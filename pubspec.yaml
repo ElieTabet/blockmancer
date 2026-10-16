@@ -47,9 +47,7 @@ melos:
         analyzer: ^10.2.0
         analyzer_plugin: 0.14.4 # pinned to match analyzer 10.2.0 / analysis_server_plugin 0.3.10
         auto_route: ^11.1.0
-        dio: ^5.4.0 # HTTP transport for the network package (no feature depends on dio directly)
-        connectivity_plus: ^7.3.1 # whether the phone has a network (packages/utilities/connectivity). Resolves to 7.3.1: 7.3.2 needs dbus 0.8, flutter_local_notifications_linux pins 0.7
-        device_info_plus: ^13.3.0 # OS version reported by the device feature
+        dio: ^5.4.0 # not used today; `melos run create --type core` scaffolds packages with it
         firebase_analytics: ^12.6.0 # automatic usage events, production release builds only (packages/utilities/telemetry)
         firebase_core: ^4.15.0 # Firebase app initialization — the app starts it at boot; packages/utilities/push uses it in tests
         firebase_crashlytics: ^5.4.0 # crash reports, production release builds only (packages/utilities/telemetry)
@@ -57,18 +55,14 @@ melos:
         flutter_inappwebview: ^6.1.5 # The only webview engine; no feature depends on it directly (packages/utilities/webviews)
         flutter_local_notifications: ^22.3.1 # Android has no foreground display of its own — this is what draws it (packages/utilities/push)
         flutter_riverpod: ^3.3.1
-        flutter_secure_storage: ^11.2.0 # Keychain/Keystore-backed storage for the keychain package
         freezed_annotation: ^3.1.0
         google_fonts: ^6.3.1
         intl: ^0.20.2
         json_annotation: ^4.9.0
-        package_info_plus: ^10.2.2
-        result_dart: ^2.1.1 # backs the workspace Result type (packages/utilities/result)
         riverpod_annotation: ^4.0.2
         slang: ^4.19.0
         slang_flutter: ^4.19.0
         url_launcher: ^6.3.2 # opens a link outside the app; known only to the external_links package
-        uuid: ^4.5.1 # device_uuid generation (auth)
       dev_dependencies:
         auto_route_generator: ^10.4.0
         build_runner: 2.16.0 # pinned: 2.16.2 calls AnalysisOptionsBuilder, absent in the pinned analyzer 10.2.0
@@ -139,15 +133,11 @@ melos:
       run: bash scripts/create_package.sh
 
     flavor-dev:
-      description: Run the app against the local dev API (MAMP) — iOS simulator, macOS, host
+      description: Run a dev build (ENV=dev — no telemetry)
       run: cd app && flutter run --dart-define-from-file=env/dev.json
 
-    flavor-dev-android:
-      description: Run the app against the local dev API from an Android emulator (10.0.2.2 is the emulator's alias for the host loopback; plain localhost would resolve to the emulator itself)
-      run: cd app && flutter run --dart-define-from-file=env/dev_android.json
-
     flavor-prod:
-      description: Run the app against production (API_BASE_URL in app/env/prod.json)
+      description: Run a production build (ENV=prod — telemetry on in release mode)
       run: cd app && flutter run --dart-define-from-file=env/prod.json
 
     build-ios:

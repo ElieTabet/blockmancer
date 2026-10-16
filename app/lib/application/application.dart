@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_application/l10n_application.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:timber/timber.dart';
 
 class Application {
@@ -26,10 +25,6 @@ class Application {
     LocaleSettings.useDeviceLocaleSync(); // Resolve the initial locale from the device
     DSFont.useBundledFonts();
 
-    // The same rule, and the same format `device` already reports to
-    // /devices/me — so a support mail and the telemetry row say the same thing.
-    final packageInfo = await PackageInfo.fromPlatform();
-
     final config = AppConfig.fromEnvironment();
 
     // Before the container: nothing that reaches messaging may run earlier.
@@ -39,17 +34,10 @@ class Application {
 
     _container = ProviderContainer(
       overrides: appOverrides(
-        // The application id is the package name on Android, which is what the
-        // Play Store listing is found by.
-        androidPackageName: packageInfo.packageName,
-        apiBaseUrl: config.apiBaseUrl,
-        appVersion: packageInfo.version,
         // Only a release build against production sends usage and crash
         // data, so the dashboards show real use and nothing else.
         collectsTelemetry: kReleaseMode && config.env == .prod,
         router: _appRouter,
-        httpProxy: config.httpProxy,
-        iosAppStoreId: config.iosAppStoreId,
       ),
     );
 
@@ -68,7 +56,7 @@ class Application {
       container: _container,
       child: TranslationProvider(
         child: Builder(
-          // Splash and login carry no AppBar, so nothing under them annotates
+          // Splash and the game carry no AppBar, so nothing under them annotates
           // the status bar. This covers those; a screen that does have one
           // pushes its own annotation deeper and wins — the same value, by way
           // of DSTheme's appBarTheme.

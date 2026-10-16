@@ -28,9 +28,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-# What: the production configuration (API_BASE_URL, ENV=prod), relative to app/.
-# Why:  compiled into the app; without it the build falls back to the local
-#       MAMP API and telemetry stays off.
+# What: the production configuration (ENV=prod), relative to app/.
+# Why:  compiled into the app; without it the build is a dev build and
+#       telemetry stays off.
 ENV_FILE="env/prod.json"
 
 # What: the upload key's location and passwords (kept out of git).
@@ -47,16 +47,9 @@ GOOGLE_SERVICES="app/android/app/google-services.json"
 # ---------------------------------------------------------------------------
 
 # What: stop if the production configuration is missing.
-# Why:  nothing else would define API_BASE_URL for the store build.
+# Why:  without ENV=prod the store build would be a dev build, telemetry off.
 if [ ! -f "app/$ENV_FILE" ]; then
-  echo "Error: app/$ENV_FILE is missing — nothing would define API_BASE_URL." >&2
-  exit 1
-fi
-
-# What: stop if the production configuration names no API.
-# Why:  the build would fall back to the local dev API and ship pointing at it.
-if ! grep -q '"API_BASE_URL"' "app/$ENV_FILE"; then
-  echo "Error: app/$ENV_FILE defines no API_BASE_URL — the build would ship against the local dev API." >&2
+  echo "Error: app/$ENV_FILE is missing — the build would not be marked production." >&2
   exit 1
 fi
 

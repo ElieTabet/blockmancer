@@ -39,35 +39,8 @@ class TranslationsFr extends Translations with BaseTranslations<AppLocale, Trans
 	TranslationsFr $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsFr(meta: meta ?? this.$meta);
 
 	// Translations
-	@override late final _Translations$login$fr login = _Translations$login$fr._(_root);
 	@override late final _Translations$game$fr game = _Translations$game$fr._(_root);
 	@override late final _Translations$push$fr push = _Translations$push$fr._(_root);
-	@override late final _Translations$appStatus$fr appStatus = _Translations$appStatus$fr._(_root);
-}
-
-// Path: login
-class _Translations$login$fr extends Translations$login$en {
-	_Translations$login$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get emailHint => 'Courriel';
-	@override String get passwordHint => 'Mot de passe';
-	@override String get submit => 'Se connecter';
-	@override String get continueAsGuest => 'Continuer en tant qu\'invité';
-	@override String get emailRequired => 'Veuillez saisir votre courriel';
-	@override String get emailInvalid => 'Veuillez saisir une adresse courriel valide';
-	@override String get emailTooLong => 'L\'adresse courriel est trop longue';
-	@override String get passwordRequired => 'Veuillez saisir votre mot de passe';
-	@override String get passwordTooShort => 'Le mot de passe doit contenir au moins 8 caractères';
-	@override String get passwordTooLong => 'Le mot de passe est trop long';
-	@override String get errorTitle => 'Échec de la connexion';
-	@override String get errorButtonLabel => 'OK';
-	@override String get invalidCredentials => 'Courriel ou mot de passe incorrect';
-	@override String get deviceConflict => 'Cet appareil est connecté avec un autre compte. Déconnectez-vous d\'abord.';
-	@override String get noInternet => 'Vérifiez votre connexion Internet et réessayez.';
-	@override String get genericError => 'Une erreur est survenue. Veuillez réessayer.';
 }
 
 // Path: game
@@ -98,24 +71,6 @@ class _Translations$push$fr extends Translations$push$en {
 	// Translations
 	@override String get channelName => 'Annonces';
 	@override String get channelDescription => 'Nouvelles et messages de l\'application.';
-}
-
-// Path: appStatus
-class _Translations$appStatus$fr extends Translations$appStatus$en {
-	_Translations$appStatus$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get maintenanceTitle => 'Nous revenons vite';
-	@override String get maintenanceFallback => 'L\'application est en maintenance. Réessayez dans quelques instants.';
-	@override String get retry => 'Réessayer';
-	@override String get forceUpdateTitle => 'Mise à jour requise';
-	@override String get forceUpdateBody => 'Cette version de l\'application n\'est plus prise en charge. Mettez-la à jour pour continuer à l\'utiliser.';
-	@override String get updateAvailableTitle => 'Mise à jour disponible';
-	@override String updateAvailableBody({required Object version}) => 'La version ${version} est disponible.';
-	@override String get update => 'Mettre à jour';
-	@override String get later => 'Plus tard';
 }
 
 // Path: game.round
@@ -392,22 +347,6 @@ class _Translations$game$jokers$saver$fr extends Translations$game$jokers$saver$
 extension on TranslationsFr {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'login.emailHint' => 'Courriel',
-			'login.passwordHint' => 'Mot de passe',
-			'login.submit' => 'Se connecter',
-			'login.continueAsGuest' => 'Continuer en tant qu\'invité',
-			'login.emailRequired' => 'Veuillez saisir votre courriel',
-			'login.emailInvalid' => 'Veuillez saisir une adresse courriel valide',
-			'login.emailTooLong' => 'L\'adresse courriel est trop longue',
-			'login.passwordRequired' => 'Veuillez saisir votre mot de passe',
-			'login.passwordTooShort' => 'Le mot de passe doit contenir au moins 8 caractères',
-			'login.passwordTooLong' => 'Le mot de passe est trop long',
-			'login.errorTitle' => 'Échec de la connexion',
-			'login.errorButtonLabel' => 'OK',
-			'login.invalidCredentials' => 'Courriel ou mot de passe incorrect',
-			'login.deviceConflict' => 'Cet appareil est connecté avec un autre compte. Déconnectez-vous d\'abord.',
-			'login.noInternet' => 'Vérifiez votre connexion Internet et réessayez.',
-			'login.genericError' => 'Une erreur est survenue. Veuillez réessayer.',
 			'game.tabLabel' => 'Jouer',
 			'game.title' => 'Blockmancer',
 			'game.subtitle' => 'Partie du jour · les mêmes pièces pour tous',
@@ -483,15 +422,6 @@ extension on TranslationsFr {
 			'game.jokers.saver.description' => 'Chaque pièce inutilisée quand tu gagnes une manche rapporte +40 points de partie.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Nouvelles et messages de l\'application.',
-			'appStatus.maintenanceTitle' => 'Nous revenons vite',
-			'appStatus.maintenanceFallback' => 'L\'application est en maintenance. Réessayez dans quelques instants.',
-			'appStatus.retry' => 'Réessayer',
-			'appStatus.forceUpdateTitle' => 'Mise à jour requise',
-			'appStatus.forceUpdateBody' => 'Cette version de l\'application n\'est plus prise en charge. Mettez-la à jour pour continuer à l\'utiliser.',
-			'appStatus.updateAvailableTitle' => 'Mise à jour disponible',
-			'appStatus.updateAvailableBody' => ({required Object version}) => 'La version ${version} est disponible.',
-			'appStatus.update' => 'Mettre à jour',
-			'appStatus.later' => 'Plus tard',
 			_ => null,
 		};
 	}

@@ -1,22 +1,4 @@
 {
-  "login": {
-    "emailHint": "Courriel",
-    "passwordHint": "Mot de passe",
-    "submit": "Se connecter",
-    "continueAsGuest": "Continuer en tant qu'invité",
-    "emailRequired": "Veuillez saisir votre courriel",
-    "emailInvalid": "Veuillez saisir une adresse courriel valide",
-    "emailTooLong": "L'adresse courriel est trop longue",
-    "passwordRequired": "Veuillez saisir votre mot de passe",
-    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
-    "passwordTooLong": "Le mot de passe est trop long",
-    "errorTitle": "Échec de la connexion",
-    "errorButtonLabel": "OK",
-    "invalidCredentials": "Courriel ou mot de passe incorrect",
-    "deviceConflict": "Cet appareil est connecté avec un autre compte. Déconnectez-vous d'abord.",
-    "noInternet": "Vérifiez votre connexion Internet et réessayez.",
-    "genericError": "Une erreur est survenue. Veuillez réessayer."
-  },
   "game": {
     "tabLabel": "Jouer",
     "title": "Blockmancer",
@@ -138,16 +120,5 @@
   "push": {
     "channelName": "Annonces",
     "channelDescription": "Nouvelles et messages de l'application."
-  },
-  "appStatus": {
-    "maintenanceTitle": "Nous revenons vite",
-    "maintenanceFallback": "L'application est en maintenance. Réessayez dans quelques instants.",
-    "retry": "Réessayer",
-    "forceUpdateTitle": "Mise à jour requise",
-    "forceUpdateBody": "Cette version de l'application n'est plus prise en charge. Mettez-la à jour pour continuer à l'utiliser.",
-    "updateAvailableTitle": "Mise à jour disponible",
-    "updateAvailableBody": "La version $version est disponible.",
-    "update": "Mettre à jour",
-    "later": "Plus tard"
   }
 }

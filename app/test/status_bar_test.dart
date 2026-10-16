@@ -24,13 +24,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          ...appOverrides(
-            androidPackageName: 'com.elietabet.blockmancer',
-            apiBaseUrl: 'http://localhost:8888/api/mobile/v1',
-            appVersion: '1.0.0',
-            collectsTelemetry: false,
-            router: appRouter,
-          ),
+          ...appOverrides(collectsTelemetry: false, router: appRouter),
         ],
         child: TranslationProvider(
           child: AnnotatedRegion<SystemUiOverlayStyle>(

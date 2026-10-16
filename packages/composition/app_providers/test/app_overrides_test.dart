@@ -7,14 +7,10 @@
 
 import 'package:app_providers/app_providers.dart';
 import 'package:app_router/app_router.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_presentation/src/providers_di.br.dart' as game_di;
-import 'package:keychain/keychain.dart';
-import 'package:network/network.dart';
-import 'package:network/src/providers_di.br.dart' as network_di;
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
 import 'package:push_notifications_domain/push_notifications_domain.dart'
@@ -24,44 +20,14 @@ import 'package:push_notifications_presentation/src/providers_di.br.dart'
 import 'package:telemetry/telemetry.dart';
 
 void main() {
-  const stubAndroidPackage = 'com.elietabet.blockmancer';
-  const stubAppVersion = '1.0.0';
-  const stubBaseUrl = 'https://stub.test/v1';
-
   ProviderContainer buildContainer() {
     final container = ProviderContainer(
-      overrides: appOverrides(
-        androidPackageName: stubAndroidPackage,
-        apiBaseUrl: stubBaseUrl,
-        appVersion: stubAppVersion,
-        collectsTelemetry: false,
-        router: AppRouter(),
-      ),
+      overrides: appOverrides(collectsTelemetry: false, router: AppRouter()),
     );
     addTearDown(container.dispose);
 
     return container;
   }
-
-  test('the network slots are bound, so both clients resolve', () {
-    final container = buildContainer();
-
-    expect(container.read(httpClientProvider), isA<DioHttpClient>());
-    expect(container.read(publicHttpClientProvider), isA<DioHttpClient>());
-  });
-
-  // The app owns its configuration and hands the base URL down; composition
-  // never learns how it is shaped.
-  test('the base URL is the one the app passed in', () {
-    expect(buildContainer().read(network_di.apiBaseUrlProvider), stubBaseUrl);
-  });
-
-  test('secure storage backs the keychain slot', () {
-    expect(
-      buildContainer().read(keychainRepositoryProvider),
-      isA<SecureKeychainRepository>(),
-    );
-  });
 
   test('the game reaches the engine only through its rules slot', () {
     expect(
@@ -70,9 +36,9 @@ void main() {
     );
   });
 
-  // Push crosses four packages and never lets any but `push` name Firebase:
-  // push_notifications decides, `device` reports the token, and the router
-  // opens what a tap is about. These binds are the whole join.
+  // Push crosses three packages and never lets any but `push` name Firebase:
+  // push_notifications decides and the router opens what a tap is about.
+  // These binds are the whole join.
   test('the push slots are bound across push, its feature and the rest', () {
     final container = buildContainer();
 
@@ -115,14 +81,5 @@ void main() {
 
     expect(container.read(telemetryProvider), isA<FirebaseTelemetry>());
     expect(container.read(collectsTelemetryProvider), false);
-  });
-
-  // Whatever waits for the phone to come back online may not name the plugin
-  // that says so.
-  test('the connectivity slot is bound to the plugin', () {
-    expect(
-      buildContainer().read(connectivityMonitorProvider),
-      isA<PlusConnectivityMonitor>(),
-    );
   });
 }

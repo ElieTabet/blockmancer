@@ -38,12 +38,7 @@ if [ "$(uname -s)" != "Darwin" ]; then
 fi
 
 if [ ! -f "app/$ENV_FILE" ]; then
-  echo "Error: app/$ENV_FILE is missing — nothing would define API_BASE_URL." >&2
-  exit 1
-fi
-
-if ! grep -q '"API_BASE_URL"' "app/$ENV_FILE"; then
-  echo "Error: app/$ENV_FILE defines no API_BASE_URL — the build would ship against the local dev API." >&2
+  echo "Error: app/$ENV_FILE is missing — the build would not be marked production." >&2
   exit 1
 fi
 

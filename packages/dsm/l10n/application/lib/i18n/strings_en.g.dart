@@ -40,67 +40,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
-	late final Translations$login$en login = Translations$login$en.internal(_root);
 	late final Translations$game$en game = Translations$game$en.internal(_root);
 	late final Translations$push$en push = Translations$push$en.internal(_root);
-	late final Translations$appStatus$en appStatus = Translations$appStatus$en.internal(_root);
-}
-
-// Path: login
-class Translations$login$en {
-	Translations$login$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Email'
-	String get emailHint => 'Email';
-
-	/// en: 'Password'
-	String get passwordHint => 'Password';
-
-	/// en: 'Sign in'
-	String get submit => 'Sign in';
-
-	/// en: 'Continue as a guest'
-	String get continueAsGuest => 'Continue as a guest';
-
-	/// en: 'Please enter your email'
-	String get emailRequired => 'Please enter your email';
-
-	/// en: 'Please enter a valid email address'
-	String get emailInvalid => 'Please enter a valid email address';
-
-	/// en: 'Email address is too long'
-	String get emailTooLong => 'Email address is too long';
-
-	/// en: 'Please enter your password'
-	String get passwordRequired => 'Please enter your password';
-
-	/// en: 'Password must be at least 8 characters long'
-	String get passwordTooShort => 'Password must be at least 8 characters long';
-
-	/// en: 'Password is too long'
-	String get passwordTooLong => 'Password is too long';
-
-	/// en: 'Sign-in failed'
-	String get errorTitle => 'Sign-in failed';
-
-	/// en: 'OK'
-	String get errorButtonLabel => 'OK';
-
-	/// en: 'Incorrect email or password'
-	String get invalidCredentials => 'Incorrect email or password';
-
-	/// en: 'This device is signed in as another member. Sign out first.'
-	String get deviceConflict => 'This device is signed in as another member. Sign out first.';
-
-	/// en: 'Check your internet connection and try again.'
-	String get noInternet => 'Check your internet connection and try again.';
-
-	/// en: 'Something went wrong. Please try again.'
-	String get genericError => 'Something went wrong. Please try again.';
 }
 
 // Path: game
@@ -144,42 +85,6 @@ class Translations$push$en {
 
 	/// en: 'News and messages from the app.'
 	String get channelDescription => 'News and messages from the app.';
-}
-
-// Path: appStatus
-class Translations$appStatus$en {
-	Translations$appStatus$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'We'll be right back'
-	String get maintenanceTitle => 'We\'ll be right back';
-
-	/// en: 'The app is undergoing maintenance. Please try again in a little while.'
-	String get maintenanceFallback => 'The app is undergoing maintenance. Please try again in a little while.';
-
-	/// en: 'Try again'
-	String get retry => 'Try again';
-
-	/// en: 'Update required'
-	String get forceUpdateTitle => 'Update required';
-
-	/// en: 'This version of the app is no longer supported. Update it to keep using it.'
-	String get forceUpdateBody => 'This version of the app is no longer supported. Update it to keep using it.';
-
-	/// en: 'Update available'
-	String get updateAvailableTitle => 'Update available';
-
-	/// en: 'Version $version is available.'
-	String updateAvailableBody({required Object version}) => 'Version ${version} is available.';
-
-	/// en: 'Update'
-	String get update => 'Update';
-
-	/// en: 'Later'
-	String get later => 'Later';
 }
 
 // Path: game.round
@@ -594,22 +499,6 @@ class Translations$game$jokers$saver$en {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'login.emailHint' => 'Email',
-			'login.passwordHint' => 'Password',
-			'login.submit' => 'Sign in',
-			'login.continueAsGuest' => 'Continue as a guest',
-			'login.emailRequired' => 'Please enter your email',
-			'login.emailInvalid' => 'Please enter a valid email address',
-			'login.emailTooLong' => 'Email address is too long',
-			'login.passwordRequired' => 'Please enter your password',
-			'login.passwordTooShort' => 'Password must be at least 8 characters long',
-			'login.passwordTooLong' => 'Password is too long',
-			'login.errorTitle' => 'Sign-in failed',
-			'login.errorButtonLabel' => 'OK',
-			'login.invalidCredentials' => 'Incorrect email or password',
-			'login.deviceConflict' => 'This device is signed in as another member. Sign out first.',
-			'login.noInternet' => 'Check your internet connection and try again.',
-			'login.genericError' => 'Something went wrong. Please try again.',
 			'game.tabLabel' => 'Play',
 			'game.title' => 'Blockmancer',
 			'game.subtitle' => 'Daily run · same pieces for everyone',
@@ -685,15 +574,6 @@ extension on Translations {
 			'game.jokers.saver.description' => 'Each unused piece when you beat a round gives +40 run points.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
-			'appStatus.maintenanceTitle' => 'We\'ll be right back',
-			'appStatus.maintenanceFallback' => 'The app is undergoing maintenance. Please try again in a little while.',
-			'appStatus.retry' => 'Try again',
-			'appStatus.forceUpdateTitle' => 'Update required',
-			'appStatus.forceUpdateBody' => 'This version of the app is no longer supported. Update it to keep using it.',
-			'appStatus.updateAvailableTitle' => 'Update available',
-			'appStatus.updateAvailableBody' => ({required Object version}) => 'Version ${version} is available.',
-			'appStatus.update' => 'Update',
-			'appStatus.later' => 'Later',
 			_ => null,
 		};
 	}
