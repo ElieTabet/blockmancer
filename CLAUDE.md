@@ -31,7 +31,7 @@ blockmancer/
 │   │   ├── timber/           # Logging facade — static Timber over pluggable Tree sinks
 │   │   └── webviews/{domain,presentation}/  # webviews_domain / webviews_presentation — the only place flutter_inappwebview is known
 │   ├── dsm/              # Design-system module
-│   │   ├── design_system/    # Tokens (theme, colors, spacing), buttons, text fields, icons, containers
+│   │   ├── design_system/    # Tokens (theme, colors, spacing), buttons, text fields, icons, containers; bundled fonts (DM Sans, Fredoka) — `DSFont.useBundledFonts()` at boot, never downloaded
 │   │   ├── assets/           # Bundled images + FlutterGen type-safe Assets accessor (webp bundled, PNG master under source/)
 │   │   └── l10n/             # Localization packages
 │   │       └── application/      # l10n_application — slang-generated translations (en, fr) + reactive context.t

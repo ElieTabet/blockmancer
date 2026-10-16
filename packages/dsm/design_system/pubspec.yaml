@@ -17,3 +17,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+
+flutter:
+  assets:
+    # The typefaces and their licences ship with the app: fetching them at
+    # runtime fails offline and behind TLS-inspecting networks.
+    - assets/fonts/

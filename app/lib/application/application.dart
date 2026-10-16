@@ -24,6 +24,7 @@ class Application {
     if (kDebugMode) Timber.plant(const DebugTree());
 
     LocaleSettings.useDeviceLocaleSync(); // Resolve the initial locale from the device
+    DSFont.useBundledFonts();
 
     // The same rule, and the same format `device` already reports to
     // /devices/me — so a support mail and the telemetry row say the same thing.

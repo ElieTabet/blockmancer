@@ -33,5 +33,3 @@ Note the run and the moment where you can.
 - A bot that clears as many lines as it can won 10 of the first 20 seeds (engine `full_run_test`),
   which suggests the targets may be lenient for a human. Worth watching.
 - No animations yet: cleared lines and the tray refill simply change.
-- Fonts load at runtime through google_fonts, so the very first launch offline falls back to the
-  system font.
