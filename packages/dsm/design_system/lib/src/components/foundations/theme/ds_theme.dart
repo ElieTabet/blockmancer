@@ -6,6 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 final class DSTheme {
   // Singleton instance
+  static const _appBarTheme = AppBarTheme(
+    systemOverlayStyle: SystemUiOverlayStyle.light,
+  );
   late final _darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
     primary: DSColor.primaryLight,
@@ -43,6 +46,11 @@ final class DSTheme {
     inversePrimary: DSColor.mist,
     surfaceTint: DSColor.primaryLight,
   );
+
+  // Constructor
+  DSTheme._();
+
+  // Public Properties
   late final _lightColorScheme = ColorScheme(
     brightness: Brightness.light,
     primary: DSColor.primary,
@@ -80,14 +88,8 @@ final class DSTheme {
     inversePrimary: DSColor.primaryLight,
     surfaceTint: DSColor.primary,
   );
-
-  // Constructor
-  DSTheme._();
-
-  // Public Properties
   late final ThemeData darkTheme = _darkTheme();
   static final DSTheme instance = DSTheme._();
-  late final ThemeData lightTheme = _lightTheme();
 
   TextTheme _textThemeDark(Color onColor) {
     return _buildTextTheme(
@@ -224,17 +226,7 @@ final class DSTheme {
     );
   }
 
-  /// Every bar in this app sits on charcoal, in both themes, so the status bar
-  /// above it always needs light content.
-  ///
-  /// Set on the theme rather than screen by screen: left to itself Material
-  /// picks the contrast from the *scheme's* surface colour, which in light mode
-  /// is a pale one — so a screen that forgot would get dark icons on a charcoal
-  /// bar, and only in light mode, which is exactly the kind of thing nobody
-  /// notices until a member reports it.
-  static const _appBarTheme = AppBarTheme(
-    systemOverlayStyle: SystemUiOverlayStyle.light,
-  );
+  late final ThemeData lightTheme = _lightTheme();
 
   ThemeData _darkTheme() {
     return ThemeData.dark().copyWith(
