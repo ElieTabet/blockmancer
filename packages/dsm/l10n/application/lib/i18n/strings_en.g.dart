@@ -125,6 +125,7 @@ class Translations$game$en {
 	String runTotal({required Object total}) => 'Run ${total}';
 
 	late final Translations$game$round$en round = Translations$game$round$en.internal(_root);
+	late final Translations$game$banner$en banner = Translations$game$banner$en.internal(_root);
 	late final Translations$game$offers$en offers = Translations$game$offers$en.internal(_root);
 	late final Translations$game$lost$en lost = Translations$game$lost$en.internal(_root);
 	late final Translations$game$end$en end = Translations$game$end$en.internal(_root);
@@ -246,6 +247,54 @@ class Translations$game$round$en {
 
 	/// en: '+$mult mult stored'
 	String storedMult({required Object mult}) => '+${mult} mult stored';
+}
+
+// Path: game.banner
+class Translations$game$banner$en {
+	Translations$game$banner$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '$chips chips × $mult mult = $total'
+	String clear({required Object chips, required Object mult, required Object total}) => '${chips} chips × ${mult} mult = ${total}';
+
+	/// en: '+$points'
+	String placed({required Object points}) => '+${points}';
+
+	/// en: '+$points bonus'
+	String bonus({required Object points}) => '+${points} bonus';
+
+	/// en: '$joker $effect'
+	String fired({required Object joker, required Object effect}) => '${joker} ${effect}';
+
+	/// en: '+$amount chips'
+	String chipsAdded({required Object amount}) => '+${amount} chips';
+
+	/// en: '+$amount mult'
+	String multAdded({required Object amount}) => '+${amount} mult';
+
+	/// en: '×$factor mult'
+	String multMultiplied({required Object factor}) => '×${factor} mult';
+
+	/// en: 'mult stored · $total ready'
+	String multStored({required Object total}) => 'mult stored · ${total} ready';
+
+	/// en: '+$amount'
+	String pointsAdded({required Object amount}) => '+${amount}';
+
+	/// en: '+$amount run points'
+	String runPointsAdded({required Object amount}) => '+${amount} run points';
+
+	/// en: 'new stone'
+	String get stoneDropped => 'new stone';
+
+	/// en: '+$amount pieces'
+	String piecesAdded({required Object amount}) => '+${amount} pieces';
+
+	/// en: '+$amount stones'
+	String stonesAdded({required Object amount}) => '+${amount} stones';
 }
 
 // Path: game.offers
@@ -608,6 +657,19 @@ extension on Translations {
 			'game.round.piecesLeft' => ({required Object count}) => '${count} pieces left',
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult stored',
+			'game.banner.clear' => ({required Object chips, required Object mult, required Object total}) => '${chips} chips × ${mult} mult = ${total}',
+			'game.banner.placed' => ({required Object points}) => '+${points}',
+			'game.banner.bonus' => ({required Object points}) => '+${points} bonus',
+			'game.banner.fired' => ({required Object joker, required Object effect}) => '${joker} ${effect}',
+			'game.banner.chipsAdded' => ({required Object amount}) => '+${amount} chips',
+			'game.banner.multAdded' => ({required Object amount}) => '+${amount} mult',
+			'game.banner.multMultiplied' => ({required Object factor}) => '×${factor} mult',
+			'game.banner.multStored' => ({required Object total}) => 'mult stored · ${total} ready',
+			'game.banner.pointsAdded' => ({required Object amount}) => '+${amount}',
+			'game.banner.runPointsAdded' => ({required Object amount}) => '+${amount} run points',
+			'game.banner.stoneDropped' => 'new stone',
+			'game.banner.piecesAdded' => ({required Object amount}) => '+${amount} pieces',
+			'game.banner.stonesAdded' => ({required Object amount}) => '+${amount} stones',
 			'game.offers.startTitle' => 'Pick your starting joker',
 			'game.offers.startSubtitle' => 'Jokers work in pairs. You pick one more after every round, so plan your build.',
 			'game.offers.roundTitle' => 'Round cleared!',

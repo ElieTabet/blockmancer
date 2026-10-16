@@ -30,6 +30,21 @@
       "combo": "Combo ×$streak",
       "storedMult": "+$mult mult en réserve"
     },
+    "banner": {
+      "clear": "$chips jetons × $mult mult = $total",
+      "placed": "+$points",
+      "bonus": "+$points bonus",
+      "fired": "$joker $effect",
+      "chipsAdded": "+$amount jetons",
+      "multAdded": "+$amount mult",
+      "multMultiplied": "×$factor mult",
+      "multStored": "mult en réserve · $total prêts",
+      "pointsAdded": "+$amount",
+      "runPointsAdded": "+$amount points de partie",
+      "stoneDropped": "nouvelle pierre",
+      "piecesAdded": "+$amount pièces",
+      "stonesAdded": "+$amount pierres"
+    },
     "offers": {
       "startTitle": "Choisis ton joker de départ",
       "startSubtitle": "Les jokers vont par paires. Tu en choisis un de plus après chaque manche : prépare ta combinaison.",

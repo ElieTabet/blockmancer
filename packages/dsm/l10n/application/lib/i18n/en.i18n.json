@@ -30,6 +30,21 @@
       "combo": "Combo ×$streak",
       "storedMult": "+$mult mult stored"
     },
+    "banner": {
+      "clear": "$chips chips × $mult mult = $total",
+      "placed": "+$points",
+      "bonus": "+$points bonus",
+      "fired": "$joker $effect",
+      "chipsAdded": "+$amount chips",
+      "multAdded": "+$amount mult",
+      "multMultiplied": "×$factor mult",
+      "multStored": "mult stored · $total ready",
+      "pointsAdded": "+$amount",
+      "runPointsAdded": "+$amount run points",
+      "stoneDropped": "new stone",
+      "piecesAdded": "+$amount pieces",
+      "stonesAdded": "+$amount stones"
+    },
     "offers": {
       "startTitle": "Pick your starting joker",
       "startSubtitle": "Jokers work in pairs. You pick one more after every round, so plan your build.",

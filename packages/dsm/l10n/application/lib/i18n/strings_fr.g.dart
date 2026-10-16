@@ -83,6 +83,7 @@ class _Translations$game$fr extends Translations$game$en {
 	@override String get subtitle => 'Partie du jour · les mêmes pièces pour tous';
 	@override String runTotal({required Object total}) => 'Partie ${total}';
 	@override late final _Translations$game$round$fr round = _Translations$game$round$fr._(_root);
+	@override late final _Translations$game$banner$fr banner = _Translations$game$banner$fr._(_root);
 	@override late final _Translations$game$offers$fr offers = _Translations$game$offers$fr._(_root);
 	@override late final _Translations$game$lost$fr lost = _Translations$game$lost$fr._(_root);
 	@override late final _Translations$game$end$fr end = _Translations$game$end$fr._(_root);
@@ -150,6 +151,28 @@ class _Translations$game$round$fr extends Translations$game$round$en {
 	@override String piecesLeft({required Object count}) => '${count} pièces restantes';
 	@override String combo({required Object streak}) => 'Combo ×${streak}';
 	@override String storedMult({required Object mult}) => '+${mult} mult en réserve';
+}
+
+// Path: game.banner
+class _Translations$game$banner$fr extends Translations$game$banner$en {
+	_Translations$game$banner$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String clear({required Object chips, required Object mult, required Object total}) => '${chips} jetons × ${mult} mult = ${total}';
+	@override String placed({required Object points}) => '+${points}';
+	@override String bonus({required Object points}) => '+${points} bonus';
+	@override String fired({required Object joker, required Object effect}) => '${joker} ${effect}';
+	@override String chipsAdded({required Object amount}) => '+${amount} jetons';
+	@override String multAdded({required Object amount}) => '+${amount} mult';
+	@override String multMultiplied({required Object factor}) => '×${factor} mult';
+	@override String multStored({required Object total}) => 'mult en réserve · ${total} prêts';
+	@override String pointsAdded({required Object amount}) => '+${amount}';
+	@override String runPointsAdded({required Object amount}) => '+${amount} points de partie';
+	@override String get stoneDropped => 'nouvelle pierre';
+	@override String piecesAdded({required Object amount}) => '+${amount} pièces';
+	@override String stonesAdded({required Object amount}) => '+${amount} pierres';
 }
 
 // Path: game.offers
@@ -412,6 +435,19 @@ extension on TranslationsFr {
 			'game.round.piecesLeft' => ({required Object count}) => '${count} pièces restantes',
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult en réserve',
+			'game.banner.clear' => ({required Object chips, required Object mult, required Object total}) => '${chips} jetons × ${mult} mult = ${total}',
+			'game.banner.placed' => ({required Object points}) => '+${points}',
+			'game.banner.bonus' => ({required Object points}) => '+${points} bonus',
+			'game.banner.fired' => ({required Object joker, required Object effect}) => '${joker} ${effect}',
+			'game.banner.chipsAdded' => ({required Object amount}) => '+${amount} jetons',
+			'game.banner.multAdded' => ({required Object amount}) => '+${amount} mult',
+			'game.banner.multMultiplied' => ({required Object factor}) => '×${factor} mult',
+			'game.banner.multStored' => ({required Object total}) => 'mult en réserve · ${total} prêts',
+			'game.banner.pointsAdded' => ({required Object amount}) => '+${amount}',
+			'game.banner.runPointsAdded' => ({required Object amount}) => '+${amount} points de partie',
+			'game.banner.stoneDropped' => 'nouvelle pierre',
+			'game.banner.piecesAdded' => ({required Object amount}) => '+${amount} pièces',
+			'game.banner.stonesAdded' => ({required Object amount}) => '+${amount} pierres',
 			'game.offers.startTitle' => 'Choisis ton joker de départ',
 			'game.offers.startSubtitle' => 'Les jokers vont par paires. Tu en choisis un de plus après chaque manche : prépare ta combinaison.',
 			'game.offers.roundTitle' => 'Manche gagnée !',

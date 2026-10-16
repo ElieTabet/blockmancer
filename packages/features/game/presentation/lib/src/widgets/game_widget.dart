@@ -7,6 +7,7 @@ import 'package:game_presentation/src/widgets/game_header.dart';
 import 'package:game_presentation/src/widgets/joker_chips.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:game_presentation/src/widgets/round_card.dart';
+import 'package:game_presentation/src/widgets/score_banner.dart';
 import 'package:game_presentation/src/widgets/tray_view.dart';
 
 /// The game screen: the round, the jokers, the board and the tray, with the
@@ -53,6 +54,7 @@ class _GameWidgetState extends State<GameWidget> {
                         ),
                       ),
                     ),
+                    const ScoreBanner(),
                     const TrayView(),
                   ],
                 ),
