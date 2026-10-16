@@ -1,8 +1,7 @@
-import 'package:blockmancer_engine/src/board/board.br.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
-import 'package:blockmancer_engine/src/random/mulberry32.dart';
-import 'package:blockmancer_engine/src/run/run_config.br.dart';
-import 'package:blockmancer_engine/src/run/run_phase.br.dart';
+import 'package:shared_domain/src/entities/game/board.br.dart';
+import 'package:shared_domain/src/entities/game/joker_id.dart';
+import 'package:shared_domain/src/entities/game/run_config.br.dart';
+import 'package:shared_domain/src/entities/game/run_phase.br.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'run_state.br.freezed.dart';
@@ -24,7 +23,9 @@ abstract class RunState with _$RunState {
 
     /// Pieces not drawn into the tray yet.
     required int piecesLeft,
-    required Mulberry32 piecesRng,
+
+    /// The pieces stream's generator state; only the rules read it.
+    required int piecesRngState,
     required int revivesUsed,
     required int roundIndex,
 
@@ -32,7 +33,9 @@ abstract class RunState with _$RunState {
     required int runTotal,
     required int score,
     required int seed,
-    required Mulberry32 stonesRng,
+
+    /// The stones stream's generator state; only the rules read it.
+    required int stonesRngState,
     required int storedMult,
     required int streak,
 

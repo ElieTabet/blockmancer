@@ -1,4 +1,4 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:blockmancer_engine/src/random/mulberry32.dart';
 import 'package:test/test.dart';
 
 // Expected values come from the reference prototype's rand() and Math.imul run

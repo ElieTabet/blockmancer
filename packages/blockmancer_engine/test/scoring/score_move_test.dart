@@ -1,4 +1,4 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../play_move.dart';
@@ -73,5 +73,20 @@ void main() {
       JokerId.combo,
       JokerId.twin,
     ]);
+  });
+
+  test('a flat bonus is reported apart from chips × mult', () {
+    // Given / When
+    final score = playMove(
+      rowAlmostFull,
+      at: topRight,
+      jokers: const [.sweep],
+      shape: 0,
+    );
+
+    // Then
+    expect(score.lineScore, 80);
+    expect(score.bonusPoints, 500);
+    expect(score.points, 1 + 80 + 500);
   });
 }

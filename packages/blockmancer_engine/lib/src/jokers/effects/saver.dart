@@ -1,6 +1,6 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 
 /// When a round is won, +40 run points per unused piece.
 final class Saver extends JokerEffect {
@@ -15,8 +15,8 @@ final class Saver extends JokerEffect {
   JokerId get partner => .pockets;
 
   @override
-  RoundBonus onRoundWon(RoundWonContext round, RoundBonus bonus) =>
+  RoundBonus onRoundWon(RoundBonus bonus, RoundWonContext round) =>
       round.unusedPieces > 0
-      ? bonus.addRunPoints(id, _pointsPerPiece * round.unusedPieces)
+      ? bonus.addRunPoints(_pointsPerPiece * round.unusedPieces, id)
       : bonus;
 }

@@ -1,6 +1,6 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 
 /// +4 pieces every round.
 final class DeepPockets extends JokerEffect {
@@ -16,5 +16,5 @@ final class DeepPockets extends JokerEffect {
 
   @override
   RoundSetup onRoundSetup(RoundSetup setup) =>
-      setup.addPieces(id, _extraPieces);
+      setup.addPieces(_extraPieces, id);
 }

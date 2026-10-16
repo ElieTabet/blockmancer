@@ -18,7 +18,11 @@ enum RngStream {
 ///
 /// Each round draws pieces and stones from its own sequence, and each joker
 /// pick its offers, so one round's play never changes the next round's pieces.
-int deriveSeed(int runSeed, RngStream stream, int index) {
+int deriveSeed({
+  required int index,
+  required int runSeed,
+  required RngStream stream,
+}) {
   var hash = _fmix32(runSeed & 0xFFFFFFFF);
   hash = _fmix32(hash ^ imul32(stream.salt, 0x9E3779B9));
 
@@ -34,5 +38,8 @@ int _fmix32(int value) {
   return (hash ^ (hash >>> 16)) & 0xFFFFFFFF;
 }
 
-Mulberry32 streamFor(int runSeed, RngStream stream, int index) =>
-    Mulberry32(deriveSeed(runSeed, stream, index));
+Mulberry32 streamFor({
+  required int index,
+  required int runSeed,
+  required RngStream stream,
+}) => Mulberry32(deriveSeed(index: index, runSeed: runSeed, stream: stream));

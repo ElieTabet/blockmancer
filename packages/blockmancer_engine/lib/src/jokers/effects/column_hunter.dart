@@ -1,6 +1,6 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 
 /// ×2 mult when the move clears a column.
 final class ColumnHunter extends JokerEffect {
@@ -16,5 +16,5 @@ final class ColumnHunter extends JokerEffect {
 
   @override
   ScoreStep onMultiplicative(MoveContext move, ScoreStep step) =>
-      move.clear.cols.isNotEmpty ? step.multiplyMult(id, _factor) : step;
+      move.clear.cols.isNotEmpty ? step.multiplyMult(_factor, id) : step;
 }

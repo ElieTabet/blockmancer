@@ -1,7 +1,5 @@
-import 'package:blockmancer_engine/src/board/board.br.dart';
-import 'package:blockmancer_engine/src/board/cell.br.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/board/placement.br.dart';
-import 'package:blockmancer_engine/src/events/game_event.br.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
@@ -10,8 +8,10 @@ import 'package:blockmancer_engine/src/random/mulberry32.dart';
 final class MoveScore {
   const MoveScore({
     required this.board,
+    required this.bonusPoints,
     required this.chips,
     required this.fired,
+    required this.lineScore,
     required this.mult,
     required this.points,
     required this.stonesDropped,
@@ -22,9 +22,15 @@ final class MoveScore {
 
   final Board board;
 
+  /// Flat points outside `chips × mult`, such as Clean Sweep's.
+  final int bonusPoints;
+
   /// 0 when nothing cleared, like [mult].
   final int chips;
   final List<JokerFired> fired;
+
+  /// `chips × mult`.
+  final int lineScore;
   final int mult;
 
   /// Everything the move adds to the round score.
@@ -72,15 +78,19 @@ MoveScore scoreMove({
 
   final after = jokers.fold(
     AfterMove(board: clear.board, stonesRng: stonesRng, storedMult: storedMult),
-    (after, joker) => joker.afterMove(move, after),
+    (after, joker) => joker.afterMove(after, move),
   );
+
+  final lineScore = step.chips * step.mult;
 
   return MoveScore(
     board: after.board,
+    bonusPoints: after.bonusPoints,
     chips: step.chips,
     fired: [...step.fired, ...after.fired],
+    lineScore: lineScore,
     mult: step.mult,
-    points: pieceSize + step.chips * step.mult + after.bonusPoints,
+    points: pieceSize + lineScore + after.bonusPoints,
     stonesDropped: after.stonesDropped,
     stonesRng: after.stonesRng,
     storedMult: after.storedMult,

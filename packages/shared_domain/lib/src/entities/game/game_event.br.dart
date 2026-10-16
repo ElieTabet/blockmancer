@@ -1,7 +1,7 @@
-import 'package:blockmancer_engine/src/board/cell.br.dart';
-import 'package:blockmancer_engine/src/jokers/joker_delta.br.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
-import 'package:blockmancer_engine/src/run/loss_reason.dart';
+import 'package:shared_domain/src/entities/game/cell.br.dart';
+import 'package:shared_domain/src/entities/game/joker_delta.br.dart';
+import 'package:shared_domain/src/entities/game/joker_id.dart';
+import 'package:shared_domain/src/entities/game/loss_reason.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'game_event.br.freezed.dart';
@@ -55,11 +55,15 @@ sealed class GameEvent with _$GameEvent {
 
   const factory GameEvent.runWon({required int total}) = RunWon;
 
-  /// A move's points: `chips × mult` plus the piece size and flat bonuses.
-  /// [chips] and [mult] are 0 on a move that cleared nothing.
+  /// A move's points, as the parts that add up to [total]: [piecePoints] (the
+  /// piece's size), [lineScore] (`chips × mult`, 0 when nothing cleared) and
+  /// [bonusPoints] (flat bonuses such as Clean Sweep's).
   const factory GameEvent.scoreAdded({
+    required int bonusPoints,
     required int chips,
+    required int lineScore,
     required int mult,
+    required int piecePoints,
     required int total,
   }) = ScoreAdded;
 

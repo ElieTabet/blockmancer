@@ -1,6 +1,6 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 
 /// A move that clears nothing banks +2 mult; the next clear spends the bank.
 final class Patience extends JokerEffect {
@@ -15,12 +15,12 @@ final class Patience extends JokerEffect {
   JokerId get partner => .twin;
 
   @override
-  AfterMove afterMove(MoveContext move, AfterMove after) =>
+  AfterMove afterMove(AfterMove after, MoveContext move) =>
       move.clear.clearedAny
       ? after.resetStoredMult()
-      : after.storeMult(id, _storedPerMove);
+      : after.storeMult(_storedPerMove, id);
 
   @override
   ScoreStep onAdditive(MoveContext move, ScoreStep step) =>
-      move.storedMult > 0 ? step.addMult(id, move.storedMult) : step;
+      move.storedMult > 0 ? step.addMult(move.storedMult, id) : step;
 }

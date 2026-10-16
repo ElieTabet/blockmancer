@@ -18,8 +18,8 @@ blockmancer/
 │   ├── lib/config/           # Env (dev/prod) + AppConfig (apiBaseUrl) — compile-time, app-owned
 │   └── env/                  # dart-define-from-file configs: dev.json, dev_android.json, prod.json
 ├── packages/
-│   ├── blockmancer_engine/ # The game rules — pure Dart (no Flutter, no clock, no I/O), deterministic from a seed
-│   ├── shared_domain/    # Entities shared across features (AuthError) — entities only, no logic
+│   ├── blockmancer_engine/ # The game rules (BlockmancerEngine implements GameRules) — pure Dart, deterministic; injected, never imported by a feature
+│   ├── shared_domain/    # Entities shared across features (AuthError, the game's RunState/GameEvent/…) + contracts (GameRules) — pure Dart, no logic
 │   ├── utilities/        # Horizontal infrastructure — no feature knowledge
 │   │   ├── connectivity/     # Whether the phone has a network — the only place connectivity_plus is known
 │   │   ├── external_links/   # Hands a link to the OS (browser, mail draft) — the only place url_launcher is known
@@ -255,10 +255,18 @@ Localization is a standalone foundational package `l10n_application` (`packages/
 
 ## Game engine
 
-`packages/blockmancer_engine` holds every game rule: board, pieces, scoring, jokers and the run
-state machine. The rules are specified in `.claude/doc/BLOCKMANCER_BRIEF.md`. The UI animates the
+`packages/blockmancer_engine` holds every game rule: pieces, scoring, jokers and the run state
+machine. The rules are specified in `.claude/doc/BLOCKMANCER_BRIEF.md`. The UI animates the
 engine's events and never recomputes a rule.
 
+- **Injected, never imported.** The game's vocabulary (`RunState`, `RunPhase`, `RunConfig`,
+  `Board`, `Cell`, `GameEvent`, `JokerId`, `PlacementPreview`, …) and the `GameRules` contract live
+  in `shared_domain`. The engine's barrel exports only `BlockmancerEngine implements GameRules`;
+  `game_presentation` declares a throwing `gameRulesProvider` slot and `app_providers` binds it to
+  `const BlockmancerEngine()`. Rule data (round targets, the shape catalog, joker pairs) stays behind
+  the contract (`defaultConfig`, `shape(id)`, `partnerOf(id)`), so no feature can compute a rule.
+- **`shared_domain` is pure Dart** because the engine depends on it and must run on the plain VM
+  and the web; its tests use `package:test`.
 - **Pure Dart.** Its pubspec declares no Flutter, so a `package:flutter` import fails
   `melos run analyze` (`depend_on_referenced_packages` under `--fatal-infos`). The brief's
   `import_lint` isn't used because no version resolves against the pinned analyzer 10.2.0.
@@ -280,7 +288,7 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 Three horizontal packages sit outside the feature UI tree. **No feature package may depend on `dio`,
 `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`, `flutter_inappwebview`,
-`keychain`, `network`, `push`, `telemetry`, `url_launcher`, or `auth` directly** — a feature declares a contract and the composition layer injects the
+`keychain`, `network`, `push`, `telemetry`, `url_launcher`, `auth` or `blockmancer_engine` directly** — a feature declares a contract and the composition layer injects the
 implementation, exactly as it does for routing.
 
 **`packages/utilities/network`** — transport-agnostic contract plus a Dio implementation:

@@ -1,18 +1,21 @@
-import 'package:blockmancer_engine/src/board/cell.br.dart';
+import 'package:shared_domain/src/entities/game/cell.br.dart';
 
 /// A piece, as offsets from the top-left cell of its bounding box — which is
 /// also its anchor when placed. Pieces never rotate.
 final class Shape {
-  const Shape({required this.cells, required this.id});
+  Shape({required List<Cell> cells, required this.id})
+    : cells = List.unmodifiable(cells);
 
+  /// Unmodifiable: shapes are shared by every run in the process, and a run
+  /// stores only their ids.
   final List<Cell> cells;
-
-  /// The shape's index in [shapeCatalog]; the draw streams return it.
-  final int id;
 
   /// Distinct piece colours. A shape always wears the same one, as in the
   /// reference prototype.
   static const colorCount = 9;
+
+  /// What a tray slot holds; `GameRules.shape` turns it back into the shape.
+  final int id;
 
   int get colorIndex => id % colorCount;
 

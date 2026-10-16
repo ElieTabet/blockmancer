@@ -1,4 +1,6 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:blockmancer_engine/src/board/placement.br.dart';
+import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../board_picture.dart';
@@ -14,7 +16,7 @@ void main() {
       final board = Board.empty();
 
       // When
-      final result = fits(board, square, const Cell(col: 6, row: 6));
+      final result = fits(board, square, anchor: const Cell(col: 6, row: 6));
 
       // Then
       expect(result, isTrue);
@@ -25,7 +27,11 @@ void main() {
       final board = Board.empty();
 
       // When
-      final result = fits(board, horizontalFive, const Cell(col: 4, row: 0));
+      final result = fits(
+        board,
+        horizontalFive,
+        anchor: const Cell(col: 4, row: 0),
+      );
 
       // Then
       expect(result, isFalse);
@@ -36,7 +42,7 @@ void main() {
       final board = Board.empty();
 
       // When
-      final result = fits(board, single, const Cell(col: 0, row: -1));
+      final result = fits(board, single, anchor: const Cell(col: 0, row: -1));
 
       // Then
       expect(result, isFalse);
@@ -47,7 +53,7 @@ void main() {
       final board = boardFrom(['.#......']);
 
       // When
-      final result = fits(board, square, const Cell(col: 0, row: 0));
+      final result = fits(board, square, anchor: const Cell(col: 0, row: 0));
 
       // Then
       expect(result, isFalse);
@@ -58,7 +64,7 @@ void main() {
       final board = boardFrom(['S.......']);
 
       // When
-      final result = fits(board, single, const Cell(col: 0, row: 0));
+      final result = fits(board, single, anchor: const Cell(col: 0, row: 0));
 
       // Then
       expect(result, isFalse);
@@ -71,7 +77,11 @@ void main() {
         final board = boardFrom(['#.......']);
 
         // When
-        final result = fits(board, shapeCatalog[8], const Cell(col: 0, row: 0));
+        final result = fits(
+          board,
+          shapeCatalog[8],
+          anchor: const Cell(col: 0, row: 0),
+        );
 
         // Then
         expect(result, isTrue);
@@ -112,7 +122,7 @@ void main() {
       final placed = placeShape(
         board,
         shapeCatalog[8],
-        const Cell(col: 2, row: 3),
+        anchor: const Cell(col: 2, row: 3),
       );
 
       // Then
@@ -199,5 +209,40 @@ void main() {
       expect(result.stonesCleared, 2);
       expect(result.board, boardFrom(['........', 'S.......']));
     });
+  });
+
+  group('stoneCells', () {
+    test('leaves out a cell that would complete a row or a column', () {
+      // Given: row 0 and column 0 each miss one cell
+      final board = boardFrom([
+        '#######.',
+        '#.......',
+        '#.......',
+        '#.......',
+        '#.......',
+        '#.......',
+        '#.......',
+        '........',
+      ]);
+
+      // When
+      final cells = stoneCells(board);
+
+      // Then
+      expect(cells, isNot(contains(const Cell(col: 7, row: 0))));
+      expect(cells, isNot(contains(const Cell(col: 0, row: 7))));
+      expect(cells, contains(const Cell(col: 1, row: 1)));
+    });
+
+    test(
+      'falls back to any empty cell when every one would complete a line',
+      () {
+        // Given
+        final board = boardFrom([...List.filled(7, '########'), '#######.']);
+
+        // When / Then
+        expect(stoneCells(board), [const Cell(col: 7, row: 7)]);
+      },
+    );
   });
 }

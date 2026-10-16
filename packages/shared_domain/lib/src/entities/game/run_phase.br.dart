@@ -1,5 +1,5 @@
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
-import 'package:blockmancer_engine/src/run/loss_reason.dart';
+import 'package:shared_domain/src/entities/game/joker_id.dart';
+import 'package:shared_domain/src/entities/game/loss_reason.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'run_phase.br.freezed.dart';

@@ -1,6 +1,5 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
-import 'package:blockmancer_engine/src/pieces/shape.dart';
 
 /// Pieces of 1–2 cells are drawn 3× as often.
 final class TinyTools extends JokerEffect {

@@ -1,6 +1,6 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 
 /// +1 mult per joker owned, this one included.
 final class Collector extends JokerEffect {
@@ -14,5 +14,5 @@ final class Collector extends JokerEffect {
 
   @override
   ScoreStep onAdditive(MoveContext move, ScoreStep step) =>
-      step.addMult(id, move.jokerCount);
+      step.addMult(move.jokerCount, id);
 }

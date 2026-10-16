@@ -1,4 +1,4 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// Builds a board from 8 rows of 8 characters: `.` empty, `#` filled, `S` stone.
 /// Missing trailing rows are empty.

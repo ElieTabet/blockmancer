@@ -1,26 +1,14 @@
-import 'package:blockmancer_engine/src/board/board.br.dart';
-import 'package:blockmancer_engine/src/board/cell.br.dart';
-import 'package:blockmancer_engine/src/board/cell_state.br.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/board/placement.br.dart';
-import 'package:blockmancer_engine/src/events/game_event.br.dart';
 import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
 import 'package:blockmancer_engine/src/random/rng_stream.dart';
 import 'package:blockmancer_engine/src/random/weighted_draw.dart';
-import 'package:blockmancer_engine/src/run/loss_reason.dart';
 import 'package:blockmancer_engine/src/run/offers.dart';
-import 'package:blockmancer_engine/src/run/placement_preview.br.dart';
-import 'package:blockmancer_engine/src/run/run_config.br.dart';
-import 'package:blockmancer_engine/src/run/run_phase.br.dart';
-import 'package:blockmancer_engine/src/run/run_state.br.dart';
 import 'package:blockmancer_engine/src/scoring/score_move.dart';
-
-/// The next state and what happened on the way, in order.
-typedef Transition = (RunState, List<GameEvent>);
 
 /// A new run, waiting for its starting joker.
 RunState startRun({required RunConfig config, required int seed}) => RunState(
@@ -37,20 +25,20 @@ RunState startRun({required RunConfig config, required int seed}) => RunState(
   ),
   pickIndex: 0,
   piecesLeft: 0,
-  piecesRng: streamFor(seed, .pieces, 0),
+  piecesRngState: deriveSeed(index: 0, runSeed: seed, stream: .pieces),
   revivesUsed: 0,
   roundIndex: 0,
   runTotal: 0,
   score: 0,
   seed: seed,
-  stonesRng: streamFor(seed, .stones, 0),
+  stonesRngState: deriveSeed(index: 0, runSeed: seed, stream: .stones),
   storedMult: 0,
   streak: 0,
   tray: List.filled(config.traySize, null),
 );
 
 /// Takes an offered joker and starts the next round.
-Transition pickJoker(RunState state, JokerId id) {
+Transition pickJoker(RunState state, {required JokerId id}) {
   final phase = state.phase;
 
   if (phase is! PickingJokerPhase) {
@@ -61,28 +49,31 @@ Transition pickJoker(RunState state, JokerId id) {
     throw ArgumentError.value(id, 'id', 'is not on offer');
   }
 
-  return _startRound(state.copyWith(jokers: [...state.jokers, id]));
+  return _startRound((state.copyWith(jokers: [...state.jokers, id]), const []));
 }
 
-bool canPlace(RunState state, int trayIndex, Cell anchor) {
-  final shapeId = _trayShape(state, trayIndex);
+bool canPlace(RunState state, {required Cell anchor, required int trayIndex}) {
+  final shapeId = _playableShape(state, trayIndex);
 
-  return state.phase is PlayingPhase &&
-      shapeId != null &&
-      fits(state.board, shapeCatalog[shapeId], anchor);
+  return shapeId != null &&
+      fits(state.board, shapeCatalog[shapeId], anchor: anchor);
 }
 
 /// Whether the tray piece at [trayIndex] fits anywhere on the board.
-bool fitsSomewhere(RunState state, int trayIndex) {
-  final shapeId = _trayShape(state, trayIndex);
+bool fitsSomewhere(RunState state, {required int trayIndex}) {
+  final shapeId = _playableShape(state, trayIndex);
 
   return shapeId != null && fitsAnywhere(state.board, shapeCatalog[shapeId]);
 }
 
-PlacementPreview preview(RunState state, int trayIndex, Cell anchor) {
-  final shapeId = _trayShape(state, trayIndex);
+PlacementPreview preview(
+  RunState state, {
+  required Cell anchor,
+  required int trayIndex,
+}) {
+  final shapeId = _playableShape(state, trayIndex);
 
-  if (shapeId == null) return PlacementPreview.none;
+  if (shapeId == null) return .none;
 
   final shape = shapeCatalog[shapeId];
   final cells = [
@@ -90,8 +81,10 @@ PlacementPreview preview(RunState state, int trayIndex, Cell anchor) {
       if (state.board.contains(anchor + offset)) anchor + offset,
   ];
   final fitsHere =
-      cells.length == shape.size && fits(state.board, shape, anchor);
-  final placed = fitsHere ? placeShape(state.board, shape, anchor) : null;
+      cells.length == shape.size && fits(state.board, shape, anchor: anchor);
+  final placed = fitsHere
+      ? placeShape(state.board, shape, anchor: anchor)
+      : null;
 
   return PlacementPreview(
     cells: cells,
@@ -105,66 +98,65 @@ PlacementPreview preview(RunState state, int trayIndex, Cell anchor) {
   );
 }
 
-/// Drops the tray piece at [trayIndex] with its top-left at [anchor], clears,
-/// scores, refills the tray, then decides whether the round is won or lost.
+/// Drops the tray piece at [trayIndex] with its top-left at [anchor], clears
+/// and scores, then decides whether the round is won or lost. The tray refills
+/// only when play goes on: a won round deals nothing it would never play.
 Transition place(
   RunState state, {
   required Cell anchor,
   required int trayIndex,
 }) {
-  if (!canPlace(state, trayIndex, anchor)) {
+  if (!canPlace(state, anchor: anchor, trayIndex: trayIndex)) {
     throw ArgumentError('Tray piece $trayIndex cannot be placed at $anchor');
   }
 
   final shapeId = state.tray[trayIndex]!;
   final shape = shapeCatalog[shapeId];
   final jokers = effectsOf(state.jokers);
-  final clear = resolveClears(placeShape(state.board, shape, anchor));
+  final clear = resolveClears(placeShape(state.board, shape, anchor: anchor));
 
   final score = scoreMove(
     clear: clear,
     jokers: jokers,
     pieceSize: shape.size,
     previousStreak: state.streak,
-    stonesRng: state.stonesRng,
+    stonesRng: Mulberry32(state.stonesRngState),
     storedMult: state.storedMult,
   );
 
   final events = <GameEvent>[
-    GameEvent.piecePlaced(
+    .piecePlaced(
       anchor: anchor,
       cells: [for (final offset in shape.cells) anchor + offset],
       shapeId: shapeId,
       trayIndex: trayIndex,
     ),
     if (clear.clearedAny)
-      GameEvent.linesCleared(
-        cells: clear.cells,
-        cols: clear.cols,
-        rows: clear.rows,
-      ),
+      .linesCleared(cells: clear.cells, cols: clear.cols, rows: clear.rows),
     ...score.fired,
-    GameEvent.scoreAdded(
+    .scoreAdded(
+      bonusPoints: score.bonusPoints,
       chips: score.chips,
+      lineScore: score.lineScore,
       mult: score.mult,
+      piecePoints: shape.size,
       total: score.points,
     ),
-    for (final cell in score.stonesDropped) GameEvent.stonePlaced(cell: cell),
+    for (final cell in score.stonesDropped) .stonePlaced(cell: cell),
   ];
 
-  var next = state.copyWith(
+  final next = state.copyWith(
     board: score.board,
     score: state.score + score.points,
-    stonesRng: score.stonesRng,
+    stonesRngState: score.stonesRng.state,
     storedMult: score.storedMult,
     streak: score.streak,
     tray: [...state.tray]..[trayIndex] = null,
   );
-  next = _refillIfEmpty(next, jokers, events);
 
-  if (next.score >= next.round.target) return _winRound(next, jokers, events);
+  if (next.score >= next.round.target) return _winRound(jokers, (next, events));
 
-  return _settle(next, events);
+  return _settle(_refillIfEmpty(jokers, (next, events)));
 }
 
 /// Empties the fullest rows and adds pieces to a lost round, once per
@@ -181,19 +173,19 @@ Transition revive(RunState state) {
     });
   final cleared = rows.take(state.config.reviveRows).toList()..sort();
 
-  final events = <GameEvent>[GameEvent.revived(rows: cleared)];
-
   final next = state.copyWith(
     board: state.board.withCells({
       for (final row in cleared)
         for (var col = 0; col < Board.size; col++)
-          Cell(col: col, row: row): const CellState.empty(),
+          Cell(col: col, row: row): const .empty(),
     }),
     piecesLeft: state.piecesLeft + state.config.revivePieces,
     revivesUsed: state.revivesUsed + 1,
   );
 
-  return _settle(_refillIfEmpty(next, effectsOf(state.jokers), events), events);
+  return _settle(
+    _refillIfEmpty(effectsOf(state.jokers), (next, [.revived(rows: cleared)])),
+  );
 }
 
 /// Gives up after a lost round, banking its score.
@@ -206,60 +198,54 @@ Transition endRun(RunState state) {
 
   return (
     state.copyWith(phase: const .over(), runTotal: total),
-    [GameEvent.runOver(total: total)],
+    [.runOver(total: total)],
   );
 }
 
-(List<int?>, int, Mulberry32) _draw({
-  required List<JokerEffect> jokers,
-  required int piecesLeft,
-  required Mulberry32 rng,
-  required int traySize,
-}) {
-  final count = piecesLeft < traySize ? piecesLeft : traySize;
+/// The tray piece at [trayIndex] while the round is being played, else `null`.
+int? _playableShape(RunState state, int trayIndex) {
+  final inTray = trayIndex >= 0 && trayIndex < state.tray.length;
+
+  return state.phase is PlayingPhase && inTray ? state.tray[trayIndex] : null;
+}
+
+/// Draws the next tray when the current one is played out and pieces remain.
+Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
+  final (state, events) = transition;
+
+  if (state.tray.any((slot) => slot != null) || state.piecesLeft == 0) {
+    return transition;
+  }
+
+  final traySize = state.config.traySize;
+  final count = state.piecesLeft < traySize ? state.piecesLeft : traySize;
   final weights = pieceWeights(jokers);
   final tray = <int?>[];
-  var next = rng;
+  var rng = Mulberry32(state.piecesRngState);
 
   for (var slot = 0; slot < traySize; slot++) {
     if (slot < count) {
-      final (shapeId, afterDraw) = weightedIndex(next, weights);
+      final (shapeId, next) = weightedIndex(rng, weights);
       tray.add(shapeId);
-      next = afterDraw;
+      rng = next;
     } else {
       tray.add(null);
     }
   }
 
-  return (tray, piecesLeft - count, next);
-}
-
-RunState _refillIfEmpty(
-  RunState state,
-  List<JokerEffect> jokers,
-  List<GameEvent> events,
-) {
-  if (state.tray.any((slot) => slot != null) || state.piecesLeft == 0) {
-    return state;
-  }
-
-  final (tray, piecesLeft, piecesRng) = _draw(
-    jokers: jokers,
-    piecesLeft: state.piecesLeft,
-    rng: state.piecesRng,
-    traySize: state.config.traySize,
-  );
-  events.add(GameEvent.trayRefilled(tray: tray));
-
-  return state.copyWith(
-    piecesLeft: piecesLeft,
-    piecesRng: piecesRng,
-    tray: tray,
+  return (
+    state.copyWith(
+      piecesLeft: state.piecesLeft - count,
+      piecesRngState: rng.state,
+      tray: tray,
+    ),
+    [...events, .trayRefilled(tray: tray)],
   );
 }
 
 /// Playing on, or lost: out of pieces, or none of the tray fits.
-Transition _settle(RunState state, List<GameEvent> events) {
+Transition _settle(Transition transition) {
+  final (state, events) = transition;
   final pieces = state.tray.whereType<int>();
 
   LossReason? reason;
@@ -274,22 +260,24 @@ Transition _settle(RunState state, List<GameEvent> events) {
 
   return (
     state.copyWith(phase: .roundLost(reason: reason)),
-    [...events, GameEvent.roundLost(reason: reason)],
+    [...events, .roundLost(reason: reason)],
   );
 }
 
 /// Sets up round [RunState.pickIndex]: its stones, its pieces and a full tray.
-Transition _startRound(RunState state) {
+Transition _startRound(Transition transition) {
+  final (state, events) = transition;
   final roundIndex = state.pickIndex;
   final spec = state.config.rounds[roundIndex];
   final jokers = effectsOf(state.jokers);
   final setup = roundSetup(
-    jokers,
     RoundSetup(pieces: spec.pieces, stones: spec.stones),
+    jokers,
   );
 
-  final events = <GameEvent>[
-    GameEvent.roundStarted(
+  final started = <GameEvent>[
+    ...events,
+    .roundStarted(
       pieces: setup.pieces,
       roundIndex: roundIndex,
       target: spec.target,
@@ -298,56 +286,58 @@ Transition _startRound(RunState state) {
   ];
 
   var board = Board.empty();
-  var stonesRng = streamFor(state.seed, .stones, roundIndex);
+  var stonesRng = streamFor(
+    index: roundIndex,
+    runSeed: state.seed,
+    stream: .stones,
+  );
 
   for (var stone = 0; stone < setup.stones; stone++) {
-    final empties = board.emptyCells;
+    final cells = stoneCells(board);
 
-    if (empties.isEmpty) break;
+    if (cells.isEmpty) break;
 
-    final (index, next) = stonesRng.nextInt(empties.length);
+    final (index, next) = stonesRng.nextInt(cells.length);
     stonesRng = next;
-    board = board.withCells({empties[index]: const CellState.stone()});
-    events.add(GameEvent.stonePlaced(cell: empties[index]));
+    board = board.withCells({cells[index]: const .stone()});
+    started.add(.stonePlaced(cell: cells[index]));
   }
 
   final round = state.copyWith(
     board: board,
     pickIndex: roundIndex + 1,
     piecesLeft: setup.pieces,
-    piecesRng: streamFor(state.seed, .pieces, roundIndex),
+    piecesRngState: deriveSeed(
+      index: roundIndex,
+      runSeed: state.seed,
+      stream: .pieces,
+    ),
     roundIndex: roundIndex,
     score: 0,
-    stonesRng: stonesRng,
+    stonesRngState: stonesRng.state,
     storedMult: 0,
     streak: 0,
     tray: List.filled(state.config.traySize, null),
   );
 
-  return _settle(_refillIfEmpty(round, jokers, events), events);
+  return _settle(_refillIfEmpty(jokers, (round, started)));
 }
 
-int? _trayShape(RunState state, int trayIndex) =>
-    trayIndex >= 0 && trayIndex < state.tray.length
-    ? state.tray[trayIndex]
-    : null;
-
-/// Banks the round and its bonus, then offers jokers — or ends the run on the boss.
-Transition _winRound(
-  RunState state,
-  List<JokerEffect> jokers,
-  List<GameEvent> events,
-) {
+/// Banks the round and its bonus, then offers jokers — or, after the last
+/// round, wins the run. With every joker already owned there is nothing to
+/// offer, and the next round starts straight away.
+Transition _winRound(List<JokerEffect> jokers, Transition transition) {
+  final (state, events) = transition;
   final bonus = roundBonus(
     jokers,
     RoundWonContext(unusedPieces: state.piecesRemaining),
   );
   final total = state.runTotal + state.score + bonus.runPoints;
 
-  final won = [
+  final List<GameEvent> won = [
     ...events,
     ...bonus.fired,
-    GameEvent.roundWon(
+    .roundWon(
       bonus: bonus.runPoints,
       roundIndex: state.roundIndex,
       score: state.score,
@@ -357,7 +347,7 @@ Transition _winRound(
   if (state.isLastRound) {
     return (
       state.copyWith(phase: const .won(), runTotal: total),
-      [...won, GameEvent.runWon(total: total)],
+      [...won, .runWon(total: total)],
     );
   }
 
@@ -368,11 +358,15 @@ Transition _winRound(
     seed: state.seed,
   );
 
+  if (offers.isEmpty) {
+    return _startRound((state.copyWith(runTotal: total), won));
+  }
+
   return (
     state.copyWith(
       phase: .pickingJoker(offers: offers),
       runTotal: total,
     ),
-    [...won, GameEvent.offersPresented(offers: offers)],
+    [...won, .offersPresented(offers: offers)],
   );
 }

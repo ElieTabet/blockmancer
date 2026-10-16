@@ -1,6 +1,5 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
-import 'package:blockmancer_engine/src/pieces/shape.dart';
 
 /// One joker's rules. Every hook defaults to doing nothing, so a joker
 /// overrides only the moments it cares about, and adding one never touches
@@ -14,7 +13,7 @@ abstract class JokerEffect {
   JokerId get partner;
 
   /// After a move is scored, cleared or not.
-  AfterMove afterMove(MoveContext move, AfterMove after) => after;
+  AfterMove afterMove(AfterMove after, MoveContext move) => after;
 
   /// On a clearing move, before any multiplicative effect.
   ScoreStep onAdditive(MoveContext move, ScoreStep step) => step;
@@ -24,7 +23,7 @@ abstract class JokerEffect {
 
   RoundSetup onRoundSetup(RoundSetup setup) => setup;
 
-  RoundBonus onRoundWon(RoundWonContext round, RoundBonus bonus) => bonus;
+  RoundBonus onRoundWon(RoundBonus bonus, RoundWonContext round) => bonus;
 
   /// How likely [shape] is drawn, relative to the other shapes.
   int pieceWeight(Shape shape, int weight) => weight;

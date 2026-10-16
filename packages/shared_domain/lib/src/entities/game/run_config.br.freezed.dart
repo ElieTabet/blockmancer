@@ -14,8 +14,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RoundSpec {
 
- int get pieces; int get target; bool get isBoss;/// Stones on the board when the round starts.
- int get stones;
+/// How the round is presented. The run ends after the last round,
+/// whichever it is.
+ bool get isBoss; int get pieces;/// Stones on the board when the round starts.
+ int get stones; int get target;
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +28,16 @@ $RoundSpecCopyWith<RoundSpec> get copyWith => _$RoundSpecCopyWithImpl<RoundSpec>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoundSpec&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.target, target) || other.target == target)&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.stones, stones) || other.stones == stones));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoundSpec&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.stones, stones) || other.stones == stones)&&(identical(other.target, target) || other.target == target));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pieces,target,isBoss,stones);
+int get hashCode => Object.hash(runtimeType,isBoss,pieces,stones,target);
 
 @override
 String toString() {
-  return 'RoundSpec(pieces: $pieces, target: $target, isBoss: $isBoss, stones: $stones)';
+  return 'RoundSpec(isBoss: $isBoss, pieces: $pieces, stones: $stones, target: $target)';
 }
 
 
@@ -46,7 +48,7 @@ abstract mixin class $RoundSpecCopyWith<$Res>  {
   factory $RoundSpecCopyWith(RoundSpec value, $Res Function(RoundSpec) _then) = _$RoundSpecCopyWithImpl;
 @useResult
 $Res call({
- int pieces, int target, bool isBoss, int stones
+ bool isBoss, int pieces, int stones, int target
 });
 
 
@@ -63,12 +65,12 @@ class _$RoundSpecCopyWithImpl<$Res>
 
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pieces = null,Object? target = null,Object? isBoss = null,Object? stones = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isBoss = null,Object? pieces = null,Object? stones = null,Object? target = null,}) {
   return _then(_self.copyWith(
-pieces: null == pieces ? _self.pieces : pieces // ignore: cast_nullable_to_non_nullable
+isBoss: null == isBoss ? _self.isBoss : isBoss // ignore: cast_nullable_to_non_nullable
+as bool,pieces: null == pieces ? _self.pieces : pieces // ignore: cast_nullable_to_non_nullable
+as int,stones: null == stones ? _self.stones : stones // ignore: cast_nullable_to_non_nullable
 as int,target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
-as int,isBoss: null == isBoss ? _self.isBoss : isBoss // ignore: cast_nullable_to_non_nullable
-as bool,stones: null == stones ? _self.stones : stones // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -154,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int pieces,  int target,  bool isBoss,  int stones)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isBoss,  int pieces,  int stones,  int target)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RoundSpec() when $default != null:
-return $default(_that.pieces,_that.target,_that.isBoss,_that.stones);case _:
+return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
   return orElse();
 
 }
@@ -175,10 +177,10 @@ return $default(_that.pieces,_that.target,_that.isBoss,_that.stones);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int pieces,  int target,  bool isBoss,  int stones)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isBoss,  int pieces,  int stones,  int target)  $default,) {final _that = this;
 switch (_that) {
 case _RoundSpec():
-return $default(_that.pieces,_that.target,_that.isBoss,_that.stones);case _:
+return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +197,10 @@ return $default(_that.pieces,_that.target,_that.isBoss,_that.stones);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int pieces,  int target,  bool isBoss,  int stones)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isBoss,  int pieces,  int stones,  int target)?  $default,) {final _that = this;
 switch (_that) {
 case _RoundSpec() when $default != null:
-return $default(_that.pieces,_that.target,_that.isBoss,_that.stones);case _:
+return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
   return null;
 
 }
@@ -210,14 +212,16 @@ return $default(_that.pieces,_that.target,_that.isBoss,_that.stones);case _:
 
 
 class _RoundSpec implements RoundSpec {
-  const _RoundSpec({required this.pieces, required this.target, this.isBoss = false, this.stones = 0});
+  const _RoundSpec({required this.isBoss, required this.pieces, required this.stones, required this.target});
   
 
+/// How the round is presented. The run ends after the last round,
+/// whichever it is.
+@override final  bool isBoss;
 @override final  int pieces;
-@override final  int target;
-@override@JsonKey() final  bool isBoss;
 /// Stones on the board when the round starts.
-@override@JsonKey() final  int stones;
+@override final  int stones;
+@override final  int target;
 
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +233,16 @@ _$RoundSpecCopyWith<_RoundSpec> get copyWith => __$RoundSpecCopyWithImpl<_RoundS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoundSpec&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.target, target) || other.target == target)&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.stones, stones) || other.stones == stones));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoundSpec&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.stones, stones) || other.stones == stones)&&(identical(other.target, target) || other.target == target));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pieces,target,isBoss,stones);
+int get hashCode => Object.hash(runtimeType,isBoss,pieces,stones,target);
 
 @override
 String toString() {
-  return 'RoundSpec(pieces: $pieces, target: $target, isBoss: $isBoss, stones: $stones)';
+  return 'RoundSpec(isBoss: $isBoss, pieces: $pieces, stones: $stones, target: $target)';
 }
 
 
@@ -249,7 +253,7 @@ abstract mixin class _$RoundSpecCopyWith<$Res> implements $RoundSpecCopyWith<$Re
   factory _$RoundSpecCopyWith(_RoundSpec value, $Res Function(_RoundSpec) _then) = __$RoundSpecCopyWithImpl;
 @override @useResult
 $Res call({
- int pieces, int target, bool isBoss, int stones
+ bool isBoss, int pieces, int stones, int target
 });
 
 
@@ -266,12 +270,12 @@ class __$RoundSpecCopyWithImpl<$Res>
 
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pieces = null,Object? target = null,Object? isBoss = null,Object? stones = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isBoss = null,Object? pieces = null,Object? stones = null,Object? target = null,}) {
   return _then(_RoundSpec(
-pieces: null == pieces ? _self.pieces : pieces // ignore: cast_nullable_to_non_nullable
+isBoss: null == isBoss ? _self.isBoss : isBoss // ignore: cast_nullable_to_non_nullable
+as bool,pieces: null == pieces ? _self.pieces : pieces // ignore: cast_nullable_to_non_nullable
+as int,stones: null == stones ? _self.stones : stones // ignore: cast_nullable_to_non_nullable
 as int,target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
-as int,isBoss: null == isBoss ? _self.isBoss : isBoss // ignore: cast_nullable_to_non_nullable
-as bool,stones: null == stones ? _self.stones : stones // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -481,23 +485,23 @@ return $default(_that.offerCount,_that.partnerBias,_that.revivePieces,_that.revi
 
 
 class _RunConfig implements RunConfig {
-  const _RunConfig({this.offerCount = 3, this.partnerBias = 0.75, this.revivePieces = 3, this.reviveRows = 2, this.revivesPerRun = 1, final  List<RoundSpec> rounds = defaultRounds, this.traySize = 3}): _rounds = rounds;
+  const _RunConfig({required this.offerCount, required this.partnerBias, required this.revivePieces, required this.reviveRows, required this.revivesPerRun, required final  List<RoundSpec> rounds, required this.traySize}): _rounds = rounds;
   
 
-@override@JsonKey() final  int offerCount;
+@override final  int offerCount;
 /// The chance that one offer is the partner of a joker already owned.
-@override@JsonKey() final  double partnerBias;
-@override@JsonKey() final  int revivePieces;
-@override@JsonKey() final  int reviveRows;
-@override@JsonKey() final  int revivesPerRun;
+@override final  double partnerBias;
+@override final  int revivePieces;
+@override final  int reviveRows;
+@override final  int revivesPerRun;
  final  List<RoundSpec> _rounds;
-@override@JsonKey() List<RoundSpec> get rounds {
+@override List<RoundSpec> get rounds {
   if (_rounds is EqualUnmodifiableListView) return _rounds;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_rounds);
 }
 
-@override@JsonKey() final  int traySize;
+@override final  int traySize;
 
 /// Create a copy of RunConfig
 /// with the given fields replaced by the non-null parameter values.

@@ -1,5 +1,5 @@
-import 'package:blockmancer_engine/src/board/cell.br.dart';
-import 'package:blockmancer_engine/src/board/cell_state.br.dart';
+import 'package:shared_domain/src/entities/game/cell.br.dart';
+import 'package:shared_domain/src/entities/game/cell_state.br.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'board.br.freezed.dart';
@@ -11,8 +11,7 @@ abstract class Board with _$Board {
 
   const Board._();
 
-  factory Board.empty() =>
-      Board(cells: List.filled(cellCount, const CellState.empty()));
+  factory Board.empty() => Board(cells: List.filled(cellCount, const .empty()));
 
   static const cellCount = size * size;
   static const size = 8;
@@ -45,6 +44,10 @@ abstract class Board with _$Board {
 
   bool contains(Cell cell) =>
       cell.row >= 0 && cell.row < size && cell.col >= 0 && cell.col < size;
+
+  int occupiedInCol(int col) => [
+    for (var row = 0; row < size; row++) Cell(col: col, row: row),
+  ].where((cell) => at(cell) is! EmptyCell).length;
 
   int occupiedInRow(int row) => [
     for (var col = 0; col < size; col++) Cell(col: col, row: row),

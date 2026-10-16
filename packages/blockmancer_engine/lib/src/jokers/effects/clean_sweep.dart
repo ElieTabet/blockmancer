@@ -1,6 +1,6 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 
 /// +500 points when a clear leaves the board completely empty.
 final class CleanSweep extends JokerEffect {
@@ -15,8 +15,8 @@ final class CleanSweep extends JokerEffect {
   JokerId get partner => .column;
 
   @override
-  AfterMove afterMove(MoveContext move, AfterMove after) =>
+  AfterMove afterMove(AfterMove after, MoveContext move) =>
       move.clear.clearedAny && after.board.isEmpty
-      ? after.addPoints(id, _bonus)
+      ? after.addPoints(_bonus, id)
       : after;
 }

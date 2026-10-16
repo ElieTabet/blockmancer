@@ -1,4 +1,4 @@
-import 'package:blockmancer_engine/src/board/cell.br.dart';
+import 'package:shared_domain/src/entities/game/cell.br.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'joker_delta.br.freezed.dart';

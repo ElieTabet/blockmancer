@@ -1,11 +1,13 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:blockmancer_engine/src/run/default_config.dart';
+import 'package:blockmancer_engine/src/run/engine.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 /// Plays a whole run with a fixed strategy: take the first offer, place the
 /// move that clears the most lines (first in tray and row-major order on a
 /// tie), revive when allowed, otherwise end the run.
 (RunState, List<GameEvent>) _autoplay(int seed) {
-  var state = startRun(config: const RunConfig(), seed: seed);
+  var state = startRun(config: defaultConfig, seed: seed);
   final log = <GameEvent>[];
 
   for (var step = 0; step < 2000; step++) {
@@ -13,7 +15,7 @@ import 'package:test/test.dart';
 
     switch (state.phase) {
       case PickingJokerPhase(:final offers):
-        (state, events) = pickJoker(state, offers.first);
+        (state, events) = pickJoker(state, id: offers.first);
       case PlayingPhase():
         final (trayIndex, anchor) = _bestMove(state);
         (state, events) = place(state, anchor: anchor, trayIndex: trayIndex);
@@ -39,7 +41,7 @@ import 'package:test/test.dart';
     for (var row = 0; row < Board.size; row++) {
       for (var col = 0; col < Board.size; col++) {
         final anchor = Cell(col: col, row: row);
-        final result = preview(state, trayIndex, anchor);
+        final result = preview(state, anchor: anchor, trayIndex: trayIndex);
 
         if (!result.fits) continue;
 

@@ -1,18 +1,21 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:blockmancer_engine/src/run/default_config.dart';
+import 'package:blockmancer_engine/src/run/engine.dart';
+import 'package:blockmancer_engine/src/run/offers.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../board_picture.dart';
 import '../play_move.dart';
 
 const _seed = 20261016;
-const _config = RunConfig();
+const _config = defaultConfig;
 
 /// A run in its first round, having started with [joker].
 RunState _playing({JokerId joker = .twin}) {
   final start = startRun(config: _config, seed: _seed);
   final (state, _) = pickJoker(
     start.copyWith(phase: .pickingJoker(offers: [joker])),
-    joker,
+    id: joker,
   );
 
   return state;
@@ -48,7 +51,7 @@ void main() {
       ).copyWith(phase: const .pickingJoker(offers: [.combo, .twin, .saver]));
 
       // When
-      final (state, events) = pickJoker(start, .twin);
+      final (state, events) = pickJoker(start, id: .twin);
 
       // Then
       expect(state.phase, const RunPhase.playing());
@@ -71,7 +74,7 @@ void main() {
       expect(
         () => pickJoker(
           start.copyWith(phase: const .pickingJoker(offers: [.twin])),
-          .combo,
+          id: .combo,
         ),
         throwsArgumentError,
       );
@@ -82,7 +85,7 @@ void main() {
       final state = _playing();
 
       // When / Then
-      expect(() => pickJoker(state, .combo), throwsStateError);
+      expect(() => pickJoker(state, id: .combo), throwsStateError);
     });
 
     test('starting with Stonemason drops 2 stones on the board', () {
@@ -123,7 +126,7 @@ void main() {
       );
 
       // When / Then
-      expect(canPlace(state, 0, topLeft), isFalse);
+      expect(canPlace(state, anchor: topLeft, trayIndex: 0), isFalse);
       expect(
         () => place(state, anchor: topLeft, trayIndex: 0),
         throwsArgumentError,
@@ -135,8 +138,8 @@ void main() {
       final state = _playing().copyWith(tray: [0, null, null]);
 
       // When / Then
-      expect(canPlace(state, 1, topLeft), isFalse);
-      expect(canPlace(state, 3, topLeft), isFalse);
+      expect(canPlace(state, anchor: topLeft, trayIndex: 1), isFalse);
+      expect(canPlace(state, anchor: topLeft, trayIndex: 3), isFalse);
     });
 
     test('a placed piece leaves its tray slot empty and scores its size', () {
@@ -153,7 +156,16 @@ void main() {
       expect(events.first, isA<PiecePlaced>());
       expect(
         events,
-        contains(const GameEvent.scoreAdded(chips: 0, mult: 0, total: 4)),
+        contains(
+          const GameEvent.scoreAdded(
+            bonusPoints: 0,
+            chips: 0,
+            lineScore: 0,
+            mult: 0,
+            piecePoints: 4,
+            total: 4,
+          ),
+        ),
       );
     });
 
@@ -197,7 +209,14 @@ void main() {
       expect(events[1], isA<LinesCleared>());
       expect(
         events[2],
-        const GameEvent.scoreAdded(chips: 80, mult: 1, total: 81),
+        const GameEvent.scoreAdded(
+          bonusPoints: 0,
+          chips: 80,
+          lineScore: 80,
+          mult: 1,
+          piecePoints: 1,
+          total: 81,
+        ),
       );
     });
   });
@@ -237,7 +256,7 @@ void main() {
       final offer = (won.phase as PickingJokerPhase).offers.first;
 
       // When
-      final (next, events) = pickJoker(won, offer);
+      final (next, events) = pickJoker(won, id: offer);
 
       // Then
       expect(next.roundIndex, 1);
@@ -303,7 +322,7 @@ void main() {
       );
 
       // When
-      final (boss, _) = pickJoker(beforeBoss, .combo);
+      final (boss, _) = pickJoker(beforeBoss, id: .combo);
 
       // Then
       expect(boss.round.isBoss, isTrue);
@@ -461,7 +480,7 @@ void main() {
       );
 
       // When
-      final result = preview(state, 0, topRight);
+      final result = preview(state, anchor: topRight, trayIndex: 0);
 
       // Then
       expect(result.fits, isTrue);
@@ -478,7 +497,7 @@ void main() {
       );
 
       // When
-      final result = preview(state, 0, topLeft);
+      final result = preview(state, anchor: topLeft, trayIndex: 0);
 
       // Then
       expect(result.fits, isFalse);
@@ -491,7 +510,11 @@ void main() {
       final state = _playing().copyWith(tray: [9, 0, 0]);
 
       // When
-      final result = preview(state, 0, const Cell(col: 7, row: 7));
+      final result = preview(
+        state,
+        anchor: const Cell(col: 7, row: 7),
+        trayIndex: 0,
+      );
 
       // Then
       expect(result.fits, isFalse);
@@ -503,7 +526,10 @@ void main() {
       final state = _playing().copyWith(tray: [null, 0, 0]);
 
       // When / Then
-      expect(preview(state, 0, topLeft), PlacementPreview.none);
+      expect(
+        preview(state, anchor: topLeft, trayIndex: 0),
+        PlacementPreview.none,
+      );
     });
   });
 
@@ -566,6 +592,274 @@ void main() {
 
       // Then
       expect(again, first);
+    });
+  });
+
+  group('joker state carried from move to move', () {
+    test('Patience stores over two quiet moves and spends it on the clear', () {
+      // Given
+      var (state, _) = (
+        _playing(joker: .patience).copyWith(
+          board: boardFrom(rowAlmostFull),
+          piecesLeft: 5,
+          tray: [0, 0, 0],
+        ),
+        const <GameEvent>[],
+      );
+
+      // When
+      (state, _) = place(
+        state,
+        anchor: const Cell(col: 3, row: 3),
+        trayIndex: 0,
+      );
+      (state, _) = place(
+        state,
+        anchor: const Cell(col: 4, row: 4),
+        trayIndex: 1,
+      );
+      final stored = state.storedMult;
+      final (spent, events) = place(state, anchor: topRight, trayIndex: 2);
+
+      // Then
+      expect(stored, 4);
+      expect(events.whereType<ScoreAdded>().single.mult, 1 + 4);
+      expect(spent.storedMult, 0);
+    });
+
+    test('Quarry draws a fresh stone after each clear', () {
+      // Given
+      final state = _playing(joker: .quarry).copyWith(
+        board: boardFrom(['#######.', '#######.']),
+        piecesLeft: 5,
+        tray: [0, 0, 0],
+      );
+
+      // When
+      final (first, firstEvents) = place(state, anchor: topRight, trayIndex: 0);
+      final (second, secondEvents) = place(
+        first,
+        anchor: const Cell(col: 7, row: 1),
+        trayIndex: 1,
+      );
+
+      // Then
+      expect(firstEvents.whereType<StonePlaced>(), hasLength(1));
+      expect(secondEvents.whereType<StonePlaced>(), hasLength(1));
+      expect(first.stonesRngState, isNot(state.stonesRngState));
+      expect(second.stonesRngState, isNot(first.stonesRngState));
+    });
+
+    test('Stonemason scores the stones a move clears', () {
+      // Given
+      final state = _playing(
+        joker: .stonemason,
+      ).copyWith(board: boardFrom(['##S##S#.']), tray: [0, 0, 0]);
+
+      // When
+      final (_, events) = place(state, anchor: topRight, trayIndex: 0);
+
+      // Then
+      expect(events.whereType<ScoreAdded>().single.chips, 80 + 100);
+    });
+  });
+
+  group('the winning move', () {
+    test('Deep Pockets’ extra pieces become Saver points when left unused', () {
+      // Given: a round of 18 pieces, 3 dealt; Saver joins the build
+      final state = _playing(joker: .pockets).copyWith(
+        board: boardFrom(rowAlmostFull),
+        jokers: const [.pockets, .saver],
+        score: 200,
+        tray: [0, 0, 0],
+      );
+
+      // When: the first piece wins, leaving 15 undrawn and 2 in the tray
+      final (next, _) = place(state, anchor: topRight, trayIndex: 0);
+
+      // Then
+      expect(next.runTotal, 281 + 17 * 40);
+    });
+
+    test('wins rather than running out of pieces when it is the last one', () {
+      // Given
+      final state = _playing().copyWith(
+        board: boardFrom(rowAlmostFull),
+        piecesLeft: 0,
+        score: 200,
+        tray: [0, null, null],
+      );
+
+      // When
+      final (next, _) = place(state, anchor: topRight, trayIndex: 0);
+
+      // Then
+      expect(next.phase, isA<PickingJokerPhase>());
+    });
+
+    test('wins even when the rest of the tray fits nowhere', () {
+      // Given: after the clear only isolated holes are left for the 3×3
+      final state = _playing().copyWith(
+        board: boardFrom([
+          '#######.',
+          '#.#.####',
+          '##.#.###',
+          '###.#.##',
+          '####.#.#',
+          '#####.#.',
+          '.#####.#',
+          '#.#####.',
+        ]),
+        score: 200,
+        tray: [0, 16, null],
+      );
+
+      // When
+      final (next, events) = place(state, anchor: topRight, trayIndex: 0);
+
+      // Then
+      expect(next.phase, isA<PickingJokerPhase>());
+      expect(events.whereType<RoundLost>(), isEmpty);
+    });
+
+    test('deals no new tray for a round that is over', () {
+      // Given
+      final state = _playing().copyWith(
+        board: boardFrom(rowAlmostFull),
+        piecesLeft: 5,
+        score: 200,
+        tray: [null, null, 0],
+      );
+
+      // When
+      final (_, events) = place(state, anchor: topRight, trayIndex: 2);
+
+      // Then
+      expect(events.whereType<TrayRefilled>(), isEmpty);
+    });
+
+    test('starts the next round directly when no joker is left to offer', () {
+      // Given
+      final state = _playing().copyWith(
+        board: boardFrom(rowAlmostFull),
+        jokers: JokerId.values,
+        score: 200,
+        tray: [0, 0, 0],
+      );
+
+      // When
+      final (next, events) = place(state, anchor: topRight, trayIndex: 0);
+
+      // Then
+      expect(next.phase, const RunPhase.playing());
+      expect(next.roundIndex, 1);
+      expect(events.whereType<OffersPresented>(), isEmpty);
+      expect(events.whereType<RoundStarted>().single.roundIndex, 1);
+    });
+  });
+
+  group('reviving, edge cases', () {
+    test('two rows tied on occupancy clear the upper one first', () {
+      // Given
+      final state = _playing().copyWith(
+        board: boardFrom(['#.......', '........', '.#......', '..#.....']),
+        phase: const .roundLost(reason: .noRoom),
+        tray: [0, null, null],
+      );
+
+      // When
+      final (_, events) = revive(state);
+
+      // Then
+      expect(events.first, const GameEvent.revived(rows: [0, 2]));
+    });
+
+    test('a no-room loss keeps its tray and banks the three pieces', () {
+      // Given
+      final state = _playing().copyWith(
+        phase: const .roundLost(reason: .noRoom),
+        piecesLeft: 0,
+        tray: [0, null, null],
+      );
+
+      // When
+      final (next, events) = revive(state);
+
+      // Then
+      expect(next.tray, [0, null, null]);
+      expect(next.piecesLeft, 3);
+      expect(events.whereType<TrayRefilled>(), isEmpty);
+    });
+
+    test('a revive spent in round 1 is gone in round 2', () {
+      // Given
+      final (revived, _) = revive(
+        _playing().copyWith(
+          phase: const .roundLost(reason: .noRoom),
+          tray: [0, null, null],
+        ),
+      );
+      final (roundTwo, _) = pickJoker(
+        revived.copyWith(phase: const .pickingJoker(offers: [.combo])),
+        id: .combo,
+      );
+
+      // When
+      final lost = roundTwo.copyWith(
+        phase: const .roundLost(reason: .outOfPieces),
+      );
+
+      // Then
+      expect(roundTwo.roundIndex, 1);
+      expect(lost.canRevive, isFalse);
+    });
+  });
+
+  group('outside the playing phase', () {
+    RunState picking() => _playing().copyWith(
+      phase: const .pickingJoker(offers: [.combo]),
+      tray: [0, 0, 0],
+    );
+
+    test('no piece can be placed or previewed', () {
+      // Given
+      final state = picking();
+
+      // When / Then
+      expect(canPlace(state, anchor: topLeft, trayIndex: 0), isFalse);
+      expect(fitsSomewhere(state, trayIndex: 0), isFalse);
+      expect(
+        preview(state, anchor: topLeft, trayIndex: 0),
+        PlacementPreview.none,
+      );
+      expect(
+        () => place(state, anchor: topLeft, trayIndex: 0),
+        throwsArgumentError,
+      );
+    });
+
+    test('a lost or won round takes no piece either', () {
+      // Given
+      final lost = _playing().copyWith(
+        phase: const .roundLost(reason: .noRoom),
+        tray: [0, 0, 0],
+      );
+      final won = lost.copyWith(phase: const .won());
+
+      // When / Then
+      expect(
+        () => place(lost, anchor: topLeft, trayIndex: 0),
+        throwsArgumentError,
+      );
+      expect(
+        () => place(won, anchor: topLeft, trayIndex: 0),
+        throwsArgumentError,
+      );
+    });
+
+    test('nothing can be revived while picking a joker', () {
+      // Given / When / Then
+      expect(() => revive(picking()), throwsStateError);
     });
   });
 }

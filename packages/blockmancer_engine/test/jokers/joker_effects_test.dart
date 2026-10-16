@@ -1,4 +1,7 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
+import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
+import 'package:blockmancer_engine/src/random/mulberry32.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../play_move.dart';
@@ -44,7 +47,7 @@ void main() {
 
     test('drops 2 more stones at the start of a round', () {
       // Given / When
-      final setup = roundSetup(effectsOf(const [.stonemason]), baseSetup);
+      final setup = roundSetup(baseSetup, effectsOf(const [.stonemason]));
 
       // Then
       expect(setup.stones, 2);
@@ -403,6 +406,19 @@ void main() {
       expect(weights.skip(16), [3, 3, 3]);
       expect(weights.take(16).toSet(), {1});
     });
+
+    test('ignores a three-cell piece', () {
+      // Given / When
+      final score = playMove(
+        ['#####...'],
+        at: const Cell(col: 5, row: 0),
+        jokers: const [.heavy],
+        shape: 3,
+      );
+
+      // Then
+      expect(score.mult, 1);
+    });
   });
 
   group('Clean Sweep', () {
@@ -447,6 +463,19 @@ void main() {
         expect(score.points, 1 + 80 + 500);
       },
     );
+
+    test('does nothing when a stone is left on the board', () {
+      // Given / When
+      final score = playMove(
+        ['#######.', '...S....'],
+        at: topRight,
+        jokers: const [.sweep],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.bonusPoints, 0);
+    });
   });
 
   group('Quarry', () {
@@ -496,12 +525,28 @@ void main() {
     test('with Stonemason, starts the round with 2 extra stones', () {
       // Given / When
       final setup = roundSetup(
-        effectsOf(const [.quarry, .stonemason]),
         baseSetup,
+        effectsOf(const [.quarry, .stonemason]),
       );
 
       // Then
       expect(setup.stones, 2);
+    });
+
+    test('never drops its stone into the last gap of a line', () {
+      // Given: once row 0 clears, row 1 is one cell short of full
+      // When
+      final score = playMove(
+        ['#######.', '#######.'],
+        at: topRight,
+        jokers: const [.quarry],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.stonesDropped.single, isNot(const Cell(col: 7, row: 1)));
+      expect(score.board.fullRows, isEmpty);
+      expect(score.board.fullCols, isEmpty);
     });
   });
 
@@ -538,7 +583,7 @@ void main() {
   group('Deep Pockets', () {
     test('adds 4 pieces to every round', () {
       // Given / When
-      final setup = roundSetup(effectsOf(const [.pockets]), baseSetup);
+      final setup = roundSetup(baseSetup, effectsOf(const [.pockets]));
 
       // Then
       expect(setup.pieces, 18);
@@ -553,7 +598,7 @@ void main() {
       final jokers = effectsOf(const [.pockets, .saver]);
 
       // When
-      final setup = roundSetup(jokers, baseSetup);
+      final setup = roundSetup(baseSetup, jokers);
       final bonus = roundBonus(jokers, const RoundWonContext(unusedPieces: 4));
 
       // Then

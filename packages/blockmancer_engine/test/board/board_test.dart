@@ -1,4 +1,4 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../board_picture.dart';
@@ -54,5 +54,14 @@ void main() {
     // Then
     expect(board.isEmpty, isTrue);
     expect(changed.at(const Cell(col: 0, row: 0)), const CellState.stone());
+  });
+
+  test('a column counts its filled cells and stones as occupied', () {
+    // Given
+    final board = boardFrom(['.#......', '.S......', '........']);
+
+    // When / Then
+    expect(board.occupiedInCol(1), 2);
+    expect(board.occupiedInCol(0), 0);
   });
 }

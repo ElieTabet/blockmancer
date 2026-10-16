@@ -1,5 +1,9 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
-
+import 'package:blockmancer_engine/src/board/placement.br.dart';
+import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
+import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
+import 'package:blockmancer_engine/src/random/mulberry32.dart';
+import 'package:blockmancer_engine/src/scoring/score_move.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'board_picture.dart';
 
 /// Places shape [shape] at [at] on the pictured board, clears and scores it.
@@ -12,7 +16,7 @@ MoveScore playMove(
   int storedMult = 0,
 }) {
   final piece = shapeCatalog[shape];
-  final placed = placeShape(boardFrom(picture), piece, at);
+  final placed = placeShape(boardFrom(picture), piece, anchor: at);
 
   return scoreMove(
     clear: resolveClears(placed),

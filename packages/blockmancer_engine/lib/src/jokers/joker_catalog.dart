@@ -1,3 +1,4 @@
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/effects/big_box.dart';
 import 'package:blockmancer_engine/src/jokers/effects/clean_sweep.dart';
 import 'package:blockmancer_engine/src/jokers/effects/collector.dart';
@@ -14,7 +15,6 @@ import 'package:blockmancer_engine/src/jokers/effects/tiny_tools.dart';
 import 'package:blockmancer_engine/src/jokers/effects/twin_lines.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 
 /// Every joker, in the order their hooks run: the brief's table order, which
@@ -53,8 +53,8 @@ List<int> pieceWeights(List<JokerEffect> jokers) => [
     jokers.fold(1, (weight, joker) => joker.pieceWeight(shape, weight)),
 ];
 
-RoundSetup roundSetup(List<JokerEffect> jokers, RoundSetup base) =>
+RoundSetup roundSetup(RoundSetup base, List<JokerEffect> jokers) =>
     jokers.fold(base, (setup, joker) => joker.onRoundSetup(setup));
 
 RoundBonus roundBonus(List<JokerEffect> jokers, RoundWonContext round) => jokers
-    .fold(const RoundBonus(), (bonus, joker) => joker.onRoundWon(round, bonus));
+    .fold(const RoundBonus(), (bonus, joker) => joker.onRoundWon(bonus, round));

@@ -1,4 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 TokenPair _pair(Duration accessExpiresIn) => TokenPair(

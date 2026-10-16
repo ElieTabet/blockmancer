@@ -152,7 +152,7 @@ return trayRefilled(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult Function( List<JokerId> offers)?  offersPresented,TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult Function( List<int> rows)?  revived,TResult Function( LossReason reason)?  roundLost,TResult Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult Function( int total)?  runOver,TResult Function( int total)?  runWon,TResult Function( int chips,  int mult,  int total)?  scoreAdded,TResult Function( Cell cell)?  stonePlaced,TResult Function( List<int?> tray)?  trayRefilled,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult Function( List<JokerId> offers)?  offersPresented,TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult Function( List<int> rows)?  revived,TResult Function( LossReason reason)?  roundLost,TResult Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult Function( int total)?  runOver,TResult Function( int total)?  runWon,TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult Function( Cell cell)?  stonePlaced,TResult Function( List<int?> tray)?  trayRefilled,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case JokerFired() when jokerFired != null:
 return jokerFired(_that.delta,_that.joker);case LinesCleared() when linesCleared != null:
@@ -165,7 +165,7 @@ return roundStarted(_that.pieces,_that.roundIndex,_that.target);case RoundWon() 
 return roundWon(_that.bonus,_that.roundIndex,_that.score);case RunOver() when runOver != null:
 return runOver(_that.total);case RunWon() when runWon != null:
 return runWon(_that.total);case ScoreAdded() when scoreAdded != null:
-return scoreAdded(_that.chips,_that.mult,_that.total);case StonePlaced() when stonePlaced != null:
+return scoreAdded(_that.bonusPoints,_that.chips,_that.lineScore,_that.mult,_that.piecePoints,_that.total);case StonePlaced() when stonePlaced != null:
 return stonePlaced(_that.cell);case TrayRefilled() when trayRefilled != null:
 return trayRefilled(_that.tray);case _:
   return orElse();
@@ -185,7 +185,7 @@ return trayRefilled(_that.tray);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( JokerDelta delta,  JokerId joker)  jokerFired,required TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)  linesCleared,required TResult Function( List<JokerId> offers)  offersPresented,required TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)  piecePlaced,required TResult Function( List<int> rows)  revived,required TResult Function( LossReason reason)  roundLost,required TResult Function( int pieces,  int roundIndex,  int target)  roundStarted,required TResult Function( int bonus,  int roundIndex,  int score)  roundWon,required TResult Function( int total)  runOver,required TResult Function( int total)  runWon,required TResult Function( int chips,  int mult,  int total)  scoreAdded,required TResult Function( Cell cell)  stonePlaced,required TResult Function( List<int?> tray)  trayRefilled,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( JokerDelta delta,  JokerId joker)  jokerFired,required TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)  linesCleared,required TResult Function( List<JokerId> offers)  offersPresented,required TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)  piecePlaced,required TResult Function( List<int> rows)  revived,required TResult Function( LossReason reason)  roundLost,required TResult Function( int pieces,  int roundIndex,  int target)  roundStarted,required TResult Function( int bonus,  int roundIndex,  int score)  roundWon,required TResult Function( int total)  runOver,required TResult Function( int total)  runWon,required TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)  scoreAdded,required TResult Function( Cell cell)  stonePlaced,required TResult Function( List<int?> tray)  trayRefilled,}) {final _that = this;
 switch (_that) {
 case JokerFired():
 return jokerFired(_that.delta,_that.joker);case LinesCleared():
@@ -198,7 +198,7 @@ return roundStarted(_that.pieces,_that.roundIndex,_that.target);case RoundWon():
 return roundWon(_that.bonus,_that.roundIndex,_that.score);case RunOver():
 return runOver(_that.total);case RunWon():
 return runWon(_that.total);case ScoreAdded():
-return scoreAdded(_that.chips,_that.mult,_that.total);case StonePlaced():
+return scoreAdded(_that.bonusPoints,_that.chips,_that.lineScore,_that.mult,_that.piecePoints,_that.total);case StonePlaced():
 return stonePlaced(_that.cell);case TrayRefilled():
 return trayRefilled(_that.tray);}
 }
@@ -214,7 +214,7 @@ return trayRefilled(_that.tray);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult? Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult? Function( List<JokerId> offers)?  offersPresented,TResult? Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult? Function( List<int> rows)?  revived,TResult? Function( LossReason reason)?  roundLost,TResult? Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult? Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult? Function( int total)?  runOver,TResult? Function( int total)?  runWon,TResult? Function( int chips,  int mult,  int total)?  scoreAdded,TResult? Function( Cell cell)?  stonePlaced,TResult? Function( List<int?> tray)?  trayRefilled,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult? Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult? Function( List<JokerId> offers)?  offersPresented,TResult? Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult? Function( List<int> rows)?  revived,TResult? Function( LossReason reason)?  roundLost,TResult? Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult? Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult? Function( int total)?  runOver,TResult? Function( int total)?  runWon,TResult? Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult? Function( Cell cell)?  stonePlaced,TResult? Function( List<int?> tray)?  trayRefilled,}) {final _that = this;
 switch (_that) {
 case JokerFired() when jokerFired != null:
 return jokerFired(_that.delta,_that.joker);case LinesCleared() when linesCleared != null:
@@ -227,7 +227,7 @@ return roundStarted(_that.pieces,_that.roundIndex,_that.target);case RoundWon() 
 return roundWon(_that.bonus,_that.roundIndex,_that.score);case RunOver() when runOver != null:
 return runOver(_that.total);case RunWon() when runWon != null:
 return runWon(_that.total);case ScoreAdded() when scoreAdded != null:
-return scoreAdded(_that.chips,_that.mult,_that.total);case StonePlaced() when stonePlaced != null:
+return scoreAdded(_that.bonusPoints,_that.chips,_that.lineScore,_that.mult,_that.piecePoints,_that.total);case StonePlaced() when stonePlaced != null:
 return stonePlaced(_that.cell);case TrayRefilled() when trayRefilled != null:
 return trayRefilled(_that.tray);case _:
   return null;
@@ -979,11 +979,14 @@ as int,
 
 
 class ScoreAdded implements GameEvent {
-  const ScoreAdded({required this.chips, required this.mult, required this.total});
+  const ScoreAdded({required this.bonusPoints, required this.chips, required this.lineScore, required this.mult, required this.piecePoints, required this.total});
   
 
+ final  int bonusPoints;
  final  int chips;
+ final  int lineScore;
  final  int mult;
+ final  int piecePoints;
  final  int total;
 
 /// Create a copy of GameEvent
@@ -996,16 +999,16 @@ $ScoreAddedCopyWith<ScoreAdded> get copyWith => _$ScoreAddedCopyWithImpl<ScoreAd
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScoreAdded&&(identical(other.chips, chips) || other.chips == chips)&&(identical(other.mult, mult) || other.mult == mult)&&(identical(other.total, total) || other.total == total));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScoreAdded&&(identical(other.bonusPoints, bonusPoints) || other.bonusPoints == bonusPoints)&&(identical(other.chips, chips) || other.chips == chips)&&(identical(other.lineScore, lineScore) || other.lineScore == lineScore)&&(identical(other.mult, mult) || other.mult == mult)&&(identical(other.piecePoints, piecePoints) || other.piecePoints == piecePoints)&&(identical(other.total, total) || other.total == total));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chips,mult,total);
+int get hashCode => Object.hash(runtimeType,bonusPoints,chips,lineScore,mult,piecePoints,total);
 
 @override
 String toString() {
-  return 'GameEvent.scoreAdded(chips: $chips, mult: $mult, total: $total)';
+  return 'GameEvent.scoreAdded(bonusPoints: $bonusPoints, chips: $chips, lineScore: $lineScore, mult: $mult, piecePoints: $piecePoints, total: $total)';
 }
 
 
@@ -1016,7 +1019,7 @@ abstract mixin class $ScoreAddedCopyWith<$Res> implements $GameEventCopyWith<$Re
   factory $ScoreAddedCopyWith(ScoreAdded value, $Res Function(ScoreAdded) _then) = _$ScoreAddedCopyWithImpl;
 @useResult
 $Res call({
- int chips, int mult, int total
+ int bonusPoints, int chips, int lineScore, int mult, int piecePoints, int total
 });
 
 
@@ -1033,10 +1036,13 @@ class _$ScoreAddedCopyWithImpl<$Res>
 
 /// Create a copy of GameEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? chips = null,Object? mult = null,Object? total = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? bonusPoints = null,Object? chips = null,Object? lineScore = null,Object? mult = null,Object? piecePoints = null,Object? total = null,}) {
   return _then(ScoreAdded(
-chips: null == chips ? _self.chips : chips // ignore: cast_nullable_to_non_nullable
+bonusPoints: null == bonusPoints ? _self.bonusPoints : bonusPoints // ignore: cast_nullable_to_non_nullable
+as int,chips: null == chips ? _self.chips : chips // ignore: cast_nullable_to_non_nullable
+as int,lineScore: null == lineScore ? _self.lineScore : lineScore // ignore: cast_nullable_to_non_nullable
 as int,mult: null == mult ? _self.mult : mult // ignore: cast_nullable_to_non_nullable
+as int,piecePoints: null == piecePoints ? _self.piecePoints : piecePoints // ignore: cast_nullable_to_non_nullable
 as int,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
 as int,
   ));

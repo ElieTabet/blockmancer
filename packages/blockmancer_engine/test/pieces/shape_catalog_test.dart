@@ -1,4 +1,5 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -39,5 +40,13 @@ void main() {
     expect(shapeCatalog.map((shape) => shape.id), List.generate(19, (i) => i));
     expect(shapeCatalog[9].colorIndex, 0);
     expect(shapeCatalog[18].colorIndex, 0);
+  });
+
+  test('a shape cannot be changed, since every run shares it', () {
+    // Given / When / Then
+    expect(
+      () => shapeCatalog[16].cells.add(const Cell(col: 5, row: 5)),
+      throwsUnsupportedError,
+    );
   });
 }

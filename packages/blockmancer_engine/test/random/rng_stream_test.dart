@@ -1,4 +1,8 @@
-import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
+import 'package:blockmancer_engine/src/random/daily_seed.dart';
+import 'package:blockmancer_engine/src/random/mulberry32.dart';
+import 'package:blockmancer_engine/src/random/rng_stream.dart';
+import 'package:blockmancer_engine/src/random/weighted_draw.dart';
 import 'package:test/test.dart';
 
 // Golden values come from an independent Node port of the prototype's rand()
@@ -9,14 +13,14 @@ void main() {
 
   test('stream seeds derive the same way on every platform', () {
     // Given / When / Then
-    expect(deriveSeed(daily, .pieces, 0), 2736651474);
-    expect(deriveSeed(daily, .offers, 0), 614198587);
-    expect(deriveSeed(daily, .stones, 4), 787966640);
+    expect(deriveSeed(index: 0, runSeed: daily, stream: .pieces), 2736651474);
+    expect(deriveSeed(index: 0, runSeed: daily, stream: .offers), 614198587);
+    expect(deriveSeed(index: 4, runSeed: daily, stream: .stones), 787966640);
   });
 
   test('the first 30 pieces of seed 20261016 are fixed', () {
     // Given
-    var rng = streamFor(daily, .pieces, 0);
+    var rng = streamFor(index: 0, runSeed: daily, stream: .pieces);
     final weights = List.filled(shapeCatalog.length, 1);
     final ids = <int>[];
 
@@ -39,7 +43,7 @@ void main() {
     final seeds = {
       for (final stream in RngStream.values)
         for (var index = 0; index < 5; index++)
-          deriveSeed(daily, stream, index),
+          deriveSeed(index: index, runSeed: daily, stream: stream),
     };
 
     // Then
@@ -48,8 +52,8 @@ void main() {
 
   test('neighbouring run seeds give unrelated streams', () {
     // Given / When
-    final today = deriveSeed(daily, .pieces, 0);
-    final tomorrow = deriveSeed(daily + 1, .pieces, 0);
+    final today = deriveSeed(index: 0, runSeed: daily, stream: .pieces);
+    final tomorrow = deriveSeed(index: 0, runSeed: daily + 1, stream: .pieces);
 
     // Then
     expect(today, isNot(tomorrow));

@@ -1,5 +1,4 @@
-import 'package:blockmancer_engine/src/board/cell.br.dart';
-import 'package:blockmancer_engine/src/pieces/shape.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// The 19 shapes, in the brief's order. Draws index into this list, so
 /// reordering it changes every seeded run.

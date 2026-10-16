@@ -1,9 +1,5 @@
-import 'package:blockmancer_engine/src/board/board.br.dart';
-import 'package:blockmancer_engine/src/board/cell.br.dart';
-import 'package:blockmancer_engine/src/board/cell_state.br.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/board/placement.br.dart';
-import 'package:blockmancer_engine/src/events/game_event.br.dart';
-import 'package:blockmancer_engine/src/jokers/joker_id.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
 
 /// What a joker can read about the move being scored.
@@ -39,7 +35,7 @@ final class ScoreStep {
   final List<JokerFired> fired;
   final int mult;
 
-  ScoreStep addChips(JokerId joker, int amount) => ScoreStep(
+  ScoreStep addChips(int amount, JokerId joker) => ScoreStep(
     chips: chips + amount,
     fired: [
       ...fired,
@@ -51,7 +47,7 @@ final class ScoreStep {
     mult: mult,
   );
 
-  ScoreStep addMult(JokerId joker, int amount) => ScoreStep(
+  ScoreStep addMult(int amount, JokerId joker) => ScoreStep(
     chips: chips,
     fired: [
       ...fired,
@@ -63,7 +59,7 @@ final class ScoreStep {
     mult: mult + amount,
   );
 
-  ScoreStep multiplyMult(JokerId joker, int factor) => ScoreStep(
+  ScoreStep multiplyMult(int factor, JokerId joker) => ScoreStep(
     chips: chips,
     fired: [
       ...fired,
@@ -95,7 +91,7 @@ final class AfterMove {
   final Mulberry32 stonesRng;
   final int storedMult;
 
-  AfterMove addPoints(JokerId joker, int amount) => _copy(
+  AfterMove addPoints(int amount, JokerId joker) => _copy(
     bonusPoints: bonusPoints + amount,
     fired: [
       ...fired,
@@ -106,17 +102,18 @@ final class AfterMove {
     ],
   );
 
-  /// Turns a random empty cell to stone; a full board takes none.
+  /// Turns a random empty cell to stone (see [stoneCells]); a full board
+  /// takes none.
   AfterMove dropStone(JokerId joker) {
-    final empties = board.emptyCells;
+    final cells = stoneCells(board);
 
-    if (empties.isEmpty) return this;
+    if (cells.isEmpty) return this;
 
-    final (index, nextRng) = stonesRng.nextInt(empties.length);
-    final cell = empties[index];
+    final (index, nextRng) = stonesRng.nextInt(cells.length);
+    final cell = cells[index];
 
     return _copy(
-      board: board.withCells({cell: const CellState.stone()}),
+      board: board.withCells({cell: const .stone()}),
       fired: [
         ...fired,
         JokerFired(
@@ -131,7 +128,7 @@ final class AfterMove {
 
   AfterMove resetStoredMult() => _copy(storedMult: 0);
 
-  AfterMove storeMult(JokerId joker, int amount) => _copy(
+  AfterMove storeMult(int amount, JokerId joker) => _copy(
     fired: [
       ...fired,
       JokerFired(
@@ -171,7 +168,7 @@ final class RoundSetup {
   final int pieces;
   final int stones;
 
-  RoundSetup addPieces(JokerId joker, int amount) => RoundSetup(
+  RoundSetup addPieces(int amount, JokerId joker) => RoundSetup(
     fired: [
       ...fired,
       JokerFired(
@@ -183,7 +180,7 @@ final class RoundSetup {
     stones: stones,
   );
 
-  RoundSetup addStones(JokerId joker, int amount) => RoundSetup(
+  RoundSetup addStones(int amount, JokerId joker) => RoundSetup(
     fired: [
       ...fired,
       JokerFired(
@@ -203,7 +200,7 @@ final class RoundBonus {
   final List<JokerFired> fired;
   final int runPoints;
 
-  RoundBonus addRunPoints(JokerId joker, int amount) => RoundBonus(
+  RoundBonus addRunPoints(int amount, JokerId joker) => RoundBonus(
     fired: [
       ...fired,
       JokerFired(

@@ -1,5 +1,5 @@
 name: blockmancer_engine
-description: "Blockmancer's game rules — board, pieces, scoring, jokers and the run state machine. Pure Dart: no Flutter, no clock, no I/O."
+description: "Blockmancer's game rules — the implementation of shared_domain's GameRules: pieces, scoring, jokers and the run state machine. Pure Dart: no Flutter, no clock, no I/O."
 publish_to: none
 resolution: workspace
 
@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   freezed_annotation: ^3.1.0
+  shared_domain: any
 
 dev_dependencies:
   build_runner: 2.16.0
