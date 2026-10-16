@@ -34,7 +34,12 @@ class _GameWidgetState extends State<GameWidget> {
         children: [
           DragArea(
             boardKey: _boardKey,
+            // A drag that starts in the bottom gesture zone is a swipe home
+            // to Android, so the tray stays above it.
             child: SafeArea(
+              minimum: .only(
+                bottom: MediaQuery.systemGestureInsetsOf(context).bottom,
+              ),
               child: Padding(
                 padding: const .symmetric(
                   horizontal: DSSpace.medium,

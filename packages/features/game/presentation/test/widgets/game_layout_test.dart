@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_presentation/src/widgets/board_view.dart';
 import 'package:game_presentation/src/widgets/joker_chips.dart';
+import 'package:game_presentation/src/widgets/tray_view.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 import '../fake_game_rules.dart';
@@ -69,4 +70,20 @@ void main() {
       );
     });
   }
+
+  testWidgets(
+    'on an Android phone with gesture navigation, a piece is grabbed above the swipe home zone',
+    (tester) async {
+      // Given
+      tester.view.systemGestureInsets = const FakeViewPadding(bottom: 32 * 3);
+      addTearDown(tester.view.resetSystemGestureInsets);
+
+      // When
+      await pumpGame(tester, runIn(const .playing()));
+
+      // Then
+      final tray = tester.getRect(find.byType(TrayView));
+      expect(tray.bottom, lessThanOrEqualTo(844 - 32));
+    },
+  );
 }

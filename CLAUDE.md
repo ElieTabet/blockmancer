@@ -265,6 +265,18 @@ engine's events and never recomputes a rule.
 - **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and
   in Chrome (`melos run test-engine-web`).
 
+## The bottom edge
+
+Pieces are dragged up from a tray near the bottom edge, which both platforms read as the swipe
+home. Three things keep the drag in the game:
+
+- **iOS:** `app/ios/Runner/GameViewController.swift` (the storyboard's root controller) defers the
+  bottom edge's system gesture, so going home takes a second swipe. Flutter doesn't expose this.
+- **Android:** `MainActivity` hides the navigation bar with transient-by-swipe behaviour on every
+  window focus. A swipe from the edge then only reveals the bar.
+- **Layout:** `GameWidget`'s `SafeArea` keeps at least `MediaQuery.systemGestureInsetsOf(context).bottom`
+  below the tray, so a grab never starts inside the gesture zone.
+
 ## Splash & Launch Screen
 
 App startup is two screens in one colour — the brand colour (`DSColor.primary`, the logo's ground) from the first pixel to the cross-fade into the game:
