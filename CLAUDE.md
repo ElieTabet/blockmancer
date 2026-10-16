@@ -18,6 +18,7 @@ blockmancer/
 │   ├── lib/config/           # Env (dev/prod) + AppConfig (apiBaseUrl) — compile-time, app-owned
 │   └── env/                  # dart-define-from-file configs: dev.json, dev_android.json, prod.json
 ├── packages/
+│   ├── blockmancer_engine/ # The game rules — pure Dart (no Flutter, no clock, no I/O), deterministic from a seed
 │   ├── shared_domain/    # Entities shared across features (AuthError) — entities only, no logic
 │   ├── utilities/        # Horizontal infrastructure — no feature knowledge
 │   │   ├── connectivity/     # Whether the phone has a network — the only place connectivity_plus is known
@@ -71,8 +72,12 @@ melos run prepare
 #   melos run generate-build-runner   # build_runner (packages depending on build_runner)
 melos run generate
 
-# Run Flutter tests across all packages in parallel
+# Run tests across all packages in parallel — `dart test` for pure-Dart packages
+# (blockmancer_engine), `flutter test` for the rest (scripts/test_package.sh)
 melos run test
+
+# Run the engine's suite compiled to JavaScript in Chrome (the PRNG must match the VM)
+melos run test-engine-web
 
 # Run dart analyze across all packages
 melos run analyze
@@ -247,6 +252,21 @@ Localization is a standalone foundational package `l10n_application` (`packages/
 - **Reactive access via `context.t`:** the app is wrapped once in slang's `TranslationProvider` (an `InheritedWidget`); widgets then read strings with the generated `context.t` extension — `Text(context.t.login.title)` — and rebuild automatically when the locale changes. This is slang's native reactivity; there is **no** Riverpod provider wrapping translations.
 - **Locale lifecycle:** the initial locale is resolved from the device in `boot()` via `LocaleSettings.useDeviceLocaleSync()`. `MaterialApp.router` sets `locale: TranslationProvider.of(context).flutterLocale`, `supportedLocales: AppLocaleUtils.supportedLocales`, and `localizationsDelegates: GlobalMaterialLocalizations.delegates` (from `flutter_localizations`). Switch at runtime with `LocaleSettings.setLocaleSync(AppLocale.fr)` — every `context.t` rebuilds. (There is intentionally no locale-switcher UI or Riverpod locale controller yet; add one wired to a real caller when needed.)
 - **Central versions:** `slang` and `slang_flutter` live in the root `melos.command.bootstrap` like every other dependency.
+
+## Game engine
+
+`packages/blockmancer_engine` holds every game rule: board, pieces, scoring, jokers and the run
+state machine. The rules are specified in `.claude/doc/BLOCKMANCER_BRIEF.md`. The UI animates the
+engine's events and never recomputes a rule.
+
+- **Pure Dart.** Its pubspec declares no Flutter, so a `package:flutter` import fails
+  `melos run analyze` (`depend_on_referenced_packages` under `--fatal-infos`). The brief's
+  `import_lint` isn't used because no version resolves against the pinned analyzer 10.2.0.
+- **Deterministic.** No `DateTime.now()`, no `dart:math` `Random`, no I/O. Randomness is the
+  engine's own mulberry32 over 32-bit arithmetic, so a seed gives the same run on the VM and on the
+  web. Callers pass the date in for a daily seed.
+- **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and
+  in Chrome (`melos run test-engine-web`).
 
 ## Splash & Launch Screen
 

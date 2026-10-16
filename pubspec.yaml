@@ -81,6 +81,7 @@ melos:
         json_serializable: ^6.9.4
         mocktail: ^1.0.4
         riverpod_generator: 4.0.3 # pinned: 4.0.4+ calls FormalParameter.type, absent in the pinned analyzer 10.2.0
+        test: ^1.31.1 # runs the pure-Dart blockmancer_engine's suite on the VM and in Chrome, where flutter_test can't
         url_launcher_platform_interface: ^2.3.2 # fakes the launcher platform so external_links' catches are testable off-device
 
   scripts:
@@ -113,8 +114,12 @@ melos:
           dependsOn: build_runner
 
     test:
-      description: Run Flutter tests across all packages that contain test files
+      description: Run tests across all packages that contain test files — `dart test` for pure-Dart packages, `flutter test` otherwise
       run: melos exec -c 4 -- bash "$MELOS_ROOT_PATH/scripts/test_package.sh"
+
+    test-engine-web:
+      description: Run the engine's suite compiled to JavaScript in Chrome — the PRNG must give the same numbers there as on the VM (needs Chrome installed)
+      run: cd packages/blockmancer_engine && dart test -p chrome
 
     analyze:
       description: Run dart analyze across all packages — enforces layer boundary lint rules
