@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/widgets/game_button.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
@@ -40,14 +39,14 @@ final class RoundLostSheet extends ConsumerWidget {
       children: [
         SheetTitle(
           reason == .noRoom ? lost.noRoom : lost.outOfPieces,
-          color: GamePalette.lost,
+          color: DSColor.negative,
         ),
         Text(
           lost.progress(
             score: pointsText(context, score),
             target: pointsText(context, target),
           ),
-          style: const TextStyle(color: GamePalette.muted, fontSize: 14),
+          style: const TextStyle(color: DSColor.textMuted, fontSize: 14),
         ),
         if (canRevive)
           GameButton(
@@ -59,7 +58,7 @@ final class RoundLostSheet extends ConsumerWidget {
           child: Text(
             lost.endRun,
             style: const TextStyle(
-              color: GamePalette.muted,
+              color: DSColor.textMuted,
               fontSize: 14,
               fontWeight: .w700,
             ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/drag_notifier.br.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/painting/piece_painter.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
@@ -68,9 +67,9 @@ final class TraySlot extends ConsumerWidget {
       child: Container(
         height: isCompactScreen(context) ? _compactHeight : _height,
         decoration: BoxDecoration(
-          color: GamePalette.card,
+          color: DSColor.card,
           borderRadius: .circular(DSCornerRadius.large),
-          border: .all(color: GamePalette.cardBorder, width: 1.5),
+          border: .all(color: DSColor.cardBorder, width: 1.5),
         ),
         alignment: .center,
         child: shapeId == null

@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/widgets/joker_offer_sheet.dart';
 import 'package:game_presentation/src/widgets/round_lost_sheet.dart';
 import 'package:game_presentation/src/widgets/run_end_sheet.dart';
@@ -32,7 +31,7 @@ final class PhaseOverlay extends ConsumerWidget {
     if (sheet == null) return const SizedBox.shrink();
 
     return ColoredBox(
-      color: GamePalette.scrim,
+      color: DSColor.scrim,
       child: Align(
         alignment: .bottomCenter,
         child: _SheetFrame(
@@ -58,7 +57,7 @@ final class _SheetFrame extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     width: double.infinity,
     decoration: const BoxDecoration(
-      color: GamePalette.sheet,
+      color: DSColor.sheet,
       borderRadius: .vertical(top: _radius),
     ),
     child: SafeArea(

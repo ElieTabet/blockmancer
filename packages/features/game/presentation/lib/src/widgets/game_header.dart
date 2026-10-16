@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/widgets/compact_screen.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
@@ -31,7 +30,7 @@ final class GameHeader extends StatelessWidget {
             if (!isCompactScreen(context))
               Text(
                 context.t.game.subtitle,
-                style: const TextStyle(color: GamePalette.muted, fontSize: 12),
+                style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
               ),
           ],
         ),
@@ -59,7 +58,7 @@ final class RunTotalChip extends ConsumerWidget {
       padding: const .symmetric(horizontal: DSSpace.small),
       alignment: .center,
       decoration: BoxDecoration(
-        color: GamePalette.sheet,
+        color: DSColor.sheet,
         borderRadius: .circular(_height / 2),
       ),
       child: Text(

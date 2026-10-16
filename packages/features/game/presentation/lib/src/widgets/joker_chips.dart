@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -59,7 +58,7 @@ final class JokerChip extends StatelessWidget {
         height: _height,
         padding: const .symmetric(horizontal: DSSpace.small),
         decoration: BoxDecoration(
-          color: GamePalette.jokerCard,
+          color: DSColor.jokerSurface,
           borderRadius: .circular(DSCornerRadius.medium),
           border: .all(
             color: paired ? DSColor.accent : DSColor.joker,
@@ -71,7 +70,7 @@ final class JokerChip extends StatelessWidget {
           child: Text(
             paired ? '★ ${text.name}' : text.name,
             style: const TextStyle(
-              color: GamePalette.jokerInk,
+              color: DSColor.jokerInk,
               fontSize: 12,
               fontWeight: .w700,
             ),

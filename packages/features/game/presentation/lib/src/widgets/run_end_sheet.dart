@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/widgets/game_button.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
@@ -42,7 +41,7 @@ final class RunEndSheet extends ConsumerWidget {
         Text(
           label.toUpperCase(),
           style: const TextStyle(
-            color: GamePalette.info,
+            color: DSColor.info,
             fontSize: 12,
             fontWeight: .w700,
             letterSpacing: 1.6,
@@ -53,7 +52,7 @@ final class RunEndSheet extends ConsumerWidget {
           end.build(
             jokers: jokers.isEmpty ? end.noJokers : jokerNames(context, jokers),
           ),
-          style: const TextStyle(color: GamePalette.muted, fontSize: 12),
+          style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
         ),
         GameButton(
           label: end.retry,

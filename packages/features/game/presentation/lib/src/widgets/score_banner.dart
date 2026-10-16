@@ -4,7 +4,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -105,7 +104,7 @@ class _ScoreBannerState extends ConsumerState<ScoreBanner> {
                     overflow: .ellipsis,
                     style: DSFont.display(
                       const TextStyle(
-                        color: GamePalette.good,
+                        color: DSColor.positive,
                         fontSize: 16,
                         fontWeight: .w600,
                       ),

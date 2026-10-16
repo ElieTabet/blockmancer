@@ -1,7 +1,7 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/rendering.dart';
 import 'package:game_presentation/src/notifiers/drag_preview.br.dart';
 import 'package:game_presentation/src/painting/board_geometry.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// The drag shadow over the board: the piece's colour where it fits, red where
@@ -24,10 +24,10 @@ final class PreviewPainter extends CustomPainter {
 
     final geometry = BoardGeometry(size.shortestSide);
     final preview = drag.preview;
-    final colour = GamePalette.pieces[drag.colorIndex];
+    final colour = DSGameColor.pieces[drag.colorIndex];
 
     for (final cell in _clearingCells(preview)) {
-      _outline(canvas, geometry, cell, GamePalette.clearingOutline);
+      _outline(canvas, geometry, cell, DSGameColor.clearingOutline);
     }
 
     for (final cell in preview.cells) {
@@ -44,10 +44,10 @@ final class PreviewPainter extends CustomPainter {
         _outline(canvas, geometry, cell, colour);
       } else {
         final fill = preview.colliding.contains(cell)
-            ? GamePalette.collision
-            : GamePalette.collision.withValues(alpha: _strayAlpha);
+            ? DSGameColor.collision
+            : DSGameColor.collision.withValues(alpha: _strayAlpha);
         canvas.drawRRect(rect, Paint()..color = fill);
-        _outline(canvas, geometry, cell, GamePalette.collisionOutline);
+        _outline(canvas, geometry, cell, DSGameColor.collisionOutline);
       }
     }
   }

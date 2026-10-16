@@ -1,5 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/rendering.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// One piece, its top-left at the canvas origin, in cells of [cellSize] spaced
@@ -29,7 +29,7 @@ final class PiecePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = GamePalette.pieces[shape.colorIndex].withValues(alpha: opacity);
+      ..color = DSGameColor.pieces[shape.colorIndex].withValues(alpha: opacity);
     final radius = Radius.circular(cellSize / 4);
 
     for (final cell in shape.cells) {

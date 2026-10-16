@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 
@@ -18,7 +17,7 @@ final class RoundCard extends StatelessWidget {
       vertical: DSSpace.xsmall,
     ),
     decoration: BoxDecoration(
-      color: GamePalette.card,
+      color: DSColor.card,
       borderRadius: .circular(DSCornerRadius.large),
     ),
     child: const Column(
@@ -61,7 +60,7 @@ final class RoundTitle extends ConsumerWidget {
           ? round.boss(count: count, index: index)
           : round.regular(count: count, index: index),
       style: TextStyle(
-        color: isBoss ? GamePalette.bossRound : GamePalette.regularRound,
+        color: isBoss ? DSGameColor.bossRound : DSGameColor.regularRound,
         fontSize: 14,
         fontWeight: .w700,
       ),
@@ -98,7 +97,7 @@ final class RoundScore extends ConsumerWidget {
           ),
         ],
       ),
-      style: const TextStyle(color: GamePalette.muted, fontSize: 13),
+      style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
     );
   }
 }
@@ -121,7 +120,7 @@ final class RoundProgress extends ConsumerWidget {
       child: LinearProgressIndicator(
         value: progress,
         minHeight: _height,
-        backgroundColor: GamePalette.cardBorder,
+        backgroundColor: DSColor.cardBorder,
         color: DSColor.accent,
       ),
     );
@@ -146,7 +145,7 @@ final class RoundStatus extends ConsumerWidget {
       children: [
         Text(
           round.piecesLeft(count: pieces),
-          style: const TextStyle(color: GamePalette.muted, fontSize: 12),
+          style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
         ),
         Text(
           [

@@ -1,7 +1,7 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_presentation/src/notifiers/drag_preview.br.dart';
-import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/painting/preview_painter.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -33,8 +33,8 @@ void main() {
     expect(
       painting(preview),
       paints
-        ..rrect(color: GamePalette.pieces[1].withValues(alpha: 0.6))
-        ..rrect(color: GamePalette.pieces[1], style: .stroke),
+        ..rrect(color: DSGameColor.pieces[1].withValues(alpha: 0.6))
+        ..rrect(color: DSGameColor.pieces[1], style: .stroke),
     );
   });
 
@@ -52,8 +52,8 @@ void main() {
     expect(
       painting(preview),
       paints
-        ..rrect(color: GamePalette.collision)
-        ..rrect(color: GamePalette.collisionOutline, style: .stroke),
+        ..rrect(color: DSGameColor.collision)
+        ..rrect(color: DSGameColor.collisionOutline, style: .stroke),
     );
   });
 
@@ -70,7 +70,7 @@ void main() {
     // When / Then: the seven other cells of row 2 come first
     expect(
       painting(preview),
-      paints..rrect(color: GamePalette.clearingOutline, style: .stroke),
+      paints..rrect(color: DSGameColor.clearingOutline, style: .stroke),
     );
   });
 
