@@ -1,0 +1,19 @@
+name: design_system
+description: "Design system — tokens (theme, colors, spacing), buttons, text fields, icons, and containers."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.3.1  # Typography — Google Fonts integration used by the theme
+  intl: ^0.20.2         # Date/number formatting used by the date/time fields
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

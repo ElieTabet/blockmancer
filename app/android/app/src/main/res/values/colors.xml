@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#14172B</color>
+    <!-- The same DSColor.primary the rest of the app is built on. -->
+    <color name="notification_accent">#14172B</color>
+</resources>

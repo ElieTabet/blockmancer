@@ -1,0 +1,10 @@
+# The root analysis_options wires the custom_lints analyzer-plugin, which crashes
+# `dart analyze` on this Flutter application package specifically. The app is a thin
+# shell that doesn't need the ordering lints, so it opts out by not inheriting the
+# root's plugin block. Feature/composition packages keep the plugin (IDE assistance).
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+include: package:flutter_lints/flutter.yaml

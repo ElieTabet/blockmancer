@@ -1,0 +1,38 @@
+name: blockmancer_app
+description: "Flutter application shell — wires all feature packages into a single runnable app."
+# Read at runtime by package_info_plus and reported to /devices/me. Without it
+# Flutter stamps its 1.0.0+1 default and every install looks like the same build.
+version: 1.0.0+2
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0" # >=3.11.0 <4.0.0
+  flutter: ">=3.44.0 <4.0.0" # >=3.44.0 <4.0.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:            # Material/Cupertino/Widgets localization delegates
+    sdk: flutter
+  shared_domain: any  # Common business entities (User, Address) shared across features
+  design_system: any  # Design tokens, theme, and reusable UI components
+  l10n_application: any # Localization — slang translations + reactive context.t
+  app_router: any    # Composition — app root router (aggregates feature routes)
+  app_providers: any # Composition — cross-feature provider overrides
+  timber: any        # Logging facade — the app chooses the sink at boot
+  firebase_core: ^4.15.0  # Firebase started once at boot, from the native config files
+  flutter_riverpod: ^3.3.1        # State management and dependency injection
+  package_info_plus: ^10.2.2      # This build's version, resolved once at boot
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Test-only: stubbing the cold-start I/O in the boot smoke test.
+  push_notifications_domain: any
+  flutter_lints: ^6.0.0           # Flutter recommended lint rules
+  flutter_launcher_icons: ^0.14.4 # Generates the launcher icons into android/ and ios/
+  flutter_native_splash: ^2.4.8   # Generates the native launch screens into android/ and ios/
+
+flutter:
+  uses-material-design: true

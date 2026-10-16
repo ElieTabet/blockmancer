@@ -1,0 +1,164 @@
+name: blockmancer_workspace
+description: "Foundation monorepo workspace root. Declares the workspace packages — no app dependencies live here."
+publish_to: none
+
+environment:
+  sdk: ^3.11.0 # >=3.11.0 <4.0.0
+  flutter: ^3.44.0 # >=3.44.0 <4.0.0
+
+workspace:
+  - app
+  - packages/*
+  - packages/dsm/*
+  - packages/dsm/l10n/*
+  - packages/composition/*
+  - packages/plugins/*
+  - packages/utilities/*
+  - packages/utilities/**/* # layer-split utilities (webviews/{domain,presentation}) sit one level deeper
+  - packages/features/**/*
+  - packages/ui/* # shared, state-aware UI — riverpod and l10n aware, so not design_system
+
+# Root-only tooling: this runs at the workspace root, so it is declared here as well as
+# under melos.command.bootstrap below (the single source of versions — keep the two in step).
+dev_dependencies:
+  melos: ^7.5.0 # Monorepo script orchestration: test, generate, analyze across all packages
+
+# Forces the analyzer 10.2.0 line so the custom_lints analyzer-plugin
+# (analysis_server_plugin, which the Dart SDK's plugin host requires at >=0.3.8 →
+# analyzer >=10.0.2) can coexist with the codegen stack. Mirrors flutter-front.
+dependency_overrides:
+  analyzer: 10.2.0 # overrides riverpod_generator 4.0.3's ^9.0.0 upper bound
+  dart_style: 3.1.7 # 3.1.8+ requires analyzer >=13; 3.1.7 supports analyzer >=10 <12
+  riverpod_analyzer_utils: 1.0.0-dev.10 # riverpod_generator 4.0.3 pins dev.9, which mis-parses under analyzer 10; dev.10 handles it
+  mockito: 5.6.4 # transitive via riverpod_generator; 5.6.5+ requires analyzer >=13
+
+melos:
+  # Single source of dependency versions for the whole workspace. `melos bootstrap`
+  # stamps each version down into the packages that declare the dependency: external
+  # (hosted) deps carry the version, internal/workspace deps stay version-less (`any`).
+  # Add a new external dependency's version HERE, then declare it (version-less) in the
+  # consuming package — never hand-manage a package-level version.
+  command:
+    bootstrap:
+      environment:
+        sdk: ">=3.11.0 <4.0.0"
+        flutter: ">=3.44.0 <4.0.0"
+      dependencies:
+        analysis_server_plugin: 0.3.10 # pinned: newer versions require analyzer >=11 (see dependency_overrides)
+        analyzer: ^10.2.0
+        analyzer_plugin: 0.14.4 # pinned to match analyzer 10.2.0 / analysis_server_plugin 0.3.10
+        auto_route: ^11.1.0
+        dio: ^5.4.0 # HTTP transport for the network package (no feature depends on dio directly)
+        connectivity_plus: ^7.3.1 # whether the phone has a network (packages/utilities/connectivity). Resolves to 7.3.1: 7.3.2 needs dbus 0.8, flutter_local_notifications_linux pins 0.7
+        device_info_plus: ^13.3.0 # OS version reported by the device feature
+        firebase_analytics: ^12.6.0 # automatic usage events, production release builds only (packages/utilities/telemetry)
+        firebase_core: ^4.15.0 # Firebase app initialization — the app starts it at boot; packages/utilities/push uses it in tests
+        firebase_crashlytics: ^5.4.0 # crash reports, production release builds only (packages/utilities/telemetry)
+        firebase_messaging: ^16.7.0 # FCM token + message streams (packages/utilities/push)
+        flutter_inappwebview: ^6.1.5 # The only webview engine; no feature depends on it directly (packages/utilities/webviews)
+        flutter_local_notifications: ^22.3.1 # Android has no foreground display of its own — this is what draws it (packages/utilities/push)
+        flutter_riverpod: ^3.3.1
+        flutter_secure_storage: ^11.2.0 # Keychain/Keystore-backed storage for the keychain package
+        freezed_annotation: ^3.1.0
+        google_fonts: ^6.3.1
+        intl: ^0.20.2
+        json_annotation: ^4.9.0
+        package_info_plus: ^10.2.2
+        result_dart: ^2.1.1 # backs the workspace Result type (packages/utilities/result)
+        riverpod_annotation: ^4.0.2
+        slang: ^4.19.0
+        slang_flutter: ^4.19.0
+        url_launcher: ^6.3.2 # opens a link outside the app; known only to the external_links package
+        uuid: ^4.5.1 # device_uuid generation (auth)
+      dev_dependencies:
+        auto_route_generator: ^10.4.0
+        build_runner: 2.16.0 # pinned: 2.16.2 calls AnalysisOptionsBuilder, absent in the pinned analyzer 10.2.0
+        flutter_launcher_icons: ^0.14.4 # Generates the launcher icons into app/android and app/ios
+        flutter_gen_runner: ^5.15.0 # FlutterGen — generates the type-safe Assets accessor (assets package)
+        flutter_lints: ^6.0.0
+        flutter_native_splash: ^2.4.8 # Generates the native Android/iOS launch screens (run from app/, where the platform folders live)
+        freezed: ^3.2.5
+        json_serializable: ^6.9.4
+        mocktail: ^1.0.4
+        riverpod_generator: 4.0.3 # pinned: 4.0.4+ calls FormalParameter.type, absent in the pinned analyzer 10.2.0
+        url_launcher_platform_interface: ^2.3.2 # fakes the launcher platform so external_links' catches are testable off-device
+
+  scripts:
+    prepare:
+      description: Bootstrap workspace, link local packages, then run code generation
+      steps:
+        - bootstrap
+        - generate
+
+    generate:
+      description: Generate all code — slang localization (CLI) first, then build_runner (freezed, json_serializable, auto_route, riverpod)
+      steps:
+        - generate-i18n
+        - generate-build-runner
+
+    generate-i18n:
+      description: Generate slang localization sources (strings.g.dart) via the slang CLI, for packages that depend on slang
+      run: dart run slang
+      exec:
+        concurrency: 1
+        packageFilters:
+          dependsOn: slang
+
+    generate-build-runner:
+      description: Run build_runner (freezed, json_serializable, auto_route, riverpod) across packages that declare it
+      run: dart run build_runner build
+      exec:
+        concurrency: 1
+        packageFilters:
+          dependsOn: build_runner
+
+    test:
+      description: Run Flutter tests across all packages that contain test files
+      run: melos exec -c 4 -- bash "$MELOS_ROOT_PATH/scripts/test_package.sh"
+
+    analyze:
+      description: Run dart analyze across all packages — enforces layer boundary lint rules
+      run: dart analyze --fatal-infos
+      exec:
+        concurrency: 4
+
+    pr-check:
+      description: |
+        Full PR validation suite (delegates to scripts/pr_check.sh): format, analyze,
+        cycling dependencies, generated up-to-date, tests. Stops on first failure.
+        Prefer `bash scripts/pr_check.sh [--tests-only] [--verbose]`.
+        Env: PRCHECK_VERBOSE=1 (print step output even on success), PRCHECK_TESTS_ONLY=1.
+      run: bash scripts/pr_check.sh
+
+    create:
+      description: "Scaffold a new package — usage: melos run create -- --name <name> --type <feature|core|shared_domain|design_system>"
+      run: bash scripts/create_package.sh
+
+    flavor-dev:
+      description: Run the app against the local dev API (MAMP) — iOS simulator, macOS, host
+      run: cd app && flutter run --dart-define-from-file=env/dev.json
+
+    flavor-dev-android:
+      description: Run the app against the local dev API from an Android emulator (10.0.2.2 is the emulator's alias for the host loopback; plain localhost would resolve to the emulator itself)
+      run: cd app && flutter run --dart-define-from-file=env/dev_android.json
+
+    flavor-prod:
+      description: Run the app against production (API_BASE_URL in app/env/prod.json)
+      run: cd app && flutter run --dart-define-from-file=env/prod.json
+
+    build-ios:
+      description: |
+        Release build of the iOS app against production, as an obfuscated .ipa
+        for TestFlight, with its Dart symbols uploaded to Crashlytics
+        (delegates to scripts/build_ios_release.sh). Cleans first, so it is
+        built from nothing rather than from whatever debug runs left behind —
+        the one place a clean is warranted. Requires macOS + Xcode.
+      run: bash scripts/build_ios_release.sh
+
+    build-android:
+      description: |
+        Release build of the Android app against production, as an obfuscated
+        .aab for the Play Console, with its Dart symbols uploaded to
+        Crashlytics (delegates to scripts/build_android_release.sh). Cleans
+        first, like build-ios. Needs app/android/key.properties.
+      run: bash scripts/build_android_release.sh

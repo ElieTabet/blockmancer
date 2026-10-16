@@ -1,0 +1,67 @@
+// The status bar over a screen that has no app bar.
+//
+// Splash and login are both bare Scaffolds, so nothing in them annotates the
+// strip the clock and battery sit in. Application wraps the whole app in one
+// AnnotatedRegion to cover exactly that; this pumps the same wrapper — the way
+// widget_test.dart mirrors Application's wiring — and asserts what the platform
+// is actually told, rather than that the widget is present.
+
+import 'package:app_providers/app_providers.dart';
+import 'package:app_router/app_router.dart';
+import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:l10n_application/l10n_application.dart';
+
+import 'package:push_notifications_domain/push_notifications_domain.dart'
+    as push_notifications;
+
+void main() {
+  testWidgets('Given a screen with no app bar '
+      'When it is on screen '
+      'Then the status bar over it is drawn light', (tester) async {
+    final appRouter = AppRouter();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          ...appOverrides(
+            androidPackageName: 'com.elietabet.blockmancer',
+            apiBaseUrl: 'http://localhost:8888/api/mobile/v1',
+            appVersion: '1.0.0',
+            collectsTelemetry: false,
+            router: appRouter,
+          ),
+          // With no login screen the splash hands off to Home, which asks for
+          // notifications — a platform channel the test has no answer for.
+          push_notifications.askForNotificationsProvider.overrideWithValue(
+            () async {},
+          ),
+        ],
+        child: TranslationProvider(
+          child: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle.light,
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              theme: DSTheme.instance.lightTheme,
+              darkTheme: DSTheme.instance.darkTheme,
+              routerConfig: appRouter.config(),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Splash first, then the hand-off to login. Both are bare Scaffolds.
+    await tester.pump();
+    expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
+
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Your app starts here'), findsOneWidget);
+    expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
+  });
+}

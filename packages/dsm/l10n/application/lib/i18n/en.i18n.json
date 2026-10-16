@@ -1,0 +1,52 @@
+{
+  "login": {
+    "emailHint": "Email",
+    "passwordHint": "Password",
+    "submit": "Sign in",
+    "continueAsGuest": "Continue as a guest",
+    "emailRequired": "Please enter your email",
+    "emailInvalid": "Please enter a valid email address",
+    "emailTooLong": "Email address is too long",
+    "passwordRequired": "Please enter your password",
+    "passwordTooShort": "Password must be at least 8 characters long",
+    "passwordTooLong": "Password is too long",
+    "errorTitle": "Sign-in failed",
+    "errorButtonLabel": "OK",
+    "invalidCredentials": "Incorrect email or password",
+    "deviceConflict": "This device is signed in as another member. Sign out first.",
+    "noInternet": "Check your internet connection and try again.",
+    "genericError": "Something went wrong. Please try again."
+  },
+  "home": {
+    "tabLabel": "Home",
+    "title": "Home",
+    "placeholder": "Your app starts here. Replace this tab with the app's own main screen."
+  },
+  "session": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signOutConfirmTitle": "Sign out?",
+    "signOutConfirmMessage": "You'll need to sign in again to see your content.",
+    "signOutConfirmAction": "Sign out",
+    "signOutCancel": "Stay signed in",
+    "signOutFailedTitle": "Couldn't sign out",
+    "signOutFailed": "Something went wrong signing you out. Please try again.",
+    "signOutNoConnection": "No internet connection. Check your connection and try again.",
+    "signOutFailedButtonLabel": "OK"
+  },
+  "push": {
+    "channelName": "Announcements",
+    "channelDescription": "News and messages from the app."
+  },
+  "appStatus": {
+    "maintenanceTitle": "We'll be right back",
+    "maintenanceFallback": "The app is undergoing maintenance. Please try again in a little while.",
+    "retry": "Try again",
+    "forceUpdateTitle": "Update required",
+    "forceUpdateBody": "This version of the app is no longer supported. Update it to keep using it.",
+    "updateAvailableTitle": "Update available",
+    "updateAvailableBody": "Version $version is available.",
+    "update": "Update",
+    "later": "Later"
+  }
+}

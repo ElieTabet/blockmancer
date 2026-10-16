@@ -1,0 +1,31 @@
+name: app_router
+description: "Composition — app root router: aggregates feature routes and implements each feature's routing interface."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  design_system: any
+  home_presentation: any
+  splash_presentation: any
+  push_notifications_presentation: any
+  screen_header: any
+  l10n_application: any
+  riverpod_annotation: ^4.0.2
+  flutter_riverpod: ^3.3.1
+  auto_route: ^11.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Test-only: the composition tests mount the real tabs, so they have to fill
+  # the slots those read rather than let them throw.
+  result: any
+  build_runner: 2.16.0
+  auto_route_generator: ^10.4.0
+  mocktail: ^1.0.4

@@ -1,0 +1,20 @@
+name: shared_domain
+description: "Common business entities (User, Address) and shared use cases used across multiple features."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0" # >=3.11.0 <4.0.0
+  flutter: ">=3.44.0 <4.0.0" # >=3.44.0 <4.0.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  freezed_annotation: ^3.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: 2.16.0
+  freezed: ^3.2.5
+  mocktail: ^1.0.4    # Mock generation for unit tests

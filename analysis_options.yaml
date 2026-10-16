@@ -1,0 +1,14 @@
+# Layer boundaries are enforced structurally by the pub-workspace package split
+# (each layer is its own package and can only import what its pubspec declares).
+include: package:flutter_lints/flutter.yaml
+
+# Workspace custom analyzer-plugin (packages/plugins/custom_lints): alphabetical-ordering
+# rules with quick-fixes. Native analysis_server_plugin — loads in the IDE / single-file
+# analysis; `dart analyze <dir>` does not run it (so it's not a CI gate).
+plugins:
+  custom_lints:
+    path: packages/plugins/custom_lints
+    diagnostics:
+      prefer_parameters_sorted_alphabetically: true
+      prefer_field_declarations_sorted_alphabetically: true
+      prefer_enum_constants_sorted_alphabetically: true

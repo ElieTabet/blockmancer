@@ -1,0 +1,16 @@
+# slang is generated via the CLI (`dart run slang`), NOT build_runner: its build_runner
+# integration writes strings.g.dart in a post-process phase that runs after riverpod, so a
+# same-package @riverpod provider depending on slang's types can never see them in one pass.
+# Running the CLI first makes strings.g.dart a plain committed source that riverpod reads.
+# lazy: false keeps locale loading eager so translations build synchronously (buildSync).
+# timestamp: false keeps strings.g.dart byte-identical across regenerations — slang
+# otherwise stamps a build time into the header, which scripts/check_generated.sh
+# (it globs *.g.dart) would report as drift on every pr-check.
+timestamp: false
+base_locale: en
+fallback_strategy: base_locale
+lazy: false
+input_directory: lib/i18n
+input_file_pattern: .i18n.json
+output_directory: lib/i18n
+output_file_name: strings.g.dart

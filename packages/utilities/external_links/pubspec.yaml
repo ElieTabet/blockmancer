@@ -1,0 +1,19 @@
+name: external_links
+description: "Hands a link to something outside the app — the only place url_launcher is known."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  timber: any
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  url_launcher_platform_interface: ^2.3.2

@@ -1,0 +1,23 @@
+name: push_notifications_presentation
+description: "push_notifications presentation layer — starting push at launch, and opening what a tapped push is about."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  push_notifications_domain: any
+  riverpod_annotation: ^4.0.2
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Test-only: ProviderContainer, for driving the openings notifier.
+  flutter_riverpod: ^3.3.1
+  build_runner: 2.16.0
+  riverpod_generator: 4.0.3

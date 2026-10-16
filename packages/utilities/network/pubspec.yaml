@@ -1,0 +1,24 @@
+name: network
+description: "Network infrastructure — transport-agnostic HttpClient contract, error hierarchy and interceptor chain, with a Dio implementation."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.4.0                 # The only transport; no feature package may depend on dio directly
+  freezed_annotation: ^3.1.0
+  riverpod_annotation: ^4.0.2
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: 2.16.0
+  freezed: ^3.2.5
+  riverpod_generator: 4.0.3
+  mocktail: ^1.0.4

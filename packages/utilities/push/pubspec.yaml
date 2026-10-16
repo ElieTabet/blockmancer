@@ -1,0 +1,26 @@
+name: push
+description: "Push messaging — FCM registration, the OS permission prompt, Android's foreground display, and the data a tapped notification carries. Knows nothing about devices, sessions or news."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_messaging: ^16.7.0
+  flutter_local_notifications: ^22.3.1
+  riverpod_annotation: ^4.0.2
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: 2.16.0
+  # Test-only: the real `apns-token-not-set` failure is a FirebaseException, and
+  # a test that threw something else would not pin the case that matters.
+  firebase_core: ^4.15.0
+  riverpod_generator: 4.0.3
+  mocktail: ^1.0.4

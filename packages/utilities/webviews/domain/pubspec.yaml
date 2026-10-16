@@ -1,0 +1,19 @@
+name: webviews_domain
+description: "Webview configuration, JS-bridge and command entities — engine-agnostic, so nothing here knows which webview renders it."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  freezed_annotation: ^3.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: 2.16.0
+  freezed: ^3.2.5

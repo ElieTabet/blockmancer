@@ -1,0 +1,386 @@
+// Which environment a debug run uses is decided here, by the --dart-define-from-file
+// passed in toolArgs. VS Code runs the FIRST configuration when nothing is selected,
+// so "app · dev (localhost)" is the default; pick another from the Run and Debug
+// dropdown to switch. Without a flag AppConfig falls back to the same dev URL, so a
+// bare `flutter run` behaves identically.
+//
+// PROXYMAN
+// The "(Proxyman)" configurations carry the same two defines flutter-front uses:
+// ALLOW_SYSTEM_PROXY opts the build in, EXPLICIT_PROXY names host:port (Proxyman
+// listens on 9090). Both are required: the resolver short-circuits on a disabled
+// configuration before it ever reads EXPLICIT_PROXY.
+//
+// Only EXPLICIT_PROXY changes between them, and API_BASE_URL never does. Under a
+// proxy the device does not dial the API — it hands the URL to Proxyman, which
+// resolves it on the Mac. So every configuration keeps dev.json's localhost and
+// only says where the proxy is; pointing the API at a device-relative address
+// (10.0.2.2, a LAN IP) would ask Proxyman to resolve it from the wrong machine.
+//
+// Naming the proxy is what makes Dio visible at all: Dart's HttpClient ignores the
+// system proxy on every platform (findProxy returns DIRECT unless set), so Proxyman's
+// automatic setup captures the WebView, which uses native networking, and nothing Dio
+// sends. AppConfig resolves the two defines into one address, composition hands it to
+// `network`, and DioHttpClient.create installs an IOHttpClientAdapter with findProxy
+// and — since Proxyman MITMs TLS with its own CA — badCertificateCallback. Both are
+// behind kDebugMode, so a release build connects directly whatever it was given.
+//
+// This file is hand-maintained — melos does not regenerate it (it only writes .idea).
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "app \u00b7 dev (localhost)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/dev.json"
+            ]
+        },
+        {
+            "name": "app \u00b7 dev (Android emulator)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/dev_android.json"
+            ]
+        },
+        {
+            "name": "app \u00b7 prod",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/prod.json"
+            ]
+        },
+        // Same defines as "app \u00b7 prod" \u2014 the prod API is public, so the emulator
+        // needs no 10.0.2.2 rewrite. Behind Cloudflare WARP every API call fails
+        // TLS: WARP re-signs with the corporate root, and dart:io on Android
+        // trusts system CAs only. Use it off WARP, or a Proxyman configuration.
+        {
+            "name": "app \u00b7 prod (Android emulator)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/prod.json"
+            ]
+        },
+        // EDIT THE IP: a physical device reaches the Mac as neither localhost nor
+        // 10.0.2.2 (the emulator's alias), so API_BASE_URL is overridden with the
+        // Mac's LAN address \u2014 `ipconfig getifaddr en0` prints it. The later
+        // --dart-define wins over the file's value. Phone and Mac on the same Wi-Fi.
+        {
+            "name": "app \u00b7 dev (Android device)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/dev.json",
+                "--dart-define=API_BASE_URL=http://192.168.1.10:8888/api/mobile/v1"
+            ]
+        },
+        // Same defines as "app \u00b7 prod". The emulator's WARP caveat applies to
+        // the phone too when it runs the Cloudflare One agent itself: every API
+        // call fails CERTIFICATE_VERIFY_FAILED. Pause WARP on the phone first.
+        {
+            "name": "app \u00b7 prod (Android device)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/prod.json"
+            ]
+        },
+        {
+            "name": "app \u00b7 dev (profile mode)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "toolArgs": [
+                "--dart-define-from-file=env/dev.json"
+            ]
+        },
+        {
+            "name": "app \u00b7 prod (release mode)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "toolArgs": [
+                "--dart-define-from-file=env/prod.json"
+            ]
+        },
+        {
+            "name": "app \u00b7 dev (Proxyman)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/dev.json",
+                "--dart-define=ALLOW_SYSTEM_PROXY=true",
+                "--dart-define=EXPLICIT_PROXY=127.0.0.1:9090"
+            ]
+        },
+        {
+            "name": "app \u00b7 prod (Proxyman)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/prod.json",
+                "--dart-define=ALLOW_SYSTEM_PROXY=true",
+                "--dart-define=EXPLICIT_PROXY=127.0.0.1:9090"
+            ]
+        },
+        // dev.json, NOT dev_android.json: 10.0.2.2 is the emulator's alias for the
+        // host, so it is the right address for the proxy and the wrong one for the
+        // API — Proxyman would have to resolve it on the Mac, where it means
+        // nothing. Android distrusts user-installed CAs, which is what
+        // android/app/src/debug/res/xml/network_security_config.xml is for — it
+        // covers the WebView and other native traffic, and lives in the debug
+        // source set so it can never ship. Dio needs none of it: dart:io carries
+        // its own root store and is covered by badCertificateCallback instead.
+        {
+            "name": "app \u00b7 dev (Android emulator, Proxyman)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/dev.json",
+                "--dart-define=ALLOW_SYSTEM_PROXY=true",
+                "--dart-define=EXPLICIT_PROXY=10.0.2.2:9090"
+            ]
+        },
+        // EDIT THE IP: a physical device reaches neither localhost nor 127.0.0.1, so
+        // the Mac's LAN address is where Proxyman is. API_BASE_URL still needs no
+        // override — Proxyman resolves localhost on the Mac. The address changes
+        // with the network; `ipconfig getifaddr en0` prints the current one.
+        {
+            "name": "app \u00b7 dev (physical device, Proxyman)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/dev.json",
+                "--dart-define=ALLOW_SYSTEM_PROXY=true",
+                "--dart-define=EXPLICIT_PROXY=192.168.1.10:9090"
+            ]
+        },
+        // Only the proxy needs the LAN address here — the prod API is public.
+        {
+            "name": "app \u00b7 prod (physical device, Proxyman)",
+            "cwd": "app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file=env/prod.json",
+                "--dart-define=ALLOW_SYSTEM_PROXY=true",
+                "--dart-define=EXPLICIT_PROXY=192.168.1.10:9090"
+            ]
+        },
+        {
+            "name": "shared_domain",
+            "cwd": "packages/shared_domain",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "shared_domain (profile mode)",
+            "cwd": "packages/shared_domain",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "shared_domain (release mode)",
+            "cwd": "packages/shared_domain",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "app_providers",
+            "cwd": "packages/composition/app_providers",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "app_providers (profile mode)",
+            "cwd": "packages/composition/app_providers",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "app_providers (release mode)",
+            "cwd": "packages/composition/app_providers",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "app_router",
+            "cwd": "packages/composition/app_router",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "app_router (profile mode)",
+            "cwd": "packages/composition/app_router",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "app_router (release mode)",
+            "cwd": "packages/composition/app_router",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "assets",
+            "cwd": "packages/dsm/assets",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "assets (profile mode)",
+            "cwd": "packages/dsm/assets",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "assets (release mode)",
+            "cwd": "packages/dsm/assets",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "design_system",
+            "cwd": "packages/dsm/design_system",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "design_system (profile mode)",
+            "cwd": "packages/dsm/design_system",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "design_system (release mode)",
+            "cwd": "packages/dsm/design_system",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "custom_lints",
+            "cwd": "packages/plugins/custom_lints",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "custom_lints (profile mode)",
+            "cwd": "packages/plugins/custom_lints",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "custom_lints (release mode)",
+            "cwd": "packages/plugins/custom_lints",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "application",
+            "cwd": "packages/dsm/l10n/application",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "application (profile mode)",
+            "cwd": "packages/dsm/l10n/application",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "application (release mode)",
+            "cwd": "packages/dsm/l10n/application",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "domain",
+            "cwd": "packages/features/login/domain",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "domain (profile mode)",
+            "cwd": "packages/features/login/domain",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "domain (release mode)",
+            "cwd": "packages/features/login/domain",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "presentation",
+            "cwd": "packages/features/login/presentation",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "presentation (profile mode)",
+            "cwd": "packages/features/login/presentation",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "presentation (release mode)",
+            "cwd": "packages/features/login/presentation",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "presentation",
+            "cwd": "packages/features/splash/presentation",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "presentation (profile mode)",
+            "cwd": "packages/features/splash/presentation",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "presentation (release mode)",
+            "cwd": "packages/features/splash/presentation",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

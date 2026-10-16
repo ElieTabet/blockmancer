@@ -1,0 +1,43 @@
+#!/bin/sh
+# Staged Dart files are formatted (and fully re-staged) on every commit.
+# Install once with: git config core.hooksPath .git-hooks
+# Note: this hook does not support partial staging (git add -p).
+
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
+git diff --cached --name-only --diff-filter=ACMR -z -- '*.dart' | while IFS= read -r -d '' file; do
+	case "$file" in
+		build/* | */build/* | */.dart_tool/*) continue ;;
+	esac
+
+	basename=$(basename "$file")
+	case "$basename" in
+		*.g.dart | *.gr.dart | *.freezed.dart | *.config.dart | *.gen.dart | \
+		*.mocks.dart | *.tailor.dart | *.pb.dart | *.pbenum.dart | \
+		*.pbgrpc.dart | *.pbjson.dart) continue ;;
+	esac
+
+	printf '%s\0' "$file" >> "$tmpfile"
+done
+
+if [ ! -s "$tmpfile" ]; then
+	exit 0
+fi
+
+if ! command -v dart >/dev/null 2>&1; then
+	echo "Pre-commit: 'dart' not found on PATH. Install the Flutter/Dart toolchain, or commit from a shell where 'dart' is available."
+	exit 1
+fi
+
+echo "Pre-commit: formatting staged Dart files..."
+
+if ! xargs -0 dart format -- < "$tmpfile"; then
+	echo "Pre-commit: dart format failed"
+	exit 1
+fi
+
+xargs -0 git add -- < "$tmpfile"
+
+count=$(tr -cd '\0' < "$tmpfile" | wc -c | tr -d ' ')
+echo "Pre-commit: formatted $count file(s)"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug source set only, so it cannot reach a release build. Mirrors
+  flutter-front's stage-flavor config, which exists for the same reason.
+
+  Android trusts only system CAs, and an HTTP debugging proxy signs with one
+  you installed yourself, so native networking — the webviews utility
+  renders through, and any plugin that doesn't go through Dio — has to be told to
+  accept the `user` store. Dio is unaffected either way: `dart:io` carries its
+  own root store and never consults this file.
+
+  Cleartext is permitted for the same reason the dev API is http:// — the local
+  MAMP server has no certificate.
+-->
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" overridePins="true"
+                tools:ignore="AcceptsUserCertificates" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

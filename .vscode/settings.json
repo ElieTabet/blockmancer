@@ -1,0 +1,8 @@
+{
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "*.dart": "${capture}.g.dart, ${capture}.gr.dart, ${capture}.freezed.dart, ${capture}.config.dart, ${capture}.gen.dart, ${capture}.mocks.dart, ${capture}.tailor.dart",
+    "pubspec.yaml": "pubspec.lock, pubspec_overrides.yaml, .flutter-plugins, .flutter-plugins-dependencies, .packages, .metadata"
+  }
+}

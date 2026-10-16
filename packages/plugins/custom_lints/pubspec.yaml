@@ -1,0 +1,26 @@
+name: custom_lints
+description: "Custom analyzer lints for the workspace (alphabetical-ordering rules + quick-fixes)."
+version: 0.0.1
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+# Native analyzer-plugin (analysis_server_plugin), pinned to the same versions as
+# the flutter-front reference so `dart analyze` runs the rules.
+dependencies:
+  analysis_server_plugin: 0.3.10
+  analyzer: ^10.2.0
+  analyzer_plugin: 0.14.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+plugin:
+  platforms:
+    dart:
+      pluginClass: CustomLintsPlugin
+      fileName: lib/main.dart

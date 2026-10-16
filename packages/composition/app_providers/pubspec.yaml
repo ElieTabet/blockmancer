@@ -1,0 +1,36 @@
+name: app_providers
+description: "Composition — aggregates cross-feature provider overrides for the app's root ProviderContainer."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  app_router: any
+  connectivity: any
+  keychain: any
+  network: any
+  push: any
+  push_notifications_domain: any
+  push_notifications_presentation: any
+  screen_header: any
+  splash_presentation: any
+  telemetry: any
+  home_presentation: any
+  flutter_secure_storage: ^11.2.0
+  timber: any
+  # The no-backend sign-out answers a Result.
+  result: any
+  riverpod_annotation: ^4.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_riverpod: ^3.3.1     # ProviderContainer, for the composition wiring test
+  # The token-reporting test's fake repository speaks AuthError.
+  shared_domain: any
+  mocktail: ^1.0.4

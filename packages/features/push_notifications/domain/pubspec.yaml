@@ -1,0 +1,24 @@
+name: push_notifications_domain
+description: "push_notifications domain layer — asking for notifications, keeping the server's token current, and where a tapped push leads."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  timber: any
+  riverpod_annotation: ^4.0.2
+  freezed_annotation: ^3.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Test-only: ProviderContainer, for driving the token refresh subscription.
+  flutter_riverpod: ^3.3.1
+  build_runner: 2.16.0
+  riverpod_generator: 4.0.3
+  freezed: ^3.2.5
