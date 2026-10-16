@@ -148,7 +148,10 @@ class _Translations$game$round$fr extends Translations$game$round$en {
 	@override String regular({required Object index, required Object count}) => 'Manche · ${index} / ${count}';
 	@override String boss({required Object index, required Object count}) => 'Boss · Gravats · ${index} / ${count}';
 	@override String target({required Object target}) => '/ ${target}';
-	@override String piecesLeft({required Object count}) => '${count} pièces restantes';
+	@override String piecesLeft({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count,
+		one: '${count} pièce restante',
+		other: '${count} pièces restantes',
+	);
 	@override String combo({required Object streak}) => 'Combo ×${streak}';
 	@override String storedMult({required Object mult}) => '+${mult} mult en réserve';
 }
@@ -204,7 +207,7 @@ class _Translations$game$lost$fr extends Translations$game$lost$en {
 	@override String get outOfPieces => 'Plus de pièces';
 	@override String get noRoom => 'Plus de place';
 	@override String progress({required Object score, required Object target}) => '${score} sur ${target} points cette manche.';
-	@override String get revive => 'Relancer · 2 lignes vidées + 3 pièces';
+	@override String revive({required Object rows, required Object pieces}) => 'Relancer · ${rows} lignes vidées + ${pieces} pièces';
 	@override String get endRun => 'Terminer la partie';
 }
 
@@ -432,7 +435,7 @@ extension on TranslationsFr {
 			'game.round.regular' => ({required Object index, required Object count}) => 'Manche · ${index} / ${count}',
 			'game.round.boss' => ({required Object index, required Object count}) => 'Boss · Gravats · ${index} / ${count}',
 			'game.round.target' => ({required Object target}) => '/ ${target}',
-			'game.round.piecesLeft' => ({required Object count}) => '${count} pièces restantes',
+			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: '${count} pièce restante', other: '${count} pièces restantes', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult en réserve',
 			'game.banner.clear' => ({required Object chips, required Object mult, required Object total}) => '${chips} jetons × ${mult} mult = ${total}',
@@ -461,7 +464,7 @@ extension on TranslationsFr {
 			'game.lost.outOfPieces' => 'Plus de pièces',
 			'game.lost.noRoom' => 'Plus de place',
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} sur ${target} points cette manche.',
-			'game.lost.revive' => 'Relancer · 2 lignes vidées + 3 pièces',
+			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Relancer · ${rows} lignes vidées + ${pieces} pièces',
 			'game.lost.endRun' => 'Terminer la partie',
 			'game.end.won' => 'Boss vaincu · partie terminée',
 			'game.end.overRound' => ({required Object index}) => 'Partie finie · manche ${index} atteinte',

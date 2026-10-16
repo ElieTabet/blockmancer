@@ -45,7 +45,7 @@ class _GameWidgetState extends State<GameWidget> {
                   children: [
                     const GameHeader(),
                     const RoundCard(),
-                    const Align(alignment: .centerLeft, child: JokerChips()),
+                    const JokerChips(),
                     Expanded(
                       child: Center(
                         child: AspectRatio(

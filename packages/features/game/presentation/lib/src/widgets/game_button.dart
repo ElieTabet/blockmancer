@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 final class GameButton extends StatelessWidget {
   const GameButton({required this.label, required this.onPressed, super.key});
 
+  static const _height = 54.0;
+
   final String label;
   final VoidCallback onPressed;
-
-  static const _height = 54.0;
 
   @override
   Widget build(BuildContext context) => SizedBox(

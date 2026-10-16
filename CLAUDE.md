@@ -39,7 +39,7 @@ blockmancer/
 │   │   ├── app_router/       # app_router — app root router + concrete feature routing impls
 │   │   └── app_providers/    # app_providers — aggregates cross-feature provider overrides
 │   ├── ui/               # Shared, state-aware UI — riverpod and l10n aware, so not design_system
-│   │   └── screen_header/    # The band every main screen wears: title, organization line, session control
+│   │   └── screen_header/    # Title, organization line, session control — parked: no screen wears it since the game draws its own header and there is no login
 │   ├── plugins/          # Dev tooling packages
 │   │   └── custom_lints/     # Native analyzer-plugin — alphabetical-ordering lints + quick-fixes (IDE-only)
 │   └── features/         # Feature packages, split by layer
@@ -263,8 +263,9 @@ engine's events and never recomputes a rule.
   `Board`, `Cell`, `GameEvent`, `JokerId`, `PlacementPreview`, …) and the `GameRules` contract live
   in `shared_domain`. The engine's barrel exports only `BlockmancerEngine implements GameRules`;
   `game_presentation` declares a throwing `gameRulesProvider` slot and `app_providers` binds it to
-  `const BlockmancerEngine()`. Rule data (round targets, the shape catalog, joker pairs) stays behind
-  the contract (`defaultConfig`, `shape(id)`, `partnerOf(id)`), so no feature can compute a rule.
+  `const BlockmancerEngine()`. Rule data and rule decisions stay behind the contract (`defaultConfig`,
+  `shape(id)`, `partnerOf(id)`, `canRevive`, `liveRunTotal`), so no feature computes a rule and
+  `shared_domain`'s entities only read their own fields.
 - **`shared_domain` is pure Dart** because the engine depends on it and must run on the plain VM
   and the web; its tests use `package:test`.
 - **Pure Dart.** Its pubspec declares no Flutter, so a `package:flutter` import fails

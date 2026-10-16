@@ -19,6 +19,9 @@ abstract interface class GameRules {
 
   bool canPlace(RunState state, {required Cell anchor, required int trayIndex});
 
+  /// Whether [revive] is allowed now.
+  bool canRevive(RunState state);
+
   /// The daily run's seed. The rules have no clock: the caller says what UTC
   /// day it is.
   int dailySeed({required int day, required int month, required int year});
@@ -28,6 +31,9 @@ abstract interface class GameRules {
 
   /// Whether the tray piece at [trayIndex] fits anywhere on the board.
   bool fitsSomewhere(RunState state, {required int trayIndex});
+
+  /// The run total to show: what is banked, plus the round in play.
+  int liveRunTotal(RunState state);
 
   /// The joker [id] pairs with.
   JokerId partnerOf(JokerId id);

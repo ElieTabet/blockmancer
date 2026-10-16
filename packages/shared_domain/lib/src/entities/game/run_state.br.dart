@@ -45,9 +45,6 @@ abstract class RunState with _$RunState {
 
   const RunState._();
 
-  bool get canRevive =>
-      phase is RoundLostPhase && revivesUsed < config.revivesPerRun;
-
   bool get isLastRound => roundIndex == config.rounds.length - 1;
 
   /// The tray plus the pieces not drawn yet.

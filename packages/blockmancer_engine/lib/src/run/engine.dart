@@ -59,6 +59,17 @@ bool canPlace(RunState state, {required Cell anchor, required int trayIndex}) {
       fits(state.board, shapeCatalog[shapeId], anchor: anchor);
 }
 
+bool canRevive(RunState state) =>
+    state.phase is RoundLostPhase &&
+    state.revivesUsed < state.config.revivesPerRun;
+
+/// What is banked, plus the round in play: a won round's score is already in
+/// [RunState.runTotal], a lost or playing one's is not yet.
+int liveRunTotal(RunState state) => switch (state.phase) {
+  PlayingPhase() || RoundLostPhase() => state.runTotal + state.score,
+  PickingJokerPhase() || WonPhase() || OverPhase() => state.runTotal,
+};
+
 /// Whether the tray piece at [trayIndex] fits anywhere on the board.
 bool fitsSomewhere(RunState state, {required int trayIndex}) {
   final shapeId = _playableShape(state, trayIndex);
@@ -162,7 +173,7 @@ Transition place(
 /// Empties the fullest rows and adds pieces to a lost round, once per
 /// [RunConfig.revivesPerRun]. A board still stuck afterwards loses again.
 Transition revive(RunState state) {
-  if (!state.canRevive) throw StateError('Cannot revive in ${state.phase}');
+  if (!canRevive(state)) throw StateError('Cannot revive in ${state.phase}');
 
   final rows = List.generate(Board.size, (row) => row)
     ..sort((a, b) {

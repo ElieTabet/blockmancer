@@ -1,16 +1,16 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:flutter/rendering.dart';
 import 'package:game_presentation/src/painting/board_geometry.dart';
 import 'package:game_presentation/src/painting/game_palette.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// The board and what is on it.
 final class BoardPainter extends CustomPainter {
   const BoardPainter(this.board);
 
-  final Board board;
-
   static const _boardRadius = Radius.circular(16);
   static const _cellRadius = Radius.circular(6);
+
+  final Board board;
 
   @override
   void paint(Canvas canvas, Size size) {

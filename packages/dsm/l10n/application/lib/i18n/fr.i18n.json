@@ -26,7 +26,10 @@
       "regular": "Manche · $index / $count",
       "boss": "Boss · Gravats · $index / $count",
       "target": "/ $target",
-      "piecesLeft": "$count pièces restantes",
+      "piecesLeft(param=count)": {
+        "one": "$count pièce restante",
+        "other": "$count pièces restantes"
+      },
       "combo": "Combo ×$streak",
       "storedMult": "+$mult mult en réserve"
     },
@@ -61,7 +64,7 @@
       "outOfPieces": "Plus de pièces",
       "noRoom": "Plus de place",
       "progress": "$score sur $target points cette manche.",
-      "revive": "Relancer · 2 lignes vidées + 3 pièces",
+      "revive": "Relancer · $rows lignes vidées + $pieces pièces",
       "endRun": "Terminer la partie"
     },
     "end": {

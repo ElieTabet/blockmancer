@@ -6,8 +6,13 @@ RunState runIn(
   Board? board,
   List<JokerId> jokers = const [],
   int pickIndex = 1,
+  int piecesLeft = 5,
   int revivesUsed = 0,
+  int roundIndex = 0,
+  int runTotal = 0,
   int score = 0,
+  int storedMult = 0,
+  int streak = 0,
   List<int?> tray = const [0, 0, 0],
 }) => RunState(
   board: board ?? Board.empty(),
@@ -15,16 +20,16 @@ RunState runIn(
   jokers: jokers,
   phase: phase,
   pickIndex: pickIndex,
-  piecesLeft: 5,
+  piecesLeft: piecesLeft,
   piecesRngState: 0,
   revivesUsed: revivesUsed,
-  roundIndex: 0,
-  runTotal: 0,
+  roundIndex: roundIndex,
+  runTotal: runTotal,
   score: score,
   seed: 1,
   stonesRngState: 0,
-  storedMult: 0,
-  streak: 0,
+  storedMult: storedMult,
+  streak: streak,
   tray: tray,
 );
 
@@ -61,6 +66,11 @@ final class FakeGameRules implements GameRules {
   }) => state.tray[trayIndex] != null && state.board.at(anchor) is EmptyCell;
 
   @override
+  bool canRevive(RunState state) =>
+      state.phase is RoundLostPhase &&
+      state.revivesUsed < state.config.revivesPerRun;
+
+  @override
   int dailySeed({required int day, required int month, required int year}) => 1;
 
   @override
@@ -68,6 +78,9 @@ final class FakeGameRules implements GameRules {
 
   @override
   bool fitsSomewhere(RunState state, {required int trayIndex}) => true;
+
+  @override
+  int liveRunTotal(RunState state) => state.runTotal + state.score;
 
   @override
   JokerId partnerOf(JokerId id) => id == .twin ? .patience : .twin;

@@ -67,11 +67,11 @@ final class ScoreBanner extends ConsumerStatefulWidget {
 
 class _ScoreBannerState extends ConsumerState<ScoreBanner> {
   Timer? _fade;
-  var _visible = false;
 
   /// Two lines, reserved even when empty so the board never jumps.
   static const _height = 40.0;
   static const _shown = Duration(milliseconds: 2500);
+  var _visible = false;
 
   @override
   void dispose() {

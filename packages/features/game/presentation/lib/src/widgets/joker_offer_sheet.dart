@@ -1,4 +1,3 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +7,7 @@ import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:l10n_application/l10n_application.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// The starting pick, and the pick after every round but the boss.
 final class JokerOfferSheet extends ConsumerWidget {
@@ -43,14 +43,18 @@ final class _OfferHeading extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final (isStart, saverBonus, nextIndex, nextTarget, nextIsBoss) = ref.watch(
       gameProvider.select((state) {
-        final next = state.run.config.rounds[state.run.pickIndex];
+        // Still selected for a frame after the last pick, when the next round
+        // has started and pickIndex is past the final round.
+        final next = state.run.config.rounds.elementAtOrNull(
+          state.run.pickIndex,
+        );
 
         return (
           state.run.pickIndex == 0,
           state.lastEvents.whereType<RoundWon>().firstOrNull?.bonus ?? 0,
           state.run.pickIndex + 1,
-          next.target,
-          next.isBoss,
+          next?.target ?? 0,
+          next?.isBoss ?? false,
         );
       }),
     );
@@ -181,9 +185,9 @@ final class JokerOfferCard extends ConsumerWidget {
 final class _TakeLabel extends StatelessWidget {
   const _TakeLabel({required this.label});
 
-  final String label;
-
   static const _height = 36.0;
+
+  final String label;
 
   @override
   Widget build(BuildContext context) => Container(

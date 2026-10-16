@@ -6,6 +6,8 @@ import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/painting/piece_painter.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
+import 'package:game_presentation/src/providers_internal.br.dart';
+import 'package:game_presentation/src/widgets/compact_screen.dart';
 import 'package:game_presentation/src/widgets/drag_area.dart';
 
 final class TrayView extends ConsumerWidget {
@@ -32,25 +34,22 @@ final class TrayView extends ConsumerWidget {
 final class TraySlot extends ConsumerWidget {
   const TraySlot({required this.index, super.key});
 
-  final int index;
-
   static const _cellSize = 13.0;
   static const _dimmed = 0.35;
   static const _dragged = 0.2;
   static const _gap = 2.0;
+  static const _compactHeight = 64.0;
   static const _height = 84.0;
+
+  final int index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rules = ref.watch(gameRulesProvider);
-    final (shapeId, fits) = ref.watch(
-      gameProvider.select(
-        (state) => (
-          state.run.tray[index],
-          rules.fitsSomewhere(state.run, trayIndex: index),
-        ),
-      ),
+    final shapeId = ref.watch(
+      gameProvider.select((state) => state.run.tray[index]),
     );
+    final fits = ref.watch(trayFitsProvider(index));
     final dragged = ref.watch(
       dragProvider.select((drag) => drag?.trayIndex == index),
     );
@@ -67,7 +66,7 @@ final class TraySlot extends ConsumerWidget {
       onPointerMove: (event) => drag.move(event.pointer, event.position),
       onPointerUp: (event) => drag.end(event.pointer),
       child: Container(
-        height: _height,
+        height: isCompactScreen(context) ? _compactHeight : _height,
         decoration: BoxDecoration(
           color: GamePalette.card,
           borderRadius: .circular(DSCornerRadius.large),

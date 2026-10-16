@@ -1,4 +1,3 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +6,7 @@ import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/painting/board_geometry.dart';
 import 'package:game_presentation/src/painting/piece_painter.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// What a tray slot calls as the finger that grabbed it moves.
 abstract interface class TrayDrag {
@@ -70,9 +70,11 @@ class _DragAreaState extends ConsumerState<DragArea> implements TrayDrag {
     super.dispose();
   }
 
+  // A finger that went down before the screen was removed keeps reporting to
+  // the tray slot's Listener, so each callback checks the screen is still here.
   @override
   void cancel(int pointer) {
-    if (pointer != _pointer) return;
+    if (!mounted || pointer != _pointer) return;
 
     _release();
     ref.read(dragProvider.notifier).cancel();
@@ -80,7 +82,7 @@ class _DragAreaState extends ConsumerState<DragArea> implements TrayDrag {
 
   @override
   void end(int pointer) {
-    if (pointer != _pointer) return;
+    if (!mounted || pointer != _pointer) return;
 
     _release();
     ref.read(dragProvider.notifier).drop();
@@ -88,7 +90,7 @@ class _DragAreaState extends ConsumerState<DragArea> implements TrayDrag {
 
   @override
   void move(int pointer, Offset position) {
-    if (pointer == _pointer) _moveTo(position);
+    if (mounted && pointer == _pointer) _moveTo(position);
   }
 
   @override

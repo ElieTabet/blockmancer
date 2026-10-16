@@ -11,7 +11,11 @@ part 'game_notifier.br.g.dart';
 @riverpod
 class GameNotifier extends _$GameNotifier {
   @override
-  GameUiState build() => _fresh();
+  GameUiState build() {
+    ref.watch(gameRulesProvider);
+
+    return _fresh();
+  }
 
   void endRun() => _apply(_rules.endRun(state.run));
 

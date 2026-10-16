@@ -9,7 +9,6 @@ import 'package:l10n_application/l10n_application.dart';
 import 'stub_deep_route.dart';
 import 'stub_game.dart';
 import 'stub_launch.dart';
-import 'stub_screen_header.dart';
 
 /// Mounts the real route tree at [deepLink], which is what these tests are
 /// about: every one of them turns on where a route actually lands in the stack,
@@ -26,12 +25,7 @@ Future<AppRouter> pumpAppRouter(
 
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [
-        ...routingOverrides(),
-        ...stubGame(),
-        ...stubLaunch(),
-        ...stubScreenHeader(),
-      ],
+      overrides: [...routingOverrides(), ...stubGame(), ...stubLaunch()],
       child: TranslationProvider(
         child: MaterialApp.router(
           theme: DSTheme.instance.lightTheme,

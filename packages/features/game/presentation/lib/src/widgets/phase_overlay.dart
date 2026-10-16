@@ -1,4 +1,3 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +6,7 @@ import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/widgets/joker_offer_sheet.dart';
 import 'package:game_presentation/src/widgets/round_lost_sheet.dart';
 import 'package:game_presentation/src/widgets/run_end_sheet.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 enum _Sheet { end, lost, offers }
 
@@ -15,8 +15,6 @@ enum _Sheet { end, lost, offers }
 /// which sheet is up, so there is no route to keep in step with it.
 final class PhaseOverlay extends ConsumerWidget {
   const PhaseOverlay({super.key});
-
-  static const _scrim = Color(0xE00A0C1A);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +32,7 @@ final class PhaseOverlay extends ConsumerWidget {
     if (sheet == null) return const SizedBox.shrink();
 
     return ColoredBox(
-      color: _scrim,
+      color: GamePalette.scrim,
       child: Align(
         alignment: .bottomCenter,
         child: _SheetFrame(
@@ -52,9 +50,9 @@ final class PhaseOverlay extends ConsumerWidget {
 final class _SheetFrame extends StatelessWidget {
   const _SheetFrame({required this.child});
 
-  final Widget child;
-
   static const _radius = Radius.circular(28);
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) => Container(

@@ -19,7 +19,7 @@ import 'package:test/test.dart';
       case PlayingPhase():
         final (trayIndex, anchor) = _bestMove(state);
         (state, events) = place(state, anchor: anchor, trayIndex: trayIndex);
-      case RoundLostPhase() when state.canRevive:
+      case RoundLostPhase() when canRevive(state):
         (state, events) = revive(state);
       case RoundLostPhase():
         (state, events) = endRun(state);

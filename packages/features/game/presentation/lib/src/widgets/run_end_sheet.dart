@@ -1,4 +1,3 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,13 +6,13 @@ import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/widgets/game_button.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
+import 'package:game_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// The run's result. No ranking yet: leaderboards come after Sprint 1.
 final class RunEndSheet extends ConsumerWidget {
   const RunEndSheet({super.key});
-
-  static const _labelColor = Color(0xFF8FD6FF);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,13 +42,13 @@ final class RunEndSheet extends ConsumerWidget {
         Text(
           label.toUpperCase(),
           style: const TextStyle(
-            color: _labelColor,
+            color: GamePalette.info,
             fontSize: 12,
             fontWeight: .w700,
             letterSpacing: 1.6,
           ),
         ),
-        SheetTitle(end.total(total: total)),
+        SheetTitle(end.total(total: pointsText(context, total))),
         Text(
           end.build(
             jokers: jokers.isEmpty ? end.noJokers : jokerNames(context, jokers),

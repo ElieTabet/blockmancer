@@ -1,4 +1,3 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,40 +5,48 @@ import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/painting/game_palette.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
+import 'package:shared_domain/shared_domain.dart';
 
-/// The jokers owned, in pick order. Tapping one shows what it does; a star marks
-/// one whose partner is owned too.
+/// The jokers owned, in pick order, on one line that scrolls sideways: the
+/// board takes the height a second line would cost. Tapping one shows what it
+/// does; a star marks one whose partner is owned too.
 final class JokerChips extends ConsumerWidget {
   const JokerChips({super.key});
 
-  static const _minHeight = 26.0;
+  static const _height = 26.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final jokers = ref.watch(gameProvider.select((state) => state.run.jokers));
     final rules = ref.watch(gameRulesProvider);
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: _minHeight),
-      child: Wrap(
-        spacing: DSSpace.xsmall,
-        runSpacing: DSSpace.xsmall,
+    return SizedBox(
+      height: _height,
+      child: ListView(
+        scrollDirection: .horizontal,
         children: [
-          for (final id in jokers)
-            JokerChip(id: id, paired: jokers.contains(rules.partnerOf(id))),
+          for (final (index, id) in jokers.indexed)
+            Padding(
+              padding: .only(left: index == 0 ? 0 : DSSpace.xsmall),
+              child: JokerChip(
+                id: id,
+                paired: jokers.contains(rules.partnerOf(id)),
+              ),
+            ),
         ],
       ),
     );
   }
 }
 
+/// One owned joker, as wide as its name.
 final class JokerChip extends StatelessWidget {
   const JokerChip({required this.id, required this.paired, super.key});
 
+  static const _height = 26.0;
+
   final JokerId id;
   final bool paired;
-
-  static const _height = 26.0;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +58,6 @@ final class JokerChip extends StatelessWidget {
       child: Container(
         height: _height,
         padding: const .symmetric(horizontal: DSSpace.small),
-        alignment: .center,
         decoration: BoxDecoration(
           color: GamePalette.jokerCard,
           borderRadius: .circular(DSCornerRadius.medium),
@@ -60,12 +66,15 @@ final class JokerChip extends StatelessWidget {
             width: 1.5,
           ),
         ),
-        child: Text(
-          paired ? '★ ${text.name}' : text.name,
-          style: const TextStyle(
-            color: GamePalette.jokerInk,
-            fontSize: 12,
-            fontWeight: .w700,
+        child: Center(
+          widthFactor: 1,
+          child: Text(
+            paired ? '★ ${text.name}' : text.name,
+            style: const TextStyle(
+              color: GamePalette.jokerInk,
+              fontSize: 12,
+              fontWeight: .w700,
+            ),
           ),
         ),
       ),

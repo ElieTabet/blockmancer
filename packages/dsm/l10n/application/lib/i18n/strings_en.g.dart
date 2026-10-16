@@ -239,8 +239,11 @@ class Translations$game$round$en {
 	/// en: '/ $target'
 	String target({required Object target}) => '/ ${target}';
 
-	/// en: '$count pieces left'
-	String piecesLeft({required Object count}) => '${count} pieces left';
+	/// en: '(one) {$count piece left} (other) {$count pieces left}'
+	String piecesLeft({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count,
+		one: '${count} piece left',
+		other: '${count} pieces left',
+	);
 
 	/// en: 'Combo ×$streak'
 	String combo({required Object streak}) => 'Combo ×${streak}';
@@ -353,8 +356,8 @@ class Translations$game$lost$en {
 	/// en: '$score of $target points this round.'
 	String progress({required Object score, required Object target}) => '${score} of ${target} points this round.';
 
-	/// en: 'Revive · clear 2 rows + 3 pieces'
-	String get revive => 'Revive · clear 2 rows + 3 pieces';
+	/// en: 'Revive · clear $rows rows + $pieces pieces'
+	String revive({required Object rows, required Object pieces}) => 'Revive · clear ${rows} rows + ${pieces} pieces';
 
 	/// en: 'End run'
 	String get endRun => 'End run';
@@ -654,7 +657,7 @@ extension on Translations {
 			'game.round.regular' => ({required Object index, required Object count}) => 'Round · ${index} / ${count}',
 			'game.round.boss' => ({required Object index, required Object count}) => 'Boss · Rubble · ${index} / ${count}',
 			'game.round.target' => ({required Object target}) => '/ ${target}',
-			'game.round.piecesLeft' => ({required Object count}) => '${count} pieces left',
+			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: '${count} piece left', other: '${count} pieces left', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult stored',
 			'game.banner.clear' => ({required Object chips, required Object mult, required Object total}) => '${chips} chips × ${mult} mult = ${total}',
@@ -683,7 +686,7 @@ extension on Translations {
 			'game.lost.outOfPieces' => 'Out of pieces',
 			'game.lost.noRoom' => 'No room left',
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} of ${target} points this round.',
-			'game.lost.revive' => 'Revive · clear 2 rows + 3 pieces',
+			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Revive · clear ${rows} rows + ${pieces} pieces',
 			'game.lost.endRun' => 'End run',
 			'game.end.won' => 'Boss beaten · run complete',
 			'game.end.overRound' => ({required Object index}) => 'Run over · reached round ${index}',

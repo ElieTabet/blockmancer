@@ -1,20 +1,20 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:flutter/rendering.dart';
 import 'package:game_presentation/src/notifiers/drag_preview.br.dart';
 import 'package:game_presentation/src/painting/board_geometry.dart';
 import 'package:game_presentation/src/painting/game_palette.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// The drag shadow over the board: the piece's colour where it fits, red where
 /// it collides, and an outline on the lines it would clear.
 final class PreviewPainter extends CustomPainter {
   const PreviewPainter(this.drag);
 
-  final DragPreview? drag;
-
   static const _cellRadius = Radius.circular(6);
   static const _outlineWidth = 2.0;
   static const _shadowAlpha = 0.6;
   static const _strayAlpha = 0.45;
+
+  final DragPreview? drag;
 
   @override
   void paint(Canvas canvas, Size size) {

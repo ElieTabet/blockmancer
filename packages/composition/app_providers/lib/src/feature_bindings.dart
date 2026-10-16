@@ -111,10 +111,9 @@ List<Override> featureBindingOverrides({
   ),
   // The game screen reaches the rules only through this slot.
   ...game_ui.bindProviders(gameRules: (ref) => const BlockmancerEngine()),
-  // The one session control every main screen wears. Bound once here rather
-  // than per screen.
-  // No backend: no one signs in, and the organization has no settings to
-  // send. The header shows the screen's title alone.
+  // Parked: no screen wears the header since the game replaced Home (the game
+  // draws its own), and with no login its session control has nothing to do.
+  // Kept bound so a future screen can mount it without touching composition.
   ...screen_header.bindProviders(
     isAuthenticated: (ref) async => false,
     logout: (ref) =>

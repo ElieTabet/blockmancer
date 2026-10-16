@@ -21,6 +21,9 @@ final class BlockmancerEngine implements GameRules {
   }) => engine.canPlace(state, anchor: anchor, trayIndex: trayIndex);
 
   @override
+  bool canRevive(RunState state) => engine.canRevive(state);
+
+  @override
   int dailySeed({required int day, required int month, required int year}) =>
       seeds.dailySeed(day: day, month: month, year: year);
 
@@ -30,6 +33,9 @@ final class BlockmancerEngine implements GameRules {
   @override
   bool fitsSomewhere(RunState state, {required int trayIndex}) =>
       engine.fitsSomewhere(state, trayIndex: trayIndex);
+
+  @override
+  int liveRunTotal(RunState state) => engine.liveRunTotal(state);
 
   @override
   JokerId partnerOf(JokerId id) => jokerEffect(id).partner;

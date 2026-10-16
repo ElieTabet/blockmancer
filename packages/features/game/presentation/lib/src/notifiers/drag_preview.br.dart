@@ -1,5 +1,5 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 part 'drag_preview.br.freezed.dart';
 

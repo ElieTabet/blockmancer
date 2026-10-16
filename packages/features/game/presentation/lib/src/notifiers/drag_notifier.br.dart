@@ -1,8 +1,8 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:game_presentation/src/notifiers/drag_preview.br.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 part 'drag_notifier.br.g.dart';
 
@@ -21,7 +21,7 @@ class DragNotifier extends _$DragNotifier {
     state = DragPreview(
       anchor: null,
       colorIndex: ref.read(gameRulesProvider).shape(shapeId).colorIndex,
-      preview: PlacementPreview.none,
+      preview: .none,
       trayIndex: trayIndex,
     );
   }
@@ -48,7 +48,7 @@ class DragNotifier extends _$DragNotifier {
     state = drag.copyWith(
       anchor: anchor,
       preview: anchor == null
-          ? PlacementPreview.none
+          ? .none
           : ref
                 .read(gameRulesProvider)
                 .preview(

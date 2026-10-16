@@ -420,7 +420,7 @@ void main() {
       );
 
       // Then
-      expect(lostAgain.canRevive, isFalse);
+      expect(canRevive(lostAgain), isFalse);
       expect(() => revive(lostAgain), throwsStateError);
     });
 
@@ -811,7 +811,7 @@ void main() {
 
       // Then
       expect(roundTwo.roundIndex, 1);
-      expect(lost.canRevive, isFalse);
+      expect(canRevive(lost), isFalse);
     });
   });
 
@@ -860,6 +860,33 @@ void main() {
     test('nothing can be revived while picking a joker', () {
       // Given / When / Then
       expect(() => revive(picking()), throwsStateError);
+    });
+  });
+
+  group('the live run total', () {
+    test('adds the round in play to what is banked', () {
+      // Given
+      final state = _playing().copyWith(runTotal: 700, score: 120);
+
+      // When / Then
+      expect(liveRunTotal(state), 820);
+      expect(
+        liveRunTotal(state.copyWith(phase: const .roundLost(reason: .noRoom))),
+        820,
+      );
+    });
+
+    test('counts a won round once, since winning banked it', () {
+      // Given
+      final state = _playing().copyWith(
+        phase: const .pickingJoker(offers: [.combo]),
+        runTotal: 820,
+        score: 120,
+      );
+
+      // When / Then
+      expect(liveRunTotal(state), 820);
+      expect(liveRunTotal(state.copyWith(phase: const .over())), 820);
     });
   });
 }

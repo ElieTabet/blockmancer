@@ -1,9 +1,11 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/painting/game_palette.dart';
+import 'package:game_presentation/src/providers_di.br.dart';
+import 'package:game_presentation/src/widgets/compact_screen.dart';
+import 'package:game_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 final class GameHeader extends StatelessWidget {
@@ -26,10 +28,11 @@ final class GameHeader extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              context.t.game.subtitle,
-              style: const TextStyle(color: GamePalette.muted, fontSize: 12),
-            ),
+            if (!isCompactScreen(context))
+              Text(
+                context.t.game.subtitle,
+                style: const TextStyle(color: GamePalette.muted, fontSize: 12),
+              ),
           ],
         ),
       ),
@@ -46,14 +49,9 @@ final class RunTotalChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final rules = ref.watch(gameRulesProvider);
     final total = ref.watch(
-      gameProvider.select(
-        (state) => switch (state.run.phase) {
-          PlayingPhase() ||
-          RoundLostPhase() => state.run.runTotal + state.run.score,
-          _ => state.run.runTotal,
-        },
-      ),
+      gameProvider.select((state) => rules.liveRunTotal(state.run)),
     );
 
     return Container(
@@ -65,7 +63,7 @@ final class RunTotalChip extends ConsumerWidget {
         borderRadius: .circular(_height / 2),
       ),
       child: Text(
-        context.t.game.runTotal(total: total),
+        context.t.game.runTotal(total: pointsText(context, total)),
         style: const TextStyle(
           color: DSColor.white,
           fontSize: 13,

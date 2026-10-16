@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/painting/game_palette.dart';
+import 'package:game_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 /// The round in play: which one, the score against its target, and how many
@@ -24,8 +25,11 @@ final class RoundCard extends StatelessWidget {
       spacing: DSSpace.xxsmall,
       children: [
         Row(
-          mainAxisAlignment: .spaceBetween,
-          children: [RoundTitle(), RoundScore()],
+          spacing: DSSpace.xsmall,
+          children: [
+            Expanded(child: RoundTitle()),
+            RoundScore(),
+          ],
         ),
         RoundProgress(),
         RoundStatus(),
@@ -36,9 +40,6 @@ final class RoundCard extends StatelessWidget {
 
 final class RoundTitle extends ConsumerWidget {
   const RoundTitle({super.key});
-
-  static const _bossColor = Color(0xFFFF6B7A);
-  static const _roundColor = Color(0xFF5EC8FF);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,11 +55,13 @@ final class RoundTitle extends ConsumerWidget {
     final round = context.t.game.round;
 
     return Text(
+      maxLines: 1,
+      overflow: .ellipsis,
       isBoss
           ? round.boss(count: count, index: index)
           : round.regular(count: count, index: index),
       style: TextStyle(
-        color: isBoss ? _bossColor : _roundColor,
+        color: isBoss ? GamePalette.bossRound : GamePalette.regularRound,
         fontSize: 14,
         fontWeight: .w700,
       ),
@@ -79,7 +82,7 @@ final class RoundScore extends ConsumerWidget {
       TextSpan(
         children: [
           TextSpan(
-            text: '$score ',
+            text: '${pointsText(context, score)} ',
             style: DSFont.display(
               const TextStyle(
                 color: DSColor.white,
@@ -88,7 +91,11 @@ final class RoundScore extends ConsumerWidget {
               ),
             ),
           ),
-          TextSpan(text: context.t.game.round.target(target: target)),
+          TextSpan(
+            text: context.t.game.round.target(
+              target: pointsText(context, target),
+            ),
+          ),
         ],
       ),
       style: const TextStyle(color: GamePalette.muted, fontSize: 13),

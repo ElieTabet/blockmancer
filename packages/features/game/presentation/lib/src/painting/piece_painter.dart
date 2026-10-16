@@ -1,6 +1,6 @@
-import 'package:shared_domain/shared_domain.dart';
 import 'package:flutter/rendering.dart';
 import 'package:game_presentation/src/painting/game_palette.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 /// One piece, its top-left at the canvas origin, in cells of [cellSize] spaced
 /// [gap] apart.

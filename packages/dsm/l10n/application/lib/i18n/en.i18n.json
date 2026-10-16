@@ -26,7 +26,10 @@
       "regular": "Round · $index / $count",
       "boss": "Boss · Rubble · $index / $count",
       "target": "/ $target",
-      "piecesLeft": "$count pieces left",
+      "piecesLeft(param=count)": {
+        "one": "$count piece left",
+        "other": "$count pieces left"
+      },
       "combo": "Combo ×$streak",
       "storedMult": "+$mult mult stored"
     },
@@ -61,7 +64,7 @@
       "outOfPieces": "Out of pieces",
       "noRoom": "No room left",
       "progress": "$score of $target points this round.",
-      "revive": "Revive · clear 2 rows + 3 pieces",
+      "revive": "Revive · clear $rows rows + $pieces pieces",
       "endRun": "End run"
     },
     "end": {
