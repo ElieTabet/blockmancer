@@ -42,7 +42,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final Translations$login$en login = Translations$login$en.internal(_root);
 	late final Translations$game$en game = Translations$game$en.internal(_root);
-	late final Translations$session$en session = Translations$session$en.internal(_root);
 	late final Translations$push$en push = Translations$push$en.internal(_root);
 	late final Translations$appStatus$en appStatus = Translations$appStatus$en.internal(_root);
 }
@@ -130,45 +129,6 @@ class Translations$game$en {
 	late final Translations$game$lost$en lost = Translations$game$lost$en.internal(_root);
 	late final Translations$game$end$en end = Translations$game$end$en.internal(_root);
 	late final Translations$game$jokers$en jokers = Translations$game$jokers$en.internal(_root);
-}
-
-// Path: session
-class Translations$session$en {
-	Translations$session$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Sign in'
-	String get signIn => 'Sign in';
-
-	/// en: 'Sign out'
-	String get signOut => 'Sign out';
-
-	/// en: 'Sign out?'
-	String get signOutConfirmTitle => 'Sign out?';
-
-	/// en: 'You'll need to sign in again to see your content.'
-	String get signOutConfirmMessage => 'You\'ll need to sign in again to see your content.';
-
-	/// en: 'Sign out'
-	String get signOutConfirmAction => 'Sign out';
-
-	/// en: 'Stay signed in'
-	String get signOutCancel => 'Stay signed in';
-
-	/// en: 'Couldn't sign out'
-	String get signOutFailedTitle => 'Couldn\'t sign out';
-
-	/// en: 'Something went wrong signing you out. Please try again.'
-	String get signOutFailed => 'Something went wrong signing you out. Please try again.';
-
-	/// en: 'No internet connection. Check your connection and try again.'
-	String get signOutNoConnection => 'No internet connection. Check your connection and try again.';
-
-	/// en: 'OK'
-	String get signOutFailedButtonLabel => 'OK';
 }
 
 // Path: push
@@ -723,16 +683,6 @@ extension on Translations {
 			'game.jokers.pockets.description' => '+4 pieces every round.',
 			'game.jokers.saver.name' => 'Saver',
 			'game.jokers.saver.description' => 'Each unused piece when you beat a round gives +40 run points.',
-			'session.signIn' => 'Sign in',
-			'session.signOut' => 'Sign out',
-			'session.signOutConfirmTitle' => 'Sign out?',
-			'session.signOutConfirmMessage' => 'You\'ll need to sign in again to see your content.',
-			'session.signOutConfirmAction' => 'Sign out',
-			'session.signOutCancel' => 'Stay signed in',
-			'session.signOutFailedTitle' => 'Couldn\'t sign out',
-			'session.signOutFailed' => 'Something went wrong signing you out. Please try again.',
-			'session.signOutNoConnection' => 'No internet connection. Check your connection and try again.',
-			'session.signOutFailedButtonLabel' => 'OK',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'appStatus.maintenanceTitle' => 'We\'ll be right back',

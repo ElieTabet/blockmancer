@@ -10,9 +10,7 @@ import 'package:push_notifications_domain/push_notifications_domain.dart'
     as push_notifications_domain;
 import 'package:push_notifications_presentation/push_notifications_presentation.dart'
     as push_notifications_ui;
-import 'package:result/result.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:screen_header/screen_header.dart' as screen_header;
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 import 'package:telemetry/telemetry.dart' as telemetry;
 
@@ -111,15 +109,6 @@ List<Override> featureBindingOverrides({
   ),
   // The game screen reaches the rules only through this slot.
   ...game_ui.bindProviders(gameRules: (ref) => const BlockmancerEngine()),
-  // Parked: no screen wears the header since the game replaced Home (the game
-  // draws its own), and with no login its session control has nothing to do.
-  // Kept bound so a future screen can mount it without touching composition.
-  ...screen_header.bindProviders(
-    isAuthenticated: (ref) async => false,
-    logout: (ref) =>
-        () async => const Success(unit),
-    organizationName: (ref) => null,
-  ),
   // Nothing to check, register or fetch at launch: the splash holds its
   // minimum and hands over.
   ...splash_ui.bindProviders(

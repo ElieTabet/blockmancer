@@ -135,18 +135,6 @@
       }
     }
   },
-  "session": {
-    "signIn": "Se connecter",
-    "signOut": "Se déconnecter",
-    "signOutConfirmTitle": "Se déconnecter ?",
-    "signOutConfirmMessage": "Vous devrez vous reconnecter pour accéder à votre contenu.",
-    "signOutConfirmAction": "Se déconnecter",
-    "signOutCancel": "Rester connecté",
-    "signOutFailedTitle": "Déconnexion impossible",
-    "signOutFailed": "Un problème est survenu lors de la déconnexion. Veuillez réessayer.",
-    "signOutNoConnection": "Aucune connexion Internet. Vérifiez votre connexion et réessayez.",
-    "signOutFailedButtonLabel": "OK"
-  },
   "push": {
     "channelName": "Annonces",
     "channelDescription": "Nouvelles et messages de l'application."

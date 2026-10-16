@@ -41,7 +41,6 @@ class TranslationsFr extends Translations with BaseTranslations<AppLocale, Trans
 	// Translations
 	@override late final _Translations$login$fr login = _Translations$login$fr._(_root);
 	@override late final _Translations$game$fr game = _Translations$game$fr._(_root);
-	@override late final _Translations$session$fr session = _Translations$session$fr._(_root);
 	@override late final _Translations$push$fr push = _Translations$push$fr._(_root);
 	@override late final _Translations$appStatus$fr appStatus = _Translations$appStatus$fr._(_root);
 }
@@ -88,25 +87,6 @@ class _Translations$game$fr extends Translations$game$en {
 	@override late final _Translations$game$lost$fr lost = _Translations$game$lost$fr._(_root);
 	@override late final _Translations$game$end$fr end = _Translations$game$end$fr._(_root);
 	@override late final _Translations$game$jokers$fr jokers = _Translations$game$jokers$fr._(_root);
-}
-
-// Path: session
-class _Translations$session$fr extends Translations$session$en {
-	_Translations$session$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get signIn => 'Se connecter';
-	@override String get signOut => 'Se déconnecter';
-	@override String get signOutConfirmTitle => 'Se déconnecter ?';
-	@override String get signOutConfirmMessage => 'Vous devrez vous reconnecter pour accéder à votre contenu.';
-	@override String get signOutConfirmAction => 'Se déconnecter';
-	@override String get signOutCancel => 'Rester connecté';
-	@override String get signOutFailedTitle => 'Déconnexion impossible';
-	@override String get signOutFailed => 'Un problème est survenu lors de la déconnexion. Veuillez réessayer.';
-	@override String get signOutNoConnection => 'Aucune connexion Internet. Vérifiez votre connexion et réessayez.';
-	@override String get signOutFailedButtonLabel => 'OK';
 }
 
 // Path: push
@@ -501,16 +481,6 @@ extension on TranslationsFr {
 			'game.jokers.pockets.description' => '+4 pièces à chaque manche.',
 			'game.jokers.saver.name' => 'Épargnant',
 			'game.jokers.saver.description' => 'Chaque pièce inutilisée quand tu gagnes une manche rapporte +40 points de partie.',
-			'session.signIn' => 'Se connecter',
-			'session.signOut' => 'Se déconnecter',
-			'session.signOutConfirmTitle' => 'Se déconnecter ?',
-			'session.signOutConfirmMessage' => 'Vous devrez vous reconnecter pour accéder à votre contenu.',
-			'session.signOutConfirmAction' => 'Se déconnecter',
-			'session.signOutCancel' => 'Rester connecté',
-			'session.signOutFailedTitle' => 'Déconnexion impossible',
-			'session.signOutFailed' => 'Un problème est survenu lors de la déconnexion. Veuillez réessayer.',
-			'session.signOutNoConnection' => 'Aucune connexion Internet. Vérifiez votre connexion et réessayez.',
-			'session.signOutFailedButtonLabel' => 'OK',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Nouvelles et messages de l\'application.',
 			'appStatus.maintenanceTitle' => 'Nous revenons vite',

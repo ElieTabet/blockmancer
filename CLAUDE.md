@@ -38,8 +38,6 @@ blockmancer/
 │   ├── composition/      # Composition root — imports feature packages so the app doesn't
 │   │   ├── app_router/       # app_router — app root router + concrete feature routing impls
 │   │   └── app_providers/    # app_providers — aggregates cross-feature provider overrides
-│   ├── ui/               # Shared, state-aware UI — riverpod and l10n aware, so not design_system
-│   │   └── screen_header/    # Title, organization line, session control — parked: no screen wears it since the game draws its own header and there is no login
 │   ├── plugins/          # Dev tooling packages
 │   │   └── custom_lints/     # Native analyzer-plugin — alphabetical-ordering lints + quick-fixes (IDE-only)
 │   └── features/         # Feature packages, split by layer
@@ -438,11 +436,10 @@ The route wants a token — a guest's will do — so splash calls `refreshSettin
 - A blank name or sign-in line is `null` by the time it leaves the data layer, and `null`
   everywhere means "show nothing": no header subtitle, no title or subtitle line on sign-in. The contract gives the sign-in text no fallback, so the app
   ships none.
-- Consumers never import it. `screen_header` declares a `String? organizationName` slot,
-  `login_presentation` declares
+- Consumers never import it. `login_presentation` declares
   `loginTitle` / `loginSubtitle`, and composition points them at `app_settings_domain`'s
-  projections. Each is watched by the leaf that draws it — the header's `OrganizationLine`, the
-  login screen's title and subtitle — so the subscription never sits in the screen.
+  projections. Each is watched by the leaf that draws it — the login screen's title and
+  subtitle — so the subscription never sits in the screen.
 
 ## Push notifications
 

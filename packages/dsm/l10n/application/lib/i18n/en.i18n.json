@@ -135,18 +135,6 @@
       }
     }
   },
-  "session": {
-    "signIn": "Sign in",
-    "signOut": "Sign out",
-    "signOutConfirmTitle": "Sign out?",
-    "signOutConfirmMessage": "You'll need to sign in again to see your content.",
-    "signOutConfirmAction": "Sign out",
-    "signOutCancel": "Stay signed in",
-    "signOutFailedTitle": "Couldn't sign out",
-    "signOutFailed": "Something went wrong signing you out. Please try again.",
-    "signOutNoConnection": "No internet connection. Check your connection and try again.",
-    "signOutFailedButtonLabel": "OK"
-  },
   "push": {
     "channelName": "Announcements",
     "channelDescription": "News and messages from the app."

@@ -16,7 +16,6 @@ workspace:
   - packages/utilities/*
   - packages/utilities/**/* # layer-split utilities (webviews/{domain,presentation}) sit one level deeper
   - packages/features/**/*
-  - packages/ui/* # shared, state-aware UI — riverpod and l10n aware, so not design_system
 
 # Root-only tooling: this runs at the workspace root, so it is declared here as well as
 # under melos.command.bootstrap below (the single source of versions — keep the two in step).

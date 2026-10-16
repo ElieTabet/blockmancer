@@ -18,14 +18,11 @@ dependencies:
   push: any
   push_notifications_domain: any
   push_notifications_presentation: any
-  screen_header: any
   splash_presentation: any
   telemetry: any
   game_presentation: any
   flutter_secure_storage: ^11.2.0
   timber: any
-  # The no-backend sign-out answers a Result.
-  result: any
   riverpod_annotation: ^4.0.2
 
 dev_dependencies:

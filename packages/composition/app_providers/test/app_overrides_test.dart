@@ -15,8 +15,6 @@ import 'package:game_presentation/src/providers_di.br.dart' as game_di;
 import 'package:keychain/keychain.dart';
 import 'package:network/network.dart';
 import 'package:network/src/providers_di.br.dart' as network_di;
-import 'package:screen_header/screen_header.dart' show ScreenHeaderRouting;
-import 'package:screen_header/src/providers_di.br.dart' as header_di;
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
 import 'package:push_notifications_domain/push_notifications_domain.dart'
@@ -125,26 +123,6 @@ void main() {
     expect(
       buildContainer().read(connectivityMonitorProvider),
       isA<PlusConnectivityMonitor>(),
-    );
-  });
-
-  // The header's own session slots. It never names `auth`, so these binds are
-  // the only thing that makes the sign-in/sign-out control work at all — on
-  // every screen that wears the band.
-  test('the header session contracts are bound to auth', () {
-    final container = buildContainer();
-
-    expect(
-      container.read(header_di.isAuthenticatedProvider),
-      isA<AsyncValue<bool>>(),
-    );
-    expect(
-      container.read(header_di.logoutProvider),
-      isA<header_di.LogoutFun>(),
-    );
-    expect(
-      container.read(header_di.screenHeaderRoutingProvider),
-      isA<ScreenHeaderRouting>(),
     );
   });
 }
