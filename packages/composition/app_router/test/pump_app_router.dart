@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 import 'stub_deep_route.dart';
-import 'stub_home.dart';
+import 'stub_game.dart';
 import 'stub_launch.dart';
 import 'stub_screen_header.dart';
 
@@ -28,7 +28,7 @@ Future<AppRouter> pumpAppRouter(
     ProviderScope(
       overrides: [
         ...routingOverrides(),
-        ...stubHome(),
+        ...stubGame(),
         ...stubLaunch(),
         ...stubScreenHeader(),
       ],

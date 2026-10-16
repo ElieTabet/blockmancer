@@ -28,8 +28,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # Test-only: stubbing the cold-start I/O in the boot smoke test.
-  push_notifications_domain: any
   flutter_lints: ^6.0.0           # Flutter recommended lint rules
   flutter_launcher_icons: ^0.14.4 # Generates the launcher icons into android/ and ios/
   flutter_native_splash: ^2.4.8   # Generates the native launch screens into android/ and ios/

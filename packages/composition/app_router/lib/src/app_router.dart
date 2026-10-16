@@ -1,8 +1,8 @@
 import 'package:app_router/src/shells/tab_shell.br.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
-import 'package:home_presentation/home_presentation.dart'
-    show HomeRoute, HomeRoutePath;
+import 'package:game_presentation/game_presentation.dart'
+    show GameRoute, GameRoutePath;
 import 'package:splash_presentation/splash_presentation.dart'
     show SplashRoute, SplashRoutePath;
 
@@ -40,8 +40,8 @@ final class AppRouter extends RootStackRouter implements AutoRouteGuard {
     transitionsBuilder: TransitionsBuilders.fadeIn,
     children: [
       AutoRoute(
-        path: HomeRoutePath.home.path,
-        page: HomeRoute.page,
+        path: GameRoutePath.game.path,
+        page: GameRoute.page,
         initial: true,
       ),
     ],

@@ -41,7 +41,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	// Translations
 	late final Translations$login$en login = Translations$login$en.internal(_root);
-	late final Translations$home$en home = Translations$home$en.internal(_root);
+	late final Translations$game$en game = Translations$game$en.internal(_root);
 	late final Translations$session$en session = Translations$session$en.internal(_root);
 	late final Translations$push$en push = Translations$push$en.internal(_root);
 	late final Translations$appStatus$en appStatus = Translations$appStatus$en.internal(_root);
@@ -104,22 +104,31 @@ class Translations$login$en {
 	String get genericError => 'Something went wrong. Please try again.';
 }
 
-// Path: home
-class Translations$home$en {
-	Translations$home$en.internal(this._root);
+// Path: game
+class Translations$game$en {
+	Translations$game$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
 
-	/// en: 'Home'
-	String get tabLabel => 'Home';
+	/// en: 'Play'
+	String get tabLabel => 'Play';
 
-	/// en: 'Home'
-	String get title => 'Home';
+	/// en: 'Blockmancer'
+	String get title => 'Blockmancer';
 
-	/// en: 'Your app starts here. Replace this tab with the app's own main screen.'
-	String get placeholder => 'Your app starts here. Replace this tab with the app\'s own main screen.';
+	/// en: 'Daily run · same pieces for everyone'
+	String get subtitle => 'Daily run · same pieces for everyone';
+
+	/// en: 'Run $total'
+	String runTotal({required Object total}) => 'Run ${total}';
+
+	late final Translations$game$round$en round = Translations$game$round$en.internal(_root);
+	late final Translations$game$offers$en offers = Translations$game$offers$en.internal(_root);
+	late final Translations$game$lost$en lost = Translations$game$lost$en.internal(_root);
+	late final Translations$game$end$en end = Translations$game$end$en.internal(_root);
+	late final Translations$game$jokers$en jokers = Translations$game$jokers$en.internal(_root);
 }
 
 // Path: session
@@ -212,6 +221,359 @@ class Translations$appStatus$en {
 	String get later => 'Later';
 }
 
+// Path: game.round
+class Translations$game$round$en {
+	Translations$game$round$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Round · $index / $count'
+	String regular({required Object index, required Object count}) => 'Round · ${index} / ${count}';
+
+	/// en: 'Boss · Rubble · $index / $count'
+	String boss({required Object index, required Object count}) => 'Boss · Rubble · ${index} / ${count}';
+
+	/// en: '/ $target'
+	String target({required Object target}) => '/ ${target}';
+
+	/// en: '$count pieces left'
+	String piecesLeft({required Object count}) => '${count} pieces left';
+
+	/// en: 'Combo ×$streak'
+	String combo({required Object streak}) => 'Combo ×${streak}';
+
+	/// en: '+$mult mult stored'
+	String storedMult({required Object mult}) => '+${mult} mult stored';
+}
+
+// Path: game.offers
+class Translations$game$offers$en {
+	Translations$game$offers$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Pick your starting joker'
+	String get startTitle => 'Pick your starting joker';
+
+	/// en: 'Jokers work in pairs. You pick one more after every round, so plan your build.'
+	String get startSubtitle => 'Jokers work in pairs. You pick one more after every round, so plan your build.';
+
+	/// en: 'Round cleared!'
+	String get roundTitle => 'Round cleared!';
+
+	/// en: 'Saver +$points'
+	String saverBonus({required Object points}) => 'Saver +${points}';
+
+	/// en: 'Pick a joker. Next: round $index · $target pts.'
+	String nextRound({required Object index, required Object target}) => 'Pick a joker. Next: round ${index} · ${target} pts.';
+
+	/// en: 'Pick a joker. Next: Boss · $target pts with stones.'
+	String nextBoss({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts with stones.';
+
+	/// en: 'Your build: $jokers'
+	String build({required Object jokers}) => 'Your build: ${jokers}';
+
+	/// en: '★ Completes a pair with your $joker'
+	String completesPair({required Object joker}) => '★ Completes a pair with your ${joker}';
+
+	/// en: 'Pairs with: $joker'
+	String pairsWith({required Object joker}) => 'Pairs with: ${joker}';
+
+	/// en: 'Take'
+	String get take => 'Take';
+}
+
+// Path: game.lost
+class Translations$game$lost$en {
+	Translations$game$lost$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Out of pieces'
+	String get outOfPieces => 'Out of pieces';
+
+	/// en: 'No room left'
+	String get noRoom => 'No room left';
+
+	/// en: '$score of $target points this round.'
+	String progress({required Object score, required Object target}) => '${score} of ${target} points this round.';
+
+	/// en: 'Revive · clear 2 rows + 3 pieces'
+	String get revive => 'Revive · clear 2 rows + 3 pieces';
+
+	/// en: 'End run'
+	String get endRun => 'End run';
+}
+
+// Path: game.end
+class Translations$game$end$en {
+	Translations$game$end$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Boss beaten · run complete'
+	String get won => 'Boss beaten · run complete';
+
+	/// en: 'Run over · reached round $index'
+	String overRound({required Object index}) => 'Run over · reached round ${index}';
+
+	/// en: 'Run over · reached the boss'
+	String get overBoss => 'Run over · reached the boss';
+
+	/// en: '$total points'
+	String total({required Object total}) => '${total} points';
+
+	/// en: 'Build: $jokers'
+	String build({required Object jokers}) => 'Build: ${jokers}';
+
+	/// en: 'none'
+	String get noJokers => 'none';
+
+	/// en: 'Retry today's run'
+	String get retry => 'Retry today\'s run';
+}
+
+// Path: game.jokers
+class Translations$game$jokers$en {
+	Translations$game$jokers$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final Translations$game$jokers$stonemason$en stonemason = Translations$game$jokers$stonemason$en.internal(_root);
+	late final Translations$game$jokers$combo$en combo = Translations$game$jokers$combo$en.internal(_root);
+	late final Translations$game$jokers$patience$en patience = Translations$game$jokers$patience$en.internal(_root);
+	late final Translations$game$jokers$precision$en precision = Translations$game$jokers$precision$en.internal(_root);
+	late final Translations$game$jokers$collector$en collector = Translations$game$jokers$collector$en.internal(_root);
+	late final Translations$game$jokers$twin$en twin = Translations$game$jokers$twin$en.internal(_root);
+	late final Translations$game$jokers$column$en column = Translations$game$jokers$column$en.internal(_root);
+	late final Translations$game$jokers$heavy$en heavy = Translations$game$jokers$heavy$en.internal(_root);
+	late final Translations$game$jokers$sweep$en sweep = Translations$game$jokers$sweep$en.internal(_root);
+	late final Translations$game$jokers$quarry$en quarry = Translations$game$jokers$quarry$en.internal(_root);
+	late final Translations$game$jokers$bigbox$en bigbox = Translations$game$jokers$bigbox$en.internal(_root);
+	late final Translations$game$jokers$tiny$en tiny = Translations$game$jokers$tiny$en.internal(_root);
+	late final Translations$game$jokers$pockets$en pockets = Translations$game$jokers$pockets$en.internal(_root);
+	late final Translations$game$jokers$saver$en saver = Translations$game$jokers$saver$en.internal(_root);
+}
+
+// Path: game.jokers.stonemason
+class Translations$game$jokers$stonemason$en {
+	Translations$game$jokers$stonemason$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Stonemason'
+	String get name => 'Stonemason';
+
+	/// en: '+50 chips for each stone cleared. 2 extra stones every round.'
+	String get description => '+50 chips for each stone cleared. 2 extra stones every round.';
+}
+
+// Path: game.jokers.combo
+class Translations$game$jokers$combo$en {
+	Translations$game$jokers$combo$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Combo King'
+	String get name => 'Combo King';
+
+	/// en: '+1 mult for every clearing move in a row.'
+	String get description => '+1 mult for every clearing move in a row.';
+}
+
+// Path: game.jokers.patience
+class Translations$game$jokers$patience$en {
+	Translations$game$jokers$patience$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Patience'
+	String get name => 'Patience';
+
+	/// en: 'Each move without a clear stores +2 mult for your next clear.'
+	String get description => 'Each move without a clear stores +2 mult for your next clear.';
+}
+
+// Path: game.jokers.precision
+class Translations$game$jokers$precision$en {
+	Translations$game$jokers$precision$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Precision'
+	String get name => 'Precision';
+
+	/// en: '+6 mult when a 1–2 cell piece completes a line.'
+	String get description => '+6 mult when a 1–2 cell piece completes a line.';
+}
+
+// Path: game.jokers.collector
+class Translations$game$jokers$collector$en {
+	Translations$game$jokers$collector$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Collector'
+	String get name => 'Collector';
+
+	/// en: '+1 mult on every clear for each joker you own.'
+	String get description => '+1 mult on every clear for each joker you own.';
+}
+
+// Path: game.jokers.twin
+class Translations$game$jokers$twin$en {
+	Translations$game$jokers$twin$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Twin Lines'
+	String get name => 'Twin Lines';
+
+	/// en: '×3 mult when you clear 2 or more lines at once.'
+	String get description => '×3 mult when you clear 2 or more lines at once.';
+}
+
+// Path: game.jokers.column
+class Translations$game$jokers$column$en {
+	Translations$game$jokers$column$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Column Hunter'
+	String get name => 'Column Hunter';
+
+	/// en: '×2 mult when your move clears a column.'
+	String get description => '×2 mult when your move clears a column.';
+}
+
+// Path: game.jokers.heavy
+class Translations$game$jokers$heavy$en {
+	Translations$game$jokers$heavy$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Heavyweight'
+	String get name => 'Heavyweight';
+
+	/// en: '×2 mult when a piece of 4+ cells completes a line.'
+	String get description => '×2 mult when a piece of 4+ cells completes a line.';
+}
+
+// Path: game.jokers.sweep
+class Translations$game$jokers$sweep$en {
+	Translations$game$jokers$sweep$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Clean Sweep'
+	String get name => 'Clean Sweep';
+
+	/// en: '+500 points when the board becomes completely empty.'
+	String get description => '+500 points when the board becomes completely empty.';
+}
+
+// Path: game.jokers.quarry
+class Translations$game$jokers$quarry$en {
+	Translations$game$jokers$quarry$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Quarry'
+	String get name => 'Quarry';
+
+	/// en: 'Every clear drops a new stone on a random empty cell.'
+	String get description => 'Every clear drops a new stone on a random empty cell.';
+}
+
+// Path: game.jokers.bigbox
+class Translations$game$jokers$bigbox$en {
+	Translations$game$jokers$bigbox$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Big Box'
+	String get name => 'Big Box';
+
+	/// en: 'Pieces of 5+ cells show up 3× more often.'
+	String get description => 'Pieces of 5+ cells show up 3× more often.';
+}
+
+// Path: game.jokers.tiny
+class Translations$game$jokers$tiny$en {
+	Translations$game$jokers$tiny$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Tiny Tools'
+	String get name => 'Tiny Tools';
+
+	/// en: 'Pieces of 1–2 cells show up 3× more often.'
+	String get description => 'Pieces of 1–2 cells show up 3× more often.';
+}
+
+// Path: game.jokers.pockets
+class Translations$game$jokers$pockets$en {
+	Translations$game$jokers$pockets$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Deep Pockets'
+	String get name => 'Deep Pockets';
+
+	/// en: '+4 pieces every round.'
+	String get description => '+4 pieces every round.';
+}
+
+// Path: game.jokers.saver
+class Translations$game$jokers$saver$en {
+	Translations$game$jokers$saver$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Saver'
+	String get name => 'Saver';
+
+	/// en: 'Each unused piece when you beat a round gives +40 run points.'
+	String get description => 'Each unused piece when you beat a round gives +40 run points.';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -236,9 +598,66 @@ extension on Translations {
 			'login.deviceConflict' => 'This device is signed in as another member. Sign out first.',
 			'login.noInternet' => 'Check your internet connection and try again.',
 			'login.genericError' => 'Something went wrong. Please try again.',
-			'home.tabLabel' => 'Home',
-			'home.title' => 'Home',
-			'home.placeholder' => 'Your app starts here. Replace this tab with the app\'s own main screen.',
+			'game.tabLabel' => 'Play',
+			'game.title' => 'Blockmancer',
+			'game.subtitle' => 'Daily run · same pieces for everyone',
+			'game.runTotal' => ({required Object total}) => 'Run ${total}',
+			'game.round.regular' => ({required Object index, required Object count}) => 'Round · ${index} / ${count}',
+			'game.round.boss' => ({required Object index, required Object count}) => 'Boss · Rubble · ${index} / ${count}',
+			'game.round.target' => ({required Object target}) => '/ ${target}',
+			'game.round.piecesLeft' => ({required Object count}) => '${count} pieces left',
+			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
+			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult stored',
+			'game.offers.startTitle' => 'Pick your starting joker',
+			'game.offers.startSubtitle' => 'Jokers work in pairs. You pick one more after every round, so plan your build.',
+			'game.offers.roundTitle' => 'Round cleared!',
+			'game.offers.saverBonus' => ({required Object points}) => 'Saver +${points}',
+			'game.offers.nextRound' => ({required Object index, required Object target}) => 'Pick a joker. Next: round ${index} · ${target} pts.',
+			'game.offers.nextBoss' => ({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts with stones.',
+			'game.offers.build' => ({required Object jokers}) => 'Your build: ${jokers}',
+			'game.offers.completesPair' => ({required Object joker}) => '★ Completes a pair with your ${joker}',
+			'game.offers.pairsWith' => ({required Object joker}) => 'Pairs with: ${joker}',
+			'game.offers.take' => 'Take',
+			'game.lost.outOfPieces' => 'Out of pieces',
+			'game.lost.noRoom' => 'No room left',
+			'game.lost.progress' => ({required Object score, required Object target}) => '${score} of ${target} points this round.',
+			'game.lost.revive' => 'Revive · clear 2 rows + 3 pieces',
+			'game.lost.endRun' => 'End run',
+			'game.end.won' => 'Boss beaten · run complete',
+			'game.end.overRound' => ({required Object index}) => 'Run over · reached round ${index}',
+			'game.end.overBoss' => 'Run over · reached the boss',
+			'game.end.total' => ({required Object total}) => '${total} points',
+			'game.end.build' => ({required Object jokers}) => 'Build: ${jokers}',
+			'game.end.noJokers' => 'none',
+			'game.end.retry' => 'Retry today\'s run',
+			'game.jokers.stonemason.name' => 'Stonemason',
+			'game.jokers.stonemason.description' => '+50 chips for each stone cleared. 2 extra stones every round.',
+			'game.jokers.combo.name' => 'Combo King',
+			'game.jokers.combo.description' => '+1 mult for every clearing move in a row.',
+			'game.jokers.patience.name' => 'Patience',
+			'game.jokers.patience.description' => 'Each move without a clear stores +2 mult for your next clear.',
+			'game.jokers.precision.name' => 'Precision',
+			'game.jokers.precision.description' => '+6 mult when a 1–2 cell piece completes a line.',
+			'game.jokers.collector.name' => 'Collector',
+			'game.jokers.collector.description' => '+1 mult on every clear for each joker you own.',
+			'game.jokers.twin.name' => 'Twin Lines',
+			'game.jokers.twin.description' => '×3 mult when you clear 2 or more lines at once.',
+			'game.jokers.column.name' => 'Column Hunter',
+			'game.jokers.column.description' => '×2 mult when your move clears a column.',
+			'game.jokers.heavy.name' => 'Heavyweight',
+			'game.jokers.heavy.description' => '×2 mult when a piece of 4+ cells completes a line.',
+			'game.jokers.sweep.name' => 'Clean Sweep',
+			'game.jokers.sweep.description' => '+500 points when the board becomes completely empty.',
+			'game.jokers.quarry.name' => 'Quarry',
+			'game.jokers.quarry.description' => 'Every clear drops a new stone on a random empty cell.',
+			'game.jokers.bigbox.name' => 'Big Box',
+			'game.jokers.bigbox.description' => 'Pieces of 5+ cells show up 3× more often.',
+			'game.jokers.tiny.name' => 'Tiny Tools',
+			'game.jokers.tiny.description' => 'Pieces of 1–2 cells show up 3× more often.',
+			'game.jokers.pockets.name' => 'Deep Pockets',
+			'game.jokers.pockets.description' => '+4 pieces every round.',
+			'game.jokers.saver.name' => 'Saver',
+			'game.jokers.saver.description' => 'Each unused piece when you beat a round gives +40 run points.',
 			'session.signIn' => 'Sign in',
 			'session.signOut' => 'Sign out',
 			'session.signOutConfirmTitle' => 'Sign out?',

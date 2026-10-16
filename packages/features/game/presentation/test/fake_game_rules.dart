@@ -1,0 +1,121 @@
+import 'package:shared_domain/shared_domain.dart';
+
+/// A run in [phase] with an empty board and a tray of singles.
+RunState runIn(
+  RunPhase phase, {
+  Board? board,
+  List<JokerId> jokers = const [],
+  int pickIndex = 1,
+  int revivesUsed = 0,
+  int score = 0,
+  List<int?> tray = const [0, 0, 0],
+}) => RunState(
+  board: board ?? Board.empty(),
+  config: testConfig,
+  jokers: jokers,
+  phase: phase,
+  pickIndex: pickIndex,
+  piecesLeft: 5,
+  piecesRngState: 0,
+  revivesUsed: revivesUsed,
+  roundIndex: 0,
+  runTotal: 0,
+  score: score,
+  seed: 1,
+  stonesRngState: 0,
+  storedMult: 0,
+  streak: 0,
+  tray: tray,
+);
+
+const testConfig = RunConfig(
+  offerCount: 3,
+  partnerBias: 0.75,
+  revivePieces: 3,
+  reviveRows: 2,
+  revivesPerRun: 1,
+  rounds: [
+    RoundSpec(isBoss: false, pieces: 14, stones: 0, target: 250),
+    RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
+  ],
+  traySize: 3,
+);
+
+/// Scripted rules: every move answers [next], and every call is recorded.
+/// Shape ids are singles; a piece fits wherever the board is empty.
+final class FakeGameRules implements GameRules {
+  FakeGameRules({required this.start});
+
+  final calls = <String>[];
+  Transition? next;
+  final RunState start;
+
+  @override
+  RunConfig get defaultConfig => testConfig;
+
+  @override
+  bool canPlace(
+    RunState state, {
+    required Cell anchor,
+    required int trayIndex,
+  }) => state.tray[trayIndex] != null && state.board.at(anchor) is EmptyCell;
+
+  @override
+  int dailySeed({required int day, required int month, required int year}) => 1;
+
+  @override
+  Transition endRun(RunState state) => _move('endRun', state);
+
+  @override
+  bool fitsSomewhere(RunState state, {required int trayIndex}) => true;
+
+  @override
+  JokerId partnerOf(JokerId id) => id == .twin ? .patience : .twin;
+
+  @override
+  Transition pickJoker(RunState state, {required JokerId id}) =>
+      _move('pickJoker $id', state);
+
+  @override
+  Transition place(
+    RunState state, {
+    required Cell anchor,
+    required int trayIndex,
+  }) => _move('place $trayIndex (${anchor.row}, ${anchor.col})', state);
+
+  @override
+  PlacementPreview preview(
+    RunState state, {
+    required Cell anchor,
+    required int trayIndex,
+  }) {
+    final fits = canPlace(state, anchor: anchor, trayIndex: trayIndex);
+
+    return PlacementPreview(
+      cells: [anchor],
+      clearingCols: const [],
+      clearingRows: const [],
+      colliding: fits ? const [] : [anchor],
+      fits: fits,
+    );
+  }
+
+  @override
+  Transition revive(RunState state) => _move('revive', state);
+
+  @override
+  Shape shape(int id) => Shape(cells: const [Cell(col: 0, row: 0)], id: id);
+
+  @override
+  RunState startRun({required RunConfig config, required int seed}) {
+    calls.add('startRun $seed');
+
+    return start;
+  }
+
+  Transition _move(String call, RunState state) {
+    calls.add(call);
+
+    return next ?? (state, const []);
+  }
+}

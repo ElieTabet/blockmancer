@@ -15,9 +15,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:l10n_application/l10n_application.dart';
 
-import 'package:push_notifications_domain/push_notifications_domain.dart'
-    as push_notifications;
-
 void main() {
   testWidgets('Given a screen with no app bar '
       'When it is on screen '
@@ -34,11 +31,6 @@ void main() {
             collectsTelemetry: false,
             router: appRouter,
           ),
-          // With no login screen the splash hands off to Home, which asks for
-          // notifications — a platform channel the test has no answer for.
-          push_notifications.askForNotificationsProvider.overrideWithValue(
-            () async {},
-          ),
         ],
         child: TranslationProvider(
           child: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -54,14 +46,14 @@ void main() {
       ),
     );
 
-    // Splash first, then the hand-off to login. Both are bare Scaffolds.
+    // Splash first, then the hand-off to the game. Neither has an app bar.
     await tester.pump();
     expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
 
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Your app starts here'), findsOneWidget);
+    expect(find.text('Pick your starting joker'), findsOneWidget);
     expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
   });
 }

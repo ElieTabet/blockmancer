@@ -9,8 +9,9 @@ import 'package:app_providers/app_providers.dart';
 import 'package:app_router/app_router.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:home_presentation/src/providers_di.br.dart' as home_di;
+import 'package:game_presentation/src/providers_di.br.dart' as game_di;
 import 'package:keychain/keychain.dart';
 import 'package:network/network.dart';
 import 'package:network/src/providers_di.br.dart' as network_di;
@@ -64,20 +65,22 @@ void main() {
     );
   });
 
+  test('the game reaches the engine only through its rules slot', () {
+    expect(
+      buildContainer().read(game_di.gameRulesProvider),
+      isA<BlockmancerEngine>(),
+    );
+  });
+
   // Push crosses four packages and never lets any but `push` name Firebase:
-  // push_notifications decides, `device` reports the token, Home says when
-  // to ask, and the router opens what a tap is about. These binds are the
-  // whole join.
+  // push_notifications decides, `device` reports the token, and the router
+  // opens what a tap is about. These binds are the whole join.
   test('the push slots are bound across push, its feature and the rest', () {
     final container = buildContainer();
 
     expect(
       container.read(push_di.pushMessagingProvider),
       isA<FirebasePushMessaging>(),
-    );
-    expect(
-      container.read(home_di.askForNotificationsProvider),
-      isA<home_di.AskForNotificationsFun>(),
     );
     // Read from one container, which is what proves the device ↔
     // push_notifications pair is not circular.

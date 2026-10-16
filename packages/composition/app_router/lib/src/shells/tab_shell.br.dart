@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:home_presentation/home_presentation.dart' show HomeRoute;
+import 'package:game_presentation/game_presentation.dart' show GameRoute;
 import 'package:l10n_application/l10n_application.dart';
 
 /// Root path for the tab shell. Splash owns the initial `/`, so the shell gets
-/// its own segment; its tab children resolve under it (`/main/home`, …).
+/// its own segment; its tab children resolve under it (`/main/game`, …).
 enum TabShellRoutePath {
   shell('/main');
 
@@ -29,7 +29,7 @@ final class TabShellPage extends StatelessWidget {
 
   /// Tab routes, in bar order. AutoTabsScaffold matches these to
   /// [_destinationsOf] by index, so the two must stay in the same order.
-  static const _routes = <PageRouteInfo<void>>[HomeRoute()];
+  static const _routes = <PageRouteInfo<void>>[GameRoute()];
 
   @override
   Widget build(BuildContext context) => AutoTabsScaffold(
@@ -77,9 +77,9 @@ final class TabShellPage extends StatelessWidget {
 
   List<NavigationDestination> _destinationsOf(BuildContext context) => [
     NavigationDestination(
-      icon: const Icon(Icons.home_outlined),
-      selectedIcon: const Icon(Icons.home),
-      label: context.t.home.tabLabel,
+      icon: const Icon(Icons.grid_view_outlined),
+      selectedIcon: const Icon(Icons.grid_view),
+      label: context.t.game.tabLabel,
       // Empty rather than omitted: disables the long-press tooltip, which the
       // always-hidden labels make redundant.
       tooltip: '',

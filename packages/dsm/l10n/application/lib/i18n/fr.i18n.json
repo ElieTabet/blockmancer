@@ -17,10 +17,105 @@
     "noInternet": "Vérifiez votre connexion Internet et réessayez.",
     "genericError": "Une erreur est survenue. Veuillez réessayer."
   },
-  "home": {
-    "tabLabel": "Accueil",
-    "title": "Accueil",
-    "placeholder": "Votre application commence ici. Remplacez cet onglet par l'écran principal de l'application."
+  "game": {
+    "tabLabel": "Jouer",
+    "title": "Blockmancer",
+    "subtitle": "Partie du jour · les mêmes pièces pour tous",
+    "runTotal": "Partie $total",
+    "round": {
+      "regular": "Manche · $index / $count",
+      "boss": "Boss · Gravats · $index / $count",
+      "target": "/ $target",
+      "piecesLeft": "$count pièces restantes",
+      "combo": "Combo ×$streak",
+      "storedMult": "+$mult mult en réserve"
+    },
+    "offers": {
+      "startTitle": "Choisis ton joker de départ",
+      "startSubtitle": "Les jokers vont par paires. Tu en choisis un de plus après chaque manche : prépare ta combinaison.",
+      "roundTitle": "Manche gagnée !",
+      "saverBonus": "Épargnant +$points",
+      "nextRound": "Choisis un joker. Ensuite : manche $index · $target pts.",
+      "nextBoss": "Choisis un joker. Ensuite : Boss · $target pts avec des pierres.",
+      "build": "Ta combinaison : $jokers",
+      "completesPair": "★ Complète une paire avec ton $joker",
+      "pairsWith": "Va avec : $joker",
+      "take": "Prendre"
+    },
+    "lost": {
+      "outOfPieces": "Plus de pièces",
+      "noRoom": "Plus de place",
+      "progress": "$score sur $target points cette manche.",
+      "revive": "Relancer · 2 lignes vidées + 3 pièces",
+      "endRun": "Terminer la partie"
+    },
+    "end": {
+      "won": "Boss vaincu · partie terminée",
+      "overRound": "Partie finie · manche $index atteinte",
+      "overBoss": "Partie finie · boss atteint",
+      "total": "$total points",
+      "build": "Combinaison : $jokers",
+      "noJokers": "aucune",
+      "retry": "Rejouer la partie du jour"
+    },
+    "jokers": {
+      "stonemason": {
+        "name": "Tailleur de pierre",
+        "description": "+50 jetons par pierre effacée. 2 pierres de plus à chaque manche."
+      },
+      "combo": {
+        "name": "Roi du combo",
+        "description": "+1 mult pour chaque coup gagnant d'affilée."
+      },
+      "patience": {
+        "name": "Patience",
+        "description": "Chaque coup sans ligne met +2 mult en réserve pour la prochaine."
+      },
+      "precision": {
+        "name": "Précision",
+        "description": "+6 mult quand une pièce de 1 ou 2 cases complète une ligne."
+      },
+      "collector": {
+        "name": "Collectionneur",
+        "description": "+1 mult à chaque ligne pour chaque joker possédé."
+      },
+      "twin": {
+        "name": "Lignes jumelles",
+        "description": "×3 mult quand tu effaces 2 lignes ou plus d'un coup."
+      },
+      "column": {
+        "name": "Chasseur de colonnes",
+        "description": "×2 mult quand ton coup efface une colonne."
+      },
+      "heavy": {
+        "name": "Poids lourd",
+        "description": "×2 mult quand une pièce de 4 cases ou plus complète une ligne."
+      },
+      "sweep": {
+        "name": "Grand ménage",
+        "description": "+500 points quand le plateau se vide entièrement."
+      },
+      "quarry": {
+        "name": "Carrière",
+        "description": "Chaque ligne effacée fait tomber une pierre sur une case vide au hasard."
+      },
+      "bigbox": {
+        "name": "Grande boîte",
+        "description": "Les pièces de 5 cases ou plus arrivent 3× plus souvent."
+      },
+      "tiny": {
+        "name": "Petits outils",
+        "description": "Les pièces de 1 ou 2 cases arrivent 3× plus souvent."
+      },
+      "pockets": {
+        "name": "Poches profondes",
+        "description": "+4 pièces à chaque manche."
+      },
+      "saver": {
+        "name": "Épargnant",
+        "description": "Chaque pièce inutilisée quand tu gagnes une manche rapporte +40 points de partie."
+      }
+    }
   },
   "session": {
     "signIn": "Se connecter",

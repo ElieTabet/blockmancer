@@ -1,7 +1,8 @@
 import 'package:app_router/app_router.dart';
+import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:connectivity/connectivity.dart' as connectivity;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:home_presentation/home_presentation.dart' as home_ui;
+import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:keychain/keychain.dart' as keychain;
 import 'package:network/network.dart' as network;
 import 'package:push/push.dart' as push;
@@ -108,12 +109,8 @@ List<Override> featureBindingOverrides({
   ...push_notifications_ui.bindRoutingProviders(
     pushNotificationsRouting: (ref) => PushNotificationsRoutingImpl(router),
   ),
-  // Home owns the moment to ask for notifications; push_notifications owns
-  // what asking means.
-  ...home_ui.bindProviders(
-    askForNotifications: (ref) =>
-        ref.watch(push_notifications_domain.askForNotificationsProvider),
-  ),
+  // The game screen reaches the rules only through this slot.
+  ...game_ui.bindProviders(gameRules: (ref) => const BlockmancerEngine()),
   // The one session control every main screen wears. Bound once here rather
   // than per screen.
   // No backend: no one signs in, and the organization has no settings to

@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   design_system: any
-  home_presentation: any
+  game_presentation: any
   splash_presentation: any
   push_notifications_presentation: any
   screen_header: any
@@ -21,6 +21,8 @@ dependencies:
   auto_route: ^11.1.0
 
 dev_dependencies:
+  # Test-only: the composition tests mount the real game tab, rules included.
+  blockmancer_engine: any
   flutter_test:
     sdk: flutter
   # Test-only: the composition tests mount the real tabs, so they have to fill

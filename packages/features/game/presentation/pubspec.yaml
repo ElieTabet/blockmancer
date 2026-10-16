@@ -1,0 +1,27 @@
+name: game_presentation
+description: "game presentation layer — the board, the tray and the joker picks of a run. The rules are injected (shared_domain's GameRules); this layer only draws them and forwards moves."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auto_route: ^11.1.0
+  design_system: any
+  flutter_riverpod: ^3.3.1
+  freezed_annotation: ^3.1.0
+  l10n_application: any
+  riverpod_annotation: ^4.0.2
+  shared_domain: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  auto_route_generator: ^10.4.0
+  build_runner: 2.16.0
+  freezed: ^3.2.5
+  riverpod_generator: 4.0.3

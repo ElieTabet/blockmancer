@@ -11,6 +11,9 @@ class DSColor {
   static const charcoalLight = Color(0xFF2F353B); // dark surfaceVariant
   static const cloud = Color(0xFFEFF3F4); // light surfaceVariant
   static const error = Color(0xFFE7505A);
+  static const joker = Color(
+    0xFFA57BFF,
+  ); // jokers — the game's third brand colour
   static const mist = Color(0xFFCFD8DC); // subtle borders / outlines
   static const primary = Color(0xFF14172B); // brand
   static const primaryDark = Color(0xFF0F1221); // hover / active

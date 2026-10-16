@@ -17,10 +17,105 @@
     "noInternet": "Check your internet connection and try again.",
     "genericError": "Something went wrong. Please try again."
   },
-  "home": {
-    "tabLabel": "Home",
-    "title": "Home",
-    "placeholder": "Your app starts here. Replace this tab with the app's own main screen."
+  "game": {
+    "tabLabel": "Play",
+    "title": "Blockmancer",
+    "subtitle": "Daily run · same pieces for everyone",
+    "runTotal": "Run $total",
+    "round": {
+      "regular": "Round · $index / $count",
+      "boss": "Boss · Rubble · $index / $count",
+      "target": "/ $target",
+      "piecesLeft": "$count pieces left",
+      "combo": "Combo ×$streak",
+      "storedMult": "+$mult mult stored"
+    },
+    "offers": {
+      "startTitle": "Pick your starting joker",
+      "startSubtitle": "Jokers work in pairs. You pick one more after every round, so plan your build.",
+      "roundTitle": "Round cleared!",
+      "saverBonus": "Saver +$points",
+      "nextRound": "Pick a joker. Next: round $index · $target pts.",
+      "nextBoss": "Pick a joker. Next: Boss · $target pts with stones.",
+      "build": "Your build: $jokers",
+      "completesPair": "★ Completes a pair with your $joker",
+      "pairsWith": "Pairs with: $joker",
+      "take": "Take"
+    },
+    "lost": {
+      "outOfPieces": "Out of pieces",
+      "noRoom": "No room left",
+      "progress": "$score of $target points this round.",
+      "revive": "Revive · clear 2 rows + 3 pieces",
+      "endRun": "End run"
+    },
+    "end": {
+      "won": "Boss beaten · run complete",
+      "overRound": "Run over · reached round $index",
+      "overBoss": "Run over · reached the boss",
+      "total": "$total points",
+      "build": "Build: $jokers",
+      "noJokers": "none",
+      "retry": "Retry today's run"
+    },
+    "jokers": {
+      "stonemason": {
+        "name": "Stonemason",
+        "description": "+50 chips for each stone cleared. 2 extra stones every round."
+      },
+      "combo": {
+        "name": "Combo King",
+        "description": "+1 mult for every clearing move in a row."
+      },
+      "patience": {
+        "name": "Patience",
+        "description": "Each move without a clear stores +2 mult for your next clear."
+      },
+      "precision": {
+        "name": "Precision",
+        "description": "+6 mult when a 1–2 cell piece completes a line."
+      },
+      "collector": {
+        "name": "Collector",
+        "description": "+1 mult on every clear for each joker you own."
+      },
+      "twin": {
+        "name": "Twin Lines",
+        "description": "×3 mult when you clear 2 or more lines at once."
+      },
+      "column": {
+        "name": "Column Hunter",
+        "description": "×2 mult when your move clears a column."
+      },
+      "heavy": {
+        "name": "Heavyweight",
+        "description": "×2 mult when a piece of 4+ cells completes a line."
+      },
+      "sweep": {
+        "name": "Clean Sweep",
+        "description": "+500 points when the board becomes completely empty."
+      },
+      "quarry": {
+        "name": "Quarry",
+        "description": "Every clear drops a new stone on a random empty cell."
+      },
+      "bigbox": {
+        "name": "Big Box",
+        "description": "Pieces of 5+ cells show up 3× more often."
+      },
+      "tiny": {
+        "name": "Tiny Tools",
+        "description": "Pieces of 1–2 cells show up 3× more often."
+      },
+      "pockets": {
+        "name": "Deep Pockets",
+        "description": "+4 pieces every round."
+      },
+      "saver": {
+        "name": "Saver",
+        "description": "Each unused piece when you beat a round gives +40 run points."
+      }
+    }
   },
   "session": {
     "signIn": "Sign in",

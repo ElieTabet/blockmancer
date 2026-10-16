@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:l10n_application/l10n_application.dart';
-import 'package:push_notifications_domain/push_notifications_domain.dart'
-    as push_notifications;
 
 void main() {
   testWidgets('boots to the splash screen, then hands off to login', (
@@ -28,11 +26,6 @@ void main() {
             collectsTelemetry: false,
             router: appRouter,
           ),
-          // With no login screen the splash hands off to Home, which asks for
-          // notifications — a platform channel the test has no answer for.
-          push_notifications.askForNotificationsProvider.overrideWithValue(
-            () async {},
-          ),
         ],
         child: TranslationProvider(
           child: MaterialApp.router(
@@ -47,10 +40,10 @@ void main() {
     // Splash is showing: login isn't there yet.
     expect(find.text('Continue as a guest'), findsNothing);
 
-    // After the splash delay it replaces the stack with login.
+    // After the splash delay it hands off to the game, on its starting pick.
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Your app starts here'), findsOneWidget);
+    expect(find.text('Pick your starting joker'), findsOneWidget);
   });
 }

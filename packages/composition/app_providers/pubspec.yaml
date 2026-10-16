@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   app_router: any
+  blockmancer_engine: any
   connectivity: any
   keychain: any
   network: any
@@ -20,7 +21,7 @@ dependencies:
   screen_header: any
   splash_presentation: any
   telemetry: any
-  home_presentation: any
+  game_presentation: any
   flutter_secure_storage: ^11.2.0
   timber: any
   # The no-backend sign-out answers a Result.

@@ -47,7 +47,7 @@ blockmancer/
 │       ├── app_status/{domain,data,presentation}/ # app_status_* — force update / optional update / maintenance, on launch and foreground
 │       ├── auth/{domain,data}/                   # auth_domain / auth_data — login, token storage, token source (no UI)
 │       ├── device/{domain,data}/                 # device_domain / device_data — this install's identity and telemetry (no UI)
-│       ├── home/presentation/                    # home_presentation — the first tab: a placeholder for the app's main screen
+│       ├── game/presentation/                    # game_presentation — the first tab: board, tray and joker picks; rules injected via GameRules
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
 │       ├── splash/presentation/                  # splash_presentation — app entry + the cold-start contract
 │       └── login/{domain,presentation}/          # login_domain / login_presentation (reference implementation)
@@ -463,8 +463,9 @@ Firebase:
   server sends, resolve it there, and route it in `PushOpeningsNotifier` — anything unrecognised
   still opens the app. `push`'s `receivedMessages` (pushes arriving while the app is open) is
   available for a screen that should catch up on one; nothing listens to it yet.
-- **Who calls what.** Home owns the *moment* to ask (`HomeStateNotifier.onShown`, the first screen
-  a guest and a member share); `device` owns the *report* and starts the token
+- **Who calls what.** Nothing asks for permission yet: Home owned that moment and was replaced by the
+  game, and the ask returns with the daily-run notifications (`askForNotifications` is ready for
+  it). `device` owns the *report* and starts the token
   sync only once registration lets a report authenticate — device and push_notifications bind into
   each other, a second mutual pair. `PushNotificationsRoutingImpl` (context-free, like
   `AppStatusRoutingImpl`) waits out the splash, login and the blocking screens, then dismisses
@@ -599,7 +600,7 @@ melos run create -- --name <name> --type feature
 
 The `login` feature (`packages/features/login/`) is the reference implementation; `splash` (`packages/features/splash/`) shows the same pattern for a screen whose only job is a routing hand-off, and `auth` (`packages/features/auth/`) shows a capability feature with no UI at all. The scaffolding script lives at `scripts/create_package.sh`.
 
-**A new tab** follows `home` (`packages/features/home/`): a `<feature>_presentation` with a relative `<Feature>RoutePath`, one `AutoRoute` child in `AppRouter._tabConfiguration`, and one entry in each of `TabShellPage._routes` and `_destinationsOf`. The bar appears by itself with the second tab. Replace Home with the app's real main screen rather than keeping both: it is a placeholder, and its only behaviour worth keeping is the notification ask on first show.
+**A new tab** follows `game` (`packages/features/game/`): a `<feature>_presentation` with a relative `<Feature>RoutePath`, one `AutoRoute` child in `AppRouter._tabConfiguration`, and one entry in each of `TabShellPage._routes` and `_destinationsOf`. The bar appears by itself with the second tab.
 
 ## Claude agents and skills
 
