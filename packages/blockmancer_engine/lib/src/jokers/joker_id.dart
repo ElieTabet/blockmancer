@@ -1,0 +1,16 @@
+enum JokerId {
+  bigbox,
+  collector,
+  column,
+  combo,
+  heavy,
+  patience,
+  pockets,
+  precision,
+  quarry,
+  saver,
+  stonemason,
+  sweep,
+  tiny,
+  twin,
+}
