@@ -11,6 +11,8 @@ import 'package:push_notifications_domain/push_notifications_domain.dart'
 import 'package:push_notifications_presentation/push_notifications_presentation.dart'
     as push_notifications_ui;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:settings_data/settings_data.dart';
+import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:telemetry/telemetry.dart' as telemetry;
 
 /// Binds every non-routing slot to its concrete implementation — the feature
@@ -84,5 +86,10 @@ List<Override> featureBindingOverrides({
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     practiceBest: (ref) =>
         ref.watch(game.bestScoreProvider(const .practice()).future),
+  ),
+  // Settings resets the game's progress without knowing the game.
+  ...settings.bindProviders(
+    clearProgress: (ref) => ref.watch(game.clearProgressProvider),
+    settingsStore: (ref) => const SharedPreferencesSettingsStore(),
   ),
 ];

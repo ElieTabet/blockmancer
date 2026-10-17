@@ -5,6 +5,8 @@ import 'package:game_presentation/game_presentation.dart'
     show GameRoute, GameRoutePath;
 import 'package:home_presentation/home_presentation.dart'
     show HomeRoute, HomeRoutePath;
+import 'package:settings_presentation/settings_presentation.dart'
+    show SettingsRoute, SettingsRoutePath;
 import 'package:splash_presentation/splash_presentation.dart'
     show SplashRoute, SplashRoutePath;
 
@@ -25,6 +27,7 @@ final class AppRouter extends RootStackRouter implements AutoRouteGuard {
     // Over the shell, not a tab: a run fills the screen, and back returns to
     // the tab it was started from.
     AutoRoute(path: GameRoutePath.game.path, page: GameRoute.page),
+    AutoRoute(path: SettingsRoutePath.settings.path, page: SettingsRoute.page),
     // Faded in, not pushed: the launch shows it with no transition at all, but
     // lifting a block brings it back over the blocking screen.
     CustomRoute(

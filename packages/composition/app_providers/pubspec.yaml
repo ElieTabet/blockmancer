@@ -22,6 +22,9 @@ dependencies:
   game_presentation: any
   home_presentation: any
   riverpod_annotation: ^4.0.2
+  settings_data: any
+  settings_domain: any
+  settings_presentation: any
 
 dev_dependencies:
   flutter_test:

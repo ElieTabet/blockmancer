@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:home_presentation/home_presentation.dart' as home_ui;
+import 'package:settings_domain/settings_domain.dart' as settings;
 
 /// Home's daily card, which is how these tests know Home is on screen.
 const homeDailyTitle = 'Daily run';
@@ -10,9 +11,15 @@ const homeDailyTitle = 'Daily run';
 /// The game's back arrow, which is how these tests know a run is on screen.
 const gameLeaveLabel = 'Back to the menu';
 
-/// Fills the slots Home and the game read, so a composition test mounts the
-/// real screens with the real rules and, unless [runStore] keeps one, no saved
-/// run.
+/// Settings' gear on Home, which is how these tests open Settings.
+const homeSettingsLabel = 'Settings';
+
+/// Settings' back arrow.
+const settingsBackLabel = 'Back to the menu';
+
+/// Fills the slots Home, the game and Settings read, so a composition test
+/// mounts the real screens with the real rules, a first launch's settings and,
+/// unless [runStore] keeps one, no saved run.
 List<Override> stubFeatures({game.RunStore? runStore}) => [
   ...game.bindProviders(
     bestScores: (ref) => const _NoBestScores(),
@@ -29,13 +36,31 @@ List<Override> stubFeatures({game.RunStore? runStore}) => [
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     practiceBest: (ref) async => null,
   ),
+  ...settings.bindProviders(
+    clearProgress: (ref) => ref.watch(game.clearProgressProvider),
+    settingsStore: (ref) => const _FirstLaunchSettingsStore(),
+  ),
 ];
+
+/// A first launch's settings, and nothing kept.
+final class _FirstLaunchSettingsStore implements settings.SettingsStore {
+  const _FirstLaunchSettingsStore();
+
+  @override
+  Future<settings.AppSettings> load() async => const settings.AppSettings();
+
+  @override
+  Future<void> save(settings.AppSettings settings) async {}
+}
 
 final class _NoBestScores implements game.BestScores {
   const _NoBestScores();
 
   @override
   Future<int?> best(game.GameMode mode) async => null;
+
+  @override
+  Future<void> clearAll() async {}
 
   @override
   Future<void> save(game.GameMode mode, int total) async {}

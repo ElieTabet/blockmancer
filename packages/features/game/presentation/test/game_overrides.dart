@@ -29,6 +29,9 @@ final class FakeBestScores implements game.BestScores {
   }
 
   @override
+  Future<void> clearAll() async => saved.clear();
+
+  @override
   Future<void> save(game.GameMode mode, int total) async => saved[mode] = total;
 }
 

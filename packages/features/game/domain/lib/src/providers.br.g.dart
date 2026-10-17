@@ -86,6 +86,66 @@ final class BestScoreFamily extends $Family
   String toString() => r'bestScoreProvider';
 }
 
+/// See [ClearProgressBehavior].
+///
+/// Kept alive because it refreshes the bests and the saved run after an await,
+/// by when an auto-disposed provider's ref may be gone.
+
+@ProviderFor(clearProgress)
+final clearProgressProvider = ClearProgressProvider._();
+
+/// See [ClearProgressBehavior].
+///
+/// Kept alive because it refreshes the bests and the saved run after an await,
+/// by when an auto-disposed provider's ref may be gone.
+
+final class ClearProgressProvider
+    extends
+        $FunctionalProvider<
+          ClearProgressFun,
+          ClearProgressFun,
+          ClearProgressFun
+        >
+    with $Provider<ClearProgressFun> {
+  /// See [ClearProgressBehavior].
+  ///
+  /// Kept alive because it refreshes the bests and the saved run after an await,
+  /// by when an auto-disposed provider's ref may be gone.
+  ClearProgressProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clearProgressProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$clearProgressHash();
+
+  @$internal
+  @override
+  $ProviderElement<ClearProgressFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ClearProgressFun create(Ref ref) {
+    return clearProgress(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ClearProgressFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ClearProgressFun>(value),
+    );
+  }
+}
+
+String _$clearProgressHash() => r'6236ca04eba501fd7cb3c49a879b67f9c7b6a848';
+
 /// Keeps a finished run's total if it beats its mode's best, and says so.
 ///
 /// Kept alive because it refreshes [bestScoreProvider] after an await, by when

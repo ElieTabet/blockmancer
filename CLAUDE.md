@@ -41,6 +41,7 @@ blockmancer/
 │       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
 │       ├── home/presentation/                    # home_presentation — the first tab: Daily run and Practice, each with its best (read through slots)
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
+│       ├── settings/{domain,data,presentation}/  # settings_* — sound, haptics, reduce motion, language and the tutorial flag (domain), on the device (data), and the Settings screen, pushed over the shell from Home's gear (presentation); resetting progress goes through a slot
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
 ├── app/flutter_native_splash.yaml  # Native launch-screen config (brand colour) — `cd app && dart run flutter_native_splash:create`
 └── pubspec.yaml          # Workspace root + Melos config (scripts live here under melos:)
@@ -217,7 +218,7 @@ final class SplashRoutingImpl implements SplashRouting {
 }
 ```
 
-`app_router` also owns the app root router `AppRouter` (`@AutoRouterConfig RootStackRouter implements AutoRouteGuard`, aggregating each feature's `AutoRoute` with its path from the feature's `<Feature>RoutePath` enum, e.g. `AutoRoute(path: SplashRoutePath.splash.path, page: SplashRoute.page, initial: true)`) and exposes `routingOverrides()` — which calls every feature's `bindRoutingProviders(...)` — alongside `featureBindingOverrides()`, the same aggregation for the non-routing slots (the game's rules, best scores and revive reward, push, telemetry). `app_providers.appOverrides()` spreads both; the thin `app` applies it at startup:
+`app_router` also owns the app root router `AppRouter` (`@AutoRouterConfig RootStackRouter implements AutoRouteGuard`, aggregating each feature's `AutoRoute` with its path from the feature's `<Feature>RoutePath` enum, e.g. `AutoRoute(path: SplashRoutePath.splash.path, page: SplashRoute.page, initial: true)`) and exposes `routingOverrides()` — which calls every feature's `bindRoutingProviders(...)` — alongside `featureBindingOverrides()`, the same aggregation for the non-routing slots (the game's rules, best scores and revive reward, the settings' store and progress reset, push, telemetry). `app_providers.appOverrides()` spreads both; the thin `app` applies it at startup:
 
 ```dart
 // app/lib/application/application.dart — imports composition (+ design_system for the theme,
@@ -248,7 +249,7 @@ Localization is a standalone foundational package `l10n_application` (`packages/
 - **Translation sources:** `lib/i18n/<locale>.i18n.json` — `en.i18n.json` (base) and `fr.i18n.json`. Add a key to every locale file; add a locale by adding a new `<locale>.i18n.json`.
 - **Generation is via the slang CLI, not build_runner** (`dart run slang`, config in `slang.yaml` with `lazy: false`). Output is `lib/i18n/strings.g.dart` (+ per-locale parts), a **committed source file**. This is deliberate: slang's build_runner builder writes in a post-process phase that runs after riverpod, so a same-package `@riverpod` provider depending on slang's types could never resolve them in one pass. `melos run generate` runs `generate-i18n` (slang) before `generate-build-runner`. The package therefore declares only `slang` + `slang_flutter` (no build_runner / riverpod).
 - **Reactive access via `context.t`:** the app is wrapped once in slang's `TranslationProvider` (an `InheritedWidget`); widgets then read strings with the generated `context.t` extension — `Text(context.t.game.title)` — and rebuild automatically when the locale changes. This is slang's native reactivity; there is **no** Riverpod provider wrapping translations.
-- **Locale lifecycle:** the initial locale is resolved from the device in `boot()` via `LocaleSettings.useDeviceLocaleSync()`. `MaterialApp.router` sets `locale: TranslationProvider.of(context).flutterLocale`, `supportedLocales: AppLocaleUtils.supportedLocales`, and `localizationsDelegates: GlobalMaterialLocalizations.delegates` (from `flutter_localizations`). Switch at runtime with `LocaleSettings.setLocaleSync(AppLocale.fr)` — every `context.t` rebuilds. (There is intentionally no locale-switcher UI or Riverpod locale controller yet; add one wired to a real caller when needed.)
+- **Locale lifecycle:** the initial locale is resolved from the device in `boot()` via `LocaleSettings.useDeviceLocaleSync()`. `MaterialApp.router` sets `locale: TranslationProvider.of(context).flutterLocale`, `supportedLocales: AppLocaleUtils.supportedLocales`, and `localizationsDelegates: GlobalMaterialLocalizations.delegates` (from `flutter_localizations`). Switch at runtime with `LocaleSettings.setLocaleSync(AppLocale.fr)` — every `context.t` rebuilds. The player's choice is Settings' (see [Settings](#settings)): applied at boot by `applyStoredLanguage`, and on change by the Settings screen.
 - **Central versions:** `slang` and `slang_flutter` live in the root `melos.command.bootstrap` like every other dependency.
 
 ## Game engine
@@ -358,6 +359,32 @@ time with no wiring. Pass it with `--dart-define-from-file=env/<flavor>.json` (s
 melos scripts). With no flag — including every `flutter test` run — it is a dev build. It is not a
 package: the app is the only thing that reads it, and `boot()` turns it into the
 `collectsTelemetry` value it passes to `appOverrides`.
+
+## Settings
+
+The player's settings, kept on the device; there is no account to sync them to. Home's gear pushes
+`SettingsRoute` over the shell (absolute `/settings`, like the game), and its back arrow pops.
+
+- **What is kept:** `settings_domain`'s freezed `AppSettings` — `sound`, `haptics` (on by default),
+  `reduceMotion` (off), `language` (`AppLanguage.system` / `.en` / `.fr`) and `tutorialSeen`.
+  `settings_data`'s `SharedPreferencesSettingsStore` writes one key per setting (`settings.sound`,
+  `settings.haptics`, `settings.reduceMotion`, `settings.language`, `settings.tutorialSeen`), so a
+  value missing or of the wrong type reads as its default rather than losing the rest.
+- **One notifier:** `SettingsNotifier` (keepAlive, `settingsProvider`) loads once and is the only
+  writer: each setter shows the change at once, then writes, in order; a failed write is logged and
+  the change holds for the session. `markTutorialSeen` / `resetTutorial` are there for the tutorial.
+- **Who reads it:** other features never import settings. They declare their own slot, and
+  `app_providers` fills it from `settings_domain`'s leaves — `soundOn`, `hapticsOn`,
+  `reduceMotionOn` (plain bools, a first launch's value while loading) and `tutorialSeen` /
+  `appLanguage` (futures, so a launch can wait for the stored answer). Nothing binds them yet.
+- **Reset progress:** the Settings row confirms with `DSPopup.showConfirm`, then `resetProgress`
+  calls the `clearProgressProvider` slot and offers the tutorial again. `app_providers` binds that
+  slot to `game_domain`'s own `clearProgressProvider`, which clears every `best.*` key and the saved
+  run and refreshes what Home shows of them — settings never learns what progress is.
+- **Language:** `boot()` calls `applyStoredLanguage` (app_providers, delegating to
+  `settings_presentation`, which maps `AppLanguage` to slang's `LocaleSettings`) right after
+  telemetry and before push, whose channel is named in the language the app shows. System re-reads
+  the phone's locale.
 
 ## Push notifications
 

@@ -1,9 +1,12 @@
 import 'package:app_router/src/routing/game_routing.dart';
 import 'package:app_router/src/routing/home_routing.dart';
+import 'package:app_router/src/routing/settings_routing.dart';
 import 'package:app_router/src/routing/splash_routing.dart';
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:home_presentation/home_presentation.dart' as home_ui;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:settings_presentation/settings_presentation.dart'
+    as settings_ui;
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 
 /// Overrides that bind every feature routing slot to its app_router
@@ -17,6 +20,9 @@ List<Override> routingOverrides() => [
   ),
   ...home_ui.bindRoutingProviders(
     homeRouting: (ref) => const HomeRoutingImpl(),
+  ),
+  ...settings_ui.bindRoutingProviders(
+    settingsRouting: (ref) => const SettingsRoutingImpl(),
   ),
   ...splash_ui.bindRoutingProviders(
     splashRouting: (ref) => const SplashRoutingImpl(),

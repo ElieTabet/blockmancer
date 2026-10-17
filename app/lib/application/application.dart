@@ -44,6 +44,9 @@ class Application {
     // First after the container, so the crash handlers cover the rest of boot.
     await initializeTelemetry(_container);
 
+    // Before push, whose channel is named in the language the app shows.
+    await applyStoredLanguage(_container);
+
     await initializePushNotifications(
       _container,
       channelDescription: t.push.channelDescription,

@@ -97,4 +97,16 @@ void main() {
       expect(routing.calls, [call]);
     });
   }
+
+  testWidgets('the gear opens Settings', (tester) async {
+    // Given
+    final routing = await _pumpHome(tester);
+
+    // When
+    await tester.tap(find.bySemanticsLabel('Settings'));
+    await tester.pump();
+
+    // Then
+    expect(routing.calls, ['settings']);
+  });
 }

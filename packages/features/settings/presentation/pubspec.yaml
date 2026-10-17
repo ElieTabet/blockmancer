@@ -1,0 +1,26 @@
+name: settings_presentation
+description: "settings presentation layer — the Settings screen, pushed over the shell, and the language the app is shown in. What it sets lives in settings_domain; where back leads comes through a slot."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auto_route: ^11.1.0
+  design_system: any
+  flutter_riverpod: ^3.3.1
+  l10n_application: any
+  riverpod_annotation: ^4.0.2
+  settings_domain: any
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  auto_route_generator: ^10.4.0
+  build_runner: 2.16.0
+  riverpod_generator: 4.0.3

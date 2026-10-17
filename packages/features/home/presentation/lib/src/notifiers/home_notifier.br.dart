@@ -18,4 +18,7 @@ class HomeNotifier extends _$HomeNotifier {
 
   void openPractice(BuildContext context) =>
       ref.read(homeRoutingProvider).onPracticeRequested(context);
+
+  void openSettings(BuildContext context) =>
+      ref.read(homeRoutingProvider).onSettingsRequested(context);
 }

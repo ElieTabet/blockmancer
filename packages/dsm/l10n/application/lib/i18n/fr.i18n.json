@@ -141,6 +141,31 @@
       "subtitle": "Une partie neuve à chaque fois"
     },
     "best": "Record : $points",
-    "noBest": "Pas encore de partie"
+    "noBest": "Pas encore de partie",
+    "settings": "Réglages"
+  },
+  "settings": {
+    "title": "Réglages",
+    "back": "Retour au menu",
+    "sound": "Son",
+    "haptics": "Vibrations",
+    "reduceMotion": {
+      "title": "Réduire les animations",
+      "subtitle": "Des animations plus douces, sans secousses d'écran"
+    },
+    "language": {
+      "title": "Langue",
+      "system": "Système",
+      "en": "English",
+      "fr": "Français"
+    },
+    "reset": {
+      "title": "Réinitialiser la progression",
+      "subtitle": "Tes records et la partie en cours",
+      "confirmTitle": "Réinitialiser la progression ?",
+      "confirmMessage": "Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.",
+      "confirm": "Réinitialiser",
+      "cancel": "Annuler"
+    }
   }
 }

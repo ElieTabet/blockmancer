@@ -61,6 +61,10 @@ final class _DSPressableState extends State<DSPressable>
     final onTap = widget.onTap;
 
     return Semantics(
+      // Its own node, as Material's buttons have: without one, a lone
+      // pressable lends its label and tap to the nearest ancestor's node,
+      // which can be a whole tab.
+      container: true,
       button: true,
       enabled: onTap != null,
       label: widget.semanticLabel,

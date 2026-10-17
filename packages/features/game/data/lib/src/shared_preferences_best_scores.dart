@@ -6,9 +6,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 final class SharedPreferencesBestScores implements BestScores {
   const SharedPreferencesBestScores();
 
+  static const _prefix = 'best.';
+
   @override
   Future<int?> best(GameMode mode) async =>
       (await SharedPreferences.getInstance()).getInt(_keyOf(mode));
+
+  @override
+  Future<void> clearAll() async {
+    final preferences = await SharedPreferences.getInstance();
+
+    await Future.wait([
+      for (final key in preferences.getKeys())
+        if (key.startsWith(_prefix)) preferences.remove(key),
+    ]);
+  }
 
   @override
   Future<void> save(GameMode mode, int total) async {
@@ -16,7 +28,7 @@ final class SharedPreferencesBestScores implements BestScores {
   }
 
   static String _keyOf(GameMode mode) => switch (mode) {
-    DailyMode(:final day) => 'best.daily.$day',
-    PracticeMode() => 'best.practice',
+    DailyMode(:final day) => '${_prefix}daily.$day',
+    PracticeMode() => '${_prefix}practice',
   };
 }

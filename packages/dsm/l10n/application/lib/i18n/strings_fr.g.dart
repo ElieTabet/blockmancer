@@ -42,6 +42,7 @@ class TranslationsFr extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$game$fr game = _Translations$game$fr._(_root);
 	@override late final _Translations$push$fr push = _Translations$push$fr._(_root);
 	@override late final _Translations$home$fr home = _Translations$home$fr._(_root);
+	@override late final _Translations$settings$fr settings = _Translations$settings$fr._(_root);
 }
 
 // Path: game
@@ -90,6 +91,23 @@ class _Translations$home$fr extends Translations$home$en {
 	@override late final _Translations$home$practice$fr practice = _Translations$home$practice$fr._(_root);
 	@override String best({required Object points}) => 'Record : ${points}';
 	@override String get noBest => 'Pas encore de partie';
+	@override String get settings => 'Réglages';
+}
+
+// Path: settings
+class _Translations$settings$fr extends Translations$settings$en {
+	_Translations$settings$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Réglages';
+	@override String get back => 'Retour au menu';
+	@override String get sound => 'Son';
+	@override String get haptics => 'Vibrations';
+	@override late final _Translations$settings$reduceMotion$fr reduceMotion = _Translations$settings$reduceMotion$fr._(_root);
+	@override late final _Translations$settings$language$fr language = _Translations$settings$language$fr._(_root);
+	@override late final _Translations$settings$reset$fr reset = _Translations$settings$reset$fr._(_root);
 }
 
 // Path: game.round
@@ -237,6 +255,45 @@ class _Translations$home$practice$fr extends Translations$home$practice$en {
 	// Translations
 	@override String get title => 'Entraînement';
 	@override String get subtitle => 'Une partie neuve à chaque fois';
+}
+
+// Path: settings.reduceMotion
+class _Translations$settings$reduceMotion$fr extends Translations$settings$reduceMotion$en {
+	_Translations$settings$reduceMotion$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Réduire les animations';
+	@override String get subtitle => 'Des animations plus douces, sans secousses d\'écran';
+}
+
+// Path: settings.language
+class _Translations$settings$language$fr extends Translations$settings$language$en {
+	_Translations$settings$language$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Langue';
+	@override String get system => 'Système';
+	@override String get en => 'English';
+	@override String get fr => 'Français';
+}
+
+// Path: settings.reset
+class _Translations$settings$reset$fr extends Translations$settings$reset$en {
+	_Translations$settings$reset$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Réinitialiser la progression';
+	@override String get subtitle => 'Tes records et la partie en cours';
+	@override String get confirmTitle => 'Réinitialiser la progression ?';
+	@override String get confirmMessage => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.';
+	@override String get confirm => 'Réinitialiser';
+	@override String get cancel => 'Annuler';
 }
 
 // Path: game.jokers.stonemason
@@ -490,6 +547,23 @@ extension on TranslationsFr {
 			'home.practice.subtitle' => 'Une partie neuve à chaque fois',
 			'home.best' => ({required Object points}) => 'Record : ${points}',
 			'home.noBest' => 'Pas encore de partie',
+			'home.settings' => 'Réglages',
+			'settings.title' => 'Réglages',
+			'settings.back' => 'Retour au menu',
+			'settings.sound' => 'Son',
+			'settings.haptics' => 'Vibrations',
+			'settings.reduceMotion.title' => 'Réduire les animations',
+			'settings.reduceMotion.subtitle' => 'Des animations plus douces, sans secousses d\'écran',
+			'settings.language.title' => 'Langue',
+			'settings.language.system' => 'Système',
+			'settings.language.en' => 'English',
+			'settings.language.fr' => 'Français',
+			'settings.reset.title' => 'Réinitialiser la progression',
+			'settings.reset.subtitle' => 'Tes records et la partie en cours',
+			'settings.reset.confirmTitle' => 'Réinitialiser la progression ?',
+			'settings.reset.confirmMessage' => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.',
+			'settings.reset.confirm' => 'Réinitialiser',
+			'settings.reset.cancel' => 'Annuler',
 			_ => null,
 		};
 	}

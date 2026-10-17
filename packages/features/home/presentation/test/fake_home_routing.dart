@@ -13,4 +13,7 @@ final class FakeHomeRouting implements HomeRouting {
 
   @override
   void onPracticeRequested(BuildContext context) => calls.add('practice');
+
+  @override
+  void onSettingsRequested(BuildContext context) => calls.add('settings');
 }

@@ -5,5 +5,8 @@ abstract interface class BestScores {
   /// Null until a run of [mode] has ended.
   Future<int?> best(GameMode mode);
 
+  /// Forgets the best of every mode.
+  Future<void> clearAll();
+
   Future<void> save(GameMode mode, int total);
 }

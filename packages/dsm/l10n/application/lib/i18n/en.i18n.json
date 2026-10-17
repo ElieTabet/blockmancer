@@ -141,6 +141,31 @@
       "subtitle": "A new run every time"
     },
     "best": "Best: $points",
-    "noBest": "No run yet"
+    "noBest": "No run yet",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "back": "Back to the menu",
+    "sound": "Sound",
+    "haptics": "Haptics",
+    "reduceMotion": {
+      "title": "Reduce motion",
+      "subtitle": "Calmer animations, no screen shake"
+    },
+    "language": {
+      "title": "Language",
+      "system": "System",
+      "en": "English",
+      "fr": "Français"
+    },
+    "reset": {
+      "title": "Reset progress",
+      "subtitle": "Your best scores and the run in progress",
+      "confirmTitle": "Reset progress?",
+      "confirmMessage": "Your best scores and the run in progress will be deleted. This can't be undone.",
+      "confirm": "Reset",
+      "cancel": "Cancel"
+    }
   }
 }

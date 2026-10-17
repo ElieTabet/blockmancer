@@ -43,6 +43,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$game$en game = Translations$game$en.internal(_root);
 	late final Translations$push$en push = Translations$push$en.internal(_root);
 	late final Translations$home$en home = Translations$home$en.internal(_root);
+	late final Translations$settings$en settings = Translations$settings$en.internal(_root);
 }
 
 // Path: game
@@ -117,6 +118,34 @@ class Translations$home$en {
 
 	/// en: 'No run yet'
 	String get noBest => 'No run yet';
+
+	/// en: 'Settings'
+	String get settings => 'Settings';
+}
+
+// Path: settings
+class Translations$settings$en {
+	Translations$settings$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Settings'
+	String get title => 'Settings';
+
+	/// en: 'Back to the menu'
+	String get back => 'Back to the menu';
+
+	/// en: 'Sound'
+	String get sound => 'Sound';
+
+	/// en: 'Haptics'
+	String get haptics => 'Haptics';
+
+	late final Translations$settings$reduceMotion$en reduceMotion = Translations$settings$reduceMotion$en.internal(_root);
+	late final Translations$settings$language$en language = Translations$settings$language$en.internal(_root);
+	late final Translations$settings$reset$en reset = Translations$settings$reset$en.internal(_root);
 }
 
 // Path: game.round
@@ -362,6 +391,69 @@ class Translations$home$practice$en {
 
 	/// en: 'A new run every time'
 	String get subtitle => 'A new run every time';
+}
+
+// Path: settings.reduceMotion
+class Translations$settings$reduceMotion$en {
+	Translations$settings$reduceMotion$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Reduce motion'
+	String get title => 'Reduce motion';
+
+	/// en: 'Calmer animations, no screen shake'
+	String get subtitle => 'Calmer animations, no screen shake';
+}
+
+// Path: settings.language
+class Translations$settings$language$en {
+	Translations$settings$language$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Language'
+	String get title => 'Language';
+
+	/// en: 'System'
+	String get system => 'System';
+
+	/// en: 'English'
+	String get en => 'English';
+
+	/// en: 'Français'
+	String get fr => 'Français';
+}
+
+// Path: settings.reset
+class Translations$settings$reset$en {
+	Translations$settings$reset$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Reset progress'
+	String get title => 'Reset progress';
+
+	/// en: 'Your best scores and the run in progress'
+	String get subtitle => 'Your best scores and the run in progress';
+
+	/// en: 'Reset progress?'
+	String get confirmTitle => 'Reset progress?';
+
+	/// en: 'Your best scores and the run in progress will be deleted. This can't be undone.'
+	String get confirmMessage => 'Your best scores and the run in progress will be deleted. This can\'t be undone.';
+
+	/// en: 'Reset'
+	String get confirm => 'Reset';
+
+	/// en: 'Cancel'
+	String get cancel => 'Cancel';
 }
 
 // Path: game.jokers.stonemason
@@ -671,6 +763,23 @@ extension on Translations {
 			'home.practice.subtitle' => 'A new run every time',
 			'home.best' => ({required Object points}) => 'Best: ${points}',
 			'home.noBest' => 'No run yet',
+			'home.settings' => 'Settings',
+			'settings.title' => 'Settings',
+			'settings.back' => 'Back to the menu',
+			'settings.sound' => 'Sound',
+			'settings.haptics' => 'Haptics',
+			'settings.reduceMotion.title' => 'Reduce motion',
+			'settings.reduceMotion.subtitle' => 'Calmer animations, no screen shake',
+			'settings.language.title' => 'Language',
+			'settings.language.system' => 'System',
+			'settings.language.en' => 'English',
+			'settings.language.fr' => 'Français',
+			'settings.reset.title' => 'Reset progress',
+			'settings.reset.subtitle' => 'Your best scores and the run in progress',
+			'settings.reset.confirmTitle' => 'Reset progress?',
+			'settings.reset.confirmMessage' => 'Your best scores and the run in progress will be deleted. This can\'t be undone.',
+			'settings.reset.confirm' => 'Reset',
+			'settings.reset.cancel' => 'Cancel',
 			_ => null,
 		};
 	}

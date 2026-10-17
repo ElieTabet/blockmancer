@@ -82,4 +82,40 @@ void main() {
 
     await gesture.up();
   });
+
+  testWidgets('Given a gear with no text, alone in a tab '
+      'When a screen reader reads it '
+      'Then it is a button of its own size, not the whole screen', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Semantics(
+          container: true,
+          child: Stack(
+            children: [
+              Positioned(
+                right: 0,
+                top: 0,
+                child: DSPressable(
+                  onTap: () {},
+                  semanticLabel: 'Settings',
+                  child: const SizedBox.square(key: _card, dimension: 48),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final node = tester.getSemantics(find.byKey(_card));
+
+    expect(node.label, 'Settings');
+    expect(node.rect.size, const Size.square(48));
+
+    semantics.dispose();
+  });
 }

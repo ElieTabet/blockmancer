@@ -8,4 +8,6 @@ abstract interface class HomeRouting {
   void onDailyRequested(BuildContext context);
 
   void onPracticeRequested(BuildContext context);
+
+  void onSettingsRequested(BuildContext context);
 }

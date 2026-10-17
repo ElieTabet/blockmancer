@@ -44,4 +44,24 @@ void main() {
     expect(await scores.best(_today), 2400);
     expect(await scores.best(const GameMode.practice()), 3100);
   });
+
+  test('clearing forgets every best and nothing else', () async {
+    // Given
+    const scores = SharedPreferencesBestScores();
+    await scores.save(_today, 2400);
+    await scores.save(const GameMode.daily(day: 20261018), 900);
+    await scores.save(const GameMode.practice(), 3100);
+    final stored = await SharedPreferences.getInstance();
+    await stored.setString('run.saved', '{}');
+    await stored.setBool('settings.sound', false);
+
+    // When
+    await scores.clearAll();
+
+    // Then
+    expect(await scores.best(_today), isNull);
+    expect(await scores.best(const GameMode.daily(day: 20261018)), isNull);
+    expect(await scores.best(const GameMode.practice()), isNull);
+    expect(stored.getKeys(), {'run.saved', 'settings.sound'});
+  });
 }

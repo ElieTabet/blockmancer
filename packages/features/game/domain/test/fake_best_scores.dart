@@ -8,5 +8,8 @@ final class FakeBestScores implements BestScores {
   Future<int?> best(GameMode mode) async => saved[mode];
 
   @override
+  Future<void> clearAll() async => saved.clear();
+
+  @override
   Future<void> save(GameMode mode, int total) async => saved[mode] = total;
 }

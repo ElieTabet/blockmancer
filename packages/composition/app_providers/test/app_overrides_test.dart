@@ -19,6 +19,8 @@ import 'package:push_notifications_domain/push_notifications_domain.dart'
     as push_notifications;
 import 'package:push_notifications_presentation/src/providers_di.br.dart'
     as push_notifications_di;
+import 'package:settings_data/settings_data.dart';
+import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:shared_domain/shared_domain.dart';
 import 'package:telemetry/telemetry.dart';
 
@@ -74,6 +76,24 @@ void main() {
       // Then: the same pieces, from the same seed
       expect(tokyo, newYork);
       expect(firstRound(tokyo.seed), firstRound(newYork.seed));
+    },
+  );
+
+  // Settings keeps its own choices, and resets the game's progress through a
+  // slot: the game's own clearing is what fills it.
+  test(
+    "settings reach their storage and the game's progress through slots",
+    () {
+      final container = buildContainer();
+
+      expect(
+        container.read(settings.settingsStoreProvider),
+        isA<SharedPreferencesSettingsStore>(),
+      );
+      expect(
+        container.read(settings.clearProgressProvider),
+        same(container.read(game.clearProgressProvider)),
+      );
     },
   );
 

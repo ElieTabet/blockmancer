@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
 import 'package:game_domain/src/behaviors/record_run_end_behavior.dart';
 import 'package:game_domain/src/behaviors/save_run_behavior.dart';
 import 'package:game_domain/src/contracts/best_scores.dart';
@@ -17,6 +18,8 @@ import 'package:shared_domain/shared_domain.dart';
 part 'providers.br.g.dart';
 
 // game_domain — public providers exposed by this layer.
+
+typedef ClearProgressFun = Future<void> Function();
 
 typedef RecordRunEndFun =
     Future<RunEndRecord> Function(GameMode mode, int total);
@@ -39,6 +42,25 @@ typedef SaveRunFun = Future<void> Function(SavedRun run);
 @riverpod
 Future<int?> bestScore(Ref ref, GameMode mode) =>
     ref.watch(di.bestScoresProvider).best(mode);
+
+/// See [ClearProgressBehavior].
+///
+/// Kept alive because it refreshes the bests and the saved run after an await,
+/// by when an auto-disposed provider's ref may be gone.
+@Riverpod(keepAlive: true)
+ClearProgressFun clearProgress(Ref ref) {
+  final clear = ClearProgressBehavior(
+    scores: ref.watch(di.bestScoresProvider),
+    store: ref.watch(di.runStoreProvider),
+  );
+
+  return () async {
+    await clear();
+
+    ref.invalidate(bestScoreProvider);
+    ref.invalidate(hasSavedRunProvider);
+  };
+}
 
 /// Keeps a finished run's total if it beats its mode's best, and says so.
 ///
