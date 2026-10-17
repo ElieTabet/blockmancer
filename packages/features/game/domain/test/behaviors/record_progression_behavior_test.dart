@@ -351,7 +351,8 @@ void main() {
   });
 
   group('joker stats', () {
-    test('a finished run counts once for each joker it owned', () async {
+    test('a finished run counts its total for each joker it owned, but not '
+        'its picks, counted as they are made', () async {
       // Given / When
       await record(
         _rubble,
@@ -362,7 +363,7 @@ void main() {
       );
 
       // Then
-      const once = JokerStats(bestRunTotal: 3000, runsWon: 0, timesPicked: 1);
+      const once = JokerStats(bestRunTotal: 3000, runsWon: 0, timesPicked: 0);
       expect(store.saved.jokerStats, {
         JokerId.patience: once,
         JokerId.twin: once,
@@ -385,7 +386,7 @@ void main() {
       // Then
       expect(
         store.saved.jokerStats[JokerId.twin],
-        const JokerStats(bestRunTotal: 9000, runsWon: 1, timesPicked: 2),
+        const JokerStats(bestRunTotal: 9000, runsWon: 1, timesPicked: 0),
       );
     });
 
@@ -405,7 +406,7 @@ void main() {
           JokerId.collector: JokerStats(
             bestRunTotal: 5000,
             runsWon: 1,
-            timesPicked: 1,
+            timesPicked: 0,
           ),
         });
       });

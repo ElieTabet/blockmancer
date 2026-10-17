@@ -63,7 +63,7 @@ void main() {
       final shown = await container.read(progressionProvider.future);
       expect(
         shown.jokerStats[JokerId.twin],
-        const JokerStats(bestRunTotal: 1200, runsWon: 0, timesPicked: 1),
+        const JokerStats(bestRunTotal: 1200, runsWon: 0, timesPicked: 0),
       );
     },
   );

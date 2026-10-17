@@ -14,9 +14,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$JokerStats {
 
-/// The best run total of a run that owned it, boss beaten or not.
+/// The best run total of a finished run that owned it, boss beaten or
+/// not.
  int get bestRunTotal;/// Runs won, the boss beaten, with it owned.
- int get runsWon;/// Finished runs it was picked in.
+ int get runsWon;/// Every pick of it, the starting pick included, counted as it is made:
+/// a run left before its end still counts.
  int get timesPicked;
 /// Create a copy of JokerStats
 /// with the given fields replaced by the non-null parameter values.
@@ -214,11 +216,13 @@ class _JokerStats implements JokerStats {
   const _JokerStats({required this.bestRunTotal, required this.runsWon, required this.timesPicked});
   
 
-/// The best run total of a run that owned it, boss beaten or not.
+/// The best run total of a finished run that owned it, boss beaten or
+/// not.
 @override final  int bestRunTotal;
 /// Runs won, the boss beaten, with it owned.
 @override final  int runsWon;
-/// Finished runs it was picked in.
+/// Every pick of it, the starting pick included, counted as it is made:
+/// a run left before its end still counts.
 @override final  int timesPicked;
 
 /// Create a copy of JokerStats

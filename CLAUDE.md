@@ -344,8 +344,8 @@ One run is saved on the device, so a killed app picks it up where it stood.
 ## Progression and the profile
 
 What a player has earned across runs is one `Progression` (`shared_domain`): per world
-`{unlocked, bossBeaten, stars}`, the jokers runs may offer, `jokerStats` (per joker a finished run
-owned: `timesPicked`, `runsWon`, `bestRunTotal`) and `tutorialDone`.
+`{unlocked, bossBeaten, stars}`, the jokers runs may offer, `jokerStats` (per joker ever picked:
+`timesPicked`, `runsWon`, `bestRunTotal`) and `tutorialDone`.
 
 - **Where:** one JSON profile under `profile` (`game_data`'s `profile_dto.br.dart`), holding the
   bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
@@ -378,9 +378,11 @@ owned: `timesPicked`, `runsWon`, `bestRunTotal`) and `tutorialDone`.
   A resumed run keeps the config it was saved with.
 - **What a run earns.** At every run's end but the tutorial's, `GameNotifier` calls
   `recordProgression` (`RecordProgressionBehavior`, keepAlive, then refreshes
-  `progressionProvider`). Every run counts once in the stats of each joker it owned (a pick
-  counts at the run's end, so an abandoned run never does; the best total counts with the boss
-  beaten or not). The rest is a world run's alone. The first win
+  `progressionProvider`). Every run counts in the stats of each joker it owned: its win and its
+  total (the best counts with the boss beaten or not); a run abandoned before its end counts
+  neither. Picks are counted as they are made instead (`recordPick`, called by
+  `GameNotifier.pickJoker` outside the tutorial), the starting pick included, so an abandoned
+  run's picks count. The rest is a world run's alone. The first win
   over the world's boss marks it beaten, adds `rules.unlocksOf(world)` to `unlockedJokers` and
   unlocks the next world **if the rules can play it** (`isPlayable`): a coming-soon world stays
   locked, so beating Gravity announces Anchor and Avalanche and no world. The release that gives

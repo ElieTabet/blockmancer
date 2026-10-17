@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
 import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
+import 'package:game_domain/src/behaviors/record_pick_behavior.dart';
 import 'package:game_domain/src/behaviors/record_progression_behavior.dart';
 import 'package:game_domain/src/behaviors/record_run_end_behavior.dart';
 import 'package:game_domain/src/behaviors/run_start_for_behavior.dart';
@@ -28,6 +29,9 @@ part 'providers.br.g.dart';
 // game_domain — public providers exposed by this layer.
 
 typedef ClearProgressFun = Future<void> Function();
+
+/// See [RecordPickBehavior].
+typedef RecordPickFun = Future<void> Function(JokerId joker);
 
 /// See [RecordProgressionBehavior].
 typedef RecordProgressionFun =
@@ -83,6 +87,22 @@ ClearProgressFun clearProgress(Ref ref) {
 @riverpod
 Future<Progression> progression(Ref ref) =>
     ref.watch(loadProgressionProvider)();
+
+/// See [RecordPickBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+@Riverpod(keepAlive: true)
+RecordPickFun recordPick(Ref ref) {
+  final record = RecordPickBehavior(
+    store: ref.watch(di.progressionStoreProvider),
+  );
+
+  return (joker) async {
+    await record(joker);
+    ref.invalidate(progressionProvider);
+  };
+}
 
 /// See [RecordProgressionBehavior].
 ///

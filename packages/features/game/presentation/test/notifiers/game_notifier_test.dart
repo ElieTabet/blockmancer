@@ -662,7 +662,7 @@ void main() {
           store.saved,
           before.copyWith(
             jokerStats: const {
-              .twin: JokerStats(bestRunTotal: 6400, runsWon: 1, timesPicked: 1),
+              .twin: JokerStats(bestRunTotal: 6400, runsWon: 1, timesPicked: 0),
             },
           ),
         );
@@ -684,6 +684,46 @@ void main() {
 
       // Then
       expect(store.saved, before);
+    });
+  });
+
+  group('counting picks', () {
+    test(
+      'the starting pick counts as it is made, though the run is then left',
+      () async {
+        // Given
+        final store = FakeProgressionStore(startingProgression(rules));
+        final game = container(progressionStore: store);
+        rules.next = (runIn(const .playing(), jokers: const [.twin]), const []);
+
+        // When: the starting pick, and nothing more
+        game.read(gameProvider.notifier).pickJoker(.twin);
+        await pumpEventQueue();
+
+        // Then
+        expect(store.saved.jokerStats[JokerId.twin]?.timesPicked, 1);
+      },
+    );
+
+    test('each later pick counts too', () async {
+      // Given: a run that took Twin Lines to start
+      final store = FakeProgressionStore(startingProgression(rules));
+      final game = container(progressionStore: store);
+      rules.next = (runIn(const .playing(), jokers: const [.twin]), const []);
+      game.read(gameProvider.notifier).pickJoker(.twin);
+      await pumpEventQueue();
+
+      // When
+      rules.next = (
+        runIn(const .playing(), jokers: const [.twin, .patience]),
+        const [],
+      );
+      game.read(gameProvider.notifier).pickJoker(.patience);
+      await pumpEventQueue();
+
+      // Then
+      expect(store.saved.jokerStats[JokerId.twin]?.timesPicked, 1);
+      expect(store.saved.jokerStats[JokerId.patience]?.timesPicked, 1);
     });
   });
 

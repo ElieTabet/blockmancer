@@ -5,8 +5,9 @@ import 'package:game_domain/src/entities/game_mode.br.dart';
 import 'package:game_domain/src/entities/progression_change.br.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-/// Keeps what a finished run earned. Every run counts towards the stats of
-/// the jokers it owned; the tutorial never reaches here.
+/// Keeps what a finished run earned. Every run counts towards the wins and
+/// best total of the jokers it owned (their picks are counted as they are
+/// made, by `RecordPickBehavior`); the tutorial never reaches here.
 ///
 /// A world run also earns its world's stars, and on the first
 /// win over its boss, the jokers the win unlocks and the next world — if the
@@ -121,10 +122,9 @@ class RecordProgressionBehavior {
     for (final joker in run.jokers) joker: _counted(stats[joker] ?? .none, run),
   };
 
-  static JokerStats _counted(JokerStats stats, RunState run) => JokerStats(
+  static JokerStats _counted(JokerStats stats, RunState run) => stats.copyWith(
     bestRunTotal: max(stats.bestRunTotal, run.runTotal),
     runsWon: stats.runsWon + (run.phase is WonPhase ? 1 : 0),
-    timesPicked: stats.timesPicked + 1,
   );
 
   static int _count(WorldStars stars) => [

@@ -62,7 +62,11 @@ class GameNotifier extends _$GameNotifier {
 
   void endRun() => _apply(_rules.endRun(state.run));
 
-  void pickJoker(JokerId id) => _apply(_rules.pickJoker(state.run, id: id));
+  void pickJoker(JokerId id) {
+    _apply(_rules.pickJoker(state.run, id: id));
+
+    if (!state.isTutorial) unawaited(_recordPick(id));
+  }
 
   /// Ignores a drop that doesn't fit; the drag shadow has already said so.
   void place({required Cell anchor, required int trayIndex}) {
@@ -163,6 +167,21 @@ class GameNotifier extends _$GameNotifier {
       Timber.e(
         tag: packageName,
         logMessage: 'Recording the run end failed; no best is shown',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  Future<void> _recordPick(JokerId id) async {
+    final recordPick = ref.read(recordPickProvider);
+
+    try {
+      await recordPick(id);
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Recording a pick failed; it goes uncounted',
         exception: error,
         stackTrace: stackTrace,
       );

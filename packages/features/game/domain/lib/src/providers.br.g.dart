@@ -190,6 +190,61 @@ final class ProgressionProvider
 
 String _$progressionHash() => r'd5ef8901cb6c69644074bfd17991c4d85b4d3089';
 
+/// See [RecordPickBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+@ProviderFor(recordPick)
+final recordPickProvider = RecordPickProvider._();
+
+/// See [RecordPickBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+final class RecordPickProvider
+    extends $FunctionalProvider<RecordPickFun, RecordPickFun, RecordPickFun>
+    with $Provider<RecordPickFun> {
+  /// See [RecordPickBehavior].
+  ///
+  /// Kept alive because it refreshes [progressionProvider] after an await, by
+  /// when an auto-disposed provider's ref may be gone.
+  RecordPickProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recordPickProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$recordPickHash();
+
+  @$internal
+  @override
+  $ProviderElement<RecordPickFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RecordPickFun create(Ref ref) {
+    return recordPick(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RecordPickFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RecordPickFun>(value),
+    );
+  }
+}
+
+String _$recordPickHash() => r'54babf5158a8dc309bea017d94cb1112e79b1252';
+
 /// See [RecordProgressionBehavior].
 ///
 /// Kept alive because it refreshes [progressionProvider] after an await, by
