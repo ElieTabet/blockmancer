@@ -20,9 +20,13 @@ dev_dependencies:
 # Listed one by one so LICENSES.md, beside them, is not bundled.
 flutter:
   assets:
+    - assets/sounds/boss_start.ogg
+    - assets/sounds/boss_win.ogg
     - assets/sounds/clear.ogg
     - assets/sounds/joker.ogg
+    - assets/sounds/kaching.ogg
     - assets/sounds/place.ogg
     - assets/sounds/round_lost.ogg
     - assets/sounds/round_won.ogg
     - assets/sounds/tap.ogg
+    - assets/sounds/tick.ogg

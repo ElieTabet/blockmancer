@@ -5,6 +5,7 @@ final class FakeSoundEngine implements SoundEngine {
   Object? initThrows;
   final loaded = <String>[];
   final played = <(String, double)>[];
+  final volumes = <double>[];
   Object? playThrows;
 
   @override
@@ -21,11 +22,12 @@ final class FakeSoundEngine implements SoundEngine {
   Future<void> load(String assetKey) async => loaded.add(assetKey);
 
   @override
-  void play(String assetKey, double speed) {
+  void play(String assetKey, double speed, double volume) {
     final playThrows = this.playThrows;
 
     if (playThrows != null) throw playThrows;
 
     played.add((assetKey, speed));
+    volumes.add(volume);
   }
 }

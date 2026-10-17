@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:sounds/src/package_name.dart';
 import 'package:sounds/src/sound.dart';
 import 'package:sounds/src/sound_engine.dart';
@@ -11,27 +13,46 @@ import 'package:timber/timber.dart';
 final class GameSounds {
   final SoundEngine _engine;
   Future<void>? _initialization;
+  final Random _random;
   bool _ready = false;
 
   /// The player's switch: while false, [play] stays silent. Whoever owns the
   /// setting sets it; this class only obeys.
   bool enabled = true;
 
-  /// [engine] is optional so the composition layer can write `GameSounds()`
-  /// and stay free of the plugin; it is here for tests.
-  GameSounds({SoundEngine? engine}) : _engine = engine ?? SoLoudSoundEngine();
+  /// [engine] and [random] are optional so the composition layer can write
+  /// `GameSounds()` and stay free of the plugin; they are here for tests.
+  GameSounds({SoundEngine? engine, Random? random})
+    : _engine = engine ?? SoLoudSoundEngine(),
+      _random = random ?? Random();
 
   /// Safe to call more than once: later calls wait on the first.
   Future<void> init() => _initialization ??= _start();
 
   /// Does nothing until [init] has loaded every sound, after it failed, or
-  /// while [enabled] is false.
-  /// [speed] is relative, so it raises the pitch with it.
-  void play(Sound sound, {double speed = 1}) {
+  /// while [enabled] is false. Each play is a voice of its own, so plays
+  /// overlap and never cut one another off.
+  ///
+  /// The pitch moves with the playback speed: [speed] scales it directly,
+  /// [semitones] moves it on the musical scale (12 is an octave up), and
+  /// [variance] nudges it by a random factor within ±[variance], so a sound
+  /// heard over and over doesn't sound like a loop.
+  void play(
+    Sound sound, {
+    double semitones = 0,
+    double speed = 1,
+    double variance = 0,
+  }) {
     if (!_ready || !enabled) return;
 
+    final nudge = 1 + variance * (_random.nextDouble() * 2 - 1);
+
     try {
-      _engine.play(sound.assetKey, speed);
+      _engine.play(
+        sound.assetKey,
+        speed * pow(2, semitones / 12) * nudge,
+        sound.volume,
+      );
     } catch (error, stackTrace) {
       Timber.e(
         tag: packageName,

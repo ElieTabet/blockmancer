@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sounds/sounds.dart';
@@ -122,6 +124,64 @@ void main() {
       expect(engine.played, isEmpty);
     },
   );
+
+  test(
+    'Given a started engine, When a sound plays an octave up, Then it plays '
+    'twice as fast, and a fifth up about one and a half times as fast',
+    () async {
+      await sounds.init();
+
+      sounds
+        ..play(.joker, semitones: 12)
+        ..play(.joker, semitones: 7);
+
+      expect(engine.played[0].$2, closeTo(2, 1e-9));
+      expect(engine.played[1].$2, closeTo(1.4983, 1e-4));
+    },
+  );
+
+  test(
+    'Given a variance of 5%, When a sound plays many times, Then its pitch '
+    'moves within 5% either way, and not always by the same amount',
+    () async {
+      final sounds = GameSounds(engine: engine, random: Random(7));
+      await sounds.init();
+
+      for (var play = 0; play < 200; play++) {
+        sounds.play(.place, variance: 0.05);
+      }
+
+      final speeds = engine.played.map((played) => played.$2).toSet();
+
+      expect(speeds.every((speed) => speed >= 0.95 && speed <= 1.05), isTrue);
+      expect(speeds.length, greaterThan(100));
+    },
+  );
+
+  test('Given a started engine, When the same sound plays twice at once, Then '
+      'both are heard, the second not cutting the first', () async {
+    await sounds.init();
+
+    sounds
+      ..play(.tick)
+      ..play(.tick);
+
+    expect(engine.played, [
+      (Sound.tick.assetKey, 1.0),
+      (Sound.tick.assetKey, 1.0),
+    ]);
+  });
+
+  test('Given a started engine, When a sound plays, Then it plays at its own '
+      'level, so quiet and loud files sit together', () async {
+    await sounds.init();
+
+    sounds
+      ..play(.bossStart)
+      ..play(.bossWin);
+
+    expect(engine.volumes, [Sound.bossStart.volume, Sound.bossWin.volume]);
+  });
 
   test(
     'Given every sound, When its asset is read, Then it is bundled',
