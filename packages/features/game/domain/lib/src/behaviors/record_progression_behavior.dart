@@ -9,6 +9,11 @@ import 'package:shared_domain/shared_domain.dart';
 /// announces or opens a world without a run. Nothing is ever taken back, so a
 /// worse run changes nothing.
 ///
+/// Stars held across every world unlock the run config's `starUnlocks`: each
+/// joker once, at the end of the first world run that finds the count reached.
+/// That is the run that crosses it, or for a player already past it before
+/// the unlock existed, their next world run.
+///
 /// Only world runs count: the daily is everyone's competition and practice is
 /// free play, so neither touches the map. The third star is the run total
 /// alone, boss beaten or not.
@@ -54,23 +59,29 @@ class RecordProgressionBehavior {
             !(before.worlds[next]?.unlocked ?? false)
         ? next
         : null;
-    final unlockedJokers = [
-      if (firstWin)
-        for (final joker in _rules.unlocksOf(world))
-          if (!before.unlockedJokers.contains(joker)) joker,
-    ];
+    final worlds = {
+      ...before.worlds,
+      world: was.copyWith(
+        bossBeaten: was.bossBeaten || bossBeaten,
+        stars: stars,
+      ),
+      ?unlockedWorld: (before.worlds[unlockedWorld] ?? _nothingEarned).copyWith(
+        unlocked: true,
+      ),
+    };
+    final starsHeld = worlds.values.fold(
+      0,
+      (held, progress) => held + _count(progress.stars),
+    );
+    final unlockedJokers = {
+      if (firstWin) ..._rules.unlocksOf(world),
+      for (final unlock in run.config.starUnlocks)
+        if (starsHeld >= unlock.stars) ...unlock.jokers,
+    }.where((joker) => !before.unlockedJokers.contains(joker)).toList();
 
     final after = before.copyWith(
       unlockedJokers: {...before.unlockedJokers, ...unlockedJokers},
-      worlds: {
-        ...before.worlds,
-        world: was.copyWith(
-          bossBeaten: was.bossBeaten || bossBeaten,
-          stars: stars,
-        ),
-        ?unlockedWorld: (before.worlds[unlockedWorld] ?? _nothingEarned)
-            .copyWith(unlocked: true),
-      },
+      worlds: worlds,
     );
 
     if (after != before) await _store.save(after);
@@ -87,4 +98,10 @@ class RecordProgressionBehavior {
       unlockedWorld: unlockedWorld,
     );
   }
+
+  static int _count(WorldStars stars) => [
+    stars.bossBeaten,
+    stars.noRevive,
+    stars.scoreThreshold,
+  ].where((earned) => earned).length;
 }

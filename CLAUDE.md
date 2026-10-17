@@ -383,7 +383,11 @@ What a player has earned across runs is one `Progression` (`shared_domain`): per
   Fog its rules must therefore open it for players who beat Gravity before (a profile migration
   keyed on Gravity's `bossBeaten`). A second win unlocks nothing. Stars: ★1 the boss beaten, ★2
   beaten with `revivesUsed == 0`, ★3 a run total of at least `config.starThreshold` — independent
-  of the boss. Nothing is ever taken back (each star ORed into what was earned). It returns a
+  of the boss. Nothing is ever taken back (each star ORed into what was earned). Stars held
+  across every world unlock `config.starUnlocks` (4★ Full House and On the Brink, 6★ Finisher and
+  Hat Trick): each joker once, at the end of the first world run that finds its count reached —
+  the run that crosses it, or for a player already past it, their next world run — and announced
+  by the same sheet as a boss's jokers, after them when both come at once. It returns a
   `ProgressionChange` (`newStars`, `progression`, `stars`, `unlockedWorld`, `unlockedJokers`)
   kept as `GameUiState.progress`.
   **Daily and practice runs never touch progression**: the daily is everyone's competition and

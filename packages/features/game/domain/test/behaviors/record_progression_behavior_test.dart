@@ -198,6 +198,139 @@ void main() {
     );
   });
 
+  group('stars held across worlds', () {
+    const gravity = GameMode.world(world: .gravity);
+    const allThree = WorldStars(
+      bossBeaten: true,
+      noRevive: true,
+      scoreThreshold: true,
+    );
+
+    /// Rubble's boss beaten with every star, and Gravity open with [stars].
+    void holding({WorldStars gravityStars = _noStars, Set<JokerId>? jokers}) {
+      store.saved = store.saved.copyWith(
+        unlockedJokers: jokers ?? store.saved.unlockedJokers,
+        worlds: {
+          ...store.saved.worlds,
+          WorldId.rubble: const WorldProgress(
+            bossBeaten: true,
+            stars: allThree,
+            unlocked: true,
+          ),
+          WorldId.gravity: WorldProgress(
+            bossBeaten: false,
+            stars: gravityStars,
+            unlocked: true,
+          ),
+        },
+      );
+    }
+
+    test('3 stars unlock no joker', () async {
+      // Given
+      holding();
+
+      // When: a Gravity run that earns nothing
+      final change = await record(gravity, runIn(const .over()));
+
+      // Then
+      expect(change?.unlockedJokers, isEmpty);
+      expect(store.saved.unlockedJokers, {JokerId.patience, JokerId.twin});
+    });
+
+    test(
+      'the run that reaches 4 stars unlocks Full House and On the Brink',
+      () async {
+        // Given
+        holding();
+
+        // When: Gravity's third star, its boss still standing
+        final change = await record(
+          gravity,
+          runIn(const .over(), runTotal: 8000),
+        );
+
+        // Then
+        expect(change?.unlockedWorld, isNull);
+        expect(change?.unlockedJokers, [JokerId.fullhouse, JokerId.brink]);
+        expect(change?.unlocksAnything, isTrue);
+        expect(
+          store.saved.unlockedJokers,
+          containsAll([JokerId.fullhouse, JokerId.brink]),
+        );
+        expect(store.saved.unlockedJokers, isNot(contains(JokerId.finisher)));
+      },
+    );
+
+    test('a pair is announced once, and never locked again', () async {
+      // Given: the pair unlocked by reaching 4 stars
+      holding();
+      await record(gravity, runIn(const .over(), runTotal: 8000));
+
+      // When: a run that earns nothing
+      final change = await record(gravity, runIn(const .over()));
+
+      // Then
+      expect(change?.unlockedJokers, isEmpty);
+      expect(
+        store.saved.unlockedJokers,
+        containsAll([JokerId.fullhouse, JokerId.brink]),
+      );
+    });
+
+    test(
+      'the run that reaches 6 stars unlocks Finisher and Hat Trick',
+      () async {
+        // Given: 5 stars, the first pair already unlocked
+        holding(
+          gravityStars: const WorldStars(
+            bossBeaten: true,
+            noRevive: true,
+            scoreThreshold: false,
+          ),
+          jokers: {.patience, .twin, .fullhouse, .brink},
+        );
+
+        // When
+        final change = await record(
+          gravity,
+          runIn(const .over(), runTotal: 8000),
+        );
+
+        // Then
+        expect(change?.unlockedJokers, [JokerId.finisher, JokerId.hattrick]);
+      },
+    );
+
+    test(
+      "a first boss win's jokers and the stars' jokers are announced together",
+      () async {
+        // Given: 4 stars held before the star unlocks existed, so neither
+        // pair was ever announced
+        holding(
+          gravityStars: const WorldStars(
+            bossBeaten: false,
+            noRevive: false,
+            scoreThreshold: true,
+          ),
+        );
+
+        // When: Gravity's boss falls with no revive, for 6 stars
+        final change = await record(gravity, runIn(const .won()));
+
+        // Then
+        expect(change?.unlockedJokers, [
+          JokerId.anchor,
+          JokerId.avalanche,
+          JokerId.fullhouse,
+          JokerId.brink,
+          JokerId.finisher,
+          JokerId.hattrick,
+        ]);
+      },
+    );
+  });
+
   for (final (name, mode) in const [
     ('daily run', GameMode.daily(day: 20261017)),
     ('practice run', GameMode.practice()),

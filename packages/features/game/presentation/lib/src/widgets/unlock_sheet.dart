@@ -9,9 +9,9 @@ import 'package:game_presentation/src/widgets/world_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-/// What beating a world's boss for the first time unlocked: the next world,
-/// and the jokers runs may offer from now on. Shown before the run's end,
-/// which it hands over to.
+/// What a world run unlocked: the next world and its boss's jokers on a first
+/// win, and the jokers the stars held across worlds unlock. Shown before the
+/// run's end, which it hands over to.
 final class UnlockSheet extends ConsumerWidget {
   const UnlockSheet({super.key});
 

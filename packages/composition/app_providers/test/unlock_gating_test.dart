@@ -58,6 +58,78 @@ void main() {
     expect(offeredAcross(daily.config).intersection(locked), isNotEmpty);
   });
 
+  test("Given a new player, Then the stars' four jokers are locked, and only "
+      'the daily offers them', () {
+    // Given
+    const starJokers = {
+      JokerId.brink,
+      JokerId.finisher,
+      JokerId.fullhouse,
+      JokerId.hattrick,
+    };
+    final fresh = container.read(game.initialProgressionProvider);
+    final startFor = container.read(game.runStartForProvider);
+
+    // When
+    final practice = startFor(.practice, progression: fresh);
+    final daily = startFor(.daily, progression: fresh);
+
+    // Then
+    expect(fresh.unlockedJokers.intersection(starJokers), isEmpty);
+    expect(offeredAcross(practice.config).intersection(starJokers), isEmpty);
+    expect(offeredAcross(daily.config).intersection(starJokers), isNotEmpty);
+  });
+
+  test(
+    "Given Rubble's three stars, When a Gravity run earns its third star, Then "
+    'Full House and On the Brink unlock',
+    () async {
+      // Given
+      const rules = BlockmancerEngine();
+      final fresh = game.startingProgression(rules);
+      final store = FakeProgressionStore(
+        fresh.copyWith(
+          worlds: {
+            ...fresh.worlds,
+            WorldId.rubble: const WorldProgress(
+              bossBeaten: true,
+              stars: WorldStars(
+                bossBeaten: true,
+                noRevive: true,
+                scoreThreshold: true,
+              ),
+              unlocked: true,
+            ),
+            WorldId.gravity: fresh.worlds[WorldId.gravity]!.copyWith(
+              unlocked: true,
+            ),
+          },
+        ),
+      );
+      final gameContainer = engineGame(progressionStore: store);
+      final config = rules.configFor(
+        .gravity,
+        jokerPool: fresh.unlockedJokers.toList(),
+      );
+      final ended = rules
+          .startRun(config: config, seed: 1)
+          .copyWith(phase: const .over(), runTotal: config.starThreshold);
+
+      // When
+      final change = await gameContainer.read(game.recordProgressionProvider)(
+        const .world(world: .gravity),
+        ended,
+      );
+
+      // Then
+      expect(change?.unlockedJokers, [JokerId.fullhouse, JokerId.brink]);
+      expect(
+        store.saved.unlockedJokers,
+        containsAll([JokerId.fullhouse, JokerId.brink]),
+      );
+    },
+  );
+
   test(
     'Given Gravity open, When its boss falls for the first time, Then '
     'Anchor and Avalanche unlock and Fog, still coming soon, stays locked',
