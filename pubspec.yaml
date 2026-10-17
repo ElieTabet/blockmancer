@@ -111,6 +111,10 @@ melos:
       description: Run tests across all packages that contain test files — `dart test` for pure-Dart packages, `flutter test` otherwise
       run: melos exec -c 4 -- bash "$MELOS_ROOT_PATH/scripts/test_package.sh"
 
+    balance-bot:
+      description: Play 2,000 seeded runs per reference build with the greedy balance bot and print how far they get (packages/blockmancer_engine/tool/balance_bot.dart; for --runs / --build, run it from that package)
+      run: cd packages/blockmancer_engine && dart run tool/balance_bot.dart
+
     test-engine-web:
       description: Run the engine's suite compiled to JavaScript in Chrome — the PRNG must give the same numbers there as on the VM (needs Chrome installed)
       run: cd packages/blockmancer_engine && dart test -p chrome

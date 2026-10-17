@@ -70,6 +70,13 @@ melos run test
 # Run the engine's suite compiled to JavaScript in Chrome (the PRNG must match the VM)
 melos run test-engine-web
 
+# Play 2,000 seeded runs for each reference build with the greedy balance bot, and print
+# the share of runs clearing each round, the median total and the boss win rate
+# (docs/balance-v0.md holds the first table). Melos passes no arguments through, so for
+# `--runs` / `--build` run it from the package:
+#   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build patience,twin
+melos run balance-bot
+
 # Run dart analyze across all packages
 melos run analyze
 
@@ -270,6 +277,9 @@ engine's events and never recomputes a rule.
   list of `shared_domain`'s `RunMove`s (`pick`, `place`, `revive`, `end`) back into the final
   `RunState`, refusing any move the run couldn't have made. This is what a server will check a score
   with.
+- **Balance bot.** `tool/balance_bot.dart` plays seeded runs with `lib/src/bot/`'s greedy policy
+  (the best immediate score, a fixed joker build) across one isolate per core. It depends only on
+  the engine, and `lib/src/bot/` uses no `dart:io` or isolates, so it stays web-safe.
 - **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and
   in Chrome (`melos run test-engine-web`).
 
