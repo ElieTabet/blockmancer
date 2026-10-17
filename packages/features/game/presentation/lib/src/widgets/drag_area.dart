@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/notifiers/drag_notifier.br.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/painting/board_geometry.dart';
 import 'package:game_presentation/src/painting/piece_painter.dart';
-import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// What a tray slot calls as the finger that grabbed it moves.

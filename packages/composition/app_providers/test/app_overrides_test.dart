@@ -7,10 +7,12 @@
 
 import 'package:app_providers/app_providers.dart';
 import 'package:app_router/app_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_presentation/src/providers_di.br.dart' as game_di;
+import 'package:game_data/game_data.dart';
+import 'package:game_domain/game_domain.dart' as game;
+import 'package:game_presentation/src/providers_di.br.dart' as game_ui_di;
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
 import 'package:push_notifications_domain/push_notifications_domain.dart'
@@ -29,10 +31,20 @@ void main() {
     return container;
   }
 
-  test('the game reaches the engine only through its rules slot', () {
+  test('the game reaches the engine and its storage only through slots', () {
+    final container = buildContainer();
+
+    expect(container.read(game.gameRulesProvider), isA<BlockmancerEngine>());
     expect(
-      buildContainer().read(game_di.gameRulesProvider),
-      isA<BlockmancerEngine>(),
+      container.read(game.bestScoresProvider),
+      isA<SharedPreferencesBestScores>(),
+    );
+  });
+
+  test('a revive costs nothing until there is an ad network', () async {
+    expect(
+      await buildContainer().read(game_ui_di.rewardedActionProvider)(),
+      isTrue,
     );
   });
 

@@ -1,5 +1,8 @@
+import 'package:ads/ads.dart';
 import 'package:app_router/app_router.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:game_data/game_data.dart';
+import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:push/push.dart' as push;
 import 'package:push_notifications_domain/push_notifications_domain.dart'
@@ -65,6 +68,11 @@ List<Override> featureBindingOverrides({
   ...push_notifications_ui.bindRoutingProviders(
     pushNotificationsRouting: (ref) => PushNotificationsRoutingImpl(router),
   ),
-  // The game screen reaches the rules only through this slot.
-  ...game_ui.bindProviders(gameRules: (ref) => const BlockmancerEngine()),
+  // The game reaches the rules, its storage and the ad network only through
+  // these slots.
+  ...game.bindProviders(
+    bestScores: (ref) => const SharedPreferencesBestScores(),
+    gameRules: (ref) => const BlockmancerEngine(),
+  ),
+  ...game_ui.bindProviders(rewardedAction: (ref) => const RewardedAds().show),
 ];

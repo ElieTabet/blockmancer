@@ -56,7 +56,9 @@
       "total": "$total points",
       "build": "Combinaison : $jokers",
       "noJokers": "aucune",
-      "retry": "Rejouer la partie du jour"
+      "best": "Record : $points",
+      "newBest": "Nouveau record !",
+      "retry": "Rejouer"
     },
     "jokers": {
       "stonemason": {

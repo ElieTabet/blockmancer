@@ -254,8 +254,14 @@ class Translations$game$end$en {
 	/// en: 'none'
 	String get noJokers => 'none';
 
-	/// en: 'Retry today's run'
-	String get retry => 'Retry today\'s run';
+	/// en: 'Best: $points'
+	String best({required Object points}) => 'Best: ${points}';
+
+	/// en: 'New best!'
+	String get newBest => 'New best!';
+
+	/// en: 'Play again'
+	String get retry => 'Play again';
 }
 
 // Path: game.jokers
@@ -543,7 +549,9 @@ extension on Translations {
 			'game.end.total' => ({required Object total}) => '${total} points',
 			'game.end.build' => ({required Object jokers}) => 'Build: ${jokers}',
 			'game.end.noJokers' => 'none',
-			'game.end.retry' => 'Retry today\'s run',
+			'game.end.best' => ({required Object points}) => 'Best: ${points}',
+			'game.end.newBest' => 'New best!',
+			'game.end.retry' => 'Play again',
 			'game.jokers.stonemason.name' => 'Stonemason',
 			'game.jokers.stonemason.description' => '+50 chips for each stone cleared. 2 extra stones every round.',
 			'game.jokers.combo.name' => 'Combo King',

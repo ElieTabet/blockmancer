@@ -159,7 +159,9 @@ class _Translations$game$end$fr extends Translations$game$end$en {
 	@override String total({required Object total}) => '${total} points';
 	@override String build({required Object jokers}) => 'Combinaison : ${jokers}';
 	@override String get noJokers => 'aucune';
-	@override String get retry => 'Rejouer la partie du jour';
+	@override String best({required Object points}) => 'Record : ${points}';
+	@override String get newBest => 'Nouveau record !';
+	@override String get retry => 'Rejouer';
 }
 
 // Path: game.jokers
@@ -391,7 +393,9 @@ extension on TranslationsFr {
 			'game.end.total' => ({required Object total}) => '${total} points',
 			'game.end.build' => ({required Object jokers}) => 'Combinaison : ${jokers}',
 			'game.end.noJokers' => 'aucune',
-			'game.end.retry' => 'Rejouer la partie du jour',
+			'game.end.best' => ({required Object points}) => 'Record : ${points}',
+			'game.end.newBest' => 'Nouveau record !',
+			'game.end.retry' => 'Rejouer',
 			'game.jokers.stonemason.name' => 'Tailleur de pierre',
 			'game.jokers.stonemason.description' => '+50 jetons par pierre effacée. 2 pierres de plus à chaque manche.',
 			'game.jokers.combo.name' => 'Roi du combo',

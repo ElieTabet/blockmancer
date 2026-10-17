@@ -1,18 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_presentation/game_presentation.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/notifiers/drag_notifier.br.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 import '../fake_game_rules.dart';
+import '../game_overrides.dart';
 
 void main() {
   late FakeGameRules rules;
 
-  ProviderContainer container() {
+  ProviderContainer container({
+    FakeBestScores? bestScores,
+    RewardedActionFun? rewardedAction,
+  }) {
     final container = ProviderContainer(
-      overrides: bindProviders(gameRules: (ref) => rules),
+      overrides: gameOverrides(
+        rules,
+        bestScores: bestScores,
+        rewardedAction: rewardedAction,
+      ),
     );
     addTearDown(container.dispose);
     container.listen(gameProvider, (_, _) {});
@@ -118,22 +129,17 @@ void main() {
   });
 
   group('forwarding', () {
-    test('taking a joker, reviving and ending go to the rules', () {
+    test('taking a joker and ending go to the rules', () {
       // Given
       final notifier = container().read(gameProvider.notifier);
 
       // When
       notifier
         ..pickJoker(.twin)
-        ..revive()
         ..endRun();
 
       // Then
-      expect(rules.calls.skip(1), [
-        'pickJoker JokerId.twin',
-        'revive',
-        'endRun',
-      ]);
+      expect(rules.calls.skip(1), ['pickJoker JokerId.twin', 'endRun']);
     });
 
     test('retrying starts today’s run again from scratch', () {
@@ -204,5 +210,215 @@ void main() {
       // Then
       expect(rules.calls, ['startRun 1']);
     });
+  });
+
+  group('reviving', () {
+    setUp(
+      () => rules = FakeGameRules(
+        start: runIn(const .roundLost(reason: .outOfPieces)),
+      ),
+    );
+
+    test('revives once the reward has been earned', () async {
+      // Given
+      final game = container();
+      final revived = runIn(const .playing(), revivesUsed: 1);
+      rules.next = (
+        revived,
+        const [
+          GameEvent.revived(rows: [0, 1]),
+        ],
+      );
+
+      // When
+      await game.read(gameProvider.notifier).revive();
+
+      // Then
+      expect(rules.calls.last, 'revive');
+      expect(game.read(gameProvider).run, revived);
+    });
+
+    test('a second tap while the reward shows asks for it once', () async {
+      // Given
+      final reward = Completer<bool>();
+      var shown = 0;
+      final game = container(
+        rewardedAction: () {
+          shown++;
+
+          return reward.future;
+        },
+      );
+      rules.next = (runIn(const .playing(), revivesUsed: 1), const []);
+      final notifier = game.read(gameProvider.notifier);
+
+      // When
+      final first = notifier.revive();
+      final second = notifier.revive();
+      reward.complete(true);
+      await Future.wait([first, second]);
+
+      // Then
+      expect(shown, 1);
+      expect(rules.calls.where((call) => call == 'revive'), hasLength(1));
+    });
+
+    test('a run ended while the reward shows is not revived', () async {
+      // Given
+      final reward = Completer<bool>();
+      final game = container(rewardedAction: () => reward.future);
+      final notifier = game.read(gameProvider.notifier);
+      final reviving = notifier.revive();
+
+      // When
+      rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 0)]);
+      notifier.endRun();
+      reward.complete(true);
+      await reviving;
+
+      // Then
+      expect(rules.calls, isNot(contains('revive')));
+      expect(game.read(gameProvider).run.phase, const RunPhase.over());
+    });
+
+    test('a reward that fails to show leaves the round lost', () async {
+      // Given
+      final game = container(
+        rewardedAction: () async => throw StateError('no ad'),
+      );
+
+      // When
+      await game.read(gameProvider.notifier).revive();
+
+      // Then
+      expect(rules.calls, isNot(contains('revive')));
+      expect(
+        game.read(gameProvider).run.phase,
+        const RunPhase.roundLost(reason: .outOfPieces),
+      );
+    });
+
+    test('no reward is asked for once the revive is spent', () async {
+      // Given
+      rules = FakeGameRules(
+        start: runIn(const .roundLost(reason: .noRoom), revivesUsed: 1),
+      );
+      var shown = 0;
+      final game = container(
+        rewardedAction: () async {
+          shown++;
+
+          return true;
+        },
+      );
+
+      // When
+      await game.read(gameProvider.notifier).revive();
+
+      // Then
+      expect(shown, 0);
+    });
+
+    test('a reward not earned leaves the round lost', () async {
+      // Given
+      final game = container(rewardedAction: () async => false);
+
+      // When
+      await game.read(gameProvider.notifier).revive();
+
+      // Then
+      expect(rules.calls, isNot(contains('revive')));
+      expect(
+        game.read(gameProvider).run.phase,
+        const RunPhase.roundLost(reason: .outOfPieces),
+      );
+    });
+  });
+
+  group('when the run ends', () {
+    test('a first run of the day becomes its best', () async {
+      // Given
+      final scores = FakeBestScores();
+      final game = container(bestScores: scores);
+      rules.next = (
+        runIn(const .over(), runTotal: 1450),
+        const [GameEvent.runOver(total: 1450)],
+      );
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      expect(
+        game.read(gameProvider).record,
+        const RunEndRecord(best: 1450, isNewBest: true),
+      );
+      expect(scores.saved[testDay], 1450);
+    });
+
+    test('a run short of the day’s best says what the best is', () async {
+      // Given
+      final scores = FakeBestScores()..saved[testDay] = 3000;
+      final game = container(bestScores: scores);
+      rules.next = (
+        runIn(const .won(), runTotal: 2100),
+        const [GameEvent.runWon(total: 2100)],
+      );
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      expect(
+        game.read(gameProvider).record,
+        const RunEndRecord(best: 3000, isNewBest: false),
+      );
+    });
+
+    test(
+      'a best read after starting again stays with the run it was for',
+      () async {
+        // Given
+        final scores = FakeBestScores()..gate = Completer<void>();
+        final game = container(bestScores: scores);
+        rules.next = (
+          runIn(const .over(), runTotal: 1450),
+          const [GameEvent.runOver(total: 1450)],
+        );
+        game.read(gameProvider.notifier).endRun();
+
+        // When
+        game.read(gameProvider.notifier).retry();
+        scores.gate!.complete();
+        await pumpEventQueue();
+
+        // Then
+        expect(game.read(gameProvider).record, isNull);
+        expect(scores.saved[testDay], 1450);
+      },
+    );
+
+    test(
+      'a best that cannot be read leaves the run ended, without one',
+      () async {
+        // Given
+        final scores = FakeBestScores()..broken = true;
+        final game = container(bestScores: scores);
+        rules.next = (
+          runIn(const .over(), runTotal: 1450),
+          const [GameEvent.runOver(total: 1450)],
+        );
+
+        // When
+        game.read(gameProvider.notifier).endRun();
+        await pumpEventQueue();
+
+        // Then
+        expect(game.read(gameProvider).run.phase, const RunPhase.over());
+        expect(game.read(gameProvider).record, isNull);
+      },
+    );
   });
 }

@@ -16,7 +16,10 @@ mixin _$GameUiState {
 
 /// What the last action did, for the feedback that follows it.
  List<GameEvent> get lastEvents;/// Counts actions, so the same events twice still read as a new move.
- int get moveCount; RunState get run;
+/// What the run counts for: which best it is measured against.
+ GameMode get mode; int get moveCount; RunState get run;/// The finished run against its mode's best; null until the run has ended
+/// and the best has been read, and for good if it couldn't be.
+ RunEndRecord? get record;
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,16 +30,16 @@ $GameUiStateCopyWith<GameUiState> get copyWith => _$GameUiStateCopyWithImpl<Game
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameUiState&&const DeepCollectionEquality().equals(other.lastEvents, lastEvents)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameUiState&&const DeepCollectionEquality().equals(other.lastEvents, lastEvents)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run)&&(identical(other.record, record) || other.record == record));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(lastEvents),moveCount,run);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(lastEvents),mode,moveCount,run,record);
 
 @override
 String toString() {
-  return 'GameUiState(lastEvents: $lastEvents, moveCount: $moveCount, run: $run)';
+  return 'GameUiState(lastEvents: $lastEvents, mode: $mode, moveCount: $moveCount, run: $run, record: $record)';
 }
 
 
@@ -47,11 +50,11 @@ abstract mixin class $GameUiStateCopyWith<$Res>  {
   factory $GameUiStateCopyWith(GameUiState value, $Res Function(GameUiState) _then) = _$GameUiStateCopyWithImpl;
 @useResult
 $Res call({
- List<GameEvent> lastEvents, int moveCount, RunState run
+ List<GameEvent> lastEvents, GameMode mode, int moveCount, RunState run, RunEndRecord? record
 });
 
 
-$RunStateCopyWith<$Res> get run;
+$GameModeCopyWith<$Res> get mode;$RunStateCopyWith<$Res> get run;$RunEndRecordCopyWith<$Res>? get record;
 
 }
 /// @nodoc
@@ -64,15 +67,26 @@ class _$GameUiStateCopyWithImpl<$Res>
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? lastEvents = null,Object? moveCount = null,Object? run = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? lastEvents = null,Object? mode = null,Object? moveCount = null,Object? run = null,Object? record = freezed,}) {
   return _then(_self.copyWith(
 lastEvents: null == lastEvents ? _self.lastEvents : lastEvents // ignore: cast_nullable_to_non_nullable
-as List<GameEvent>,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
+as List<GameEvent>,mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
+as GameMode,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
 as int,run: null == run ? _self.run : run // ignore: cast_nullable_to_non_nullable
-as RunState,
+as RunState,record: freezed == record ? _self.record : record // ignore: cast_nullable_to_non_nullable
+as RunEndRecord?,
   ));
 }
 /// Create a copy of GameUiState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GameModeCopyWith<$Res> get mode {
+  
+  return $GameModeCopyWith<$Res>(_self.mode, (value) {
+    return _then(_self.copyWith(mode: value));
+  });
+}/// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -80,6 +94,18 @@ $RunStateCopyWith<$Res> get run {
   
   return $RunStateCopyWith<$Res>(_self.run, (value) {
     return _then(_self.copyWith(run: value));
+  });
+}/// Create a copy of GameUiState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RunEndRecordCopyWith<$Res>? get record {
+    if (_self.record == null) {
+    return null;
+  }
+
+  return $RunEndRecordCopyWith<$Res>(_self.record!, (value) {
+    return _then(_self.copyWith(record: value));
   });
 }
 }
@@ -163,10 +189,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  int moveCount,  RunState run)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  RunEndRecord? record)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameUiState() when $default != null:
-return $default(_that.lastEvents,_that.moveCount,_that.run);case _:
+return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.record);case _:
   return orElse();
 
 }
@@ -184,10 +210,10 @@ return $default(_that.lastEvents,_that.moveCount,_that.run);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  int moveCount,  RunState run)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  RunEndRecord? record)  $default,) {final _that = this;
 switch (_that) {
 case _GameUiState():
-return $default(_that.lastEvents,_that.moveCount,_that.run);case _:
+return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.record);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +230,10 @@ return $default(_that.lastEvents,_that.moveCount,_that.run);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<GameEvent> lastEvents,  int moveCount,  RunState run)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  RunEndRecord? record)?  $default,) {final _that = this;
 switch (_that) {
 case _GameUiState() when $default != null:
-return $default(_that.lastEvents,_that.moveCount,_that.run);case _:
+return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.record);case _:
   return null;
 
 }
@@ -219,7 +245,7 @@ return $default(_that.lastEvents,_that.moveCount,_that.run);case _:
 
 
 class _GameUiState implements GameUiState {
-  const _GameUiState({required final  List<GameEvent> lastEvents, required this.moveCount, required this.run}): _lastEvents = lastEvents;
+  const _GameUiState({required final  List<GameEvent> lastEvents, required this.mode, required this.moveCount, required this.run, this.record}): _lastEvents = lastEvents;
   
 
 /// What the last action did, for the feedback that follows it.
@@ -232,8 +258,13 @@ class _GameUiState implements GameUiState {
 }
 
 /// Counts actions, so the same events twice still read as a new move.
+/// What the run counts for: which best it is measured against.
+@override final  GameMode mode;
 @override final  int moveCount;
 @override final  RunState run;
+/// The finished run against its mode's best; null until the run has ended
+/// and the best has been read, and for good if it couldn't be.
+@override final  RunEndRecord? record;
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +276,16 @@ _$GameUiStateCopyWith<_GameUiState> get copyWith => __$GameUiStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameUiState&&const DeepCollectionEquality().equals(other._lastEvents, _lastEvents)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameUiState&&const DeepCollectionEquality().equals(other._lastEvents, _lastEvents)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run)&&(identical(other.record, record) || other.record == record));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_lastEvents),moveCount,run);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_lastEvents),mode,moveCount,run,record);
 
 @override
 String toString() {
-  return 'GameUiState(lastEvents: $lastEvents, moveCount: $moveCount, run: $run)';
+  return 'GameUiState(lastEvents: $lastEvents, mode: $mode, moveCount: $moveCount, run: $run, record: $record)';
 }
 
 
@@ -265,11 +296,11 @@ abstract mixin class _$GameUiStateCopyWith<$Res> implements $GameUiStateCopyWith
   factory _$GameUiStateCopyWith(_GameUiState value, $Res Function(_GameUiState) _then) = __$GameUiStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<GameEvent> lastEvents, int moveCount, RunState run
+ List<GameEvent> lastEvents, GameMode mode, int moveCount, RunState run, RunEndRecord? record
 });
 
 
-@override $RunStateCopyWith<$Res> get run;
+@override $GameModeCopyWith<$Res> get mode;@override $RunStateCopyWith<$Res> get run;@override $RunEndRecordCopyWith<$Res>? get record;
 
 }
 /// @nodoc
@@ -282,12 +313,14 @@ class __$GameUiStateCopyWithImpl<$Res>
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? lastEvents = null,Object? moveCount = null,Object? run = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? lastEvents = null,Object? mode = null,Object? moveCount = null,Object? run = null,Object? record = freezed,}) {
   return _then(_GameUiState(
 lastEvents: null == lastEvents ? _self._lastEvents : lastEvents // ignore: cast_nullable_to_non_nullable
-as List<GameEvent>,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
+as List<GameEvent>,mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
+as GameMode,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
 as int,run: null == run ? _self.run : run // ignore: cast_nullable_to_non_nullable
-as RunState,
+as RunState,record: freezed == record ? _self.record : record // ignore: cast_nullable_to_non_nullable
+as RunEndRecord?,
   ));
 }
 
@@ -295,10 +328,31 @@ as RunState,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
+$GameModeCopyWith<$Res> get mode {
+  
+  return $GameModeCopyWith<$Res>(_self.mode, (value) {
+    return _then(_self.copyWith(mode: value));
+  });
+}/// Create a copy of GameUiState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
 $RunStateCopyWith<$Res> get run {
   
   return $RunStateCopyWith<$Res>(_self.run, (value) {
     return _then(_self.copyWith(run: value));
+  });
+}/// Create a copy of GameUiState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RunEndRecordCopyWith<$Res>? get record {
+    if (_self.record == null) {
+    return null;
+  }
+
+  return $RunEndRecordCopyWith<$Res>(_self.record!, (value) {
+    return _then(_self.copyWith(record: value));
   });
 }
 }

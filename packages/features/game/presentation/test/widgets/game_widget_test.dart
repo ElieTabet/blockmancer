@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,6 +10,7 @@ import 'package:game_presentation/src/widgets/tray_view.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 import '../fake_game_rules.dart';
+import '../game_overrides.dart';
 import '../pump_game.dart';
 
 void main() {
@@ -206,7 +209,7 @@ void main() {
     expect(find.text('Build: Twin Lines, Patience'), findsOneWidget);
 
     // When
-    await tester.tap(find.text("Retry today's run"));
+    await tester.tap(find.text('Play again'));
     await tester.pump();
 
     // Then
@@ -262,5 +265,92 @@ void main() {
 
     // Then
     expect(find.text('Boss · Rubble'), findsOneWidget);
+  });
+
+  testWidgets('a finished run shows the best it is measured against', (
+    tester,
+  ) async {
+    // Given
+    final scores = FakeBestScores()..saved[testDay] = 4200;
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .noRoom)),
+      bestScores: scores,
+    );
+    rules.next = (
+      runIn(const .over(), runTotal: 900),
+      const [GameEvent.runOver(total: 900)],
+    );
+
+    // When
+    await tester.tap(find.text('End run'));
+    await tester.pump();
+    await tester.pump();
+
+    // Then
+    expect(find.text('Best: 4,200'), findsOneWidget);
+  });
+
+  testWidgets('a lost round is revived only once the reward is earned', (
+    tester,
+  ) async {
+    // Given
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .outOfPieces)),
+      rewardedAction: () async => false,
+    );
+
+    // When
+    await tester.tap(find.text('Revive · clear 2 rows + 3 pieces'));
+    await tester.pump();
+
+    // Then
+    expect(rules.calls, isNot(contains('revive')));
+    expect(find.text('Out of pieces'), findsOneWidget);
+  });
+
+  testWidgets('a run that beats the best says so', (tester) async {
+    // Given
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .noRoom)),
+    );
+    rules.next = (
+      runIn(const .over(), runTotal: 900),
+      const [GameEvent.runOver(total: 900)],
+    );
+
+    // When
+    await tester.tap(find.text('End run'));
+    await tester.pump();
+    await tester.pump();
+
+    // Then
+    expect(find.text('New best!'), findsOneWidget);
+  });
+
+  testWidgets('no best is shown while it is still being read', (tester) async {
+    // Given
+    final scores = FakeBestScores()..gate = Completer<void>();
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .noRoom)),
+      bestScores: scores,
+    );
+    rules.next = (
+      runIn(const .over(), runTotal: 900),
+      const [GameEvent.runOver(total: 900)],
+    );
+
+    // When
+    await tester.tap(find.text('End run'));
+    await tester.pump();
+
+    // Then
+    expect(find.text('900 points'), findsOneWidget);
+    expect(find.textContaining('best'), findsNothing);
+    expect(find.textContaining('Best'), findsNothing);
+    scores.gate!.complete();
   });
 }

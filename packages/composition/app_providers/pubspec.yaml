@@ -10,12 +10,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  ads: any
   app_router: any
   blockmancer_engine: any
   push: any
   push_notifications_domain: any
   push_notifications_presentation: any
   telemetry: any
+  game_data: any
+  game_domain: any
   game_presentation: any
   riverpod_annotation: ^4.0.2
 

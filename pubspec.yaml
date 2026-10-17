@@ -60,6 +60,7 @@ melos:
         intl: ^0.20.2
         json_annotation: ^4.9.0
         riverpod_annotation: ^4.0.2
+        shared_preferences: ^2.5.3 # the best scores, on the device (packages/features/game/data)
         slang: ^4.19.0
         slang_flutter: ^4.19.0
         url_launcher: ^6.3.2 # opens a link outside the app; known only to the external_links package
@@ -74,7 +75,7 @@ melos:
         json_serializable: ^6.9.4
         mocktail: ^1.0.4
         riverpod_generator: 4.0.3 # pinned: 4.0.4+ calls FormalParameter.type, absent in the pinned analyzer 10.2.0
-        test: ^1.31.1 # runs the pure-Dart blockmancer_engine's suite on the VM and in Chrome, where flutter_test can't
+        test: ^1.31.1 # runs the pure-Dart packages' suites (blockmancer_engine on the VM and in Chrome, ads), where flutter_test can't
         url_launcher_platform_interface: ^2.3.2 # fakes the launcher platform so external_links' catches are testable off-device
 
   scripts:

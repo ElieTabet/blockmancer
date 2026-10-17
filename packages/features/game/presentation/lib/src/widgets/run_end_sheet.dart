@@ -9,7 +9,8 @@ import 'package:game_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-/// The run's result. No ranking yet: leaderboards come after Sprint 1.
+/// The run's result against this device's best. No ranking yet: leaderboards
+/// come in a later phase.
 final class RunEndSheet extends ConsumerWidget {
   const RunEndSheet({super.key});
 
@@ -48,6 +49,7 @@ final class RunEndSheet extends ConsumerWidget {
           ),
         ),
         SheetTitle(end.total(total: pointsText(context, total))),
+        const _BestLine(),
         Text(
           end.build(
             jokers: jokers.isEmpty ? end.noJokers : jokerNames(context, jokers),
@@ -59,6 +61,30 @@ final class RunEndSheet extends ConsumerWidget {
           onPressed: ref.read(gameProvider.notifier).retry,
         ),
       ],
+    );
+  }
+}
+
+/// The mode's best, or that this run is it. Empty while the best is read.
+final class _BestLine extends ConsumerWidget {
+  const _BestLine();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final record = ref.watch(gameProvider.select((state) => state.record));
+    final end = context.t.game.end;
+
+    if (record == null) return const SizedBox.shrink();
+
+    return Text(
+      record.isNewBest
+          ? end.newBest
+          : end.best(points: pointsText(context, record.best)),
+      style: TextStyle(
+        color: record.isNewBest ? DSColor.accent : DSColor.textMuted,
+        fontSize: 14,
+        fontWeight: .w700,
+      ),
     );
   }
 }

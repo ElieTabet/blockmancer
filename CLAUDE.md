@@ -21,6 +21,7 @@ blockmancer/
 │   ├── blockmancer_engine/ # The game rules (BlockmancerEngine implements GameRules) — pure Dart, deterministic; injected, never imported by a feature
 │   ├── shared_domain/    # Entities shared across features (the game's RunState/GameEvent/…) + contracts (GameRules) — pure Dart, no logic
 │   ├── utilities/        # Horizontal infrastructure — no feature knowledge
+│   │   ├── ads/              # Rewarded ads behind `RewardedAds.show()` — no network yet, so every reward is granted (phase 3 brings AdMob)
 │   │   ├── external_links/   # Hands a link to the OS (browser, mail draft) — the only place url_launcher is known; unused yet
 │   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
 │   │   ├── telemetry/        # Firebase Analytics + Crashlytics behind one switch — the only place either is known
@@ -37,7 +38,7 @@ blockmancer/
 │   ├── plugins/          # Dev tooling packages
 │   │   └── custom_lints/     # Native analyzer-plugin — alphabetical-ordering lints + quick-fixes (IDE-only)
 │   └── features/         # Feature packages, split by layer
-│       ├── game/presentation/                    # game_presentation — the first tab: board, tray and joker picks; rules injected via GameRules
+│       ├── game/{domain,data,presentation}/      # game_* — the run's mode, best scores and rewarded revive (domain), kept on the device (data), and the board, tray and joker picks (presentation); rules injected via GameRules
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
 ├── app/flutter_native_splash.yaml  # Native launch-screen config (brand colour) — `cd app && dart run flutter_native_splash:create`
@@ -124,7 +125,7 @@ Examples:
 
 - **Monorepo:** Dart Pub Workspace — each package has `resolution: workspace`; root `pubspec.yaml` discovers members via globs under `workspace:` (`app`, `packages/*`, `packages/dsm/*`, `packages/dsm/l10n/*`, `packages/composition/*`, `packages/plugins/*`, `packages/utilities/*`, `packages/utilities/**/*`, `packages/features/**/*`). New packages are picked up automatically — no manual registration. The two utilities globs coexist because most utilities are flat (`push`, `telemetry`) while a layer-split one (`webviews/{domain,presentation}`) sits a level deeper; `**/*` needs two segments, so it matches only the deeper ones and the flat glob's hit on the bare `webviews/` directory is ignored, exactly as `packages/dsm/*` already ignores `l10n/`.
 - **Dependency overrides:** the root `pubspec.yaml` pins `analyzer: 10.2.0` (plus `dart_style: 3.1.7`, `riverpod_analyzer_utils: 1.0.0-dev.10`) via `dependency_overrides` so the `custom_lints` analyzer-plugin can coexist with `riverpod_generator`'s conservative `analyzer ^9.0.0` cap. Mirrors flutter-front.
-- **Feature layering:** each feature is split into layer packages `<feature>_domain`, `<feature>_data`, `<feature>_presentation` under `packages/features/<feature>/`. Layer boundaries are enforced at compile time by each package's declared deps. Layers a feature doesn't need are simply absent — `game` is presentation only (its rules are injected), `push_notifications` has no `_data`.
+- **Feature layering:** each feature is split into layer packages `<feature>_domain`, `<feature>_data`, `<feature>_presentation` under `packages/features/<feature>/`. Layer boundaries are enforced at compile time by each package's declared deps. Layers a feature doesn't need are simply absent — `push_notifications` has no `_data`.
 - **Composition layer:** `packages/composition/` holds the composition root — `app_router` (app root router `AppRouter` aggregating feature routes, plus the concrete `<Feature>RoutingImpl` classes and `routingOverrides()`) and `app_providers` (`appOverrides()` aggregating the routing binds for the app's root container). The composition packages import the feature packages; the `app` depends only on composition, so it imports no feature package. Dependency direction: `app → composition → features`.
 - **Package internals:** the public API of every package is its barrel `lib/<pkg>.dart`; all implementation lives under `lib/src/`. Each package carries `lib/src/package_name.dart` (`const packageName = '<pkg>';`). Providers follow [providers](.claude/rules/providers.md): `providers.br.dart` holds this package's own `@riverpod` providers **and** its `bindProviders(...)` helper, `providers_di.br.dart` holds inbound slots that throw until overridden, and `providers_internal.br.dart` holds layer-internal ones. Never both `providers.br.dart` and `providers.dart` in one package.
 - **Melos v7+:** Scripts defined in `pubspec.yaml` under `melos:` key — no separate `melos.yaml` file
@@ -207,7 +208,7 @@ final class SplashRoutingImpl implements SplashRouting {
 }
 ```
 
-`app_router` also owns the app root router `AppRouter` (`@AutoRouterConfig RootStackRouter implements AutoRouteGuard`, aggregating each feature's `AutoRoute` with its path from the feature's `<Feature>RoutePath` enum, e.g. `AutoRoute(path: SplashRoutePath.splash.path, page: SplashRoute.page, initial: true)`) and exposes `routingOverrides()` — which calls every feature's `bindRoutingProviders(...)` — alongside `featureBindingOverrides()`, the same aggregation for the non-routing slots (the game's rules, push, telemetry). `app_providers.appOverrides()` spreads both; the thin `app` applies it at startup:
+`app_router` also owns the app root router `AppRouter` (`@AutoRouterConfig RootStackRouter implements AutoRouteGuard`, aggregating each feature's `AutoRoute` with its path from the feature's `<Feature>RoutePath` enum, e.g. `AutoRoute(path: SplashRoutePath.splash.path, page: SplashRoute.page, initial: true)`) and exposes `routingOverrides()` — which calls every feature's `bindRoutingProviders(...)` — alongside `featureBindingOverrides()`, the same aggregation for the non-routing slots (the game's rules, best scores and revive reward, push, telemetry). `app_providers.appOverrides()` spreads both; the thin `app` applies it at startup:
 
 ```dart
 // app/lib/application/application.dart — imports composition (+ design_system for the theme,
@@ -250,7 +251,7 @@ engine's events and never recomputes a rule.
 - **Injected, never imported.** The game's vocabulary (`RunState`, `RunPhase`, `RunConfig`,
   `Board`, `Cell`, `GameEvent`, `JokerId`, `PlacementPreview`, …) and the `GameRules` contract live
   in `shared_domain`. The engine's barrel exports only `BlockmancerEngine implements GameRules`;
-  `game_presentation` declares a throwing `gameRulesProvider` slot and `app_providers` binds it to
+  `game_domain` declares a throwing `gameRulesProvider` slot and `app_providers` binds it to
   `const BlockmancerEngine()`. Rule data and rule decisions stay behind the contract (`defaultConfig`,
   `shape(id)`, `partnerOf(id)`, `canRevive`, `liveRunTotal`), so no feature computes a rule and
   `shared_domain`'s entities only read their own fields.
@@ -289,18 +290,20 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
-`flutter_inappwebview`, `push`, `telemetry`, `url_launcher` or `blockmancer_engine` directly** — a
+`flutter_inappwebview`, `push`, `telemetry`, `url_launcher`, `ads` or `blockmancer_engine` directly** — a
 feature declares a contract and the composition layer injects the implementation, exactly as it does
 for routing.
 
-- **The slot lives where it is consumed.** `game_presentation` declares `gameRulesProvider`, typed
-  by `shared_domain`'s `GameRules`, and imports neither the engine nor any capability package.
+- **The slot lives where it is consumed.** `game_domain` declares `gameRulesProvider` (typed by
+  `shared_domain`'s `GameRules`; it derives each mode's seed with it) and `bestScoresProvider`;
+  `game_presentation`, which shows the revive's reward, declares `rewardedActionProvider`. Neither
+  imports the engine, `game_data`'s shared_preferences or `ads`.
 - **`app_providers`' `featureBindingOverrides()` is the only place both halves are known**, and it
   is pure wiring: it says which function fills which slot and nothing else. Any decision — combining
   results, mapping an error, choosing an outcome — belongs to the package that owns the meaning.
   `app_router` binds routing only.
 - Every package's binding helper is named `bindProviders(...)`; callers import with a prefix
-  (`game_ui.bindProviders(...)`). Routing keeps its own `bindRoutingProviders(...)`.
+  (`game.bindProviders(...)`, `game_ui.bindProviders(...)`). Routing keeps its own `bindRoutingProviders(...)`.
 - **Logging goes through `Timber`**, never a payload: no push token, no push `data`, no raw body
   reaches a log line. Failures log at `Timber.e`. Nothing is planted in release, so every call is a
   no-op there; `boot()` plants a `DebugTree` under `kDebugMode`.

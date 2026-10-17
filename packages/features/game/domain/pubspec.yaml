@@ -1,0 +1,22 @@
+name: game_domain
+description: "game domain layer — the run's mode, its best scores and the rewarded revive, behind slots the composition layer fills. The rules themselves are shared_domain's GameRules, injected."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  freezed_annotation: ^3.1.0
+  riverpod_annotation: ^4.0.2
+  shared_domain: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: 2.16.0
+  freezed: ^3.2.5
+  riverpod_generator: 4.0.3

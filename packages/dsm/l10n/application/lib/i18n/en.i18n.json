@@ -56,7 +56,9 @@
       "total": "$total points",
       "build": "Build: $jokers",
       "noJokers": "none",
-      "retry": "Retry today's run"
+      "best": "Best: $points",
+      "newBest": "New best!",
+      "retry": "Play again"
     },
     "jokers": {
       "stonemason": {

@@ -8,51 +8,50 @@ part of 'providers_di.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The game's rules. Composition binds the engine; this package never imports
-/// it, so the screen can only draw what the rules say.
 
-@ProviderFor(gameRules)
-final gameRulesProvider = GameRulesProvider._();
+@ProviderFor(rewardedAction)
+final rewardedActionProvider = RewardedActionProvider._();
 
-/// The game's rules. Composition binds the engine; this package never imports
-/// it, so the screen can only draw what the rules say.
-
-final class GameRulesProvider
-    extends $FunctionalProvider<GameRules, GameRules, GameRules>
-    with $Provider<GameRules> {
-  /// The game's rules. Composition binds the engine; this package never imports
-  /// it, so the screen can only draw what the rules say.
-  GameRulesProvider._()
+final class RewardedActionProvider
+    extends
+        $FunctionalProvider<
+          RewardedActionFun,
+          RewardedActionFun,
+          RewardedActionFun
+        >
+    with $Provider<RewardedActionFun> {
+  RewardedActionProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'gameRulesProvider',
+        name: r'rewardedActionProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$gameRulesHash();
+  String debugGetCreateSourceHash() => _$rewardedActionHash();
 
   @$internal
   @override
-  $ProviderElement<GameRules> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<RewardedActionFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
-  GameRules create(Ref ref) {
-    return gameRules(ref);
+  RewardedActionFun create(Ref ref) {
+    return rewardedAction(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GameRules value) {
+  Override overrideWithValue(RewardedActionFun value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<GameRules>(value),
+      providerOverride: $SyncValueProvider<RewardedActionFun>(value),
     );
   }
 }
 
-String _$gameRulesHash() => r'aedb42ba0debe7407ed8cfe4af33bf6cc721b26f';
+String _$rewardedActionHash() => r'c4f7bf56c8fa99168fcfbdc5ef1d77d0373e28c1';
