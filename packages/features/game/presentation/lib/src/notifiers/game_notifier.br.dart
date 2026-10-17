@@ -14,15 +14,29 @@ part 'game_notifier.br.g.dart';
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
-@Riverpod(dependencies: [gameLaunch])
+///
+/// What it plays is saved after every action, so a killed app resumes it.
+@Riverpod(dependencies: [gameLaunch, resumedRun])
 class GameNotifier extends _$GameNotifier {
   var _reviving = false;
 
   @override
   GameUiState build() {
     ref.watch(gameRulesProvider);
+    final launch = ref.watch(gameLaunchProvider);
+    final resumed = launch == .resume ? ref.watch(resumedRunProvider) : null;
 
-    return _fresh(ref.read(runStartForProvider)(ref.watch(gameLaunchProvider)));
+    if (resumed != null) {
+      return GameUiState(
+        lastEvents: const [],
+        mode: resumed.mode,
+        moveCount: 0,
+        run: resumed.run,
+      );
+    }
+
+    // Nothing to resume means the save was lost: today's run instead.
+    return _fresh(ref.read(runStartForProvider)(launch));
   }
 
   void endRun() => _apply(_rules.endRun(state.run));
@@ -40,6 +54,10 @@ class GameNotifier extends _$GameNotifier {
 
   void leave(BuildContext context) =>
       ref.read(gameRoutingProvider).onLeaveRequested(context);
+
+  /// Saves the run as it stands, for when the app is about to be put away.
+  void persist() =>
+      unawaited(_save(SavedRun(mode: state.mode, run: state.run)));
 
   /// Plays the same mode again from its first pick: the same daily run, even
   /// past midnight, or a new practice run.
@@ -79,7 +97,7 @@ class GameNotifier extends _$GameNotifier {
 
   void _apply(Transition transition) {
     final (run, events) = transition;
-    final ended = !_isOver(state.run) && _isOver(run);
+    final ended = !hasEnded(state.run) && hasEnded(run);
 
     state = state.copyWith(
       lastEvents: events,
@@ -88,9 +106,9 @@ class GameNotifier extends _$GameNotifier {
     );
 
     if (ended) unawaited(_recordEnd(run));
-  }
 
-  bool _isOver(RunState run) => run.phase is WonPhase || run.phase is OverPhase;
+    unawaited(_save(SavedRun(mode: state.mode, run: run)));
+  }
 
   Future<void> _recordEnd(RunState run) async {
     final recordRunEnd = ref.read(recordRunEndProvider);
@@ -112,6 +130,8 @@ class GameNotifier extends _$GameNotifier {
     }
   }
 
+  /// A new run. Not saved until its first action: opening a run by mistake
+  /// and backing out leaves the saved one standing.
   GameUiState _fresh(RunStart start) {
     final (:mode, :seed) = start;
 
@@ -121,5 +141,20 @@ class GameNotifier extends _$GameNotifier {
       moveCount: 0,
       run: _rules.startRun(config: _rules.defaultConfig, seed: seed),
     );
+  }
+
+  Future<void> _save(SavedRun saved) async {
+    final saveRun = ref.read(saveRunProvider);
+
+    try {
+      await saveRun(saved);
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Saving the run failed; it will not resume',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 }

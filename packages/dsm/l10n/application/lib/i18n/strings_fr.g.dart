@@ -86,6 +86,7 @@ class _Translations$home$fr extends Translations$home$en {
 	@override String get title => 'Blockmancer';
 	@override String get tagline => 'Posez des pièces, effacez des lignes, combinez vos jokers.';
 	@override late final _Translations$home$daily$fr daily = _Translations$home$daily$fr._(_root);
+	@override late final _Translations$home$resume$fr resume = _Translations$home$resume$fr._(_root);
 	@override late final _Translations$home$practice$fr practice = _Translations$home$practice$fr._(_root);
 	@override String best({required Object points}) => 'Record : ${points}';
 	@override String get noBest => 'Pas encore de partie';
@@ -214,6 +215,17 @@ class _Translations$home$daily$fr extends Translations$home$daily$en {
 	// Translations
 	@override String get title => 'Partie du jour';
 	@override String get subtitle => 'Les mêmes pièces pour tous aujourd\'hui';
+}
+
+// Path: home.resume
+class _Translations$home$resume$fr extends Translations$home$resume$en {
+	_Translations$home$resume$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Reprendre la partie';
+	@override String get subtitle => 'Reprenez là où vous en étiez';
 }
 
 // Path: home.practice
@@ -472,6 +484,8 @@ extension on TranslationsFr {
 			'home.tagline' => 'Posez des pièces, effacez des lignes, combinez vos jokers.',
 			'home.daily.title' => 'Partie du jour',
 			'home.daily.subtitle' => 'Les mêmes pièces pour tous aujourd\'hui',
+			'home.resume.title' => 'Reprendre la partie',
+			'home.resume.subtitle' => 'Reprenez là où vous en étiez',
 			'home.practice.title' => 'Entraînement',
 			'home.practice.subtitle' => 'Une partie neuve à chaque fois',
 			'home.best' => ({required Object points}) => 'Record : ${points}',

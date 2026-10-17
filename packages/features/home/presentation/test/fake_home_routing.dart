@@ -6,6 +6,9 @@ final class FakeHomeRouting implements HomeRouting {
   final calls = <String>[];
 
   @override
+  void onContinueRequested(BuildContext context) => calls.add('continue');
+
+  @override
   void onDailyRequested(BuildContext context) => calls.add('daily');
 
   @override

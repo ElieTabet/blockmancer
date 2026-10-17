@@ -41,6 +41,10 @@ void main() {
       isA<SharedPreferencesBestScores>(),
     );
     expect(container.read(game.clockProvider), isA<SystemClock>());
+    expect(
+      container.read(game.runStoreProvider),
+      isA<SharedPreferencesRunStore>(),
+    );
   });
 
   // The day is the game's to decide and the seed the engine's: this is the one

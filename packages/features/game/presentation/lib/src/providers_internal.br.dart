@@ -11,6 +11,11 @@ part 'providers_internal.br.g.dart';
 GameLaunch gameLaunch(Ref ref) =>
     throw UnimplementedError('gameLaunchProvider is scoped by GamePage');
 
+/// The saved run this screen resumes, loaded by `GamePage` before the game
+/// starts; null for any other launch.
+@Riverpod(dependencies: [])
+SavedRun? resumedRun(Ref ref) => null;
+
 /// Whether the tray piece at [index] fits anywhere — cached, so the board scan
 /// runs once per change of the board or the tray, not in a widget's selector.
 @Riverpod(dependencies: [GameNotifier])

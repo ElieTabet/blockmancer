@@ -141,3 +141,44 @@ final class GameRulesProvider
 }
 
 String _$gameRulesHash() => r'aedb42ba0debe7407ed8cfe4af33bf6cc721b26f';
+
+@ProviderFor(runStore)
+final runStoreProvider = RunStoreProvider._();
+
+final class RunStoreProvider
+    extends $FunctionalProvider<RunStore, RunStore, RunStore>
+    with $Provider<RunStore> {
+  RunStoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'runStoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$runStoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<RunStore> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RunStore create(Ref ref) {
+    return runStore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RunStore value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RunStore>(value),
+    );
+  }
+}
+
+String _$runStoreHash() => r'812affa06697708f46f9b20eec5dc0fedf0be838';

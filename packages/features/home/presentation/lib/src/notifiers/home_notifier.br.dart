@@ -10,6 +10,9 @@ class HomeNotifier extends _$HomeNotifier {
   @override
   void build() {}
 
+  void openContinue(BuildContext context) =>
+      ref.read(homeRoutingProvider).onContinueRequested(context);
+
   void openDaily(BuildContext context) =>
       ref.read(homeRoutingProvider).onDailyRequested(context);
 

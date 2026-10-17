@@ -10,6 +10,7 @@ ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
       bestScores: (ref) => scores ?? FakeBestScores(),
       clock: (ref) => clock,
       gameRules: (ref) => const DailySeedRules(),
+      runStore: (ref) => FakeRunStore(),
     ),
   );
   addTearDown(container.dispose);

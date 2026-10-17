@@ -8,6 +8,10 @@ final class HomeRoutingImpl implements HomeRouting {
   const HomeRoutingImpl();
 
   @override
+  void onContinueRequested(BuildContext context) =>
+      AutoRouter.of(context).push(GameRoute(launch: .resume));
+
+  @override
   void onDailyRequested(BuildContext context) =>
       AutoRouter.of(context).push(GameRoute(launch: .daily));
 

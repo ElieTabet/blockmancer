@@ -75,11 +75,13 @@ List<Override> featureBindingOverrides({
     bestScores: (ref) => const SharedPreferencesBestScores(),
     clock: (ref) => const SystemClock(),
     gameRules: (ref) => const BlockmancerEngine(),
+    runStore: (ref) => const SharedPreferencesRunStore(),
   ),
   ...game_ui.bindProviders(rewardedAction: (ref) => const RewardedAds().show),
-  // Home shows the game's bests without knowing the game.
+  // Home shows the game's bests and saved run without knowing the game.
   ...home_ui.bindProviders(
     dailyBest: (ref) => ref.watch(game.todaysDailyBestProvider.future),
+    hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     practiceBest: (ref) =>
         ref.watch(game.bestScoreProvider(const .practice()).future),
   ),

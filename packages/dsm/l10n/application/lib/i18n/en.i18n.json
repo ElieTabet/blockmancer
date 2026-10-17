@@ -132,6 +132,10 @@
       "title": "Daily run",
       "subtitle": "Same pieces for everyone today"
     },
+    "resume": {
+      "title": "Continue run",
+      "subtitle": "Pick up where you left off"
+    },
     "practice": {
       "title": "Practice",
       "subtitle": "A new run every time"

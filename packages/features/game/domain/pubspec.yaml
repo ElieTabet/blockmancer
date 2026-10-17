@@ -1,5 +1,5 @@
 name: game_domain
-description: "game domain layer — the run's mode, its best scores and the rewarded revive, behind slots the composition layer fills. The rules themselves are shared_domain's GameRules, injected."
+description: "game domain layer — the run's mode and seed, its best scores and the run saved to resume, behind slots the composition layer fills. The rules themselves are shared_domain's GameRules, injected."
 publish_to: none
 resolution: workspace
 

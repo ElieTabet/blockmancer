@@ -1,5 +1,6 @@
 import 'package:game_domain/src/contracts/best_scores.dart';
 import 'package:game_domain/src/contracts/clock.dart';
+import 'package:game_domain/src/contracts/run_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -24,4 +25,9 @@ Clock clock(Ref ref) => throw UnimplementedError(
 @riverpod
 GameRules gameRules(Ref ref) => throw UnimplementedError(
   'gameRulesProvider must be overridden by the composition layer',
+);
+
+@riverpod
+RunStore runStore(Ref ref) => throw UnimplementedError(
+  'runStoreProvider must be overridden by the composition layer',
 );

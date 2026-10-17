@@ -18,6 +18,8 @@ void main() {
     FakeBestScores? bestScores,
     GameLaunch launch = .daily,
     RewardedActionFun? rewardedAction,
+    SavedRun? resumed,
+    FakeRunStore? runStore,
   }) {
     final container = ProviderContainer(
       overrides: gameOverrides(
@@ -25,6 +27,8 @@ void main() {
         bestScores: bestScores,
         launch: launch,
         rewardedAction: rewardedAction,
+        resumed: resumed,
+        runStore: runStore,
       ),
     );
     addTearDown(container.dispose);
@@ -448,5 +452,116 @@ void main() {
         expect(game.read(gameProvider).record, isNull);
       },
     );
+  });
+
+  group('saving the run', () {
+    test('opening a run keeps the saved one until its first action', () async {
+      // Given
+      final saved = SavedRun(
+        mode: const .practice(),
+        run: runIn(const .playing()),
+      );
+      final store = FakeRunStore()..saved = saved;
+
+      // When
+      container(runStore: store).read(gameProvider);
+      await pumpEventQueue();
+
+      // Then
+      expect(store.saved, saved);
+    });
+
+    test("a new run's first pick replaces the saved one", () async {
+      // Given
+      final store = FakeRunStore()
+        ..saved = SavedRun(
+          mode: const .practice(),
+          run: runIn(const .playing()),
+        );
+      final game = container(runStore: store);
+      final picked = runIn(const .playing(), jokers: const [.twin]);
+      rules.next = (picked, const []);
+
+      // When
+      game.read(gameProvider.notifier).pickJoker(.twin);
+      await pumpEventQueue();
+
+      // Then
+      expect(store.saved, SavedRun(mode: testDay, run: picked));
+    });
+
+    test('every move is saved as it leaves the run', () async {
+      // Given
+      final store = FakeRunStore();
+      final game = container(runStore: store);
+      final after = runIn(const .playing(), score: 9);
+      rules.next = (after, const []);
+
+      // When
+      game
+          .read(gameProvider.notifier)
+          .place(anchor: const Cell(col: 0, row: 0), trayIndex: 0);
+      await pumpEventQueue();
+
+      // Then
+      expect(store.saved, SavedRun(mode: testDay, run: after));
+    });
+
+    test('a finished run is forgotten', () async {
+      // Given
+      final store = FakeRunStore();
+      final game = container(runStore: store);
+      rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 0)]);
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      expect(store.saved, isNull);
+    });
+
+    test('putting the app away saves the run as it stands', () async {
+      // Given
+      final store = FakeRunStore();
+      final game = container(runStore: store);
+
+      // When
+      game.read(gameProvider.notifier).persist();
+      await pumpEventQueue();
+
+      // Then
+      expect(store.saved, SavedRun(mode: testDay, run: rules.start));
+    });
+  });
+
+  group('resuming', () {
+    test('picks up the saved run where it stood', () {
+      // Given
+      final saved = SavedRun(
+        mode: const .practice(),
+        run: runIn(const .playing(), score: 640, storedMult: 6),
+      );
+
+      // When
+      final state = container(
+        launch: .resume,
+        resumed: saved,
+      ).read(gameProvider);
+
+      // Then
+      expect(state.run, saved.run);
+      expect(state.mode, const GameMode.practice());
+      expect(rules.calls, isEmpty);
+    });
+
+    test("a save that couldn't be read starts today's run instead", () {
+      // Given / When
+      final state = container(launch: .resume).read(gameProvider);
+
+      // Then
+      expect(state.mode, testDay);
+      expect(rules.calls, ['startRun 1']);
+    });
   });
 }

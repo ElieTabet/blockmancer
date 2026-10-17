@@ -132,6 +132,10 @@
       "title": "Partie du jour",
       "subtitle": "Les mêmes pièces pour tous aujourd'hui"
     },
+    "resume": {
+      "title": "Reprendre la partie",
+      "subtitle": "Reprenez là où vous en étiez"
+    },
     "practice": {
       "title": "Entraînement",
       "subtitle": "Une partie neuve à chaque fois"

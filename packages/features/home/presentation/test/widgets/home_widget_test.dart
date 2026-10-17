@@ -11,6 +11,7 @@ import '../fake_home_routing.dart';
 Future<FakeHomeRouting> _pumpHome(
   WidgetTester tester, {
   int? dailyBest,
+  bool hasSavedRun = false,
   int? practiceBest,
 }) async {
   final routing = FakeHomeRouting();
@@ -20,6 +21,7 @@ Future<FakeHomeRouting> _pumpHome(
       overrides: [
         ...bindProviders(
           dailyBest: (ref) async => dailyBest,
+          hasSavedRun: (ref) async => hasSavedRun,
           practiceBest: (ref) async => practiceBest,
         ),
         ...bindRoutingProviders(homeRouting: (ref) => routing),
@@ -60,13 +62,32 @@ void main() {
     expect(find.text('Best: 900'), findsOneWidget);
   });
 
+  testWidgets('a saved run is offered to continue', (tester) async {
+    // Given / When
+    await _pumpHome(tester, hasSavedRun: true);
+
+    // Then
+    expect(find.text('Continue run'), findsOneWidget);
+  });
+
+  testWidgets('nothing is offered to continue when no run is saved', (
+    tester,
+  ) async {
+    // Given / When
+    await _pumpHome(tester);
+
+    // Then
+    expect(find.text('Continue run'), findsNothing);
+  });
+
   for (final (card, call) in const [
+    ('Continue run', 'continue'),
     ('Daily run', 'daily'),
     ('Practice', 'practice'),
   ]) {
-    testWidgets('tapping $card starts that run', (tester) async {
+    testWidgets('tapping $card opens that run', (tester) async {
       // Given
-      final routing = await _pumpHome(tester);
+      final routing = await _pumpHome(tester, hasSavedRun: true);
 
       // When
       await tester.tap(find.text(card));

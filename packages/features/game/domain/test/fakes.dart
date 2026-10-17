@@ -2,6 +2,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 export 'fake_best_scores.dart';
+export 'fake_run_store.dart';
 
 /// A clock at [current], which a test may move.
 final class FakeClock implements Clock {
@@ -25,3 +26,36 @@ final class DailySeedRules implements GameRules {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
+
+const _config = RunConfig(
+  offerCount: 3,
+  partnerBias: 0.75,
+  revivePieces: 3,
+  reviveRows: 2,
+  revivesPerRun: 1,
+  rounds: [RoundSpec(isBoss: true, pieces: 14, stones: 0, target: 250)],
+  traySize: 3,
+);
+
+/// A practice run in [phase].
+SavedRun savedIn(RunPhase phase) => SavedRun(
+  mode: const .practice(),
+  run: RunState(
+    board: Board.empty(),
+    config: _config,
+    jokers: const [],
+    phase: phase,
+    pickIndex: 1,
+    piecesLeft: 5,
+    piecesRngState: 0,
+    revivesUsed: 0,
+    roundIndex: 0,
+    runTotal: 0,
+    score: 40,
+    seed: 7,
+    stonesRngState: 0,
+    storedMult: 0,
+    streak: 0,
+    tray: const [0, 1, 2],
+  ),
+);

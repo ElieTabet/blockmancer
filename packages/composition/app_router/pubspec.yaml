@@ -24,6 +24,7 @@ dev_dependencies:
   # Test-only: the composition tests mount the real game tab, rules included.
   blockmancer_engine: any
   game_domain: any
+  shared_domain: any
   flutter_test:
     sdk: flutter
   build_runner: 2.16.0

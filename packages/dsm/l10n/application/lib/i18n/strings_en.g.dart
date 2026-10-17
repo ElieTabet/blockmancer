@@ -109,6 +109,7 @@ class Translations$home$en {
 	String get tagline => 'Place pieces, clear lines, build joker combos.';
 
 	late final Translations$home$daily$en daily = Translations$home$daily$en.internal(_root);
+	late final Translations$home$resume$en resume = Translations$home$resume$en.internal(_root);
 	late final Translations$home$practice$en practice = Translations$home$practice$en.internal(_root);
 
 	/// en: 'Best: $points'
@@ -331,6 +332,21 @@ class Translations$home$daily$en {
 
 	/// en: 'Same pieces for everyone today'
 	String get subtitle => 'Same pieces for everyone today';
+}
+
+// Path: home.resume
+class Translations$home$resume$en {
+	Translations$home$resume$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Continue run'
+	String get title => 'Continue run';
+
+	/// en: 'Pick up where you left off'
+	String get subtitle => 'Pick up where you left off';
 }
 
 // Path: home.practice
@@ -649,6 +665,8 @@ extension on Translations {
 			'home.tagline' => 'Place pieces, clear lines, build joker combos.',
 			'home.daily.title' => 'Daily run',
 			'home.daily.subtitle' => 'Same pieces for everyone today',
+			'home.resume.title' => 'Continue run',
+			'home.resume.subtitle' => 'Pick up where you left off',
 			'home.practice.title' => 'Practice',
 			'home.practice.subtitle' => 'A new run every time',
 			'home.best' => ({required Object points}) => 'Best: ${points}',

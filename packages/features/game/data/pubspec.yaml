@@ -1,5 +1,5 @@
 name: game_data
-description: "game data layer — the run's best scores on the device, through shared_preferences, and the device's clock."
+description: "game data layer — the run's best scores and the run saved to resume, on the device through shared_preferences, and the device's clock."
 publish_to: none
 resolution: workspace
 
@@ -11,8 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
   game_domain: any
+  json_annotation: ^4.9.0
+  shared_domain: any
   shared_preferences: ^2.5.3
+  timber: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: 2.16.0
+  json_serializable: ^6.9.4

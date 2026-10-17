@@ -12,6 +12,12 @@ Future<int?> dailyBest(Ref ref) => throw UnimplementedError(
   'dailyBestProvider must be overridden by the composition layer',
 );
 
+/// Whether a run is saved to pick up again.
+@riverpod
+Future<bool> hasSavedRun(Ref ref) => throw UnimplementedError(
+  'hasSavedRunProvider must be overridden by the composition layer',
+);
+
 @riverpod
 HomeRouting homeRouting(Ref ref) => throw UnimplementedError(
   'homeRoutingProvider must be overridden by the composition layer (app_router)',

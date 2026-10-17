@@ -32,6 +32,20 @@ final class FakeBestScores implements game.BestScores {
   Future<void> save(game.GameMode mode, int total) async => saved[mode] = total;
 }
 
+/// The saved run kept in memory.
+final class FakeRunStore implements game.RunStore {
+  game.SavedRun? saved;
+
+  @override
+  Future<void> clear() async => saved = null;
+
+  @override
+  Future<game.SavedRun?> load() async => saved;
+
+  @override
+  Future<void> save(game.SavedRun run) async => saved = run;
+}
+
 /// A clock stopped at noon on [testDay], UTC.
 final class FakeClock implements game.Clock {
   const FakeClock();
@@ -55,14 +69,18 @@ List<Override> gameOverrides(
   game.BestScores? bestScores,
   game.GameLaunch launch = .daily,
   RewardedActionFun? rewardedAction,
+  game.SavedRun? resumed,
   GameRouting? routing,
+  game.RunStore? runStore,
 }) => [
   ...game.bindProviders(
     bestScores: (ref) => bestScores ?? FakeBestScores(),
     clock: (ref) => const FakeClock(),
     gameRules: (ref) => rules,
+    runStore: (ref) => runStore ?? FakeRunStore(),
   ),
   ...bindProviders(rewardedAction: (ref) => rewardedAction ?? () async => true),
   ...bindRoutingProviders(gameRouting: (ref) => routing ?? FakeGameRouting()),
   gameLaunchProvider.overrideWithValue(launch),
+  resumedRunProvider.overrideWithValue(resumed),
 ];

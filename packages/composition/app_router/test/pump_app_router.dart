@@ -4,6 +4,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart' show RunStore;
 import 'package:l10n_application/l10n_application.dart';
 
 import 'stub_deep_route.dart';
@@ -15,6 +16,7 @@ import 'stub_features.dart';
 Future<AppRouter> pumpAppRouter(
   WidgetTester tester, {
   required List<PageRouteInfo<dynamic>> deepLink,
+  RunStore? runStore,
 }) async {
   tester.view.physicalSize = const Size(1170, 2532); // iPhone 13 Pro
   tester.view.devicePixelRatio = 3.0;
@@ -24,7 +26,10 @@ Future<AppRouter> pumpAppRouter(
 
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [...routingOverrides(), ...stubFeatures()],
+      overrides: [
+        ...routingOverrides(),
+        ...stubFeatures(runStore: runStore),
+      ],
       child: TranslationProvider(
         child: MaterialApp.router(
           theme: DSTheme.instance.lightTheme,

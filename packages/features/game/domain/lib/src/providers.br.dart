@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:game_domain/src/behaviors/record_run_end_behavior.dart';
+import 'package:game_domain/src/behaviors/save_run_behavior.dart';
 import 'package:game_domain/src/contracts/best_scores.dart';
 import 'package:game_domain/src/contracts/clock.dart';
+import 'package:game_domain/src/contracts/run_store.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
 import 'package:game_domain/src/entities/game_mode.br.dart';
+import 'package:game_domain/src/entities/run_end.dart';
 import 'package:game_domain/src/entities/run_end_record.br.dart';
+import 'package:game_domain/src/entities/saved_run.br.dart';
 import 'package:game_domain/src/providers_di.br.dart' as di;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -22,7 +26,14 @@ typedef RunStart = ({GameMode mode, int seed});
 
 /// The run [GameLaunch] asks for, as of now: today's daily run, or a practice
 /// run on a fresh seed. A function, so each launch reads the clock afresh.
+/// A resume normally starts nothing — it loads the saved run — so it only gets
+/// here when the save was lost, and starts today's daily instead.
 typedef RunStartForFun = RunStart Function(GameLaunch launch);
+
+typedef LoadSavedRunFun = Future<SavedRun?> Function();
+
+/// Keeps [run] as the one to resume, or forgets it once it is over.
+typedef SaveRunFun = Future<void> Function(SavedRun run);
 
 /// The best run total of [mode] on this device, or null before its first run.
 @riverpod
@@ -52,12 +63,44 @@ RunStartForFun runStartFor(Ref ref) {
   final rules = ref.watch(di.gameRulesProvider);
 
   return (launch) => switch (launch) {
-    .daily => dailyRunOn(clock.now(), rules: rules),
+    .daily || .resume => dailyRunOn(clock.now(), rules: rules),
     // Any 32 bits will do: practice runs are not meant to be replayed.
     .practice => (
       mode: const .practice(),
       seed: clock.now().microsecondsSinceEpoch & 0xFFFFFFFF,
     ),
+  };
+}
+
+/// Whether a run is saved to resume.
+@riverpod
+Future<bool> hasSavedRun(Ref ref) async =>
+    await ref.watch(loadSavedRunProvider)() != null;
+
+/// The run saved on this device, or null when there is none to resume.
+/// Throws when the device's storage can't be reached at all.
+@riverpod
+LoadSavedRunFun loadSavedRun(Ref ref) => ref.watch(di.runStoreProvider).load;
+
+/// See [SaveRunBehavior].
+///
+/// Kept alive so one behavior orders every write, and because it refreshes
+/// [hasSavedRunProvider] after an await, by when an auto-disposed provider's
+/// ref may be gone.
+@Riverpod(keepAlive: true)
+SaveRunFun saveRun(Ref ref) {
+  final save = SaveRunBehavior(store: ref.watch(di.runStoreProvider));
+
+  return (saved) async {
+    await save(saved);
+
+    // Only whether there is a run to resume is read from it, and that only
+    // changes when a run starts or ends.
+    final known = ref.read(hasSavedRunProvider).value;
+
+    if (known == null || known == hasEnded(saved.run)) {
+      ref.invalidate(hasSavedRunProvider);
+    }
   };
 }
 
@@ -96,8 +139,10 @@ List<Override> bindProviders({
   required BestScores Function(Ref ref) bestScores,
   required Clock Function(Ref ref) clock,
   required GameRules Function(Ref ref) gameRules,
+  required RunStore Function(Ref ref) runStore,
 }) => [
   di.bestScoresProvider.overrideWith(bestScores),
   di.clockProvider.overrideWith(clock),
   di.gameRulesProvider.overrideWith(gameRules),
+  di.runStoreProvider.overrideWith(runStore),
 ];

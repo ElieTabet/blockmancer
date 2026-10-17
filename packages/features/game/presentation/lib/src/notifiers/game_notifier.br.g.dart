@@ -10,16 +10,22 @@ part of 'game_notifier.br.dart';
 // ignore_for_file: type=lint, type=warning
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
+///
+/// What it plays is saved after every action, so a killed app resumes it.
 
 @ProviderFor(GameNotifier)
 final gameProvider = GameNotifierProvider._();
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
+///
+/// What it plays is saved after every action, so a killed app resumes it.
 final class GameNotifierProvider
     extends $NotifierProvider<GameNotifier, GameUiState> {
   /// The run on screen. Every rule is [GameRules]': this only forwards the
   /// player's actions and keeps what each one did.
+  ///
+  /// What it plays is saved after every action, so a killed app resumes it.
   GameNotifierProvider._()
     : super(
         from: null,
@@ -27,13 +33,18 @@ final class GameNotifierProvider
         retry: null,
         name: r'gameProvider',
         isAutoDispose: true,
-        dependencies: <ProviderOrFamily>[gameLaunchProvider],
+        dependencies: <ProviderOrFamily>[
+          gameLaunchProvider,
+          resumedRunProvider,
+        ],
         $allTransitiveDependencies: <ProviderOrFamily>[
           GameNotifierProvider.$allTransitiveDependencies0,
+          GameNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
   static final $allTransitiveDependencies0 = gameLaunchProvider;
+  static final $allTransitiveDependencies1 = resumedRunProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameNotifierHash();
@@ -51,10 +62,12 @@ final class GameNotifierProvider
   }
 }
 
-String _$gameNotifierHash() => r'becf754c34fb6be7a8de26ae11d43c2c2cd74875';
+String _$gameNotifierHash() => r'a45eba0609618d90555b9b74262f89573e9361b3';
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
+///
+/// What it plays is saved after every action, so a killed app resumes it.
 
 abstract class _$GameNotifier extends $Notifier<GameUiState> {
   GameUiState build();

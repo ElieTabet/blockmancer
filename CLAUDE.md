@@ -38,7 +38,7 @@ blockmancer/
 │   ├── plugins/          # Dev tooling packages
 │   │   └── custom_lints/     # Native analyzer-plugin — alphabetical-ordering lints + quick-fixes (IDE-only)
 │   └── features/         # Feature packages, split by layer
-│       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed and best scores (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
+│       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
 │       ├── home/presentation/                    # home_presentation — the first tab: Daily run and Practice, each with its best (read through slots)
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
@@ -268,6 +268,26 @@ engine's events and never recomputes a rule.
   day and asks the rules for that day's seed (`dailyRunOn`).
 - **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and
   in Chrome (`melos run test-engine-web`).
+
+## Saving and resuming
+
+One run is saved on the device, so a killed app picks it up where it stood.
+
+- **When:** `GameNotifier` saves after every action (placing, picking, reviving, ending), and
+  `GameWidget`'s `AppLifecycleListener` saves on pause. A won or ended run clears the save instead
+  (`game_domain`'s `SaveRunBehavior`), so it is never offered again. A new run is not saved until its
+  first action: opening one by mistake and backing out leaves the saved run standing. Writes land in
+  the order they were made, so a slow save can't land after the clear that followed it.
+- **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
+  through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
+  wire format. The schema has `version: 1`; `migrate(json)` is where an older version is brought up
+  to date (a no-op today), and a save that can't be read (corrupt, unknown version, a joker this
+  build lacks) is treated as no save.
+- **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes
+  `GameRoute(launch: .resume)`. `GamePage` loads the save **once** (`loadSavedRun`), before the game
+  starts, and scopes it in as `resumedRunProvider`. If the save can't be loaded it plays today's
+  daily, which saves nothing until the player acts. Reading it from a provider instead would reload it after
+  every move, because each save refreshes `hasSavedRun`, and the reload would restart the game.
 
 ## The bottom edge
 

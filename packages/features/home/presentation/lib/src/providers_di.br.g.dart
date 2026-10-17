@@ -46,6 +46,44 @@ final class DailyBestProvider
 
 String _$dailyBestHash() => r'99f6b064bcfa6424ae4bba7dd926d2515c872a39';
 
+/// Whether a run is saved to pick up again.
+
+@ProviderFor(hasSavedRun)
+final hasSavedRunProvider = HasSavedRunProvider._();
+
+/// Whether a run is saved to pick up again.
+
+final class HasSavedRunProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether a run is saved to pick up again.
+  HasSavedRunProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hasSavedRunProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$hasSavedRunHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return hasSavedRun(ref);
+  }
+}
+
+String _$hasSavedRunHash() => r'918350938391fcd7292c4d3c2229a328a2bfd023';
+
 @ProviderFor(homeRouting)
 final homeRoutingProvider = HomeRoutingProvider._();
 

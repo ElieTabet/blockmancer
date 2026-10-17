@@ -31,12 +31,15 @@ final class DragNotifierProvider
         $allTransitiveDependencies: <ProviderOrFamily>[
           DragNotifierProvider.$allTransitiveDependencies0,
           DragNotifierProvider.$allTransitiveDependencies1,
+          DragNotifierProvider.$allTransitiveDependencies2,
         ],
       );
 
   static final $allTransitiveDependencies0 = gameProvider;
   static final $allTransitiveDependencies1 =
       GameNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameNotifierProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$dragNotifierHash();

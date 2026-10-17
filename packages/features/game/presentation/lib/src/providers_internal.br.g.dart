@@ -57,6 +57,55 @@ final class GameLaunchProvider
 
 String _$gameLaunchHash() => r'e51edee4c82db8687ffb8ccaa510735fef6fa061';
 
+/// The saved run this screen resumes, loaded by `GamePage` before the game
+/// starts; null for any other launch.
+
+@ProviderFor(resumedRun)
+final resumedRunProvider = ResumedRunProvider._();
+
+/// The saved run this screen resumes, loaded by `GamePage` before the game
+/// starts; null for any other launch.
+
+final class ResumedRunProvider
+    extends $FunctionalProvider<SavedRun?, SavedRun?, SavedRun?>
+    with $Provider<SavedRun?> {
+  /// The saved run this screen resumes, loaded by `GamePage` before the game
+  /// starts; null for any other launch.
+  ResumedRunProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'resumedRunProvider',
+        isAutoDispose: true,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$resumedRunHash();
+
+  @$internal
+  @override
+  $ProviderElement<SavedRun?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SavedRun? create(Ref ref) {
+    return resumedRun(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SavedRun? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SavedRun?>(value),
+    );
+  }
+}
+
+String _$resumedRunHash() => r'62ee5be98fbd8c4707292ae61a6e74840dd76e42';
+
 /// Whether the tray piece at [index] fits anywhere — cached, so the board scan
 /// runs once per change of the board or the tray, not in a widget's selector.
 
@@ -84,6 +133,8 @@ final class TrayFitsProvider extends $FunctionalProvider<bool, bool, bool>
   static final $allTransitiveDependencies0 = gameProvider;
   static final $allTransitiveDependencies1 =
       GameNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameNotifierProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$trayFitsHash();
@@ -140,6 +191,7 @@ final class TrayFitsFamily extends $Family
         $allTransitiveDependencies: <ProviderOrFamily>[
           TrayFitsProvider.$allTransitiveDependencies0,
           TrayFitsProvider.$allTransitiveDependencies1,
+          TrayFitsProvider.$allTransitiveDependencies2,
         ],
         isAutoDispose: true,
       );

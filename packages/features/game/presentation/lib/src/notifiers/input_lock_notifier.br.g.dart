@@ -34,12 +34,15 @@ final class InputLockNotifierProvider
         $allTransitiveDependencies: <ProviderOrFamily>[
           InputLockNotifierProvider.$allTransitiveDependencies0,
           InputLockNotifierProvider.$allTransitiveDependencies1,
+          InputLockNotifierProvider.$allTransitiveDependencies2,
         ],
       );
 
   static final $allTransitiveDependencies0 = gameProvider;
   static final $allTransitiveDependencies1 =
       GameNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameNotifierProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$inputLockNotifierHash();

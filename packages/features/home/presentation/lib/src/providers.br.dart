@@ -6,9 +6,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 List<Override> bindProviders({
   required Future<int?> Function(Ref ref) dailyBest,
+  required Future<bool> Function(Ref ref) hasSavedRun,
   required Future<int?> Function(Ref ref) practiceBest,
 }) => [
   di.dailyBestProvider.overrideWith(dailyBest),
+  di.hasSavedRunProvider.overrideWith(hasSavedRun),
   di.practiceBestProvider.overrideWith(practiceBest),
 ];
 

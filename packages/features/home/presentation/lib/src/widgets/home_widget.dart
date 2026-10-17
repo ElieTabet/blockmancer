@@ -41,8 +41,15 @@ final class HomeWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: DSSpace.medium),
-                const ModeCard(mode: .daily),
-                const ModeCard(mode: .practice),
+                const Column(
+                  crossAxisAlignment: .stretch,
+                  children: [
+                    ContinueCard(),
+                    ModeCard(mode: .daily),
+                    SizedBox(height: DSSpace.small),
+                    ModeCard(mode: .practice),
+                  ],
+                ),
               ],
             ),
           ),

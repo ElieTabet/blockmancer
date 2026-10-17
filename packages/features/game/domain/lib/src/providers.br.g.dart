@@ -181,7 +181,153 @@ final class RunStartForProvider
   }
 }
 
-String _$runStartForHash() => r'5038a83d7f5481a4515473007cf902d1673fb522';
+String _$runStartForHash() => r'6d7421d1f4bb18cc87ee845c9b56819b94326a80';
+
+/// Whether a run is saved to resume.
+
+@ProviderFor(hasSavedRun)
+final hasSavedRunProvider = HasSavedRunProvider._();
+
+/// Whether a run is saved to resume.
+
+final class HasSavedRunProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether a run is saved to resume.
+  HasSavedRunProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hasSavedRunProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$hasSavedRunHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return hasSavedRun(ref);
+  }
+}
+
+String _$hasSavedRunHash() => r'305e7ff8111ee1c05fbc7d7c9dc06a729a67539a';
+
+/// The run saved on this device, or null when there is none to resume.
+/// Throws when the device's storage can't be reached at all.
+
+@ProviderFor(loadSavedRun)
+final loadSavedRunProvider = LoadSavedRunProvider._();
+
+/// The run saved on this device, or null when there is none to resume.
+/// Throws when the device's storage can't be reached at all.
+
+final class LoadSavedRunProvider
+    extends
+        $FunctionalProvider<LoadSavedRunFun, LoadSavedRunFun, LoadSavedRunFun>
+    with $Provider<LoadSavedRunFun> {
+  /// The run saved on this device, or null when there is none to resume.
+  /// Throws when the device's storage can't be reached at all.
+  LoadSavedRunProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'loadSavedRunProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$loadSavedRunHash();
+
+  @$internal
+  @override
+  $ProviderElement<LoadSavedRunFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  LoadSavedRunFun create(Ref ref) {
+    return loadSavedRun(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LoadSavedRunFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LoadSavedRunFun>(value),
+    );
+  }
+}
+
+String _$loadSavedRunHash() => r'bb7af466bee2c0fd1d283086ab75d3006994d760';
+
+/// See [SaveRunBehavior].
+///
+/// Kept alive so one behavior orders every write, and because it refreshes
+/// [hasSavedRunProvider] after an await, by when an auto-disposed provider's
+/// ref may be gone.
+
+@ProviderFor(saveRun)
+final saveRunProvider = SaveRunProvider._();
+
+/// See [SaveRunBehavior].
+///
+/// Kept alive so one behavior orders every write, and because it refreshes
+/// [hasSavedRunProvider] after an await, by when an auto-disposed provider's
+/// ref may be gone.
+
+final class SaveRunProvider
+    extends $FunctionalProvider<SaveRunFun, SaveRunFun, SaveRunFun>
+    with $Provider<SaveRunFun> {
+  /// See [SaveRunBehavior].
+  ///
+  /// Kept alive so one behavior orders every write, and because it refreshes
+  /// [hasSavedRunProvider] after an await, by when an auto-disposed provider's
+  /// ref may be gone.
+  SaveRunProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'saveRunProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$saveRunHash();
+
+  @$internal
+  @override
+  $ProviderElement<SaveRunFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SaveRunFun create(Ref ref) {
+    return saveRun(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SaveRunFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SaveRunFun>(value),
+    );
+  }
+}
+
+String _$saveRunHash() => r'ef65f025fc5e0f6ca6b8bc917a8a931b544197dd';
 
 /// Today's daily best, renewed at the next UTC midnight when the day it was
 /// read for is over.

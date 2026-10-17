@@ -21,6 +21,7 @@ Future<FakeGameRules> pumpGame(
   GameLaunch launch = .daily,
   RewardedActionFun? rewardedAction,
   GameRouting? routing,
+  RunStore? runStore,
   Size size = const Size(390, 844),
 }) async {
   tester.view.physicalSize = size * 3;
@@ -37,6 +38,7 @@ Future<FakeGameRules> pumpGame(
         launch: launch,
         rewardedAction: rewardedAction,
         routing: routing,
+        runStore: runStore,
       ),
       child: TranslationProvider(
         child: MaterialApp(
