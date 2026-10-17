@@ -720,9 +720,10 @@ question yet — the privacy policy and App Store privacy details are what discl
   of boot. The package only obeys.
 - **Native defaults are off** — `FIREBASE_ANALYTICS_COLLECTION_ENABLED` /
   `FirebaseCrashlyticsCollectionEnabled` in `Info.plist`, the matching `meta-data` in the Android
-  manifest — so nothing goes out before Dart has set the switch. No advertising id: Android
-  removes the `AD_ID` permission; iOS links the full Analytics SDK but never asks for tracking
-  permission, so the OS hands it an all-zero IDFA. Don't retry `FIREBASE_ANALYTICS_WITHOUT_ADID`:
+  manifest — so nothing goes out before Dart has set the switch. No advertising id until phase 3
+  (AdMob): Android removes the `AD_ID` permission; iOS links the full Analytics SDK but never asks
+  for tracking permission, so the OS hands it an all-zero IDFA. The `ACCESS_ADSERVICES_*`
+  permissions Firebase Analytics merges into the Android manifest stay, since AdMob will use them. Don't retry `FIREBASE_ANALYTICS_WITHOUT_ADID`:
   firebase_analytics' `Package.swift` reads it, but Xcode doesn't pass environment variables to
   manifest evaluation (only the `swift` CLI does), so it never takes effect in a Flutter build.
 - **Popups take turns.** Anything the app raises on its own goes through `RootPopups` in
