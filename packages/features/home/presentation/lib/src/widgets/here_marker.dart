@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_presentation/src/providers_di.br.dart';
 import 'package:home_presentation/src/providers_internal.br.dart';
+import 'package:home_presentation/src/widgets/map_celebration_director.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// "You are here": a pin over [world] once the player has reached it,
-/// bobbing unless motion is reduced.
+/// bobbing unless motion is reduced, and fading in as a world just opened
+/// pops open.
 final class HereMarker extends ConsumerWidget {
   const HereMarker({required this.world, super.key});
 
@@ -34,7 +36,18 @@ final class HereMarker extends ConsumerWidget {
       ),
     );
 
-    return still ? pin : _Bobbing(child: pin);
+    final shown = still ? pin : _Bobbing(child: pin);
+    final scope = MapCelebrationScope.maybeOf(context);
+    final pop = scope?.celebration?.unlockedWorld == world
+        ? scope?.plan?.pop
+        : null;
+
+    return pop == null
+        ? shown
+        : FadeTransition(
+            opacity: CurvedAnimation(parent: scope!.timeline, curve: pop),
+            child: shown,
+          );
   }
 }
 

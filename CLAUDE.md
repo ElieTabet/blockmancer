@@ -410,7 +410,8 @@ for the map to announce them) and `tutorialDone`.
   answers — so the run end can't flash first, nor Play again discard the unlock. A write that
   fails also ends the wait (logged): the end then shows without stars. A run that unlocked
   something shows `UnlockSheet` first — "New world: …" (or "New jokers" when no world opened)
-  and the unlocked jokers' cards (`JokerCard`, the offer card's look) — and its Continue
+  and the unlocked jokers' cards (`JokerCard`, the offer card's look), flipping in one after
+  another once the sheet is up (at once under reduce motion, skipped by a tap) — and its Continue
   (`closeUnlocks`) hands over to the run's end, so Play again stays the last thing on screen.
   `RunEndSheet` then shows the world's three stars (`RunStars`), each with its objective; the new
   ones in amber, popping in one after the other, still under reduce motion. A daily or practice
@@ -445,9 +446,22 @@ header, beside the gear.
   `GameRoute(launch: .world, world: …)`: the widget shows the sheet, as Settings' rows show
   their popups, because a notifier only hands its `BuildContext` to routing.
 - **Smooth.** The trail is one `CustomPainter` behind a `RepaintBoundary`, repainted only when the
-  player gets further; each node watches its own world. The pin's bob is the only per-frame work,
-  in its own layer, and it holds still under the phone's or Settings' reduce motion (home's
-  `reduceMotionSetting` slot).
+  player gets further; each node watches its own world. The pin's bob is the only per-frame work
+  at rest, in its own layer, and it holds still under the phone's or Settings' reduce motion
+  (home's `reduceMotionSetting` slot).
+- **Celebrations, once per event.** `MapCelebrationDirector` (around the map) keeps the
+  progression the map last settled on, in its state, which lives as long as Home: a cold start
+  settles on what it reads. When the progression changes, `celebrationBetween` gives the stars
+  earned and the world opened since, and `CelebrationPlan` lays them on one timeline — the stars
+  one after another, each filling with a burst (`StarBurstPainter`), then the trail's leg drawing
+  into the opened world (`TrailPainter.drawn`), then its badge popping from locked to open with
+  the pin fading in (about 600 ms). It starts only once the map is on screen again
+  (`TickerMode`, plus a beat for the covering route to leave), so a run's end plays it on return;
+  until then the pieces taking part hold how they stood. Reduce motion settles at once, a tap on
+  the map skips to the end (and opens nothing), and once settled nothing replays, whatever
+  rebuilds. Only the trail and the nodes in the celebration animate, each in its own
+  `AnimatedBuilder` under `MapCelebrationScope`. A locked or coming-soon node shakes lightly when
+  tapped (not under reduce motion), and its sheet still opens.
 
 ### Spellbook
 

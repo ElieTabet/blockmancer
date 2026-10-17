@@ -315,6 +315,81 @@ void main() {
     });
   }
 
+  group("the unlock sheet's cards", () {
+    /// The angle [card]'s flip has left to turn, 0 once it is face up.
+    double turnLeft(WidgetTester tester, String card) {
+      final flip = tester.widget<Transform>(
+        find
+            .ancestor(of: find.text(card), matching: find.byType(Transform))
+            .first,
+      );
+
+      return flip.transform.storage[8].abs();
+    }
+
+    Future<void> beatRubble(WidgetTester tester, {required bool still}) async {
+      final rules = await pumpGame(
+        tester,
+        runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+        launch: .world,
+        progressionStore: store,
+        reduceMotion: still,
+        world: .rubble,
+      );
+      rules.next = (
+        runIn(const .won(), runTotal: 3000),
+        const [GameEvent.runWon(total: 3000)],
+      );
+      await tester.tap(find.text('End run'));
+      await tester.pump();
+      await tester.pump();
+    }
+
+    testWidgets('flip in one after another', (tester) async {
+      // Given / When: the sheet up, the first card turning
+      await beatRubble(tester, still: false);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // Then: the first ahead of the second
+      expect(
+        turnLeft(tester, 'Stonemason'),
+        lessThan(turnLeft(tester, 'Quarry')),
+      );
+
+      // When
+      await tester.pumpAndSettle();
+
+      // Then
+      expect(turnLeft(tester, 'Stonemason'), closeTo(0, 1e-9));
+      expect(turnLeft(tester, 'Quarry'), closeTo(0, 1e-9));
+    });
+
+    testWidgets('are face up at once under reduce motion', (tester) async {
+      // Given / When
+      await beatRubble(tester, still: true);
+
+      // Then
+      expect(turnLeft(tester, 'Stonemason'), closeTo(0, 1e-9));
+      expect(turnLeft(tester, 'Quarry'), closeTo(0, 1e-9));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('turn face up at a tap', (tester) async {
+      // Given: the cards still turning
+      await beatRubble(tester, still: false);
+      await tester.pump(const Duration(milliseconds: 350));
+
+      // When
+      await tester.tap(find.text('Stonemason'), warnIfMissed: false);
+      await tester.pump();
+
+      // Then
+      expect(turnLeft(tester, 'Stonemason'), closeTo(0, 1e-9));
+      expect(turnLeft(tester, 'Quarry'), closeTo(0, 1e-9));
+      await tester.pumpAndSettle();
+    });
+  });
+
   testWidgets('a daily run earns no stars, so its end shows none', (
     tester,
   ) async {
