@@ -1,34 +1,50 @@
+import 'package:game_data/src/dtos/profile_dto.br.dart';
+import 'package:game_data/src/shared_preferences_profile.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_domain/shared_domain.dart';
 
-/// One int per mode: a key per daily run's day, one for practice. Past days are
-/// never pruned — a year of them is a few kilobytes.
+/// The profile's bests: one per daily run's day, one for practice.
 final class SharedPreferencesBestScores implements BestScores {
-  const SharedPreferencesBestScores();
+  final SharedPreferencesProfile _profile;
 
-  static const _prefix = 'best.';
+  SharedPreferencesBestScores({required Progression startingProgression})
+    : _profile = SharedPreferencesProfile(
+        startingProgression: startingProgression,
+      );
 
   @override
-  Future<int?> best(GameMode mode) async =>
-      (await SharedPreferences.getInstance()).getInt(_keyOf(mode));
+  Future<int?> best(GameMode mode) async {
+    final bests = (await _profile.read()).bests;
 
-  @override
-  Future<void> clearAll() async {
-    final preferences = await SharedPreferences.getInstance();
-
-    await Future.wait([
-      for (final key in preferences.getKeys())
-        if (key.startsWith(_prefix)) preferences.remove(key),
-    ]);
+    return switch (mode) {
+      DailyMode(:final day) => bests.daily['$day'],
+      PracticeMode() => bests.practice,
+    };
   }
 
   @override
-  Future<void> save(GameMode mode, int total) async {
-    await (await SharedPreferences.getInstance()).setInt(_keyOf(mode), total);
-  }
+  Future<void> clearAll() => _profile.update(
+    (profile) => ProfileDto(
+      bests: const BestsDto(daily: {}),
+      progression: profile.progression,
+      version: profileVersion,
+    ),
+  );
 
-  static String _keyOf(GameMode mode) => switch (mode) {
-    DailyMode(:final day) => '${_prefix}daily.$day',
-    PracticeMode() => '${_prefix}practice',
-  };
+  @override
+  Future<void> save(GameMode mode, int total) => _profile.update((profile) {
+    final bests = profile.bests;
+
+    return ProfileDto(
+      bests: switch (mode) {
+        DailyMode(:final day) => BestsDto(
+          daily: {...bests.daily, '$day': total},
+          practice: bests.practice,
+        ),
+        PracticeMode() => BestsDto(daily: bests.daily, practice: total),
+      },
+      progression: profile.progression,
+      version: profileVersion,
+    );
+  });
 }

@@ -5,12 +5,14 @@ import 'package:game_domain/src/behaviors/record_run_end_behavior.dart';
 import 'package:game_domain/src/behaviors/save_run_behavior.dart';
 import 'package:game_domain/src/contracts/best_scores.dart';
 import 'package:game_domain/src/contracts/clock.dart';
+import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/contracts/run_store.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
 import 'package:game_domain/src/entities/game_mode.br.dart';
 import 'package:game_domain/src/entities/run_end.dart';
 import 'package:game_domain/src/entities/run_end_record.br.dart';
 import 'package:game_domain/src/entities/saved_run.br.dart';
+import 'package:game_domain/src/entities/starting_progression.dart';
 import 'package:game_domain/src/providers_di.br.dart' as di;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -158,14 +160,22 @@ RunStart dailyRunOn(DateTime now, {required GameRules rules}) {
   );
 }
 
+/// What a new profile starts from, worked out from the rules so the storage
+/// never needs to know them.
+@riverpod
+Progression initialProgression(Ref ref) =>
+    startingProgression(ref.watch(di.gameRulesProvider));
+
 List<Override> bindProviders({
   required BestScores Function(Ref ref) bestScores,
   required Clock Function(Ref ref) clock,
   required GameRules Function(Ref ref) gameRules,
+  required ProgressionStore Function(Ref ref) progressionStore,
   required RunStore Function(Ref ref) runStore,
 }) => [
   di.bestScoresProvider.overrideWith(bestScores),
   di.clockProvider.overrideWith(clock),
   di.gameRulesProvider.overrideWith(gameRules),
+  di.progressionStoreProvider.overrideWith(progressionStore),
   di.runStoreProvider.overrideWith(runStore),
 ];

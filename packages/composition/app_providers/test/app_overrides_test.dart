@@ -53,6 +53,10 @@ void main() {
     );
     expect(container.read(game.clockProvider), isA<SystemClock>());
     expect(
+      container.read(game.progressionStoreProvider),
+      isA<SharedPreferencesProgressionStore>(),
+    );
+    expect(
       container.read(game.runStoreProvider),
       isA<SharedPreferencesRunStore>(),
     );

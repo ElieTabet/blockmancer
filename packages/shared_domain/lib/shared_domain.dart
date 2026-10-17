@@ -21,3 +21,6 @@ export 'src/entities/game/run_phase.br.dart';
 export 'src/entities/game/run_state.br.dart';
 export 'src/entities/game/shape.dart';
 export 'src/entities/game/world_id.dart';
+export 'src/entities/progression/progression.br.dart';
+export 'src/entities/progression/world_progress.br.dart';
+export 'src/entities/progression/world_stars.br.dart';

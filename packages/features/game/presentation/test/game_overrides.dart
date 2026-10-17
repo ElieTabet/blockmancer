@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
+import 'package:shared_domain/shared_domain.dart' show Progression;
 import 'package:game_presentation/game_presentation.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
@@ -89,6 +90,7 @@ List<Override> gameOverrides(
     bestScores: (ref) => bestScores ?? FakeBestScores(),
     clock: (ref) => const FakeClock(),
     gameRules: (ref) => rules,
+    progressionStore: (ref) => _MemoryProgressionStore(),
     runStore: (ref) => runStore ?? FakeRunStore(),
   ),
   ...bindProviders(
@@ -104,3 +106,18 @@ List<Override> gameOverrides(
   gameLaunchProvider.overrideWithValue(launch),
   resumedRunProvider.overrideWithValue(resumed),
 ];
+
+/// The progression kept in memory, starting from nothing earned.
+final class _MemoryProgressionStore implements game.ProgressionStore {
+  Progression _saved = const Progression(
+    tutorialDone: false,
+    unlockedJokers: {},
+    worlds: {},
+  );
+
+  @override
+  Future<Progression> load() async => _saved;
+
+  @override
+  Future<void> save(Progression progression) async => _saved = progression;
+}

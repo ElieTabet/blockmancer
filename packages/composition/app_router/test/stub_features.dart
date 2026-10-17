@@ -1,6 +1,7 @@
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
+import 'package:shared_domain/shared_domain.dart' show Progression;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:home_presentation/home_presentation.dart' as home_ui;
 import 'package:settings_domain/settings_domain.dart' as settings;
@@ -34,6 +35,7 @@ List<Override> stubFeatures({
     bestScores: (ref) => const _NoBestScores(),
     clock: (ref) => const _NoonClock(),
     gameRules: (ref) => const BlockmancerEngine(),
+    progressionStore: (ref) => _MemoryProgressionStore(),
     runStore: (ref) => runStore ?? _NoRunStore(),
   ),
   ...game_ui.bindProviders(
@@ -112,4 +114,19 @@ final class _NoonClock implements game.Clock {
 
   @override
   DateTime now() => DateTime.utc(2026, 10, 17, 12);
+}
+
+/// The progression kept in memory, starting from nothing earned.
+final class _MemoryProgressionStore implements game.ProgressionStore {
+  Progression _saved = const Progression(
+    tutorialDone: false,
+    unlockedJokers: {},
+    worlds: {},
+  );
+
+  @override
+  Future<Progression> load() async => _saved;
+
+  @override
+  Future<void> save(Progression progression) async => _saved = progression;
 }

@@ -27,6 +27,21 @@ final class DailySeedRules implements GameRules {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+/// Rules with a map of [worldOrder] and [startingJokers]. Nothing else is
+/// called.
+final class MapRules implements GameRules {
+  const MapRules({required this.startingJokers, required this.worldOrder});
+
+  @override
+  final List<JokerId> startingJokers;
+
+  @override
+  final List<WorldId> worldOrder;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 const _config = RunConfig(
   chipsPerCell: 10,
   jokerPool: JokerId.values,

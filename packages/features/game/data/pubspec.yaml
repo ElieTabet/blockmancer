@@ -1,5 +1,5 @@
 name: game_data
-description: "game data layer — the run's best scores and the run saved to resume, on the device through shared_preferences, and the device's clock."
+description: "game data layer — the player's profile (bests and progression) and the run saved to resume, on the device through shared_preferences, and the device's clock."
 publish_to: none
 resolution: workspace
 

@@ -3,14 +3,19 @@ import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'profiles.dart';
+
 const _today = GameMode.daily(day: 20261017);
+
+SharedPreferencesBestScores _scores() =>
+    SharedPreferencesBestScores(startingProgression: starting);
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   test('nothing is best before a first run', () async {
     // Given / When
-    final best = await const SharedPreferencesBestScores().best(_today);
+    final best = await _scores().best(_today);
 
     // Then
     expect(best, isNull);
@@ -18,13 +23,11 @@ void main() {
 
   test('a saved best is read back by the next launch', () async {
     // Given
-    await const SharedPreferencesBestScores().save(_today, 2400);
+    await _scores().save(_today, 2400);
 
-    // When: what a relaunch reads, the store's cache gone
-    final stored = await SharedPreferences.getInstance();
-    final values = {for (final key in stored.getKeys()) key: stored.get(key)!};
-    SharedPreferences.setMockInitialValues(values);
-    final best = await const SharedPreferencesBestScores().best(_today);
+    // When
+    await relaunch();
+    final best = await _scores().best(_today);
 
     // Then
     expect(best, 2400);
@@ -32,7 +35,7 @@ void main() {
 
   test('each day and practice keep their own best', () async {
     // Given
-    const scores = SharedPreferencesBestScores();
+    final scores = _scores();
     await scores.save(_today, 2400);
     await scores.save(const GameMode.practice(), 3100);
 
@@ -47,10 +50,15 @@ void main() {
 
   test('clearing forgets every best and nothing else', () async {
     // Given
-    const scores = SharedPreferencesBestScores();
+    final scores = _scores();
+    final progression = SharedPreferencesProgressionStore(
+      startingProgression: starting,
+    );
+    final unlocked = starting.copyWith(tutorialDone: true);
     await scores.save(_today, 2400);
     await scores.save(const GameMode.daily(day: 20261018), 900);
     await scores.save(const GameMode.practice(), 3100);
+    await progression.save(unlocked);
     final stored = await SharedPreferences.getInstance();
     await stored.setString('run.saved', '{}');
     await stored.setBool('settings.sound', false);
@@ -62,6 +70,7 @@ void main() {
     expect(await scores.best(_today), isNull);
     expect(await scores.best(const GameMode.daily(day: 20261018)), isNull);
     expect(await scores.best(const GameMode.practice()), isNull);
-    expect(stored.getKeys(), {'run.saved', 'settings.sound'});
+    expect(await progression.load(), unlocked);
+    expect(stored.getKeys(), {'profile', 'run.saved', 'settings.sound'});
   });
 }

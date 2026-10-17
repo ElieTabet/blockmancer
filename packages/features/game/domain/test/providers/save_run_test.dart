@@ -4,6 +4,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 import '../fakes.dart';
+import '../fake_progression_store.dart';
 
 void main() {
   late FakeRunStore store;
@@ -16,6 +17,7 @@ void main() {
         bestScores: (ref) => FakeBestScores(),
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17)),
         gameRules: (ref) => const DailySeedRules(),
+        progressionStore: (ref) => FakeProgressionStore(),
         runStore: (ref) => store,
       ),
     );

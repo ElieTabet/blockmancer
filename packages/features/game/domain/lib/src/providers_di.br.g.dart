@@ -142,6 +142,52 @@ final class GameRulesProvider
 
 String _$gameRulesHash() => r'aedb42ba0debe7407ed8cfe4af33bf6cc721b26f';
 
+@ProviderFor(progressionStore)
+final progressionStoreProvider = ProgressionStoreProvider._();
+
+final class ProgressionStoreProvider
+    extends
+        $FunctionalProvider<
+          ProgressionStore,
+          ProgressionStore,
+          ProgressionStore
+        >
+    with $Provider<ProgressionStore> {
+  ProgressionStoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'progressionStoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$progressionStoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<ProgressionStore> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ProgressionStore create(Ref ref) {
+    return progressionStore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProgressionStore value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ProgressionStore>(value),
+    );
+  }
+}
+
+String _$progressionStoreHash() => r'7559444db90e56c507ff5f951b02998f0e0ddb45';
+
 @ProviderFor(runStore)
 final runStoreProvider = RunStoreProvider._();
 

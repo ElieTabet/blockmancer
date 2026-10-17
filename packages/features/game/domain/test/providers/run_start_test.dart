@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 
 import '../fakes.dart';
+import '../fake_progression_store.dart';
 
 ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
   final container = ProviderContainer(
@@ -10,6 +11,7 @@ ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
       bestScores: (ref) => scores ?? FakeBestScores(),
       clock: (ref) => clock,
       gameRules: (ref) => const DailySeedRules(),
+      progressionStore: (ref) => FakeProgressionStore(),
       runStore: (ref) => FakeRunStore(),
     ),
   );

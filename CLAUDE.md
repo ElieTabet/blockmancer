@@ -331,6 +331,23 @@ One run is saved on the device, so a killed app picks it up where it stood.
   daily, which saves nothing until the player acts. Reading it from a provider instead would reload it after
   every move, because each save refreshes `hasSavedRun`, and the reload would restart the game.
 
+## Progression and the profile
+
+What a player has earned across runs is one `Progression` (`shared_domain`): per world
+`{unlocked, bossBeaten, stars}`, the jokers runs may offer, and `tutorialDone`.
+
+- **Where:** one JSON profile under `profile` (`game_data`'s `profile_dto.br.dart`), holding the
+  bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
+  both read and write it, each update a read and a write with no await between, so neither wipes
+  the other.
+- **Version 2.** A device without a profile is version 1: the `best.*` keys and
+  `settings.tutorialSeen`. `migrateProfile` turns that into version 2 on first read (bests kept,
+  `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys. An
+  unreadable profile starts fresh and is replaced by the next write.
+- **Starting state:** `game_domain`'s `startingProgression(rules)` (exposed as
+  `initialProgressionProvider`): the first world unlocked and `rules.startingJokers` — worked out
+  from the rules, so storage never knows them.
+
 ## Tutorial
 
 A first launch plays a guided run before anything else. It is shown once, skippable at any step,
@@ -456,7 +473,7 @@ The player's settings, kept on the device; there is no account to sync them to. 
   `tutorialSeen`.
 - **Reset progress:** the Settings row confirms with `DSPopup.showConfirm`, then `resetProgress`
   calls the `clearProgressProvider` slot and offers the tutorial again. `app_providers` binds that
-  slot to `game_domain`'s own `clearProgressProvider`, which clears every `best.*` key and the saved
+  slot to `game_domain`'s own `clearProgressProvider`, which clears the profile's bests and the saved
   run and refreshes what Home shows of them — settings never learns what progress is.
 - **Language:** `boot()` calls `applyStoredLanguage` (app_providers, delegating to
   `settings_presentation`, which maps `AppLanguage` to slang's `LocaleSettings`) right after

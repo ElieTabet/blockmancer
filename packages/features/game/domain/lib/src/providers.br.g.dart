@@ -429,3 +429,53 @@ final class TodaysDailyBestProvider
 }
 
 String _$todaysDailyBestHash() => r'ce960fcf2619f8949e001c1ecbf058a42d39a685';
+
+/// What a new profile starts from, worked out from the rules so the storage
+/// never needs to know them.
+
+@ProviderFor(initialProgression)
+final initialProgressionProvider = InitialProgressionProvider._();
+
+/// What a new profile starts from, worked out from the rules so the storage
+/// never needs to know them.
+
+final class InitialProgressionProvider
+    extends $FunctionalProvider<Progression, Progression, Progression>
+    with $Provider<Progression> {
+  /// What a new profile starts from, worked out from the rules so the storage
+  /// never needs to know them.
+  InitialProgressionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'initialProgressionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$initialProgressionHash();
+
+  @$internal
+  @override
+  $ProviderElement<Progression> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Progression create(Ref ref) {
+    return initialProgression(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Progression value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Progression>(value),
+    );
+  }
+}
+
+String _$initialProgressionHash() =>
+    r'0e1f2830bfdb0a6f42df3cc97c7970c114675131';

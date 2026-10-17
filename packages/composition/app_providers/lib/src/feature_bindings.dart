@@ -76,9 +76,14 @@ List<Override> featureBindingOverrides({
   // The game reaches the rules, its storage and the ad network only through
   // these slots.
   ...game.bindProviders(
-    bestScores: (ref) => const SharedPreferencesBestScores(),
+    bestScores: (ref) => SharedPreferencesBestScores(
+      startingProgression: ref.watch(game.initialProgressionProvider),
+    ),
     clock: (ref) => const SystemClock(),
     gameRules: (ref) => const BlockmancerEngine(),
+    progressionStore: (ref) => SharedPreferencesProgressionStore(
+      startingProgression: ref.watch(game.initialProgressionProvider),
+    ),
     runStore: (ref) => const SharedPreferencesRunStore(),
   ),
   ...game_ui.bindProviders(
