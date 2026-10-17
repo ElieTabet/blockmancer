@@ -823,6 +823,66 @@ void main() {
     });
   });
 
+  group("Finisher's last piece", () {
+    test('a short final tray of one piece earns it when that piece clears', () {
+      // Given: the round's last piece, alone in its tray
+      final state = _playing(joker: .finisher).copyWith(
+        board: boardFrom(['#######.']),
+        piecesLeft: 0,
+        tray: [null, 0, null],
+        trayClearMask: null,
+      );
+
+      // When
+      final (_, events) = place(
+        state,
+        anchor: const Cell(col: 7, row: 0),
+        trayIndex: 1,
+      );
+
+      // Then
+      expect(
+        events,
+        contains(
+          const GameEvent.jokerFired(
+            delta: .multMultiplied(factor: 2),
+            joker: .finisher,
+          ),
+        ),
+      );
+      expect(
+        events.whereType<ScoreAdded>().single,
+        const GameEvent.scoreAdded(
+          bonusPoints: 0,
+          chips: 80,
+          lineScore: 160,
+          mult: 2,
+          piecePoints: 1,
+          total: 161,
+        ),
+      );
+    });
+
+    test('a piece played with others left in the tray earns nothing', () {
+      // Given: two pieces in hand
+      final state = _playing(joker: .finisher).copyWith(
+        board: boardFrom(['#######.']),
+        piecesLeft: 0,
+        tray: [0, 0, null],
+      );
+
+      // When
+      final (_, events) = place(
+        state,
+        anchor: const Cell(col: 7, row: 0),
+        trayIndex: 0,
+      );
+
+      // Then
+      expect(events.whereType<JokerFired>(), isEmpty);
+    });
+  });
+
   group("Hat Trick's tray", () {
     /// A round of [_playing] with Hat Trick, three singles in a tray dealt in
     /// full, and rows 0 to 2 one cell short of clearing.
