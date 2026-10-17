@@ -6,6 +6,7 @@ import 'package:shared_domain/src/entities/game/run_config.br.dart';
 import 'package:shared_domain/src/entities/game/run_move.br.dart';
 import 'package:shared_domain/src/entities/game/run_state.br.dart';
 import 'package:shared_domain/src/entities/game/shape.dart';
+import 'package:shared_domain/src/entities/game/world_id.dart';
 
 /// The next state and what happened on the way, in order.
 typedef Transition = (RunState, List<GameEvent>);
@@ -18,10 +19,20 @@ abstract interface class GameRules {
   /// Round targets, piece counts and the other tunable numbers.
   RunConfig get defaultConfig;
 
+  /// The jokers a new player has, before any world unlocks more.
+  List<JokerId> get startingJokers;
+
+  /// The worlds in the map's order, playable or not.
+  List<WorldId> get worldOrder;
+
   bool canPlace(RunState state, {required Cell anchor, required int trayIndex});
 
   /// Whether [revive] is allowed now.
   bool canRevive(RunState state);
+
+  /// The run of [world], offering jokers from [jokerPool] only. Throws for a
+  /// world that isn't [isPlayable].
+  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool});
 
   /// The daily run's seed. The rules have no clock: the caller says what UTC
   /// day it is.
@@ -33,8 +44,14 @@ abstract interface class GameRules {
   /// Whether the tray piece at [trayIndex] fits anywhere on the board.
   bool fitsSomewhere(RunState state, {required int trayIndex});
 
+  /// Whether [world] has its rules yet; the others are "coming soon".
+  bool isPlayable(WorldId world);
+
   /// The run total to show: what is banked, plus the round in play.
   int liveRunTotal(RunState state);
+
+  /// The world after [world] on the map, or null after the last.
+  WorldId? nextWorld(WorldId world);
 
   /// The joker [id] pairs with.
   JokerId partnerOf(JokerId id);
@@ -77,4 +94,7 @@ abstract interface class GameRules {
   /// with no joker and a round that never ends on its own. Its bottom row
   /// lacks one cell, so a single piece clears a line.
   RunState tutorialRun({required RunConfig config});
+
+  /// The jokers beating [world]'s boss unlocks.
+  List<JokerId> unlocksOf(WorldId world);
 }

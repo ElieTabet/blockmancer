@@ -66,6 +66,9 @@ Map<String, dynamic> _$RunStateDtoToJson(RunStateDto instance) =>
 
 RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
   chipsPerCell: (json['chipsPerCell'] as num).toInt(),
+  jokerPool: (json['jokerPool'] as List<dynamic>)
+      .map((e) => e as String)
+      .toList(),
   jokers: JokerTuningDto.fromJson(json['jokers'] as Map<String, dynamic>),
   offerCount: (json['offerCount'] as num).toInt(),
   partnerBias: (json['partnerBias'] as num).toDouble(),
@@ -82,6 +85,7 @@ RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
 Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
     <String, dynamic>{
       'chipsPerCell': instance.chipsPerCell,
+      'jokerPool': instance.jokerPool,
       'jokers': instance.jokers.toJson(),
       'offerCount': instance.offerCount,
       'partnerBias': instance.partnerBias,
@@ -95,6 +99,8 @@ Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
 
 JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
     JokerTuningDto(
+      anchorMult: (json['anchorMult'] as num).toInt(),
+      avalancheChipsPerCell: (json['avalancheChipsPerCell'] as num).toInt(),
       bigBoxFactor: (json['bigBoxFactor'] as num).toInt(),
       bigBoxMinPieceSize: (json['bigBoxMinPieceSize'] as num).toInt(),
       collectorMultPerJoker: (json['collectorMultPerJoker'] as num).toInt(),
@@ -119,6 +125,8 @@ JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$JokerTuningDtoToJson(JokerTuningDto instance) =>
     <String, dynamic>{
+      'anchorMult': instance.anchorMult,
+      'avalancheChipsPerCell': instance.avalancheChipsPerCell,
       'bigBoxFactor': instance.bigBoxFactor,
       'bigBoxMinPieceSize': instance.bigBoxMinPieceSize,
       'collectorMultPerJoker': instance.collectorMultPerJoker,

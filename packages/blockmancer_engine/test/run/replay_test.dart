@@ -6,10 +6,11 @@ import 'package:test/test.dart';
 import '../autoplay.dart';
 
 void main() {
+  // Each seed's bot gets to take a joker of its build.
   for (final (seed, build) in const [
-    (20261016, [JokerId.patience, JokerId.twin]),
+    (1, [JokerId.patience, JokerId.twin]),
     (7, [JokerId.combo, JokerId.collector]),
-    (42, [JokerId.heavy, JokerId.bigbox]),
+    (5, [JokerId.heavy, JokerId.bigbox]),
   ]) {
     test('a run built on ${build.map((joker) => joker.name).join(' + ')} '
         'replays from its seed and moves to the same end', () {
@@ -32,6 +33,24 @@ void main() {
       );
     });
   }
+
+  test('a run offering only part of the jokers replays to the same end', () {
+    // Given
+    final config = defaultConfig.copyWith(
+      jokerPool: const [.collector, .combo, .patience, .twin],
+    );
+    final played = autoplay(7, config: config);
+
+    // When
+    final replayed = replay(config: config, moves: played.moves, seed: 7);
+
+    // Then
+    expect(replayed, played.state);
+    expect(
+      played.state.jokers.toSet().difference(config.jokerPool.toSet()),
+      isEmpty,
+    );
+  });
 
   test('a move the run could not have made is refused', () {
     // Given

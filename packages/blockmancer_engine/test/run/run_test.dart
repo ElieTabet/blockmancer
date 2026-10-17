@@ -572,7 +572,7 @@ void main() {
     test(
       'favour the partner of an owned joker about 3 times in 4, plus chance',
       () {
-        // Given: the bias alone is 0.75; the random fill adds 0.25 × 3/13
+        // Given: the bias alone is 0.75; the random fill adds 0.25 × 3/15
         var partnerOffered = 0;
         const seeds = 4000;
 
@@ -589,7 +589,7 @@ void main() {
         }
 
         // Then
-        expect(partnerOffered / seeds, closeTo(0.75 + 0.25 * 3 / 13, 0.03));
+        expect(partnerOffered / seeds, closeTo(0.75 + 0.25 * 3 / 15, 0.03));
       },
     );
 
@@ -610,6 +610,117 @@ void main() {
 
       // Then
       expect(again, first);
+    });
+  });
+
+  group('the joker pool', () {
+    const starting = [
+      JokerId.bigbox,
+      JokerId.collector,
+      JokerId.column,
+      JokerId.combo,
+      JokerId.heavy,
+      JokerId.patience,
+      JokerId.pockets,
+      JokerId.precision,
+      JokerId.saver,
+      JokerId.sweep,
+      JokerId.tiny,
+      JokerId.twin,
+    ];
+
+    /// Every offer of the run of [seed] under [config], taking the first
+    /// offer at each pick.
+    List<JokerId> offeredOver(RunConfig config, {required int seed}) {
+      final owned = <JokerId>[];
+      final offered = <JokerId>[];
+
+      for (var pick = 0; pick < config.rounds.length; pick++) {
+        final offers = offersFor(
+          config: config,
+          owned: owned,
+          pickIndex: pick,
+          seed: seed,
+        );
+        offered.addAll(offers);
+        owned.add(offers.first);
+      }
+
+      return offered;
+    }
+
+    test('a joker outside the pool is never offered, at any pick', () {
+      // Given
+      final config = _config.copyWith(jokerPool: starting);
+
+      // When / Then
+      for (var seed = 0; seed < 500; seed++) {
+        expect(
+          offeredOver(config, seed: seed).toSet().difference(starting.toSet()),
+          isEmpty,
+        );
+      }
+    });
+
+    test(
+      'the partner of an owned joker is not proposed from outside the pool',
+      () {
+        // Given: Stonemason owned, Quarry locked
+        final config = _config.copyWith(jokerPool: [...starting, .stonemason]);
+
+        // When / Then
+        for (var seed = 0; seed < 500; seed++) {
+          final offers = offersFor(
+            config: config,
+            owned: const [.stonemason],
+            pickIndex: 1,
+            seed: seed,
+          );
+          expect(offers, isNot(contains(JokerId.quarry)));
+          expect(offers.toSet(), hasLength(3));
+        }
+      },
+    );
+
+    test('a pool of every joker offers Anchor and Avalanche too', () {
+      // Given / When
+      final offered = {
+        for (var seed = 0; seed < 100; seed++)
+          ...offeredOver(_config, seed: seed),
+      };
+
+      // Then
+      expect(offered, containsAll(const [JokerId.anchor, JokerId.avalanche]));
+    });
+
+    test('the order of the pool never changes what is offered', () {
+      // Given
+      final forwards = _config.copyWith(jokerPool: starting);
+      final backwards = _config.copyWith(jokerPool: starting.reversed.toList());
+
+      // When / Then
+      for (var seed = 0; seed < 100; seed++) {
+        expect(
+          offeredOver(backwards, seed: seed),
+          offeredOver(forwards, seed: seed),
+        );
+      }
+    });
+
+    test('a pool smaller than the offer count offers what it has', () {
+      // Given
+      final config = _config.copyWith(jokerPool: const [.twin, .patience]);
+
+      // When
+      final offers = offersFor(
+        config: config,
+        owned: const [],
+        pickIndex: 0,
+        seed: _seed,
+      );
+
+      // Then
+      expect(offers.toSet(), {JokerId.twin, JokerId.patience});
     });
   });
 

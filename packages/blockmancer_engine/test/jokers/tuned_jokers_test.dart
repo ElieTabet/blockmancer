@@ -315,6 +315,50 @@ void main() {
     expect(setup.pieces, 14 + 17);
   });
 
+  group('Anchor', () {
+    test('adds its configured mult when the bottom row clears', () {
+      // Given / When
+      final score = playMove(
+        atBottom(['#######.']),
+        at: bottomRight,
+        config: tunedConfig,
+        jokers: const [.anchor],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 19);
+    });
+
+    test('stays quiet when another row clears', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        config: tunedConfig,
+        jokers: const [.anchor],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.fired, isEmpty);
+    });
+  });
+
+  test('Avalanche adds its configured chips per cell left at the bottom', () {
+    // Given / When: row 6 keeps 3 cells once row 7 clears
+    final score = playMove(
+      atBottom(['###.....', '#######.']),
+      at: bottomRight,
+      config: tunedConfig,
+      jokers: const [.avalanche],
+      shape: 0,
+    );
+
+    // Then
+    expect(score.chips, 160 + 3 * 21);
+  });
+
   test('Saver gives its configured run points per unused piece', () {
     // Given / When
     final bonus = roundBonus(

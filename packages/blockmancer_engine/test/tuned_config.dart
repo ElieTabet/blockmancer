@@ -4,6 +4,8 @@ import 'package:shared_domain/shared_domain.dart';
 /// Every joker number distinct and off its default, so a test reading one
 /// proves the effect reads its own field rather than another's or a constant.
 const tunedJokers = JokerTuning(
+  anchorMult: 19,
+  avalancheChipsPerCell: 21,
   bigBoxFactor: 15,
   bigBoxMinPieceSize: 9,
   collectorMultPerJoker: 8,

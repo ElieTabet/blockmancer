@@ -1,4 +1,6 @@
 enum JokerId {
+  anchor,
+  avalanche,
   bigbox,
   collector,
   column,

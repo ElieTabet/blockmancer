@@ -119,6 +119,14 @@
       "saver": {
         "name": "Épargnant",
         "description": "Chaque pièce non jouée à la fin d'une manche gagnée rapporte +40 points de partie."
+      },
+      "anchor": {
+        "name": "Ancre",
+        "description": "+4 mult quand ton coup efface la ligne du bas."
+      },
+      "avalanche": {
+        "name": "Avalanche",
+        "description": "Après chaque ligne effacée, +25 jetons par case pleine restée dans les 2 lignes du bas."
       }
     }
   },

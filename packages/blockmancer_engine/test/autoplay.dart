@@ -11,12 +11,16 @@ typedef Autoplayed = ({
   RunState state,
 });
 
-/// Plays the run of [seed] to its end: take the first joker of [build] on
-/// offer, else the first offer; place the move that clears the most lines
+/// Plays the run of [seed] under [config] to its end: take the first joker of
+/// [build] on offer, else the first offer; place the move that clears the most lines
 /// (first in tray and row-major order on a tie); revive when allowed,
 /// otherwise end the run.
-Autoplayed autoplay(int seed, {List<JokerId> build = const []}) {
-  var state = startRun(config: defaultConfig, seed: seed);
+Autoplayed autoplay(
+  int seed, {
+  List<JokerId> build = const [],
+  RunConfig config = defaultConfig,
+}) {
+  var state = startRun(config: config, seed: seed);
   final events = <GameEvent>[];
   final moves = <RunMove>[];
 

@@ -659,6 +659,148 @@ void main() {
     });
   });
 
+  group('Anchor', () {
+    test('adds 4 mult when the move clears the bottom row', () {
+      // Given / When
+      final score = playMove(
+        atBottom(['#######.']),
+        at: bottomRight,
+        jokers: const [.anchor],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 4);
+      expect(score.points, 1 + 80 * 5);
+      expect(
+        score.fired.single,
+        const JokerFired(delta: .multAdded(amount: 4), joker: .anchor),
+      );
+    });
+
+    test('stays quiet when the move clears another row', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.anchor],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1);
+      expect(score.fired, isEmpty);
+    });
+
+    test('stays quiet when a column clears through the bottom row', () {
+      // Given / When
+      final score = playMove(
+        columnAlmostFull,
+        at: topLeft,
+        jokers: const [.anchor],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.fired, isEmpty);
+    });
+
+    test('with Avalanche, both fire on a bottom clear, Anchor first', () {
+      // Given / When: 4 cells stay in row 6 once row 7 clears
+      final score = playMove(
+        atBottom(['####....', '#######.']),
+        at: bottomRight,
+        jokers: const [.avalanche, .anchor],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.chips, 80 + 4 * 25);
+      expect(score.mult, 1 + 4);
+      expect(score.points, 1 + 180 * 5);
+      expect(score.fired, const [
+        JokerFired(delta: .multAdded(amount: 4), joker: .anchor),
+        JokerFired(delta: .chipsAdded(amount: 100), joker: .avalanche),
+      ]);
+    });
+  });
+
+  group('Avalanche', () {
+    test('adds 25 chips per filled cell left in the two bottom rows', () {
+      // Given / When: row 6 keeps 3 cells once row 7 clears
+      final score = playMove(
+        atBottom(['###.....', '#######.']),
+        at: bottomRight,
+        jokers: const [.avalanche],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.chips, 80 + 3 * 25);
+      expect(score.points, 1 + 155);
+      expect(
+        score.fired.single,
+        const JokerFired(delta: .chipsAdded(amount: 75), joker: .avalanche),
+      );
+    });
+
+    test('counts neither the rows above nor stones', () {
+      // Given / When: row 5 is out of reach, row 6 holds 2 cells and a stone
+      final score = playMove(
+        atBottom(['####....', '##S.....', '#######.']),
+        at: bottomRight,
+        jokers: const [.avalanche],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.chips, 80 + 2 * 25);
+    });
+
+    test('counts after the clear, so emptied rows earn nothing', () {
+      // Given / When: a vertical domino clears rows 6 and 7
+      final score = playMove(
+        atBottom(['#######.', '#######.']),
+        at: const Cell(col: 7, row: 6),
+        jokers: const [.avalanche],
+        shape: 2,
+      );
+
+      // Then
+      expect(score.chips, 160);
+      expect(score.fired, isEmpty);
+    });
+
+    test('does nothing on a move that clears nothing', () {
+      // Given / When
+      final score = playMove(
+        atBottom(['###.....', '###.....']),
+        at: bottomRight,
+        jokers: const [.avalanche],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.chips, 0);
+      expect(score.fired, isEmpty);
+    });
+
+    test('with Anchor, a clear above the bottom row earns only its chips', () {
+      // Given / When: row 0 clears, row 7 keeps 2 cells
+      final score = playMove(
+        ['#######.', ...List.filled(6, '........'), '##......'],
+        at: topRight,
+        jokers: const [.anchor, .avalanche],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.chips, 80 + 2 * 25);
+      expect(score.mult, 1);
+      expect(score.fired.map((fired) => fired.joker), [JokerId.avalanche]);
+    });
+  });
+
   group('catalog', () {
     test('holds every joker exactly once', () {
       // Given / When

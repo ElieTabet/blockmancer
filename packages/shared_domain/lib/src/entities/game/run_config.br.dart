@@ -1,3 +1,4 @@
+import 'package:shared_domain/src/entities/game/joker_id.dart';
 import 'package:shared_domain/src/entities/game/joker_tuning.br.dart';
 import 'package:shared_domain/src/entities/game/world_id.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -26,6 +27,11 @@ abstract class RunConfig with _$RunConfig {
   const factory RunConfig({
     /// Chips a cleared cell scores, before any joker.
     required int chipsPerCell,
+
+    /// The jokers offers may draw from, owned ones aside. A set in all but
+    /// type: offers draw in the rules' own order, so how the list is ordered
+    /// never changes a seeded run.
+    required List<JokerId> jokerPool,
     required JokerTuning jokers,
     required int offerCount,
 

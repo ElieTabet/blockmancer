@@ -3,7 +3,10 @@ import 'package:shared_domain/shared_domain.dart';
 /// The run as the brief tunes it, until Remote Config supplies the numbers.
 const defaultConfig = RunConfig(
   chipsPerCell: 10,
+  jokerPool: JokerId.values,
   jokers: JokerTuning(
+    anchorMult: 4,
+    avalancheChipsPerCell: 25,
     bigBoxFactor: 3,
     bigBoxMinPieceSize: 5,
     collectorMultPerJoker: 1,

@@ -2,9 +2,10 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/random/rng_stream.dart';
 
-/// The jokers offered at pick [pickIndex]. Owned jokers are never offered and,
-/// with probability [RunConfig.partnerBias], one slot is the partner of a joker
-/// already owned.
+/// The jokers offered at pick [pickIndex], from [RunConfig.jokerPool] in
+/// [jokerCatalog] order. Owned jokers are never offered and, with probability
+/// [RunConfig.partnerBias], one slot is the partner of a joker already owned
+/// when that partner is in the pool.
 List<JokerId> offersFor({
   required RunConfig config,
   required List<JokerId> owned,
@@ -14,7 +15,8 @@ List<JokerId> offersFor({
   var rng = streamFor(index: pickIndex, runSeed: seed, stream: .offers);
   final pool = [
     for (final joker in jokerCatalog)
-      if (!owned.contains(joker.id)) joker.id,
+      if (config.jokerPool.contains(joker.id) && !owned.contains(joker.id))
+        joker.id,
   ];
   final partners = [
     for (final id in owned)

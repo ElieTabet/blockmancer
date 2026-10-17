@@ -5,6 +5,7 @@ import 'package:blockmancer_engine/src/run/default_config.dart' as config;
 import 'package:blockmancer_engine/src/run/engine.dart' as engine;
 import 'package:blockmancer_engine/src/run/replay.dart' as replays;
 import 'package:blockmancer_engine/src/run/tutorial.dart' as tutorial;
+import 'package:blockmancer_engine/src/worlds/world_map.dart' as map;
 import 'package:shared_domain/shared_domain.dart';
 
 /// Blockmancer's rules behind the [GameRules] contract. Composition binds it;
@@ -16,6 +17,12 @@ final class BlockmancerEngine implements GameRules {
   RunConfig get defaultConfig => config.defaultConfig;
 
   @override
+  List<JokerId> get startingJokers => map.startingJokers;
+
+  @override
+  List<WorldId> get worldOrder => map.worldOrder;
+
+  @override
   bool canPlace(
     RunState state, {
     required Cell anchor,
@@ -24,6 +31,10 @@ final class BlockmancerEngine implements GameRules {
 
   @override
   bool canRevive(RunState state) => engine.canRevive(state);
+
+  @override
+  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
+      map.configFor(world, jokerPool: jokerPool);
 
   @override
   int dailySeed({required int day, required int month, required int year}) =>
@@ -37,7 +48,13 @@ final class BlockmancerEngine implements GameRules {
       engine.fitsSomewhere(state, trayIndex: trayIndex);
 
   @override
+  bool isPlayable(WorldId world) => map.isPlayable(world);
+
+  @override
   int liveRunTotal(RunState state) => engine.liveRunTotal(state);
+
+  @override
+  WorldId? nextWorld(WorldId world) => map.nextWorld(world);
 
   @override
   JokerId partnerOf(JokerId id) => jokerEffect(id).partner;
@@ -80,4 +97,7 @@ final class BlockmancerEngine implements GameRules {
   @override
   RunState tutorialRun({required RunConfig config}) =>
       tutorial.tutorialRun(config: config);
+
+  @override
+  List<JokerId> unlocksOf(WorldId world) => map.unlocksOf(world);
 }

@@ -58,5 +58,12 @@ const columnAlmostFull = [
   '#.......',
 ];
 
+/// [rows] as the bottom of an otherwise empty board.
+List<String> atBottom(List<String> rows) => [
+  ...List.filled(Board.size - rows.length, '........'),
+  ...rows,
+];
+
+const bottomRight = Cell(col: 7, row: 7);
 const topLeft = Cell(col: 0, row: 0);
 const topRight = Cell(col: 7, row: 0);

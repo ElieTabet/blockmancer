@@ -224,6 +224,8 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$tiny$fr tiny = _Translations$game$jokers$tiny$fr._(_root);
 	@override late final _Translations$game$jokers$pockets$fr pockets = _Translations$game$jokers$pockets$fr._(_root);
 	@override late final _Translations$game$jokers$saver$fr saver = _Translations$game$jokers$saver$fr._(_root);
+	@override late final _Translations$game$jokers$anchor$fr anchor = _Translations$game$jokers$anchor$fr._(_root);
+	@override late final _Translations$game$jokers$avalanche$fr avalanche = _Translations$game$jokers$avalanche$fr._(_root);
 }
 
 // Path: home.daily
@@ -452,6 +454,28 @@ class _Translations$game$jokers$saver$fr extends Translations$game$jokers$saver$
 	@override String get description => 'Chaque pièce non jouée à la fin d\'une manche gagnée rapporte +40 points de partie.';
 }
 
+// Path: game.jokers.anchor
+class _Translations$game$jokers$anchor$fr extends Translations$game$jokers$anchor$en {
+	_Translations$game$jokers$anchor$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Ancre';
+	@override String get description => '+4 mult quand ton coup efface la ligne du bas.';
+}
+
+// Path: game.jokers.avalanche
+class _Translations$game$jokers$avalanche$fr extends Translations$game$jokers$avalanche$en {
+	_Translations$game$jokers$avalanche$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Avalanche';
+	@override String get description => 'Après chaque ligne effacée, +25 jetons par case pleine restée dans les 2 lignes du bas.';
+}
+
 /// The flat map containing all translations for locale <fr>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -538,6 +562,10 @@ extension on TranslationsFr {
 			'game.jokers.pockets.description' => '+4 pièces à chaque manche.',
 			'game.jokers.saver.name' => 'Épargnant',
 			'game.jokers.saver.description' => 'Chaque pièce non jouée à la fin d\'une manche gagnée rapporte +40 points de partie.',
+			'game.jokers.anchor.name' => 'Ancre',
+			'game.jokers.anchor.description' => '+4 mult quand ton coup efface la ligne du bas.',
+			'game.jokers.avalanche.name' => 'Avalanche',
+			'game.jokers.avalanche.description' => 'Après chaque ligne effacée, +25 jetons par case pleine restée dans les 2 lignes du bas.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',

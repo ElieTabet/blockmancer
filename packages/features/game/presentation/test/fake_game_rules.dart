@@ -36,7 +36,10 @@ RunState runIn(
 
 const testConfig = RunConfig(
   chipsPerCell: 10,
+  jokerPool: JokerId.values,
   jokers: JokerTuning(
+    anchorMult: 4,
+    avalancheChipsPerCell: 25,
     bigBoxFactor: 3,
     bigBoxMinPieceSize: 5,
     collectorMultPerJoker: 1,
@@ -76,12 +79,20 @@ const testConfig = RunConfig(
 final class FakeGameRules implements GameRules {
   FakeGameRules({required this.start});
 
+  static const _noMap = 'the screen has no world map yet';
+
   final calls = <String>[];
   Transition? next;
   final RunState start;
 
   @override
   RunConfig get defaultConfig => testConfig;
+
+  @override
+  List<JokerId> get startingJokers => throw UnimplementedError(_noMap);
+
+  @override
+  List<WorldId> get worldOrder => throw UnimplementedError(_noMap);
 
   @override
   bool canPlace(
@@ -96,6 +107,10 @@ final class FakeGameRules implements GameRules {
       state.revivesUsed < state.config.revivesPerRun;
 
   @override
+  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
+      throw UnimplementedError(_noMap);
+
+  @override
   int dailySeed({required int day, required int month, required int year}) => 1;
 
   @override
@@ -105,7 +120,13 @@ final class FakeGameRules implements GameRules {
   bool fitsSomewhere(RunState state, {required int trayIndex}) => true;
 
   @override
+  bool isPlayable(WorldId world) => throw UnimplementedError(_noMap);
+
+  @override
   int liveRunTotal(RunState state) => state.runTotal + state.score;
+
+  @override
+  WorldId? nextWorld(WorldId world) => throw UnimplementedError(_noMap);
 
   @override
   JokerId partnerOf(JokerId id) => id == .twin ? .patience : .twin;
@@ -161,6 +182,9 @@ final class FakeGameRules implements GameRules {
   @override
   RunState tutorialRun({required RunConfig config}) =>
       throw UnimplementedError('the screen has no tutorial yet');
+
+  @override
+  List<JokerId> unlocksOf(WorldId world) => throw UnimplementedError(_noMap);
 
   Transition _move(String call, RunState state) {
     calls.add(call);

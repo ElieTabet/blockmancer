@@ -1,4 +1,6 @@
 import 'package:shared_domain/shared_domain.dart';
+import 'package:blockmancer_engine/src/jokers/effects/anchor.dart';
+import 'package:blockmancer_engine/src/jokers/effects/avalanche.dart';
 import 'package:blockmancer_engine/src/jokers/effects/big_box.dart';
 import 'package:blockmancer_engine/src/jokers/effects/clean_sweep.dart';
 import 'package:blockmancer_engine/src/jokers/effects/collector.dart';
@@ -19,8 +21,9 @@ import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 
 /// Every joker, in the order their hooks run: the brief's table order, which
 /// puts the additive effects before the multiplicative ones and Clean Sweep's
-/// empty-board check before Quarry drops a stone. Offers also draw from this
-/// order, so reordering it changes seeded runs.
+/// empty-board check before Quarry drops a stone, then later jokers appended.
+/// Offers also draw in this order, so reordering it changes seeded runs, while
+/// appending leaves a pool without the newcomers drawing as before.
 const List<JokerEffect> jokerCatalog = [
   Stonemason(),
   ComboKing(),
@@ -36,6 +39,8 @@ const List<JokerEffect> jokerCatalog = [
   TinyTools(),
   DeepPockets(),
   Saver(),
+  Anchor(),
+  Avalanche(),
 ];
 
 JokerEffect jokerEffect(JokerId id) =>

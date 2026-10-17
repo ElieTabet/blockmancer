@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 3;
+const savedRunVersion = 4;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -14,6 +14,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
     switch (json['version']) {
       1 => migrate(_fromVersion1(json)),
       2 => migrate(_fromVersion2(json)),
+      3 => migrate(_fromVersion3(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -53,6 +54,48 @@ Map<String, dynamic> _fromVersion2(Map<String, dynamic> json) {
     'version': 3,
   };
 }
+
+/// Version 3 knew neither Anchor nor Avalanche: its runs go on drawing from
+/// the 14 jokers there were, so they offer what they would have. Neither joker
+/// can be owned there, so their numbers only complete the schema.
+Map<String, dynamic> _fromVersion3(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{
+        ...config,
+        'jokerPool': _version3Pool,
+        'jokers': <String, dynamic>{
+          ...config['jokers'] as Map<String, dynamic>,
+          'anchorMult': 4,
+          'avalancheChipsPerCell': 25,
+        },
+      },
+    },
+    'version': 4,
+  };
+}
+
+const _version3Pool = [
+  'bigbox',
+  'collector',
+  'column',
+  'combo',
+  'heavy',
+  'patience',
+  'pockets',
+  'precision',
+  'quarry',
+  'saver',
+  'stonemason',
+  'sweep',
+  'tiny',
+  'twin',
+];
 
 const Map<String, dynamic> _version1Jokers = {
   'bigBoxFactor': 3,
@@ -230,6 +273,7 @@ final class RunStateDto {
 final class RunConfigDto {
   const RunConfigDto({
     required this.chipsPerCell,
+    required this.jokerPool,
     required this.jokers,
     required this.offerCount,
     required this.partnerBias,
@@ -243,6 +287,7 @@ final class RunConfigDto {
 
   factory RunConfigDto.fromDomain(RunConfig config) => RunConfigDto(
     chipsPerCell: config.chipsPerCell,
+    jokerPool: [for (final joker in config.jokerPool) joker.name],
     jokers: .fromDomain(config.jokers),
     offerCount: config.offerCount,
     partnerBias: config.partnerBias,
@@ -258,6 +303,7 @@ final class RunConfigDto {
       _$RunConfigDtoFromJson(json);
 
   final int chipsPerCell;
+  final List<String> jokerPool;
   final JokerTuningDto jokers;
   final int offerCount;
   final double partnerBias;
@@ -272,6 +318,7 @@ final class RunConfigDto {
 
   RunConfig toDomain() => RunConfig(
     chipsPerCell: chipsPerCell,
+    jokerPool: [for (final joker in jokerPool) JokerId.values.byName(joker)],
     jokers: jokers.toDomain(),
     offerCount: offerCount,
     partnerBias: partnerBias,
@@ -287,6 +334,8 @@ final class RunConfigDto {
 @JsonSerializable()
 final class JokerTuningDto {
   const JokerTuningDto({
+    required this.anchorMult,
+    required this.avalancheChipsPerCell,
     required this.bigBoxFactor,
     required this.bigBoxMinPieceSize,
     required this.collectorMultPerJoker,
@@ -310,6 +359,8 @@ final class JokerTuningDto {
   });
 
   factory JokerTuningDto.fromDomain(JokerTuning tuning) => JokerTuningDto(
+    anchorMult: tuning.anchorMult,
+    avalancheChipsPerCell: tuning.avalancheChipsPerCell,
     bigBoxFactor: tuning.bigBoxFactor,
     bigBoxMinPieceSize: tuning.bigBoxMinPieceSize,
     collectorMultPerJoker: tuning.collectorMultPerJoker,
@@ -335,6 +386,8 @@ final class JokerTuningDto {
   factory JokerTuningDto.fromJson(Map<String, dynamic> json) =>
       _$JokerTuningDtoFromJson(json);
 
+  final int anchorMult;
+  final int avalancheChipsPerCell;
   final int bigBoxFactor;
   final int bigBoxMinPieceSize;
   final int collectorMultPerJoker;
@@ -359,6 +412,8 @@ final class JokerTuningDto {
   Map<String, dynamic> toJson() => _$JokerTuningDtoToJson(this);
 
   JokerTuning toDomain() => JokerTuning(
+    anchorMult: anchorMult,
+    avalancheChipsPerCell: avalancheChipsPerCell,
     bigBoxFactor: bigBoxFactor,
     bigBoxMinPieceSize: bigBoxMinPieceSize,
     collectorMultPerJoker: collectorMultPerJoker,

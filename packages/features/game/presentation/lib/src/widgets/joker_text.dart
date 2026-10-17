@@ -10,6 +10,14 @@ import 'package:shared_domain/shared_domain.dart';
   final jokers = context.t.game.jokers;
 
   return switch (id) {
+    .anchor => (
+      description: jokers.anchor.description,
+      name: jokers.anchor.name,
+    ),
+    .avalanche => (
+      description: jokers.avalanche.description,
+      name: jokers.avalanche.name,
+    ),
     .bigbox => (
       description: jokers.bigbox.description,
       name: jokers.bigbox.name,

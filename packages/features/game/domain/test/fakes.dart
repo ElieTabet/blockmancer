@@ -29,7 +29,10 @@ final class DailySeedRules implements GameRules {
 
 const _config = RunConfig(
   chipsPerCell: 10,
+  jokerPool: JokerId.values,
   jokers: JokerTuning(
+    anchorMult: 4,
+    avalancheChipsPerCell: 25,
     bigBoxFactor: 3,
     bigBoxMinPieceSize: 5,
     collectorMultPerJoker: 1,

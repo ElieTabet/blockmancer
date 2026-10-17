@@ -266,6 +266,13 @@ engine's events and never recomputes a rule.
   `const BlockmancerEngine()`. Rule data and rule decisions stay behind the contract (`defaultConfig`,
   `shape(id)`, `partnerOf(id)`, `canRevive`, `liveRunTotal`), so no feature computes a rule and
   `shared_domain`'s entities only read their own fields.
+- **Jokers and worlds.** 16 jokers in `jokerCatalog` (hook and draw order; new ones are appended,
+  so a pool without them draws exactly as before — Anchor and Avalanche, Gravity's, are the last
+  two). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
+  pool's list order, and the pair bias only proposes a partner in the pool; `defaultConfig`'s pool
+  is every joker, as the daily run's is. The map is rule data behind the contract too:
+  `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (Rubble, Gravity),
+  `unlocksOf(world)` and `startingJokers` (every joker no world unlocks).
 - **`shared_domain` is pure Dart** because the engine depends on it and must run on the plain VM
   and the web.
 - **Pure Dart.** Its pubspec declares no Flutter, so a `package:flutter` import fails
@@ -309,8 +316,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 2`; `migrate(json)` brings an older version up to date one
-  step at a time (version 1 gains the chips per cell and joker numbers it was played with), and a
+  wire format. The schema has `version: 4`; `migrate(json)` brings an older version up to date one
+  step at a time, each step filling what that build played with (1 → 2 the chips per cell and
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes

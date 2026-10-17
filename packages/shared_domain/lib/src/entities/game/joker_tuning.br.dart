@@ -7,6 +7,8 @@ part 'joker_tuning.br.freezed.dart';
 @freezed
 abstract class JokerTuning with _$JokerTuning {
   const factory JokerTuning({
+    required int anchorMult,
+    required int avalancheChipsPerCell,
     required int bigBoxFactor,
     required int bigBoxMinPieceSize,
     required int collectorMultPerJoker,

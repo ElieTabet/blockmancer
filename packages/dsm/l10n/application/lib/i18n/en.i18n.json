@@ -119,6 +119,14 @@
       "saver": {
         "name": "Saver",
         "description": "Each unused piece when you beat a round gives +40 run points."
+      },
+      "anchor": {
+        "name": "Anchor",
+        "description": "+4 mult when your move clears the bottom row."
+      },
+      "avalanche": {
+        "name": "Avalanche",
+        "description": "+25 chips for each filled cell left in the bottom 2 rows after a clear."
       }
     }
   },

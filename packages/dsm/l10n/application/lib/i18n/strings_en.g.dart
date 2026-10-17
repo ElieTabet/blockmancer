@@ -352,6 +352,8 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$tiny$en tiny = Translations$game$jokers$tiny$en.internal(_root);
 	late final Translations$game$jokers$pockets$en pockets = Translations$game$jokers$pockets$en.internal(_root);
 	late final Translations$game$jokers$saver$en saver = Translations$game$jokers$saver$en.internal(_root);
+	late final Translations$game$jokers$anchor$en anchor = Translations$game$jokers$anchor$en.internal(_root);
+	late final Translations$game$jokers$avalanche$en avalanche = Translations$game$jokers$avalanche$en.internal(_root);
 }
 
 // Path: home.daily
@@ -672,6 +674,36 @@ class Translations$game$jokers$saver$en {
 	String get description => 'Each unused piece when you beat a round gives +40 run points.';
 }
 
+// Path: game.jokers.anchor
+class Translations$game$jokers$anchor$en {
+	Translations$game$jokers$anchor$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Anchor'
+	String get name => 'Anchor';
+
+	/// en: '+4 mult when your move clears the bottom row.'
+	String get description => '+4 mult when your move clears the bottom row.';
+}
+
+// Path: game.jokers.avalanche
+class Translations$game$jokers$avalanche$en {
+	Translations$game$jokers$avalanche$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Avalanche'
+	String get name => 'Avalanche';
+
+	/// en: '+25 chips for each filled cell left in the bottom 2 rows after a clear.'
+	String get description => '+25 chips for each filled cell left in the bottom 2 rows after a clear.';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -758,6 +790,10 @@ extension on Translations {
 			'game.jokers.pockets.description' => '+4 pieces every round.',
 			'game.jokers.saver.name' => 'Saver',
 			'game.jokers.saver.description' => 'Each unused piece when you beat a round gives +40 run points.',
+			'game.jokers.anchor.name' => 'Anchor',
+			'game.jokers.anchor.description' => '+4 mult when your move clears the bottom row.',
+			'game.jokers.avalanche.name' => 'Avalanche',
+			'game.jokers.avalanche.description' => '+25 chips for each filled cell left in the bottom 2 rows after a clear.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',
