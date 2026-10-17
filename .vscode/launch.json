@@ -104,6 +104,7 @@
                 "--dart-define-from-file=env/dev.json"
             ]
         },
+        // Release runs on a physical device only, never a simulator.
         {
             "name": "app \u00b7 prod (release mode)",
             "cwd": "app",

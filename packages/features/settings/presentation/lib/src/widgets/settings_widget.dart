@@ -20,24 +20,29 @@ final class SettingsWidget extends StatelessWidget {
     value: SystemUiOverlayStyle.light,
     child: Scaffold(
       backgroundColor: DSColor.primary,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: .all(DSSpace.medium),
-          child: Column(
-            crossAxisAlignment: .stretch,
-            spacing: DSSpace.small,
-            children: [
-              SettingsHeader(),
-              SizedBox(height: DSSpace.xsmall),
-              ToggleRow(toggle: .sound),
-              ToggleRow(toggle: .haptics),
-              ToggleRow(toggle: .reduceMotion),
-              LanguageRow(),
-              ReplayTutorialRow(),
-              SendFeedbackRow(),
-              ResetProgressRow(),
-              VersionRow(),
-            ],
+      // The safe area pads the content inside the scroll view, so the rows
+      // scroll under the notch and the home indicator rather than being cut
+      // off at the inset.
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: .all(DSSpace.medium),
+            child: Column(
+              crossAxisAlignment: .stretch,
+              spacing: DSSpace.small,
+              children: [
+                SettingsHeader(),
+                SizedBox(height: DSSpace.xsmall),
+                ToggleRow(toggle: .sound),
+                ToggleRow(toggle: .haptics),
+                ToggleRow(toggle: .reduceMotion),
+                LanguageRow(),
+                ReplayTutorialRow(),
+                SendFeedbackRow(),
+                ResetProgressRow(),
+                VersionRow(),
+              ],
+            ),
           ),
         ),
       ),
