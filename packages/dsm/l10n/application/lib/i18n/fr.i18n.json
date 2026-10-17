@@ -1,10 +1,10 @@
 {
   "game": {
     "title": "Blockmancer",
-    "subtitle": "Partie du jour · les mêmes pièces pour tous",
-    "practiceSubtitle": "Entraînement · une partie neuve à chaque fois",
+    "subtitle": "Partie du jour · les mêmes pièces pour tout le monde",
+    "practiceSubtitle": "Entraînement · une nouvelle partie à chaque fois",
     "leave": "Retour au menu",
-    "runTotal": "Partie $total",
+    "runTotal": "Partie : $total",
     "round": {
       "regular": "Manche · $index / $count",
       "boss": "Boss · Gravats",
@@ -21,12 +21,12 @@
       "mult": "× $mult mult",
       "product": "= $total",
       "placed": "+$points",
-      "bonus": "+$points bonus",
+      "bonus": "+$points de bonus",
       "fired": "$joker $effect",
       "chipsAdded": "+$amount jetons",
       "multAdded": "+$amount mult",
       "multMultiplied": "×$factor mult",
-      "multStored": "mult en réserve · $total prêts",
+      "multStored": "mult en réserve : $total",
       "pointsAdded": "+$amount",
       "runPointsAdded": "+$amount points de partie",
       "stoneDropped": "nouvelle pierre",
@@ -35,32 +35,32 @@
     },
     "offers": {
       "startTitle": "Choisis ton joker de départ",
-      "startSubtitle": "Les jokers vont par paires. Tu en choisis un de plus après chaque manche : prépare ta combinaison.",
-      "roundTitle": "Manche gagnée !",
+      "startSubtitle": "Les jokers fonctionnent par paires. Tu en choisis un de plus après chaque manche, alors pense à la suite.",
+      "roundTitle": "Manche gagnée !",
       "saverBonus": "Épargnant +$points",
-      "nextRound": "Choisis un joker. Ensuite : manche $index · $target pts.",
-      "nextBoss": "Choisis un joker. Ensuite : Boss · $target pts avec des pierres.",
-      "build": "Ta combinaison : $jokers",
-      "completesPair": "★ Complète une paire avec ton $joker",
-      "pairsWith": "Va avec : $joker",
+      "nextRound": "Choisis un joker. À suivre : manche $index · $target pts.",
+      "nextBoss": "Choisis un joker. À suivre : le boss · $target pts, avec des pierres.",
+      "build": "Tes jokers : $jokers",
+      "completesPair": "★ Forme une paire avec $joker",
+      "pairsWith": "En paire avec : $joker",
       "take": "Prendre"
     },
     "lost": {
       "outOfPieces": "Plus de pièces",
       "noRoom": "Plus de place",
-      "progress": "$score sur $target points cette manche.",
-      "revive": "Relancer · $rows lignes vidées + $pieces pièces",
+      "progress": "$score points sur $target pour cette manche.",
+      "revive": "Continuer · $rows lignes effacées + $pieces pièces",
       "endRun": "Terminer la partie"
     },
     "end": {
-      "won": "Boss vaincu · partie terminée",
-      "overRound": "Partie finie · manche $index atteinte",
-      "overBoss": "Partie finie · boss atteint",
+      "won": "Boss vaincu · partie réussie",
+      "overRound": "Fin de partie · manche $index atteinte",
+      "overBoss": "Fin de partie · boss atteint",
       "total": "$total points",
-      "build": "Combinaison : $jokers",
-      "noJokers": "aucune",
-      "best": "Record : $points",
-      "newBest": "Nouveau record !",
+      "build": "Jokers : $jokers",
+      "noJokers": "aucun",
+      "best": "Record : $points",
+      "newBest": "Nouveau record !",
       "retry": "Rejouer"
     },
     "jokers": {
@@ -70,11 +70,11 @@
       },
       "combo": {
         "name": "Roi du combo",
-        "description": "+1 mult pour chaque coup gagnant d'affilée."
+        "description": "+1 mult par coup d'affilée qui efface une ligne."
       },
       "patience": {
         "name": "Patience",
-        "description": "Chaque coup sans ligne met +2 mult en réserve pour la prochaine."
+        "description": "Chaque coup qui n'efface rien met +2 mult de côté pour ta prochaine ligne."
       },
       "precision": {
         "name": "Précision",
@@ -82,7 +82,7 @@
       },
       "collector": {
         "name": "Collectionneur",
-        "description": "+1 mult à chaque ligne pour chaque joker possédé."
+        "description": "À chaque ligne effacée, +1 mult par joker que tu as."
       },
       "twin": {
         "name": "Lignes jumelles",
@@ -98,14 +98,14 @@
       },
       "sweep": {
         "name": "Grand ménage",
-        "description": "+500 points quand le plateau se vide entièrement."
+        "description": "+500 points quand tu vides entièrement le plateau."
       },
       "quarry": {
         "name": "Carrière",
         "description": "Chaque ligne effacée fait tomber une pierre sur une case vide au hasard."
       },
       "bigbox": {
-        "name": "Grande boîte",
+        "name": "Grand format",
         "description": "Les pièces de 5 cases ou plus arrivent 3× plus souvent."
       },
       "tiny": {
@@ -113,36 +113,36 @@
         "description": "Les pièces de 1 ou 2 cases arrivent 3× plus souvent."
       },
       "pockets": {
-        "name": "Poches profondes",
+        "name": "Poches pleines",
         "description": "+4 pièces à chaque manche."
       },
       "saver": {
         "name": "Épargnant",
-        "description": "Chaque pièce inutilisée quand tu gagnes une manche rapporte +40 points de partie."
+        "description": "Chaque pièce non jouée à la fin d'une manche gagnée rapporte +40 points de partie."
       }
     }
   },
   "push": {
     "channelName": "Annonces",
-    "channelDescription": "Nouvelles et messages de l'application."
+    "channelDescription": "Les nouveautés et messages de l'application."
   },
   "home": {
     "tabLabel": "Jouer",
     "title": "Blockmancer",
-    "tagline": "Posez des pièces, effacez des lignes, combinez vos jokers.",
+    "tagline": "Pose des pièces, efface des lignes, combine tes jokers.",
     "daily": {
       "title": "Partie du jour",
-      "subtitle": "Les mêmes pièces pour tous aujourd'hui"
+      "subtitle": "Aujourd'hui, les mêmes pièces pour tout le monde"
     },
     "resume": {
       "title": "Reprendre la partie",
-      "subtitle": "Reprenez là où vous en étiez"
+      "subtitle": "Reprends là où tu en étais"
     },
     "practice": {
       "title": "Entraînement",
-      "subtitle": "Une partie neuve à chaque fois"
+      "subtitle": "Une nouvelle partie à chaque fois"
     },
-    "best": "Record : $points",
+    "best": "Record : $points",
     "noBest": "Pas encore de partie",
     "settings": "Réglages"
   },
@@ -153,7 +153,7 @@
     "haptics": "Vibrations",
     "reduceMotion": {
       "title": "Réduire les animations",
-      "subtitle": "Des animations plus douces, sans secousses d'écran"
+      "subtitle": "Des animations plus douces, sans tremblement de l'écran"
     },
     "language": {
       "title": "Langue",
@@ -164,7 +164,7 @@
     "reset": {
       "title": "Réinitialiser la progression",
       "subtitle": "Tes records et la partie en cours",
-      "confirmTitle": "Réinitialiser la progression ?",
+      "confirmTitle": "Réinitialiser la progression ?",
       "confirmMessage": "Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.",
       "confirm": "Réinitialiser",
       "cancel": "Annuler"

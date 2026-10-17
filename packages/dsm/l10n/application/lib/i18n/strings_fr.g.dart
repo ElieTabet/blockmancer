@@ -53,10 +53,10 @@ class _Translations$game$fr extends Translations$game$en {
 
 	// Translations
 	@override String get title => 'Blockmancer';
-	@override String get subtitle => 'Partie du jour · les mêmes pièces pour tous';
-	@override String get practiceSubtitle => 'Entraînement · une partie neuve à chaque fois';
+	@override String get subtitle => 'Partie du jour · les mêmes pièces pour tout le monde';
+	@override String get practiceSubtitle => 'Entraînement · une nouvelle partie à chaque fois';
 	@override String get leave => 'Retour au menu';
-	@override String runTotal({required Object total}) => 'Partie ${total}';
+	@override String runTotal({required Object total}) => 'Partie : ${total}';
 	@override late final _Translations$game$round$fr round = _Translations$game$round$fr._(_root);
 	@override late final _Translations$game$banner$fr banner = _Translations$game$banner$fr._(_root);
 	@override late final _Translations$game$offers$fr offers = _Translations$game$offers$fr._(_root);
@@ -73,7 +73,7 @@ class _Translations$push$fr extends Translations$push$en {
 
 	// Translations
 	@override String get channelName => 'Annonces';
-	@override String get channelDescription => 'Nouvelles et messages de l\'application.';
+	@override String get channelDescription => 'Les nouveautés et messages de l\'application.';
 }
 
 // Path: home
@@ -85,11 +85,11 @@ class _Translations$home$fr extends Translations$home$en {
 	// Translations
 	@override String get tabLabel => 'Jouer';
 	@override String get title => 'Blockmancer';
-	@override String get tagline => 'Posez des pièces, effacez des lignes, combinez vos jokers.';
+	@override String get tagline => 'Pose des pièces, efface des lignes, combine tes jokers.';
 	@override late final _Translations$home$daily$fr daily = _Translations$home$daily$fr._(_root);
 	@override late final _Translations$home$resume$fr resume = _Translations$home$resume$fr._(_root);
 	@override late final _Translations$home$practice$fr practice = _Translations$home$practice$fr._(_root);
-	@override String best({required Object points}) => 'Record : ${points}';
+	@override String best({required Object points}) => 'Record : ${points}';
 	@override String get noBest => 'Pas encore de partie';
 	@override String get settings => 'Réglages';
 }
@@ -139,12 +139,12 @@ class _Translations$game$banner$fr extends Translations$game$banner$en {
 	@override String mult({required Object mult}) => '× ${mult} mult';
 	@override String product({required Object total}) => '= ${total}';
 	@override String placed({required Object points}) => '+${points}';
-	@override String bonus({required Object points}) => '+${points} bonus';
+	@override String bonus({required Object points}) => '+${points} de bonus';
 	@override String fired({required Object joker, required Object effect}) => '${joker} ${effect}';
 	@override String chipsAdded({required Object amount}) => '+${amount} jetons';
 	@override String multAdded({required Object amount}) => '+${amount} mult';
 	@override String multMultiplied({required Object factor}) => '×${factor} mult';
-	@override String multStored({required Object total}) => 'mult en réserve · ${total} prêts';
+	@override String multStored({required Object total}) => 'mult en réserve : ${total}';
 	@override String pointsAdded({required Object amount}) => '+${amount}';
 	@override String runPointsAdded({required Object amount}) => '+${amount} points de partie';
 	@override String get stoneDropped => 'nouvelle pierre';
@@ -160,14 +160,14 @@ class _Translations$game$offers$fr extends Translations$game$offers$en {
 
 	// Translations
 	@override String get startTitle => 'Choisis ton joker de départ';
-	@override String get startSubtitle => 'Les jokers vont par paires. Tu en choisis un de plus après chaque manche : prépare ta combinaison.';
-	@override String get roundTitle => 'Manche gagnée !';
+	@override String get startSubtitle => 'Les jokers fonctionnent par paires. Tu en choisis un de plus après chaque manche, alors pense à la suite.';
+	@override String get roundTitle => 'Manche gagnée !';
 	@override String saverBonus({required Object points}) => 'Épargnant +${points}';
-	@override String nextRound({required Object index, required Object target}) => 'Choisis un joker. Ensuite : manche ${index} · ${target} pts.';
-	@override String nextBoss({required Object target}) => 'Choisis un joker. Ensuite : Boss · ${target} pts avec des pierres.';
-	@override String build({required Object jokers}) => 'Ta combinaison : ${jokers}';
-	@override String completesPair({required Object joker}) => '★ Complète une paire avec ton ${joker}';
-	@override String pairsWith({required Object joker}) => 'Va avec : ${joker}';
+	@override String nextRound({required Object index, required Object target}) => 'Choisis un joker. À suivre : manche ${index} · ${target} pts.';
+	@override String nextBoss({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, avec des pierres.';
+	@override String build({required Object jokers}) => 'Tes jokers : ${jokers}';
+	@override String completesPair({required Object joker}) => '★ Forme une paire avec ${joker}';
+	@override String pairsWith({required Object joker}) => 'En paire avec : ${joker}';
 	@override String get take => 'Prendre';
 }
 
@@ -180,8 +180,8 @@ class _Translations$game$lost$fr extends Translations$game$lost$en {
 	// Translations
 	@override String get outOfPieces => 'Plus de pièces';
 	@override String get noRoom => 'Plus de place';
-	@override String progress({required Object score, required Object target}) => '${score} sur ${target} points cette manche.';
-	@override String revive({required Object rows, required Object pieces}) => 'Relancer · ${rows} lignes vidées + ${pieces} pièces';
+	@override String progress({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.';
+	@override String revive({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces';
 	@override String get endRun => 'Terminer la partie';
 }
 
@@ -192,14 +192,14 @@ class _Translations$game$end$fr extends Translations$game$end$en {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get won => 'Boss vaincu · partie terminée';
-	@override String overRound({required Object index}) => 'Partie finie · manche ${index} atteinte';
-	@override String get overBoss => 'Partie finie · boss atteint';
+	@override String get won => 'Boss vaincu · partie réussie';
+	@override String overRound({required Object index}) => 'Fin de partie · manche ${index} atteinte';
+	@override String get overBoss => 'Fin de partie · boss atteint';
 	@override String total({required Object total}) => '${total} points';
-	@override String build({required Object jokers}) => 'Combinaison : ${jokers}';
-	@override String get noJokers => 'aucune';
-	@override String best({required Object points}) => 'Record : ${points}';
-	@override String get newBest => 'Nouveau record !';
+	@override String build({required Object jokers}) => 'Jokers : ${jokers}';
+	@override String get noJokers => 'aucun';
+	@override String best({required Object points}) => 'Record : ${points}';
+	@override String get newBest => 'Nouveau record !';
 	@override String get retry => 'Rejouer';
 }
 
@@ -234,7 +234,7 @@ class _Translations$home$daily$fr extends Translations$home$daily$en {
 
 	// Translations
 	@override String get title => 'Partie du jour';
-	@override String get subtitle => 'Les mêmes pièces pour tous aujourd\'hui';
+	@override String get subtitle => 'Aujourd\'hui, les mêmes pièces pour tout le monde';
 }
 
 // Path: home.resume
@@ -245,7 +245,7 @@ class _Translations$home$resume$fr extends Translations$home$resume$en {
 
 	// Translations
 	@override String get title => 'Reprendre la partie';
-	@override String get subtitle => 'Reprenez là où vous en étiez';
+	@override String get subtitle => 'Reprends là où tu en étais';
 }
 
 // Path: home.practice
@@ -256,7 +256,7 @@ class _Translations$home$practice$fr extends Translations$home$practice$en {
 
 	// Translations
 	@override String get title => 'Entraînement';
-	@override String get subtitle => 'Une partie neuve à chaque fois';
+	@override String get subtitle => 'Une nouvelle partie à chaque fois';
 }
 
 // Path: settings.reduceMotion
@@ -267,7 +267,7 @@ class _Translations$settings$reduceMotion$fr extends Translations$settings$reduc
 
 	// Translations
 	@override String get title => 'Réduire les animations';
-	@override String get subtitle => 'Des animations plus douces, sans secousses d\'écran';
+	@override String get subtitle => 'Des animations plus douces, sans tremblement de l\'écran';
 }
 
 // Path: settings.language
@@ -292,7 +292,7 @@ class _Translations$settings$reset$fr extends Translations$settings$reset$en {
 	// Translations
 	@override String get title => 'Réinitialiser la progression';
 	@override String get subtitle => 'Tes records et la partie en cours';
-	@override String get confirmTitle => 'Réinitialiser la progression ?';
+	@override String get confirmTitle => 'Réinitialiser la progression ?';
 	@override String get confirmMessage => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.';
 	@override String get confirm => 'Réinitialiser';
 	@override String get cancel => 'Annuler';
@@ -317,7 +317,7 @@ class _Translations$game$jokers$combo$fr extends Translations$game$jokers$combo$
 
 	// Translations
 	@override String get name => 'Roi du combo';
-	@override String get description => '+1 mult pour chaque coup gagnant d\'affilée.';
+	@override String get description => '+1 mult par coup d\'affilée qui efface une ligne.';
 }
 
 // Path: game.jokers.patience
@@ -328,7 +328,7 @@ class _Translations$game$jokers$patience$fr extends Translations$game$jokers$pat
 
 	// Translations
 	@override String get name => 'Patience';
-	@override String get description => 'Chaque coup sans ligne met +2 mult en réserve pour la prochaine.';
+	@override String get description => 'Chaque coup qui n\'efface rien met +2 mult de côté pour ta prochaine ligne.';
 }
 
 // Path: game.jokers.precision
@@ -350,7 +350,7 @@ class _Translations$game$jokers$collector$fr extends Translations$game$jokers$co
 
 	// Translations
 	@override String get name => 'Collectionneur';
-	@override String get description => '+1 mult à chaque ligne pour chaque joker possédé.';
+	@override String get description => 'À chaque ligne effacée, +1 mult par joker que tu as.';
 }
 
 // Path: game.jokers.twin
@@ -394,7 +394,7 @@ class _Translations$game$jokers$sweep$fr extends Translations$game$jokers$sweep$
 
 	// Translations
 	@override String get name => 'Grand ménage';
-	@override String get description => '+500 points quand le plateau se vide entièrement.';
+	@override String get description => '+500 points quand tu vides entièrement le plateau.';
 }
 
 // Path: game.jokers.quarry
@@ -415,7 +415,7 @@ class _Translations$game$jokers$bigbox$fr extends Translations$game$jokers$bigbo
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get name => 'Grande boîte';
+	@override String get name => 'Grand format';
 	@override String get description => 'Les pièces de 5 cases ou plus arrivent 3× plus souvent.';
 }
 
@@ -437,7 +437,7 @@ class _Translations$game$jokers$pockets$fr extends Translations$game$jokers$pock
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get name => 'Poches profondes';
+	@override String get name => 'Poches pleines';
 	@override String get description => '+4 pièces à chaque manche.';
 }
 
@@ -449,7 +449,7 @@ class _Translations$game$jokers$saver$fr extends Translations$game$jokers$saver$
 
 	// Translations
 	@override String get name => 'Épargnant';
-	@override String get description => 'Chaque pièce inutilisée quand tu gagnes une manche rapporte +40 points de partie.';
+	@override String get description => 'Chaque pièce non jouée à la fin d\'une manche gagnée rapporte +40 points de partie.';
 }
 
 /// The flat map containing all translations for locale <fr>.
@@ -461,10 +461,10 @@ extension on TranslationsFr {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'game.title' => 'Blockmancer',
-			'game.subtitle' => 'Partie du jour · les mêmes pièces pour tous',
-			'game.practiceSubtitle' => 'Entraînement · une partie neuve à chaque fois',
+			'game.subtitle' => 'Partie du jour · les mêmes pièces pour tout le monde',
+			'game.practiceSubtitle' => 'Entraînement · une nouvelle partie à chaque fois',
 			'game.leave' => 'Retour au menu',
-			'game.runTotal' => ({required Object total}) => 'Partie ${total}',
+			'game.runTotal' => ({required Object total}) => 'Partie : ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Manche · ${index} / ${count}',
 			'game.round.boss' => 'Boss · Gravats',
 			'game.round.target' => ({required Object target}) => '/ ${target}',
@@ -475,51 +475,51 @@ extension on TranslationsFr {
 			'game.banner.mult' => ({required Object mult}) => '× ${mult} mult',
 			'game.banner.product' => ({required Object total}) => '= ${total}',
 			'game.banner.placed' => ({required Object points}) => '+${points}',
-			'game.banner.bonus' => ({required Object points}) => '+${points} bonus',
+			'game.banner.bonus' => ({required Object points}) => '+${points} de bonus',
 			'game.banner.fired' => ({required Object joker, required Object effect}) => '${joker} ${effect}',
 			'game.banner.chipsAdded' => ({required Object amount}) => '+${amount} jetons',
 			'game.banner.multAdded' => ({required Object amount}) => '+${amount} mult',
 			'game.banner.multMultiplied' => ({required Object factor}) => '×${factor} mult',
-			'game.banner.multStored' => ({required Object total}) => 'mult en réserve · ${total} prêts',
+			'game.banner.multStored' => ({required Object total}) => 'mult en réserve : ${total}',
 			'game.banner.pointsAdded' => ({required Object amount}) => '+${amount}',
 			'game.banner.runPointsAdded' => ({required Object amount}) => '+${amount} points de partie',
 			'game.banner.stoneDropped' => 'nouvelle pierre',
 			'game.banner.piecesAdded' => ({required Object amount}) => '+${amount} pièces',
 			'game.banner.stonesAdded' => ({required Object amount}) => '+${amount} pierres',
 			'game.offers.startTitle' => 'Choisis ton joker de départ',
-			'game.offers.startSubtitle' => 'Les jokers vont par paires. Tu en choisis un de plus après chaque manche : prépare ta combinaison.',
-			'game.offers.roundTitle' => 'Manche gagnée !',
+			'game.offers.startSubtitle' => 'Les jokers fonctionnent par paires. Tu en choisis un de plus après chaque manche, alors pense à la suite.',
+			'game.offers.roundTitle' => 'Manche gagnée !',
 			'game.offers.saverBonus' => ({required Object points}) => 'Épargnant +${points}',
-			'game.offers.nextRound' => ({required Object index, required Object target}) => 'Choisis un joker. Ensuite : manche ${index} · ${target} pts.',
-			'game.offers.nextBoss' => ({required Object target}) => 'Choisis un joker. Ensuite : Boss · ${target} pts avec des pierres.',
-			'game.offers.build' => ({required Object jokers}) => 'Ta combinaison : ${jokers}',
-			'game.offers.completesPair' => ({required Object joker}) => '★ Complète une paire avec ton ${joker}',
-			'game.offers.pairsWith' => ({required Object joker}) => 'Va avec : ${joker}',
+			'game.offers.nextRound' => ({required Object index, required Object target}) => 'Choisis un joker. À suivre : manche ${index} · ${target} pts.',
+			'game.offers.nextBoss' => ({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, avec des pierres.',
+			'game.offers.build' => ({required Object jokers}) => 'Tes jokers : ${jokers}',
+			'game.offers.completesPair' => ({required Object joker}) => '★ Forme une paire avec ${joker}',
+			'game.offers.pairsWith' => ({required Object joker}) => 'En paire avec : ${joker}',
 			'game.offers.take' => 'Prendre',
 			'game.lost.outOfPieces' => 'Plus de pièces',
 			'game.lost.noRoom' => 'Plus de place',
-			'game.lost.progress' => ({required Object score, required Object target}) => '${score} sur ${target} points cette manche.',
-			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Relancer · ${rows} lignes vidées + ${pieces} pièces',
+			'game.lost.progress' => ({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.',
+			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces',
 			'game.lost.endRun' => 'Terminer la partie',
-			'game.end.won' => 'Boss vaincu · partie terminée',
-			'game.end.overRound' => ({required Object index}) => 'Partie finie · manche ${index} atteinte',
-			'game.end.overBoss' => 'Partie finie · boss atteint',
+			'game.end.won' => 'Boss vaincu · partie réussie',
+			'game.end.overRound' => ({required Object index}) => 'Fin de partie · manche ${index} atteinte',
+			'game.end.overBoss' => 'Fin de partie · boss atteint',
 			'game.end.total' => ({required Object total}) => '${total} points',
-			'game.end.build' => ({required Object jokers}) => 'Combinaison : ${jokers}',
-			'game.end.noJokers' => 'aucune',
-			'game.end.best' => ({required Object points}) => 'Record : ${points}',
-			'game.end.newBest' => 'Nouveau record !',
+			'game.end.build' => ({required Object jokers}) => 'Jokers : ${jokers}',
+			'game.end.noJokers' => 'aucun',
+			'game.end.best' => ({required Object points}) => 'Record : ${points}',
+			'game.end.newBest' => 'Nouveau record !',
 			'game.end.retry' => 'Rejouer',
 			'game.jokers.stonemason.name' => 'Tailleur de pierre',
 			'game.jokers.stonemason.description' => '+50 jetons par pierre effacée. 2 pierres de plus à chaque manche.',
 			'game.jokers.combo.name' => 'Roi du combo',
-			'game.jokers.combo.description' => '+1 mult pour chaque coup gagnant d\'affilée.',
+			'game.jokers.combo.description' => '+1 mult par coup d\'affilée qui efface une ligne.',
 			'game.jokers.patience.name' => 'Patience',
-			'game.jokers.patience.description' => 'Chaque coup sans ligne met +2 mult en réserve pour la prochaine.',
+			'game.jokers.patience.description' => 'Chaque coup qui n\'efface rien met +2 mult de côté pour ta prochaine ligne.',
 			'game.jokers.precision.name' => 'Précision',
 			'game.jokers.precision.description' => '+6 mult quand une pièce de 1 ou 2 cases complète une ligne.',
 			'game.jokers.collector.name' => 'Collectionneur',
-			'game.jokers.collector.description' => '+1 mult à chaque ligne pour chaque joker possédé.',
+			'game.jokers.collector.description' => 'À chaque ligne effacée, +1 mult par joker que tu as.',
 			'game.jokers.twin.name' => 'Lignes jumelles',
 			'game.jokers.twin.description' => '×3 mult quand tu effaces 2 lignes ou plus d\'un coup.',
 			'game.jokers.column.name' => 'Chasseur de colonnes',
@@ -527,29 +527,29 @@ extension on TranslationsFr {
 			'game.jokers.heavy.name' => 'Poids lourd',
 			'game.jokers.heavy.description' => '×2 mult quand une pièce de 4 cases ou plus complète une ligne.',
 			'game.jokers.sweep.name' => 'Grand ménage',
-			'game.jokers.sweep.description' => '+500 points quand le plateau se vide entièrement.',
+			'game.jokers.sweep.description' => '+500 points quand tu vides entièrement le plateau.',
 			'game.jokers.quarry.name' => 'Carrière',
 			'game.jokers.quarry.description' => 'Chaque ligne effacée fait tomber une pierre sur une case vide au hasard.',
-			'game.jokers.bigbox.name' => 'Grande boîte',
+			'game.jokers.bigbox.name' => 'Grand format',
 			'game.jokers.bigbox.description' => 'Les pièces de 5 cases ou plus arrivent 3× plus souvent.',
 			'game.jokers.tiny.name' => 'Petits outils',
 			'game.jokers.tiny.description' => 'Les pièces de 1 ou 2 cases arrivent 3× plus souvent.',
-			'game.jokers.pockets.name' => 'Poches profondes',
+			'game.jokers.pockets.name' => 'Poches pleines',
 			'game.jokers.pockets.description' => '+4 pièces à chaque manche.',
 			'game.jokers.saver.name' => 'Épargnant',
-			'game.jokers.saver.description' => 'Chaque pièce inutilisée quand tu gagnes une manche rapporte +40 points de partie.',
+			'game.jokers.saver.description' => 'Chaque pièce non jouée à la fin d\'une manche gagnée rapporte +40 points de partie.',
 			'push.channelName' => 'Annonces',
-			'push.channelDescription' => 'Nouvelles et messages de l\'application.',
+			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',
 			'home.title' => 'Blockmancer',
-			'home.tagline' => 'Posez des pièces, effacez des lignes, combinez vos jokers.',
+			'home.tagline' => 'Pose des pièces, efface des lignes, combine tes jokers.',
 			'home.daily.title' => 'Partie du jour',
-			'home.daily.subtitle' => 'Les mêmes pièces pour tous aujourd\'hui',
+			'home.daily.subtitle' => 'Aujourd\'hui, les mêmes pièces pour tout le monde',
 			'home.resume.title' => 'Reprendre la partie',
-			'home.resume.subtitle' => 'Reprenez là où vous en étiez',
+			'home.resume.subtitle' => 'Reprends là où tu en étais',
 			'home.practice.title' => 'Entraînement',
-			'home.practice.subtitle' => 'Une partie neuve à chaque fois',
-			'home.best' => ({required Object points}) => 'Record : ${points}',
+			'home.practice.subtitle' => 'Une nouvelle partie à chaque fois',
+			'home.best' => ({required Object points}) => 'Record : ${points}',
 			'home.noBest' => 'Pas encore de partie',
 			'home.settings' => 'Réglages',
 			'settings.title' => 'Réglages',
@@ -557,14 +557,14 @@ extension on TranslationsFr {
 			'settings.sound' => 'Son',
 			'settings.haptics' => 'Vibrations',
 			'settings.reduceMotion.title' => 'Réduire les animations',
-			'settings.reduceMotion.subtitle' => 'Des animations plus douces, sans secousses d\'écran',
+			'settings.reduceMotion.subtitle' => 'Des animations plus douces, sans tremblement de l\'écran',
 			'settings.language.title' => 'Langue',
 			'settings.language.system' => 'Système',
 			'settings.language.en' => 'English',
 			'settings.language.fr' => 'Français',
 			'settings.reset.title' => 'Réinitialiser la progression',
 			'settings.reset.subtitle' => 'Tes records et la partie en cours',
-			'settings.reset.confirmTitle' => 'Réinitialiser la progression ?',
+			'settings.reset.confirmTitle' => 'Réinitialiser la progression ?',
 			'settings.reset.confirmMessage' => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.',
 			'settings.reset.confirm' => 'Réinitialiser',
 			'settings.reset.cancel' => 'Annuler',

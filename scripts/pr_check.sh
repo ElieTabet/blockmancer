@@ -6,7 +6,7 @@ set -euo pipefail
 # just sequences them and maps flags/env to behaviour.
 #
 # Usage: bash scripts/pr_check.sh [--tests-only] [--verbose]
-#   --tests-only   Run only the Tests step (skip format/analyze/cycles/generated)
+#   --tests-only   Run only the Tests step (skip format/strings/analyze/cycles/generated)
 #   --verbose      Print each step's output even when it succeeds
 # Env equivalents: PRCHECK_TESTS_ONLY=1, PRCHECK_VERBOSE=1
 #
@@ -36,7 +36,7 @@ touch pubspec.lock
 # failure (or when VERBOSE=1) echo its captured output. Exits 1 on failure.
 run_step() {
   local n=$1 label=$2; shift 2
-  echo "[$n/5] $label..."
+  echo "[$n/6] $label..."
   local start out ret el
   start=$(date +%s)
   # `if` guards the capture so `set -e` doesn't abort before we record the status.
@@ -46,17 +46,18 @@ run_step() {
     echo "$out"
   fi
   if [ "$ret" -eq 0 ]; then
-    echo "[$n/5] $label... ✓ (${el}s)"
+    echo "[$n/6] $label... ✓ (${el}s)"
   else
-    echo "[$n/5] $label... ✗ (${el}s)"
+    echo "[$n/6] $label... ✗ (${el}s)"
     exit 1
   fi
 }
 
 if [ "$TESTS_ONLY" -eq 0 ]; then
   run_step 1 "Format"               bash scripts/format_check.sh
-  run_step 2 "Analyze"              dart run melos run analyze
-  run_step 3 "Cycling dependencies" dart run melos list --cycles
-  run_step 4 "Generated up-to-date" bash scripts/check_generated.sh
+  run_step 2 "Hard-coded strings"   bash scripts/check_hardcoded_strings.sh
+  run_step 3 "Analyze"              dart run melos run analyze
+  run_step 4 "Cycling dependencies" dart run melos list --cycles
+  run_step 5 "Generated up-to-date" bash scripts/check_generated.sh
 fi
-run_step 5 "Tests"                  dart run melos run test
+run_step 6 "Tests"                  dart run melos run test

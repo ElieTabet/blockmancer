@@ -128,10 +128,14 @@ melos:
       exec:
         concurrency: 4
 
+    check-strings:
+      description: "Fail on a hard-coded user-facing string in a presentation, composition or app source — copy goes through slang (scripts/check_hardcoded_strings.sh; `// l10n-ignore: <reason>` marks genuine non-copy)"
+      run: bash scripts/check_hardcoded_strings.sh
+
     pr-check:
       description: |
-        Full PR validation suite (delegates to scripts/pr_check.sh): format, analyze,
-        cycling dependencies, generated up-to-date, tests. Stops on first failure.
+        Full PR validation suite (delegates to scripts/pr_check.sh): format, hard-coded
+        strings, analyze, cycling dependencies, generated up-to-date, tests. Stops on first failure.
         Prefer `bash scripts/pr_check.sh [--tests-only] [--verbose]`.
         Env: PRCHECK_VERBOSE=1 (print step output even on success), PRCHECK_TESTS_ONLY=1.
       run: bash scripts/pr_check.sh
