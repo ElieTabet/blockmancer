@@ -280,10 +280,9 @@ engine's events and never recomputes a rule.
   Patience's bank, `occupiedAfterPlacing` (filled cells and stones once the piece has landed, before
   its lines clear: Full House and On the Brink), `trayEmptied` (the move played the tray's last
   piece: Finisher) and `trayClearMask`. `RunState.trayClearMask` has a bit per tray slot whose piece
-  cleared, reset by every refill to `0` for a tray dealt in full and to `null` for a short one or
-  one holding any of a revive's pieces, which can never earn Hat Trick. A revive's pieces are dealt
-  after the round's own (`RunState.revivePiecesLeft` counts those not dealt yet, and a new round
-  forgets them); a revive that leaves the tray in hand keeps its mask.
+  cleared, reset by every refill to `0` for a tray dealt in full and to `null` for a short one,
+  which can never earn Hat Trick. A revive sets the tray in play, if any, to `null`; a tray dealt
+  later counts like any other, whichever pieces it holds.
 - **`shared_domain` is pure Dart** because the engine depends on it and must run on the plain VM
   and the web.
 - **Pure Dart.** Its pubspec declares no Flutter, so a `package:flutter` import fails
@@ -333,7 +332,7 @@ One run is saved on the device, so a killed app picks it up where it stood.
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
   wire format. The schema has `version: 7`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, no revive's pieces told apart, and a tray that can't earn Hat Trick; the saved pool is kept, so an old run never offers a new joker), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick; the saved pool is kept, so an old run never offers a new joker), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes

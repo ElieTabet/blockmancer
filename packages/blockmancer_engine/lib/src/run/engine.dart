@@ -182,7 +182,9 @@ Transition place(
 }
 
 /// Empties the fullest rows and adds pieces to a lost round, once per
-/// [RunConfig.revivesPerRun]. A board still stuck afterwards loses again.
+/// [RunConfig.revivesPerRun]. A board still stuck afterwards loses again. The
+/// tray in play, if any, can no longer earn Hat Trick; a tray dealt later
+/// can, whichever pieces it holds.
 Transition revive(RunState state) {
   if (!canRevive(state)) throw StateError('Cannot revive in ${state.phase}');
 
@@ -202,8 +204,8 @@ Transition revive(RunState state) {
           Cell(col: col, row: row): const .empty(),
     }),
     piecesLeft: state.piecesLeft + state.config.revivePieces,
-    revivePiecesLeft: state.revivePiecesLeft + state.config.revivePieces,
     revivesUsed: state.revivesUsed + 1,
+    trayClearMask: null,
   );
 
   return _settle(
@@ -246,9 +248,8 @@ int? _playableShape(RunState state, int trayIndex) {
 }
 
 /// Draws the next tray when the current one is played out and pieces remain.
-/// Only a tray dealt in full from the round's own pieces can earn Hat Trick:
-/// a short one, or one holding any of a revive's pieces, starts with no clear
-/// mask.
+/// Only a tray dealt in full can earn Hat Trick: a short one starts with no
+/// clear mask.
 Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
   final (state, events) = transition;
 
@@ -272,16 +273,12 @@ Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
     }
   }
 
-  final piecesLeft = state.piecesLeft - count;
-  final ownPiecesOnly = piecesLeft >= state.revivePiecesLeft;
-
   return (
     state.copyWith(
-      piecesLeft: piecesLeft,
+      piecesLeft: state.piecesLeft - count,
       piecesRngState: rng.state,
-      revivePiecesLeft: ownPiecesOnly ? state.revivePiecesLeft : piecesLeft,
       tray: tray,
-      trayClearMask: count == traySize && ownPiecesOnly ? 0 : null,
+      trayClearMask: count == traySize ? 0 : null,
     ),
     [...events, .trayRefilled(tray: tray)],
   );
@@ -358,7 +355,6 @@ Transition _startRound(Transition transition) {
       runSeed: state.seed,
       stream: .pieces,
     ),
-    revivePiecesLeft: 0,
     roundIndex: roundIndex,
     score: 0,
     stonesRngState: stonesRng.state,

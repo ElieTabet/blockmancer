@@ -93,8 +93,8 @@ const _config = RunConfig(
 );
 
 /// Mid-round in the boss: stones and pieces on the board, a stored Patience
-/// bank, a streak going, one revive spent with one of its pieces still to
-/// deal, and a tray slot already played, whose piece cleared a line.
+/// bank, a streak going, one revive spent and a tray slot already played,
+/// whose piece cleared a line.
 final _midRound = RunState(
   board: Board.empty().withCells({
     const Cell(col: 0, row: 0): const .stone(),
@@ -108,7 +108,6 @@ final _midRound = RunState(
   pickIndex: 2,
   piecesLeft: 11,
   piecesRngState: 0xDEADBEEF,
-  revivePiecesLeft: 1,
   revivesUsed: 1,
   roundIndex: 1,
   runTotal: 1870,
@@ -298,8 +297,8 @@ const _version6Save = """
 """;
 
 /// What version 7 fills in for a save from before it: the numbers and unlocks
-/// it first shipped for the stars' jokers, no revive's pieces told apart, and
-/// a tray that can't earn Hat Trick.
+/// it first shipped for the stars' jokers, and a tray that can't earn Hat
+/// Trick.
 RunState _beforeVersion7(RunState run) => run.copyWith(
   config: run.config.copyWith(
     jokers: run.config.jokers.copyWith(
@@ -314,7 +313,6 @@ RunState _beforeVersion7(RunState run) => run.copyWith(
       StarUnlock(jokers: [.finisher, .hattrick], stars: 6),
     ],
   ),
-  revivePiecesLeft: 0,
   trayClearMask: null,
 );
 
