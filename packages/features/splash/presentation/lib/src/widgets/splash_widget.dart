@@ -17,7 +17,6 @@ class _SplashWidgetState extends ConsumerState<SplashWidget> {
   @override
   void initState() {
     super.initState();
-    // Kick off the splash → login hand-off after the first frame.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(splashStateProvider.notifier).onReady(context);
     });

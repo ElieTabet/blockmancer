@@ -76,6 +76,19 @@ def bounds(w, h, rows):
     return minx, miny, maxx, maxy
 
 
+def reach(minx, miny, maxx, maxy, rows):
+    """Farthest ink pixel from the ink box's centre, which compose() puts on the
+    canvas centre. A box would understate it: the logo's corners are its reach."""
+    cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
+    far = 0
+    for y in range(miny, maxy + 1):
+        r = rows[y]
+        for x in range(minx, maxx + 1):
+            if r[x * 4 + 3]:
+                far = max(far, (x - cx) ** 2 + (y - cy) ** 2)
+    return far ** 0.5
+
+
 def box_scale(rows, sx, sy, sw, sh, dw, dh):
     """Area-average downscale of a sub-rectangle. Premultiplies so that
     transparent pixels do not bleed their colour into the edges."""
@@ -132,21 +145,26 @@ def compose(size, scaled, sw, sh, ground):
 w, h, rows = decode(SRC)
 minx, miny, maxx, maxy = bounds(w, h, rows)
 bw, bh = maxx - minx + 1, maxy - miny + 1
-print(f'source {w}x{h}, ink box {bw}x{bh} at ({minx},{miny}), ground #%02x%02x%02x' % GROUND)
+far = reach(minx, miny, maxx, maxy, rows)
+print(f'source {w}x{h}, ink box {bw}x{bh} at ({minx},{miny}), reach {far:.0f}px, ground #%02x%02x%02x' % GROUND)
 
 SIZE = 1024
-for name, fraction, bg in (
-    ('icon.png', 0.78, GROUND),          # iOS + legacy Android: opaque, RGB, no alpha
-    # The adaptive foreground is padded by flutter_launcher_icons as well — it
-    # writes a 16% inset either side — so this is deliberately close to full
-    # bleed. 0.78 x 0.68 lands the logo at about 80% of the visible circle;
-    # padding it here too would leave it stranded in the middle.
-    ('icon_foreground.png', 0.78, None),
+# Android masks an adaptive icon to at most its centre 72 of 108dp, and only a
+# 66dp circle is shown by every launcher. flutter_launcher_icons insets the
+# foreground 16% a side, so this master spans 0.68 x 108dp and the circle's
+# 33dp radius is 33 / (0.68 x 108) of its width. Fitting the logo's reach to 96%
+# of that keeps the corner cubes whole under the roundest mask.
+SAFE_RADIUS = SIZE * 33 / (0.68 * 108)
+for name, scale, bg in (
+    # iOS + legacy Android: opaque, RGB, no alpha. The box fills 78%, leaving
+    # about 11% a side under iOS's rounded-square mask.
+    ('icon.png', min(SIZE * 0.78 / bw, SIZE * 0.78 / bh), GROUND),
+    ('icon_foreground.png', SAFE_RADIUS * 0.96 / far, None),
 ):
-    scale = min(SIZE * fraction / bw, SIZE * fraction / bh)
     dw, dh = max(1, round(bw * scale)), max(1, round(bh * scale))
     scaled = box_scale(rows, minx, miny, bw, bh, dw, dh)
     out, ch = compose(SIZE, scaled, dw, dh, bg)
     n = encode(f'packages/dsm/assets/source/{name}', SIZE, SIZE, out, 6 if ch == 4 else 2)
-    print(f'  {name}: {SIZE}x{SIZE}, logo {dw}x{dh} ({int(fraction*100)}%), '
+    print(f'  {name}: {SIZE}x{SIZE}, logo {dw}x{dh} ({100 * dw / SIZE:.0f}%), reach {far * scale:.0f}px, '
           f'{"RGB (no alpha)" if ch == 3 else "RGBA"}, {n // 1024} KiB')
+print(f'  adaptive safe radius on the foreground master: {SAFE_RADIUS:.0f}px')
