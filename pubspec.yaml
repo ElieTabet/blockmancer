@@ -47,6 +47,7 @@ melos:
         analyzer: ^10.2.0
         analyzer_plugin: 0.14.4 # pinned to match analyzer 10.2.0 / analysis_server_plugin 0.3.10
         auto_route: ^11.1.0
+        device_info_plus: ^13.3.0 # the phone's model and OS version for a feedback email; known only to the app_info package
         dio: ^5.4.0 # not used today; `melos run create --type core` scaffolds packages with it
         firebase_analytics: ^12.6.0 # automatic usage events, production release builds only (packages/utilities/telemetry)
         firebase_core: ^4.15.0 # Firebase app initialization — the app starts it at boot; packages/utilities/push uses it in tests
@@ -60,6 +61,7 @@ melos:
         google_fonts: ^6.3.1
         intl: ^0.20.2
         json_annotation: ^4.9.0
+        package_info_plus: ^10.2.2 # the app's version and build number shown in Settings; known only to the app_info package
         riverpod_annotation: ^4.0.2
         shared_preferences: ^2.5.3 # the best scores, the saved run and the settings, on the device (packages/features/{game,settings}/data)
         slang: ^4.19.0

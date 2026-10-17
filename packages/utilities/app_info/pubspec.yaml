@@ -1,0 +1,19 @@
+name: app_info
+description: "The app's version and the device it runs on — the only place package_info_plus and device_info_plus are known."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  device_info_plus: ^13.3.0
+  flutter:
+    sdk: flutter
+  package_info_plus: ^10.2.2
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
