@@ -115,7 +115,7 @@ melos:
       run: melos exec -c 4 -- bash "$MELOS_ROOT_PATH/scripts/test_package.sh"
 
     balance-bot:
-      description: Play 2,000 seeded runs per reference build with the greedy balance bot and print how far they get (packages/blockmancer_engine/tool/balance_bot.dart; for --runs / --build, run it from that package)
+      description: Play 2,000 seeded runs per reference build with the greedy balance bot in Rubble and print how far they get, with the 50th and 80th percentile totals (packages/blockmancer_engine/tool/balance_bot.dart; for --runs / --build / --world, run it from that package)
       run: cd packages/blockmancer_engine && dart run tool/balance_bot.dart
 
     test-engine-web:

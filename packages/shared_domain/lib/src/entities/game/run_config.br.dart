@@ -41,6 +41,9 @@ abstract class RunConfig with _$RunConfig {
     required int reviveRows,
     required int revivesPerRun,
     required List<RoundSpec> rounds,
+
+    /// The run total that earns the world's third star.
+    required int starThreshold,
     required int traySize,
 
     /// The world whose boss rule the run plays under.

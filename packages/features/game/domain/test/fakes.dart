@@ -60,6 +60,7 @@ const _config = RunConfig(
   reviveRows: 2,
   revivesPerRun: 1,
   rounds: [RoundSpec(isBoss: true, pieces: 14, stones: 0, target: 250)],
+  starThreshold: 8000,
   traySize: 3,
   world: .rubble,
 );

@@ -35,22 +35,22 @@ BotRun playBotRun(
 /// What a batch of bot runs adds up to.
 typedef BotSummary = ({
   double bossWinRate,
-  int medianTotal,
+  int p50Total,
+  int p80Total,
   List<double> roundClearRates,
   int runs,
 });
 
 /// [runs] summed up over a run of [roundCount] rounds: the share of runs
-/// that cleared each round, the median total, and how often the boss fell.
+/// that cleared each round, the 50th and 80th percentile totals, and how often
+/// the boss fell.
 BotSummary summarize(List<BotRun> runs, {required int roundCount}) {
   final totals = [for (final run in runs) run.runTotal]..sort();
-  final middle = totals.length ~/ 2;
 
   return (
     bossWinRate: runs.where((run) => run.won).length / runs.length,
-    medianTotal: totals.length.isOdd
-        ? totals[middle]
-        : (totals[middle - 1] + totals[middle]) ~/ 2,
+    p50Total: _nearestRank(totals, percent: 50),
+    p80Total: _nearestRank(totals, percent: 80),
     roundClearRates: [
       for (var round = 1; round <= roundCount; round++)
         runs.where((run) => run.roundsWon >= round).length / runs.length,
@@ -58,3 +58,8 @@ BotSummary summarize(List<BotRun> runs, {required int roundCount}) {
     runs: runs.length,
   );
 }
+
+/// The nearest-rank percentile: the lowest total that at least [percent]% of
+/// [sorted] are at or under, so it is always a total some run made.
+int _nearestRank(List<int> sorted, {required int percent}) =>
+    sorted[(percent * sorted.length + 99) ~/ 100 - 1];

@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 4;
+const savedRunVersion = 5;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -15,6 +15,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
       1 => migrate(_fromVersion1(json)),
       2 => migrate(_fromVersion2(json)),
       3 => migrate(_fromVersion3(json)),
+      4 => migrate(_fromVersion4(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -77,6 +78,27 @@ Map<String, dynamic> _fromVersion3(Map<String, dynamic> json) {
       },
     },
     'version': 4,
+  };
+}
+
+/// Version 4 had no third star: its runs take the threshold version 5 first
+/// gave their world, as literals since the defaults may move.
+Map<String, dynamic> _fromVersion4(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+  final starThreshold = switch (config['world']) {
+    'gravity' => 8250,
+    'rubble' => 8000,
+    final world => throw FormatException('Saved run world $world'),
+  };
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{...config, 'starThreshold': starThreshold},
+    },
+    'version': 5,
   };
 }
 
@@ -281,6 +303,7 @@ final class RunConfigDto {
     required this.reviveRows,
     required this.revivesPerRun,
     required this.rounds,
+    required this.starThreshold,
     required this.traySize,
     required this.world,
   });
@@ -295,6 +318,7 @@ final class RunConfigDto {
     reviveRows: config.reviveRows,
     revivesPerRun: config.revivesPerRun,
     rounds: [for (final round in config.rounds) .fromDomain(round)],
+    starThreshold: config.starThreshold,
     traySize: config.traySize,
     world: config.world.name,
   );
@@ -311,6 +335,7 @@ final class RunConfigDto {
   final int reviveRows;
   final int revivesPerRun;
   final List<RoundSpecDto> rounds;
+  final int starThreshold;
   final int traySize;
   final String world;
 
@@ -326,6 +351,7 @@ final class RunConfigDto {
     reviveRows: reviveRows,
     revivesPerRun: revivesPerRun,
     rounds: [for (final round in rounds) round.toDomain()],
+    starThreshold: starThreshold,
     traySize: traySize,
     world: WorldId.values.byName(world),
   );

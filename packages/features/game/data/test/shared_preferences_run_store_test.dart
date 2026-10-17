@@ -74,6 +74,7 @@ const _config = RunConfig(
     RoundSpec(isBoss: false, pieces: 14, stones: 0, target: 250),
     RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
   ],
+  starThreshold: 9500,
   traySize: 3,
   world: .gravity,
 );
@@ -186,6 +187,38 @@ const _version3Save = """
 "storedMult":6,"streak":3,"tray":[4,null,16]},"version":3}
 """;
 
+/// [_midRound] as the version 4 build wrote it, before the config named the
+/// total that earns the third star. Frozen: never regenerate it from today's
+/// DTOs.
+const _version4Save = """
+{"day":20261017,"mode":"daily","run":{"board":[
+-1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,1,9,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,-1],
+"config":{"chipsPerCell":20,"jokerPool":["anchor","patience","twin","stonemason"],
+"jokers":{"anchorMult":19,"avalancheChipsPerCell":21,"bigBoxFactor":15,
+"bigBoxMinPieceSize":9,"collectorMultPerJoker":8,"columnFactor":11,
+"comboMultPerStreak":10,"heavyFactor":12,"heavyMinPieceSize":5,
+"patienceStoredPerMove":16,"pocketsExtraPieces":17,"precisionBonusMult":18,
+"precisionMaxPieceSize":4,"quarryStonesPerClear":2,"saverPointsPerPiece":70,
+"stonemasonChipsPerStone":80,"stonemasonExtraStones":7,"sweepBonus":900,
+"tinyFactor":14,"tinyMaxPieceSize":1,"twinFactor":13,"twinMinLines":3},
+"offerCount":3,"partnerBias":0.75,"revivePieces":3,"reviveRows":2,
+"revivesPerRun":1,"rounds":[{"isBoss":false,"pieces":14,"stones":0,"target":250},
+{"isBoss":true,"pieces":22,"stones":6,"target":2000}],"traySize":3,
+"world":"gravity"},
+"jokers":["patience","twin","stonemason"],
+"phase":{"kind":"playing","offers":null,"reason":null},"pickIndex":2,
+"piecesLeft":11,"piecesRngState":3735928559,"revivesUsed":1,"roundIndex":1,
+"runTotal":1870,"score":640,"seed":20261017,"stonesRngState":123456789,
+"storedMult":6,"streak":3,"tray":[4,null,16]},"version":4}
+""";
+
 /// The 14 jokers before version 4 added Anchor and Avalanche.
 const _version3Pool = [
   JokerId.bigbox,
@@ -273,7 +306,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 4);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 5);
   });
 
   for (final (name, raw) in [
@@ -361,6 +394,7 @@ void main() {
               chipsPerCell: 10,
               jokerPool: _version3Pool,
               jokers: _version1Tuning,
+              starThreshold: 8000,
               world: .rubble,
             ),
           ),
@@ -391,6 +425,7 @@ void main() {
                 anchorMult: 4,
                 avalancheChipsPerCell: 25,
               ),
+              starThreshold: 8000,
               world: .rubble,
             ),
           ),
@@ -421,6 +456,7 @@ void main() {
                 anchorMult: 4,
                 avalancheChipsPerCell: 25,
               ),
+              starThreshold: 8250,
             ),
           ),
         ),
@@ -428,7 +464,42 @@ void main() {
     },
   );
 
-  test('a version 4 save passes through migrate unchanged', () {
+  for (final (world, starThreshold) in const [
+    ('gravity', 8250),
+    ('rubble', 8000),
+  ]) {
+    test(
+      'a save from version 4 in $world resumes with the star threshold version 5 gave it',
+      () async {
+        // Given
+        SharedPreferences.setMockInitialValues({
+          'run.saved': _version4Save.replaceFirst(
+            '"world":"gravity"',
+            '"world":"$world"',
+          ),
+        });
+
+        // When
+        final loaded = await const SharedPreferencesRunStore().load();
+
+        // Then
+        expect(
+          loaded,
+          SavedRun(
+            mode: const .daily(day: 20261017),
+            run: _midRound.copyWith(
+              config: _config.copyWith(
+                starThreshold: starThreshold,
+                world: WorldId.values.byName(world),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  test('a version 5 save passes through migrate unchanged', () {
     // Given
     final json = SavedRunDto.fromDomain(
       SavedRun(mode: const .practice(), run: _midRound),

@@ -1,63 +1,66 @@
 // The balance bot: plays many seeded runs with a greedy policy and a fixed
 // joker build, and prints how far they get, for tuning the round targets.
 //
-//   dart run tool/balance_bot.dart --runs 2000 --build patience,twin
+//   dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 //
 // `--build` may be given several times, one table row each; `none` takes the
-// first offer every time. With no `--build`, the five reference builds run.
-// Seeds are 1 to --runs, so a table is reproducible.
+// first offer every time. With no `--build`, the six reference builds run.
+// `--world` is rubble (the default) or gravity, whose rule holds in the boss.
+// Offers draw from every joker, so any build can be offered whatever the
+// player has unlocked. Seeds are 1 to --runs, so a table is reproducible.
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:blockmancer_engine/src/bot/bot_args.dart';
 import 'package:blockmancer_engine/src/bot/bot_run.dart';
-import 'package:blockmancer_engine/src/run/default_config.dart';
+import 'package:blockmancer_engine/src/worlds/world_map.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-const _referenceBuilds = [
-  'none',
-  'patience,twin',
-  'combo,collector',
-  'heavy,bigbox',
-  'stonemason,quarry',
-];
-
 Future<void> main(List<String> args) async {
-  final (:builds, :runs) = _parse(args);
-  final roundCount = defaultConfig.rounds.length;
+  final BotArgs(:builds, :runs, :world) = _parse(args);
+  final config = configFor(world, jokerPool: JokerId.values);
+  final roundCount = config.rounds.length;
   final watch = Stopwatch()..start();
 
   stdout
     ..writeln(
-      '| build | ${[for (var round = 1; round <= roundCount; round++) 'round $round'].join(' | ')} | median total | boss win |',
+      '| build | ${[for (var round = 1; round <= roundCount; round++) 'round $round'].join(' | ')} | P50 total | P80 total | boss win |',
     )
-    ..writeln('|---|${'---|' * roundCount}---|---|');
+    ..writeln('|---|${'---|' * roundCount}---|---|---|');
 
   for (final name in builds) {
     final summary = summarize(
-      await _playAll(_buildOf(name), runs: runs),
+      await _playAll(_buildOf(name), config: config, runs: runs),
       roundCount: roundCount,
     );
 
     stdout.writeln(
       '| $name | ${summary.roundClearRates.map(_percent).join(' | ')} '
-      '| ${summary.medianTotal} | ${_percent(summary.bossWinRate)} |',
+      '| ${summary.p50Total} | ${summary.p80Total} '
+      '| ${_percent(summary.bossWinRate)} |',
     );
   }
 
   stdout.writeln(
-    '\n$runs runs per build, seeds 1–$runs, in ${(watch.elapsedMilliseconds / 1000).toStringAsFixed(1)} s.',
+    '\n${world.name}: $runs runs per build, seeds 1–$runs, in '
+    '${(watch.elapsedMilliseconds / 1000).toStringAsFixed(1)} s on '
+    '${Platform.numberOfProcessors} cores.',
   );
 }
 
 /// Seeds 1 to [runs], shared out over one isolate per core.
-Future<List<BotRun>> _playAll(List<JokerId> build, {required int runs}) async {
+Future<List<BotRun>> _playAll(
+  List<JokerId> build, {
+  required RunConfig config,
+  required int runs,
+}) async {
   final workers = Platform.numberOfProcessors;
   final chunks = await Future.wait([
     for (var worker = 0; worker < workers; worker++)
       Isolate.run(
         () => [
           for (var seed = 1 + worker; seed <= runs; seed += workers)
-            playBotRun(seed, build: build, config: defaultConfig),
+            playBotRun(seed, build: build, config: config),
         ],
       ),
   ]);
@@ -71,27 +74,16 @@ List<JokerId> _buildOf(String name) => name == 'none'
 
 String _percent(double share) => '${(share * 100).round()}%';
 
-({List<String> builds, int runs}) _parse(List<String> args) {
-  final builds = <String>[];
-  var runs = 2000;
-
-  for (var index = 0; index < args.length; index++) {
-    final value = index + 1 < args.length ? args[index + 1] : null;
-
-    switch (args[index]) {
-      case '--runs' when value != null:
-        runs = int.parse(value);
-        index++;
-      case '--build' when value != null:
-        builds.add(value);
-        index++;
-      default:
-        stderr.writeln(
-          'Usage: dart run tool/balance_bot.dart [--runs N] [--build a,b]...',
-        );
-        exit(64);
-    }
+BotArgs _parse(List<String> args) {
+  try {
+    return parseBotArgs(args);
+  } on FormatException catch (error) {
+    stderr
+      ..writeln('${error.message}: ${error.source}')
+      ..writeln(
+        'Usage: dart run tool/balance_bot.dart [--runs N] '
+        '[--world rubble|gravity] [--build a,b]...',
+      );
+    exit(64);
   }
-
-  return (builds: builds.isEmpty ? _referenceBuilds : builds, runs: runs);
 }

@@ -73,11 +73,13 @@ melos run test
 melos run test-engine-web
 
 # Play 2,000 seeded runs for each reference build with the greedy balance bot, and print
-# the share of runs clearing each round, the median total and the boss win rate
-# (docs/balance/<date>.md holds each table, docs/balance-v0.md the first). It plays
-# `defaultConfig`. Melos passes no arguments through, so for
-# `--runs` / `--build` run it from the package:
-#   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build patience,twin
+# the share of runs clearing each round, the 50th and 80th percentile totals (nearest rank)
+# and the boss win rate (docs/balance/<date>.md holds each table, docs/balance-v0.md the
+# first, docs/balance/2026-10-17-worlds.md both worlds and the ★3 thresholds). It plays
+# `configFor(world, jokerPool: JokerId.values)` — every joker on offer — in Rubble unless
+# `--world gravity`. Melos passes no arguments through, so for
+# `--runs` / `--build` / `--world` run it from the package:
+#   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 melos run balance-bot
 
 # Run dart analyze across all packages
@@ -289,9 +291,11 @@ engine's events and never recomputes a rule.
   with.
 - **Tunable.** Every number a designer would tune lives in the immutable `RunConfig`, whose values
   are `defaultConfig`: the rounds' targets, pieces and stones, chips per cleared cell, revives, offers,
-  and each joker's numbers (`JokerTuning`, which every joker hook is handed). No rule
-  hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit. This is
-  what Remote Config will feed.
+  each joker's numbers (`JokerTuning`, which every joker hook is handed), and `starThreshold`, the
+  run total that earns a world's third star (Rubble 8,000 and Gravity 8,250, set near the bot's
+  P80 with its best build in docs/balance/2026-10-17-worlds.md; no rule reads it, the app does). No
+  rule hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit. This
+  is what Remote Config will feed.
 - **Worlds.** `RunConfig.world` (`WorldId`) picks a `WorldRule` (`lib/src/worlds/`) that holds in the
   boss only: its round setup (Rubble's stones, from `RoundSpec.stones`) and `transformAnchor`, where
   a dropped piece really lands (Gravity's fall). `canPlace`, `preview`, `place`, `fitsSomewhere`
@@ -316,9 +320,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 4`; `migrate(json)` brings an older version up to date one
+  wire format. The schema has `version: 5`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes

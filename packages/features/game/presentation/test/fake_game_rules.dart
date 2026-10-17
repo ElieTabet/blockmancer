@@ -70,6 +70,7 @@ const testConfig = RunConfig(
     RoundSpec(isBoss: false, pieces: 14, stones: 0, target: 250),
     RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
   ],
+  starThreshold: 8000,
   traySize: 3,
   world: .rubble,
 );
@@ -180,8 +181,11 @@ final class FakeGameRules implements GameRules {
   }
 
   @override
-  RunState tutorialRun({required RunConfig config}) =>
-      throw UnimplementedError('the screen has no tutorial yet');
+  RunState tutorialRun({required RunConfig config}) {
+    calls.add('tutorialRun');
+
+    return runIn(const .playing(), piecesLeft: 96, seed: 0);
+  }
 
   @override
   List<JokerId> unlocksOf(WorldId world) => throw UnimplementedError(_noMap);

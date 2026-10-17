@@ -25,6 +25,11 @@ void main() {
     expect(config.world, WorldId.gravity);
   });
 
+  test('each world names the run total that earns its third star', () {
+    expect(rules.configFor(.rubble, jokerPool: pool).starThreshold, 8000);
+    expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 8250);
+  });
+
   for (final world in const [WorldId.fog, WorldId.mirror, WorldId.speed]) {
     test('${world.name}, coming soon, is not playable and has no run', () {
       expect(rules.isPlayable(world), isFalse);

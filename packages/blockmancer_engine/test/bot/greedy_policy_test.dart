@@ -109,10 +109,25 @@ void main() {
     int medianTotal(RunConfig config) => summarize([
       for (var seed = 1; seed <= 20; seed++)
         playBotRun(seed, build: const [], config: config),
-    ], roundCount: config.rounds.length).medianTotal;
+    ], roundCount: config.rounds.length).p50Total;
 
     // When / Then
     expect(medianTotal(richer), greaterThan(medianTotal(defaultConfig)));
+  });
+
+  test('a bot run in Gravity reaches its boss', () {
+    // Given / When
+    final run = playBotRun(
+      1,
+      build: const [.patience, .twin],
+      config: gravityConfig,
+    );
+
+    // Then
+    expect(
+      run.roundsWon,
+      greaterThanOrEqualTo(gravityConfig.rounds.length - 1),
+    );
   });
 
   group('summing up runs', () {
@@ -133,12 +148,35 @@ void main() {
       ]);
     });
 
-    test('gives the median total and the boss win rate', () {
+    test('gives the boss win rate over every run', () {
       final summary = summarize(runs, roundCount: 5);
 
-      expect(summary.medianTotal, (400 + 2000) ~/ 2);
       expect(summary.bossWinRate, 0.25);
       expect(summary.runs, 4);
+    });
+
+    test('gives the 50th and 80th percentile totals by nearest rank', () {
+      // Given: ten totals out of order, 100 to 1,000
+      final ten = <BotRun>[
+        for (final total in [700, 200, 1000, 500, 100, 900, 300, 800, 400, 600])
+          (roundsWon: 0, runTotal: total, won: false),
+      ];
+
+      // When
+      final summary = summarize(ten, roundCount: 5);
+
+      // Then: the 5th and 8th lowest, ranks ceil(0.5 × 10) and ceil(0.8 × 10)
+      expect(summary.p50Total, 500);
+      expect(summary.p80Total, 800);
+    });
+
+    test('of four totals, P50 is the lower middle and P80 the highest', () {
+      // Given / When: ranks ceil(0.5 × 4) = 2 and ceil(0.8 × 4) = 4
+      final summary = summarize(runs, roundCount: 5);
+
+      // Then
+      expect(summary.p50Total, 400);
+      expect(summary.p80Total, 6000);
     });
   });
 }

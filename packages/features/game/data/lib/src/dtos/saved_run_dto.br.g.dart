@@ -78,6 +78,7 @@ RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
   rounds: (json['rounds'] as List<dynamic>)
       .map((e) => RoundSpecDto.fromJson(e as Map<String, dynamic>))
       .toList(),
+  starThreshold: (json['starThreshold'] as num).toInt(),
   traySize: (json['traySize'] as num).toInt(),
   world: json['world'] as String,
 );
@@ -93,6 +94,7 @@ Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
       'reviveRows': instance.reviveRows,
       'revivesPerRun': instance.revivesPerRun,
       'rounds': instance.rounds.map((e) => e.toJson()).toList(),
+      'starThreshold': instance.starThreshold,
       'traySize': instance.traySize,
       'world': instance.world,
     };

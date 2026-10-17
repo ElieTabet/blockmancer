@@ -40,6 +40,10 @@ const defaultConfig = RunConfig(
     RoundSpec(isBoss: false, pieces: 20, stones: 0, target: 1400),
     RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
   ],
+  // Near the bot's 80th percentile with its best build, so the third star
+  // takes skill and a good build: patience,twin's 7,916 rounded to the nearest
+  // 250 (docs/balance/2026-10-17-worlds.md).
+  starThreshold: 8000,
   traySize: 3,
   world: .rubble,
 );
@@ -51,5 +55,9 @@ final gravityConfig = defaultConfig.copyWith(
     for (final round in defaultConfig.rounds)
       round.isBoss ? round.copyWith(stones: 0) : round,
   ],
+  // Near the bot's 80th percentile with its best build, so the third star
+  // takes skill and a good build: patience,twin's 8,338 rounded to the nearest
+  // 250 (docs/balance/2026-10-17-worlds.md).
+  starThreshold: 8250,
   world: .gravity,
 );
