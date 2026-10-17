@@ -96,6 +96,17 @@ void main() {
       expect(state.board.cells.whereType<StoneCell>(), hasLength(2));
     });
 
+    test('Stonemason’s stones leave the pieces drawn untouched', () {
+      // Given / When
+      final withStonemason = _playing(joker: .stonemason);
+      final without = _playing();
+
+      // Then
+      expect(withStonemason.board, isNot(without.board));
+      expect(withStonemason.tray, without.tray);
+      expect(withStonemason.piecesRngState, without.piecesRngState);
+    });
+
     test('starting with Deep Pockets gives the round 4 more pieces', () {
       // Given / When
       final state = _playing(joker: .pockets);
@@ -283,7 +294,14 @@ void main() {
       final (next, events) = place(state, anchor: topRight, trayIndex: 0);
 
       // Then
+      expect(next.score, 281);
       expect(next.runTotal, 281 + 7 * 40);
+      expect(
+        events,
+        contains(
+          const GameEvent.roundWon(bonus: 280, roundIndex: 0, score: 281),
+        ),
+      );
       expect(
         events,
         contains(
@@ -648,6 +666,36 @@ void main() {
       expect(secondEvents.whereType<StonePlaced>(), hasLength(1));
       expect(first.stonesRngState, isNot(state.stonesRngState));
       expect(second.stonesRngState, isNot(first.stonesRngState));
+    });
+
+    test('Quarry’s stones leave the pieces drawn untouched', () {
+      // Given: the same round with and without Quarry, three clears in a row
+      RunState round(JokerId joker) => _playing(joker: joker).copyWith(
+        board: boardFrom(['#######.', '#######.', '#######.']),
+        piecesLeft: 9,
+        tray: [0, 0, 0],
+      );
+
+      // When: each clear drops a stone, then the empty tray draws three more
+      RunState playThree(RunState state) {
+        for (var row = 0; row < 3; row++) {
+          (state, _) = place(
+            state,
+            anchor: Cell(col: 7, row: row),
+            trayIndex: row,
+          );
+        }
+
+        return state;
+      }
+
+      final withQuarry = playThree(round(.quarry));
+      final without = playThree(round(.twin));
+
+      // Then
+      expect(withQuarry.board, isNot(without.board));
+      expect(withQuarry.tray, without.tray);
+      expect(withQuarry.piecesRngState, without.piecesRngState);
     });
 
     test('Stonemason scores the stones a move clears', () {
