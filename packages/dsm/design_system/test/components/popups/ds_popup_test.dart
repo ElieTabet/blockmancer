@@ -119,30 +119,26 @@ void main() {
     });
   });
 
-  // A popup is a route, so it renders as a sibling of the screen that opened it
-  // rather than inside it. DSBgContainer forces its own subtree dark because the
-  // gradient is charcoal in every theme — without carrying the caller's theme
-  // across, an error popup came up light on top of a charcoal login screen
-  // whenever the device was in light mode.
-  testWidgets('takes its theme from the screen that opened it', (tester) async {
-    final darkTheme = DSTheme.instance.darkTheme;
-
+  // The game is dark by design, so the popup keeps the game's palette even
+  // under a light theme rather than coming up as a white system dialog.
+  testWidgets('a confirmation looks like the game, whatever the theme', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: DSTheme.instance.lightTheme,
         home: Scaffold(
-          body: Theme(
-            data: darkTheme,
-            child: Builder(
-              builder: (context) => TextButton(
-                onPressed: () => DSPopup.showError(
-                  context,
-                  title: 'Sign-in failed',
-                  message: 'Incorrect email or password',
-                  buttonLabel: 'OK',
-                ),
-                child: const Text('open'),
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => DSPopup.showConfirm(
+                context,
+                title: 'Reset progress?',
+                message: 'Your bests and saved run will be gone.',
+                confirmLabel: 'Reset',
+                cancelLabel: 'Cancel',
+                isDestructive: true,
               ),
+              child: const Text('open'),
             ),
           ),
         ),
@@ -153,11 +149,17 @@ void main() {
     await tester.pumpAndSettle();
 
     final dialog = tester.widget<Dialog>(find.byType(Dialog));
+    final shape = dialog.shape! as RoundedRectangleBorder;
 
-    expect(dialog.backgroundColor, darkTheme.colorScheme.surface);
+    expect(dialog.backgroundColor, DSColor.card);
+    expect(shape.side.color, DSColor.cardBorder);
     expect(
-      dialog.backgroundColor,
-      isNot(DSTheme.instance.lightTheme.colorScheme.surface),
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            (widget.decoration as BoxDecoration?)?.color == DSColor.negative,
+      ),
+      findsOneWidget,
     );
   });
 }

@@ -1,12 +1,12 @@
-import 'package:design_system/src/components/foundations/buttons/ds_error_button.dart';
-import 'package:design_system/src/components/foundations/buttons/ds_primary_button.dart';
-import 'package:design_system/src/components/foundations/buttons/ds_secondary_button.dart';
+import 'package:design_system/src/components/foundations/buttons/ds_pressable.dart';
+import 'package:design_system/src/components/foundations/theme/ds_color.dart';
 import 'package:design_system/src/components/foundations/theme/ds_corner_radius.dart';
+import 'package:design_system/src/components/foundations/theme/ds_font.dart';
 import 'package:design_system/src/components/foundations/theme/ds_space.dart';
 import 'package:design_system/src/components/foundations/theme/ds_vertical_space.dart';
 import 'package:flutter/material.dart';
 
-/// Branded, reusable popups. Holds no copy — callers pass already-localized
+/// Popups in the game's palette: a raised card on the scrim, game buttons. Holds no copy — callers pass already-localized
 /// strings. Two semantic entry points:
 /// - [showError] for an error/acknowledge popup (single button).
 /// - [showConfirm] for an interrogative confirm/cancel popup (returns the
@@ -29,14 +29,14 @@ abstract final class DSPopup {
     context,
     (context) => _DSPopupBody(
       icon: Icons.error_outline,
-      iconColor: Theme.of(context).colorScheme.error,
+      iconColor: DSColor.negative,
       title: title,
       message: message,
       actions: [
-        DSPrimaryButton.large(
-          context: context,
-          title: buttonLabel,
-          onPressed: () => Navigator.of(context).pop(),
+        _DSPopupButton(
+          label: buttonLabel,
+          onTap: () => Navigator.of(context).pop(),
+          style: .primary,
         ),
       ],
     ),
@@ -56,22 +56,15 @@ abstract final class DSPopup {
         title: title,
         message: message,
         actions: [
-          if (isDestructive)
-            DSErrorButton.large(
-              context: context,
-              title: confirmLabel,
-              onPressed: () => Navigator.of(context).pop(true),
-            )
-          else
-            DSPrimaryButton.large(
-              context: context,
-              title: confirmLabel,
-              onPressed: () => Navigator.of(context).pop(true),
-            ),
-          DSSecondaryButton.large(
-            context: context,
-            title: cancelLabel,
-            onPressed: () => Navigator.of(context).pop(false),
+          _DSPopupButton(
+            label: confirmLabel,
+            onTap: () => Navigator.of(context).pop(true),
+            style: isDestructive ? .destructive : .primary,
+          ),
+          _DSPopupButton(
+            label: cancelLabel,
+            onTap: () => Navigator.of(context).pop(false),
+            style: .secondary,
           ),
         ],
       ),
@@ -91,19 +84,7 @@ abstract final class DSPopup {
       barrierLabel: MaterialLocalizations.of(
         callerContext,
       ).modalBarrierDismissLabel,
-      // The popup is a route, so it renders as a sibling of the screen that
-      // opened it and inherits the app theme rather than that screen's. Carrying
-      // the caller's theme across keeps it consistent with what is behind it:
-      // DSBgContainer forces its subtree dark because the gradient is charcoal
-      // in every theme, and without this the popup would come up light on top of
-      // it whenever the device is in light mode.
-      //
-      // Builder, not a direct call: [builder] must resolve Theme.of below the
-      // wrapper, or the icon and buttons it builds keep the ambient scheme.
-      pageBuilder: (context, _, _) => Theme(
-        data: Theme.of(callerContext),
-        child: Builder(builder: builder),
-      ),
+      pageBuilder: (context, _, _) => Builder(builder: builder),
       transitionBuilder: (context, animation, _, child) {
         // easeOutBack overshoots past the final position (the "bump"), so
         // it drives the slide only — opacity must stay within [0, 1], so the
@@ -139,7 +120,7 @@ final class _DSPopupRoute<T> extends RawDialogRoute<T> {
     required super.pageBuilder,
     required super.transitionBuilder,
   }) : super(
-         barrierColor: Colors.black54,
+         barrierColor: DSColor.scrim,
          transitionDuration: DSPopup._transitionDuration,
        );
 
@@ -164,22 +145,21 @@ final class _DSPopupBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
     final icon = this.icon;
 
     return Dialog(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: DSColor.card,
       elevation: 0,
-      insetPadding: const EdgeInsets.symmetric(
+      insetPadding: const .symmetric(
         horizontal: DSSpace.xlarge,
         vertical: DSSpace.xxlarge,
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(DSCornerRadius.large),
+        borderRadius: .circular(DSCornerRadius.large),
+        side: const BorderSide(color: DSColor.cardBorder, width: 2),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(DSSpace.large),
+        padding: const .all(DSSpace.large),
         child: Column(
           mainAxisSize: .min,
           crossAxisAlignment: .stretch,
@@ -188,14 +168,22 @@ final class _DSPopupBody extends StatelessWidget {
               Icon(icon, color: iconColor, size: DSSpace.xxxlarge),
               DSVerticalSpace.medium,
             ],
-            Text(title, textAlign: .center, style: textTheme.titleLarge),
+            Text(
+              title,
+              textAlign: .center,
+              style: DSFont.display(
+                const TextStyle(
+                  color: DSColor.white,
+                  fontSize: 22,
+                  fontWeight: .w600,
+                ),
+              ),
+            ),
             DSVerticalSpace.small,
             Text(
               message,
               textAlign: .center,
-              style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
+              style: const TextStyle(color: DSColor.textMuted, fontSize: 14),
             ),
             DSVerticalSpace.xlarge,
             for (var index = 0; index < actions.length; index++) ...[
@@ -203,6 +191,51 @@ final class _DSPopupBody extends StatelessWidget {
               actions[index],
             ],
           ],
+        ),
+      ),
+    );
+  }
+}
+
+enum _DSPopupButtonStyle { destructive, primary, secondary }
+
+/// A game button: amber to go ahead, red to destroy, outlined to back out.
+final class _DSPopupButton extends StatelessWidget {
+  const _DSPopupButton({
+    required this.label,
+    required this.onTap,
+    required this.style,
+  });
+
+  static const _height = 54.0;
+
+  final String label;
+  final VoidCallback onTap;
+  final _DSPopupButtonStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    final (background, border, text) = switch (style) {
+      .destructive => (DSColor.negative, DSColor.negative, DSColor.primary),
+      .primary => (DSColor.accent, DSColor.accent, DSColor.primary),
+      .secondary => (DSColor.sheet, DSColor.cardBorder, DSColor.white),
+    };
+
+    return DSPressable(
+      onTap: onTap,
+      child: Container(
+        height: _height,
+        alignment: .center,
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: .circular(DSCornerRadius.large),
+          border: .all(color: border, width: 2),
+        ),
+        child: Text(
+          label,
+          style: DSFont.display(
+            TextStyle(color: text, fontSize: 18, fontWeight: .w700),
+          ),
         ),
       ),
     );
