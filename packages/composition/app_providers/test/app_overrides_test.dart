@@ -5,6 +5,8 @@
 // The DI slots aren't exported from their packages' barrels (they're bound, not
 // read, by consumers), so this reaches into src/ the way the feature tests do.
 
+import 'dart:math';
+
 import 'package:app_providers/app_providers.dart';
 import 'package:app_providers/src/providers_internal.br.dart';
 import 'package:app_router/app_router.dart';
@@ -27,6 +29,7 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:sounds/sounds.dart';
 import 'package:telemetry/telemetry.dart';
 
+import 'fake_random.dart';
 import 'fake_sound_engine.dart';
 
 void main() {
@@ -142,12 +145,15 @@ void main() {
     late FakeSoundEngine engine;
 
     Future<ProviderContainer> buildLoadedContainer({
+      Random? random,
       bool soundOn = true,
     }) async {
       final container = ProviderContainer(
         overrides: [
           ...appOverrides(collectsTelemetry: false, router: AppRouter()),
-          gameSoundsProvider.overrideWithValue(GameSounds(engine: engine)),
+          gameSoundsProvider.overrideWithValue(
+            GameSounds(engine: engine, random: random),
+          ),
           settings.soundOnProvider.overrideWithValue(soundOn),
         ],
       );
@@ -160,30 +166,48 @@ void main() {
     setUp(() => engine = FakeSoundEngine());
 
     test(
-      "each of the game's sounds plays its own file, at its speed",
+      "each of the game's sounds plays its own file, at its pitch",
       () async {
         // Given
         final container = await buildLoadedContainer();
         final playSound = container.read(game_ui_di.playSoundProvider);
 
-        // When
+        // When: each an octave up
         for (final sound in game_ui.GameSound.values) {
-          playSound(sound, speed: 1.5);
+          playSound(sound, semitones: 12);
         }
 
         // Then
         expect(engine.played, [
           for (final sound in [
+            Sound.bossStart,
+            Sound.bossWin,
             Sound.clear,
             Sound.joker,
+            Sound.kaching,
             Sound.place,
             Sound.roundLost,
             Sound.roundWon,
+            Sound.tick,
           ])
-            (assetKey: sound.assetKey, speed: 1.5),
+            (assetKey: sound.assetKey, speed: 2.0),
         ]);
       },
     );
+
+    test("a game sound's variance reaches the sound's pitch", () async {
+      // Given: a random draw at the top of its range
+      final container = await buildLoadedContainer(random: const FakeRandom(1));
+
+      // When
+      container.read(game_ui_di.playSoundProvider)(
+        game_ui.GameSound.place,
+        variance: 0.05,
+      );
+
+      // Then
+      expect(engine.played.single.speed, closeTo(1.05, 1e-9));
+    });
 
     test('a tap plays the tap sound', () async {
       // Given

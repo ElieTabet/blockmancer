@@ -337,12 +337,20 @@ The game asks for a `GameSound` and never knows the audio engine: `game_presenta
 `playSoundProvider`, `soundOnSettingProvider` and `hapticsOnSettingProvider`, and `app_providers`
 binds them to `GameSounds` (`sounds`) and Settings' switches.
 
-- **When:** `GameFeedback` follows `PlaybackNotifier`'s beats — placing plays `place` with a light
-  haptic, clearing plays `clear` (a little faster, and so higher, each step of the streak, up to
-  1.6×) with a medium one, a combo of 3 or more a heavy one, each joker pulse `joker`. A won round
-  plays `roundWon` with a heavy haptic as its points land; a lost round plays `roundLost` as the
-  move plays out and its sheet comes up. A skip plays nothing it skipped but that outcome. Reduce
-  motion drops the placing and clearing beats, not their feedback.
+- **When:** `GameFeedback` follows `PlaybackNotifier`'s beats, and the notes are the game's
+  (`game_feedback.br.dart`'s scales). Placing plays `place`, its pitch nudged within ±5%, with a
+  light haptic; clearing plays `clear` a step up the major pentatonic per level of the streak
+  (held on its top note) with a medium one; a combo of 3 or more a heavy one. The count-up ticks
+  up the same scale — one tick per 40 ms of the chips and mult beats at most, no more than the
+  number counted, 12 a move at most, on a timer the notifier cancels on a skip, a new move and
+  dispose — and `kaching` plays as the total lands. The jokers of one move climb a major chord in
+  firing order, from the root again each move. A won round plays `roundWon` with a heavy haptic as
+  its points land, the boss round `bossWin` instead; a lost round plays `roundLost` as the move
+  plays out and its sheet comes up. `bossStart` plays when the boss round begins, read from the
+  game rather than the playback because the pick that starts it may have no beats; when the same
+  move wins the round before it, the sting waits until the move has played out. A skip plays
+  nothing it skipped but that outcome. Reduce motion drops the placing and clearing beats, not
+  their feedback, and its shorter count-up ticks fewer times.
 - **Switches:** each sound and each haptic obeys its own Settings switch, read as it plays.
   Haptics are Flutter's `HapticFeedback`, so they need no package.
 - **Taps:** every `DSPressable` calls the `DSPressFeedback` above it, which the app points at

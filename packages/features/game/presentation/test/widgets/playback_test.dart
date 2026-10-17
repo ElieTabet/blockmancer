@@ -115,7 +115,8 @@ void main() {
     expect(rules.calls, ['place 1 (3, 3)']);
   });
 
-  testWidgets('a clear on the board is heard as it bursts', (tester) async {
+  testWidgets('a clear on the board is heard as it bursts, counts up and '
+      'lands', (tester) async {
     // Given
     final feedback = FakeFeedback();
     final rules = await pumpGame(
@@ -129,7 +130,11 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
 
     // Then
-    expect(feedback.soundsPlayed, [GameSound.clear]);
+    expect(feedback.soundsPlayed, [
+      GameSound.clear,
+      for (var tick = 0; tick < 7; tick++) GameSound.tick,
+      GameSound.kaching,
+    ]);
   });
 
   testWidgets('the round score keeps its old value until the points land', (

@@ -91,7 +91,7 @@ List<Override> gameOverrides(
   ),
   ...bindProviders(
     hapticsOnSetting: (ref) => hapticsOn,
-    playSound: (ref) => playSound ?? (sound, {speed = 1}) {},
+    playSound: (ref) => playSound ?? (sound, {semitones = 0, variance = 0}) {},
     reduceMotionSetting: (ref) => reduceMotion,
     rewardedAction: (ref) => rewardedAction ?? () async => true,
     soundOnSetting: (ref) => soundOn,

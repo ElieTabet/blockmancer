@@ -7,9 +7,11 @@ part 'providers_di.br.g.dart';
 // game_presentation — inbound dependency-injection slots. Each throws until
 // the composition layer overrides it.
 
-/// Plays [GameSound] at [speed] times its pace, which raises its pitch with
-/// it. Never throws; a sound that isn't loaded yet is skipped.
-typedef PlaySoundFun = void Function(GameSound sound, {double speed});
+/// Plays [GameSound] [semitones] above its own pitch (12 is an octave), nudged
+/// by a random factor within ±[variance]. Never throws; a sound that isn't
+/// loaded yet is skipped.
+typedef PlaySoundFun =
+    void Function(GameSound sound, {double semitones, double variance});
 
 /// Shows the reward a revive costs; true once it has been earned. A reward
 /// that couldn't be shown is false, never an error.

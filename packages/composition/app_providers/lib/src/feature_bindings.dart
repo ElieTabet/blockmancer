@@ -85,13 +85,21 @@ List<Override> featureBindingOverrides({
     playSound: (ref) {
       final sounds = ref.watch(gameSoundsProvider);
 
-      return (sound, {speed = 1}) => sounds.play(switch (sound) {
-        .clear => .clear,
-        .joker => .joker,
-        .place => .place,
-        .roundLost => .roundLost,
-        .roundWon => .roundWon,
-      }, speed: speed);
+      return (sound, {semitones = 0, variance = 0}) => sounds.play(
+        switch (sound) {
+          .bossStart => .bossStart,
+          .bossWin => .bossWin,
+          .clear => .clear,
+          .joker => .joker,
+          .kaching => .kaching,
+          .place => .place,
+          .roundLost => .roundLost,
+          .roundWon => .roundWon,
+          .tick => .tick,
+        },
+        semitones: semitones,
+        variance: variance,
+      );
     },
     reduceMotionSetting: (ref) => ref.watch(settings.reduceMotionOnProvider),
     rewardedAction: (ref) => const RewardedAds().show,

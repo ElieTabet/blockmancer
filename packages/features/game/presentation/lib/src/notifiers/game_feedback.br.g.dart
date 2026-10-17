@@ -77,7 +77,7 @@ final class GameFeedbackProvider extends $NotifierProvider<GameFeedback, void> {
   }
 }
 
-String _$gameFeedbackHash() => r'70986c6cb077966bcb8e3f3de13521729bda8a73';
+String _$gameFeedbackHash() => r'63af717e5dcf40d623dc7894bc92eeed4a9586cd';
 
 /// Plays each move's sounds and haptics as its beats play back, each obeying
 /// its own switch in Settings. Reduce motion stills the board, not the sound.

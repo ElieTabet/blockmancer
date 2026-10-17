@@ -29,7 +29,7 @@ List<Override> stubFeatures({game.RunStore? runStore}) => [
   ),
   ...game_ui.bindProviders(
     hapticsOnSetting: (ref) => false,
-    playSound: (ref) => (sound, {speed = 1}) {},
+    playSound: (ref) => (sound, {semitones = 0, variance = 0}) {},
     reduceMotionSetting: (ref) => false,
     rewardedAction: (ref) =>
         () async => true,
