@@ -4,9 +4,9 @@
 //   dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 //
 // `--build` may be given several times, one table row each: a pair takes one
-// of its jokers whenever one is offered, else the first offer, and a single
-// joker does the same alone; the baselines `random` always take the first
-// offer and `empty` skip every pick. `--solo` adds every joker alone. With no
+// of its jokers whenever one is offered, else any offer (seeded, each as
+// likely), and a single joker does the same alone; the baselines `random`
+// always take any offer and `empty` skip every pick. `--solo` adds every joker alone. With no
 // `--build` or `--solo`, both baselines and every pair run. "pair done" is a
 // run ending with the build's jokers, a solo's one included. `--world` is rubble (the
 // default) or gravity, whose rule holds in the boss. Offers draw from every

@@ -3,6 +3,9 @@ import 'package:blockmancer_engine/src/random/mulberry32.dart';
 /// Independent random sequences derived from one run seed, so what a player
 /// does in one cannot shift another: Quarry's stones never move the offers.
 enum RngStream {
+  /// The balance bot's picks when its build isn't on offer; no rule draws
+  /// from it.
+  botPicks(0xB07B1C),
   offers(0x0FFE125),
   pieces(0x91ECE5),
   stones(0x570E5);

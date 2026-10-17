@@ -8,10 +8,9 @@ typedef BotArgs = ({List<BotBuild> builds, int runs, WorldId world});
 
 /// How the bot picks, every joker on offer whatever a player has unlocked. A
 /// pair takes one of its two jokers whenever one is offered (the first named
-/// when both are), otherwise the first offer; a solo build, one joker, takes
-/// it whenever offered, otherwise the first offer; `random` always takes the
-/// first offer, which the offers' own draw makes random; `empty` skips every
-/// pick and plays the run with no joker.
+/// when both are), otherwise any offer, each as likely and drawn from the
+/// run's seed; a solo build, one joker, does the same alone; `random` always
+/// takes any offer; `empty` skips every pick and plays the run with no joker.
 final class BotBuild {
   const BotBuild._({
     required this.jokers,

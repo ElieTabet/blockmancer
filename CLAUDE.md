@@ -320,8 +320,9 @@ engine's events and never recomputes a rule.
   cell short, a single in the tray, and a round that can't be won.
 - **Balance bot.** `tool/balance_bot.dart` plays seeded runs with `lib/src/bot/`'s greedy policy
   (the best immediate score) across one isolate per core, every joker on offer. Its picks are a
-  `BotBuild`: a pair, or a solo joker, takes its jokers whenever offered, else the first offer;
-  `random` always takes the first offer; `empty` skips every pick, playing from an empty pool,
+  `BotBuild`: a pair, or a solo joker, takes its jokers whenever offered, else any offer, each as
+  likely, drawn from the run's seed (never the first: the partner bias puts an owned joker's
+  partner there three times in four); `random` always takes any offer; `empty` skips every pick, playing from an empty pool,
   which `startRun` starts straight into round 1. It depends only on
   the engine, and `lib/src/bot/` uses no `dart:io` or isolates, so it stays web-safe.
 - **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and

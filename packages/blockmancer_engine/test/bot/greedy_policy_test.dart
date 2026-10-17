@@ -3,6 +3,7 @@ import 'package:blockmancer_engine/src/bot/bot_run.dart';
 import 'package:blockmancer_engine/src/bot/greedy_policy.dart';
 import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/run/engine.dart';
+import 'package:blockmancer_engine/src/run/offers.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
@@ -34,11 +35,68 @@ void main() {
       );
     });
 
-    test('takes the first offer when its build has none on offer', () {
+    test('with none of its build on offer, takes the same offer every time '
+        'for the same run', () {
       expect(
         greedyMove(offering, build: const [.quarry]),
-        const RunMove.pick(id: .combo),
+        greedyMove(offering, build: const [.quarry]),
       );
+    });
+
+    test('with none of its build on offer, takes any of the offers, each '
+        'about as often', () {
+      // Given / When
+      final picks = <JokerId, int>{};
+
+      for (var seed = 1; seed <= 300; seed++) {
+        final move = greedyMove(
+          offering.copyWith(seed: seed),
+          build: const [.quarry],
+        );
+        final id = (move! as PickMove).id;
+        picks[id] = (picks[id] ?? 0) + 1;
+      }
+
+      // Then
+      expect(
+        picks.keys,
+        unorderedEquals(const [JokerId.combo, JokerId.twin, JokerId.saver]),
+      );
+      expect(picks.values, everyElement(inInclusiveRange(70, 130)));
+    });
+
+    test('once Deep Pockets is owned, takes Saver about one time in three '
+        'it is offered, not every time the pair bias offers it first', () {
+      // Given
+      var offered = 0;
+      var taken = 0;
+
+      // When
+      for (var seed = 1; seed <= 300; seed++) {
+        final offers = offersFor(
+          config: defaultConfig,
+          owned: const [.pockets],
+          pickIndex: 1,
+          seed: seed,
+        );
+        final state = startRun(config: defaultConfig, seed: seed).copyWith(
+          jokers: const [.pockets],
+          phase: .pickingJoker(offers: offers),
+          pickIndex: 1,
+        );
+
+        if (!offers.contains(JokerId.saver)) continue;
+
+        offered++;
+
+        if (greedyMove(state, build: const [.pockets]) ==
+            const RunMove.pick(id: .saver)) {
+          taken++;
+        }
+      }
+
+      // Then
+      expect(taken / offered, inInclusiveRange(0.25, 0.42));
     });
   });
 
