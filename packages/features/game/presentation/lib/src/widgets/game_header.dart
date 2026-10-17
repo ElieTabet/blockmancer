@@ -13,8 +13,12 @@ final class GameHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      // Room for the leave button, which GameWidget lays over the sheets.
-      const SizedBox.square(dimension: kMinInteractiveDimension),
+      // Room for the leave button, which GameWidget lays over the sheets, and
+      // a gap so the title doesn't sit against it.
+      const SizedBox(
+        height: kMinInteractiveDimension,
+        width: kMinInteractiveDimension + DSSpace.xsmall,
+      ),
       Expanded(
         child: Column(
           crossAxisAlignment: .start,
