@@ -72,4 +72,9 @@ abstract interface class GameRules {
 
   /// A new run, waiting for its starting joker.
   RunState startRun({required RunConfig config, required int seed});
+
+  /// The guided first run: always the same board and tray, already in play,
+  /// with no joker and a round that never ends on its own. Its bottom row
+  /// lacks one cell, so a single piece clears a line.
+  RunState tutorialRun({required RunConfig config});
 }

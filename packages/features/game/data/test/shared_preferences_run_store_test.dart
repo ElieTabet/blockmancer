@@ -69,6 +69,7 @@ const _config = RunConfig(
     RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
   ],
   traySize: 3,
+  world: .gravity,
 );
 
 /// Mid-round in the boss: stones and pieces on the board, a stored Patience
@@ -117,6 +118,35 @@ const _version1Save = """
 "piecesLeft":11,"piecesRngState":3735928559,"revivesUsed":1,"roundIndex":1,
 "runTotal":1870,"score":640,"seed":20261017,"stonesRngState":123456789,
 "storedMult":6,"streak":3,"tray":[4,null,16]},"version":1}
+""";
+
+/// [_midRound] as the version 2 build wrote it, before the config named its
+/// world. Frozen: never regenerate it from today's DTOs.
+const _version2Save = """
+{"day":20261017,"mode":"daily","run":{"board":[
+-1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,1,9,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,-1],
+"config":{"chipsPerCell":20,"jokers":{"bigBoxFactor":15,"bigBoxMinPieceSize":9,
+"collectorMultPerJoker":8,"columnFactor":11,"comboMultPerStreak":10,
+"heavyFactor":12,"heavyMinPieceSize":5,"patienceStoredPerMove":16,
+"pocketsExtraPieces":17,"precisionBonusMult":18,"precisionMaxPieceSize":4,
+"quarryStonesPerClear":2,"saverPointsPerPiece":70,"stonemasonChipsPerStone":80,
+"stonemasonExtraStones":7,"sweepBonus":900,"tinyFactor":14,"tinyMaxPieceSize":1,
+"twinFactor":13,"twinMinLines":3},"offerCount":3,"partnerBias":0.75,
+"revivePieces":3,"reviveRows":2,"revivesPerRun":1,
+"rounds":[{"isBoss":false,"pieces":14,"stones":0,"target":250},
+{"isBoss":true,"pieces":22,"stones":6,"target":2000}],"traySize":3},
+"jokers":["patience","twin","stonemason"],
+"phase":{"kind":"playing","offers":null,"reason":null},"pickIndex":2,
+"piecesLeft":11,"piecesRngState":3735928559,"revivesUsed":1,"roundIndex":1,
+"runTotal":1870,"score":640,"seed":20261017,"stonesRngState":123456789,
+"storedMult":6,"streak":3,"tray":[4,null,16]},"version":2}
 """;
 
 /// [run] as the next launch reads it: through JSON, the store's cache gone.
@@ -188,7 +218,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 2);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 3);
   });
 
   for (final (name, raw) in [
@@ -210,6 +240,18 @@ void main() {
           SavedRun(mode: const .practice(), run: _midRound),
         ).toJson();
         (json['run'] as Map<String, dynamic>)['jokers'] = ['wildcard'];
+
+        return jsonEncode(json);
+      }(),
+    ),
+    (
+      'names a world this build lacks',
+      () {
+        final json = SavedRunDto.fromDomain(
+          SavedRun(mode: const .practice(), run: _midRound),
+        ).toJson();
+        final run = json['run'] as Map<String, dynamic>;
+        (run['config'] as Map<String, dynamic>)['world'] = 'atlantis';
 
         return jsonEncode(json);
       }(),
@@ -248,14 +290,39 @@ void main() {
         SavedRun(
           mode: const .daily(day: 20261017),
           run: _midRound.copyWith(
-            config: _config.copyWith(chipsPerCell: 10, jokers: _version1Tuning),
+            config: _config.copyWith(
+              chipsPerCell: 10,
+              jokers: _version1Tuning,
+              world: .rubble,
+            ),
           ),
         ),
       );
     },
   );
 
-  test('a version 2 save passes through migrate unchanged', () {
+  test(
+    'a save from version 2 resumes in Rubble, the only world it had',
+    () async {
+      // Given
+      SharedPreferences.setMockInitialValues({'run.saved': _version2Save});
+
+      // When
+      final loaded = await const SharedPreferencesRunStore().load();
+
+      // Then
+      expect(loaded?.run.config.world, WorldId.rubble);
+      expect(
+        loaded,
+        SavedRun(
+          mode: const .daily(day: 20261017),
+          run: _midRound.copyWith(config: _config.copyWith(world: .rubble)),
+        ),
+      );
+    },
+  );
+
+  test('a version 3 save passes through migrate unchanged', () {
     // Given
     final json = SavedRunDto.fromDomain(
       SavedRun(mode: const .practice(), run: _midRound),

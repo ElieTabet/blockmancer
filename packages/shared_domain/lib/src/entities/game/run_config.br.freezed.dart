@@ -14,9 +14,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RoundSpec {
 
-/// How the round is presented. The run ends after the last round,
-/// whichever it is.
- bool get isBoss; int get pieces;/// Stones on the board when the round starts.
+/// How the round is presented, and the round a world's boss rule holds
+/// in. The run ends after the last round, whichever it is.
+ bool get isBoss; int get pieces;/// Stones on the board when the round starts, in a round whose world rule
+/// drops them (Rubble's boss).
  int get stones; int get target;
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
@@ -215,11 +216,12 @@ class _RoundSpec implements RoundSpec {
   const _RoundSpec({required this.isBoss, required this.pieces, required this.stones, required this.target});
   
 
-/// How the round is presented. The run ends after the last round,
-/// whichever it is.
+/// How the round is presented, and the round a world's boss rule holds
+/// in. The run ends after the last round, whichever it is.
 @override final  bool isBoss;
 @override final  int pieces;
-/// Stones on the board when the round starts.
+/// Stones on the board when the round starts, in a round whose world rule
+/// drops them (Rubble's boss).
 @override final  int stones;
 @override final  int target;
 
@@ -288,7 +290,8 @@ mixin _$RunConfig {
 
 /// Chips a cleared cell scores, before any joker.
  int get chipsPerCell; JokerTuning get jokers; int get offerCount;/// The chance that one offer is the partner of a joker already owned.
- double get partnerBias; int get revivePieces; int get reviveRows; int get revivesPerRun; List<RoundSpec> get rounds; int get traySize;
+ double get partnerBias; int get revivePieces; int get reviveRows; int get revivesPerRun; List<RoundSpec> get rounds; int get traySize;/// The world whose boss rule the run plays under.
+ WorldId get world;
 /// Create a copy of RunConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -299,16 +302,16 @@ $RunConfigCopyWith<RunConfig> get copyWith => _$RunConfigCopyWithImpl<RunConfig>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RunConfig&&(identical(other.chipsPerCell, chipsPerCell) || other.chipsPerCell == chipsPerCell)&&(identical(other.jokers, jokers) || other.jokers == jokers)&&(identical(other.offerCount, offerCount) || other.offerCount == offerCount)&&(identical(other.partnerBias, partnerBias) || other.partnerBias == partnerBias)&&(identical(other.revivePieces, revivePieces) || other.revivePieces == revivePieces)&&(identical(other.reviveRows, reviveRows) || other.reviveRows == reviveRows)&&(identical(other.revivesPerRun, revivesPerRun) || other.revivesPerRun == revivesPerRun)&&const DeepCollectionEquality().equals(other.rounds, rounds)&&(identical(other.traySize, traySize) || other.traySize == traySize));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RunConfig&&(identical(other.chipsPerCell, chipsPerCell) || other.chipsPerCell == chipsPerCell)&&(identical(other.jokers, jokers) || other.jokers == jokers)&&(identical(other.offerCount, offerCount) || other.offerCount == offerCount)&&(identical(other.partnerBias, partnerBias) || other.partnerBias == partnerBias)&&(identical(other.revivePieces, revivePieces) || other.revivePieces == revivePieces)&&(identical(other.reviveRows, reviveRows) || other.reviveRows == reviveRows)&&(identical(other.revivesPerRun, revivesPerRun) || other.revivesPerRun == revivesPerRun)&&const DeepCollectionEquality().equals(other.rounds, rounds)&&(identical(other.traySize, traySize) || other.traySize == traySize)&&(identical(other.world, world) || other.world == world));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chipsPerCell,jokers,offerCount,partnerBias,revivePieces,reviveRows,revivesPerRun,const DeepCollectionEquality().hash(rounds),traySize);
+int get hashCode => Object.hash(runtimeType,chipsPerCell,jokers,offerCount,partnerBias,revivePieces,reviveRows,revivesPerRun,const DeepCollectionEquality().hash(rounds),traySize,world);
 
 @override
 String toString() {
-  return 'RunConfig(chipsPerCell: $chipsPerCell, jokers: $jokers, offerCount: $offerCount, partnerBias: $partnerBias, revivePieces: $revivePieces, reviveRows: $reviveRows, revivesPerRun: $revivesPerRun, rounds: $rounds, traySize: $traySize)';
+  return 'RunConfig(chipsPerCell: $chipsPerCell, jokers: $jokers, offerCount: $offerCount, partnerBias: $partnerBias, revivePieces: $revivePieces, reviveRows: $reviveRows, revivesPerRun: $revivesPerRun, rounds: $rounds, traySize: $traySize, world: $world)';
 }
 
 
@@ -319,7 +322,7 @@ abstract mixin class $RunConfigCopyWith<$Res>  {
   factory $RunConfigCopyWith(RunConfig value, $Res Function(RunConfig) _then) = _$RunConfigCopyWithImpl;
 @useResult
 $Res call({
- int chipsPerCell, JokerTuning jokers, int offerCount, double partnerBias, int revivePieces, int reviveRows, int revivesPerRun, List<RoundSpec> rounds, int traySize
+ int chipsPerCell, JokerTuning jokers, int offerCount, double partnerBias, int revivePieces, int reviveRows, int revivesPerRun, List<RoundSpec> rounds, int traySize, WorldId world
 });
 
 
@@ -336,7 +339,7 @@ class _$RunConfigCopyWithImpl<$Res>
 
 /// Create a copy of RunConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chipsPerCell = null,Object? jokers = null,Object? offerCount = null,Object? partnerBias = null,Object? revivePieces = null,Object? reviveRows = null,Object? revivesPerRun = null,Object? rounds = null,Object? traySize = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chipsPerCell = null,Object? jokers = null,Object? offerCount = null,Object? partnerBias = null,Object? revivePieces = null,Object? reviveRows = null,Object? revivesPerRun = null,Object? rounds = null,Object? traySize = null,Object? world = null,}) {
   return _then(_self.copyWith(
 chipsPerCell: null == chipsPerCell ? _self.chipsPerCell : chipsPerCell // ignore: cast_nullable_to_non_nullable
 as int,jokers: null == jokers ? _self.jokers : jokers // ignore: cast_nullable_to_non_nullable
@@ -347,7 +350,8 @@ as int,reviveRows: null == reviveRows ? _self.reviveRows : reviveRows // ignore:
 as int,revivesPerRun: null == revivesPerRun ? _self.revivesPerRun : revivesPerRun // ignore: cast_nullable_to_non_nullable
 as int,rounds: null == rounds ? _self.rounds : rounds // ignore: cast_nullable_to_non_nullable
 as List<RoundSpec>,traySize: null == traySize ? _self.traySize : traySize // ignore: cast_nullable_to_non_nullable
-as int,
+as int,world: null == world ? _self.world : world // ignore: cast_nullable_to_non_nullable
+as WorldId,
   ));
 }
 /// Create a copy of RunConfig
@@ -441,10 +445,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int chipsPerCell,  JokerTuning jokers,  int offerCount,  double partnerBias,  int revivePieces,  int reviveRows,  int revivesPerRun,  List<RoundSpec> rounds,  int traySize)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int chipsPerCell,  JokerTuning jokers,  int offerCount,  double partnerBias,  int revivePieces,  int reviveRows,  int revivesPerRun,  List<RoundSpec> rounds,  int traySize,  WorldId world)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RunConfig() when $default != null:
-return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBias,_that.revivePieces,_that.reviveRows,_that.revivesPerRun,_that.rounds,_that.traySize);case _:
+return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBias,_that.revivePieces,_that.reviveRows,_that.revivesPerRun,_that.rounds,_that.traySize,_that.world);case _:
   return orElse();
 
 }
@@ -462,10 +466,10 @@ return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBi
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int chipsPerCell,  JokerTuning jokers,  int offerCount,  double partnerBias,  int revivePieces,  int reviveRows,  int revivesPerRun,  List<RoundSpec> rounds,  int traySize)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int chipsPerCell,  JokerTuning jokers,  int offerCount,  double partnerBias,  int revivePieces,  int reviveRows,  int revivesPerRun,  List<RoundSpec> rounds,  int traySize,  WorldId world)  $default,) {final _that = this;
 switch (_that) {
 case _RunConfig():
-return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBias,_that.revivePieces,_that.reviveRows,_that.revivesPerRun,_that.rounds,_that.traySize);case _:
+return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBias,_that.revivePieces,_that.reviveRows,_that.revivesPerRun,_that.rounds,_that.traySize,_that.world);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -482,10 +486,10 @@ return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBi
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int chipsPerCell,  JokerTuning jokers,  int offerCount,  double partnerBias,  int revivePieces,  int reviveRows,  int revivesPerRun,  List<RoundSpec> rounds,  int traySize)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int chipsPerCell,  JokerTuning jokers,  int offerCount,  double partnerBias,  int revivePieces,  int reviveRows,  int revivesPerRun,  List<RoundSpec> rounds,  int traySize,  WorldId world)?  $default,) {final _that = this;
 switch (_that) {
 case _RunConfig() when $default != null:
-return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBias,_that.revivePieces,_that.reviveRows,_that.revivesPerRun,_that.rounds,_that.traySize);case _:
+return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBias,_that.revivePieces,_that.reviveRows,_that.revivesPerRun,_that.rounds,_that.traySize,_that.world);case _:
   return null;
 
 }
@@ -497,7 +501,7 @@ return $default(_that.chipsPerCell,_that.jokers,_that.offerCount,_that.partnerBi
 
 
 class _RunConfig implements RunConfig {
-  const _RunConfig({required this.chipsPerCell, required this.jokers, required this.offerCount, required this.partnerBias, required this.revivePieces, required this.reviveRows, required this.revivesPerRun, required final  List<RoundSpec> rounds, required this.traySize}): _rounds = rounds;
+  const _RunConfig({required this.chipsPerCell, required this.jokers, required this.offerCount, required this.partnerBias, required this.revivePieces, required this.reviveRows, required this.revivesPerRun, required final  List<RoundSpec> rounds, required this.traySize, required this.world}): _rounds = rounds;
   
 
 /// Chips a cleared cell scores, before any joker.
@@ -517,6 +521,8 @@ class _RunConfig implements RunConfig {
 }
 
 @override final  int traySize;
+/// The world whose boss rule the run plays under.
+@override final  WorldId world;
 
 /// Create a copy of RunConfig
 /// with the given fields replaced by the non-null parameter values.
@@ -528,16 +534,16 @@ _$RunConfigCopyWith<_RunConfig> get copyWith => __$RunConfigCopyWithImpl<_RunCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RunConfig&&(identical(other.chipsPerCell, chipsPerCell) || other.chipsPerCell == chipsPerCell)&&(identical(other.jokers, jokers) || other.jokers == jokers)&&(identical(other.offerCount, offerCount) || other.offerCount == offerCount)&&(identical(other.partnerBias, partnerBias) || other.partnerBias == partnerBias)&&(identical(other.revivePieces, revivePieces) || other.revivePieces == revivePieces)&&(identical(other.reviveRows, reviveRows) || other.reviveRows == reviveRows)&&(identical(other.revivesPerRun, revivesPerRun) || other.revivesPerRun == revivesPerRun)&&const DeepCollectionEquality().equals(other._rounds, _rounds)&&(identical(other.traySize, traySize) || other.traySize == traySize));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RunConfig&&(identical(other.chipsPerCell, chipsPerCell) || other.chipsPerCell == chipsPerCell)&&(identical(other.jokers, jokers) || other.jokers == jokers)&&(identical(other.offerCount, offerCount) || other.offerCount == offerCount)&&(identical(other.partnerBias, partnerBias) || other.partnerBias == partnerBias)&&(identical(other.revivePieces, revivePieces) || other.revivePieces == revivePieces)&&(identical(other.reviveRows, reviveRows) || other.reviveRows == reviveRows)&&(identical(other.revivesPerRun, revivesPerRun) || other.revivesPerRun == revivesPerRun)&&const DeepCollectionEquality().equals(other._rounds, _rounds)&&(identical(other.traySize, traySize) || other.traySize == traySize)&&(identical(other.world, world) || other.world == world));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,chipsPerCell,jokers,offerCount,partnerBias,revivePieces,reviveRows,revivesPerRun,const DeepCollectionEquality().hash(_rounds),traySize);
+int get hashCode => Object.hash(runtimeType,chipsPerCell,jokers,offerCount,partnerBias,revivePieces,reviveRows,revivesPerRun,const DeepCollectionEquality().hash(_rounds),traySize,world);
 
 @override
 String toString() {
-  return 'RunConfig(chipsPerCell: $chipsPerCell, jokers: $jokers, offerCount: $offerCount, partnerBias: $partnerBias, revivePieces: $revivePieces, reviveRows: $reviveRows, revivesPerRun: $revivesPerRun, rounds: $rounds, traySize: $traySize)';
+  return 'RunConfig(chipsPerCell: $chipsPerCell, jokers: $jokers, offerCount: $offerCount, partnerBias: $partnerBias, revivePieces: $revivePieces, reviveRows: $reviveRows, revivesPerRun: $revivesPerRun, rounds: $rounds, traySize: $traySize, world: $world)';
 }
 
 
@@ -548,7 +554,7 @@ abstract mixin class _$RunConfigCopyWith<$Res> implements $RunConfigCopyWith<$Re
   factory _$RunConfigCopyWith(_RunConfig value, $Res Function(_RunConfig) _then) = __$RunConfigCopyWithImpl;
 @override @useResult
 $Res call({
- int chipsPerCell, JokerTuning jokers, int offerCount, double partnerBias, int revivePieces, int reviveRows, int revivesPerRun, List<RoundSpec> rounds, int traySize
+ int chipsPerCell, JokerTuning jokers, int offerCount, double partnerBias, int revivePieces, int reviveRows, int revivesPerRun, List<RoundSpec> rounds, int traySize, WorldId world
 });
 
 
@@ -565,7 +571,7 @@ class __$RunConfigCopyWithImpl<$Res>
 
 /// Create a copy of RunConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chipsPerCell = null,Object? jokers = null,Object? offerCount = null,Object? partnerBias = null,Object? revivePieces = null,Object? reviveRows = null,Object? revivesPerRun = null,Object? rounds = null,Object? traySize = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chipsPerCell = null,Object? jokers = null,Object? offerCount = null,Object? partnerBias = null,Object? revivePieces = null,Object? reviveRows = null,Object? revivesPerRun = null,Object? rounds = null,Object? traySize = null,Object? world = null,}) {
   return _then(_RunConfig(
 chipsPerCell: null == chipsPerCell ? _self.chipsPerCell : chipsPerCell // ignore: cast_nullable_to_non_nullable
 as int,jokers: null == jokers ? _self.jokers : jokers // ignore: cast_nullable_to_non_nullable
@@ -576,7 +582,8 @@ as int,reviveRows: null == reviveRows ? _self.reviveRows : reviveRows // ignore:
 as int,revivesPerRun: null == revivesPerRun ? _self.revivesPerRun : revivesPerRun // ignore: cast_nullable_to_non_nullable
 as int,rounds: null == rounds ? _self._rounds : rounds // ignore: cast_nullable_to_non_nullable
 as List<RoundSpec>,traySize: null == traySize ? _self.traySize : traySize // ignore: cast_nullable_to_non_nullable
-as int,
+as int,world: null == world ? _self.world : world // ignore: cast_nullable_to_non_nullable
+as WorldId,
   ));
 }
 

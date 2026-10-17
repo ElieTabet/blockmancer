@@ -285,6 +285,13 @@ engine's events and never recomputes a rule.
   and each joker's numbers (`JokerTuning`, which every joker hook is handed). No rule
   hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit. This is
   what Remote Config will feed.
+- **Worlds.** `RunConfig.world` (`WorldId`) picks a `WorldRule` (`lib/src/worlds/`) that holds in the
+  boss only: its round setup (Rubble's stones, from `RoundSpec.stones`) and `transformAnchor`, where
+  a dropped piece really lands (Gravity's fall). `canPlace`, `preview`, `place`, `fitsSomewhere`
+  and the round's "no room" all go through it; a `RunMove.place` keeps the drop point, so replay
+  re-applies the rule. Fog, Mirror and Speed have no rule yet and throw.
+- **Tutorial.** `GameRules.tutorialRun` is a fixed run already in play: no joker, a bottom row one
+  cell short, a single in the tray, and a round that can't be won.
 - **Balance bot.** `tool/balance_bot.dart` plays seeded runs with `lib/src/bot/`'s greedy policy
   (the best immediate score, a fixed joker build) across one isolate per core. It depends only on
   the engine, and `lib/src/bot/` uses no `dart:io` or isolates, so it stays web-safe.

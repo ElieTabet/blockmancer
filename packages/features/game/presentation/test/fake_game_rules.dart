@@ -68,6 +68,7 @@ const testConfig = RunConfig(
     RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
   ],
   traySize: 3,
+  world: .rubble,
 );
 
 /// Scripted rules: every move answers [next], and every call is recorded.
@@ -156,6 +157,10 @@ final class FakeGameRules implements GameRules {
 
     return start;
   }
+
+  @override
+  RunState tutorialRun({required RunConfig config}) =>
+      throw UnimplementedError('the screen has no tutorial yet');
 
   Transition _move(String call, RunState state) {
     calls.add(call);

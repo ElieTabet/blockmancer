@@ -9,6 +9,7 @@ import 'package:blockmancer_engine/src/random/rng_stream.dart';
 import 'package:blockmancer_engine/src/random/weighted_draw.dart';
 import 'package:blockmancer_engine/src/run/offers.dart';
 import 'package:blockmancer_engine/src/scoring/score_move.dart';
+import 'package:blockmancer_engine/src/worlds/world_rules.dart';
 
 /// A new run, waiting for its starting joker.
 RunState startRun({required RunConfig config, required int seed}) => RunState(
@@ -56,7 +57,7 @@ bool canPlace(RunState state, {required Cell anchor, required int trayIndex}) {
   final shapeId = _playableShape(state, trayIndex);
 
   return shapeId != null &&
-      fits(state.board, shapeCatalog[shapeId], anchor: anchor);
+      _landing(state, shapeCatalog[shapeId], anchor: anchor) != null;
 }
 
 bool canRevive(RunState state) =>
@@ -74,7 +75,7 @@ int liveRunTotal(RunState state) => switch (state.phase) {
 bool fitsSomewhere(RunState state, {required int trayIndex}) {
   final shapeId = _playableShape(state, trayIndex);
 
-  return shapeId != null && fitsAnywhere(state.board, shapeCatalog[shapeId]);
+  return shapeId != null && _fitsAnywhere(state, shapeCatalog[shapeId]);
 }
 
 PlacementPreview preview(
@@ -87,15 +88,15 @@ PlacementPreview preview(
   if (shapeId == null) return .none;
 
   final shape = shapeCatalog[shapeId];
+  final landing = _landing(state, shape, anchor: anchor);
+  final shown = landing ?? anchor;
   final cells = [
     for (final offset in shape.cells)
-      if (state.board.contains(anchor + offset)) anchor + offset,
+      if (state.board.contains(shown + offset)) shown + offset,
   ];
-  final fitsHere =
-      cells.length == shape.size && fits(state.board, shape, anchor: anchor);
-  final placed = fitsHere
-      ? placeShape(state.board, shape, anchor: anchor)
-      : null;
+  final placed = landing == null
+      ? null
+      : placeShape(state.board, shape, anchor: landing);
 
   return PlacementPreview(
     cells: cells,
@@ -105,13 +106,14 @@ PlacementPreview preview(
       for (final cell in cells)
         if (state.board.at(cell) is! EmptyCell) cell,
     ],
-    fits: fitsHere,
+    fits: landing != null,
   );
 }
 
-/// Drops the tray piece at [trayIndex] with its top-left at [anchor], clears
-/// and scores, then decides whether the round is won or lost. The tray refills
-/// only when play goes on: a won round deals nothing it would never play.
+/// Drops the tray piece at [trayIndex] with its top-left at [anchor], lands it
+/// where the round's world rule says, clears and scores, then decides whether
+/// the round is won or lost. The tray refills only when play goes on: a won
+/// round deals nothing it would never play.
 Transition place(
   RunState state, {
   required Cell anchor,
@@ -123,8 +125,9 @@ Transition place(
 
   final shapeId = state.tray[trayIndex]!;
   final shape = shapeCatalog[shapeId];
+  final landing = _landing(state, shape, anchor: anchor)!;
   final jokers = effectsOf(state.jokers);
-  final clear = resolveClears(placeShape(state.board, shape, anchor: anchor));
+  final clear = resolveClears(placeShape(state.board, shape, anchor: landing));
 
   final score = scoreMove(
     clear: clear,
@@ -138,8 +141,8 @@ Transition place(
 
   final events = <GameEvent>[
     .piecePlaced(
-      anchor: anchor,
-      cells: [for (final offset in shape.cells) anchor + offset],
+      anchor: landing,
+      cells: [for (final offset in shape.cells) landing + offset],
       shapeId: shapeId,
       trayIndex: trayIndex,
     ),
@@ -214,6 +217,19 @@ Transition endRun(RunState state) {
   );
 }
 
+bool _fitsAnywhere(RunState state, Shape shape) => [
+  for (var row = 0; row < Board.size; row++)
+    for (var col = 0; col < Board.size; col++) Cell(col: col, row: row),
+].any((anchor) => _landing(state, shape, anchor: anchor) != null);
+
+/// Where [shape] dropped at [anchor] lands under the round's world rule, or
+/// `null` when it can't be placed from there.
+Cell? _landing(RunState state, Shape shape, {required Cell anchor}) =>
+    ruleOfRound(
+      state.config,
+      state.round,
+    ).transformAnchor(anchor: anchor, board: state.board, shape: shape);
+
 /// The tray piece at [trayIndex] while the round is being played, else `null`.
 int? _playableShape(RunState state, int trayIndex) {
   final inTray = trayIndex >= 0 && trayIndex < state.tray.length;
@@ -264,7 +280,7 @@ Transition _settle(Transition transition) {
 
   if (pieces.isEmpty) {
     reason = .outOfPieces;
-  } else if (!pieces.any((id) => fitsAnywhere(state.board, shapeCatalog[id]))) {
+  } else if (!pieces.any((id) => _fitsAnywhere(state, shapeCatalog[id]))) {
     reason = .noRoom;
   }
 
@@ -282,8 +298,9 @@ Transition _startRound(Transition transition) {
   final roundIndex = state.pickIndex;
   final spec = state.config.rounds[roundIndex];
   final jokers = effectsOf(state.jokers);
+  final rule = ruleOfRound(state.config, spec);
   final setup = roundSetup(
-    RoundSetup(pieces: spec.pieces, stones: spec.stones),
+    rule.onRoundSetup(RoundSetup(pieces: spec.pieces, stones: 0), spec),
     jokers,
     state.config.jokers,
   );

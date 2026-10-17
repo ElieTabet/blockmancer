@@ -6,13 +6,14 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 2;
+const savedRunVersion = 3;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
 Map<String, dynamic> migrate(Map<String, dynamic> json) =>
     switch (json['version']) {
       1 => migrate(_fromVersion1(json)),
+      2 => migrate(_fromVersion2(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -35,6 +36,21 @@ Map<String, dynamic> _fromVersion1(Map<String, dynamic> json) {
       },
     },
     'version': 2,
+  };
+}
+
+/// Every run before version 3 was played in Rubble, the only world there was.
+Map<String, dynamic> _fromVersion2(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{...config, 'world': 'rubble'},
+    },
+    'version': 3,
   };
 }
 
@@ -222,6 +238,7 @@ final class RunConfigDto {
     required this.revivesPerRun,
     required this.rounds,
     required this.traySize,
+    required this.world,
   });
 
   factory RunConfigDto.fromDomain(RunConfig config) => RunConfigDto(
@@ -234,6 +251,7 @@ final class RunConfigDto {
     revivesPerRun: config.revivesPerRun,
     rounds: [for (final round in config.rounds) .fromDomain(round)],
     traySize: config.traySize,
+    world: config.world.name,
   );
 
   factory RunConfigDto.fromJson(Map<String, dynamic> json) =>
@@ -248,6 +266,7 @@ final class RunConfigDto {
   final int revivesPerRun;
   final List<RoundSpecDto> rounds;
   final int traySize;
+  final String world;
 
   Map<String, dynamic> toJson() => _$RunConfigDtoToJson(this);
 
@@ -261,6 +280,7 @@ final class RunConfigDto {
     revivesPerRun: revivesPerRun,
     rounds: [for (final round in rounds) round.toDomain()],
     traySize: traySize,
+    world: WorldId.values.byName(world),
   );
 }
 

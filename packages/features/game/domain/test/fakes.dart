@@ -58,6 +58,7 @@ const _config = RunConfig(
   revivesPerRun: 1,
   rounds: [RoundSpec(isBoss: true, pieces: 14, stones: 0, target: 250)],
   traySize: 3,
+  world: .rubble,
 );
 
 /// A practice run in [phase].

@@ -38,4 +38,15 @@ const defaultConfig = RunConfig(
     RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
   ],
   traySize: 3,
+  world: .rubble,
+);
+
+/// The default run in Gravity, whose boss starts with no stones: its rule is
+/// the fall.
+final gravityConfig = defaultConfig.copyWith(
+  rounds: [
+    for (final round in defaultConfig.rounds)
+      round.isBoss ? round.copyWith(stones: 0) : round,
+  ],
+  world: .gravity,
 );

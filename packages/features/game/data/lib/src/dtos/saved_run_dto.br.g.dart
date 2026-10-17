@@ -76,6 +76,7 @@ RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
       .map((e) => RoundSpecDto.fromJson(e as Map<String, dynamic>))
       .toList(),
   traySize: (json['traySize'] as num).toInt(),
+  world: json['world'] as String,
 );
 
 Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
@@ -89,6 +90,7 @@ Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
       'revivesPerRun': instance.revivesPerRun,
       'rounds': instance.rounds.map((e) => e.toJson()).toList(),
       'traySize': instance.traySize,
+      'world': instance.world,
     };
 
 JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>

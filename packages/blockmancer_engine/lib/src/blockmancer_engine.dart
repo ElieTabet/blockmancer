@@ -4,6 +4,7 @@ import 'package:blockmancer_engine/src/random/daily_seed.dart' as seeds;
 import 'package:blockmancer_engine/src/run/default_config.dart' as config;
 import 'package:blockmancer_engine/src/run/engine.dart' as engine;
 import 'package:blockmancer_engine/src/run/replay.dart' as replays;
+import 'package:blockmancer_engine/src/run/tutorial.dart' as tutorial;
 import 'package:shared_domain/shared_domain.dart';
 
 /// Blockmancer's rules behind the [GameRules] contract. Composition binds it;
@@ -75,4 +76,8 @@ final class BlockmancerEngine implements GameRules {
   @override
   RunState startRun({required RunConfig config, required int seed}) =>
       engine.startRun(config: config, seed: seed);
+
+  @override
+  RunState tutorialRun({required RunConfig config}) =>
+      tutorial.tutorialRun(config: config);
 }
