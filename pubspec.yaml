@@ -63,7 +63,8 @@ melos:
         json_annotation: ^4.9.0
         package_info_plus: ^10.2.2 # the app's version and build number shown in Settings; known only to the app_info package
         riverpod_annotation: ^4.0.2
-        shared_preferences: ^2.5.3 # the best scores, the saved run and the settings, on the device (packages/features/{game,settings}/data)
+        share_plus: ^13.3.1 # the OS share sheet, for Settings' Share test stats; known only to the external_links package
+        shared_preferences: ^2.5.3 # the best scores, the saved run, the settings and the testers' play stats, on the device (packages/features/{game,settings}/data, packages/utilities/play_stats)
         slang: ^4.19.0
         slang_flutter: ^4.19.0
         url_launcher: ^6.3.2 # opens a link outside the app; known only to the external_links package

@@ -134,7 +134,8 @@ class GameNotifier extends _$GameNotifier {
 
   void _apply(Transition transition) {
     final (run, events) = transition;
-    final ended = !hasEnded(state.run) && hasEnded(run);
+    final before = state.run;
+    final ended = !hasEnded(before) && hasEnded(run);
 
     state = state.copyWith(
       lastEvents: events,
@@ -144,6 +145,8 @@ class GameNotifier extends _$GameNotifier {
     );
 
     if (state.isTutorial) return;
+
+    ref.read(trackMoveProvider)(state.mode, before, transition);
 
     if (ended) {
       unawaited(_recordEnd(run));
@@ -188,8 +191,10 @@ class GameNotifier extends _$GameNotifier {
     }
   }
 
+  /// Counts the run's end once what it earned is known, kept or not.
   Future<void> _recordProgress(RunState run) async {
     final recordProgression = ref.read(recordProgressionProvider);
+    final trackRunEnd = ref.read(trackRunEndProvider);
     ProgressionChange? progress;
 
     try {
@@ -202,6 +207,8 @@ class GameNotifier extends _$GameNotifier {
         stackTrace: stackTrace,
       );
     }
+
+    trackRunEnd(run, progress);
 
     if (!ref.mounted) return;
 

@@ -155,6 +155,7 @@ class Translations$settings$en {
 	late final Translations$settings$language$en language = Translations$settings$language$en.internal(_root);
 	late final Translations$settings$tutorial$en tutorial = Translations$settings$tutorial$en.internal(_root);
 	late final Translations$settings$feedback$en feedback = Translations$settings$feedback$en.internal(_root);
+	late final Translations$settings$testStats$en testStats = Translations$settings$testStats$en.internal(_root);
 
 	/// en: 'Version'
 	String get version => 'Version';
@@ -676,6 +677,30 @@ class Translations$settings$feedback$en {
 
 	/// en: 'We couldn't open a mail app. Write to us at $address.'
 	String unavailableMessage({required Object address}) => 'We couldn\'t open a mail app. Write to us at ${address}.';
+
+	/// en: 'OK'
+	String get ok => 'OK';
+}
+
+// Path: settings.testStats
+class Translations$settings$testStats$en {
+	Translations$settings$testStats$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Share test stats'
+	String get title => 'Share test stats';
+
+	/// en: 'Send the team how you've been playing'
+	String get subtitle => 'Send the team how you\'ve been playing';
+
+	/// en: 'Couldn't share'
+	String get unavailableTitle => 'Couldn\'t share';
+
+	/// en: 'The share sheet didn't open. Try again in a moment.'
+	String get unavailableMessage => 'The share sheet didn\'t open. Try again in a moment.';
 
 	/// en: 'OK'
 	String get ok => 'OK';
@@ -1238,6 +1263,11 @@ extension on Translations {
 			'settings.feedback.unavailableTitle' => 'No mail app',
 			'settings.feedback.unavailableMessage' => ({required Object address}) => 'We couldn\'t open a mail app. Write to us at ${address}.',
 			'settings.feedback.ok' => 'OK',
+			'settings.testStats.title' => 'Share test stats',
+			'settings.testStats.subtitle' => 'Send the team how you\'ve been playing',
+			'settings.testStats.unavailableTitle' => 'Couldn\'t share',
+			'settings.testStats.unavailableMessage' => 'The share sheet didn\'t open. Try again in a moment.',
+			'settings.testStats.ok' => 'OK',
 			'settings.version' => 'Version',
 			'settings.reset.title' => 'Reset progress',
 			'settings.reset.subtitle' => 'Your best scores and the run in progress',

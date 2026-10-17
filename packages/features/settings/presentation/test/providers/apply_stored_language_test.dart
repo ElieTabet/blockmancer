@@ -13,6 +13,8 @@ Future<void> _launchWith(settings.AppLanguage language) async {
       appDetails: (ref) async => testAppDetails,
       clearProgress: (ref) => () async {},
       composeEmail: (ref) => FakeMailApp().compose,
+      exportTestStats: (ref) =>
+          () async => '{}',
       settingsStore: (ref) =>
           FakeSettingsStore(settings.AppSettings(language: language)),
     ),

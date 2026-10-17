@@ -20,6 +20,7 @@ import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:game_presentation/src/providers_di.br.dart' as game_ui_di;
 import 'package:home_presentation/src/providers_di.br.dart' as home_di;
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:play_stats/play_stats.dart';
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
 import 'package:push_notifications_domain/push_notifications_domain.dart'
@@ -28,6 +29,8 @@ import 'package:push_notifications_presentation/src/providers_di.br.dart'
     as push_notifications_di;
 import 'package:settings_data/settings_data.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
+import 'package:settings_presentation/src/providers_di.br.dart'
+    as settings_ui_di;
 import 'package:shared_domain/shared_domain.dart';
 import 'package:sounds/sounds.dart';
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
@@ -381,6 +384,24 @@ void main() {
       // Then
       expect(engine.played, isEmpty);
     });
+  });
+
+  // The testers' numbers: the game counts into play_stats without knowing
+  // it, and Settings shares them through external_links without knowing it.
+  test("the game counts into the device's play stats, and Settings shares "
+      'them', () {
+    final container = buildContainer();
+
+    expect(
+      container.read(game.analyticsSinkProvider),
+      same(container.read(playStatsProvider)),
+    );
+    expect(container.read(playStatsProvider), isA<LocalPlayStats>());
+    expect(
+      container.read(settings_ui_di.shareTextProvider),
+      external_links.shareText,
+    );
+    expect(container.read(settings.exportTestStatsProvider), isNotNull);
   });
 
   test('a revive costs nothing until there is an ad network', () async {

@@ -48,7 +48,7 @@ final class SettingsStateNotifierProvider
 }
 
 String _$settingsStateNotifierHash() =>
-    r'dab5164dd2ab5280e66dd04ca839a356b72bcdf3';
+    r'3e66feb8ca81015f14997b625b84dca7b95029c9';
 
 /// Settings' choices. Holds nothing: each change is the player's settings to
 /// keep, and closing is [SettingsRouting]'s to follow.

@@ -1,5 +1,5 @@
 name: external_links
-description: "Hands a link to something outside the app — the only place url_launcher is known."
+description: "Hands a link, or text to share, to something outside the app — the only place url_launcher and share_plus are known."
 publish_to: none
 resolution: workspace
 
@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  share_plus: ^13.3.1
   timber: any
   url_launcher: ^6.3.2
 

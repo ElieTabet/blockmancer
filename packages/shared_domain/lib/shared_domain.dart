@@ -5,7 +5,9 @@
 // An entity reading its own fields still counts as an entity: RunState knows
 // which round it is in. What would not belong here is anything that decides
 // what a move does — that is a rule, and rules live behind GameRules.
+export 'src/contracts/analytics_sink.dart';
 export 'src/contracts/game_rules.dart';
+export 'src/entities/analytics/analytics_event.br.dart';
 export 'src/entities/game/board.br.dart';
 export 'src/entities/game/cell.br.dart';
 export 'src/entities/game/cell_state.br.dart';

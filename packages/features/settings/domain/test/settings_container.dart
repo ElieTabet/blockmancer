@@ -14,18 +14,21 @@ const testAppDetails = AppDetails(
 
 /// A launch of the app over [store], on the phone [appDetails] describes
 /// ([testAppDetails] unless given). Progress clears into [onClearProgress],
-/// and mail drafts open in [mailApp].
+/// mail drafts open in [mailApp], and the play stats export as [playStats].
 ProviderContainer launchWith(
   SettingsStore store, {
   AppDetails appDetails = testAppDetails,
   FakeMailApp? mailApp,
   ClearProgressFun? onClearProgress,
+  String playStats = '{"installId":"ab12","schema":1}',
 }) {
   final container = ProviderContainer(
     overrides: bindProviders(
       appDetails: (ref) async => appDetails,
       clearProgress: (ref) => onClearProgress ?? () async {},
       composeEmail: (ref) => (mailApp ?? FakeMailApp()).compose,
+      exportTestStats: (ref) =>
+          () async => playStats,
       settingsStore: (ref) => store,
     ),
   );

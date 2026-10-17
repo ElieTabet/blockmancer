@@ -8,6 +8,7 @@ import 'package:settings_presentation/src/widgets/language_row.dart';
 import 'package:settings_presentation/src/widgets/replay_tutorial_row.dart';
 import 'package:settings_presentation/src/widgets/reset_progress_row.dart';
 import 'package:settings_presentation/src/widgets/send_feedback_row.dart';
+import 'package:settings_presentation/src/widgets/share_test_stats_row.dart';
 import 'package:settings_presentation/src/widgets/toggle_row.dart';
 import 'package:settings_presentation/src/widgets/version_row.dart';
 
@@ -40,6 +41,7 @@ final class SettingsWidget extends StatelessWidget {
                 ReplayTutorialRow(),
                 SendFeedbackRow(),
                 ResetProgressRow(),
+                ShareTestStatsRow(),
                 VersionRow(),
               ],
             ),

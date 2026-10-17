@@ -68,5 +68,29 @@ class SettingsStateNotifier extends _$SettingsStateNotifier {
 
   Future<void> setSound(bool on) => _settings.setSound(on);
 
+  /// Whether the share sheet opened with the testers' stats. [origin] is the
+  /// row's rect, which an iPad's popover points from.
+  Future<bool> shareTestStats({Rect? origin}) async {
+    final summary = ref.read(testStatsSummaryProvider);
+    final shareText = ref.read(di.shareTextProvider);
+
+    try {
+      return await shareText(
+        await summary(),
+        origin: origin,
+        subject: testStatsSubject,
+      );
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Sharing the test stats failed',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+
+      return false;
+    }
+  }
+
   SettingsNotifier get _settings => ref.read(settingsProvider.notifier);
 }

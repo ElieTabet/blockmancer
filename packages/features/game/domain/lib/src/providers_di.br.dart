@@ -10,6 +10,13 @@ part 'providers_di.br.g.dart';
 // game_domain — inbound dependency-injection slots. Each throws until the
 // composition layer overrides it.
 
+/// Where what players do is counted: the testers' log today, Firebase
+/// Analytics later.
+@riverpod
+AnalyticsSink analyticsSink(Ref ref) => throw UnimplementedError(
+  'analyticsSinkProvider must be overridden by the composition layer',
+);
+
 @riverpod
 BestScores bestScores(Ref ref) => throw UnimplementedError(
   'bestScoresProvider must be overridden by the composition layer',

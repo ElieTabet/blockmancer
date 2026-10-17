@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:game_domain/game_domain.dart' as game;
+import 'package:play_stats/play_stats.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sounds/sounds.dart';
 
@@ -16,3 +18,9 @@ GameSounds gameSounds(Ref ref) {
 
   return sounds;
 }
+
+/// One for the app's life, so its writes stay in order. Its days are the
+/// game's clock's.
+@Riverpod(keepAlive: true)
+LocalPlayStats playStats(Ref ref) =>
+    LocalPlayStats(now: ref.watch(game.clockProvider).now);

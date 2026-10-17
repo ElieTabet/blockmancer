@@ -18,6 +18,7 @@ import 'package:game_domain/src/entities/joker_collection_of.dart';
 import 'package:game_domain/src/entities/progression_change.br.dart';
 import 'package:game_domain/src/entities/run_end.dart';
 import 'package:game_domain/src/entities/run_end_record.br.dart';
+import 'package:game_domain/src/entities/run_events.dart';
 import 'package:game_domain/src/entities/run_start.dart';
 import 'package:game_domain/src/entities/saved_run.br.dart';
 import 'package:game_domain/src/entities/starting_progression.dart';
@@ -44,6 +45,14 @@ typedef RecordProgressionFun =
 
 typedef RecordRunEndFun =
     Future<RunEndRecord> Function(GameMode mode, int total);
+
+/// Counts what a move did, from the run before it and the transition it
+/// made. See [runEventsOf].
+typedef TrackMoveFun =
+    void Function(GameMode mode, RunState before, Transition transition);
+
+/// Counts a finished run, with what it earned. See [runEndEventsOf].
+typedef TrackRunEndFun = void Function(RunState run, ProgressionChange? change);
 
 /// See [RunStartForBehavior]. A function, so each launch reads the clock
 /// afresh.
@@ -249,13 +258,32 @@ List<WorldSummary> worldSummaries(Ref ref) =>
 Progression initialProgression(Ref ref) =>
     startingProgression(ref.watch(di.gameRulesProvider));
 
+/// See [TrackMoveFun].
+@riverpod
+TrackMoveFun trackMove(Ref ref) {
+  final sink = ref.watch(di.analyticsSinkProvider);
+
+  return (mode, before, transition) =>
+      runEventsOf(mode, before, transition).forEach(sink.log);
+}
+
+/// See [TrackRunEndFun].
+@riverpod
+TrackRunEndFun trackRunEnd(Ref ref) {
+  final sink = ref.watch(di.analyticsSinkProvider);
+
+  return (run, change) => runEndEventsOf(run, change).forEach(sink.log);
+}
+
 List<Override> bindProviders({
+  required AnalyticsSink Function(Ref ref) analyticsSink,
   required BestScores Function(Ref ref) bestScores,
   required Clock Function(Ref ref) clock,
   required GameRules Function(Ref ref) gameRules,
   required ProgressionStore Function(Ref ref) progressionStore,
   required RunStore Function(Ref ref) runStore,
 }) => [
+  di.analyticsSinkProvider.overrideWith(analyticsSink),
   di.bestScoresProvider.overrideWith(bestScores),
   di.clockProvider.overrideWith(clock),
   di.gameRulesProvider.overrideWith(gameRules),

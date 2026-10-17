@@ -14,6 +14,7 @@ void main() {
     store = FakeRunStore();
     container = ProviderContainer(
       overrides: bindProviders(
+        analyticsSink: (ref) => FakeAnalyticsSink(),
         bestScores: (ref) => FakeBestScores(),
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17)),
         gameRules: (ref) => const TwoWorldRules(),

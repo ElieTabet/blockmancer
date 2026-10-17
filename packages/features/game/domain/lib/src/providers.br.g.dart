@@ -904,3 +904,95 @@ final class InitialProgressionProvider
 
 String _$initialProgressionHash() =>
     r'0e1f2830bfdb0a6f42df3cc97c7970c114675131';
+
+/// See [TrackMoveFun].
+
+@ProviderFor(trackMove)
+final trackMoveProvider = TrackMoveProvider._();
+
+/// See [TrackMoveFun].
+
+final class TrackMoveProvider
+    extends $FunctionalProvider<TrackMoveFun, TrackMoveFun, TrackMoveFun>
+    with $Provider<TrackMoveFun> {
+  /// See [TrackMoveFun].
+  TrackMoveProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trackMoveProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$trackMoveHash();
+
+  @$internal
+  @override
+  $ProviderElement<TrackMoveFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TrackMoveFun create(Ref ref) {
+    return trackMove(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TrackMoveFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TrackMoveFun>(value),
+    );
+  }
+}
+
+String _$trackMoveHash() => r'b00c99351b48233a748f08300f21405a312da980';
+
+/// See [TrackRunEndFun].
+
+@ProviderFor(trackRunEnd)
+final trackRunEndProvider = TrackRunEndProvider._();
+
+/// See [TrackRunEndFun].
+
+final class TrackRunEndProvider
+    extends $FunctionalProvider<TrackRunEndFun, TrackRunEndFun, TrackRunEndFun>
+    with $Provider<TrackRunEndFun> {
+  /// See [TrackRunEndFun].
+  TrackRunEndProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trackRunEndProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$trackRunEndHash();
+
+  @$internal
+  @override
+  $ProviderElement<TrackRunEndFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TrackRunEndFun create(Ref ref) {
+    return trackRunEnd(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TrackRunEndFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TrackRunEndFun>(value),
+    );
+  }
+}
+
+String _$trackRunEndHash() => r'0f39080590e9fd371f0c5a52f75dae4a0b5fccae';

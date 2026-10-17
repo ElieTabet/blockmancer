@@ -274,6 +274,13 @@
       "unavailableMessage": "We couldn't open a mail app. Write to us at $address.",
       "ok": "OK"
     },
+    "testStats": {
+      "title": "Share test stats",
+      "subtitle": "Send the team how you've been playing",
+      "unavailableTitle": "Couldn't share",
+      "unavailableMessage": "The share sheet didn't open. Try again in a moment.",
+      "ok": "OK"
+    },
     "version": "Version",
     "reset": {
       "title": "Reset progress",

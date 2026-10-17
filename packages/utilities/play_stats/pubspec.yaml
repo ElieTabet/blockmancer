@@ -1,0 +1,19 @@
+name: play_stats
+description: "The testers' numbers, kept on the device: what players do, counted per day behind the game's AnalyticsSink, and exported as JSON — the phase 2 stand-in for Firebase Analytics."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_domain: any
+  shared_preferences: ^2.5.3
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

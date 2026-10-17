@@ -274,6 +274,13 @@
       "unavailableMessage": "Impossible d'ouvrir une app de mail. Écris-nous à $address.",
       "ok": "OK"
     },
+    "testStats": {
+      "title": "Partager les stats de test",
+      "subtitle": "Envoie à l'équipe comment tu joues",
+      "unavailableTitle": "Partage impossible",
+      "unavailableMessage": "La feuille de partage ne s'est pas ouverte. Réessaie dans un instant.",
+      "ok": "OK"
+    },
     "version": "Version",
     "reset": {
       "title": "Réinitialiser la progression",

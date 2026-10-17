@@ -115,6 +115,7 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override late final _Translations$settings$language$fr language = _Translations$settings$language$fr._(_root);
 	@override late final _Translations$settings$tutorial$fr tutorial = _Translations$settings$tutorial$fr._(_root);
 	@override late final _Translations$settings$feedback$fr feedback = _Translations$settings$feedback$fr._(_root);
+	@override late final _Translations$settings$testStats$fr testStats = _Translations$settings$testStats$fr._(_root);
 	@override String get version => 'Version';
 	@override late final _Translations$settings$reset$fr reset = _Translations$settings$reset$fr._(_root);
 }
@@ -421,6 +422,20 @@ class _Translations$settings$feedback$fr extends Translations$settings$feedback$
 	@override String get subtitle => 'Ouvre un e-mail à l\'équipe';
 	@override String get unavailableTitle => 'Pas d\'app de mail';
 	@override String unavailableMessage({required Object address}) => 'Impossible d\'ouvrir une app de mail. Écris-nous à ${address}.';
+	@override String get ok => 'OK';
+}
+
+// Path: settings.testStats
+class _Translations$settings$testStats$fr extends Translations$settings$testStats$en {
+	_Translations$settings$testStats$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Partager les stats de test';
+	@override String get subtitle => 'Envoie à l\'équipe comment tu joues';
+	@override String get unavailableTitle => 'Partage impossible';
+	@override String get unavailableMessage => 'La feuille de partage ne s\'est pas ouverte. Réessaie dans un instant.';
 	@override String get ok => 'OK';
 }
 
@@ -873,6 +888,11 @@ extension on TranslationsFr {
 			'settings.feedback.unavailableTitle' => 'Pas d\'app de mail',
 			'settings.feedback.unavailableMessage' => ({required Object address}) => 'Impossible d\'ouvrir une app de mail. Écris-nous à ${address}.',
 			'settings.feedback.ok' => 'OK',
+			'settings.testStats.title' => 'Partager les stats de test',
+			'settings.testStats.subtitle' => 'Envoie à l\'équipe comment tu joues',
+			'settings.testStats.unavailableTitle' => 'Partage impossible',
+			'settings.testStats.unavailableMessage' => 'La feuille de partage ne s\'est pas ouverte. Réessaie dans un instant.',
+			'settings.testStats.ok' => 'OK',
 			'settings.version' => 'Version',
 			'settings.reset.title' => 'Réinitialiser la progression',
 			'settings.reset.subtitle' => 'Tes records et la partie en cours',

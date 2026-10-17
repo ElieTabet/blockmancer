@@ -273,6 +273,53 @@ final class SoundOnProvider extends $FunctionalProvider<bool, bool, bool>
 
 String _$soundOnHash() => r'e36a0ce920ad6349d10a1aa9b59033f966e15178';
 
+@ProviderFor(testStatsSummary)
+final testStatsSummaryProvider = TestStatsSummaryProvider._();
+
+final class TestStatsSummaryProvider
+    extends
+        $FunctionalProvider<
+          TestStatsSummaryFun,
+          TestStatsSummaryFun,
+          TestStatsSummaryFun
+        >
+    with $Provider<TestStatsSummaryFun> {
+  TestStatsSummaryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'testStatsSummaryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$testStatsSummaryHash();
+
+  @$internal
+  @override
+  $ProviderElement<TestStatsSummaryFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  TestStatsSummaryFun create(Ref ref) {
+    return testStatsSummary(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TestStatsSummaryFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TestStatsSummaryFun>(value),
+    );
+  }
+}
+
+String _$testStatsSummaryHash() => r'1b194efa11b1c7b8d755e43d2884f4d0363b253b';
+
 /// Whether the player has been through the tutorial. A future, so a launch
 /// waits for the stored answer instead of showing the tutorial on a default.
 

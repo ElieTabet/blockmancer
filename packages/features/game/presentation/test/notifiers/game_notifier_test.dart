@@ -15,6 +15,7 @@ void main() {
   late FakeGameRules rules;
 
   ProviderContainer container({
+    FakeAnalyticsSink? analytics,
     FakeBestScores? bestScores,
     GameLaunch launch = .daily,
     Progression? progression,
@@ -27,6 +28,7 @@ void main() {
     final container = ProviderContainer(
       overrides: gameOverrides(
         rules,
+        analytics: analytics,
         bestScores: bestScores,
         launch: launch,
         progression: progression,
@@ -753,6 +755,78 @@ void main() {
       // Then
       expect(store.saved.jokerStats[JokerId.twin]?.timesPicked, 1);
       expect(store.saved.jokerStats[JokerId.patience]?.timesPicked, 1);
+    });
+  });
+
+  group('counting for the testers', () {
+    const offers = [JokerId.twin, JokerId.combo, JokerId.saver];
+
+    test(
+      "a fresh run's starting pick counts as its start and a pick",
+      () async {
+        // Given: a daily run waiting for its starting joker
+        final analytics = FakeAnalyticsSink();
+        rules = FakeGameRules(
+          start: runIn(const .pickingJoker(offers: offers), pickIndex: 0),
+        );
+        final game = container(analytics: analytics);
+        rules.next = (
+          runIn(const .playing(), jokers: const [.twin], pickIndex: 1),
+          const [],
+        );
+
+        // When
+        game.read(gameProvider.notifier).pickJoker(.twin);
+        await pumpEventQueue();
+
+        // Then
+        expect(analytics.logged, const [
+          AnalyticsEvent.runStart(mode: .daily, world: .rubble),
+          AnalyticsEvent.jokerPick(id: .twin, offered: offers),
+        ]);
+      },
+    );
+
+    test("a world run's end counts once what it earned is known", () async {
+      // Given
+      final analytics = FakeAnalyticsSink();
+      final game = container(
+        analytics: analytics,
+        launch: .world,
+        progressionStore: FakeProgressionStore(startingProgression(rules)),
+        world: .rubble,
+      );
+      rules.next = (
+        runIn(const .won(), runTotal: 6400),
+        const [GameEvent.runWon(total: 6400)],
+      );
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      expect(analytics.logged, const [
+        AnalyticsEvent.runEnd(starsEarned: 2, total: 6400, won: true),
+        AnalyticsEvent.worldUnlock(world: .gravity),
+      ]);
+    });
+
+    test('the tutorial counts nothing', () async {
+      // Given
+      final analytics = FakeAnalyticsSink();
+      final game = container(analytics: analytics, launch: .tutorial);
+      rules.next = (
+        runIn(const .over(), runTotal: 300),
+        const [GameEvent.runOver(total: 300)],
+      );
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      expect(analytics.logged, isEmpty);
     });
   });
 

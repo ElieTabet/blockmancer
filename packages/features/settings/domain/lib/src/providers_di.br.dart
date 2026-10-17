@@ -32,6 +32,14 @@ ComposeEmailFun composeEmail(Ref ref) => throw UnimplementedError(
   'composeEmailProvider must be overridden by the composition layer',
 );
 
+/// The testers' play stats, as the JSON summary they send.
+typedef ExportTestStatsFun = Future<String> Function();
+
+@riverpod
+ExportTestStatsFun exportTestStats(Ref ref) => throw UnimplementedError(
+  'exportTestStatsProvider must be overridden by the composition layer',
+);
+
 @riverpod
 SettingsStore settingsStore(Ref ref) => throw UnimplementedError(
   'settingsStoreProvider must be overridden by the composition layer',

@@ -142,6 +142,53 @@ final class ComposeEmailProvider
 
 String _$composeEmailHash() => r'0f05ba9ddfb58286b6ae9bf1b34afae434375e41';
 
+@ProviderFor(exportTestStats)
+final exportTestStatsProvider = ExportTestStatsProvider._();
+
+final class ExportTestStatsProvider
+    extends
+        $FunctionalProvider<
+          ExportTestStatsFun,
+          ExportTestStatsFun,
+          ExportTestStatsFun
+        >
+    with $Provider<ExportTestStatsFun> {
+  ExportTestStatsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'exportTestStatsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$exportTestStatsHash();
+
+  @$internal
+  @override
+  $ProviderElement<ExportTestStatsFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ExportTestStatsFun create(Ref ref) {
+    return exportTestStats(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ExportTestStatsFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ExportTestStatsFun>(value),
+    );
+  }
+}
+
+String _$exportTestStatsHash() => r'f01f889e28281dfdc992274c114c94b2f55e6765';
+
 @ProviderFor(settingsStore)
 final settingsStoreProvider = SettingsStoreProvider._();
 

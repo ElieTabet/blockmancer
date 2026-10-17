@@ -9,6 +9,7 @@ import '../fake_progression_store.dart';
 ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
   final container = ProviderContainer(
     overrides: bindProviders(
+      analyticsSink: (ref) => FakeAnalyticsSink(),
       bestScores: (ref) => scores ?? FakeBestScores(),
       clock: (ref) => clock,
       gameRules: (ref) => const TwoWorldRules(),

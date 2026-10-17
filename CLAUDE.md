@@ -23,7 +23,8 @@ blockmancer/
 │   ├── utilities/        # Horizontal infrastructure — no feature knowledge
 │   │   ├── ads/              # Rewarded ads behind `RewardedAds.show()` — no network yet, so every reward is granted (phase 3 brings AdMob)
 │   │   ├── app_info/         # The app's version and the device it runs on (`readAppInfo()`, never throws) — the only place package_info_plus and device_info_plus are known
-│   │   ├── external_links/   # Hands a link to the OS (browser, mail draft) — the only place url_launcher is known; Settings' feedback email uses `composeEmail`
+│   │   ├── external_links/   # Hands a link or text to the OS (browser, mail draft, share sheet) — the only place url_launcher and share_plus are known; Settings uses `composeEmail` and `shareText`
+│   │   ├── play_stats/       # The testers' numbers: `LocalPlayStats` implements shared_domain's `AnalyticsSink`, counting per day on the device, and exports a JSON summary
 │   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
 │   │   ├── sounds/           # The game's sound effects, decoded into memory up front behind GameSounds — the only place flutter_soloud is known
 │   │   ├── telemetry/        # Firebase Analytics + Crashlytics behind one switch — the only place either is known
@@ -563,8 +564,8 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
 `flutter_inappwebview`, `flutter_soloud`, `push`, `sounds`, `telemetry`, `url_launcher`, `ads`,
-`app_info`, `package_info_plus`, `device_info_plus`, `external_links` or
-`blockmancer_engine` directly** — a
+`app_info`, `package_info_plus`, `device_info_plus`, `external_links`, `share_plus`, `play_stats`
+or `blockmancer_engine` directly** — a
 feature declares a contract and the composition layer injects the implementation, exactly as it does
 for routing.
 
@@ -622,6 +623,38 @@ The player's settings, kept on the device; there is no account to sync them to. 
   `appDetails` (keepAlive, `app_info`'s `readAppInfo` mapped field by field) and `composeEmail`
   (`external_links`). `launchUrl` is called without `canLaunchUrl`, so neither iOS's
   `LSApplicationQueriesSchemes` nor Android's `<queries>` is needed.
+- **Share test stats:** the row before Version calls `SettingsStateNotifier.shareTestStats`.
+  `settings_domain`'s `TestStatsSummaryBehavior` builds the summary — the `exportTestStats` slot's
+  JSON (play_stats', see [Local stats](#local-stats)) with the app's version and build added,
+  never its device or OS — and the notifier hands it to `settings_presentation`'s `shareText` slot
+  (`external_links`, over share_plus) with the row's rect, which an iPad's popover points from:
+  where a popover anchors is the screen's business, so the domain never sees a `Rect`. When the
+  sheet doesn't open, a popup says so.
+
+## Local stats
+
+The testers' numbers, until Firebase Analytics arrives in phase 3. The game reports what players do
+to `shared_domain`'s `AnalyticsSink` (`log(AnalyticsEvent)`, never throwing or waiting); each
+sink maps the sealed `AnalyticsEvent` cases to its own wire format, so phase 3's Firebase sink plugs
+in behind the same interface without touching `shared_domain`.
+
+- **What is counted** (`game_domain`, through its `analyticsSink` slot): `runEventsOf` maps a move —
+  `run_start(mode, world)` at a fresh run's starting pick (so a run opened by mistake counts
+  nothing), `joker_pick(id, offered)`, `round_end(round, won, score)` when a round is won or a lost
+  one given up (a revive plays it on), `revive` — and `runEndEventsOf` a run's end, once
+  `recordProgression` answers: `run_end(total, won, stars_earned)` and `world_unlock(world)`.
+  `GameNotifier` calls `trackMove` from `_apply` and `trackRunEnd` from `_recordProgress`; the
+  tutorial counts nothing.
+- **Where:** `play_stats`' `LocalPlayStats` (one for the app's life, `app_providers`'
+  `playStatsProvider`, its days from the game's `Clock`) keeps one JSON string under `playStats`:
+  a schema `version`, a random install id (128 bits from `Random.secure()`) and, per local day,
+  runs, runs won, revives, rounds reached (round-end count per round), picks and offers per joker
+  and world unlocks. A counter missing from a day an earlier build wrote reads as 0, so the log
+  grows without a migration. Writes, the export's included, run one after another in the order
+  logged; a log that can't be read starts afresh. The install id lives in shared_preferences,
+  which backups restore: when Firebase arrives, use its instance id instead.
+- **The export:** `exportJson` waits for the writes, then gives `{schema, installId, exportedOn,
+  daysPlayed, totals, days}` — no personal data.
 
 ## Push notifications
 

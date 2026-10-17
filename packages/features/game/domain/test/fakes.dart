@@ -4,6 +4,14 @@ import 'package:shared_domain/shared_domain.dart';
 export 'fake_best_scores.dart';
 export 'fake_run_store.dart';
 
+/// Keeps what the game counted, in order.
+final class FakeAnalyticsSink implements AnalyticsSink {
+  final logged = <AnalyticsEvent>[];
+
+  @override
+  void log(AnalyticsEvent event) => logged.add(event);
+}
+
 /// A clock at [current], which a test may move.
 final class FakeClock implements Clock {
   FakeClock(this.current);

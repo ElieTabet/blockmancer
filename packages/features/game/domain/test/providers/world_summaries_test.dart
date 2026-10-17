@@ -43,6 +43,7 @@ void main() {
     // Given
     final container = ProviderContainer(
       overrides: bindProviders(
+        analyticsSink: (ref) => FakeAnalyticsSink(),
         bestScores: (ref) => FakeBestScores(),
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),
         gameRules: (ref) => const _FogComingRules(),

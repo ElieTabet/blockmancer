@@ -253,6 +253,55 @@ void main() {
     );
   });
 
+  group('sharing test stats', () {
+    testWidgets(
+      'Given a share sheet, When Share test stats is tapped, Then it opens '
+      'with the stats, pointing from the row',
+      (tester) async {
+        // Given
+        final shareSheet = FakeShareSheet();
+        await pumpSettings(tester, shareSheet: shareSheet);
+        await tester.ensureVisible(find.text('Share test stats'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Share test stats'));
+        await tester.pumpAndSettle();
+
+        // Then
+        final shared = shareSheet.shared.single;
+        expect(shared.text, contains('"installId": "ab12"'));
+        expect(shared.text, contains('"version": "1.0.0"'));
+        expect(shared.origin, isNotNull);
+        expect(
+          shared.origin!.contains(
+            tester.getCenter(find.text('Share test stats')),
+          ),
+          isTrue,
+        );
+        expect(find.text("Couldn't share"), findsNothing);
+      },
+    );
+
+    testWidgets(
+      "Given a share sheet that doesn't open, When Share test stats is tapped, "
+      'Then the player is told',
+      (tester) async {
+        // Given
+        await pumpSettings(tester, shareSheet: FakeShareSheet(opens: false));
+        await tester.ensureVisible(find.text('Share test stats'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Share test stats'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(find.text("Couldn't share"), findsOneWidget);
+      },
+    );
+  });
+
   testWidgets('the close button closes Settings', (tester) async {
     // Given
     final routing = await pumpSettings(tester);

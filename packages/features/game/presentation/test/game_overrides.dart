@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
-import 'package:shared_domain/shared_domain.dart' show Progression, WorldId;
+import 'package:shared_domain/shared_domain.dart'
+    show AnalyticsEvent, AnalyticsSink, Progression, WorldId;
 import 'package:game_presentation/game_presentation.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
@@ -71,10 +72,12 @@ final class FakeGameRouting implements GameRouting {
 /// settings leave reduce motion off unless [reduceMotion] turns it on and
 /// sound and haptics on unless [soundOn] or [hapticsOn] turn them off, sounds
 /// go nowhere unless [playSound] takes them, and the tutorial is kept as seen
-/// nowhere unless [markTutorialSeen] keeps it. The screen is opened with
+/// nowhere unless [markTutorialSeen] keeps it, and what the game counts goes
+/// nowhere unless [analytics] keeps it. The screen is opened with
 /// [progression], a new player's unless given, which [progressionStore] keeps.
 List<Override> gameOverrides(
   FakeGameRules rules, {
+  AnalyticsSink? analytics,
   game.BestScores? bestScores,
   bool hapticsOn = true,
   game.GameLaunch launch = .daily,
@@ -91,6 +94,7 @@ List<Override> gameOverrides(
   WorldId? world,
 }) => [
   ...game.bindProviders(
+    analyticsSink: (ref) => analytics ?? FakeAnalyticsSink(),
     bestScores: (ref) => bestScores ?? FakeBestScores(),
     clock: (ref) => const FakeClock(),
     gameRules: (ref) => rules,
@@ -115,6 +119,14 @@ List<Override> gameOverrides(
   launchedWorldProvider.overrideWithValue(world),
   resumedRunProvider.overrideWithValue(resumed),
 ];
+
+/// Keeps what the game counted, in order.
+final class FakeAnalyticsSink implements AnalyticsSink {
+  final logged = <AnalyticsEvent>[];
+
+  @override
+  void log(AnalyticsEvent event) => logged.add(event);
+}
 
 /// The progression kept in memory, from [saved]. Writes wait for [gate] when
 /// one is set, and throw once [broken].

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart' as game;
+import 'package:shared_domain/shared_domain.dart';
 
 import 'fake_clock.dart';
 import 'fake_progression_store.dart';
@@ -16,6 +17,7 @@ ProviderContainer engineGame({
 }) {
   final container = ProviderContainer(
     overrides: game.bindProviders(
+      analyticsSink: (ref) => const _NoAnalytics(),
       bestScores: (ref) => SharedPreferencesBestScores(
         startingProgression: ref.watch(game.initialProgressionProvider),
       ),
@@ -30,4 +32,12 @@ ProviderContainer engineGame({
   addTearDown(container.dispose);
 
   return container;
+}
+
+/// Counts nothing: these runs are the engine's, not a player's.
+final class _NoAnalytics implements AnalyticsSink {
+  const _NoAnalytics();
+
+  @override
+  void log(AnalyticsEvent event) {}
 }

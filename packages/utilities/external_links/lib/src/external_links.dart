@@ -1,5 +1,7 @@
 import 'package:external_links/src/package_name.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:timber/timber.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -79,8 +81,37 @@ Future<bool> composeEmail(Uri mailto) async {
   }
 }
 
+/// Opens the operating system's share sheet with [text], and answers whether
+/// it opened: a sheet the player dismisses still did. [origin] is the rect the
+/// iPad's popover points from, and [subject] fills a mail's subject line.
+///
+/// The same two catches as the launchers, for the same reason: the share
+/// sheet is the operating system's, and it can refuse to open.
+Future<bool> shareText(
+  String text, {
+  Rect? origin,
+  @visibleForTesting Future<ShareResult> Function(ShareParams params)? share,
+  String? subject,
+}) async {
+  final params = ShareParams(
+    sharePositionOrigin: origin,
+    subject: subject,
+    text: text,
+  );
+
+  try {
+    await (share ?? SharePlus.instance.share)(params);
+
+    return true;
+  } on PlatformException catch (error, stackTrace) {
+    return _launchFailed(error, 'Could not open the share sheet', stackTrace);
+  } on MissingPluginException catch (error, stackTrace) {
+    return _launchFailed(error, 'Could not open the share sheet', stackTrace);
+  }
+}
+
 /// Reports a launch the operating system would not perform, and answers the
-/// `false` both callers hand back.
+/// `false` every caller hands back.
 ///
 /// The URL itself is deliberately absent: a link in an announcement can carry
 /// anything, and a log line is not the place for it.

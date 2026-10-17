@@ -8,6 +8,54 @@ part of 'providers_di.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Where what players do is counted: the testers' log today, Firebase
+/// Analytics later.
+
+@ProviderFor(analyticsSink)
+final analyticsSinkProvider = AnalyticsSinkProvider._();
+
+/// Where what players do is counted: the testers' log today, Firebase
+/// Analytics later.
+
+final class AnalyticsSinkProvider
+    extends $FunctionalProvider<AnalyticsSink, AnalyticsSink, AnalyticsSink>
+    with $Provider<AnalyticsSink> {
+  /// Where what players do is counted: the testers' log today, Firebase
+  /// Analytics later.
+  AnalyticsSinkProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'analyticsSinkProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$analyticsSinkHash();
+
+  @$internal
+  @override
+  $ProviderElement<AnalyticsSink> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AnalyticsSink create(Ref ref) {
+    return analyticsSink(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AnalyticsSink value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AnalyticsSink>(value),
+    );
+  }
+}
+
+String _$analyticsSinkHash() => r'0c3ecec390e77acb21ab1c90e5a089e918fd2c63';
 
 @ProviderFor(bestScores)
 final bestScoresProvider = BestScoresProvider._();

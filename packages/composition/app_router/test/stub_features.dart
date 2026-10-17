@@ -1,10 +1,13 @@
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
-import 'package:shared_domain/shared_domain.dart' show Progression;
+import 'package:shared_domain/shared_domain.dart'
+    show AnalyticsEvent, AnalyticsSink, Progression;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:home_presentation/home_presentation.dart' as home_ui;
 import 'package:settings_domain/settings_domain.dart' as settings;
+import 'package:settings_presentation/settings_presentation.dart'
+    as settings_ui;
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 
 /// Home's daily card, which is how these tests know Home is on screen.
@@ -32,6 +35,7 @@ List<Override> stubFeatures({
   bool tutorialSeen = true,
 }) => [
   ...game.bindProviders(
+    analyticsSink: (ref) => const _NoAnalytics(),
     bestScores: (ref) => const _NoBestScores(),
     clock: (ref) => const _NoonClock(),
     gameRules: (ref) => const BlockmancerEngine(),
@@ -70,7 +74,13 @@ List<Override> stubFeatures({
     clearProgress: (ref) => ref.watch(game.clearProgressProvider),
     composeEmail: (ref) =>
         (mailto) async => false,
+    exportTestStats: (ref) =>
+        () async => '{}',
     settingsStore: (ref) => const _FirstLaunchSettingsStore(),
+  ),
+  ...settings_ui.bindProviders(
+    shareText: (ref) =>
+        (text, {origin, subject}) async => false,
   ),
   ...splash_ui.bindProviders(tutorialSeen: (ref) async => tutorialSeen),
 ];
@@ -143,4 +153,12 @@ final class _MemoryProgressionStore implements game.ProgressionStore {
 
   @override
   Future<void> save(Progression progression) async => _saved = progression;
+}
+
+/// Counts nothing: a routing test plays no one's runs.
+final class _NoAnalytics implements AnalyticsSink {
+  const _NoAnalytics();
+
+  @override
+  void log(AnalyticsEvent event) {}
 }

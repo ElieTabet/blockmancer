@@ -16,6 +16,8 @@ import 'package:push_notifications_presentation/push_notifications_presentation.
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:settings_data/settings_data.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
+import 'package:settings_presentation/settings_presentation.dart'
+    as settings_ui;
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 import 'package:telemetry/telemetry.dart' as telemetry;
 
@@ -78,6 +80,7 @@ List<Override> featureBindingOverrides({
   // The game reaches the rules, its storage and the ad network only through
   // these slots.
   ...game.bindProviders(
+    analyticsSink: (ref) => ref.watch(playStatsProvider),
     bestScores: (ref) => SharedPreferencesBestScores(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
@@ -147,8 +150,10 @@ List<Override> featureBindingOverrides({
     },
     clearProgress: (ref) => ref.watch(game.clearProgressProvider),
     composeEmail: (ref) => external_links.composeEmail,
+    exportTestStats: (ref) => ref.watch(playStatsProvider).exportJson,
     settingsStore: (ref) => const SharedPreferencesSettingsStore(),
   ),
+  ...settings_ui.bindProviders(shareText: (ref) => external_links.shareText),
   // The splash opens the tutorial on a first launch without knowing Settings.
   ...splash_ui.bindProviders(
     tutorialSeen: (ref) => ref.watch(settings.tutorialSeenProvider.future),

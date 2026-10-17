@@ -16,6 +16,10 @@ typedef ApplyStoredLanguageFun = Future<void> Function();
 ApplyStoredLanguageFun applyStoredLanguage(Ref ref) =>
     () async => (await ref.read(settingsProvider.future)).language.apply();
 
+List<Override> bindProviders({
+  required di.ShareTextFun Function(Ref ref) shareText,
+}) => [di.shareTextProvider.overrideWith(shareText)];
+
 List<Override> bindRoutingProviders({
   required SettingsRouting Function(Ref ref) settingsRouting,
 }) => [di.settingsRoutingProvider.overrideWith(settingsRouting)];

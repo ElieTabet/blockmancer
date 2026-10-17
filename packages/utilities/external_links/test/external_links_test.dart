@@ -1,6 +1,7 @@
 import 'package:external_links/external_links.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher_platform_interface/link.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
@@ -111,5 +112,49 @@ void main() {
         isFalse,
       );
     });
+  });
+
+  group('sharing text', () {
+    test(
+      'hands the text, the subject and the origin to the share sheet',
+      () async {
+        // Given
+        final shared = <ShareParams>[];
+
+        // When
+        final opened = await shareText(
+          '{"installId":"a1"}',
+          origin: const Rect.fromLTWH(10, 20, 30, 40),
+          share: (params) async {
+            shared.add(params);
+
+            return const ShareResult('', .dismissed);
+          },
+          subject: 'Test stats',
+        );
+
+        // Then
+        expect(opened, isTrue);
+        expect(shared.single.text, '{"installId":"a1"}');
+        expect(shared.single.subject, 'Test stats');
+        expect(
+          shared.single.sharePositionOrigin,
+          const Rect.fromLTWH(10, 20, 30, 40),
+        );
+      },
+    );
+
+    for (final (name, error) in [
+      ('refuses', PlatformException(code: 'unavailable')),
+      ('is missing from the build', MissingPluginException()),
+    ]) {
+      test('answers false when the share sheet $name', () async {
+        // When
+        final opened = await shareText('{}', share: (_) async => throw error);
+
+        // Then
+        expect(opened, isFalse);
+      });
+    }
   });
 }

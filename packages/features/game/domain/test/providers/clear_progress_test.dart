@@ -23,6 +23,7 @@ void main() {
       ).copyWith(unlockedJokers: JokerId.values.toSet());
     container = ProviderContainer(
       overrides: bindProviders(
+        analyticsSink: (ref) => FakeAnalyticsSink(),
         bestScores: (ref) => scores,
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),
         gameRules: (ref) => const TwoWorldRules(),

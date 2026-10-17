@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:settings_domain/src/behaviors/reset_progress_behavior.dart';
 import 'package:settings_domain/src/behaviors/send_feedback_behavior.dart';
+import 'package:settings_domain/src/behaviors/test_stats_summary_behavior.dart';
 import 'package:settings_domain/src/contracts/settings_store.dart';
 import 'package:settings_domain/src/entities/app_details.br.dart';
 import 'package:settings_domain/src/entities/app_language.dart';
@@ -17,6 +18,9 @@ part 'providers.br.g.dart';
 typedef ResetProgressFun = Future<void> Function();
 
 typedef SendFeedbackFun = Future<bool> Function();
+
+/// See [TestStatsSummaryBehavior].
+typedef TestStatsSummaryFun = Future<String> Function();
 
 const _defaults = AppSettings();
 
@@ -52,6 +56,12 @@ SendFeedbackFun sendFeedback(Ref ref) => SendFeedbackBehavior(
 bool soundOn(Ref ref) =>
     ref.watch(settingsProvider).value?.sound ?? _defaults.sound;
 
+@riverpod
+TestStatsSummaryFun testStatsSummary(Ref ref) => TestStatsSummaryBehavior(
+  appDetails: ref.watch(di.appDetailsProvider.future),
+  exportTestStats: ref.watch(di.exportTestStatsProvider),
+).call;
+
 /// Whether the player has been through the tutorial. A future, so a launch
 /// waits for the stored answer instead of showing the tutorial on a default.
 @riverpod
@@ -63,10 +73,12 @@ List<Override> bindProviders({
   required Future<AppDetails> Function(Ref ref) appDetails,
   required di.ClearProgressFun Function(Ref ref) clearProgress,
   required di.ComposeEmailFun Function(Ref ref) composeEmail,
+  required di.ExportTestStatsFun Function(Ref ref) exportTestStats,
   required SettingsStore Function(Ref ref) settingsStore,
 }) => [
   di.appDetailsProvider.overrideWith(appDetails),
   di.clearProgressProvider.overrideWith(clearProgress),
   di.composeEmailProvider.overrideWith(composeEmail),
+  di.exportTestStatsProvider.overrideWith(exportTestStats),
   di.settingsStoreProvider.overrideWith(settingsStore),
 ];

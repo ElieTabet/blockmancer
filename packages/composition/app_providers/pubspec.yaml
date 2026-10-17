@@ -15,6 +15,7 @@ dependencies:
   app_router: any
   blockmancer_engine: any
   external_links: any
+  play_stats: any
   push: any
   push_notifications_domain: any
   push_notifications_presentation: any

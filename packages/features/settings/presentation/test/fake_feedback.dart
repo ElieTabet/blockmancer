@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:settings_domain/settings_domain.dart';
 
 /// What the app reports about a release build on an iPhone.
@@ -23,5 +25,20 @@ final class FakeMailApp {
     drafts.add(mailto);
 
     return installed;
+  }
+}
+
+/// The operating system's share sheet: keeps what it was handed, and opens
+/// unless [opens] is false.
+final class FakeShareSheet {
+  FakeShareSheet({this.opens = true});
+
+  final bool opens;
+  final shared = <({Rect? origin, String? subject, String text})>[];
+
+  Future<bool> share(String text, {Rect? origin, String? subject}) async {
+    shared.add((origin: origin, subject: subject, text: text));
+
+    return opens;
   }
 }
