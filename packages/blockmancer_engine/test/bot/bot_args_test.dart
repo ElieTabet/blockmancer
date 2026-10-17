@@ -31,6 +31,20 @@ void main() {
     expect(pairs.expand((pair) => pair).toSet(), JokerId.values.toSet());
   });
 
+  test(
+    '--solo plays every joker alone, in catalog order, after any --build',
+    () {
+      // Given / When
+      final args = parseBotArgs(const ['--solo', '--build', 'random']);
+
+      // Then
+      expect(
+        [for (final build in args.builds) build.name],
+        ['random', for (final joker in jokerCatalog) joker.id.name],
+      );
+    },
+  );
+
   test('--world gravity plays Gravity', () {
     expect(parseBotArgs(const ['--world', 'gravity']).world, WorldId.gravity);
   });
@@ -67,6 +81,16 @@ void main() {
       expect(build.picks, isTrue);
     });
 
+    test('a single joker is a solo build, completed by owning it', () {
+      // Given / When
+      final build = BotBuild.parse('pockets');
+
+      // Then
+      expect(build.jokers, [JokerId.pockets]);
+      expect(build.completedBy(const [.combo, .pockets]), isTrue);
+      expect(build.completedBy(const [.combo]), isFalse);
+    });
+
     test('random picks with no joker of its own, empty never picks', () {
       // Given / When
       final random = BotBuild.parse('random');
@@ -92,7 +116,6 @@ void main() {
 
   for (final args in const [
     ['--build', 'none'],
-    ['--build', 'patience'],
     ['--build', 'patience,combo'],
     ['--build', 'patience,wizard'],
     ['--world', 'fog'],

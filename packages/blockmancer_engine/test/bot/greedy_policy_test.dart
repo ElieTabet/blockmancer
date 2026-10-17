@@ -246,6 +246,24 @@ void main() {
       expect(summary.pairCompletionRate, 0.5);
     });
 
+    test('gives the boss win rate over the runs that cleared round 4', () {
+      // Given: one run reached the boss and beat it
+      final summary = summarize(runs, roundCount: 5);
+
+      // Then
+      expect(summary.bossWinRateOnceReached, 1);
+    });
+
+    test('gives the boss win rate and the P80 total over the runs that '
+        'completed their pair', () {
+      // Given: two runs completed the pair, totals 6,000 (won) and 2,000
+      final summary = summarize(runs, roundCount: 5);
+
+      // Then
+      expect(summary.bossWinRateWithPair, 0.5);
+      expect(summary.p80TotalWithPair, 6000);
+    });
+
     test('a baseline has no pair to complete', () {
       // Given
       const baseline = <BotRun>[
@@ -258,8 +276,14 @@ void main() {
         ),
       ];
 
-      // When / Then
-      expect(summarize(baseline, roundCount: 5).pairCompletionRate, isNull);
+      // When
+      final summary = summarize(baseline, roundCount: 5);
+
+      // Then
+      expect(summary.pairCompletionRate, isNull);
+      expect(summary.bossWinRateWithPair, isNull);
+      expect(summary.p80TotalWithPair, isNull);
+      expect(summary.bossWinRateOnceReached, isNull);
     });
 
     test('gives the 50th and 80th percentile totals by nearest rank', () {

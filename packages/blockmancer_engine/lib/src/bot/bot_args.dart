@@ -8,9 +8,10 @@ typedef BotArgs = ({List<BotBuild> builds, int runs, WorldId world});
 
 /// How the bot picks, every joker on offer whatever a player has unlocked. A
 /// pair takes one of its two jokers whenever one is offered (the first named
-/// when both are), otherwise the first offer; `random` always takes the first
-/// offer, which the offers' own draw makes random; `empty` skips every pick
-/// and plays the run with no joker.
+/// when both are), otherwise the first offer; a solo build, one joker, takes
+/// it whenever offered, otherwise the first offer; `random` always takes the
+/// first offer, which the offers' own draw makes random; `empty` skips every
+/// pick and plays the run with no joker.
 final class BotBuild {
   const BotBuild._({
     required this.jokers,
@@ -18,8 +19,8 @@ final class BotBuild {
     this.picks = true,
   });
 
-  /// A pair of partners, `a,b`, or `random` or `empty`; anything else is a
-  /// [FormatException].
+  /// A pair of partners, `a,b`, a single joker, or `random` or `empty`;
+  /// anything else is a [FormatException].
   factory BotBuild.parse(String name) {
     if (name == 'random') return const ._(jokers: [], name: 'random');
 
@@ -33,14 +34,17 @@ final class BotBuild {
             (throw FormatException('Not a joker', id)),
     ];
 
-    if (jokers case [
-      final first,
-      final second,
-    ] when jokerEffect(first).partner == second) {
-      return BotBuild._(jokers: jokers, name: name);
+    final valid = switch (jokers) {
+      [_] => true,
+      [final first, final second] => jokerEffect(first).partner == second,
+      _ => false,
+    };
+
+    if (!valid) {
+      throw FormatException('Not a joker or a pair of partners', name);
     }
 
-    throw FormatException('Not a pair of partners', name);
+    return BotBuild._(jokers: jokers, name: name);
   }
 
   /// The jokers the bot takes when offered; none for a baseline.
@@ -50,8 +54,8 @@ final class BotBuild {
   /// False for `empty`, which owns no joker.
   final bool picks;
 
-  /// Whether a run that ended owning [owned] had both of this pair's jokers;
-  /// null for a baseline, which has no pair.
+  /// Whether a run that ended owning [owned] had all of this build's jokers,
+  /// both of a pair or a solo's one; null for a baseline, which has none.
   bool? completedBy(List<JokerId> owned) =>
       jokers.isEmpty ? null : jokers.every(owned.contains);
 }
@@ -72,11 +76,18 @@ const referenceBuilds = [
   'finisher,hattrick',
 ];
 
-/// Reads `--runs N`, `--world <world>` and any number of `--build a,b`;
-/// anything else, a build that is neither a baseline nor a pair, or a world
-/// that can't be played, is a [FormatException].
+/// Every joker as a solo build, in catalog order.
+final List<String> soloBuilds = [
+  for (final joker in jokerCatalog) joker.id.name,
+];
+
+/// Reads `--runs N`, `--world <world>`, `--solo` (every joker solo, after any
+/// `--build`) and any number of `--build a,b`; anything else, a build that is
+/// neither a baseline, a joker nor a pair, or a world that can't be played,
+/// is a [FormatException].
 BotArgs parseBotArgs(List<String> args) {
   final builds = <String>[];
+  var solo = false;
   var runs = 2000;
   var world = WorldId.rubble;
 
@@ -87,6 +98,8 @@ BotArgs parseBotArgs(List<String> args) {
       case '--build' when value != null:
         builds.add(value);
         index++;
+      case '--solo':
+        solo = true;
       case '--runs' when value != null:
         runs = int.parse(value);
         index++;
@@ -100,7 +113,10 @@ BotArgs parseBotArgs(List<String> args) {
 
   return (
     builds: [
-      for (final name in builds.isEmpty ? referenceBuilds : builds)
+      for (final name in [
+        ...builds.isEmpty && !solo ? referenceBuilds : builds,
+        if (solo) ...soloBuilds,
+      ])
         BotBuild.parse(name),
     ],
     runs: runs,

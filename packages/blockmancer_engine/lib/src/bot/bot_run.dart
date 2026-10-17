@@ -49,8 +49,11 @@ BotRun playBotRun(
 typedef BotSummary = ({
   double averageJokersOwned,
   double bossWinRate,
+  double? bossWinRateOnceReached,
+  double? bossWinRateWithPair,
   int p50Total,
   int p80Total,
+  int? p80TotalWithPair,
   double? pairCompletionRate,
   List<double> roundClearRates,
   int runs,
@@ -58,18 +61,33 @@ typedef BotSummary = ({
 
 /// [runs] summed up over a run of [roundCount] rounds: the share of runs
 /// that cleared each round, the 50th and 80th percentile totals, how often
-/// the boss fell, the jokers a run ended with on average, and the share of
-/// runs that completed their pair (null for a baseline).
+/// the boss fell (over every run, over the runs that reached it, and over
+/// the runs that completed their build), the jokers a run ended with on
+/// average, the share of runs that completed their build, and the 80th
+/// percentile total of those. What concerns a build is null for a baseline,
+/// as is a rate over no run.
 BotSummary summarize(List<BotRun> runs, {required int roundCount}) {
-  final totals = [for (final run in runs) run.runTotal]..sort();
+  final totals = _sortedTotals(runs);
   final pairs = [for (final run in runs) ?run.pairCompleted];
+  final withPair = [
+    for (final run in runs)
+      if (run.pairCompleted ?? false) run,
+  ];
 
   return (
     averageJokersOwned:
         runs.fold(0, (sum, run) => sum + run.jokersOwned) / runs.length,
-    bossWinRate: runs.where((run) => run.won).length / runs.length,
+    bossWinRate: _winRate(runs)!,
+    bossWinRateOnceReached: _winRate([
+      for (final run in runs)
+        if (run.roundsWon >= roundCount - 1) run,
+    ]),
+    bossWinRateWithPair: pairs.isEmpty ? null : _winRate(withPair),
     p50Total: _nearestRank(totals, percent: 50),
     p80Total: _nearestRank(totals, percent: 80),
+    p80TotalWithPair: withPair.isEmpty
+        ? null
+        : _nearestRank(_sortedTotals(withPair), percent: 80),
     pairCompletionRate: pairs.isEmpty
         ? null
         : pairs.where((completed) => completed).length / pairs.length,
@@ -80,6 +98,12 @@ BotSummary summarize(List<BotRun> runs, {required int roundCount}) {
     runs: runs.length,
   );
 }
+
+List<int> _sortedTotals(List<BotRun> runs) =>
+    [for (final run in runs) run.runTotal]..sort();
+
+double? _winRate(List<BotRun> runs) =>
+    runs.isEmpty ? null : runs.where((run) => run.won).length / runs.length;
 
 /// The nearest-rank percentile: the lowest total that at least [percent]% of
 /// [sorted] are at or under, so it is always a total some run made.

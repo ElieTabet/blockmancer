@@ -4,9 +4,11 @@
 //   dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 //
 // `--build` may be given several times, one table row each: a pair takes one
-// of its jokers whenever one is offered, else the first offer; the baselines
-// `random` always take the first offer and `empty` skip every pick. With no
-// `--build`, both baselines and every pair run. `--world` is rubble (the
+// of its jokers whenever one is offered, else the first offer, and a single
+// joker does the same alone; the baselines `random` always take the first
+// offer and `empty` skip every pick. `--solo` adds every joker alone. With no
+// `--build` or `--solo`, both baselines and every pair run. "pair done" is a
+// run ending with the build's jokers, a solo's one included. `--world` is rubble (the
 // default) or gravity, whose rule holds in the boss. Offers draw from every
 // joker, so any build can be offered whatever the player has unlocked. Seeds
 // are 1 to --runs, so a table is reproducible.
@@ -26,23 +28,25 @@ Future<void> main(List<String> args) async {
 
   stdout
     ..writeln(
-      '| build | ${[for (var round = 1; round <= roundCount; round++) 'round $round'].join(' | ')} | P50 total | P80 total | boss win | jokers owned | pair done |',
+      '| build | ${[for (var round = 1; round <= roundCount; round++) 'round $round'].join(' | ')} | P50 total | P80 total | boss win | boss win \\| r${roundCount - 1} cleared | jokers owned | pair done | boss win \\| pair done | P80 \\| pair done |',
     )
-    ..writeln('|---|${'---|' * roundCount}---|---|---|---|---|');
+    ..writeln('|---|${'---|' * roundCount}---|---|---|---|---|---|---|---|');
 
   for (final build in builds) {
     final summary = summarize(
       await _playAll(build, config: config, runs: runs),
       roundCount: roundCount,
     );
-    final pairRate = summary.pairCompletionRate;
 
     stdout.writeln(
       '| ${build.name} | ${summary.roundClearRates.map(_percent).join(' | ')} '
       '| ${summary.p50Total} | ${summary.p80Total} '
       '| ${_percent(summary.bossWinRate)} '
+      '| ${_percentOrDash(summary.bossWinRateOnceReached)} '
       '| ${summary.averageJokersOwned.toStringAsFixed(2)} '
-      '| ${pairRate == null ? '—' : _percent(pairRate)} |',
+      '| ${_percentOrDash(summary.pairCompletionRate)} '
+      '| ${_percentOrDash(summary.bossWinRateWithPair)} '
+      '| ${summary.p80TotalWithPair ?? '—'} |',
     );
   }
 
@@ -75,6 +79,8 @@ Future<List<BotRun>> _playAll(
 
 String _percent(double share) => '${(share * 100).round()}%';
 
+String _percentOrDash(double? share) => share == null ? '—' : _percent(share);
+
 BotArgs _parse(List<String> args) {
   try {
     return parseBotArgs(args);
@@ -83,7 +89,7 @@ BotArgs _parse(List<String> args) {
       ..writeln('${error.message}: ${error.source}')
       ..writeln(
         'Usage: dart run tool/balance_bot.dart [--runs N] '
-        '[--world rubble|gravity] [--build random|empty|a,b]...',
+        '[--world rubble|gravity] [--solo] [--build random|empty|a|a,b]...',
       );
     exit(64);
   }
