@@ -9,18 +9,19 @@ import '../pump_game.dart';
 
 /// The border colour of the offer card for [id].
 Color _borderOf(WidgetTester tester, JokerId id) {
-  final material = tester.widget<Material>(
+  final card = tester.widget<Container>(
     find
         .descendant(
           of: find.byWidgetPredicate(
             (widget) => widget is JokerOfferCard && widget.id == id,
           ),
-          matching: find.byType(Material),
+          matching: find.byType(Container),
         )
         .first,
   );
+  final decoration = card.decoration! as ShapeDecoration;
 
-  return (material.shape! as RoundedRectangleBorder).side.color;
+  return (decoration.shape as RoundedRectangleBorder).side.color;
 }
 
 void main() {

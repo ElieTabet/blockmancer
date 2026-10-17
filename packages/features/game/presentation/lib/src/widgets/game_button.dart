@@ -11,21 +11,25 @@ final class GameButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    height: _height,
-    width: double.infinity,
-    child: FilledButton(
-      onPressed: onPressed,
-      style: FilledButton.styleFrom(
-        backgroundColor: DSColor.accent,
-        foregroundColor: DSColor.primary,
-        shape: RoundedRectangleBorder(
-          borderRadius: .circular(DSCornerRadius.large),
-        ),
+  Widget build(BuildContext context) => DSPressable(
+    onTap: onPressed,
+    child: Container(
+      height: _height,
+      width: double.infinity,
+      alignment: .center,
+      decoration: BoxDecoration(
+        color: DSColor.accent,
+        borderRadius: .circular(DSCornerRadius.large),
       ),
       child: Text(
         label,
-        style: DSFont.display(const TextStyle(fontSize: 18, fontWeight: .w700)),
+        style: DSFont.display(
+          const TextStyle(
+            color: DSColor.primary,
+            fontSize: 18,
+            fontWeight: .w700,
+          ),
+        ),
       ),
     ),
   );

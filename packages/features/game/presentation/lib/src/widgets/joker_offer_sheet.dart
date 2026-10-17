@@ -118,63 +118,60 @@ final class JokerOfferCard extends ConsumerWidget {
     final offers = context.t.game.offers;
     final partnerName = jokerText(context, partner).name;
 
-    return Material(
-      color: DSColor.jokerSurface,
-      shape: RoundedRectangleBorder(
-        borderRadius: .circular(DSCornerRadius.large),
-        side: BorderSide(
-          color: completesPair ? DSColor.accent : DSColor.joker,
-          width: 2,
-        ),
-      ),
-      child: InkWell(
-        borderRadius: .circular(DSCornerRadius.large),
-        onTap: () => ref.read(gameProvider.notifier).pickJoker(id),
-        child: Padding(
-          padding: const .all(DSSpace.small),
-          child: Row(
-            spacing: DSSpace.small,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: .start,
-                  spacing: DSSpace.xxxsmall,
-                  children: [
-                    Text(
-                      text.name,
-                      style: DSFont.display(
-                        const TextStyle(
-                          color: DSColor.jokerInk,
-                          fontSize: 17,
-                          fontWeight: .w600,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      text.description,
-                      style: const TextStyle(
-                        color: DSColor.textMuted,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Text(
-                      completesPair
-                          ? offers.completesPair(joker: partnerName)
-                          : offers.pairsWith(joker: partnerName),
-                      style: TextStyle(
-                        color: completesPair
-                            ? DSColor.accent
-                            : DSColor.textMuted,
-                        fontSize: 12,
-                        fontWeight: .w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              _TakeLabel(label: offers.take),
-            ],
+    return DSPressable(
+      onTap: () => ref.read(gameProvider.notifier).pickJoker(id),
+      child: Container(
+        padding: const .all(DSSpace.small),
+        decoration: ShapeDecoration(
+          color: DSColor.jokerSurface,
+          shape: RoundedRectangleBorder(
+            borderRadius: .circular(DSCornerRadius.large),
+            side: BorderSide(
+              color: completesPair ? DSColor.accent : DSColor.joker,
+              width: 2,
+            ),
           ),
+        ),
+        child: Row(
+          spacing: DSSpace.small,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: .start,
+                spacing: DSSpace.xxxsmall,
+                children: [
+                  Text(
+                    text.name,
+                    style: DSFont.display(
+                      const TextStyle(
+                        color: DSColor.jokerInk,
+                        fontSize: 17,
+                        fontWeight: .w600,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    text.description,
+                    style: const TextStyle(
+                      color: DSColor.textMuted,
+                      fontSize: 13,
+                    ),
+                  ),
+                  Text(
+                    completesPair
+                        ? offers.completesPair(joker: partnerName)
+                        : offers.pairsWith(joker: partnerName),
+                    style: TextStyle(
+                      color: completesPair ? DSColor.accent : DSColor.textMuted,
+                      fontSize: 12,
+                      fontWeight: .w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _TakeLabel(label: offers.take),
+          ],
         ),
       ),
     );

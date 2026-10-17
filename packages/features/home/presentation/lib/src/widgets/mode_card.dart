@@ -34,65 +34,64 @@ final class ModeCard extends ConsumerWidget {
       .resume => DSColor.joker,
     };
 
-    return Material(
-      color: DSColor.card,
-      shape: RoundedRectangleBorder(
-        borderRadius: .circular(DSCornerRadius.large),
-        side: BorderSide(
-          color: mode == .practice ? DSColor.cardBorder : accent,
-          width: 2,
-        ),
-      ),
-      child: InkWell(
-        borderRadius: .circular(DSCornerRadius.large),
-        // Read on tap: the notifier holds nothing, so nothing keeps it alive
-        // between taps.
-        onTap: () {
-          final notifier = ref.read(homeProvider.notifier);
+    return DSPressable(
+      // Read on tap: the notifier holds nothing, so nothing keeps it alive
+      // between taps.
+      onTap: () {
+        final notifier = ref.read(homeProvider.notifier);
 
-          switch (mode) {
-            case .daily:
-              notifier.openDaily(context);
-            case .practice:
-              notifier.openPractice(context);
-            case .resume:
-              notifier.openContinue(context);
-          }
-        },
-        child: Padding(
-          padding: const .all(DSSpace.medium),
-          child: Row(
-            spacing: DSSpace.small,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: .start,
-                  spacing: DSSpace.xxsmall,
-                  children: [
-                    Text(
-                      title,
-                      style: DSFont.display(
-                        const TextStyle(
-                          color: DSColor.white,
-                          fontSize: 22,
-                          fontWeight: .w600,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        color: DSColor.textMuted,
-                        fontSize: 13,
-                      ),
-                    ),
-                    BestLine(mode: mode),
-                  ],
-                ),
-              ),
-              Icon(Icons.play_arrow_rounded, color: accent, size: 36),
-            ],
+        switch (mode) {
+          case .daily:
+            notifier.openDaily(context);
+          case .practice:
+            notifier.openPractice(context);
+          case .resume:
+            notifier.openContinue(context);
+        }
+      },
+      child: Container(
+        padding: const .all(DSSpace.medium),
+        decoration: ShapeDecoration(
+          color: DSColor.card,
+          shape: RoundedRectangleBorder(
+            borderRadius: .circular(DSCornerRadius.large),
+            side: BorderSide(
+              color: mode == .practice ? DSColor.cardBorder : accent,
+              width: 2,
+            ),
           ),
+        ),
+        child: Row(
+          spacing: DSSpace.small,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: .start,
+                spacing: DSSpace.xxsmall,
+                children: [
+                  Text(
+                    title,
+                    style: DSFont.display(
+                      const TextStyle(
+                        color: DSColor.white,
+                        fontSize: 22,
+                        fontWeight: .w600,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: DSColor.textMuted,
+                      fontSize: 13,
+                    ),
+                  ),
+                  BestLine(mode: mode),
+                ],
+              ),
+            ),
+            Icon(Icons.play_arrow_rounded, color: accent, size: 36),
+          ],
         ),
       ),
     );

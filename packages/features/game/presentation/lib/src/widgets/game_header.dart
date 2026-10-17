@@ -43,10 +43,15 @@ final class LeaveButton extends ConsumerWidget {
   const LeaveButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => IconButton(
-    onPressed: () => ref.read(gameProvider.notifier).leave(context),
-    icon: const Icon(Icons.arrow_back_rounded, color: DSColor.white),
-    tooltip: context.t.game.leave,
+  Widget build(BuildContext context, WidgetRef ref) => Tooltip(
+    message: context.t.game.leave,
+    child: DSPressable(
+      onTap: () => ref.read(gameProvider.notifier).leave(context),
+      child: const SizedBox.square(
+        dimension: kMinInteractiveDimension,
+        child: Icon(Icons.arrow_back_rounded, color: DSColor.white),
+      ),
+    ),
   );
 }
 

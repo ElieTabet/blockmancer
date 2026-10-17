@@ -232,6 +232,11 @@ final class DSTheme {
     return ThemeData.dark().copyWith(
       appBarTheme: _appBarTheme,
       colorScheme: _darkColorScheme,
+      highlightColor: Colors.transparent,
+      // Taps answer with DSPressable's shrink; a ripple left on a stock
+      // Material control would be the one surface that still splashes.
+      splashColor: Colors.transparent,
+      splashFactory: NoSplash.splashFactory,
       textTheme: _textThemeDark(_darkColorScheme.onSurface),
       // Material defaults the caret to `primary`; a dark brand colour barely
       // contrasts with a charcoal surface, so the caret all but disappears. The
@@ -249,6 +254,9 @@ final class DSTheme {
     return ThemeData.light().copyWith(
       appBarTheme: _appBarTheme,
       colorScheme: _lightColorScheme,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      splashFactory: NoSplash.splashFactory,
       textTheme: _textThemeLight(_lightColorScheme.onSurface),
     );
   }
