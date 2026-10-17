@@ -41,13 +41,12 @@ final class MoveScore {
   final int streak;
 }
 
-const _chipsPerCell = 10;
-
 /// Scores a placed piece once its lines have cleared: the piece's size, then on
 /// a clear `chips × mult` with the jokers' additive effects applied before the
 /// multiplicative ones, then flat bonuses.
 MoveScore scoreMove({
   required ClearResult clear,
+  required RunConfig config,
   required List<JokerEffect> jokers,
   required int pieceSize,
   required int previousStreak,
@@ -60,13 +59,14 @@ MoveScore scoreMove({
     pieceSize: pieceSize,
     storedMult: storedMult,
     streak: clear.clearedAny ? previousStreak + 1 : 0,
+    tuning: config.jokers,
   );
 
   var step = const ScoreStep(chips: 0, mult: 0);
 
   if (clear.clearedAny) {
     step = ScoreStep(
-      chips: _chipsPerCell * clear.cells.length,
+      chips: config.chipsPerCell * clear.cells.length,
       mult: clear.lineCount,
     );
     step = jokers.fold(step, (step, joker) => joker.onAdditive(move, step));

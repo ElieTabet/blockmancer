@@ -76,9 +76,43 @@ void main() {
 
   test('a bot run is the same every time for its seed and build', () {
     expect(
-      playBotRun(7, build: const [.patience, .twin]),
-      playBotRun(7, build: const [.patience, .twin]),
+      playBotRun(7, build: const [.patience, .twin], config: defaultConfig),
+      playBotRun(7, build: const [.patience, .twin], config: defaultConfig),
     );
+  });
+
+  test('a boss target three times higher makes the bot win less often', () {
+    // Given
+    final boss = defaultConfig.rounds.last;
+    final harder = defaultConfig.copyWith(
+      rounds: [
+        ...defaultConfig.rounds.take(defaultConfig.rounds.length - 1),
+        boss.copyWith(target: boss.target * 3),
+      ],
+    );
+
+    double bossWinRate(RunConfig config) => summarize([
+      for (var seed = 1; seed <= 40; seed++)
+        playBotRun(seed, build: const [.patience, .twin], config: config),
+    ], roundCount: config.rounds.length).bossWinRate;
+
+    // When / Then
+    expect(bossWinRate(harder), lessThan(bossWinRate(defaultConfig)));
+  });
+
+  test('doubling the chips per cell raises the bot\'s median total', () {
+    // Given
+    final richer = defaultConfig.copyWith(
+      chipsPerCell: defaultConfig.chipsPerCell * 2,
+    );
+
+    int medianTotal(RunConfig config) => summarize([
+      for (var seed = 1; seed <= 20; seed++)
+        playBotRun(seed, build: const [], config: config),
+    ], roundCount: config.rounds.length).medianTotal;
+
+    // When / Then
+    expect(medianTotal(richer), greaterThan(medianTotal(defaultConfig)));
   });
 
   group('summing up runs', () {

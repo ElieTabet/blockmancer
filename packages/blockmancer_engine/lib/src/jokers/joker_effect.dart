@@ -21,10 +21,10 @@ abstract class JokerEffect {
   /// On a clearing move, after every additive effect.
   ScoreStep onMultiplicative(MoveContext move, ScoreStep step) => step;
 
-  RoundSetup onRoundSetup(RoundSetup setup) => setup;
+  RoundSetup onRoundSetup(RoundSetup setup, JokerTuning tuning) => setup;
 
   RoundBonus onRoundWon(RoundBonus bonus, RoundWonContext round) => bonus;
 
   /// How likely [shape] is drawn, relative to the other shapes.
-  int pieceWeight(Shape shape, int weight) => weight;
+  int pieceWeight(Shape shape, JokerTuning tuning, int weight) => weight;
 }

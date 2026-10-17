@@ -2,12 +2,10 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 
-/// +6 mult when a 1–2 cell piece completes a line.
+/// +[JokerTuning.precisionBonusMult] mult when a piece of up to
+/// [JokerTuning.precisionMaxPieceSize] cells completes a line.
 final class Precision extends JokerEffect {
   const Precision();
-
-  static const _bonusMult = 6;
-  static const _maxPieceSize = 2;
 
   @override
   JokerId get id => .precision;
@@ -17,5 +15,7 @@ final class Precision extends JokerEffect {
 
   @override
   ScoreStep onAdditive(MoveContext move, ScoreStep step) =>
-      move.pieceSize <= _maxPieceSize ? step.addMult(_bonusMult, id) : step;
+      move.pieceSize <= move.tuning.precisionMaxPieceSize
+      ? step.addMult(move.tuning.precisionBonusMult, id)
+      : step;
 }

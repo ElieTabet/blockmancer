@@ -1,3 +1,4 @@
+import 'package:shared_domain/src/entities/game/joker_tuning.br.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'run_config.br.freezed.dart';
@@ -21,6 +22,9 @@ abstract class RoundSpec with _$RoundSpec {
 @freezed
 abstract class RunConfig with _$RunConfig {
   const factory RunConfig({
+    /// Chips a cleared cell scores, before any joker.
+    required int chipsPerCell,
+    required JokerTuning jokers,
     required int offerCount,
 
     /// The chance that one offer is the partner of a joker already owned.

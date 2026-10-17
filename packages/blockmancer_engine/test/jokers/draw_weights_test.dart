@@ -2,6 +2,7 @@ import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
 import 'package:blockmancer_engine/src/random/weighted_draw.dart';
+import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
@@ -10,7 +11,7 @@ const _seed = 20261016;
 
 /// How many of [_draws] pieces drawn with [jokers] owned satisfy [test].
 int _count(List<JokerId> jokers, bool Function(Shape shape) test) {
-  final weights = pieceWeights(effectsOf(jokers));
+  final weights = pieceWeights(effectsOf(jokers), defaultConfig.jokers);
   var rng = const Mulberry32(_seed);
   var count = 0;
 

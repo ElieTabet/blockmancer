@@ -72,7 +72,8 @@ melos run test-engine-web
 
 # Play 2,000 seeded runs for each reference build with the greedy balance bot, and print
 # the share of runs clearing each round, the median total and the boss win rate
-# (docs/balance-v0.md holds the first table). Melos passes no arguments through, so for
+# (docs/balance/<date>.md holds each table, docs/balance-v0.md the first). It plays
+# `defaultConfig`. Melos passes no arguments through, so for
 # `--runs` / `--build` run it from the package:
 #   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build patience,twin
 melos run balance-bot
@@ -277,6 +278,11 @@ engine's events and never recomputes a rule.
   list of `shared_domain`'s `RunMove`s (`pick`, `place`, `revive`, `end`) back into the final
   `RunState`, refusing any move the run couldn't have made. This is what a server will check a score
   with.
+- **Tunable.** Every number a designer would tune lives in the immutable `RunConfig`, whose values
+  are `defaultConfig`: the rounds' targets, pieces and stones, chips per cleared cell, revives, offers,
+  and each joker's numbers (`JokerTuning`, which every joker hook is handed). No rule
+  hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit. This is
+  what Remote Config will feed.
 - **Balance bot.** `tool/balance_bot.dart` plays seeded runs with `lib/src/bot/`'s greedy policy
   (the best immediate score, a fixed joker build) across one isolate per core. It depends only on
   the engine, and `lib/src/bot/` uses no `dart:io` or isolates, so it stays web-safe.
@@ -294,9 +300,10 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 1`; `migrate(json)` is where an older version is brought up
-  to date (a no-op today), and a save that can't be read (corrupt, unknown version, a joker this
-  build lacks) is treated as no save.
+  wire format. The schema has `version: 2`; `migrate(json)` brings an older version up to date one
+  step at a time (version 1 gains the chips per cell and joker numbers it was played with), and a
+  save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
+  save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes
   `GameRoute(launch: .resume)`. `GamePage` loads the save **once** (`loadSavedRun`), before the game
   starts, and scopes it in as `resumedRunProvider`. If the save can't be loaded it plays today's

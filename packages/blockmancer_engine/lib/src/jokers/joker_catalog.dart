@@ -48,13 +48,16 @@ List<JokerEffect> effectsOf(Iterable<JokerId> owned) => [
 ];
 
 /// The draw weight of every shape in [shapeCatalog] under [jokers].
-List<int> pieceWeights(List<JokerEffect> jokers) => [
+List<int> pieceWeights(List<JokerEffect> jokers, JokerTuning tuning) => [
   for (final shape in shapeCatalog)
-    jokers.fold(1, (weight, joker) => joker.pieceWeight(shape, weight)),
+    jokers.fold(1, (weight, joker) => joker.pieceWeight(shape, tuning, weight)),
 ];
 
-RoundSetup roundSetup(RoundSetup base, List<JokerEffect> jokers) =>
-    jokers.fold(base, (setup, joker) => joker.onRoundSetup(setup));
+RoundSetup roundSetup(
+  RoundSetup base,
+  List<JokerEffect> jokers,
+  JokerTuning tuning,
+) => jokers.fold(base, (setup, joker) => joker.onRoundSetup(setup, tuning));
 
 RoundBonus roundBonus(List<JokerEffect> jokers, RoundWonContext round) => jokers
     .fold(const RoundBonus(), (bonus, joker) => joker.onRoundWon(bonus, round));

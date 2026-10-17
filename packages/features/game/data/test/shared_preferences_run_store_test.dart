@@ -7,7 +7,58 @@ import 'package:game_domain/game_domain.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// The numbers version 1 played with, when they were constants of the build.
+const _version1Tuning = JokerTuning(
+  bigBoxFactor: 3,
+  bigBoxMinPieceSize: 5,
+  collectorMultPerJoker: 1,
+  columnFactor: 2,
+  comboMultPerStreak: 1,
+  heavyFactor: 2,
+  heavyMinPieceSize: 4,
+  patienceStoredPerMove: 2,
+  pocketsExtraPieces: 4,
+  precisionBonusMult: 6,
+  precisionMaxPieceSize: 2,
+  quarryStonesPerClear: 1,
+  saverPointsPerPiece: 40,
+  stonemasonChipsPerStone: 50,
+  stonemasonExtraStones: 2,
+  sweepBonus: 500,
+  tinyFactor: 3,
+  tinyMaxPieceSize: 2,
+  twinFactor: 3,
+  twinMinLines: 2,
+);
+
+/// Every joker number distinct and off its default, so a field the DTO drops
+/// or swaps shows up.
+const _tuning = JokerTuning(
+  bigBoxFactor: 15,
+  bigBoxMinPieceSize: 9,
+  collectorMultPerJoker: 8,
+  columnFactor: 11,
+  comboMultPerStreak: 10,
+  heavyFactor: 12,
+  heavyMinPieceSize: 5,
+  patienceStoredPerMove: 16,
+  pocketsExtraPieces: 17,
+  precisionBonusMult: 18,
+  precisionMaxPieceSize: 4,
+  quarryStonesPerClear: 2,
+  saverPointsPerPiece: 70,
+  stonemasonChipsPerStone: 80,
+  stonemasonExtraStones: 7,
+  sweepBonus: 900,
+  tinyFactor: 14,
+  tinyMaxPieceSize: 1,
+  twinFactor: 13,
+  twinMinLines: 3,
+);
+
 const _config = RunConfig(
+  chipsPerCell: 20,
+  jokers: _tuning,
   offerCount: 3,
   partnerBias: 0.75,
   revivePieces: 3,
@@ -45,6 +96,28 @@ final _midRound = RunState(
   streak: 3,
   tray: const [4, null, 16],
 );
+
+/// [_midRound] as the version 1 build wrote it, before the config carried chips
+/// per cell or joker numbers. Frozen: never regenerate it from today's DTOs.
+const _version1Save = """
+{"day":20261017,"mode":"daily","run":{"board":[
+-1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,1,9,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,-1],
+"config":{"offerCount":3,"partnerBias":0.75,"revivePieces":3,"reviveRows":2,
+"revivesPerRun":1,"rounds":[{"isBoss":false,"pieces":14,"stones":0,"target":250},
+{"isBoss":true,"pieces":22,"stones":6,"target":2000}],"traySize":3},
+"jokers":["patience","twin","stonemason"],
+"phase":{"kind":"playing","offers":null,"reason":null},"pickIndex":2,
+"piecesLeft":11,"piecesRngState":3735928559,"revivesUsed":1,"roundIndex":1,
+"runTotal":1870,"score":640,"seed":20261017,"stonesRngState":123456789,
+"storedMult":6,"streak":3,"tray":[4,null,16]},"version":1}
+""";
 
 /// [run] as the next launch reads it: through JSON, the store's cache gone.
 Future<SavedRun?> _relaunchedWith(SavedRun run) async {
@@ -115,7 +188,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 1);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 2);
   });
 
   for (final (name, raw) in [
@@ -125,7 +198,7 @@ void main() {
       () {
         final json = SavedRunDto.fromDomain(
           SavedRun(mode: const .practice(), run: _midRound),
-        ).toJson()..['version'] = 2;
+        ).toJson()..['version'] = savedRunVersion + 1;
 
         return jsonEncode(json);
       }(),
@@ -158,7 +231,31 @@ void main() {
     expect(() => migrate({'mode': 'practice'}), throwsFormatException);
   });
 
-  test('a version 1 save passes through migrate unchanged', () {
+  test(
+    'a save from version 1 resumes with the numbers it was played with',
+    () async {
+      // Given
+      SharedPreferences.setMockInitialValues({'run.saved': _version1Save});
+
+      // When
+      final loaded = await const SharedPreferencesRunStore().load();
+
+      // Then
+      expect(loaded?.run.config.chipsPerCell, 10);
+      expect(loaded?.run.config.jokers, _version1Tuning);
+      expect(
+        loaded,
+        SavedRun(
+          mode: const .daily(day: 20261017),
+          run: _midRound.copyWith(
+            config: _config.copyWith(chipsPerCell: 10, jokers: _version1Tuning),
+          ),
+        ),
+      );
+    },
+  );
+
+  test('a version 2 save passes through migrate unchanged', () {
     // Given
     final json = SavedRunDto.fromDomain(
       SavedRun(mode: const .practice(), run: _midRound),

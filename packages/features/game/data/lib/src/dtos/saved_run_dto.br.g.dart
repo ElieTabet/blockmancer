@@ -65,6 +65,8 @@ Map<String, dynamic> _$RunStateDtoToJson(RunStateDto instance) =>
     };
 
 RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
+  chipsPerCell: (json['chipsPerCell'] as num).toInt(),
+  jokers: JokerTuningDto.fromJson(json['jokers'] as Map<String, dynamic>),
   offerCount: (json['offerCount'] as num).toInt(),
   partnerBias: (json['partnerBias'] as num).toDouble(),
   revivePieces: (json['revivePieces'] as num).toInt(),
@@ -78,6 +80,8 @@ RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
 
 Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
     <String, dynamic>{
+      'chipsPerCell': instance.chipsPerCell,
+      'jokers': instance.jokers.toJson(),
       'offerCount': instance.offerCount,
       'partnerBias': instance.partnerBias,
       'revivePieces': instance.revivePieces,
@@ -85,6 +89,54 @@ Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
       'revivesPerRun': instance.revivesPerRun,
       'rounds': instance.rounds.map((e) => e.toJson()).toList(),
       'traySize': instance.traySize,
+    };
+
+JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
+    JokerTuningDto(
+      bigBoxFactor: (json['bigBoxFactor'] as num).toInt(),
+      bigBoxMinPieceSize: (json['bigBoxMinPieceSize'] as num).toInt(),
+      collectorMultPerJoker: (json['collectorMultPerJoker'] as num).toInt(),
+      columnFactor: (json['columnFactor'] as num).toInt(),
+      comboMultPerStreak: (json['comboMultPerStreak'] as num).toInt(),
+      heavyFactor: (json['heavyFactor'] as num).toInt(),
+      heavyMinPieceSize: (json['heavyMinPieceSize'] as num).toInt(),
+      patienceStoredPerMove: (json['patienceStoredPerMove'] as num).toInt(),
+      pocketsExtraPieces: (json['pocketsExtraPieces'] as num).toInt(),
+      precisionBonusMult: (json['precisionBonusMult'] as num).toInt(),
+      precisionMaxPieceSize: (json['precisionMaxPieceSize'] as num).toInt(),
+      quarryStonesPerClear: (json['quarryStonesPerClear'] as num).toInt(),
+      saverPointsPerPiece: (json['saverPointsPerPiece'] as num).toInt(),
+      stonemasonChipsPerStone: (json['stonemasonChipsPerStone'] as num).toInt(),
+      stonemasonExtraStones: (json['stonemasonExtraStones'] as num).toInt(),
+      sweepBonus: (json['sweepBonus'] as num).toInt(),
+      tinyFactor: (json['tinyFactor'] as num).toInt(),
+      tinyMaxPieceSize: (json['tinyMaxPieceSize'] as num).toInt(),
+      twinFactor: (json['twinFactor'] as num).toInt(),
+      twinMinLines: (json['twinMinLines'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$JokerTuningDtoToJson(JokerTuningDto instance) =>
+    <String, dynamic>{
+      'bigBoxFactor': instance.bigBoxFactor,
+      'bigBoxMinPieceSize': instance.bigBoxMinPieceSize,
+      'collectorMultPerJoker': instance.collectorMultPerJoker,
+      'columnFactor': instance.columnFactor,
+      'comboMultPerStreak': instance.comboMultPerStreak,
+      'heavyFactor': instance.heavyFactor,
+      'heavyMinPieceSize': instance.heavyMinPieceSize,
+      'patienceStoredPerMove': instance.patienceStoredPerMove,
+      'pocketsExtraPieces': instance.pocketsExtraPieces,
+      'precisionBonusMult': instance.precisionBonusMult,
+      'precisionMaxPieceSize': instance.precisionMaxPieceSize,
+      'quarryStonesPerClear': instance.quarryStonesPerClear,
+      'saverPointsPerPiece': instance.saverPointsPerPiece,
+      'stonemasonChipsPerStone': instance.stonemasonChipsPerStone,
+      'stonemasonExtraStones': instance.stonemasonExtraStones,
+      'sweepBonus': instance.sweepBonus,
+      'tinyFactor': instance.tinyFactor,
+      'tinyMaxPieceSize': instance.tinyMaxPieceSize,
+      'twinFactor': instance.twinFactor,
+      'twinMinLines': instance.twinMinLines,
     };
 
 RoundSpecDto _$RoundSpecDtoFromJson(Map<String, dynamic> json) => RoundSpecDto(

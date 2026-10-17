@@ -10,6 +10,7 @@ final class MoveContext {
     required this.pieceSize,
     required this.storedMult,
     required this.streak,
+    required this.tuning,
   });
 
   final ClearResult clear;
@@ -21,6 +22,7 @@ final class MoveContext {
 
   /// Consecutive clearing moves, this one included.
   final int streak;
+  final JokerTuning tuning;
 }
 
 /// Chips and mult as they pass through the jokers, with what fired so far.
@@ -213,7 +215,9 @@ final class RoundBonus {
 }
 
 final class RoundWonContext {
-  const RoundWonContext({required this.unusedPieces});
+  const RoundWonContext({required this.tuning, required this.unusedPieces});
+
+  final JokerTuning tuning;
 
   /// Pieces still in the tray plus those not drawn yet.
   final int unusedPieces;

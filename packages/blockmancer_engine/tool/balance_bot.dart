@@ -57,7 +57,7 @@ Future<List<BotRun>> _playAll(List<JokerId> build, {required int runs}) async {
       Isolate.run(
         () => [
           for (var seed = 1 + worker; seed <= runs; seed += workers)
-            playBotRun(seed, build: build),
+            playBotRun(seed, build: build, config: defaultConfig),
         ],
       ),
   ]);

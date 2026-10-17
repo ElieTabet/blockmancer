@@ -2,11 +2,9 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 
-/// +4 pieces every round.
+/// +[JokerTuning.pocketsExtraPieces] pieces every round.
 final class DeepPockets extends JokerEffect {
   const DeepPockets();
-
-  static const _extraPieces = 4;
 
   @override
   JokerId get id => .pockets;
@@ -15,6 +13,6 @@ final class DeepPockets extends JokerEffect {
   JokerId get partner => .saver;
 
   @override
-  RoundSetup onRoundSetup(RoundSetup setup) =>
-      setup.addPieces(_extraPieces, id);
+  RoundSetup onRoundSetup(RoundSetup setup, JokerTuning tuning) =>
+      setup.addPieces(tuning.pocketsExtraPieces, id);
 }

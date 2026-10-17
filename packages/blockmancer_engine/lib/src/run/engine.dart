@@ -128,6 +128,7 @@ Transition place(
 
   final score = scoreMove(
     clear: clear,
+    config: state.config,
     jokers: jokers,
     pieceSize: shape.size,
     previousStreak: state.streak,
@@ -230,7 +231,7 @@ Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
 
   final traySize = state.config.traySize;
   final count = state.piecesLeft < traySize ? state.piecesLeft : traySize;
-  final weights = pieceWeights(jokers);
+  final weights = pieceWeights(jokers, state.config.jokers);
   final tray = <int?>[];
   var rng = Mulberry32(state.piecesRngState);
 
@@ -284,6 +285,7 @@ Transition _startRound(Transition transition) {
   final setup = roundSetup(
     RoundSetup(pieces: spec.pieces, stones: spec.stones),
     jokers,
+    state.config.jokers,
   );
 
   final started = <GameEvent>[
@@ -341,7 +343,10 @@ Transition _winRound(List<JokerEffect> jokers, Transition transition) {
   final (state, events) = transition;
   final bonus = roundBonus(
     jokers,
-    RoundWonContext(unusedPieces: state.piecesRemaining),
+    RoundWonContext(
+      tuning: state.config.jokers,
+      unusedPieces: state.piecesRemaining,
+    ),
   );
   final total = state.runTotal + state.score + bonus.runPoints;
 

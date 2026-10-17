@@ -6,16 +6,60 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 1;
+const savedRunVersion = 2;
 
-/// Brings a saved run written by an earlier version up to [savedRunVersion].
-/// Version 1 is the first, so there is nothing to bring up yet; a version this
-/// build doesn't know is unreadable.
+/// Brings a saved run written by an earlier version up to [savedRunVersion],
+/// one version at a time; a version this build doesn't know is unreadable.
 Map<String, dynamic> migrate(Map<String, dynamic> json) =>
     switch (json['version']) {
+      1 => migrate(_fromVersion1(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
+
+/// Version 1 saved no chips per cell and no joker numbers: they were constants
+/// of the build, so its runs resume with the values they were played with.
+/// Literals rather than today's defaults, which may have moved since.
+Map<String, dynamic> _fromVersion1(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{
+        ...config,
+        'chipsPerCell': 10,
+        'jokers': _version1Jokers,
+      },
+    },
+    'version': 2,
+  };
+}
+
+const Map<String, dynamic> _version1Jokers = {
+  'bigBoxFactor': 3,
+  'bigBoxMinPieceSize': 5,
+  'collectorMultPerJoker': 1,
+  'columnFactor': 2,
+  'comboMultPerStreak': 1,
+  'heavyFactor': 2,
+  'heavyMinPieceSize': 4,
+  'patienceStoredPerMove': 2,
+  'pocketsExtraPieces': 4,
+  'precisionBonusMult': 6,
+  'precisionMaxPieceSize': 2,
+  'quarryStonesPerClear': 1,
+  'saverPointsPerPiece': 40,
+  'stonemasonChipsPerStone': 50,
+  'stonemasonExtraStones': 2,
+  'sweepBonus': 500,
+  'tinyFactor': 3,
+  'tinyMaxPieceSize': 2,
+  'twinFactor': 3,
+  'twinMinLines': 2,
+};
 
 @JsonSerializable(explicitToJson: true)
 final class SavedRunDto {
@@ -169,6 +213,8 @@ final class RunStateDto {
 @JsonSerializable(explicitToJson: true)
 final class RunConfigDto {
   const RunConfigDto({
+    required this.chipsPerCell,
+    required this.jokers,
     required this.offerCount,
     required this.partnerBias,
     required this.revivePieces,
@@ -179,6 +225,8 @@ final class RunConfigDto {
   });
 
   factory RunConfigDto.fromDomain(RunConfig config) => RunConfigDto(
+    chipsPerCell: config.chipsPerCell,
+    jokers: .fromDomain(config.jokers),
     offerCount: config.offerCount,
     partnerBias: config.partnerBias,
     revivePieces: config.revivePieces,
@@ -191,6 +239,8 @@ final class RunConfigDto {
   factory RunConfigDto.fromJson(Map<String, dynamic> json) =>
       _$RunConfigDtoFromJson(json);
 
+  final int chipsPerCell;
+  final JokerTuningDto jokers;
   final int offerCount;
   final double partnerBias;
   final int revivePieces;
@@ -202,6 +252,8 @@ final class RunConfigDto {
   Map<String, dynamic> toJson() => _$RunConfigDtoToJson(this);
 
   RunConfig toDomain() => RunConfig(
+    chipsPerCell: chipsPerCell,
+    jokers: jokers.toDomain(),
     offerCount: offerCount,
     partnerBias: partnerBias,
     revivePieces: revivePieces,
@@ -209,6 +261,104 @@ final class RunConfigDto {
     revivesPerRun: revivesPerRun,
     rounds: [for (final round in rounds) round.toDomain()],
     traySize: traySize,
+  );
+}
+
+@JsonSerializable()
+final class JokerTuningDto {
+  const JokerTuningDto({
+    required this.bigBoxFactor,
+    required this.bigBoxMinPieceSize,
+    required this.collectorMultPerJoker,
+    required this.columnFactor,
+    required this.comboMultPerStreak,
+    required this.heavyFactor,
+    required this.heavyMinPieceSize,
+    required this.patienceStoredPerMove,
+    required this.pocketsExtraPieces,
+    required this.precisionBonusMult,
+    required this.precisionMaxPieceSize,
+    required this.quarryStonesPerClear,
+    required this.saverPointsPerPiece,
+    required this.stonemasonChipsPerStone,
+    required this.stonemasonExtraStones,
+    required this.sweepBonus,
+    required this.tinyFactor,
+    required this.tinyMaxPieceSize,
+    required this.twinFactor,
+    required this.twinMinLines,
+  });
+
+  factory JokerTuningDto.fromDomain(JokerTuning tuning) => JokerTuningDto(
+    bigBoxFactor: tuning.bigBoxFactor,
+    bigBoxMinPieceSize: tuning.bigBoxMinPieceSize,
+    collectorMultPerJoker: tuning.collectorMultPerJoker,
+    columnFactor: tuning.columnFactor,
+    comboMultPerStreak: tuning.comboMultPerStreak,
+    heavyFactor: tuning.heavyFactor,
+    heavyMinPieceSize: tuning.heavyMinPieceSize,
+    patienceStoredPerMove: tuning.patienceStoredPerMove,
+    pocketsExtraPieces: tuning.pocketsExtraPieces,
+    precisionBonusMult: tuning.precisionBonusMult,
+    precisionMaxPieceSize: tuning.precisionMaxPieceSize,
+    quarryStonesPerClear: tuning.quarryStonesPerClear,
+    saverPointsPerPiece: tuning.saverPointsPerPiece,
+    stonemasonChipsPerStone: tuning.stonemasonChipsPerStone,
+    stonemasonExtraStones: tuning.stonemasonExtraStones,
+    sweepBonus: tuning.sweepBonus,
+    tinyFactor: tuning.tinyFactor,
+    tinyMaxPieceSize: tuning.tinyMaxPieceSize,
+    twinFactor: tuning.twinFactor,
+    twinMinLines: tuning.twinMinLines,
+  );
+
+  factory JokerTuningDto.fromJson(Map<String, dynamic> json) =>
+      _$JokerTuningDtoFromJson(json);
+
+  final int bigBoxFactor;
+  final int bigBoxMinPieceSize;
+  final int collectorMultPerJoker;
+  final int columnFactor;
+  final int comboMultPerStreak;
+  final int heavyFactor;
+  final int heavyMinPieceSize;
+  final int patienceStoredPerMove;
+  final int pocketsExtraPieces;
+  final int precisionBonusMult;
+  final int precisionMaxPieceSize;
+  final int quarryStonesPerClear;
+  final int saverPointsPerPiece;
+  final int stonemasonChipsPerStone;
+  final int stonemasonExtraStones;
+  final int sweepBonus;
+  final int tinyFactor;
+  final int tinyMaxPieceSize;
+  final int twinFactor;
+  final int twinMinLines;
+
+  Map<String, dynamic> toJson() => _$JokerTuningDtoToJson(this);
+
+  JokerTuning toDomain() => JokerTuning(
+    bigBoxFactor: bigBoxFactor,
+    bigBoxMinPieceSize: bigBoxMinPieceSize,
+    collectorMultPerJoker: collectorMultPerJoker,
+    columnFactor: columnFactor,
+    comboMultPerStreak: comboMultPerStreak,
+    heavyFactor: heavyFactor,
+    heavyMinPieceSize: heavyMinPieceSize,
+    patienceStoredPerMove: patienceStoredPerMove,
+    pocketsExtraPieces: pocketsExtraPieces,
+    precisionBonusMult: precisionBonusMult,
+    precisionMaxPieceSize: precisionMaxPieceSize,
+    quarryStonesPerClear: quarryStonesPerClear,
+    saverPointsPerPiece: saverPointsPerPiece,
+    stonemasonChipsPerStone: stonemasonChipsPerStone,
+    stonemasonExtraStones: stonemasonExtraStones,
+    sweepBonus: sweepBonus,
+    tinyFactor: tinyFactor,
+    tinyMaxPieceSize: tinyMaxPieceSize,
+    twinFactor: twinFactor,
+    twinMinLines: twinMinLines,
   );
 }
 

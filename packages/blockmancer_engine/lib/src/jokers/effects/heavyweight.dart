@@ -2,12 +2,10 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 
-/// ×2 mult when a piece of 4+ cells completes a line.
+/// ×[JokerTuning.heavyFactor] mult when a piece of
+/// [JokerTuning.heavyMinPieceSize]+ cells completes a line.
 final class Heavyweight extends JokerEffect {
   const Heavyweight();
-
-  static const _factor = 2;
-  static const _minPieceSize = 4;
 
   @override
   JokerId get id => .heavy;
@@ -17,5 +15,7 @@ final class Heavyweight extends JokerEffect {
 
   @override
   ScoreStep onMultiplicative(MoveContext move, ScoreStep step) =>
-      move.pieceSize >= _minPieceSize ? step.multiplyMult(_factor, id) : step;
+      move.pieceSize >= move.tuning.heavyMinPieceSize
+      ? step.multiplyMult(move.tuning.heavyFactor, id)
+      : step;
 }

@@ -1,5 +1,4 @@
 import 'package:blockmancer_engine/src/bot/greedy_policy.dart';
-import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/run/engine.dart';
 import 'package:blockmancer_engine/src/run/replay.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -7,9 +6,13 @@ import 'package:shared_domain/shared_domain.dart';
 /// How a bot run went: rounds won (the boss included), and its total.
 typedef BotRun = ({int roundsWon, int runTotal, bool won});
 
-/// Plays the run of [seed] to its end with [greedyMove].
-BotRun playBotRun(int seed, {required List<JokerId> build}) {
-  var state = startRun(config: defaultConfig, seed: seed);
+/// Plays the run of [seed] under [config] to its end with [greedyMove].
+BotRun playBotRun(
+  int seed, {
+  required List<JokerId> build,
+  required RunConfig config,
+}) {
+  var state = startRun(config: config, seed: seed);
   var roundsWon = 0;
 
   for (

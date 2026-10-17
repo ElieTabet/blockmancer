@@ -2,12 +2,10 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 
-/// ×3 mult when 2 or more lines clear at once.
+/// ×[JokerTuning.twinFactor] mult when [JokerTuning.twinMinLines] or more
+/// lines clear at once.
 final class TwinLines extends JokerEffect {
   const TwinLines();
-
-  static const _factor = 3;
-  static const _minLines = 2;
 
   @override
   JokerId get id => .twin;
@@ -17,5 +15,7 @@ final class TwinLines extends JokerEffect {
 
   @override
   ScoreStep onMultiplicative(MoveContext move, ScoreStep step) =>
-      move.clear.lineCount >= _minLines ? step.multiplyMult(_factor, id) : step;
+      move.clear.lineCount >= move.tuning.twinMinLines
+      ? step.multiplyMult(move.tuning.twinFactor, id)
+      : step;
 }

@@ -2,6 +2,7 @@ import 'package:blockmancer_engine/src/board/placement.br.dart';
 import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
+import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/scoring/score_move.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'board_picture.dart';
@@ -11,6 +12,7 @@ MoveScore playMove(
   List<String> picture, {
   required Cell at,
   required int shape,
+  RunConfig config = defaultConfig,
   List<JokerId> jokers = const [],
   int previousStreak = 0,
   int storedMult = 0,
@@ -20,6 +22,7 @@ MoveScore playMove(
 
   return scoreMove(
     clear: resolveClears(placed),
+    config: config,
     jokers: effectsOf(jokers),
     pieceSize: piece.size,
     previousStreak: previousStreak,

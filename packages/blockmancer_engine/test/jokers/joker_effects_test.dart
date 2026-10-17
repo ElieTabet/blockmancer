@@ -1,17 +1,21 @@
 import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
+import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../play_move.dart';
+
+final _tuning = defaultConfig.jokers;
 
 // Each joker alone, then with its partner. Shapes: 0 single, 1 horizontal
 // domino, 3 horizontal three, 10 horizontal four.
 void main() {
   const baseSetup = RoundSetup(pieces: 14, stones: 0);
 
-  List<int> weightsOf(List<JokerId> jokers) => pieceWeights(effectsOf(jokers));
+  List<int> weightsOf(List<JokerId> jokers) =>
+      pieceWeights(effectsOf(jokers), defaultConfig.jokers);
 
   group('Stonemason', () {
     test('adds 50 chips per stone cleared', () {
@@ -47,7 +51,11 @@ void main() {
 
     test('drops 2 more stones at the start of a round', () {
       // Given / When
-      final setup = roundSetup(baseSetup, effectsOf(const [.stonemason]));
+      final setup = roundSetup(
+        baseSetup,
+        effectsOf(const [.stonemason]),
+        _tuning,
+      );
 
       // Then
       expect(setup.stones, 2);
@@ -527,6 +535,7 @@ void main() {
       final setup = roundSetup(
         baseSetup,
         effectsOf(const [.quarry, .stonemason]),
+        _tuning,
       );
 
       // Then
@@ -583,7 +592,7 @@ void main() {
   group('Deep Pockets', () {
     test('adds 4 pieces to every round', () {
       // Given / When
-      final setup = roundSetup(baseSetup, effectsOf(const [.pockets]));
+      final setup = roundSetup(baseSetup, effectsOf(const [.pockets]), _tuning);
 
       // Then
       expect(setup.pieces, 18);
@@ -598,8 +607,11 @@ void main() {
       final jokers = effectsOf(const [.pockets, .saver]);
 
       // When
-      final setup = roundSetup(baseSetup, jokers);
-      final bonus = roundBonus(jokers, const RoundWonContext(unusedPieces: 4));
+      final setup = roundSetup(baseSetup, jokers, _tuning);
+      final bonus = roundBonus(
+        jokers,
+        RoundWonContext(tuning: _tuning, unusedPieces: 4),
+      );
 
       // Then
       expect(setup.pieces, 18);
@@ -612,7 +624,7 @@ void main() {
       // Given / When
       final bonus = roundBonus(
         effectsOf(const [.saver]),
-        const RoundWonContext(unusedPieces: 5),
+        RoundWonContext(tuning: _tuning, unusedPieces: 5),
       );
 
       // Then
@@ -627,7 +639,7 @@ void main() {
       // Given / When
       final bonus = roundBonus(
         effectsOf(const [.saver]),
-        const RoundWonContext(unusedPieces: 0),
+        RoundWonContext(tuning: _tuning, unusedPieces: 0),
       );
 
       // Then
@@ -639,7 +651,7 @@ void main() {
       // Given / When
       final bonus = roundBonus(
         effectsOf(const [.saver, .pockets]),
-        const RoundWonContext(unusedPieces: 1),
+        RoundWonContext(tuning: _tuning, unusedPieces: 1),
       );
 
       // Then
