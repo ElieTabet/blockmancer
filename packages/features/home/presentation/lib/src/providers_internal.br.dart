@@ -89,3 +89,9 @@ WorldNodeShown worldNode(Ref ref, WorldId world) {
 @riverpod
 WorldSummary worldSummary(Ref ref, WorldId world) =>
     ref.watch(worldsProvider).firstWhere((summary) => summary.id == world);
+
+/// The numbers the jokers play with, to describe them: the rules' defaults,
+/// which every world's summary carries.
+@riverpod
+JokerTuning jokerTuning(Ref ref) =>
+    ref.watch(worldsProvider.select((worlds) => worlds.first.jokerTuning));

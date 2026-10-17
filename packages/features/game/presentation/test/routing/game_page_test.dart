@@ -190,6 +190,7 @@ void main() {
         const Progression(
           jokerStats: {},
           tutorialDone: true,
+          unannouncedJokers: {},
           unlockedJokers: {.quarry, .twin},
           worlds: {},
         ),

@@ -345,17 +345,24 @@ One run is saved on the device, so a killed app picks it up where it stood.
 
 What a player has earned across runs is one `Progression` (`shared_domain`): per world
 `{unlocked, bossBeaten, stars}`, the jokers runs may offer, `jokerStats` (per joker ever picked:
-`timesPicked`, `runsWon`, `bestRunTotal`) and `tutorialDone`.
+`timesPicked`, `runsWon`, `bestRunTotal`), `unannouncedJokers` (unlocked outside a run, waiting
+for the map to announce them) and `tutorialDone`.
 
 - **Where:** one JSON profile under `profile` (`game_data`'s `profile_dto.br.dart`), holding the
   bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
   both read and write it, each update a read and a write with no await between, so neither wipes
   the other.
-- **Version 4.** A device without a profile is version 1: the `best.*` keys and
+- **Version 5.** A device without a profile is version 1: the `best.*` keys and
   `settings.tutorialSeen`. `migrateProfile` turns that into version 2 on first read (bests kept,
   `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys; version 3
   adds a best per world (`bests.worlds`), empty for older profiles; version 4 adds the joker stats,
-  empty for older profiles. An unreadable profile starts fresh and is replaced by the next write.
+  empty for older profiles; version 5 grants the star unlocks a profile already holds the stars
+  for (thresholds as literals: 4★ and 6★), into both `unlockedJokers` and `unannouncedJokers`. An
+  unreadable profile starts fresh and is replaced by the next write.
+- **Announced once.** Home's `UnlockAnnouncer` reads `unannouncedJokers` through the
+  `progression` slot; when it holds jokers, it calls the `markJokersAnnounced` slot (bound to
+  `game_domain`'s, which empties the set and refreshes the progression) before showing
+  `JokersUnlockedSheet`, so the sheet shows on the next visit to the map and never again.
 - **Starting state:** `game_domain`'s `startingProgression(rules)` (exposed as
   `initialProgressionProvider`): the first world unlocked and `rules.startingJokers` — worked out
   from the rules, so storage never knows them. Settings' reset progress puts it back

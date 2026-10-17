@@ -30,6 +30,15 @@ HomeRouting homeRouting(Ref ref) => throw UnimplementedError(
   'homeRoutingProvider must be overridden by the composition layer (app_router)',
 );
 
+typedef MarkJokersAnnouncedFun = Future<void> Function();
+
+/// Forgets the jokers [Progression.unannouncedJokers] holds, once the map has
+/// announced them.
+@riverpod
+MarkJokersAnnouncedFun markJokersAnnounced(Ref ref) => throw UnimplementedError(
+  'markJokersAnnouncedProvider must be overridden by the composition layer',
+);
+
 /// The practice best on this device, or null before a first practice run.
 @riverpod
 Future<int?> practiceBest(Ref ref) => throw UnimplementedError(

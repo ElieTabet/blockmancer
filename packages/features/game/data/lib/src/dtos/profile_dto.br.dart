@@ -5,7 +5,7 @@ part 'profile_dto.br.g.dart';
 
 /// The profile's schema version. Bump it with each change to these DTOs, and
 /// teach `migrateProfile` to bring the previous version up to it.
-const profileVersion = 4;
+const profileVersion = 5;
 
 /// Brings a profile written by an earlier version up to [profileVersion], one
 /// version at a time; a version this build doesn't know is unreadable.
@@ -23,6 +23,10 @@ Map<String, dynamic> migrateProfile(
   ),
   3 => migrateProfile(
     _fromVersion3(json),
+    startingProgression: startingProgression,
+  ),
+  4 => migrateProfile(
+    _fromVersion4(json),
     startingProgression: startingProgression,
   ),
   profileVersion => json,
@@ -62,6 +66,41 @@ Map<String, dynamic> _fromVersion3(Map<String, dynamic> json) => {
   },
   'version': 4,
 };
+
+/// Version 4 had no star unlocks: a player already holding their stars gets
+/// the jokers now, announced on the next visit to the map. The thresholds are
+/// the ones version 5 first shipped, as literals.
+Map<String, dynamic> _fromVersion4(Map<String, dynamic> json) {
+  final progression = json['progression'] as Map<String, dynamic>;
+  final worlds = progression['worlds'] as Map<String, dynamic>;
+  final starsHeld = worlds.values.fold(0, (held, world) {
+    final stars = (world as Map<String, dynamic>)['stars'] as Map;
+
+    return held + stars.values.where((earned) => earned == true).length;
+  });
+  final unlocked = [...progression['unlockedJokers'] as List];
+  final granted = [
+    for (final (stars, jokers) in _version5StarUnlocks)
+      if (starsHeld >= stars)
+        for (final joker in jokers)
+          if (!unlocked.contains(joker)) joker,
+  ];
+
+  return {
+    ...json,
+    'progression': <String, dynamic>{
+      ...progression,
+      'unannouncedJokers': granted,
+      'unlockedJokers': [...unlocked, ...granted],
+    },
+    'version': 5,
+  };
+}
+
+const _version5StarUnlocks = [
+  (4, ['fullhouse', 'brink']),
+  (6, ['finisher', 'hattrick']),
+];
 
 @JsonSerializable(explicitToJson: true)
 final class ProfileDto {
@@ -112,6 +151,7 @@ final class ProgressionDto {
   const ProgressionDto({
     required this.jokerStats,
     required this.tutorialDone,
+    required this.unannouncedJokers,
     required this.unlockedJokers,
     required this.worlds,
   });
@@ -123,6 +163,9 @@ final class ProgressionDto {
         joker.name: .fromDomain(stats),
     },
     tutorialDone: progression.tutorialDone,
+    unannouncedJokers: [
+      for (final joker in progression.unannouncedJokers) joker.name,
+    ],
     unlockedJokers: [
       for (final joker in progression.unlockedJokers) joker.name,
     ],
@@ -139,6 +182,7 @@ final class ProgressionDto {
   /// Keyed by the joker's name.
   final Map<String, JokerStatsDto> jokerStats;
   final bool tutorialDone;
+  final List<String> unannouncedJokers;
   final List<String> unlockedJokers;
   final Map<String, WorldProgressDto> worlds;
 
@@ -150,6 +194,9 @@ final class ProgressionDto {
         JokerId.values.byName(joker): stats.toDomain(),
     },
     tutorialDone: tutorialDone,
+    unannouncedJokers: {
+      for (final joker in unannouncedJokers) JokerId.values.byName(joker),
+    },
     unlockedJokers: {
       for (final joker in unlockedJokers) JokerId.values.byName(joker),
     },

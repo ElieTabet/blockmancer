@@ -362,3 +362,52 @@ final class WorldSummaryFamily extends $Family
   @override
   String toString() => r'worldSummaryProvider';
 }
+
+/// The numbers the jokers play with, to describe them: the rules' defaults,
+/// which every world's summary carries.
+
+@ProviderFor(jokerTuning)
+final jokerTuningProvider = JokerTuningProvider._();
+
+/// The numbers the jokers play with, to describe them: the rules' defaults,
+/// which every world's summary carries.
+
+final class JokerTuningProvider
+    extends $FunctionalProvider<JokerTuning, JokerTuning, JokerTuning>
+    with $Provider<JokerTuning> {
+  /// The numbers the jokers play with, to describe them: the rules' defaults,
+  /// which every world's summary carries.
+  JokerTuningProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'jokerTuningProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$jokerTuningHash();
+
+  @$internal
+  @override
+  $ProviderElement<JokerTuning> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  JokerTuning create(Ref ref) {
+    return jokerTuning(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(JokerTuning value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<JokerTuning>(value),
+    );
+  }
+}
+
+String _$jokerTuningHash() => r'85a21769fa465fe2679edc491b3f04a6507e5e6a';

@@ -230,6 +230,10 @@ void main() {
       container.read(game.todaysDailyDateProvider),
     );
     expect(container.read(home_di.reduceMotionSettingProvider), isTrue);
+    expect(
+      container.read(home_di.markJokersAnnouncedProvider),
+      same(container.read(game.markJokersAnnouncedProvider)),
+    );
   });
 
   // The game obeys the app's sound and haptics switches without knowing

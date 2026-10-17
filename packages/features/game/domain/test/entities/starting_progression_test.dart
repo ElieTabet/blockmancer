@@ -29,6 +29,7 @@ void main() {
       const Progression(
         jokerStats: {},
         tutorialDone: false,
+        unannouncedJokers: {},
         unlockedJokers: {.combo, .patience, .twin},
         worlds: {
           .rubble: WorldProgress(

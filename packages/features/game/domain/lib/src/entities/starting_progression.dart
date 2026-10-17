@@ -5,6 +5,7 @@ import 'package:shared_domain/shared_domain.dart';
 Progression startingProgression(GameRules rules) => Progression(
   jokerStats: const {},
   tutorialDone: false,
+  unannouncedJokers: const {},
   unlockedJokers: rules.startingJokers.toSet(),
   worlds: {
     for (final world in rules.worldOrder)

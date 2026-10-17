@@ -25,6 +25,7 @@ ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
 const _profile = Progression(
   jokerStats: {},
   tutorialDone: true,
+  unannouncedJokers: {},
   unlockedJokers: {.twin, .stonemason, .patience},
   worlds: {},
 );

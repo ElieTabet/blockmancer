@@ -171,6 +171,62 @@ final class HomeRoutingProvider
 
 String _$homeRoutingHash() => r'f4b1c7ede18731892790e8691cb0907802710838';
 
+/// Forgets the jokers [Progression.unannouncedJokers] holds, once the map has
+/// announced them.
+
+@ProviderFor(markJokersAnnounced)
+final markJokersAnnouncedProvider = MarkJokersAnnouncedProvider._();
+
+/// Forgets the jokers [Progression.unannouncedJokers] holds, once the map has
+/// announced them.
+
+final class MarkJokersAnnouncedProvider
+    extends
+        $FunctionalProvider<
+          MarkJokersAnnouncedFun,
+          MarkJokersAnnouncedFun,
+          MarkJokersAnnouncedFun
+        >
+    with $Provider<MarkJokersAnnouncedFun> {
+  /// Forgets the jokers [Progression.unannouncedJokers] holds, once the map has
+  /// announced them.
+  MarkJokersAnnouncedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markJokersAnnouncedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$markJokersAnnouncedHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkJokersAnnouncedFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MarkJokersAnnouncedFun create(Ref ref) {
+    return markJokersAnnounced(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkJokersAnnouncedFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MarkJokersAnnouncedFun>(value),
+    );
+  }
+}
+
+String _$markJokersAnnouncedHash() =>
+    r'133e313d0b7fa007ed68932613a15566e4b2b77a';
+
 /// The practice best on this device, or null before a first practice run.
 
 @ProviderFor(practiceBest)

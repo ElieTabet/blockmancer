@@ -17,6 +17,7 @@ dependencies:
   l10n_application: any
   riverpod_annotation: ^4.0.2
   shared_domain: any
+  timber: any
 
 dev_dependencies:
   flutter_test:

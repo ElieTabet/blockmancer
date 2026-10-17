@@ -17,6 +17,7 @@ const noStars = WorldStars(
 const starting = Progression(
   jokerStats: {},
   tutorialDone: false,
+  unannouncedJokers: {},
   unlockedJokers: {
     .bigbox,
     .collector,

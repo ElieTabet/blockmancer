@@ -123,6 +123,7 @@ List<Override> featureBindingOverrides({
     dailyBest: (ref) => ref.watch(game.todaysDailyBestProvider.future),
     dailyDate: (ref) => ref.watch(game.todaysDailyDateProvider),
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
+    markJokersAnnounced: (ref) => ref.watch(game.markJokersAnnouncedProvider),
     practiceBest: (ref) =>
         ref.watch(game.bestScoreProvider(const .practice()).future),
     // Watched, so a run's end refreshing the progression refreshes the map.

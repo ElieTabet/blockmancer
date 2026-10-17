@@ -12,9 +12,13 @@ part 'progression.br.freezed.dart';
 @freezed
 abstract class Progression with _$Progression {
   const factory Progression({
-    /// Only the jokers some finished run owned.
+    /// Only the jokers ever picked.
     required Map<JokerId, JokerStats> jokerStats,
     required bool tutorialDone,
+
+    /// Unlocked outside a run, when an older save was brought up to date, and
+    /// not shown yet: the map announces them on the player's next visit.
+    required Set<JokerId> unannouncedJokers,
     required Set<JokerId> unlockedJokers,
     required Map<WorldId, WorldProgress> worlds,
   }) = _Progression;

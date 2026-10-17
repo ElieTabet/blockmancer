@@ -9,14 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'profiles.dart';
 
-/// Rubble done with every star, Gravity open with one, its jokers earned, and
-/// a few runs counted for two jokers.
+/// Rubble done with every star, Gravity open with one, its jokers earned, one
+/// still to announce, and a few runs counted for two jokers.
 final _progressed = starting.copyWith(
   jokerStats: const {
     .stonemason: JokerStats(bestRunTotal: 7200, runsWon: 1, timesPicked: 3),
     .twin: JokerStats(bestRunTotal: 4100, runsWon: 0, timesPicked: 5),
   },
   tutorialDone: true,
+  unannouncedJokers: const {.quarry},
   unlockedJokers: {...starting.unlockedJokers, .stonemason, .quarry},
   worlds: {
     ...starting.worlds,

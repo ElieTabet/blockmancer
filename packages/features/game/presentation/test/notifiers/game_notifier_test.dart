@@ -104,6 +104,7 @@ void main() {
       const progression = Progression(
         jokerStats: {},
         tutorialDone: true,
+        unannouncedJokers: {},
         unlockedJokers: {.quarry, .twin},
         worlds: {},
       );

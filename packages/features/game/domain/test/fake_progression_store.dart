@@ -6,6 +6,7 @@ final class FakeProgressionStore implements ProgressionStore {
   Progression saved = const Progression(
     jokerStats: {},
     tutorialDone: false,
+    unannouncedJokers: {},
     unlockedJokers: {},
     worlds: {},
   );

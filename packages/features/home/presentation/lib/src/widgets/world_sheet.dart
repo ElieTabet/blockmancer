@@ -2,8 +2,9 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_presentation/src/providers_internal.br.dart';
-import 'package:home_presentation/src/widgets/joker_text.dart';
+import 'package:home_presentation/src/widgets/joker_tile.dart';
 import 'package:home_presentation/src/widgets/points_text.dart';
+import 'package:home_presentation/src/widgets/sheet_button.dart';
 import 'package:home_presentation/src/widgets/world_name.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -162,8 +163,14 @@ final class _SheetAction extends ConsumerWidget {
         !(stars.bossBeaten && stars.noRevive && stars.scoreThreshold);
 
     return switch (status) {
-      .current => _PlayButton(label: sheet.start),
-      .done => _PlayButton(label: starMissing ? sheet.replay : sheet.start),
+      .current => SheetButton(
+        label: sheet.start,
+        onTap: () => Navigator.of(context).pop(true),
+      ),
+      .done => SheetButton(
+        label: starMissing ? sheet.replay : sheet.start,
+        onTap: () => Navigator.of(context).pop(true),
+      ),
       .locked => Padding(
         padding: const .only(top: DSSpace.xsmall),
         child: Text(
@@ -179,40 +186,6 @@ final class _SheetAction extends ConsumerWidget {
       .comingSoon => const SizedBox.shrink(),
     };
   }
-}
-
-final class _PlayButton extends StatelessWidget {
-  const _PlayButton({required this.label});
-
-  static const _height = 54.0;
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const .only(top: DSSpace.xsmall),
-    child: DSPressable(
-      onTap: () => Navigator.of(context).pop(true),
-      child: Container(
-        height: _height,
-        alignment: .center,
-        decoration: BoxDecoration(
-          color: DSColor.accent,
-          borderRadius: .circular(DSCornerRadius.large),
-        ),
-        child: Text(
-          label,
-          style: DSFont.display(
-            const TextStyle(
-              color: DSColor.primary,
-              fontSize: 18,
-              fontWeight: .w700,
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
 }
 
 final class _StarObjective extends ConsumerWidget {
@@ -320,71 +293,6 @@ final class _StatusLabel extends ConsumerWidget {
 
 /// A joker beating the world's boss unlocks, in the look of the game's joker
 /// cards, marked once runs may offer it.
-final class _UnlockCard extends ConsumerWidget {
-  const _UnlockCard({required this.joker, required this.world});
-
-  final JokerId joker;
-  final WorldId world;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final tuning = ref.watch(
-      worldSummaryProvider(world).select((summary) => summary.jokerTuning),
-    );
-    final owned = ref.watch(jokerOwnedProvider(joker));
-
-    return Container(
-      padding: const .all(DSSpace.small),
-      decoration: ShapeDecoration(
-        color: DSColor.jokerSurface,
-        shape: RoundedRectangleBorder(
-          borderRadius: .circular(DSCornerRadius.large),
-          side: BorderSide(
-            color: owned ? DSColor.positive : DSColor.joker,
-            width: 2,
-          ),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: .start,
-        spacing: DSSpace.xxxsmall,
-        children: [
-          Row(
-            spacing: DSSpace.xsmall,
-            children: [
-              Expanded(
-                child: Text(
-                  jokerName(context, joker),
-                  style: DSFont.display(
-                    const TextStyle(
-                      color: DSColor.jokerInk,
-                      fontSize: 17,
-                      fontWeight: .w600,
-                    ),
-                  ),
-                ),
-              ),
-              if (owned)
-                Text(
-                  context.t.game.unlocks.label,
-                  style: const TextStyle(
-                    color: DSColor.positive,
-                    fontSize: 12,
-                    fontWeight: .w700,
-                  ),
-                ),
-            ],
-          ),
-          Text(
-            jokerDescription(context, joker, tuning),
-            style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 final class _Unlocks extends ConsumerWidget {
   const _Unlocks({required this.world});
 
@@ -400,9 +308,7 @@ final class _Unlocks extends ConsumerWidget {
     return Column(
       crossAxisAlignment: .stretch,
       spacing: DSSpace.xsmall,
-      children: [
-        for (final joker in unlocks) _UnlockCard(joker: joker, world: world),
-      ],
+      children: [for (final joker in unlocks) JokerTile(joker: joker)],
     );
   }
 }

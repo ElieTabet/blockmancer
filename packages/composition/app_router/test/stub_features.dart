@@ -52,6 +52,7 @@ List<Override> stubFeatures({
     dailyBest: (ref) async => null,
     dailyDate: (ref) => DateTime.utc(2026, 10, 17),
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
+    markJokersAnnounced: (ref) => ref.watch(game.markJokersAnnouncedProvider),
     practiceBest: (ref) async => null,
     progression: (ref) => ref.watch(game.progressionProvider.future),
     // Still, so the map's "you are here" pin lets pumpAndSettle settle.

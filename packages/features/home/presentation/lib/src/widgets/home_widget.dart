@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:home_presentation/src/widgets/continue_card.dart';
 import 'package:home_presentation/src/widgets/daily_card.dart';
 import 'package:home_presentation/src/widgets/home_header.dart';
+import 'package:home_presentation/src/widgets/unlock_announcer.dart';
 import 'package:home_presentation/src/widgets/world_map.dart';
 
 /// The first tab: today's daily run on top, then the world map.
@@ -34,6 +35,7 @@ final class HomeWidget extends StatelessWidget {
               SizedBox(height: DSSpace.small),
               WorldMapHeading(),
               WorldMap(),
+              UnlockAnnouncer(),
             ],
           ),
         ),

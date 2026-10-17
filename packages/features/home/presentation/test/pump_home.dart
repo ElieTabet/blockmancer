@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_presentation/home_presentation.dart';
+import 'package:home_presentation/src/providers_di.br.dart'
+    show MarkJokersAnnouncedFun;
 import 'package:home_presentation/src/widgets/home_widget.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -95,6 +97,7 @@ const noStars = WorldStars(
 Progression freshProgression({WorldStars rubbleStars = noStars}) => Progression(
   jokerStats: const {},
   tutorialDone: true,
+  unannouncedJokers: const {},
   unlockedJokers: const {},
   worlds: {
     for (final world in mapWorlds)
@@ -131,10 +134,12 @@ final rubbleBeaten = freshProgression().copyWith(
 
 /// Mounts Home on a screen tall enough for the whole map, on today's daily
 /// of 17 October 2026, its marker still unless [reduceMotion] is off.
+/// Announcing jokers does nothing unless [markJokersAnnounced] says otherwise.
 Future<FakeHomeRouting> pumpHome(
   WidgetTester tester, {
   int? dailyBest,
   bool hasSavedRun = false,
+  MarkJokersAnnouncedFun? markJokersAnnounced,
   int? practiceBest,
   Future<Progression> Function()? progression,
   bool reduceMotion = true,
@@ -152,6 +157,7 @@ Future<FakeHomeRouting> pumpHome(
           dailyBest: (ref) async => dailyBest,
           dailyDate: (ref) => DateTime.utc(2026, 10, 17),
           hasSavedRun: (ref) async => hasSavedRun,
+          markJokersAnnounced: (ref) => markJokersAnnounced ?? () async {},
           practiceBest: (ref) async => practiceBest,
           progression: (ref) => progression?.call() ?? _fresh(),
           reduceMotionSetting: (ref) => reduceMotion,

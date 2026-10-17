@@ -190,6 +190,68 @@ final class ProgressionProvider
 
 String _$progressionHash() => r'd5ef8901cb6c69644074bfd17991c4d85b4d3089';
 
+/// See [MarkJokersAnnouncedBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+@ProviderFor(markJokersAnnounced)
+final markJokersAnnouncedProvider = MarkJokersAnnouncedProvider._();
+
+/// See [MarkJokersAnnouncedBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+final class MarkJokersAnnouncedProvider
+    extends
+        $FunctionalProvider<
+          MarkJokersAnnouncedFun,
+          MarkJokersAnnouncedFun,
+          MarkJokersAnnouncedFun
+        >
+    with $Provider<MarkJokersAnnouncedFun> {
+  /// See [MarkJokersAnnouncedBehavior].
+  ///
+  /// Kept alive because it refreshes [progressionProvider] after an await, by
+  /// when an auto-disposed provider's ref may be gone.
+  MarkJokersAnnouncedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markJokersAnnouncedProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$markJokersAnnouncedHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkJokersAnnouncedFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MarkJokersAnnouncedFun create(Ref ref) {
+    return markJokersAnnounced(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkJokersAnnouncedFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MarkJokersAnnouncedFun>(value),
+    );
+  }
+}
+
+String _$markJokersAnnouncedHash() =>
+    r'acd282018e82e26323dcf961f01831bdc5b2aa19';
+
 /// See [RecordPickBehavior].
 ///
 /// Kept alive because it refreshes [progressionProvider] after an await, by

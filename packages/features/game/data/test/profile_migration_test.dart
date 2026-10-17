@@ -73,6 +73,7 @@ const _version3Profile = <String, dynamic>{
 const _progressed = Progression(
   jokerStats: {},
   tutorialDone: true,
+  unannouncedJokers: {},
   unlockedJokers: {.patience, .twin, .stonemason, .quarry},
   worlds: {
     .rubble: WorldProgress(
@@ -97,14 +98,14 @@ Future<Map<String, dynamic>> _storedProfile() async {
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  test('a version 1 profile migrates to a valid version 4 one', () {
+  test('a version 1 profile migrates to a valid version 5 one', () {
     // Given / When
     final migrated = ProfileDto.fromJson(
       migrateProfile(_version1Profile, startingProgression: starting),
     );
 
     // Then
-    expect(migrated.version, 4);
+    expect(migrated.version, 5);
     expect(migrated.bests.daily, {'20261016': 640});
     expect(migrated.bests.practice, 900);
     expect(migrated.bests.worlds, isEmpty);
@@ -114,7 +115,7 @@ void main() {
     );
   });
 
-  test('a version 2 profile migrates to a valid version 4 one: its bests and '
+  test('a version 2 profile migrates to a valid version 5 one: its bests and '
       'progression kept, no world best and no joker stats yet', () {
     // Given / When
     final migrated = ProfileDto.fromJson(
@@ -122,7 +123,7 @@ void main() {
     );
 
     // Then
-    expect(migrated.version, 4);
+    expect(migrated.version, 5);
     expect(migrated.bests.daily, {'20261016': 640});
     expect(migrated.bests.practice, 900);
     expect(migrated.bests.worlds, isEmpty);
@@ -130,7 +131,7 @@ void main() {
   });
 
   test(
-    'a version 3 profile migrates to a valid version 4 one: everything kept, '
+    'a version 3 profile migrates to a valid version 5 one: everything kept, '
     'its joker stats starting at nothing',
     () {
       // Given / When
@@ -139,7 +140,7 @@ void main() {
       );
 
       // Then
-      expect(migrated.version, 4);
+      expect(migrated.version, 5);
       expect(migrated.bests.worlds, {'rubble': 5400});
       expect(migrated.progression.jokerStats, isEmpty);
       expect(migrated.progression.toDomain(), _progressed);
@@ -160,6 +161,132 @@ void main() {
 
     // Then
     expect(progression, _progressed);
+  });
+
+  group('a version 4 profile', () {
+    /// Rubble with [rubble] stars and Gravity with [gravity], as version 4
+    /// wrote them, with [unlocked] jokers.
+    Map<String, dynamic> version4({
+      required int gravity,
+      required int rubble,
+      List<String> unlocked = const ['patience', 'twin'],
+    }) {
+      Map<String, dynamic> world(int stars) => {
+        'bossBeaten': stars > 0,
+        'stars': {
+          'bossBeaten': stars > 0,
+          'noRevive': stars > 1,
+          'scoreThreshold': stars > 2,
+        },
+        'unlocked': true,
+      };
+
+      return {
+        'bests': {'daily': <String, int>{}, 'practice': null, 'worlds': {}},
+        'progression': {
+          'jokerStats': <String, dynamic>{},
+          'tutorialDone': true,
+          'unlockedJokers': unlocked,
+          'worlds': {'rubble': world(rubble), 'gravity': world(gravity)},
+        },
+        'version': 4,
+      };
+    }
+
+    Progression migrated(Map<String, dynamic> json) => ProfileDto.fromJson(
+      migrateProfile(json, startingProgression: starting),
+    ).progression.toDomain();
+
+    test('holding 3 stars unlocks nothing', () {
+      // Given / When
+      final progression = migrated(version4(gravity: 0, rubble: 3));
+
+      // Then
+      expect(progression.unlockedJokers, {JokerId.patience, JokerId.twin});
+      expect(progression.unannouncedJokers, isEmpty);
+    });
+
+    test(
+      'holding 4 stars unlocks Full House and On the Brink, to announce',
+      () {
+        // Given / When
+        final progression = migrated(version4(gravity: 1, rubble: 3));
+
+        // Then
+        expect(progression.unlockedJokers, {
+          JokerId.patience,
+          JokerId.twin,
+          JokerId.fullhouse,
+          JokerId.brink,
+        });
+        expect(progression.unannouncedJokers, {
+          JokerId.fullhouse,
+          JokerId.brink,
+        });
+      },
+    );
+
+    test('holding 6 stars unlocks all four, to announce', () {
+      // Given / When
+      final progression = migrated(version4(gravity: 3, rubble: 3));
+
+      // Then
+      expect(progression.unannouncedJokers, {
+        JokerId.fullhouse,
+        JokerId.brink,
+        JokerId.finisher,
+        JokerId.hattrick,
+      });
+      expect(
+        progression.unlockedJokers,
+        containsAll(progression.unannouncedJokers),
+      );
+    });
+
+    test('announces none a run already unlocked', () {
+      // Given / When: 4 stars, the pair already won at a run's end
+      final progression = migrated(
+        version4(
+          gravity: 1,
+          rubble: 3,
+          unlocked: ['patience', 'twin', 'fullhouse', 'brink'],
+        ),
+      );
+
+      // Then
+      expect(progression.unannouncedJokers, isEmpty);
+    });
+  });
+
+  test('a version 2 profile holding 6 stars gets all four on its way to '
+      'version 5', () {
+    // Given
+    final version2 = {
+      ..._version2Profile,
+      'progression': {
+        ..._writtenProgression,
+        'worlds': {
+          for (final world in ['rubble', 'gravity'])
+            world: {
+              'bossBeaten': true,
+              'stars': {
+                'bossBeaten': true,
+                'noRevive': true,
+                'scoreThreshold': true,
+              },
+              'unlocked': true,
+            },
+        },
+      },
+    };
+
+    // When
+    final progression = ProfileDto.fromJson(
+      migrateProfile(version2, startingProgression: starting),
+    ).progression.toDomain();
+
+    // Then
+    expect(progression.unannouncedJokers, hasLength(4));
   });
 
   test('a profile naming no version cannot be migrated', () {
@@ -184,7 +311,7 @@ void main() {
     });
 
     test(
-      'When the profile is first read, Then it is written as version 4 and the '
+      'When the profile is first read, Then it is written as version 5 and the '
       'legacy bests are gone',
       () async {
         // When
@@ -195,7 +322,7 @@ void main() {
         // Then
         final stored = await SharedPreferences.getInstance();
         final profile = await _storedProfile();
-        expect(profile['version'], 4);
+        expect(profile['version'], 5);
         expect(profile['bests'], {
           'daily': {'20261016': 640},
           'practice': 900,
@@ -235,7 +362,7 @@ void main() {
 
   test(
     'Given a device with nothing on it, When the profile is first read, Then '
-    'it is a version 4 profile with no bests at the starting progression',
+    'it is a version 5 profile with no bests at the starting progression',
     () async {
       // When
       final progression = await SharedPreferencesProgressionStore(
@@ -245,7 +372,7 @@ void main() {
       // Then
       final profile = await _storedProfile();
       expect(progression, starting);
-      expect(profile['version'], 4);
+      expect(profile['version'], 5);
       expect(profile['bests'], {
         'daily': <String, int>{},
         'practice': null,
@@ -292,7 +419,7 @@ void main() {
       // Then
       expect(progression, starting);
       expect(best, isNull);
-      expect((await _storedProfile())['version'], 4);
+      expect((await _storedProfile())['version'], 5);
       expect(await scores.best(const GameMode.practice()), 1200);
     });
   }
