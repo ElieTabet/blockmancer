@@ -266,6 +266,10 @@ engine's events and never recomputes a rule.
   web. Callers pass the date in for a daily seed: `game_domain` reads it from its injected `Clock`
   (`SystemClock` in `game_data`; never `DateTime.now()` elsewhere), keys the daily run by the UTC
   day and asks the rules for that day's seed (`dailyRunOn`).
+- **Replayable.** A run is its seed and its moves: `GameRules.replay({config, moves, seed})` folds a
+  list of `shared_domain`'s `RunMove`s (`pick`, `place`, `revive`, `end`) back into the final
+  `RunState`, refusing any move the run couldn't have made. This is what a server will check a score
+  with.
 - **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and
   in Chrome (`melos run test-engine-web`).
 

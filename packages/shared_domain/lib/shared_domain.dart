@@ -15,6 +15,7 @@ export 'src/entities/game/joker_id.dart';
 export 'src/entities/game/loss_reason.dart';
 export 'src/entities/game/placement_preview.br.dart';
 export 'src/entities/game/run_config.br.dart';
+export 'src/entities/game/run_move.br.dart';
 export 'src/entities/game/run_phase.br.dart';
 export 'src/entities/game/run_state.br.dart';
 export 'src/entities/game/shape.dart';

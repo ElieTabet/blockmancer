@@ -115,6 +115,13 @@ final class FakeGameRules implements GameRules {
   }
 
   @override
+  RunState replay({
+    required RunConfig config,
+    required List<RunMove> moves,
+    required int seed,
+  }) => throw UnimplementedError('the screen never replays');
+
+  @override
   Transition revive(RunState state) => _move('revive', state);
 
   @override

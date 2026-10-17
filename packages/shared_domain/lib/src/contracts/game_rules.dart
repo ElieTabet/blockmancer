@@ -3,6 +3,7 @@ import 'package:shared_domain/src/entities/game/game_event.br.dart';
 import 'package:shared_domain/src/entities/game/joker_id.dart';
 import 'package:shared_domain/src/entities/game/placement_preview.br.dart';
 import 'package:shared_domain/src/entities/game/run_config.br.dart';
+import 'package:shared_domain/src/entities/game/run_move.br.dart';
 import 'package:shared_domain/src/entities/game/run_state.br.dart';
 import 'package:shared_domain/src/entities/game/shape.dart';
 
@@ -53,6 +54,14 @@ abstract interface class GameRules {
     RunState state, {
     required Cell anchor,
     required int trayIndex,
+  });
+
+  /// The run [moves] play from the start of the run of [seed]. Throws on a
+  /// move the run couldn't have made.
+  RunState replay({
+    required RunConfig config,
+    required List<RunMove> moves,
+    required int seed,
   });
 
   /// Empties the fullest rows and adds pieces to a lost round.

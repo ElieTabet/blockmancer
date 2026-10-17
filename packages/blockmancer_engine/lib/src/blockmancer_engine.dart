@@ -3,6 +3,7 @@ import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 import 'package:blockmancer_engine/src/random/daily_seed.dart' as seeds;
 import 'package:blockmancer_engine/src/run/default_config.dart' as config;
 import 'package:blockmancer_engine/src/run/engine.dart' as engine;
+import 'package:blockmancer_engine/src/run/replay.dart' as replays;
 import 'package:shared_domain/shared_domain.dart';
 
 /// Blockmancer's rules behind the [GameRules] contract. Composition binds it;
@@ -57,6 +58,13 @@ final class BlockmancerEngine implements GameRules {
     required Cell anchor,
     required int trayIndex,
   }) => engine.preview(state, anchor: anchor, trayIndex: trayIndex);
+
+  @override
+  RunState replay({
+    required RunConfig config,
+    required List<RunMove> moves,
+    required int seed,
+  }) => replays.replay(config: config, moves: moves, seed: seed);
 
   @override
   Transition revive(RunState state) => engine.revive(state);
