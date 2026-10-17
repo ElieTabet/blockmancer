@@ -68,13 +68,15 @@ final class FakeGameRouting implements GameRouting {
 /// The game's slots, filled with fakes, for a game opened for [launch]. The
 /// rewarded revive is granted unless [rewardedAction] says otherwise, the
 /// settings leave reduce motion off unless [reduceMotion] turns it on and
-/// sound and haptics on unless [soundOn] or [hapticsOn] turn them off, and
-/// sounds go nowhere unless [playSound] takes them.
+/// sound and haptics on unless [soundOn] or [hapticsOn] turn them off, sounds
+/// go nowhere unless [playSound] takes them, and the tutorial is kept as seen
+/// nowhere unless [markTutorialSeen] keeps it.
 List<Override> gameOverrides(
   FakeGameRules rules, {
   game.BestScores? bestScores,
   bool hapticsOn = true,
   game.GameLaunch launch = .daily,
+  MarkTutorialSeenFun? markTutorialSeen,
   PlaySoundFun? playSound,
   bool reduceMotion = false,
   RewardedActionFun? rewardedAction,
@@ -91,6 +93,7 @@ List<Override> gameOverrides(
   ),
   ...bindProviders(
     hapticsOnSetting: (ref) => hapticsOn,
+    markTutorialSeen: (ref) => markTutorialSeen ?? () async {},
     playSound: (ref) => playSound ?? (sound, {semitones = 0, variance = 0}) {},
     reduceMotionSetting: (ref) => reduceMotion,
     rewardedAction: (ref) => rewardedAction ?? () async => true,

@@ -72,6 +72,14 @@ void main() {
     });
   });
 
+  test('the tutorial counts as practice, never as today’s run', () {
+    // Given / When
+    final tutorial = _launchAt('2026-10-16T12:00:00Z', .tutorial);
+
+    // Then
+    expect(tutorial.mode, const GameMode.practice());
+  });
+
   group("today's daily best", () {
     test('is read for the UTC day it is', () async {
       // Given

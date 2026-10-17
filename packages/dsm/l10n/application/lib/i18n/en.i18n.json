@@ -4,6 +4,14 @@
     "subtitle": "Daily run · same pieces for everyone",
     "practiceSubtitle": "Practice · a new run every time",
     "leave": "Back to the menu",
+    "tutorial": {
+      "drag": "Drag a piece onto the board",
+      "clear": "Fill a row to clear it",
+      "score": "Chips × mult = score",
+      "scoreHint": "Tap to continue",
+      "pick": "Pick your first joker — they work in pairs",
+      "skip": "Skip"
+    },
     "runTotal": "Run $total",
     "round": {
       "regular": "Round · $index / $count",
@@ -168,6 +176,10 @@
       "system": "System",
       "en": "English",
       "fr": "Français"
+    },
+    "tutorial": {
+      "title": "Replay tutorial",
+      "subtitle": "How to play, step by step"
     },
     "reset": {
       "title": "Reset progress",

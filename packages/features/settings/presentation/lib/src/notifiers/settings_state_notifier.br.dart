@@ -18,6 +18,9 @@ class SettingsStateNotifier extends _$SettingsStateNotifier {
   void close(BuildContext context) =>
       ref.read(di.settingsRoutingProvider).onCloseRequested(context);
 
+  void replayTutorial(BuildContext context) =>
+      ref.read(di.settingsRoutingProvider).onReplayTutorialRequested(context);
+
   Future<void> resetProgress() async {
     final resetProgress = ref.read(resetProgressProvider);
 

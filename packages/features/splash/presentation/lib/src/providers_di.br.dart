@@ -10,3 +10,10 @@ part 'providers_di.br.g.dart';
 SplashRouting splashRouting(Ref ref) => throw UnimplementedError(
   'splashRoutingProvider must be overridden by the composition layer (app_router)',
 );
+
+/// Whether the player has been through the tutorial. A future: the launch
+/// waits for the stored answer rather than guess.
+@riverpod
+Future<bool> tutorialSeen(Ref ref) => throw UnimplementedError(
+  'tutorialSeenProvider must be overridden by the composition layer',
+);

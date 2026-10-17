@@ -439,3 +439,70 @@ final class TrayFitsFamily extends $Family
   @override
   String toString() => r'trayFitsProvider';
 }
+
+/// The cells the tutorial's coach points at; see [tutorialHintFor].
+
+@ProviderFor(tutorialHint)
+final tutorialHintProvider = TutorialHintProvider._();
+
+/// The cells the tutorial's coach points at; see [tutorialHintFor].
+
+final class TutorialHintProvider
+    extends $FunctionalProvider<List<Cell>, List<Cell>, List<Cell>>
+    with $Provider<List<Cell>> {
+  /// The cells the tutorial's coach points at; see [tutorialHintFor].
+  TutorialHintProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'tutorialHintProvider',
+        isAutoDispose: true,
+        dependencies: <ProviderOrFamily>[gameProvider, tutorialProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>{
+          TutorialHintProvider.$allTransitiveDependencies0,
+          TutorialHintProvider.$allTransitiveDependencies1,
+          TutorialHintProvider.$allTransitiveDependencies2,
+          TutorialHintProvider.$allTransitiveDependencies3,
+          TutorialHintProvider.$allTransitiveDependencies4,
+          TutorialHintProvider.$allTransitiveDependencies5,
+          TutorialHintProvider.$allTransitiveDependencies6,
+        },
+      );
+
+  static final $allTransitiveDependencies0 = gameProvider;
+  static final $allTransitiveDependencies1 =
+      GameNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 = tutorialProvider;
+  static final $allTransitiveDependencies4 =
+      TutorialNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      TutorialNotifierProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      TutorialNotifierProvider.$allTransitiveDependencies5;
+
+  @override
+  String debugGetCreateSourceHash() => _$tutorialHintHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<Cell>> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  List<Cell> create(Ref ref) {
+    return tutorialHint(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Cell> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Cell>>(value),
+    );
+  }
+}
+
+String _$tutorialHintHash() => r'3a2cea5d4369eac6030b5ab642ec8211ee21b994';

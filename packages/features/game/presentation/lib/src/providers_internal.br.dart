@@ -3,6 +3,8 @@ import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/notifiers/beat.br.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/notifiers/playback_notifier.br.dart';
+import 'package:game_presentation/src/notifiers/tutorial_hint.dart';
+import 'package:game_presentation/src/notifiers/tutorial_notifier.br.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -79,4 +81,18 @@ bool trayFits(Ref ref, int index) {
   return ref
       .watch(gameRulesProvider)
       .fitsSomewhere(ref.read(gameProvider).run, trayIndex: index);
+}
+
+/// The cells the tutorial's coach points at; see [tutorialHintFor].
+@Riverpod(dependencies: [GameNotifier, TutorialNotifier])
+List<Cell> tutorialHint(Ref ref) {
+  final step = ref.watch(tutorialProvider);
+
+  if (step == null) return const [];
+
+  return tutorialHintFor(
+    ref.watch(gameProvider.select((state) => state.run)),
+    rules: ref.watch(gameRulesProvider),
+    step: step,
+  );
 }

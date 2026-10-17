@@ -65,7 +65,7 @@ final class PlaybackNotifierProvider
   }
 }
 
-String _$playbackNotifierHash() => r'f0adda63ba78ef5f11da64f724499b5234b1d1cf';
+String _$playbackNotifierHash() => r'e8dee40bf1a6285e4b5df706c1cfea4c3d1bd28c';
 
 /// Plays each move back beat by beat (see [beatsFor]). The screen takes no
 /// input while it plays, so a finger already reaching for the next piece

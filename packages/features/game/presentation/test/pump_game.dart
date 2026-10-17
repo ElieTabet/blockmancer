@@ -14,13 +14,15 @@ import 'game_overrides.dart';
 
 /// Mounts the game screen on a phone of [size] logical pixels, its rules
 /// scripted by the returned fake, and lets any sheet it opens on arrive. [disableAnimations] is the platform's reduce
-/// motion; [reduceMotion] the app's own setting. [playSound] hears the sounds.
+/// motion; [reduceMotion] the app's own setting. [playSound] hears the sounds,
+/// and [markTutorialSeen] the tutorial being kept as seen.
 Future<FakeGameRules> pumpGame(
   WidgetTester tester,
   RunState start, {
   BestScores? bestScores,
   bool disableAnimations = false,
   GameLaunch launch = .daily,
+  MarkTutorialSeenFun? markTutorialSeen,
   PlaySoundFun? playSound,
   bool reduceMotion = false,
   RewardedActionFun? rewardedAction,
@@ -46,6 +48,7 @@ Future<FakeGameRules> pumpGame(
         rules,
         bestScores: bestScores,
         launch: launch,
+        markTutorialSeen: markTutorialSeen,
         playSound: playSound,
         reduceMotion: reduceMotion,
         rewardedAction: rewardedAction,

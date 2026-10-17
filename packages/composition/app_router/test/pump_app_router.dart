@@ -17,6 +17,7 @@ Future<AppRouter> pumpAppRouter(
   WidgetTester tester, {
   required List<PageRouteInfo<dynamic>> deepLink,
   RunStore? runStore,
+  bool tutorialSeen = true,
 }) async {
   tester.view.physicalSize = const Size(1170, 2532); // iPhone 13 Pro
   tester.view.devicePixelRatio = 3.0;
@@ -28,7 +29,7 @@ Future<AppRouter> pumpAppRouter(
     ProviderScope(
       overrides: [
         ...routingOverrides(),
-        ...stubFeatures(runStore: runStore),
+        ...stubFeatures(runStore: runStore, tutorialSeen: tutorialSeen),
       ],
       child: TranslationProvider(
         child: MaterialApp.router(

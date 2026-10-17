@@ -169,6 +169,18 @@ void main() {
     });
   });
 
+  testWidgets('Replay tutorial opens the tutorial', (tester) async {
+    // Given
+    final routing = await pumpSettings(tester);
+
+    // When
+    await tester.tap(find.text('Replay tutorial'));
+    await tester.pump();
+
+    // Then
+    expect(routing.calls, ['replay tutorial']);
+  });
+
   testWidgets('the close button closes Settings', (tester) async {
     // Given
     final routing = await pumpSettings(tester);

@@ -14,6 +14,7 @@ import 'package:push_notifications_presentation/push_notifications_presentation.
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:settings_data/settings_data.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
+import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 import 'package:telemetry/telemetry.dart' as telemetry;
 
 /// Binds every non-routing slot to its concrete implementation — the feature
@@ -82,6 +83,9 @@ List<Override> featureBindingOverrides({
   ),
   ...game_ui.bindProviders(
     hapticsOnSetting: (ref) => ref.watch(settings.hapticsOnProvider),
+    // Settings keeps the tutorial seen, without the game knowing Settings.
+    markTutorialSeen: (ref) =>
+        ref.watch(settings.settingsProvider.notifier).markTutorialSeen,
     playSound: (ref) {
       final sounds = ref.watch(gameSoundsProvider);
 
@@ -116,5 +120,9 @@ List<Override> featureBindingOverrides({
   ...settings.bindProviders(
     clearProgress: (ref) => ref.watch(game.clearProgressProvider),
     settingsStore: (ref) => const SharedPreferencesSettingsStore(),
+  ),
+  // The splash opens the tutorial on a first launch without knowing Settings.
+  ...splash_ui.bindProviders(
+    tutorialSeen: (ref) => ref.watch(settings.tutorialSeenProvider.future),
   ),
 ];

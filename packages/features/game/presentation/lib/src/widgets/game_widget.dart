@@ -15,9 +15,10 @@ import 'package:game_presentation/src/widgets/round_card.dart';
 import 'package:game_presentation/src/widgets/score_count_up.dart';
 import 'package:game_presentation/src/widgets/screen_shake.dart';
 import 'package:game_presentation/src/widgets/tray_view.dart';
+import 'package:game_presentation/src/widgets/tutorial_coach.dart';
 
 /// The game screen: the round, the jokers, the board and the tray, with the
-/// sheet the run waits on laid over them.
+/// sheet the run waits on and the tutorial's coach laid over them.
 ///
 /// Stateful to own the board's key, which the drag needs to turn a finger
 /// position into a cell, and to save the run when the app is put away.
@@ -101,6 +102,24 @@ class _GameWidgetState extends ConsumerState<GameWidget> {
             ),
             const FeedbackPlayer(),
             const Positioned.fill(child: PhaseOverlay()),
+            // Below the header, over the round card: the hints sit low on the
+            // board, and the sheets rise from the bottom.
+            const Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              child: SafeArea(
+                child: Padding(
+                  padding: .fromLTRB(
+                    DSSpace.medium,
+                    DSSpace.small + kMinInteractiveDimension + DSSpace.small,
+                    DSSpace.medium,
+                    0,
+                  ),
+                  child: TutorialCoach(),
+                ),
+              ),
+            ),
             // Over the sheets' scrim and the playback's tap catcher, so the
             // menu is never out of reach.
             const Positioned(

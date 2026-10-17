@@ -1,7 +1,8 @@
 // Smoke test: the app boots through the composition layer (app_router's
 // AppRouter + app_providers' overrides) into the initial splash screen, which
-// then hands off to Home — mirroring how Application wires things in
-// lib/application, without importing any feature package.
+// then hands off — mirroring how Application wires things in lib/application,
+// without importing any feature package. Nothing is stored in a test, so this
+// is a fresh install, and the hand-off is to the tutorial.
 
 import 'package:app_providers/app_providers.dart';
 import 'package:app_router/app_router.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 void main() {
-  testWidgets('boots to the splash screen, then hands off to Home', (
+  testWidgets('a fresh install boots to the splash, then to the tutorial', (
     WidgetTester tester,
   ) async {
     final appRouter = AppRouter();
@@ -31,13 +32,19 @@ void main() {
     );
     await tester.pump(); // first frame — splash schedules its hand-off
 
-    // Splash is showing: Home isn't there yet.
-    expect(find.text('Daily run'), findsNothing);
+    // Splash is showing: the tutorial isn't there yet.
+    expect(find.text('Drag a piece onto the board'), findsNothing);
 
-    // After the splash delay it hands off to Home.
+    // The splash waits for the stored settings, which come over a platform
+    // channel that the tester's clock doesn't move: a real moment lets them in.
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
+
+    // After the splash delay it hands off to the tutorial.
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    expect(find.text('Daily run'), findsOneWidget);
+    expect(find.text('Drag a piece onto the board'), findsOneWidget);
   });
 }

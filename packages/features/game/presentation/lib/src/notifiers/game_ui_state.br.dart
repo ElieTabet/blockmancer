@@ -16,6 +16,9 @@ abstract class GameUiState with _$GameUiState {
     required int moveCount,
     required RunState run,
 
+    /// The guided first run: never saved, and never measured against a best.
+    @Default(false) bool isTutorial,
+
     /// The finished run against its mode's best; null until the run has ended
     /// and the best has been read, and for good if it couldn't be.
     RunEndRecord? record,

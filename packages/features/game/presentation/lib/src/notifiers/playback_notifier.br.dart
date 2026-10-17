@@ -21,7 +21,11 @@ const skipAfter = Duration(milliseconds: 300);
 class PlaybackNotifier extends _$PlaybackNotifier {
   Timer? _beat;
   var _beats = const <Beat>[];
+  var _holdsOnProduct = false;
   var _reduceMotion = false;
+
+  /// The beat a held playback goes on from.
+  int? _resumeAt;
   Timer? _skippable;
 
   @override
@@ -39,13 +43,28 @@ class PlaybackNotifier extends _$PlaybackNotifier {
     return const PlaybackState();
   }
 
-  /// Jumps to the end of the move, once it has played for [skipAfter].
+  /// Waits on the next `chips × mult` until a [skip], so the score can be
+  /// explained before it lands.
+  void holdOnProduct() => _holdsOnProduct = true;
+
+  /// Lets a held playback go on; otherwise jumps to the end of the move, once
+  /// it has played for [skipAfter].
   void skip() {
+    final resumeAt = _resumeAt;
+
+    if (resumeAt != null) {
+      _resumeAt = null;
+      state = state.copyWith(held: false);
+
+      return _play(resumeAt);
+    }
+
     if (state.canSkip) _finish();
   }
 
   void _finish() {
     _stop();
+    _holdsOnProduct = false;
     state = PlaybackState(step: state.step);
   }
 
@@ -78,18 +97,29 @@ class PlaybackNotifier extends _$PlaybackNotifier {
     if (index == _beats.length) return _finish();
 
     final beat = _beats[index];
+    final holds = _holdsOnProduct && beat is ProductBeat;
 
     state = state.copyWith(
       beat: beat,
+      held: holds,
       heldRun: beat is LandingBeat ? null : state.heldRun,
       heldScore: beat is LandingBeat ? beat.score : state.heldScore,
       step: state.step + 1,
     );
+
+    if (holds) {
+      _holdsOnProduct = false;
+      _resumeAt = index + 1;
+
+      return;
+    }
+
     _beat = Timer(beat.duration, () => _play(index + 1));
   }
 
   void _stop() {
     _beat?.cancel();
+    _resumeAt = null;
     _skippable?.cancel();
   }
 }

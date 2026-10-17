@@ -10,14 +10,18 @@ import 'package:settings_presentation/src/widgets/settings_widget.dart';
 import 'fake_settings_routing.dart';
 import 'fake_settings_store.dart';
 
-/// Mounts Settings over [store]. Each clearing of the progress is recorded in
-/// [clearedProgress].
+/// Mounts Settings over [store], on a phone. Each clearing of the progress is
+/// recorded in [clearedProgress].
 Future<FakeSettingsRouting> pumpSettings(
   WidgetTester tester, {
   List<String>? clearedProgress,
   FakeSettingsStore? store,
 }) async {
   final routing = FakeSettingsRouting();
+
+  tester.view.physicalSize = const Size(390, 844) * 3;
+  tester.view.devicePixelRatio = 3.0;
+  addTearDown(tester.view.reset);
 
   // The locale is global, so a test that switches it must not leak it.
   addTearDown(() => LocaleSettings.setLocaleSync(.en));

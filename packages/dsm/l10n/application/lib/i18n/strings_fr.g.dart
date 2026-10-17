@@ -56,6 +56,7 @@ class _Translations$game$fr extends Translations$game$en {
 	@override String get subtitle => 'Partie du jour · les mêmes pièces pour tout le monde';
 	@override String get practiceSubtitle => 'Entraînement · une nouvelle partie à chaque fois';
 	@override String get leave => 'Retour au menu';
+	@override late final _Translations$game$tutorial$fr tutorial = _Translations$game$tutorial$fr._(_root);
 	@override String runTotal({required Object total}) => 'Partie : ${total}';
 	@override late final _Translations$game$round$fr round = _Translations$game$round$fr._(_root);
 	@override late final _Translations$game$banner$fr banner = _Translations$game$banner$fr._(_root);
@@ -107,7 +108,23 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override String get haptics => 'Vibrations';
 	@override late final _Translations$settings$reduceMotion$fr reduceMotion = _Translations$settings$reduceMotion$fr._(_root);
 	@override late final _Translations$settings$language$fr language = _Translations$settings$language$fr._(_root);
+	@override late final _Translations$settings$tutorial$fr tutorial = _Translations$settings$tutorial$fr._(_root);
 	@override late final _Translations$settings$reset$fr reset = _Translations$settings$reset$fr._(_root);
+}
+
+// Path: game.tutorial
+class _Translations$game$tutorial$fr extends Translations$game$tutorial$en {
+	_Translations$game$tutorial$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get drag => 'Fais glisser une pièce sur le plateau';
+	@override String get clear => 'Remplis une ligne pour l\'effacer';
+	@override String get score => 'Jetons × mult = score';
+	@override String get scoreHint => 'Touche pour continuer';
+	@override String get pick => 'Choisis ton premier joker — ils vont par paires';
+	@override String get skip => 'Passer';
 }
 
 // Path: game.round
@@ -283,6 +300,17 @@ class _Translations$settings$language$fr extends Translations$settings$language$
 	@override String get system => 'Système';
 	@override String get en => 'English';
 	@override String get fr => 'Français';
+}
+
+// Path: settings.tutorial
+class _Translations$settings$tutorial$fr extends Translations$settings$tutorial$en {
+	_Translations$settings$tutorial$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Revoir le tutoriel';
+	@override String get subtitle => 'Comment jouer, pas à pas';
 }
 
 // Path: settings.reset
@@ -488,6 +516,12 @@ extension on TranslationsFr {
 			'game.subtitle' => 'Partie du jour · les mêmes pièces pour tout le monde',
 			'game.practiceSubtitle' => 'Entraînement · une nouvelle partie à chaque fois',
 			'game.leave' => 'Retour au menu',
+			'game.tutorial.drag' => 'Fais glisser une pièce sur le plateau',
+			'game.tutorial.clear' => 'Remplis une ligne pour l\'effacer',
+			'game.tutorial.score' => 'Jetons × mult = score',
+			'game.tutorial.scoreHint' => 'Touche pour continuer',
+			'game.tutorial.pick' => 'Choisis ton premier joker — ils vont par paires',
+			'game.tutorial.skip' => 'Passer',
 			'game.runTotal' => ({required Object total}) => 'Partie : ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Manche · ${index} / ${count}',
 			'game.round.boss' => 'Boss · Gravats',
@@ -590,6 +624,8 @@ extension on TranslationsFr {
 			'settings.language.system' => 'Système',
 			'settings.language.en' => 'English',
 			'settings.language.fr' => 'Français',
+			'settings.tutorial.title' => 'Revoir le tutoriel',
+			'settings.tutorial.subtitle' => 'Comment jouer, pas à pas',
 			'settings.reset.title' => 'Réinitialiser la progression',
 			'settings.reset.subtitle' => 'Tes records et la partie en cours',
 			'settings.reset.confirmTitle' => 'Réinitialiser la progression ?',

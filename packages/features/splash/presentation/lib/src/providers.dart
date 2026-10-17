@@ -4,6 +4,10 @@ import 'package:splash_presentation/src/routing/splash_routing.dart';
 
 // splash_presentation — public providers exposed by this layer.
 
+List<Override> bindProviders({
+  required Future<bool> Function(Ref ref) tutorialSeen,
+}) => [di.tutorialSeenProvider.overrideWith(tutorialSeen)];
+
 /// Binds the splash routing slot to a concrete [SplashRouting] supplied by the
 /// composition layer.
 List<Override> bindRoutingProviders({

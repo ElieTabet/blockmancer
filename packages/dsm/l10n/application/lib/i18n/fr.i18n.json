@@ -4,6 +4,14 @@
     "subtitle": "Partie du jour · les mêmes pièces pour tout le monde",
     "practiceSubtitle": "Entraînement · une nouvelle partie à chaque fois",
     "leave": "Retour au menu",
+    "tutorial": {
+      "drag": "Fais glisser une pièce sur le plateau",
+      "clear": "Remplis une ligne pour l'effacer",
+      "score": "Jetons × mult = score",
+      "scoreHint": "Touche pour continuer",
+      "pick": "Choisis ton premier joker — ils vont par paires",
+      "skip": "Passer"
+    },
     "runTotal": "Partie : $total",
     "round": {
       "regular": "Manche · $index / $count",
@@ -168,6 +176,10 @@
       "system": "Système",
       "en": "English",
       "fr": "Français"
+    },
+    "tutorial": {
+      "title": "Revoir le tutoriel",
+      "subtitle": "Comment jouer, pas à pas"
     },
     "reset": {
       "title": "Réinitialiser la progression",

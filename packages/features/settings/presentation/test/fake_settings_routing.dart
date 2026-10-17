@@ -7,4 +7,8 @@ final class FakeSettingsRouting implements SettingsRouting {
 
   @override
   void onCloseRequested(BuildContext context) => calls.add('close');
+
+  @override
+  void onReplayTutorialRequested(BuildContext context) =>
+      calls.add('replay tutorial');
 }

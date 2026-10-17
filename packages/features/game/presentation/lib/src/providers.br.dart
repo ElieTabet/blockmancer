@@ -6,12 +6,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 List<Override> bindProviders({
   required bool Function(Ref ref) hapticsOnSetting,
+  required di.MarkTutorialSeenFun Function(Ref ref) markTutorialSeen,
   required di.PlaySoundFun Function(Ref ref) playSound,
   required bool Function(Ref ref) reduceMotionSetting,
   required di.RewardedActionFun Function(Ref ref) rewardedAction,
   required bool Function(Ref ref) soundOnSetting,
 }) => [
   di.hapticsOnSettingProvider.overrideWith(hapticsOnSetting),
+  di.markTutorialSeenProvider.overrideWith(markTutorialSeen),
   di.playSoundProvider.overrideWith(playSound),
   di.reduceMotionSettingProvider.overrideWith(reduceMotionSetting),
   di.rewardedActionProvider.overrideWith(rewardedAction),

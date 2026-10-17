@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:splash_presentation/src/package_name.dart';
 import 'package:splash_presentation/src/providers_di.br.dart' as di;
+import 'package:timber/timber.dart';
 
 part 'splash_state_notifier.br.g.dart';
 
@@ -13,16 +15,50 @@ class SplashStateNotifier extends _$SplashStateNotifier {
   @override
   void build() {}
 
-  /// Holds the splash for its minimum, then hands off.
+  /// Holds the splash for its minimum, then hands off: to the tutorial on a
+  /// first launch, to Home otherwise.
   Future<void> onReady(BuildContext context) async {
-    // Resolved before the wait: the widget only reads this notifier, so it can
-    // be disposed during the delay, and a ref used after it would throw.
-    final routing = ref.read(di.splashRoutingProvider);
+    // Held through the wait: the widget only reads this notifier, so it would
+    // be disposed during the delay, and the answer it waits for dropped with
+    // it before it arrives.
+    final keepAlive = ref.keepAlive();
+    final tutorialSeen = ref.listen(di.tutorialSeenProvider.future, (_, _) {});
 
-    await Future<void>.delayed(_splashDuration);
+    try {
+      final (_, seen) = await (
+        Future<void>.delayed(_splashDuration),
+        _seenOrHome(tutorialSeen.read()),
+      ).wait;
 
-    if (!context.mounted) return;
+      if (!context.mounted) return;
 
-    routing.onInitialized(context);
+      final routing = ref.read(di.splashRoutingProvider);
+
+      if (seen) {
+        routing.onInitialized(context);
+      } else {
+        routing.onFirstLaunch(context);
+      }
+    } finally {
+      tutorialSeen.close();
+      keepAlive.close();
+    }
+  }
+
+  /// Home when the answer can't be read: a launch that never ends is worse
+  /// than a tutorial missed.
+  Future<bool> _seenOrHome(Future<bool> tutorialSeen) async {
+    try {
+      return await tutorialSeen;
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Whether the tutorial was seen is unknown; going Home',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+
+      return true;
+    }
   }
 }

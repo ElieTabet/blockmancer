@@ -40,14 +40,20 @@ void main() {
       ),
     );
 
-    // Splash first, then the hand-off to Home. Neither has an app bar.
+    // Splash first, then the hand-off to the tutorial, as on a fresh install.
+    // Neither has an app bar.
     await tester.pump();
     expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
 
+    // The stored settings the splash waits for come over a platform channel
+    // that the tester's clock doesn't move.
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    expect(find.text('Daily run'), findsOneWidget);
+    expect(find.text('Drag a piece onto the board'), findsOneWidget);
     expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
   });
 }

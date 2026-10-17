@@ -165,4 +165,61 @@ void main() {
     // Then
     expect(game.read(playbackProvider).isPlaying, isFalse);
   });
+
+  group('held on chips × mult', () {
+    testWidgets('the score waits there, the points not landed', (tester) async {
+      // Given
+      final game = container();
+      game.read(playbackProvider.notifier).holdOnProduct();
+
+      // When
+      place(game);
+      await tester.pump(const Duration(seconds: 5));
+
+      // Then
+      final playback = game.read(playbackProvider);
+      expect(playback.beat, isA<ProductBeat>());
+      expect(playback.held, isTrue);
+      expect(playback.heldScore, 40);
+    });
+
+    testWidgets('a touch lets the points land, then the move ends', (
+      tester,
+    ) async {
+      // Given
+      final game = container();
+      game.read(playbackProvider.notifier).holdOnProduct();
+      place(game);
+      await tester.pump(const Duration(seconds: 5));
+
+      // When
+      game.read(playbackProvider.notifier).skip();
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // Then
+      expect(game.read(playbackProvider).beat, isA<LandingBeat>());
+      expect(game.read(playbackProvider).held, isFalse);
+      expect(game.read(playbackProvider).heldScore, 241);
+
+      await tester.pump(const Duration(seconds: 1));
+      expect(game.read(playbackProvider).isPlaying, isFalse);
+    });
+
+    testWidgets('only the next move is held', (tester) async {
+      // Given: a held move let go
+      final game = container();
+      game.read(playbackProvider.notifier).holdOnProduct();
+      place(game);
+      await tester.pump(const Duration(seconds: 5));
+      game.read(playbackProvider.notifier).skip();
+      await tester.pump(const Duration(seconds: 1));
+
+      // When
+      place(game);
+      await tester.pump(const Duration(seconds: 3));
+
+      // Then
+      expect(game.read(playbackProvider).isPlaying, isFalse);
+    });
+  });
 }

@@ -15,7 +15,8 @@ part 'game_notifier.br.g.dart';
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
 ///
-/// What it plays is saved after every action, so a killed app resumes it.
+/// What it plays is saved after every action, so a killed app resumes it —
+/// all but the tutorial, which is played once and left.
 @Riverpod(dependencies: [gameLaunch, resumedRun])
 class GameNotifier extends _$GameNotifier {
   var _reviving = false;
@@ -36,7 +37,19 @@ class GameNotifier extends _$GameNotifier {
     }
 
     // Nothing to resume means the save was lost: today's run instead.
-    return _fresh(ref.read(runStartForProvider)(launch));
+    final start = ref.read(runStartForProvider)(launch);
+
+    if (launch == .tutorial) {
+      return GameUiState(
+        isTutorial: true,
+        lastEvents: const [],
+        mode: start.mode,
+        moveCount: 0,
+        run: _rules.tutorialRun(config: _rules.defaultConfig),
+      );
+    }
+
+    return _fresh(start);
   }
 
   void endRun() => _apply(_rules.endRun(state.run));
@@ -56,8 +69,15 @@ class GameNotifier extends _$GameNotifier {
       ref.read(gameRoutingProvider).onLeaveRequested(context);
 
   /// Saves the run as it stands, for when the app is about to be put away.
-  void persist() =>
-      unawaited(_save(SavedRun(mode: state.mode, run: state.run)));
+  void persist() {
+    if (state.isTutorial) return;
+
+    unawaited(_save(SavedRun(mode: state.mode, run: state.run)));
+  }
+
+  /// Leaves the tutorial for a practice run, from its starting pick.
+  void playPractice() =>
+      state = _fresh(ref.read(runStartForProvider)(.practice));
 
   /// Plays the same mode again from its first pick: the same daily run, even
   /// past midnight, or a new practice run.
@@ -104,6 +124,8 @@ class GameNotifier extends _$GameNotifier {
       moveCount: state.moveCount + 1,
       run: run,
     );
+
+    if (state.isTutorial) return;
 
     if (ended) unawaited(_recordEnd(run));
 

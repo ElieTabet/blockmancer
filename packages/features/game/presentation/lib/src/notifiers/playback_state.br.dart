@@ -13,6 +13,9 @@ abstract class PlaybackState with _$PlaybackState {
     /// Whether a touch skips to the end yet.
     @Default(false) bool canSkip,
 
+    /// Whether the playback waits on its beat until a touch lets it go on.
+    @Default(false) bool held,
+
     /// The run before the move, which the run total and the streak show until
     /// the move's points land; null shows the run's own.
     RunState? heldRun,

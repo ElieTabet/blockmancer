@@ -27,6 +27,7 @@ import 'package:settings_data/settings_data.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:shared_domain/shared_domain.dart';
 import 'package:sounds/sounds.dart';
+import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 import 'package:telemetry/telemetry.dart';
 
 import 'fake_random.dart';
@@ -101,6 +102,29 @@ void main() {
       expect(
         container.read(settings.clearProgressProvider),
         same(container.read(game.clearProgressProvider)),
+      );
+    },
+  );
+
+  // Settings keeps whether the tutorial was seen: the splash reads it to open
+  // the tutorial, and the game keeps it once the tutorial is done.
+  test(
+    'the tutorial shows on a first launch, and not once it is done',
+    () async {
+      // Given: a first launch
+      final container = buildContainer();
+      expect(
+        await container.read(splash_ui.tutorialSeenProvider.future),
+        isFalse,
+      );
+
+      // When: the game's tutorial is done
+      await container.read(game_ui_di.markTutorialSeenProvider)();
+
+      // Then
+      expect(
+        await container.read(splash_ui.tutorialSeenProvider.future),
+        isTrue,
       );
     },
   );

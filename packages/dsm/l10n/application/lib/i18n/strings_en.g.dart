@@ -66,6 +66,8 @@ class Translations$game$en {
 	/// en: 'Back to the menu'
 	String get leave => 'Back to the menu';
 
+	late final Translations$game$tutorial$en tutorial = Translations$game$tutorial$en.internal(_root);
+
 	/// en: 'Run $total'
 	String runTotal({required Object total}) => 'Run ${total}';
 
@@ -145,7 +147,35 @@ class Translations$settings$en {
 
 	late final Translations$settings$reduceMotion$en reduceMotion = Translations$settings$reduceMotion$en.internal(_root);
 	late final Translations$settings$language$en language = Translations$settings$language$en.internal(_root);
+	late final Translations$settings$tutorial$en tutorial = Translations$settings$tutorial$en.internal(_root);
 	late final Translations$settings$reset$en reset = Translations$settings$reset$en.internal(_root);
+}
+
+// Path: game.tutorial
+class Translations$game$tutorial$en {
+	Translations$game$tutorial$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Drag a piece onto the board'
+	String get drag => 'Drag a piece onto the board';
+
+	/// en: 'Fill a row to clear it'
+	String get clear => 'Fill a row to clear it';
+
+	/// en: 'Chips × mult = score'
+	String get score => 'Chips × mult = score';
+
+	/// en: 'Tap to continue'
+	String get scoreHint => 'Tap to continue';
+
+	/// en: 'Pick your first joker — they work in pairs'
+	String get pick => 'Pick your first joker — they work in pairs';
+
+	/// en: 'Skip'
+	String get skip => 'Skip';
 }
 
 // Path: game.round
@@ -437,6 +467,21 @@ class Translations$settings$language$en {
 	String get fr => 'Français';
 }
 
+// Path: settings.tutorial
+class Translations$settings$tutorial$en {
+	Translations$settings$tutorial$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Replay tutorial'
+	String get title => 'Replay tutorial';
+
+	/// en: 'How to play, step by step'
+	String get subtitle => 'How to play, step by step';
+}
+
 // Path: settings.reset
 class Translations$settings$reset$en {
 	Translations$settings$reset$en.internal(this._root);
@@ -716,6 +761,12 @@ extension on Translations {
 			'game.subtitle' => 'Daily run · same pieces for everyone',
 			'game.practiceSubtitle' => 'Practice · a new run every time',
 			'game.leave' => 'Back to the menu',
+			'game.tutorial.drag' => 'Drag a piece onto the board',
+			'game.tutorial.clear' => 'Fill a row to clear it',
+			'game.tutorial.score' => 'Chips × mult = score',
+			'game.tutorial.scoreHint' => 'Tap to continue',
+			'game.tutorial.pick' => 'Pick your first joker — they work in pairs',
+			'game.tutorial.skip' => 'Skip',
 			'game.runTotal' => ({required Object total}) => 'Run ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Round · ${index} / ${count}',
 			'game.round.boss' => 'Boss · Rubble',
@@ -818,6 +869,8 @@ extension on Translations {
 			'settings.language.system' => 'System',
 			'settings.language.en' => 'English',
 			'settings.language.fr' => 'Français',
+			'settings.tutorial.title' => 'Replay tutorial',
+			'settings.tutorial.subtitle' => 'How to play, step by step',
 			'settings.reset.title' => 'Reset progress',
 			'settings.reset.subtitle' => 'Your best scores and the run in progress',
 			'settings.reset.confirmTitle' => 'Reset progress?',

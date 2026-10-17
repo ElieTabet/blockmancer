@@ -16,7 +16,8 @@ mixin _$PlaybackState {
 
 /// The beat playing; null once the move has played out.
  Beat? get beat;/// Whether a touch skips to the end yet.
- bool get canSkip;/// The run before the move, which the run total and the streak show until
+ bool get canSkip;/// Whether the playback waits on its beat until a touch lets it go on.
+ bool get held;/// The run before the move, which the run total and the streak show until
 /// the move's points land; null shows the run's own.
  RunState? get heldRun;/// The round score shown until the move's points land in it; null shows
 /// the run's own.
@@ -33,16 +34,16 @@ $PlaybackStateCopyWith<PlaybackState> get copyWith => _$PlaybackStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.step, step) || other.step == step));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.held, held) || other.held == held)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.step, step) || other.step == step));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,beat,canSkip,heldRun,heldScore,step);
+int get hashCode => Object.hash(runtimeType,beat,canSkip,held,heldRun,heldScore,step);
 
 @override
 String toString() {
-  return 'PlaybackState(beat: $beat, canSkip: $canSkip, heldRun: $heldRun, heldScore: $heldScore, step: $step)';
+  return 'PlaybackState(beat: $beat, canSkip: $canSkip, held: $held, heldRun: $heldRun, heldScore: $heldScore, step: $step)';
 }
 
 
@@ -53,7 +54,7 @@ abstract mixin class $PlaybackStateCopyWith<$Res>  {
   factory $PlaybackStateCopyWith(PlaybackState value, $Res Function(PlaybackState) _then) = _$PlaybackStateCopyWithImpl;
 @useResult
 $Res call({
- Beat? beat, bool canSkip, RunState? heldRun, int? heldScore, int step
+ Beat? beat, bool canSkip, bool held, RunState? heldRun, int? heldScore, int step
 });
 
 
@@ -70,10 +71,11 @@ class _$PlaybackStateCopyWithImpl<$Res>
 
 /// Create a copy of PlaybackState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? beat = freezed,Object? canSkip = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? step = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? beat = freezed,Object? canSkip = null,Object? held = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? step = null,}) {
   return _then(_self.copyWith(
 beat: freezed == beat ? _self.beat : beat // ignore: cast_nullable_to_non_nullable
 as Beat?,canSkip: null == canSkip ? _self.canSkip : canSkip // ignore: cast_nullable_to_non_nullable
+as bool,held: null == held ? _self.held : held // ignore: cast_nullable_to_non_nullable
 as bool,heldRun: freezed == heldRun ? _self.heldRun : heldRun // ignore: cast_nullable_to_non_nullable
 as RunState?,heldScore: freezed == heldScore ? _self.heldScore : heldScore // ignore: cast_nullable_to_non_nullable
 as int?,step: null == step ? _self.step : step // ignore: cast_nullable_to_non_nullable
@@ -186,10 +188,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  RunState? heldRun,  int? heldScore,  int step)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  int step)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PlaybackState() when $default != null:
-return $default(_that.beat,_that.canSkip,_that.heldRun,_that.heldScore,_that.step);case _:
+return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.step);case _:
   return orElse();
 
 }
@@ -207,10 +209,10 @@ return $default(_that.beat,_that.canSkip,_that.heldRun,_that.heldScore,_that.ste
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  RunState? heldRun,  int? heldScore,  int step)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  int step)  $default,) {final _that = this;
 switch (_that) {
 case _PlaybackState():
-return $default(_that.beat,_that.canSkip,_that.heldRun,_that.heldScore,_that.step);case _:
+return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.step);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -227,10 +229,10 @@ return $default(_that.beat,_that.canSkip,_that.heldRun,_that.heldScore,_that.ste
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Beat? beat,  bool canSkip,  RunState? heldRun,  int? heldScore,  int step)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  int step)?  $default,) {final _that = this;
 switch (_that) {
 case _PlaybackState() when $default != null:
-return $default(_that.beat,_that.canSkip,_that.heldRun,_that.heldScore,_that.step);case _:
+return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.step);case _:
   return null;
 
 }
@@ -242,13 +244,15 @@ return $default(_that.beat,_that.canSkip,_that.heldRun,_that.heldScore,_that.ste
 
 
 class _PlaybackState extends PlaybackState {
-  const _PlaybackState({this.beat, this.canSkip = false, this.heldRun, this.heldScore, this.step = 0}): super._();
+  const _PlaybackState({this.beat, this.canSkip = false, this.held = false, this.heldRun, this.heldScore, this.step = 0}): super._();
   
 
 /// The beat playing; null once the move has played out.
 @override final  Beat? beat;
 /// Whether a touch skips to the end yet.
 @override@JsonKey() final  bool canSkip;
+/// Whether the playback waits on its beat until a touch lets it go on.
+@override@JsonKey() final  bool held;
 /// The run before the move, which the run total and the streak show until
 /// the move's points land; null shows the run's own.
 @override final  RunState? heldRun;
@@ -269,16 +273,16 @@ _$PlaybackStateCopyWith<_PlaybackState> get copyWith => __$PlaybackStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.step, step) || other.step == step));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.held, held) || other.held == held)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.step, step) || other.step == step));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,beat,canSkip,heldRun,heldScore,step);
+int get hashCode => Object.hash(runtimeType,beat,canSkip,held,heldRun,heldScore,step);
 
 @override
 String toString() {
-  return 'PlaybackState(beat: $beat, canSkip: $canSkip, heldRun: $heldRun, heldScore: $heldScore, step: $step)';
+  return 'PlaybackState(beat: $beat, canSkip: $canSkip, held: $held, heldRun: $heldRun, heldScore: $heldScore, step: $step)';
 }
 
 
@@ -289,7 +293,7 @@ abstract mixin class _$PlaybackStateCopyWith<$Res> implements $PlaybackStateCopy
   factory _$PlaybackStateCopyWith(_PlaybackState value, $Res Function(_PlaybackState) _then) = __$PlaybackStateCopyWithImpl;
 @override @useResult
 $Res call({
- Beat? beat, bool canSkip, RunState? heldRun, int? heldScore, int step
+ Beat? beat, bool canSkip, bool held, RunState? heldRun, int? heldScore, int step
 });
 
 
@@ -306,10 +310,11 @@ class __$PlaybackStateCopyWithImpl<$Res>
 
 /// Create a copy of PlaybackState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? beat = freezed,Object? canSkip = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? step = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? beat = freezed,Object? canSkip = null,Object? held = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? step = null,}) {
   return _then(_PlaybackState(
 beat: freezed == beat ? _self.beat : beat // ignore: cast_nullable_to_non_nullable
 as Beat?,canSkip: null == canSkip ? _self.canSkip : canSkip // ignore: cast_nullable_to_non_nullable
+as bool,held: null == held ? _self.held : held // ignore: cast_nullable_to_non_nullable
 as bool,heldRun: freezed == heldRun ? _self.heldRun : heldRun // ignore: cast_nullable_to_non_nullable
 as RunState?,heldScore: freezed == heldScore ? _self.heldScore : heldScore // ignore: cast_nullable_to_non_nullable
 as int?,step: null == step ? _self.step : step // ignore: cast_nullable_to_non_nullable

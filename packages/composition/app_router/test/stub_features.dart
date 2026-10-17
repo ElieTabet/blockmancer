@@ -4,6 +4,7 @@ import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:home_presentation/home_presentation.dart' as home_ui;
 import 'package:settings_domain/settings_domain.dart' as settings;
+import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 
 /// Home's daily card, which is how these tests know Home is on screen.
 const homeDailyTitle = 'Daily run';
@@ -17,10 +18,18 @@ const homeSettingsLabel = 'Settings';
 /// Settings' back arrow.
 const settingsCloseLabel = 'Close';
 
-/// Fills the slots Home, the game and Settings read, so a composition test
-/// mounts the real screens with the real rules, a first launch's settings,
-/// no sound or haptics and, unless [runStore] keeps one, no saved run.
-List<Override> stubFeatures({game.RunStore? runStore}) => [
+/// The tutorial coach's first line, which is how these tests know the
+/// tutorial is on screen.
+const tutorialFirstLine = 'Drag a piece onto the board';
+
+/// Fills the slots the splash, Home, the game and Settings read, so a
+/// composition test mounts the real screens with the real rules, a first
+/// launch's settings, no sound or haptics and, unless [runStore] keeps one, no
+/// saved run. The splash goes Home unless [tutorialSeen] says otherwise.
+List<Override> stubFeatures({
+  game.RunStore? runStore,
+  bool tutorialSeen = true,
+}) => [
   ...game.bindProviders(
     bestScores: (ref) => const _NoBestScores(),
     clock: (ref) => const _NoonClock(),
@@ -29,6 +38,7 @@ List<Override> stubFeatures({game.RunStore? runStore}) => [
   ),
   ...game_ui.bindProviders(
     hapticsOnSetting: (ref) => false,
+    markTutorialSeen: (ref) => () async {},
     playSound: (ref) => (sound, {semitones = 0, variance = 0}) {},
     reduceMotionSetting: (ref) => false,
     rewardedAction: (ref) =>
@@ -44,6 +54,7 @@ List<Override> stubFeatures({game.RunStore? runStore}) => [
     clearProgress: (ref) => ref.watch(game.clearProgressProvider),
     settingsStore: (ref) => const _FirstLaunchSettingsStore(),
   ),
+  ...splash_ui.bindProviders(tutorialSeen: (ref) async => tutorialSeen),
 ];
 
 /// A first launch's settings, and nothing kept.

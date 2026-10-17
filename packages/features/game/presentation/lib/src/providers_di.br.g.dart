@@ -96,6 +96,53 @@ final class HapticsOnSettingProvider
 
 String _$hapticsOnSettingHash() => r'e580e748a8e710f10a774b373bf9ab60c594e9c8';
 
+@ProviderFor(markTutorialSeen)
+final markTutorialSeenProvider = MarkTutorialSeenProvider._();
+
+final class MarkTutorialSeenProvider
+    extends
+        $FunctionalProvider<
+          MarkTutorialSeenFun,
+          MarkTutorialSeenFun,
+          MarkTutorialSeenFun
+        >
+    with $Provider<MarkTutorialSeenFun> {
+  MarkTutorialSeenProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markTutorialSeenProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$markTutorialSeenHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkTutorialSeenFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MarkTutorialSeenFun create(Ref ref) {
+    return markTutorialSeen(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkTutorialSeenFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MarkTutorialSeenFun>(value),
+    );
+  }
+}
+
+String _$markTutorialSeenHash() => r'00e38ec152a45070bf01e9ec0d0501f6a9dfc14b';
+
 @ProviderFor(playSound)
 final playSoundProvider = PlaySoundProvider._();
 

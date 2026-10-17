@@ -7,6 +7,10 @@ part 'providers_di.br.g.dart';
 // game_presentation — inbound dependency-injection slots. Each throws until
 // the composition layer overrides it.
 
+/// Keeps it that the player has been through the tutorial, so it isn't
+/// offered again.
+typedef MarkTutorialSeenFun = Future<void> Function();
+
 /// Plays [GameSound] [semitones] above its own pitch (12 is an octave), nudged
 /// by a random factor within ±[variance]. Never throws; a sound that isn't
 /// loaded yet is skipped.
@@ -26,6 +30,11 @@ GameRouting gameRouting(Ref ref) => throw UnimplementedError(
 @riverpod
 bool hapticsOnSetting(Ref ref) => throw UnimplementedError(
   'hapticsOnSettingProvider must be overridden by the composition layer',
+);
+
+@riverpod
+MarkTutorialSeenFun markTutorialSeen(Ref ref) => throw UnimplementedError(
+  'markTutorialSeenProvider must be overridden by the composition layer',
 );
 
 @riverpod

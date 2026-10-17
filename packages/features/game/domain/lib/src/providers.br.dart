@@ -30,7 +30,8 @@ typedef RunStart = ({GameMode mode, int seed});
 /// The run [GameLaunch] asks for, as of now: today's daily run, or a practice
 /// run on a fresh seed. A function, so each launch reads the clock afresh.
 /// A resume normally starts nothing — it loads the saved run — so it only gets
-/// here when the save was lost, and starts today's daily instead.
+/// here when the save was lost, and starts today's daily instead. The tutorial
+/// plays the rules' own fixed run, and counts as the practice it hands over to.
 typedef RunStartForFun = RunStart Function(GameLaunch launch);
 
 typedef LoadSavedRunFun = Future<SavedRun?> Function();
@@ -87,7 +88,7 @@ RunStartForFun runStartFor(Ref ref) {
   return (launch) => switch (launch) {
     .daily || .resume => dailyRunOn(clock.now(), rules: rules),
     // Any 32 bits will do: practice runs are not meant to be replayed.
-    .practice => (
+    .practice || .tutorial => (
       mode: const .practice(),
       seed: clock.now().microsecondsSinceEpoch & 0xFFFFFFFF,
     ),

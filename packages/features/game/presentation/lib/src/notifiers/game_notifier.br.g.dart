@@ -11,7 +11,8 @@ part of 'game_notifier.br.dart';
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
 ///
-/// What it plays is saved after every action, so a killed app resumes it.
+/// What it plays is saved after every action, so a killed app resumes it —
+/// all but the tutorial, which is played once and left.
 
 @ProviderFor(GameNotifier)
 final gameProvider = GameNotifierProvider._();
@@ -19,13 +20,15 @@ final gameProvider = GameNotifierProvider._();
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
 ///
-/// What it plays is saved after every action, so a killed app resumes it.
+/// What it plays is saved after every action, so a killed app resumes it —
+/// all but the tutorial, which is played once and left.
 final class GameNotifierProvider
     extends $NotifierProvider<GameNotifier, GameUiState> {
   /// The run on screen. Every rule is [GameRules]': this only forwards the
   /// player's actions and keeps what each one did.
   ///
-  /// What it plays is saved after every action, so a killed app resumes it.
+  /// What it plays is saved after every action, so a killed app resumes it —
+  /// all but the tutorial, which is played once and left.
   GameNotifierProvider._()
     : super(
         from: null,
@@ -62,12 +65,13 @@ final class GameNotifierProvider
   }
 }
 
-String _$gameNotifierHash() => r'a45eba0609618d90555b9b74262f89573e9361b3';
+String _$gameNotifierHash() => r'f4dc9429452c60df7e6e61ce96d59b5896383cf3';
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
 ///
-/// What it plays is saved after every action, so a killed app resumes it.
+/// What it plays is saved after every action, so a killed app resumes it —
+/// all but the tutorial, which is played once and left.
 
 abstract class _$GameNotifier extends $Notifier<GameUiState> {
   GameUiState build();
