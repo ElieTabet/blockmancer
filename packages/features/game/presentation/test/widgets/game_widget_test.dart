@@ -368,11 +368,23 @@ void main() {
     await pumpGame(tester, runIn(const .playing()), routing: routing);
 
     // When
-    await tester.tap(find.byTooltip('Back to the menu'));
+    await tester.tap(find.bySemanticsLabel('Back to the menu'));
     await tester.pump();
 
     // Then
     expect(routing.calls, ['leave']);
+  });
+
+  testWidgets('the back button shows no words, even when held', (tester) async {
+    // Given
+    await pumpGame(tester, runIn(const .playing()));
+
+    // When
+    await tester.longPress(find.bySemanticsLabel('Back to the menu'));
+    await tester.pump();
+
+    // Then
+    expect(find.text('Back to the menu'), findsNothing);
   });
 
   testWidgets('the menu can be reached while a joker is being picked', (
@@ -387,7 +399,7 @@ void main() {
     );
 
     // When
-    await tester.tap(find.byTooltip('Back to the menu'));
+    await tester.tap(find.bySemanticsLabel('Back to the menu'));
     await tester.pump();
 
     // Then

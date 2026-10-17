@@ -43,7 +43,7 @@ void main() {
       expect(find.text('Pick your starting joker'), findsOneWidget);
 
       // When
-      await tester.tap(find.byTooltip(gameLeaveTooltip));
+      await tester.tap(find.bySemanticsLabel(gameLeaveLabel));
       await tester.pumpAndSettle();
 
       // Then

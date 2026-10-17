@@ -7,12 +7,16 @@ final class DSPressable extends StatefulWidget {
     required this.child,
     required this.onTap,
     this.pressedScale = 0.95,
+    this.semanticLabel,
     super.key,
   });
 
   final Widget child;
   final VoidCallback? onTap;
   final double pressedScale;
+
+  /// What a screen reader announces when [child] shows no text of its own.
+  final String? semanticLabel;
 
   @override
   State<DSPressable> createState() => _DSPressableState();
@@ -59,6 +63,7 @@ final class _DSPressableState extends State<DSPressable>
     return Semantics(
       button: true,
       enabled: onTap != null,
+      label: widget.semanticLabel,
       child: GestureDetector(
         behavior: .opaque,
         onTap: onTap,

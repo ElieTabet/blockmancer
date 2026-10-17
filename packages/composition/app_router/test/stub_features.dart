@@ -8,7 +8,7 @@ import 'package:home_presentation/home_presentation.dart' as home_ui;
 const homeDailyTitle = 'Daily run';
 
 /// The game's back arrow, which is how these tests know a run is on screen.
-const gameLeaveTooltip = 'Back to the menu';
+const gameLeaveLabel = 'Back to the menu';
 
 /// Fills the slots Home and the game read, so a composition test mounts the
 /// real screens with the real rules and, unless [runStore] keeps one, no saved
