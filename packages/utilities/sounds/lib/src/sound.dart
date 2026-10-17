@@ -2,7 +2,7 @@
 /// others: the files come from different packs, mastered at different levels.
 enum Sound {
   bossStart('boss_start', volume: 0.5),
-  bossWin('boss_win', volume: 1.6),
+  bossWin('boss_win', volume: 0.9),
   clear('clear', volume: 0.7),
   joker('joker', volume: 0.7),
   kaching('kaching', volume: 1),
