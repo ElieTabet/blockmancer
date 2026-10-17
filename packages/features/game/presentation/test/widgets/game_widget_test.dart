@@ -172,9 +172,9 @@ void main() {
           const Offset(0, 60),
     );
     await finger.up();
-    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 150));
 
-    // Then
+    // Then: once the piece has landed
     expect(find.text('Round cleared! Saver +120'), findsOneWidget);
   });
 

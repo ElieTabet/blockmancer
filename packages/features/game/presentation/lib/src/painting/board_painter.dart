@@ -3,6 +3,12 @@ import 'package:flutter/rendering.dart';
 import 'package:game_presentation/src/painting/board_geometry.dart';
 import 'package:shared_domain/shared_domain.dart';
 
+Color cellColor(CellState state) => switch (state) {
+  EmptyCell() => DSGameColor.emptyCell,
+  FilledCell(:final colorIndex) => DSGameColor.pieces[colorIndex],
+  StoneCell() => DSGameColor.stone,
+};
+
 /// The board and what is on it.
 final class BoardPainter extends CustomPainter {
   const BoardPainter(this.board);
@@ -30,17 +36,11 @@ final class BoardPainter extends CustomPainter {
     for (var row = 0; row < Board.size; row++) {
       for (var col = 0; col < Board.size; col++) {
         final cell = Cell(col: col, row: row);
-        final color = switch (board.at(cell)) {
-          EmptyCell() => DSGameColor.emptyCell,
-          FilledCell(:final colorIndex) => DSGameColor.pieces[colorIndex],
-          StoneCell() => DSGameColor.stone,
-        };
-
         final rect = geometry.cellRect(cell);
 
         canvas.drawRRect(
           RRect.fromRectAndRadius(rect, _cellRadius),
-          Paint()..color = color,
+          Paint()..color = cellColor(board.at(cell)),
         );
 
         if (board.at(cell) is StoneCell) {

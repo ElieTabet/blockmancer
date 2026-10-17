@@ -2,6 +2,8 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/painting/round_progress_painter.dart';
+import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 
@@ -71,58 +73,149 @@ final class RoundScore extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (score, target) = ref.watch(
-      gameProvider.select((state) => (state.run.score, state.run.round.target)),
-    );
+    final (:countUp, :score, :target) = ref.watch(roundScoreShownProvider);
 
-    return Text.rich(
-      TextSpan(
-        children: [
+    // The begin is only read on the first build: after that, a new score is
+    // counted up to from the one on screen, over its landing.
+    return RepaintBoundary(
+      child: TweenAnimationBuilder(
+        tween: IntTween(begin: score, end: score),
+        curve: Curves.easeOutCubic,
+        duration: countUp,
+        builder: (context, shown, _) => Text.rich(
           TextSpan(
-            text: '${pointsText(context, score)} ',
-            style: DSFont.display(
-              const TextStyle(
-                color: DSColor.white,
-                fontSize: 18,
-                fontWeight: .w700,
+            children: [
+              TextSpan(
+                text: '${pointsText(context, shown)} ',
+                style: DSFont.display(
+                  const TextStyle(
+                    color: DSColor.white,
+                    fontSize: 18,
+                    fontWeight: .w700,
+                  ),
+                ),
               ),
-            ),
+              TextSpan(
+                text: context.t.game.round.target(
+                  target: pointsText(context, target),
+                ),
+              ),
+            ],
           ),
-          TextSpan(
-            text: context.t.game.round.target(
-              target: pointsText(context, target),
-            ),
-          ),
-        ],
+          style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
+        ),
       ),
-      style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
     );
   }
 }
 
-final class RoundProgress extends ConsumerWidget {
+/// The round score against its target. It fills as a move's points land, in
+/// step with the score counting up, with a glint along the growing fill, and
+/// swells and turns as the target is met.
+final class RoundProgress extends ConsumerStatefulWidget {
   const RoundProgress({super.key});
 
+  @override
+  ConsumerState<RoundProgress> createState() => _RoundProgressState();
+}
+
+typedef _Progress = (double fraction, Duration countUp);
+
+class _RoundProgressState extends ConsumerState<RoundProgress>
+    with TickerProviderStateMixin {
+  late final _complete = AnimationController(vsync: this, duration: _turning);
+  late final _fill = AnimationController(vsync: this);
   static const _height = 8.0;
+  late final _pulse = AnimationController(vsync: this, duration: _pulsing);
+  static const _pulsing = Duration(milliseconds: 450);
+  late final _shine = AnimationController(vsync: this);
+
+  /// What the fill is heading for, which it may not have reached yet.
+  var _target = 0.0;
+  static const _turning = Duration(milliseconds: 300);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final progress = ref.watch(
-      gameProvider.select(
-        (state) => (state.run.score / state.run.round.target).clamp(0.0, 1.0),
-      ),
+  void initState() {
+    super.initState();
+    _target = ref.read(roundScoreShownProvider.select(_progressOf)).$1;
+    _fill.value = _target;
+    _complete.value = _target >= 1 ? 1 : 0;
+  }
+
+  @override
+  void dispose() {
+    _complete.dispose();
+    _fill.dispose();
+    _pulse.dispose();
+    _shine.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(
+      roundScoreShownProvider.select(_progressOf),
+      (_, next) => _moveTo(next),
     );
 
-    return ClipRRect(
-      borderRadius: .circular(_height / 2),
-      child: LinearProgressIndicator(
-        value: progress,
-        minHeight: _height,
-        backgroundColor: DSColor.cardBorder,
-        color: DSColor.accent,
+    return RepaintBoundary(
+      child: SizedBox(
+        height: _height,
+        width: double.infinity,
+        child: CustomPaint(
+          painter: RoundProgressPainter(
+            complete: _complete,
+            fill: _fill,
+            pulse: _pulse,
+            shine: _shine,
+          ),
+        ),
       ),
     );
   }
+
+  void _celebrate() {
+    if (!mounted) return;
+
+    _complete.forward();
+
+    if (!ref.read(reduceMotionProvider)) _pulse.forward(from: 0);
+  }
+
+  void _moveTo(_Progress progress) {
+    final (fraction, countUp) = progress;
+
+    if (fraction == _target) return;
+
+    final completes = fraction >= 1 && _target < 1;
+    final grows = fraction > _target && countUp > .zero;
+
+    _target = fraction;
+
+    if (!grows) {
+      _fill.value = fraction;
+      _complete.value = fraction >= 1 ? 1 : 0;
+
+      return;
+    }
+
+    final filled = _fill.animateTo(
+      fraction,
+      curve: Curves.easeOutCubic,
+      duration: countUp,
+    );
+
+    if (!ref.read(reduceMotionProvider)) {
+      _shine
+        ..duration = countUp * 1.5
+        ..forward(from: 0);
+    }
+
+    if (completes) filled.whenCompleteOrCancel(_celebrate);
+  }
+
+  static _Progress _progressOf(RoundScoreShown shown) =>
+      ((shown.score / shown.target).clamp(0.0, 1.0), shown.countUp);
 }
 
 final class RoundStatus extends ConsumerWidget {
@@ -130,11 +223,12 @@ final class RoundStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (pieces, streak, storedMult) = ref.watch(
-      gameProvider.select(
-        (state) =>
-            (state.run.piecesRemaining, state.run.streak, state.run.storedMult),
-      ),
+    final pieces = ref.watch(
+      gameProvider.select((state) => state.run.piecesRemaining),
+    );
+    // Held with the score: the streak a move builds shows once it has landed.
+    final (streak, storedMult) = ref.watch(
+      shownRunProvider.select((run) => (run.streak, run.storedMult)),
     );
     final round = context.t.game.round;
 

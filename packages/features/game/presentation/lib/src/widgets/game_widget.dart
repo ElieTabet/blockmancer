@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/widgets/board_view.dart';
 import 'package:game_presentation/src/widgets/drag_area.dart';
 import 'package:game_presentation/src/widgets/game_header.dart';
@@ -10,7 +11,8 @@ import 'package:game_presentation/src/widgets/input_gate.dart';
 import 'package:game_presentation/src/widgets/joker_chips.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:game_presentation/src/widgets/round_card.dart';
-import 'package:game_presentation/src/widgets/score_banner.dart';
+import 'package:game_presentation/src/widgets/score_count_up.dart';
+import 'package:game_presentation/src/widgets/screen_shake.dart';
 import 'package:game_presentation/src/widgets/tray_view.dart';
 
 /// The game screen: the round, the jokers, the board and the tray, with the
@@ -18,6 +20,8 @@ import 'package:game_presentation/src/widgets/tray_view.dart';
 ///
 /// Stateful to own the board's key, which the drag needs to turn a finger
 /// position into a cell, and to save the run when the app is put away.
+///
+/// Scopes the platform's reduce-motion setting for everything under it.
 final class GameWidget extends ConsumerStatefulWidget {
   const GameWidget({super.key});
 
@@ -44,49 +48,59 @@ class _GameWidgetState extends ConsumerState<GameWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => AnnotatedRegion(
-    value: SystemUiOverlayStyle.light,
-    child: Scaffold(
-      backgroundColor: DSColor.primary,
-      body: InputGate(
-        child: Stack(
+  Widget build(BuildContext context) => ProviderScope(
+    overrides: [
+      animationsDisabledProvider.overrideWithValue(
+        MediaQuery.disableAnimationsOf(context),
+      ),
+    ],
+    child: AnnotatedRegion(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: DSColor.primary,
+        body: Stack(
           children: [
-            DragArea(
-              boardKey: _boardKey,
-              // A drag that starts in the bottom gesture zone is a swipe home
-              // to Android, so the tray stays above it.
-              child: SafeArea(
-                minimum: .only(
-                  bottom: MediaQuery.systemGestureInsetsOf(context).bottom,
-                ),
-                child: Padding(
-                  padding: const .symmetric(
-                    horizontal: DSSpace.medium,
-                    vertical: DSSpace.small,
+            InputGate(
+              child: DragArea(
+                boardKey: _boardKey,
+                // A drag that starts in the bottom gesture zone is a swipe home
+                // to Android, so the tray stays above it.
+                child: SafeArea(
+                  minimum: .only(
+                    bottom: MediaQuery.systemGestureInsetsOf(context).bottom,
                   ),
-                  child: Column(
-                    spacing: DSSpace.small,
-                    children: [
-                      const GameHeader(),
-                      const RoundCard(),
-                      const JokerChips(),
-                      Expanded(
-                        child: Center(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: BoardView(key: _boardKey),
-                          ),
-                        ),
+                  child: ScreenShake(
+                    child: Padding(
+                      padding: const .symmetric(
+                        horizontal: DSSpace.medium,
+                        vertical: DSSpace.small,
                       ),
-                      const ScoreBanner(),
-                      const TrayView(),
-                    ],
+                      child: Column(
+                        spacing: DSSpace.small,
+                        children: [
+                          const GameHeader(),
+                          const RoundCard(),
+                          const JokerChips(),
+                          Expanded(
+                            child: Center(
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: BoardView(key: _boardKey),
+                              ),
+                            ),
+                          ),
+                          const ScoreCountUp(),
+                          const TrayView(),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
             const Positioned.fill(child: PhaseOverlay()),
-            // Over the sheets' scrim, so the menu is never out of reach.
+            // Over the sheets' scrim and the playback's tap catcher, so the
+            // menu is never out of reach.
             const Positioned(
               left: 0,
               top: 0,

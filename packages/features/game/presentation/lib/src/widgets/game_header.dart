@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/widgets/compact_screen.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
@@ -70,7 +71,8 @@ final class ModeLine extends ConsumerWidget {
   }
 }
 
-/// The run total, the round in play included.
+/// The run total, the round in play included, once a move's points have
+/// landed.
 final class RunTotalChip extends ConsumerWidget {
   const RunTotalChip({super.key});
 
@@ -80,7 +82,7 @@ final class RunTotalChip extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final rules = ref.watch(gameRulesProvider);
     final total = ref.watch(
-      gameProvider.select((state) => rules.liveRunTotal(state.run)),
+      shownRunProvider.select((run) => rules.liveRunTotal(run)),
     );
 
     return Container(

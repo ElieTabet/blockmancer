@@ -97,6 +97,21 @@ void main() {
     },
   );
 
+  // The game obeys the app's reduce-motion switch without knowing Settings.
+  test("the game keeps still when Settings' reduce motion is on", () {
+    // Given
+    final container = ProviderContainer(
+      overrides: [
+        ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+        settings.reduceMotionOnProvider.overrideWithValue(true),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // When / Then
+    expect(container.read(game_ui_di.reduceMotionSettingProvider), isTrue);
+  });
+
   test('a revive costs nothing until there is an ad network', () async {
     expect(
       await buildContainer().read(game_ui_di.rewardedActionProvider)(),

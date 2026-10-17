@@ -66,11 +66,13 @@ final class FakeGameRouting implements GameRouting {
 }
 
 /// The game's slots, filled with fakes, for a game opened for [launch]. The
-/// rewarded revive is granted unless [rewardedAction] says otherwise.
+/// rewarded revive is granted unless [rewardedAction] says otherwise, and the
+/// settings leave reduce motion off unless [reduceMotion] turns it on.
 List<Override> gameOverrides(
   FakeGameRules rules, {
   game.BestScores? bestScores,
   game.GameLaunch launch = .daily,
+  bool reduceMotion = false,
   RewardedActionFun? rewardedAction,
   game.SavedRun? resumed,
   GameRouting? routing,
@@ -82,8 +84,12 @@ List<Override> gameOverrides(
     gameRules: (ref) => rules,
     runStore: (ref) => runStore ?? FakeRunStore(),
   ),
-  ...bindProviders(rewardedAction: (ref) => rewardedAction ?? () async => true),
+  ...bindProviders(
+    reduceMotionSetting: (ref) => reduceMotion,
+    rewardedAction: (ref) => rewardedAction ?? () async => true,
+  ),
   ...bindRoutingProviders(gameRouting: (ref) => routing ?? FakeGameRouting()),
+  animationsDisabledProvider.overrideWithValue(false),
   gameLaunchProvider.overrideWithValue(launch),
   resumedRunProvider.overrideWithValue(resumed),
 ];

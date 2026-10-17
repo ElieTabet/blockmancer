@@ -17,7 +17,9 @@
       "storedMult": "+$mult mult en réserve"
     },
     "banner": {
-      "clear": "$chips jetons × $mult mult = $total",
+      "chips": "$chips jetons",
+      "mult": "× $mult mult",
+      "product": "= $total",
       "placed": "+$points",
       "bonus": "+$points bonus",
       "fired": "$joker $effect",

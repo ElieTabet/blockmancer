@@ -15,7 +15,7 @@ const gameLeaveLabel = 'Back to the menu';
 const homeSettingsLabel = 'Settings';
 
 /// Settings' back arrow.
-const settingsBackLabel = 'Back to the menu';
+const settingsCloseLabel = 'Close';
 
 /// Fills the slots Home, the game and Settings read, so a composition test
 /// mounts the real screens with the real rules, a first launch's settings and,
@@ -28,6 +28,7 @@ List<Override> stubFeatures({game.RunStore? runStore}) => [
     runStore: (ref) => runStore ?? _NoRunStore(),
   ),
   ...game_ui.bindProviders(
+    reduceMotionSetting: (ref) => false,
     rewardedAction: (ref) =>
         () async => true,
   ),

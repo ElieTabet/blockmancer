@@ -13,17 +13,26 @@ import 'fake_game_rules.dart';
 import 'game_overrides.dart';
 
 /// Mounts the game screen on a phone of [size] logical pixels, its rules
-/// scripted by the returned fake.
+/// scripted by the returned fake, and lets any sheet it opens on arrive. [disableAnimations] is the platform's reduce
+/// motion; [reduceMotion] the app's own setting.
 Future<FakeGameRules> pumpGame(
   WidgetTester tester,
   RunState start, {
   BestScores? bestScores,
+  bool disableAnimations = false,
   GameLaunch launch = .daily,
+  bool reduceMotion = false,
   RewardedActionFun? rewardedAction,
   GameRouting? routing,
   RunStore? runStore,
   Size size = const Size(390, 844),
 }) async {
+  if (disableAnimations) {
+    tester.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+  }
+
   tester.view.physicalSize = size * 3;
   tester.view.devicePixelRatio = 3.0;
   addTearDown(tester.view.reset);
@@ -36,6 +45,7 @@ Future<FakeGameRules> pumpGame(
         rules,
         bestScores: bestScores,
         launch: launch,
+        reduceMotion: reduceMotion,
         rewardedAction: rewardedAction,
         routing: routing,
         runStore: runStore,
@@ -48,6 +58,9 @@ Future<FakeGameRules> pumpGame(
       ),
     ),
   );
+  await tester.pump();
+  // A sheet the run opens on takes touches once it has faded in.
+  await tester.pump(const Duration(milliseconds: 350));
   await tester.pump();
 
   return rules;

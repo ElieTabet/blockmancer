@@ -186,8 +186,14 @@ class Translations$game$banner$en {
 
 	// Translations
 
-	/// en: '$chips chips × $mult mult = $total'
-	String clear({required Object chips, required Object mult, required Object total}) => '${chips} chips × ${mult} mult = ${total}';
+	/// en: '$chips chips'
+	String chips({required Object chips}) => '${chips} chips';
+
+	/// en: '× $mult mult'
+	String mult({required Object mult}) => '× ${mult} mult';
+
+	/// en: '= $total'
+	String product({required Object total}) => '= ${total}';
 
 	/// en: '+$points'
 	String placed({required Object points}) => '+${points}';
@@ -685,7 +691,9 @@ extension on Translations {
 			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: '${count} piece left', other: '${count} pieces left', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult stored',
-			'game.banner.clear' => ({required Object chips, required Object mult, required Object total}) => '${chips} chips × ${mult} mult = ${total}',
+			'game.banner.chips' => ({required Object chips}) => '${chips} chips',
+			'game.banner.mult' => ({required Object mult}) => '× ${mult} mult',
+			'game.banner.product' => ({required Object total}) => '= ${total}',
 			'game.banner.placed' => ({required Object points}) => '+${points}',
 			'game.banner.bonus' => ({required Object points}) => '+${points} bonus',
 			'game.banner.fired' => ({required Object joker, required Object effect}) => '${joker} ${effect}',

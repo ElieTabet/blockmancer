@@ -15,6 +15,13 @@ GameRouting gameRouting(Ref ref) => throw UnimplementedError(
   'gameRoutingProvider must be overridden by the composition layer (app_router)',
 );
 
+/// Whether the player turned reduce motion on in the app's settings. The
+/// platform's own setting is read by the game screen itself.
+@riverpod
+bool reduceMotionSetting(Ref ref) => throw UnimplementedError(
+  'reduceMotionSettingProvider must be overridden by the composition layer',
+);
+
 @riverpod
 RewardedActionFun rewardedAction(Ref ref) => throw UnimplementedError(
   'rewardedActionProvider must be overridden by the composition layer',

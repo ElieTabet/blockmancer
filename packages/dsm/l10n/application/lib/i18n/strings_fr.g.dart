@@ -135,7 +135,9 @@ class _Translations$game$banner$fr extends Translations$game$banner$en {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String clear({required Object chips, required Object mult, required Object total}) => '${chips} jetons × ${mult} mult = ${total}';
+	@override String chips({required Object chips}) => '${chips} jetons';
+	@override String mult({required Object mult}) => '× ${mult} mult';
+	@override String product({required Object total}) => '= ${total}';
 	@override String placed({required Object points}) => '+${points}';
 	@override String bonus({required Object points}) => '+${points} bonus';
 	@override String fired({required Object joker, required Object effect}) => '${joker} ${effect}';
@@ -469,7 +471,9 @@ extension on TranslationsFr {
 			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: '${count} pièce restante', other: '${count} pièces restantes', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult en réserve',
-			'game.banner.clear' => ({required Object chips, required Object mult, required Object total}) => '${chips} jetons × ${mult} mult = ${total}',
+			'game.banner.chips' => ({required Object chips}) => '${chips} jetons',
+			'game.banner.mult' => ({required Object mult}) => '× ${mult} mult',
+			'game.banner.product' => ({required Object total}) => '= ${total}',
 			'game.banner.placed' => ({required Object points}) => '+${points}',
 			'game.banner.bonus' => ({required Object points}) => '+${points} bonus',
 			'game.banner.fired' => ({required Object joker, required Object effect}) => '${joker} ${effect}',

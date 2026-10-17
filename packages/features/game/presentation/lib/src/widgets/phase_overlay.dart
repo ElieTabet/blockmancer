@@ -2,6 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/notifiers/playback_notifier.br.dart';
 import 'package:game_presentation/src/widgets/joker_offer_sheet.dart';
 import 'package:game_presentation/src/widgets/round_lost_sheet.dart';
 import 'package:game_presentation/src/widgets/run_end_sheet.dart';
@@ -12,6 +13,9 @@ enum _Sheet { end, lost, offers }
 /// The sheet the run is waiting on, over a dimmed board — or nothing while
 /// playing. Declarative rather than a modal route: the run's phase alone says
 /// which sheet is up, so there is no route to keep in step with it.
+///
+/// A sheet waits for the move that led to it to play back, so the score lands
+/// before the joker pick covers it.
 final class PhaseOverlay extends ConsumerWidget {
   const PhaseOverlay({super.key});
 
@@ -28,22 +32,63 @@ final class PhaseOverlay extends ConsumerWidget {
       ),
     );
 
-    if (sheet == null) return const SizedBox.shrink();
+    final playing = ref.watch(
+      playbackProvider.select((playback) => playback.isPlaying),
+    );
 
-    return ColoredBox(
-      color: DSColor.scrim,
-      child: Align(
-        alignment: .bottomCenter,
-        child: _SheetFrame(
-          child: switch (sheet) {
-            .end => const RunEndSheet(),
-            .lost => const RoundLostSheet(),
-            .offers => const JokerOfferSheet(),
-          },
+    if (sheet == null || playing) return const SizedBox.shrink();
+
+    return _SheetEntrance(
+      key: ValueKey(sheet),
+      child: ColoredBox(
+        color: DSColor.scrim,
+        child: Align(
+          alignment: .bottomCenter,
+          child: _SheetFrame(
+            child: switch (sheet) {
+              .end => const RunEndSheet(),
+              .lost => const RoundLostSheet(),
+              .offers => const JokerOfferSheet(),
+            },
+          ),
         ),
       ),
     );
   }
+}
+
+/// Fades a sheet in, deaf to touches until it is in: a tap meant for the board
+/// an instant earlier would otherwise pick a joker or end the run.
+final class _SheetEntrance extends StatefulWidget {
+  const _SheetEntrance({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  State<_SheetEntrance> createState() => _SheetEntranceState();
+}
+
+class _SheetEntranceState extends State<_SheetEntrance>
+    with SingleTickerProviderStateMixin {
+  var _arrived = false;
+  late final _controller = AnimationController(vsync: this, duration: _fadeIn)
+    ..addStatusListener((status) {
+      if (status.isCompleted) setState(() => _arrived = true);
+    })
+    ..forward();
+  static const _fadeIn = Duration(milliseconds: 300);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => IgnorePointer(
+    ignoring: !_arrived,
+    child: FadeTransition(opacity: _controller, child: widget.child),
+  );
 }
 
 final class _SheetFrame extends StatelessWidget {

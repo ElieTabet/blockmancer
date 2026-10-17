@@ -5,8 +5,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 // game_presentation — public providers exposed by this layer.
 
 List<Override> bindProviders({
+  required bool Function(Ref ref) reduceMotionSetting,
   required di.RewardedActionFun Function(Ref ref) rewardedAction,
-}) => [di.rewardedActionProvider.overrideWith(rewardedAction)];
+}) => [
+  di.reduceMotionSettingProvider.overrideWith(reduceMotionSetting),
+  di.rewardedActionProvider.overrideWith(rewardedAction),
+];
 
 List<Override> bindRoutingProviders({
   required GameRouting Function(Ref ref) gameRouting,

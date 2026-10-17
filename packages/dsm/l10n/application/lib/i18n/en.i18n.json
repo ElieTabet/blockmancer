@@ -17,7 +17,9 @@
       "storedMult": "+$mult mult stored"
     },
     "banner": {
-      "clear": "$chips chips × $mult mult = $total",
+      "chips": "$chips chips",
+      "mult": "× $mult mult",
+      "product": "= $total",
       "placed": "+$points",
       "bonus": "+$points bonus",
       "fired": "$joker $effect",
