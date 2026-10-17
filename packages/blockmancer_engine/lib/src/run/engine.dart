@@ -128,6 +128,10 @@ Transition place(
   final landing = _landing(state, shape, anchor: anchor)!;
   final jokers = effectsOf(state.jokers);
   final clear = resolveClears(placeShape(state.board, shape, anchor: landing));
+  final mask = state.trayClearMask;
+  final trayClearMask = mask != null && clear.clearedAny
+      ? mask | 1 << trayIndex
+      : mask;
 
   final score = scoreMove(
     clear: clear,
@@ -137,6 +141,8 @@ Transition place(
     previousStreak: state.streak,
     stonesRng: Mulberry32(state.stonesRngState),
     storedMult: state.storedMult,
+    trayClearMask: trayClearMask,
+    trayEmptied: state.tray.whereType<int>().length == 1,
   );
 
   final events = <GameEvent>[
@@ -167,6 +173,7 @@ Transition place(
     storedMult: score.storedMult,
     streak: score.streak,
     tray: [...state.tray]..[trayIndex] = null,
+    trayClearMask: trayClearMask,
   );
 
   if (next.score >= next.round.target) return _winRound(jokers, (next, events));
@@ -199,7 +206,10 @@ Transition revive(RunState state) {
   );
 
   return _settle(
-    _refillIfEmpty(effectsOf(state.jokers), (next, [.revived(rows: cleared)])),
+    _refillIfEmpty(effectsOf(state.jokers), (
+      next,
+      [.revived(rows: cleared)],
+    ), byRevive: true),
   );
 }
 
@@ -238,7 +248,13 @@ int? _playableShape(RunState state, int trayIndex) {
 }
 
 /// Draws the next tray when the current one is played out and pieces remain.
-Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
+/// Only a tray dealt in full from the round's own pieces can earn Hat Trick:
+/// a short one, or one dealt [byRevive], starts with no clear mask.
+Transition _refillIfEmpty(
+  List<JokerEffect> jokers,
+  Transition transition, {
+  bool byRevive = false,
+}) {
   final (state, events) = transition;
 
   if (state.tray.any((slot) => slot != null) || state.piecesLeft == 0) {
@@ -266,6 +282,7 @@ Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
       piecesLeft: state.piecesLeft - count,
       piecesRngState: rng.state,
       tray: tray,
+      trayClearMask: count == traySize && !byRevive ? 0 : null,
     ),
     [...events, .trayRefilled(tray: tray)],
   );

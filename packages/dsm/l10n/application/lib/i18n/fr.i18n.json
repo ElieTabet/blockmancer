@@ -167,6 +167,22 @@
       "avalanche": {
         "name": "Avalanche",
         "description": "Après chaque ligne effacée, +$chips jetons par case pleine restée dans les 2 lignes du bas."
+      },
+      "fullhouse": {
+        "name": "Salle comble",
+        "description": "+1 mult toutes les $cells cases occupées, pierres comprises, quand ta pièce se pose."
+      },
+      "brink": {
+        "name": "Sur le fil",
+        "description": "×$factor mult si $cells cases ou plus sont occupées, pierres comprises, quand ta pièce se pose."
+      },
+      "finisher": {
+        "name": "Finisseur",
+        "description": "×$factor mult quand tu joues la dernière pièce de ta main."
+      },
+      "hattrick": {
+        "name": "Coup du chapeau",
+        "description": "+$points points quand chacune des 3 pièces d'une main complète efface une ligne."
       }
     }
   },

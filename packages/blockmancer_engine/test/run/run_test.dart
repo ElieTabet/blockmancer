@@ -823,6 +823,161 @@ void main() {
     });
   });
 
+  group("Hat Trick's tray", () {
+    /// A round of [_playing] with Hat Trick, three singles in a tray dealt in
+    /// full, and rows 0 to 2 one cell short of clearing.
+    RunState threeToClear() => _playing(joker: .hattrick).copyWith(
+      board: boardFrom(List.filled(3, '#######.')),
+      piecesLeft: 5,
+      tray: [0, 0, 0],
+    );
+
+    Transition playAll(RunState state, List<Cell> anchors) {
+      var transition = (state, const <GameEvent>[]);
+
+      for (final (trayIndex, anchor) in anchors.indexed) {
+        transition = place(transition.$1, anchor: anchor, trayIndex: trayIndex);
+      }
+
+      return transition;
+    }
+
+    test('a full tray starts with nothing cleared yet', () {
+      // Given / When
+      final state = _playing(joker: .hattrick);
+
+      // Then
+      expect(state.trayClearMask, 0);
+    });
+
+    test('three pieces of one tray that each clear earn 300 on the third', () {
+      // Given
+      final state = threeToClear();
+
+      // When
+      final (next, events) = playAll(state, const [
+        Cell(col: 7, row: 0),
+        Cell(col: 7, row: 1),
+        Cell(col: 7, row: 2),
+      ]);
+
+      // Then
+      expect(
+        events,
+        contains(
+          const GameEvent.jokerFired(
+            delta: .pointsAdded(amount: 300),
+            joker: .hattrick,
+          ),
+        ),
+      );
+      expect(next.score, 3 * 81 + 300);
+    });
+
+    test('a piece that clears nothing costs the tray its Hat Trick', () {
+      // Given
+      final state = threeToClear();
+
+      // When: the second single lands where nothing clears
+      final (_, events) = playAll(state, const [
+        Cell(col: 7, row: 0),
+        Cell(col: 0, row: 5),
+        Cell(col: 7, row: 2),
+      ]);
+
+      // Then
+      expect(events.whereType<JokerFired>(), isEmpty);
+    });
+
+    test('the next tray dealt in full starts over', () {
+      // Given: a tray whose first piece cleared, down to its last piece
+      final state = threeToClear().copyWith(
+        tray: [null, null, 0],
+        trayClearMask: 0x1,
+      );
+
+      // When
+      final (next, events) = place(
+        state,
+        anchor: const Cell(col: 7, row: 2),
+        trayIndex: 2,
+      );
+
+      // Then
+      expect(events.whereType<JokerFired>(), isEmpty);
+      expect(next.tray.whereType<int>(), hasLength(3));
+      expect(next.trayClearMask, 0);
+    });
+
+    test('a short final tray can never earn it', () {
+      // Given: two pieces left to deal
+      final state = _playing(
+        joker: .hattrick,
+      ).copyWith(piecesLeft: 2, tray: [null, null, 0]);
+
+      // When
+      final (next, _) = place(state, anchor: topLeft, trayIndex: 2);
+
+      // Then
+      expect(next.tray.whereType<int>(), hasLength(2));
+      expect(next.trayClearMask, isNull);
+    });
+
+    test('a short tray whose pieces all clear earns nothing', () {
+      // Given: a tray dealt with two singles
+      final state = threeToClear().copyWith(
+        piecesLeft: 0,
+        tray: [0, 0, null],
+        trayClearMask: null,
+      );
+
+      // When
+      final (_, events) = playAll(state, const [
+        Cell(col: 7, row: 0),
+        Cell(col: 7, row: 1),
+      ]);
+
+      // Then
+      expect(events.whereType<JokerFired>(), isEmpty);
+    });
+
+    test("a tray dealt from a revive's pieces can never earn it", () {
+      // Given: out of pieces, the tray played out
+      final state = _playing(joker: .hattrick).copyWith(
+        board: boardFrom(['#.#.#.#.']),
+        phase: const .roundLost(reason: .outOfPieces),
+        piecesLeft: 0,
+        tray: [null, null, null],
+        trayClearMask: 0x7,
+      );
+
+      // When
+      final (next, _) = revive(state);
+
+      // Then
+      expect(next.tray.whereType<int>(), hasLength(3));
+      expect(next.trayClearMask, isNull);
+    });
+
+    test('a revive that leaves the tray in place keeps what it cleared', () {
+      // Given: no room for the 3×3 left in a tray whose first piece cleared
+      final state = _playing(joker: .hattrick).copyWith(
+        board: boardFrom(List.filled(8, '#.#.#.#.')),
+        phase: const .roundLost(reason: .noRoom),
+        piecesLeft: 4,
+        tray: [null, null, 16],
+        trayClearMask: 0x1,
+      );
+
+      // When
+      final (next, _) = revive(state);
+
+      // Then
+      expect(next.tray, [null, null, 16]);
+      expect(next.trayClearMask, 0x1);
+    });
+  });
+
   group('the winning move', () {
     test('Deep Pockets’ extra pieces become Saver points when left unused', () {
       // Given: a round of 18 pieces, 3 dealt; Saver joins the build

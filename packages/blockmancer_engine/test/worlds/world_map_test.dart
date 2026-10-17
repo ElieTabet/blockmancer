@@ -83,20 +83,37 @@ void main() {
     expect(rules.unlocksOf(.mirror), isEmpty);
   });
 
-  test('a new player starts with the 12 jokers no world unlocks', () {
-    // Given / When
-    final starting = rules.startingJokers;
+  test(
+    'a new player starts with the 12 jokers neither a world nor the stars unlock',
+    () {
+      // Given / When
+      final starting = rules.startingJokers;
 
-    // Then
-    expect(starting, hasLength(12));
-    expect(
-      starting.toSet(),
-      JokerId.values.toSet().difference(const {
-        JokerId.anchor,
-        JokerId.avalanche,
-        JokerId.quarry,
-        JokerId.stonemason,
-      }),
-    );
-  });
+      // Then
+      expect(starting, hasLength(12));
+      expect(
+        starting.toSet(),
+        JokerId.values.toSet().difference(const {
+          JokerId.anchor,
+          JokerId.avalanche,
+          JokerId.brink,
+          JokerId.finisher,
+          JokerId.fullhouse,
+          JokerId.hattrick,
+          JokerId.quarry,
+          JokerId.stonemason,
+        }),
+      );
+    },
+  );
+
+  test(
+    '4 stars unlock Full House and On the Brink, 6 Finisher and Hat Trick',
+    () {
+      expect(rules.defaultConfig.starUnlocks, const [
+        StarUnlock(jokers: [.fullhouse, .brink], stars: 4),
+        StarUnlock(jokers: [.finisher, .hattrick], stars: 6),
+      ]);
+    },
+  );
 }

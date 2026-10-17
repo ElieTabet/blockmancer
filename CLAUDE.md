@@ -73,9 +73,9 @@ melos run test
 # Run the engine's suite compiled to JavaScript in Chrome (the PRNG must match the VM)
 melos run test-engine-web
 
-# Play 2,000 seeded runs for each reference build with the greedy balance bot, and print
-# the share of runs clearing each round, the 50th and 80th percentile totals (nearest rank)
-# and the boss win rate (docs/balance/<date>.md holds each table, docs/balance-v0.md the
+# Play 2,000 seeded runs for each reference build (`none`, then each of the 10 pairs) with
+# the greedy balance bot, and print the share of runs clearing each round, the 50th and 80th
+# percentile totals (nearest rank) and the boss win rate (docs/balance/<date>.md holds each table, docs/balance-v0.md the
 # first, docs/balance/2026-10-17-worlds.md both worlds and the ★3 thresholds). It plays
 # `configFor(world, jokerPool: JokerId.values)` — every joker on offer — in Rubble unless
 # `--world gravity`. Melos passes no arguments through, so for
@@ -269,13 +269,20 @@ engine's events and never recomputes a rule.
   `const BlockmancerEngine()`. Rule data and rule decisions stay behind the contract (`defaultConfig`,
   `shape(id)`, `partnerOf(id)`, `canRevive`, `liveRunTotal`), so no feature computes a rule and
   `shared_domain`'s entities only read their own fields.
-- **Jokers and worlds.** 16 jokers in `jokerCatalog` (hook and draw order; new ones are appended,
-  so a pool without them draws exactly as before — Anchor and Avalanche, Gravity's, are the last
-  two). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
+- **Jokers and worlds.** 20 jokers in 10 pairs in `jokerCatalog` (hook and draw order; new ones
+  are appended, so a pool without them draws exactly as before — Anchor and Avalanche, Gravity's,
+  then the stars' Full House, On the Brink, Finisher and Hat Trick come last). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
   pool's list order, and the pair bias only proposes a partner in the pool; `defaultConfig`'s pool
   is every joker, as the daily run's is. The map is rule data behind the contract too:
   `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (Rubble, Gravity),
-  `unlocksOf(world)` and `startingJokers` (every joker no world unlocks).
+  `unlocksOf(world)` and `startingJokers` (every joker neither a world nor the stars unlock: 12).
+- **What a joker reads.** Each hook gets a `MoveContext`: the clear, the piece's size, the streak,
+  Patience's bank, `occupiedAfterPlacing` (filled cells and stones once the piece has landed, before
+  its lines clear: Full House and On the Brink), `trayEmptied` (the move played the tray's last
+  piece: Finisher) and `trayClearMask`. `RunState.trayClearMask` has a bit per tray slot whose piece
+  cleared, reset by every refill to `0` for a tray dealt in full and to `null` for a short one or
+  one dealt from a revive's pieces, which can never earn Hat Trick; a revive that leaves the tray in
+  hand keeps its mask.
 - **`shared_domain` is pure Dart** because the engine depends on it and must run on the plain VM
   and the web.
 - **Pure Dart.** Its pubspec declares no Flutter, so a `package:flutter` import fails
@@ -292,9 +299,11 @@ engine's events and never recomputes a rule.
   with.
 - **Tunable.** Every number a designer would tune lives in the immutable `RunConfig`, whose values
   are `defaultConfig`: the rounds' targets, pieces and stones, chips per cleared cell, revives, offers,
-  each joker's numbers (`JokerTuning`, which every joker hook is handed), and `starThreshold`, the
+  each joker's numbers (`JokerTuning`, which every joker hook is handed), `starThreshold`, the
   run total that earns a world's third star (Rubble 8,000 and Gravity 8,250, set near the bot's
-  P80 with its best build in docs/balance/2026-10-17-worlds.md; no rule reads it, the app does). No
+  P80 with its best build in docs/balance/2026-10-17-worlds.md), and `starUnlocks`, the jokers the
+  stars held across worlds unlock (4★ Full House and On the Brink, 6★ Finisher and Hat Trick).
+  No rule reads either of the last two; the run's end does. No
   rule hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit. This
   is what Remote Config will feed.
 - **Worlds.** `RunConfig.world` (`WorldId`) picks a `WorldRule` (`lib/src/worlds/`) that holds in the
@@ -321,9 +330,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 6`; `migrate(json)` brings an older version up to date one
+  wire format. The schema has `version: 7`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick; the saved pool is kept, so an old run never offers a new joker), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes

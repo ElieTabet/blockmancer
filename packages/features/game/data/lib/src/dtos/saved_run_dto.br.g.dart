@@ -44,6 +44,7 @@ RunStateDto _$RunStateDtoFromJson(Map<String, dynamic> json) => RunStateDto(
   tray: (json['tray'] as List<dynamic>)
       .map((e) => (e as num?)?.toInt())
       .toList(),
+  trayClearMask: (json['trayClearMask'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$RunStateDtoToJson(RunStateDto instance) =>
@@ -64,6 +65,7 @@ Map<String, dynamic> _$RunStateDtoToJson(RunStateDto instance) =>
       'storedMult': instance.storedMult,
       'streak': instance.streak,
       'tray': instance.tray,
+      'trayClearMask': instance.trayClearMask,
     };
 
 RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
@@ -81,6 +83,9 @@ RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
       .map((e) => RoundSpecDto.fromJson(e as Map<String, dynamic>))
       .toList(),
   starThreshold: (json['starThreshold'] as num).toInt(),
+  starUnlocks: (json['starUnlocks'] as List<dynamic>)
+      .map((e) => StarUnlockDto.fromJson(e as Map<String, dynamic>))
+      .toList(),
   traySize: (json['traySize'] as num).toInt(),
   world: json['world'] as String,
 );
@@ -97,9 +102,21 @@ Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
       'revivesPerRun': instance.revivesPerRun,
       'rounds': instance.rounds.map((e) => e.toJson()).toList(),
       'starThreshold': instance.starThreshold,
+      'starUnlocks': instance.starUnlocks.map((e) => e.toJson()).toList(),
       'traySize': instance.traySize,
       'world': instance.world,
     };
+
+StarUnlockDto _$StarUnlockDtoFromJson(Map<String, dynamic> json) =>
+    StarUnlockDto(
+      jokers: (json['jokers'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      stars: (json['stars'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$StarUnlockDtoToJson(StarUnlockDto instance) =>
+    <String, dynamic>{'jokers': instance.jokers, 'stars': instance.stars};
 
 JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
     JokerTuningDto(
@@ -107,9 +124,14 @@ JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
       avalancheChipsPerCell: (json['avalancheChipsPerCell'] as num).toInt(),
       bigBoxFactor: (json['bigBoxFactor'] as num).toInt(),
       bigBoxMinPieceSize: (json['bigBoxMinPieceSize'] as num).toInt(),
+      brinkFactor: (json['brinkFactor'] as num).toInt(),
+      brinkMinOccupied: (json['brinkMinOccupied'] as num).toInt(),
       collectorMultPerJoker: (json['collectorMultPerJoker'] as num).toInt(),
       columnFactor: (json['columnFactor'] as num).toInt(),
       comboMultPerStreak: (json['comboMultPerStreak'] as num).toInt(),
+      finisherFactor: (json['finisherFactor'] as num).toInt(),
+      fullHouseCellsPerMult: (json['fullHouseCellsPerMult'] as num).toInt(),
+      hatTrickBonus: (json['hatTrickBonus'] as num).toInt(),
       heavyFactor: (json['heavyFactor'] as num).toInt(),
       heavyMinPieceSize: (json['heavyMinPieceSize'] as num).toInt(),
       patienceStoredPerMove: (json['patienceStoredPerMove'] as num).toInt(),
@@ -133,9 +155,14 @@ Map<String, dynamic> _$JokerTuningDtoToJson(JokerTuningDto instance) =>
       'avalancheChipsPerCell': instance.avalancheChipsPerCell,
       'bigBoxFactor': instance.bigBoxFactor,
       'bigBoxMinPieceSize': instance.bigBoxMinPieceSize,
+      'brinkFactor': instance.brinkFactor,
+      'brinkMinOccupied': instance.brinkMinOccupied,
       'collectorMultPerJoker': instance.collectorMultPerJoker,
       'columnFactor': instance.columnFactor,
       'comboMultPerStreak': instance.comboMultPerStreak,
+      'finisherFactor': instance.finisherFactor,
+      'fullHouseCellsPerMult': instance.fullHouseCellsPerMult,
+      'hatTrickBonus': instance.hatTrickBonus,
       'heavyFactor': instance.heavyFactor,
       'heavyMinPieceSize': instance.heavyMinPieceSize,
       'patienceStoredPerMove': instance.patienceStoredPerMove,

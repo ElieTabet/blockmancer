@@ -278,6 +278,10 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$saver$fr saver = _Translations$game$jokers$saver$fr._(_root);
 	@override late final _Translations$game$jokers$anchor$fr anchor = _Translations$game$jokers$anchor$fr._(_root);
 	@override late final _Translations$game$jokers$avalanche$fr avalanche = _Translations$game$jokers$avalanche$fr._(_root);
+	@override late final _Translations$game$jokers$fullhouse$fr fullhouse = _Translations$game$jokers$fullhouse$fr._(_root);
+	@override late final _Translations$game$jokers$brink$fr brink = _Translations$game$jokers$brink$fr._(_root);
+	@override late final _Translations$game$jokers$finisher$fr finisher = _Translations$game$jokers$finisher$fr._(_root);
+	@override late final _Translations$game$jokers$hattrick$fr hattrick = _Translations$game$jokers$hattrick$fr._(_root);
 }
 
 // Path: home.daily
@@ -611,6 +615,50 @@ class _Translations$game$jokers$avalanche$fr extends Translations$game$jokers$av
 	@override String description({required Object chips}) => 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les 2 lignes du bas.';
 }
 
+// Path: game.jokers.fullhouse
+class _Translations$game$jokers$fullhouse$fr extends Translations$game$jokers$fullhouse$en {
+	_Translations$game$jokers$fullhouse$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Salle comble';
+	@override String description({required Object cells}) => '+1 mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.';
+}
+
+// Path: game.jokers.brink
+class _Translations$game$jokers$brink$fr extends Translations$game$jokers$brink$en {
+	_Translations$game$jokers$brink$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Sur le fil';
+	@override String description({required Object factor, required Object cells}) => '×${factor} mult si ${cells} cases ou plus sont occupées, pierres comprises, quand ta pièce se pose.';
+}
+
+// Path: game.jokers.finisher
+class _Translations$game$jokers$finisher$fr extends Translations$game$jokers$finisher$en {
+	_Translations$game$jokers$finisher$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Finisseur';
+	@override String description({required Object factor}) => '×${factor} mult quand tu joues la dernière pièce de ta main.';
+}
+
+// Path: game.jokers.hattrick
+class _Translations$game$jokers$hattrick$fr extends Translations$game$jokers$hattrick$en {
+	_Translations$game$jokers$hattrick$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Coup du chapeau';
+	@override String description({required Object points}) => '+${points} points quand chacune des 3 pièces d\'une main complète efface une ligne.';
+}
+
 // Path: home.sheet.bossRule
 class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossRule$en {
 	_Translations$home$sheet$bossRule$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -735,6 +783,14 @@ extension on TranslationsFr {
 			'game.jokers.anchor.description' => ({required Object mult}) => '+${mult} mult quand ton coup efface la ligne du bas.',
 			'game.jokers.avalanche.name' => 'Avalanche',
 			'game.jokers.avalanche.description' => ({required Object chips}) => 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les 2 lignes du bas.',
+			'game.jokers.fullhouse.name' => 'Salle comble',
+			'game.jokers.fullhouse.description' => ({required Object cells}) => '+1 mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.',
+			'game.jokers.brink.name' => 'Sur le fil',
+			'game.jokers.brink.description' => ({required Object factor, required Object cells}) => '×${factor} mult si ${cells} cases ou plus sont occupées, pierres comprises, quand ta pièce se pose.',
+			'game.jokers.finisher.name' => 'Finisseur',
+			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult quand tu joues la dernière pièce de ta main.',
+			'game.jokers.hattrick.name' => 'Coup du chapeau',
+			'game.jokers.hattrick.description' => ({required Object points}) => '+${points} points quand chacune des 3 pièces d\'une main complète efface une ligne.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',

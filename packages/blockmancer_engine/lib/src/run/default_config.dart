@@ -9,9 +9,14 @@ const defaultConfig = RunConfig(
     avalancheChipsPerCell: 25,
     bigBoxFactor: 3,
     bigBoxMinPieceSize: 5,
+    brinkFactor: 2,
+    brinkMinOccupied: 40,
     collectorMultPerJoker: 1,
     columnFactor: 2,
     comboMultPerStreak: 1,
+    finisherFactor: 2,
+    fullHouseCellsPerMult: 6,
+    hatTrickBonus: 300,
     heavyFactor: 2,
     heavyMinPieceSize: 4,
     patienceStoredPerMove: 2,
@@ -44,6 +49,11 @@ const defaultConfig = RunConfig(
   // takes skill and a good build: patience,twin's 7,916 rounded to the nearest
   // 250 (docs/balance/2026-10-17-worlds.md).
   starThreshold: 8000,
+  // Six is every star of today's two worlds.
+  starUnlocks: [
+    StarUnlock(jokers: [.fullhouse, .brink], stars: 4),
+    StarUnlock(jokers: [.finisher, .hattrick], stars: 6),
+  ],
   traySize: 3,
   world: .rubble,
 );

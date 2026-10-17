@@ -167,6 +167,22 @@
       "avalanche": {
         "name": "Avalanche",
         "description": "+$chips chips for each filled cell left in the bottom 2 rows after a clear."
+      },
+      "fullhouse": {
+        "name": "Full House",
+        "description": "+1 mult for every $cells occupied cells, stones included, as your piece lands."
+      },
+      "brink": {
+        "name": "On the Brink",
+        "description": "×$factor mult when $cells or more cells are occupied, stones included, as your piece lands."
+      },
+      "finisher": {
+        "name": "Finisher",
+        "description": "×$factor mult when you play the last piece in your tray."
+      },
+      "hattrick": {
+        "name": "Hat Trick",
+        "description": "+$points points when each of the 3 pieces of a full tray clears a line."
       }
     }
   },

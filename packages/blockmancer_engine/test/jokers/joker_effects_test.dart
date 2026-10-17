@@ -801,6 +801,256 @@ void main() {
     });
   });
 
+  group('Full House', () {
+    test('adds 1 mult per 6 occupied cells, counted before the clear', () {
+      // Given / When: 7 + the single in row 0, and 5 in row 1, make 13
+      final score = playMove(
+        ['#######.', '#####...'],
+        at: topRight,
+        jokers: const [.fullhouse],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 2);
+      expect(score.points, 1 + 80 * 3);
+      expect(
+        score.fired.single,
+        const JokerFired(delta: .multAdded(amount: 2), joker: .fullhouse),
+      );
+    });
+
+    test('counts stones as occupied cells', () {
+      // Given / When: row 1 holds 3 filled cells and 2 stones
+      final score = playMove(
+        ['#######.', '###SS...'],
+        at: topRight,
+        jokers: const [.fullhouse],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 2);
+    });
+
+    test('does nothing on a move that clears nothing', () {
+      // Given / When
+      final score = playMove(
+        ['######..', '#####...'],
+        at: topRight,
+        jokers: const [.fullhouse],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 0);
+      expect(score.fired, isEmpty);
+    });
+
+    test('with On the Brink, a crowded board adds first, then doubles', () {
+      // Given / When: 8 in row 0 and 7 in each of rows 1 to 5 make 43
+      final score = playMove(
+        ['#######.', ...List.filled(5, '#######.')],
+        at: topRight,
+        jokers: const [.brink, .fullhouse],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, (1 + 7) * 2);
+      expect(score.points, 1 + 80 * 16);
+      expect(score.fired, const [
+        JokerFired(delta: .multAdded(amount: 7), joker: .fullhouse),
+        JokerFired(delta: .multMultiplied(factor: 2), joker: .brink),
+      ]);
+    });
+  });
+
+  group('On the Brink', () {
+    // 8 in row 0 once the single lands, 7 in each of rows 1 to 4, and row 5.
+    List<String> crowded(String row5) => [
+      '#######.',
+      ...List.filled(4, '#######.'),
+      row5,
+    ];
+
+    test('doubles the mult at 40 occupied cells, counted before the clear', () {
+      // Given / When
+      final score = playMove(
+        crowded('####....'),
+        at: topRight,
+        jokers: const [.brink],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 2);
+      expect(score.points, 1 + 160);
+      expect(
+        score.fired.single,
+        const JokerFired(delta: .multMultiplied(factor: 2), joker: .brink),
+      );
+    });
+
+    test('stays quiet one cell short, at 39', () {
+      // Given / When
+      final score = playMove(
+        crowded('###.....'),
+        at: topRight,
+        jokers: const [.brink],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1);
+      expect(score.fired, isEmpty);
+    });
+
+    test('counts stones as occupied cells', () {
+      // Given / When
+      final score = playMove(
+        crowded('SS##....'),
+        at: topRight,
+        jokers: const [.brink],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 2);
+    });
+
+    test('with Full House, a sparse board earns only Full House', () {
+      // Given / When: 8 in row 0 make 1 mult, far short of 40
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.brink, .fullhouse],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 1);
+      expect(score.fired.map((fired) => fired.joker), [JokerId.fullhouse]);
+    });
+  });
+
+  group('Finisher', () {
+    test('doubles the mult when the move plays the last piece in the tray', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.finisher],
+        shape: 0,
+        trayEmptied: true,
+      );
+
+      // Then
+      expect(score.mult, 2);
+      expect(score.points, 1 + 160);
+      expect(
+        score.fired.single,
+        const JokerFired(delta: .multMultiplied(factor: 2), joker: .finisher),
+      );
+    });
+
+    test('stays quiet while pieces are left in the tray', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.finisher],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1);
+      expect(score.fired, isEmpty);
+    });
+
+    test('with Hat Trick, a tray cleared by every piece doubles and pays', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.finisher, .hattrick],
+        shape: 0,
+        trayClearMask: 0x7,
+        trayEmptied: true,
+      );
+
+      // Then
+      expect(score.points, 1 + 160 + 300);
+      expect(score.fired, const [
+        JokerFired(delta: .multMultiplied(factor: 2), joker: .finisher),
+        JokerFired(delta: .pointsAdded(amount: 300), joker: .hattrick),
+      ]);
+    });
+  });
+
+  group('Hat Trick', () {
+    test('adds 300 points when every piece of a full tray cleared', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.hattrick],
+        shape: 0,
+        trayClearMask: 0x7,
+        trayEmptied: true,
+      );
+
+      // Then
+      expect(score.bonusPoints, 300);
+      expect(score.points, 1 + 80 + 300);
+    });
+
+    test('stays quiet when one piece of the tray cleared nothing', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.hattrick],
+        shape: 0,
+        trayClearMask: 0x5,
+        trayEmptied: true,
+      );
+
+      // Then
+      expect(score.fired, isEmpty);
+    });
+
+    test('stays quiet for a tray that cannot earn it', () {
+      // Given / When: no mask, as for a short or a revive's tray
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.hattrick],
+        shape: 0,
+        trayEmptied: true,
+      );
+
+      // Then
+      expect(score.fired, isEmpty);
+    });
+
+    test('with Finisher, a tray that missed a clear still gets the double', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.finisher, .hattrick],
+        shape: 0,
+        trayClearMask: 0x3,
+        trayEmptied: true,
+      );
+
+      // Then
+      expect(score.points, 1 + 160);
+      expect(score.fired.map((fired) => fired.joker), [JokerId.finisher]);
+    });
+  });
+
   group('catalog', () {
     test('holds every joker exactly once', () {
       // Given / When

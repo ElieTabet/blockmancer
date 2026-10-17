@@ -52,6 +52,8 @@ MoveScore scoreMove({
   required int previousStreak,
   required Mulberry32 stonesRng,
   required int storedMult,
+  required int? trayClearMask,
+  required bool trayEmptied,
 }) {
   final move = MoveContext(
     clear: clear,
@@ -59,6 +61,9 @@ MoveScore scoreMove({
     pieceSize: pieceSize,
     storedMult: storedMult,
     streak: clear.clearedAny ? previousStreak + 1 : 0,
+    trayClearMask: trayClearMask,
+    trayEmptied: trayEmptied,
+    traySize: config.traySize,
     tuning: config.jokers,
   );
 

@@ -5,13 +5,19 @@ import 'package:shared_domain/shared_domain.dart';
 /// seeds each, in [world].
 typedef BotArgs = ({List<String> builds, int runs, WorldId world});
 
+/// No joker build, then every pair.
 const referenceBuilds = [
   'none',
   'patience,twin',
   'combo,collector',
   'heavy,bigbox',
+  'precision,tiny',
+  'column,sweep',
+  'pockets,saver',
   'stonemason,quarry',
   'anchor,avalanche',
+  'fullhouse,brink',
+  'finisher,hattrick',
 ];
 
 /// Reads `--runs N`, `--world <world>` and any number of `--build a,b`;

@@ -4,7 +4,7 @@
 //   dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 //
 // `--build` may be given several times, one table row each; `none` takes the
-// first offer every time. With no `--build`, the six reference builds run.
+// first offer every time. With no `--build`, `none` and every pair run.
 // `--world` is rubble (the default) or gravity, whose rule holds in the boss.
 // Offers draw from every joker, so any build can be offered whatever the
 // player has unlocked. Seeds are 1 to --runs, so a table is reproducible.

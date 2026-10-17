@@ -272,6 +272,9 @@ void main() {
         pieceSize: 1,
         storedMult: 0,
         streak: 1,
+        trayClearMask: null,
+        trayEmptied: false,
+        traySize: 3,
         tuning: tunedJokers.copyWith(quarryStonesPerClear: 3),
       );
 
@@ -357,6 +360,81 @@ void main() {
 
     // Then
     expect(score.chips, 160 + 3 * 21);
+  });
+
+  test('Full House adds 1 mult per its configured occupied cells', () {
+    // Given / When: 8 in row 0 make 2 mult at 3 cells each
+    final score = playMove(
+      rowAlmostFull,
+      at: topRight,
+      config: tunedConfig,
+      jokers: const [.fullhouse],
+      shape: 0,
+    );
+
+    // Then
+    expect(score.mult, 1 + 2);
+  });
+
+  group('On the Brink', () {
+    test('multiplies by its factor at its configured occupied cells', () {
+      // Given / When: 8 in row 0, 7 in row 1 and 5 in row 2 make 20
+      final score = playMove(
+        ['#######.', '#######.', '#####...'],
+        at: topRight,
+        config: tunedConfig,
+        jokers: const [.brink],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 22);
+    });
+
+    test('stays quiet one cell short of its occupied cells', () {
+      // Given / When
+      final score = playMove(
+        ['#######.', '#######.', '####....'],
+        at: topRight,
+        config: tunedConfig,
+        jokers: const [.brink],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1);
+    });
+  });
+
+  test('Finisher multiplies by its configured factor', () {
+    // Given / When
+    final score = playMove(
+      rowAlmostFull,
+      at: topRight,
+      config: tunedConfig,
+      jokers: const [.finisher],
+      shape: 0,
+      trayEmptied: true,
+    );
+
+    // Then
+    expect(score.mult, 23);
+  });
+
+  test('Hat Trick adds its configured points', () {
+    // Given / When
+    final score = playMove(
+      rowAlmostFull,
+      at: topRight,
+      config: tunedConfig,
+      jokers: const [.hattrick],
+      shape: 0,
+      trayClearMask: 0x7,
+      trayEmptied: true,
+    );
+
+    // Then
+    expect(score.bonusPoints, 950);
   });
 
   test('Saver gives its configured run points per unused piece', () {

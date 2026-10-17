@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 6;
+const savedRunVersion = 7;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -17,6 +17,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
       3 => migrate(_fromVersion3(json)),
       4 => migrate(_fromVersion4(json)),
       5 => migrate(_fromVersion5(json)),
+      6 => migrate(_fromVersion6(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -109,6 +110,47 @@ Map<String, dynamic> _fromVersion5(Map<String, dynamic> json) => {
   ...json,
   'version': 6,
 };
+
+/// Version 6 knew neither the stars' four jokers nor Hat Trick's tray: its
+/// runs go on drawing from the pool they saved, which lacks them, so the new
+/// numbers only complete the schema, and the tray in hand can't earn Hat
+/// Trick. The star unlocks are the ones version 7 first shipped, as literals.
+Map<String, dynamic> _fromVersion6(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{
+        ...config,
+        'jokers': <String, dynamic>{
+          ...config['jokers'] as Map<String, dynamic>,
+          'brinkFactor': 2,
+          'brinkMinOccupied': 40,
+          'finisherFactor': 2,
+          'fullHouseCellsPerMult': 6,
+          'hatTrickBonus': 300,
+        },
+        'starUnlocks': _version7StarUnlocks,
+      },
+      'trayClearMask': null,
+    },
+    'version': 7,
+  };
+}
+
+const _version7StarUnlocks = [
+  {
+    'jokers': ['fullhouse', 'brink'],
+    'stars': 4,
+  },
+  {
+    'jokers': ['finisher', 'hattrick'],
+    'stars': 6,
+  },
+];
 
 const _version3Pool = [
   'bigbox',
@@ -226,6 +268,7 @@ final class RunStateDto {
     required this.storedMult,
     required this.streak,
     required this.tray,
+    this.trayClearMask,
   });
 
   factory RunStateDto.fromDomain(RunState run) => RunStateDto(
@@ -245,6 +288,7 @@ final class RunStateDto {
     storedMult: run.storedMult,
     streak: run.streak,
     tray: run.tray,
+    trayClearMask: run.trayClearMask,
   );
 
   factory RunStateDto.fromJson(Map<String, dynamic> json) =>
@@ -268,6 +312,7 @@ final class RunStateDto {
   final int storedMult;
   final int streak;
   final List<int?> tray;
+  final int? trayClearMask;
 
   Map<String, dynamic> toJson() => _$RunStateDtoToJson(this);
 
@@ -293,6 +338,7 @@ final class RunStateDto {
       storedMult: storedMult,
       streak: streak,
       tray: tray,
+      trayClearMask: trayClearMask,
     );
   }
 
@@ -323,6 +369,7 @@ final class RunConfigDto {
     required this.revivesPerRun,
     required this.rounds,
     required this.starThreshold,
+    required this.starUnlocks,
     required this.traySize,
     required this.world,
   });
@@ -338,6 +385,7 @@ final class RunConfigDto {
     revivesPerRun: config.revivesPerRun,
     rounds: [for (final round in config.rounds) .fromDomain(round)],
     starThreshold: config.starThreshold,
+    starUnlocks: [for (final unlock in config.starUnlocks) .fromDomain(unlock)],
     traySize: config.traySize,
     world: config.world.name,
   );
@@ -355,6 +403,7 @@ final class RunConfigDto {
   final int revivesPerRun;
   final List<RoundSpecDto> rounds;
   final int starThreshold;
+  final List<StarUnlockDto> starUnlocks;
   final int traySize;
   final String world;
 
@@ -371,8 +420,32 @@ final class RunConfigDto {
     revivesPerRun: revivesPerRun,
     rounds: [for (final round in rounds) round.toDomain()],
     starThreshold: starThreshold,
+    starUnlocks: [for (final unlock in starUnlocks) unlock.toDomain()],
     traySize: traySize,
     world: WorldId.values.byName(world),
+  );
+}
+
+@JsonSerializable()
+final class StarUnlockDto {
+  const StarUnlockDto({required this.jokers, required this.stars});
+
+  factory StarUnlockDto.fromDomain(StarUnlock unlock) => StarUnlockDto(
+    jokers: [for (final joker in unlock.jokers) joker.name],
+    stars: unlock.stars,
+  );
+
+  factory StarUnlockDto.fromJson(Map<String, dynamic> json) =>
+      _$StarUnlockDtoFromJson(json);
+
+  final List<String> jokers;
+  final int stars;
+
+  Map<String, dynamic> toJson() => _$StarUnlockDtoToJson(this);
+
+  StarUnlock toDomain() => StarUnlock(
+    jokers: [for (final joker in jokers) JokerId.values.byName(joker)],
+    stars: stars,
   );
 }
 
@@ -383,9 +456,14 @@ final class JokerTuningDto {
     required this.avalancheChipsPerCell,
     required this.bigBoxFactor,
     required this.bigBoxMinPieceSize,
+    required this.brinkFactor,
+    required this.brinkMinOccupied,
     required this.collectorMultPerJoker,
     required this.columnFactor,
     required this.comboMultPerStreak,
+    required this.finisherFactor,
+    required this.fullHouseCellsPerMult,
+    required this.hatTrickBonus,
     required this.heavyFactor,
     required this.heavyMinPieceSize,
     required this.patienceStoredPerMove,
@@ -408,9 +486,14 @@ final class JokerTuningDto {
     avalancheChipsPerCell: tuning.avalancheChipsPerCell,
     bigBoxFactor: tuning.bigBoxFactor,
     bigBoxMinPieceSize: tuning.bigBoxMinPieceSize,
+    brinkFactor: tuning.brinkFactor,
+    brinkMinOccupied: tuning.brinkMinOccupied,
     collectorMultPerJoker: tuning.collectorMultPerJoker,
     columnFactor: tuning.columnFactor,
     comboMultPerStreak: tuning.comboMultPerStreak,
+    finisherFactor: tuning.finisherFactor,
+    fullHouseCellsPerMult: tuning.fullHouseCellsPerMult,
+    hatTrickBonus: tuning.hatTrickBonus,
     heavyFactor: tuning.heavyFactor,
     heavyMinPieceSize: tuning.heavyMinPieceSize,
     patienceStoredPerMove: tuning.patienceStoredPerMove,
@@ -435,9 +518,14 @@ final class JokerTuningDto {
   final int avalancheChipsPerCell;
   final int bigBoxFactor;
   final int bigBoxMinPieceSize;
+  final int brinkFactor;
+  final int brinkMinOccupied;
   final int collectorMultPerJoker;
   final int columnFactor;
   final int comboMultPerStreak;
+  final int finisherFactor;
+  final int fullHouseCellsPerMult;
+  final int hatTrickBonus;
   final int heavyFactor;
   final int heavyMinPieceSize;
   final int patienceStoredPerMove;
@@ -461,9 +549,14 @@ final class JokerTuningDto {
     avalancheChipsPerCell: avalancheChipsPerCell,
     bigBoxFactor: bigBoxFactor,
     bigBoxMinPieceSize: bigBoxMinPieceSize,
+    brinkFactor: brinkFactor,
+    brinkMinOccupied: brinkMinOccupied,
     collectorMultPerJoker: collectorMultPerJoker,
     columnFactor: columnFactor,
     comboMultPerStreak: comboMultPerStreak,
+    finisherFactor: finisherFactor,
+    fullHouseCellsPerMult: fullHouseCellsPerMult,
+    hatTrickBonus: hatTrickBonus,
     heavyFactor: heavyFactor,
     heavyMinPieceSize: heavyMinPieceSize,
     patienceStoredPerMove: patienceStoredPerMove,

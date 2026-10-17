@@ -11,9 +11,18 @@ abstract class JokerTuning with _$JokerTuning {
     required int avalancheChipsPerCell,
     required int bigBoxFactor,
     required int bigBoxMinPieceSize,
+    required int brinkFactor,
+
+    /// Occupied cells, filled and stone, from which On the Brink fires.
+    required int brinkMinOccupied,
     required int collectorMultPerJoker,
     required int columnFactor,
     required int comboMultPerStreak,
+    required int finisherFactor,
+
+    /// Occupied cells, filled and stone, per +1 mult from Full House.
+    required int fullHouseCellsPerMult,
+    required int hatTrickBonus,
     required int heavyFactor,
     required int heavyMinPieceSize,
     required int patienceStoredPerMove,

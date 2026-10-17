@@ -16,6 +16,8 @@ MoveScore playMove(
   List<JokerId> jokers = const [],
   int previousStreak = 0,
   int storedMult = 0,
+  int? trayClearMask,
+  bool trayEmptied = false,
 }) {
   final piece = shapeCatalog[shape];
   final placed = placeShape(boardFrom(picture), piece, anchor: at);
@@ -28,6 +30,8 @@ MoveScore playMove(
     previousStreak: previousStreak,
     stonesRng: const Mulberry32(1),
     storedMult: storedMult,
+    trayClearMask: trayClearMask,
+    trayEmptied: trayEmptied,
   );
 }
 

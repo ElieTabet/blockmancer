@@ -4,10 +4,13 @@ import 'package:shared_domain/shared_domain.dart';
 
 const worldOrder = <WorldId>[.rubble, .gravity, .fog, .speed, .mirror];
 
-/// Every joker no world unlocks, in [jokerCatalog] order.
+/// Every joker neither a world nor the stars unlock, in [jokerCatalog] order.
 final List<JokerId> startingJokers = [
   for (final joker in jokerCatalog)
-    if (!worldOrder.any((world) => unlocksOf(world).contains(joker.id)))
+    if (!worldOrder.any((world) => unlocksOf(world).contains(joker.id)) &&
+        !defaultConfig.starUnlocks.any(
+          (unlock) => unlock.jokers.contains(joker.id),
+        ))
       joker.id,
 ];
 

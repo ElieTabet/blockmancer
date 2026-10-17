@@ -25,6 +25,11 @@ final _before = defaultConfig.copyWith(
   ],
 );
 
+/// The 16 jokers there were before the stars' four.
+final _beforeStars = defaultConfig.copyWith(
+  jokerPool: [..._before.jokerPool, .anchor, .avalanche],
+);
+
 void main() {
   test('a seeded run plays to its end and replays identically', () {
     // Given
@@ -43,10 +48,29 @@ void main() {
     );
   });
 
-  test('the run of 20261016 with every joker opens on Anchor and Avalanche, '
-      'and ends in round 2', () {
+  test('the run of 20261016 with every joker opens on Finisher and Hat Trick, '
+      'and ends in round 3', () {
     // Given / When
     final (events: _, moves: _, :state) = autoplay(20261016);
+
+    // Then
+    expect(state.phase, const RunPhase.over());
+    expect(state.roundIndex, 2);
+    expect(state.runTotal, 1523);
+    expect(state.jokers, const [
+      JokerId.finisher,
+      JokerId.hattrick,
+      JokerId.column,
+    ]);
+  });
+
+  test('the run of 20261016 with the jokers before the stars\' four still '
+      'opens on Anchor and Avalanche, and ends in round 2', () {
+    // Given / When
+    final (events: _, moves: _, :state) = autoplay(
+      20261016,
+      config: _beforeStars,
+    );
 
     // Then
     expect(state.phase, const RunPhase.over());

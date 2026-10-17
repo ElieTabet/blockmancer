@@ -1,5 +1,6 @@
 import 'package:shared_domain/src/entities/game/joker_id.dart';
 import 'package:shared_domain/src/entities/game/joker_tuning.br.dart';
+import 'package:shared_domain/src/entities/game/star_unlock.br.dart';
 import 'package:shared_domain/src/entities/game/world_id.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -44,6 +45,10 @@ abstract class RunConfig with _$RunConfig {
 
     /// The run total that earns the world's third star.
     required int starThreshold,
+
+    /// The jokers the stars held across worlds unlock. No rule reads it
+    /// during the run; its end does.
+    required List<StarUnlock> starUnlocks,
     required int traySize,
 
     /// The world whose boss rule the run plays under.

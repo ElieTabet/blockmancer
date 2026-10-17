@@ -10,6 +10,9 @@ final class MoveContext {
     required this.pieceSize,
     required this.storedMult,
     required this.streak,
+    required this.trayClearMask,
+    required this.trayEmptied,
+    required this.traySize,
     required this.tuning,
   });
 
@@ -22,7 +25,19 @@ final class MoveContext {
 
   /// Consecutive clearing moves, this one included.
   final int streak;
+
+  /// [RunState.trayClearMask] with this move counted.
+  final int? trayClearMask;
+
+  /// Whether this move played the last piece left in the tray.
+  final bool trayEmptied;
+  final int traySize;
   final JokerTuning tuning;
+
+  /// Filled cells and stones once the piece has landed, before its lines
+  /// clear: every cleared cell was occupied, so they are added back.
+  int get occupiedAfterPlacing =>
+      Board.cellCount - clear.board.emptyCells.length + clear.cells.length;
 }
 
 /// Chips and mult as they pass through the jokers, with what fired so far.

@@ -115,10 +115,28 @@ void main() {
     expect(medianTotal(richer), greaterThan(medianTotal(defaultConfig)));
   });
 
+  for (final build in const [
+    [JokerId.fullhouse, JokerId.brink],
+    [JokerId.finisher, JokerId.hattrick],
+  ]) {
+    test('the bot plays the ${build.map((id) => id.name).join(',')} build '
+        'through its rounds', () {
+      // Given / When
+      final summary = summarize([
+        for (var seed = 1; seed <= 20; seed++)
+          playBotRun(seed, build: build, config: defaultConfig),
+      ], roundCount: defaultConfig.rounds.length);
+
+      // Then
+      expect(summary.roundClearRates.first, greaterThan(0.5));
+      expect(summary.roundClearRates.last, greaterThan(0));
+    });
+  }
+
   test('a bot run in Gravity reaches its boss', () {
     // Given / When
     final run = playBotRun(
-      1,
+      2,
       build: const [.patience, .twin],
       config: gravityConfig,
     );

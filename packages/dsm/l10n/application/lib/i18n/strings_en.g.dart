@@ -443,6 +443,10 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$saver$en saver = Translations$game$jokers$saver$en.internal(_root);
 	late final Translations$game$jokers$anchor$en anchor = Translations$game$jokers$anchor$en.internal(_root);
 	late final Translations$game$jokers$avalanche$en avalanche = Translations$game$jokers$avalanche$en.internal(_root);
+	late final Translations$game$jokers$fullhouse$en fullhouse = Translations$game$jokers$fullhouse$en.internal(_root);
+	late final Translations$game$jokers$brink$en brink = Translations$game$jokers$brink$en.internal(_root);
+	late final Translations$game$jokers$finisher$en finisher = Translations$game$jokers$finisher$en.internal(_root);
+	late final Translations$game$jokers$hattrick$en hattrick = Translations$game$jokers$hattrick$en.internal(_root);
 }
 
 // Path: home.daily
@@ -933,6 +937,66 @@ class Translations$game$jokers$avalanche$en {
 	String description({required Object chips}) => '+${chips} chips for each filled cell left in the bottom 2 rows after a clear.';
 }
 
+// Path: game.jokers.fullhouse
+class Translations$game$jokers$fullhouse$en {
+	Translations$game$jokers$fullhouse$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Full House'
+	String get name => 'Full House';
+
+	/// en: '+1 mult for every $cells occupied cells, stones included, as your piece lands.'
+	String description({required Object cells}) => '+1 mult for every ${cells} occupied cells, stones included, as your piece lands.';
+}
+
+// Path: game.jokers.brink
+class Translations$game$jokers$brink$en {
+	Translations$game$jokers$brink$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'On the Brink'
+	String get name => 'On the Brink';
+
+	/// en: '×$factor mult when $cells or more cells are occupied, stones included, as your piece lands.'
+	String description({required Object factor, required Object cells}) => '×${factor} mult when ${cells} or more cells are occupied, stones included, as your piece lands.';
+}
+
+// Path: game.jokers.finisher
+class Translations$game$jokers$finisher$en {
+	Translations$game$jokers$finisher$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Finisher'
+	String get name => 'Finisher';
+
+	/// en: '×$factor mult when you play the last piece in your tray.'
+	String description({required Object factor}) => '×${factor} mult when you play the last piece in your tray.';
+}
+
+// Path: game.jokers.hattrick
+class Translations$game$jokers$hattrick$en {
+	Translations$game$jokers$hattrick$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Hat Trick'
+	String get name => 'Hat Trick';
+
+	/// en: '+$points points when each of the 3 pieces of a full tray clears a line.'
+	String description({required Object points}) => '+${points} points when each of the 3 pieces of a full tray clears a line.';
+}
+
 // Path: home.sheet.bossRule
 class Translations$home$sheet$bossRule$en {
 	Translations$home$sheet$bossRule$en.internal(this._root);
@@ -1061,6 +1125,14 @@ extension on Translations {
 			'game.jokers.anchor.description' => ({required Object mult}) => '+${mult} mult when your move clears the bottom row.',
 			'game.jokers.avalanche.name' => 'Avalanche',
 			'game.jokers.avalanche.description' => ({required Object chips}) => '+${chips} chips for each filled cell left in the bottom 2 rows after a clear.',
+			'game.jokers.fullhouse.name' => 'Full House',
+			'game.jokers.fullhouse.description' => ({required Object cells}) => '+1 mult for every ${cells} occupied cells, stones included, as your piece lands.',
+			'game.jokers.brink.name' => 'On the Brink',
+			'game.jokers.brink.description' => ({required Object factor, required Object cells}) => '×${factor} mult when ${cells} or more cells are occupied, stones included, as your piece lands.',
+			'game.jokers.finisher.name' => 'Finisher',
+			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult when you play the last piece in your tray.',
+			'game.jokers.hattrick.name' => 'Hat Trick',
+			'game.jokers.hattrick.description' => ({required Object points}) => '+${points} points when each of the 3 pieces of a full tray clears a line.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',
