@@ -9,20 +9,21 @@ void main() {
     final args = parseBotArgs(const []);
 
     // Then
-    expect(args.builds, referenceBuilds);
+    expect([for (final build in args.builds) build.name], referenceBuilds);
     expect(args.runs, 2000);
     expect(args.world, WorldId.rubble);
   });
 
-  test('the reference builds are none, then each of the 10 pairs once', () {
+  test('the reference builds are both baselines, then each of the 10 pairs '
+      'once', () {
     // Given / When
     final pairs = [
-      for (final build in referenceBuilds.skip(1))
+      for (final build in referenceBuilds.skip(2))
         [for (final name in build.split(',')) JokerId.values.byName(name)],
     ];
 
     // Then
-    expect(referenceBuilds.first, 'none');
+    expect(referenceBuilds.take(2), ['random', 'empty']);
     expect(pairs, hasLength(10));
     for (final [first, second] in pairs) {
       expect(jokerEffect(first).partner, second);
@@ -44,16 +45,56 @@ void main() {
       '--runs',
       '50',
       '--build',
-      'none',
+      'random',
     ]);
 
     // Then
-    expect(args.builds, ['patience,twin', 'none']);
+    expect(
+      [for (final build in args.builds) build.name],
+      ['patience,twin', 'random'],
+    );
     expect(args.runs, 50);
     expect(args.world, WorldId.rubble);
   });
 
+  group('a build', () {
+    test('a pair takes its two jokers, both picking', () {
+      // Given / When
+      final build = BotBuild.parse('patience,twin');
+
+      // Then
+      expect(build.jokers, [JokerId.patience, JokerId.twin]);
+      expect(build.picks, isTrue);
+    });
+
+    test('random picks with no joker of its own, empty never picks', () {
+      // Given / When
+      final random = BotBuild.parse('random');
+      final empty = BotBuild.parse('empty');
+
+      // Then
+      expect(random.jokers, isEmpty);
+      expect(random.picks, isTrue);
+      expect(empty.jokers, isEmpty);
+      expect(empty.picks, isFalse);
+    });
+
+    test('a pair is completed only by a run holding both its jokers', () {
+      // Given
+      final build = BotBuild.parse('patience,twin');
+
+      // When / Then
+      expect(build.completedBy(const [.combo, .patience, .twin]), isTrue);
+      expect(build.completedBy(const [.combo, .patience]), isFalse);
+      expect(BotBuild.parse('random').completedBy(const [.combo]), isNull);
+    });
+  });
+
   for (final args in const [
+    ['--build', 'none'],
+    ['--build', 'patience'],
+    ['--build', 'patience,combo'],
+    ['--build', 'patience,wizard'],
     ['--world', 'fog'],
     ['--world', 'atlantis'],
     ['--world'],

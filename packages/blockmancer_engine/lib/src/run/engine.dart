@@ -11,32 +11,37 @@ import 'package:blockmancer_engine/src/run/offers.dart';
 import 'package:blockmancer_engine/src/scoring/score_move.dart';
 import 'package:blockmancer_engine/src/worlds/world_rules.dart';
 
-/// A new run, waiting for its starting joker.
-RunState startRun({required RunConfig config, required int seed}) => RunState(
-  board: Board.empty(),
-  config: config,
-  jokers: const [],
-  phase: .pickingJoker(
-    offers: offersFor(
-      config: config,
-      owned: const [],
-      pickIndex: 0,
-      seed: seed,
-    ),
-  ),
-  pickIndex: 0,
-  piecesLeft: 0,
-  piecesRngState: deriveSeed(index: 0, runSeed: seed, stream: .pieces),
-  revivesUsed: 0,
-  roundIndex: 0,
-  runTotal: 0,
-  score: 0,
-  seed: seed,
-  stonesRngState: deriveSeed(index: 0, runSeed: seed, stream: .stones),
-  storedMult: 0,
-  streak: 0,
-  tray: List.filled(config.traySize, null),
-);
+/// A new run, waiting for its starting joker. A pool with nothing to offer
+/// starts the first round at once, as a later pick does once every joker is
+/// owned: the balance bot's no-joker baseline plays this way.
+RunState startRun({required RunConfig config, required int seed}) {
+  final offers = offersFor(
+    config: config,
+    owned: const [],
+    pickIndex: 0,
+    seed: seed,
+  );
+  final start = RunState(
+    board: Board.empty(),
+    config: config,
+    jokers: const [],
+    phase: .pickingJoker(offers: offers),
+    pickIndex: 0,
+    piecesLeft: 0,
+    piecesRngState: deriveSeed(index: 0, runSeed: seed, stream: .pieces),
+    revivesUsed: 0,
+    roundIndex: 0,
+    runTotal: 0,
+    score: 0,
+    seed: seed,
+    stonesRngState: deriveSeed(index: 0, runSeed: seed, stream: .stones),
+    storedMult: 0,
+    streak: 0,
+    tray: List.filled(config.traySize, null),
+  );
+
+  return offers.isEmpty ? _startRound((start, const [])).$1 : start;
+}
 
 /// Takes an offered joker and starts the next round.
 Transition pickJoker(RunState state, {required JokerId id}) {

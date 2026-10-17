@@ -74,9 +74,10 @@ melos run test
 # Run the engine's suite compiled to JavaScript in Chrome (the PRNG must match the VM)
 melos run test-engine-web
 
-# Play 2,000 seeded runs for each reference build (`none`, then each of the 10 pairs) with
-# the greedy balance bot, and print the share of runs clearing each round, the 50th and 80th
-# percentile totals (nearest rank) and the boss win rate (docs/balance/<date>.md holds each table, docs/balance-v0.md the
+# Play 2,000 seeded runs for each reference build (the baselines `random` and `empty`, then each
+# of the 10 pairs) with the greedy balance bot, and print the share of runs clearing each round,
+# the 50th and 80th percentile totals (nearest rank), the boss win rate, the jokers a run ends
+# with on average and the share of runs that completed their pair (docs/balance/<date>.md holds each table, docs/balance-v0.md the
 # first, docs/balance/2026-10-17-worlds.md both worlds and the ★3 thresholds). It plays
 # `configFor(world, jokerPool: JokerId.values)` — every joker on offer — in Rubble unless
 # `--world gravity`. Melos passes no arguments through, so for
@@ -315,7 +316,10 @@ engine's events and never recomputes a rule.
 - **Tutorial.** `GameRules.tutorialRun` is a fixed run already in play: no joker, a bottom row one
   cell short, a single in the tray, and a round that can't be won.
 - **Balance bot.** `tool/balance_bot.dart` plays seeded runs with `lib/src/bot/`'s greedy policy
-  (the best immediate score, a fixed joker build) across one isolate per core. It depends only on
+  (the best immediate score) across one isolate per core, every joker on offer. Its picks are a
+  `BotBuild`: a pair takes one of its jokers whenever one is offered, else the first offer;
+  `random` always takes the first offer; `empty` skips every pick, playing from an empty pool,
+  which `startRun` starts straight into round 1. It depends only on
   the engine, and `lib/src/bot/` uses no `dart:io` or isolates, so it stays web-safe.
 - **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and
   in Chrome (`melos run test-engine-web`).

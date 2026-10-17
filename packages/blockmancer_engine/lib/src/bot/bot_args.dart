@@ -1,13 +1,65 @@
+import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/worlds/world_map.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// What the balance bot is asked to play: one table row per build, [runs]
 /// seeds each, in [world].
-typedef BotArgs = ({List<String> builds, int runs, WorldId world});
+typedef BotArgs = ({List<BotBuild> builds, int runs, WorldId world});
 
-/// No joker build, then every pair.
+/// How the bot picks, every joker on offer whatever a player has unlocked. A
+/// pair takes one of its two jokers whenever one is offered (the first named
+/// when both are), otherwise the first offer; `random` always takes the first
+/// offer, which the offers' own draw makes random; `empty` skips every pick
+/// and plays the run with no joker.
+final class BotBuild {
+  const BotBuild._({
+    required this.jokers,
+    required this.name,
+    this.picks = true,
+  });
+
+  /// A pair of partners, `a,b`, or `random` or `empty`; anything else is a
+  /// [FormatException].
+  factory BotBuild.parse(String name) {
+    if (name == 'random') return const ._(jokers: [], name: 'random');
+
+    if (name == 'empty') {
+      return const ._(jokers: [], name: 'empty', picks: false);
+    }
+
+    final jokers = [
+      for (final id in name.split(','))
+        JokerId.values.asNameMap()[id.trim()] ??
+            (throw FormatException('Not a joker', id)),
+    ];
+
+    if (jokers case [
+      final first,
+      final second,
+    ] when jokerEffect(first).partner == second) {
+      return BotBuild._(jokers: jokers, name: name);
+    }
+
+    throw FormatException('Not a pair of partners', name);
+  }
+
+  /// The jokers the bot takes when offered; none for a baseline.
+  final List<JokerId> jokers;
+  final String name;
+
+  /// False for `empty`, which owns no joker.
+  final bool picks;
+
+  /// Whether a run that ended owning [owned] had both of this pair's jokers;
+  /// null for a baseline, which has no pair.
+  bool? completedBy(List<JokerId> owned) =>
+      jokers.isEmpty ? null : jokers.every(owned.contains);
+}
+
+/// The two baselines, then every pair.
 const referenceBuilds = [
-  'none',
+  'random',
+  'empty',
   'patience,twin',
   'combo,collector',
   'heavy,bigbox',
@@ -21,7 +73,8 @@ const referenceBuilds = [
 ];
 
 /// Reads `--runs N`, `--world <world>` and any number of `--build a,b`;
-/// anything else, or a world that can't be played, is a [FormatException].
+/// anything else, a build that is neither a baseline nor a pair, or a world
+/// that can't be played, is a [FormatException].
 BotArgs parseBotArgs(List<String> args) {
   final builds = <String>[];
   var runs = 2000;
@@ -46,7 +99,10 @@ BotArgs parseBotArgs(List<String> args) {
   }
 
   return (
-    builds: builds.isEmpty ? referenceBuilds : builds,
+    builds: [
+      for (final name in builds.isEmpty ? referenceBuilds : builds)
+        BotBuild.parse(name),
+    ],
     runs: runs,
     world: world,
   );

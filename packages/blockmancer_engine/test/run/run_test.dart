@@ -66,6 +66,21 @@ void main() {
       expect(events.last, isA<TrayRefilled>());
     });
 
+    test('with no joker in the pool, round 1 starts with no pick', () {
+      // Given / When
+      final state = startRun(
+        config: _config.copyWith(jokerPool: const []),
+        seed: _seed,
+      );
+
+      // Then
+      expect(state.phase, const RunPhase.playing());
+      expect(state.jokers, isEmpty);
+      expect(state.roundIndex, 0);
+      expect(state.tray.whereType<int>(), hasLength(3));
+      expect(state.piecesLeft, 14 - 3);
+    });
+
     test('a joker that is not on offer cannot be picked', () {
       // Given
       final start = startRun(config: _config, seed: _seed);
