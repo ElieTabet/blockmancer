@@ -11,12 +11,14 @@ import 'package:app_providers/app_providers.dart';
 import 'package:app_providers/src/providers_internal.br.dart';
 import 'package:app_router/app_router.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:external_links/external_links.dart' as external_links;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:game_presentation/src/providers_di.br.dart' as game_ui_di;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
 import 'package:push_notifications_domain/push_notifications_domain.dart'
@@ -106,6 +108,42 @@ void main() {
       expect(
         container.read(settings.clearProgressProvider),
         same(container.read(game.clearProgressProvider)),
+      );
+    },
+  );
+
+  // Settings shows the build and writes to support through slots: only
+  // app_info knows the version and only external_links the mail app.
+  test(
+    'Settings reads the build from app_info and mails through external_links',
+    () async {
+      // Given: a release build, on a phone whose details can't be read here
+      TestWidgetsFlutterBinding.ensureInitialized();
+      PackageInfo.setMockInitialValues(
+        appName: 'Blockmancer',
+        buildNumber: '2',
+        buildSignature: '',
+        packageName: 'com.elietabet.blockmancer',
+        version: '1.0.0',
+      );
+      final container = buildContainer();
+
+      // When
+      final details = await container.read(settings.appDetailsProvider.future);
+
+      // Then
+      expect(
+        details,
+        const settings.AppDetails(
+          build: '2',
+          device: 'unknown',
+          os: 'unknown',
+          version: '1.0.0',
+        ),
+      );
+      expect(
+        container.read(settings.composeEmailProvider),
+        external_links.composeEmail,
       );
     },
   );
@@ -210,6 +248,7 @@ void main() {
           for (final sound in [
             Sound.bossStart,
             Sound.bossWin,
+            Sound.cheer,
             Sound.clear,
             Sound.joker,
             Sound.kaching,

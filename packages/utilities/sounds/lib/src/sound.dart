@@ -3,6 +3,7 @@
 enum Sound {
   bossStart('boss_start', volume: 0.5),
   bossWin('boss_win', volume: 0.9),
+  cheer('cheer', volume: 1),
   clear('clear', volume: 0.7),
   joker('joker', volume: 0.7),
   kaching('kaching', volume: 1),

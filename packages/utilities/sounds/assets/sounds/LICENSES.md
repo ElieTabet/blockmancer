@@ -9,6 +9,7 @@ set per sound in `lib/src/sound.dart`).
 | --- | --- | --- | --- | --- | --- | --- |
 | `boss_start.ogg` | the boss round starts | `Audio/lowThreeTone.ogg` | Digital Audio 1.0 | https://kenney.nl/assets/digital-audio | CC0 1.0 | Kenney |
 | `boss_win.ogg` | the boss is beaten | `Audio/Steel jingles/jingles_STEEL02.ogg` | Music Jingles 1.0 | https://kenney.nl/assets/music-jingles | CC0 1.0 | Kenney |
+| `cheer.ogg` | the boss is beaten, over the fanfare (an announcer's "You win!") | `Audio/you_win.ogg` | Voiceover Pack: Fighter 1.0 | https://kenney.nl/assets/voiceover-pack-fighter | CC0 1.0 | Kenney |
 | `clear.ogg` | lines clear (pitched up the scale with the streak) | `Audio/powerUp9.ogg` | Digital Audio 1.0 | https://kenney.nl/assets/digital-audio | CC0 1.0 | Kenney |
 | `joker.ogg` | a joker fires (one note of a chord each) | `Audio/tone1.ogg` | Digital Audio 1.0 | https://kenney.nl/assets/digital-audio | CC0 1.0 | Kenney |
 | `kaching.ogg` | the score lands | `Audio/handleCoins.ogg` | RPG Audio 1.0 | https://kenney.nl/assets/rpg-audio | CC0 1.0 | Kenney |

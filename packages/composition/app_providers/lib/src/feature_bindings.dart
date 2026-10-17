@@ -1,7 +1,9 @@
 import 'package:ads/ads.dart';
+import 'package:app_info/app_info.dart';
 import 'package:app_providers/src/providers_internal.br.dart';
 import 'package:app_router/app_router.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:external_links/external_links.dart' as external_links;
 import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
@@ -98,6 +100,7 @@ List<Override> featureBindingOverrides({
         switch (sound) {
           .bossStart => .bossStart,
           .bossWin => .bossWin,
+          .cheer => .cheer,
           .clear => .clear,
           .joker => .joker,
           .kaching => .kaching,
@@ -121,9 +124,21 @@ List<Override> featureBindingOverrides({
     practiceBest: (ref) =>
         ref.watch(game.bestScoreProvider(const .practice()).future),
   ),
-  // Settings resets the game's progress without knowing the game.
+  // Settings resets the game's progress without knowing the game, and shows
+  // the build and opens the mail app without knowing either plugin.
   ...settings.bindProviders(
+    appDetails: (ref) async {
+      final info = await readAppInfo();
+
+      return settings.AppDetails(
+        build: info.build,
+        device: info.device,
+        os: info.os,
+        version: info.version,
+      );
+    },
     clearProgress: (ref) => ref.watch(game.clearProgressProvider),
+    composeEmail: (ref) => external_links.composeEmail,
     settingsStore: (ref) => const SharedPreferencesSettingsStore(),
   ),
   // The splash opens the tutorial on a first launch without knowing Settings.

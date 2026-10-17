@@ -193,6 +193,7 @@ class GameFeedback extends _$GameFeedback {
 
     switch (outcome) {
       case .bossWon:
+        _play(.cheer);
         _play(.bossWin);
         _vibrate(HapticFeedback.heavyImpact);
       case .lost:

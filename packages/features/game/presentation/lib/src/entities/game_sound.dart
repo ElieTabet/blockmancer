@@ -3,6 +3,7 @@
 enum GameSound {
   bossStart,
   bossWin,
+  cheer,
   clear,
   joker,
   kaching,

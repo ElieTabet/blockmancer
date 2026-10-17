@@ -438,8 +438,8 @@ void main() {
     );
   });
 
-  testWidgets('beating the boss plays the boss fanfare with a heavy tap, '
-      'not the round jingle', (tester) async {
+  testWidgets('beating the boss plays the boss fanfare and the announcer '
+      'with a heavy tap, not the round jingle', (tester) async {
     // Given
     rules = FakeGameRules(start: runIn(const .playing(), roundIndex: 1));
     final game = container(tester);
@@ -455,6 +455,7 @@ void main() {
 
     // Then
     expect(feedback.soundsPlayed.last, GameSound.bossWin);
+    expect(feedback.soundsPlayed, contains(GameSound.cheer));
     expect(feedback.soundsPlayed, isNot(contains(GameSound.roundWon)));
     expect(feedback.haptics.last, 'heavy');
   });
