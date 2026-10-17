@@ -1,3 +1,4 @@
+import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/run/engine.dart';
 import 'package:blockmancer_engine/src/run/offers.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -607,6 +608,32 @@ void main() {
         expect(partnerOffered / seeds, closeTo(0.75 + 0.25 * 3 / 15, 0.03));
       },
     );
+
+    test('the shipped run keeps the brief\'s partner bias of 3 in 4', () {
+      // Given
+      var partnerOffered = 0;
+      const seeds = 4000;
+      final pool = defaultConfig.jokerPool.length;
+
+      // When
+      for (var seed = 0; seed < seeds; seed++) {
+        final offers = offersFor(
+          config: defaultConfig,
+          owned: const [.twin],
+          pickIndex: 1,
+          seed: seed,
+        );
+
+        if (offers.contains(JokerId.patience)) partnerOffered++;
+      }
+
+      // Then: the bias, plus 3 random draws among the jokers not owned
+      expect(defaultConfig.partnerBias, 0.75);
+      expect(
+        partnerOffered / seeds,
+        closeTo(0.75 + 0.25 * 3 / (pool - 1), 0.03),
+      );
+    });
 
     test('the same seed and pick always offer the same jokers', () {
       // Given / When
