@@ -706,6 +706,34 @@ void main() {
       },
     );
 
+    test(
+      'a run left before its end counts its picks, not a win or a best',
+      () async {
+        // Given: a run that took Twin Lines and played on
+        final store = FakeProgressionStore(startingProgression(rules));
+        final game = container(progressionStore: store);
+        rules.next = (runIn(const .playing(), jokers: const [.twin]), const []);
+        game.read(gameProvider.notifier).pickJoker(.twin);
+        await pumpEventQueue();
+        rules.next = (
+          runIn(const .playing(), jokers: const [.twin], runTotal: 900),
+          const [],
+        );
+        game
+            .read(gameProvider.notifier)
+            .place(anchor: const Cell(col: 0, row: 0), trayIndex: 0);
+
+        // When: it is left there, never reaching its end
+        await pumpEventQueue();
+
+        // Then
+        expect(
+          store.saved.jokerStats[JokerId.twin],
+          const JokerStats(bestRunTotal: 0, runsWon: 0, timesPicked: 1),
+        );
+      },
+    );
+
     test('each later pick counts too', () async {
       // Given: a run that took Twin Lines to start
       final store = FakeProgressionStore(startingProgression(rules));
