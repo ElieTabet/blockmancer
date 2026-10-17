@@ -919,6 +919,20 @@ void main() {
       expect(score.mult, 2);
     });
 
+    test('fires nothing on a crowded board when the move clears nothing', () {
+      // Given / When: 41 occupied once the single lands, no line full
+      final score = playMove(
+        ['######..', ...List.filled(5, '#######.')],
+        at: const Cell(col: 6, row: 0),
+        jokers: const [.brink, .fullhouse],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 0);
+      expect(score.fired, isEmpty);
+    });
+
     test('with Full House, a sparse board earns only Full House', () {
       // Given / When: 8 in row 0 make 1 mult, far short of 40
       final score = playMove(
