@@ -36,6 +36,25 @@ class SettingsStateNotifier extends _$SettingsStateNotifier {
     }
   }
 
+  /// Whether a mail draft opened; when not, the player is shown the address
+  /// to write to.
+  Future<bool> sendFeedback() async {
+    final sendFeedback = ref.read(sendFeedbackProvider);
+
+    try {
+      return await sendFeedback();
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Sending feedback failed',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+
+      return false;
+    }
+  }
+
   Future<void> setHaptics(bool on) => _settings.setHaptics(on);
 
   /// Shows the app in [language] once it is kept.

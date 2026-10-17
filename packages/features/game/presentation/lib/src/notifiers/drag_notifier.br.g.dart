@@ -28,11 +28,13 @@ final class DragNotifierProvider
         name: r'dragProvider',
         isAutoDispose: true,
         dependencies: <ProviderOrFamily>[gameProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           DragNotifierProvider.$allTransitiveDependencies0,
           DragNotifierProvider.$allTransitiveDependencies1,
           DragNotifierProvider.$allTransitiveDependencies2,
-        ],
+          DragNotifierProvider.$allTransitiveDependencies3,
+          DragNotifierProvider.$allTransitiveDependencies4,
+        },
       );
 
   static final $allTransitiveDependencies0 = gameProvider;
@@ -40,6 +42,10 @@ final class DragNotifierProvider
       GameNotifierProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      GameNotifierProvider.$allTransitiveDependencies3;
 
   @override
   String debugGetCreateSourceHash() => _$dragNotifierHash();

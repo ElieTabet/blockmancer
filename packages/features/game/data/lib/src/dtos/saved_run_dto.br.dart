@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 5;
+const savedRunVersion = 6;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -16,6 +16,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
       2 => migrate(_fromVersion2(json)),
       3 => migrate(_fromVersion3(json)),
       4 => migrate(_fromVersion4(json)),
+      5 => migrate(_fromVersion5(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -102,6 +103,13 @@ Map<String, dynamic> _fromVersion4(Map<String, dynamic> json) {
   };
 }
 
+/// Version 6 added world runs, which name their world; every run version 5
+/// saved was a daily or a practice one, and reads as it was.
+Map<String, dynamic> _fromVersion5(Map<String, dynamic> json) => {
+  ...json,
+  'version': 6,
+};
+
 const _version3Pool = [
   'bigbox',
   'collector',
@@ -149,19 +157,25 @@ final class SavedRunDto {
     required this.run,
     required this.version,
     this.day,
+    this.world,
   });
 
   factory SavedRunDto.fromDomain(SavedRun saved) => SavedRunDto(
     day: switch (saved.mode) {
       DailyMode(:final day) => day,
-      PracticeMode() => null,
+      PracticeMode() || WorldMode() => null,
     },
     mode: switch (saved.mode) {
       DailyMode() => _daily,
       PracticeMode() => _practice,
+      WorldMode() => _world,
     },
     run: .fromDomain(saved.run),
     version: savedRunVersion,
+    world: switch (saved.mode) {
+      WorldMode(:final world) => world.name,
+      DailyMode() || PracticeMode() => null,
+    },
   );
 
   factory SavedRunDto.fromJson(Map<String, dynamic> json) =>
@@ -169,12 +183,16 @@ final class SavedRunDto {
 
   static const _daily = 'daily';
   static const _practice = 'practice';
+  static const _world = 'world';
 
-  /// A daily run's UTC day, `yyyymmdd`; null for practice.
+  /// A daily run's UTC day, `yyyymmdd`; null for the others.
   final int? day;
   final String mode;
   final RunStateDto run;
   final int version;
+
+  /// A world run's world; null for the others.
+  final String? world;
 
   Map<String, dynamic> toJson() => _$SavedRunDtoToJson(this);
 
@@ -182,6 +200,7 @@ final class SavedRunDto {
     mode: switch (mode) {
       _daily => .daily(day: day!),
       _practice => const .practice(),
+      _world => .world(world: WorldId.values.byName(world!)),
       _ => throw FormatException('Unknown mode $mode'),
     },
     run: run.toDomain(),

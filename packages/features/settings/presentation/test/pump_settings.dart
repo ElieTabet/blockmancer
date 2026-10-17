@@ -7,14 +7,16 @@ import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:settings_presentation/settings_presentation.dart';
 import 'package:settings_presentation/src/widgets/settings_widget.dart';
 
+import 'fake_feedback.dart';
 import 'fake_settings_routing.dart';
 import 'fake_settings_store.dart';
 
 /// Mounts Settings over [store], on a phone. Each clearing of the progress is
-/// recorded in [clearedProgress].
+/// recorded in [clearedProgress], and mail drafts open in [mailApp].
 Future<FakeSettingsRouting> pumpSettings(
   WidgetTester tester, {
   List<String>? clearedProgress,
+  FakeMailApp? mailApp,
   FakeSettingsStore? store,
 }) async {
   final routing = FakeSettingsRouting();
@@ -30,8 +32,10 @@ Future<FakeSettingsRouting> pumpSettings(
     ProviderScope(
       overrides: [
         ...settings.bindProviders(
+          appDetails: (ref) async => testAppDetails,
           clearProgress: (ref) =>
               () async => clearedProgress?.add('cleared'),
+          composeEmail: (ref) => (mailApp ?? FakeMailApp()).compose,
           settingsStore: (ref) => store ?? FakeSettingsStore(),
         ),
         ...bindRoutingProviders(settingsRouting: (ref) => routing),

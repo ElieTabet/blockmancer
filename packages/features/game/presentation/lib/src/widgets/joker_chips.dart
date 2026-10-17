@@ -86,10 +86,13 @@ class _JokerChipState extends ConsumerState<JokerChip>
     );
 
     final still = ref.watch(reduceMotionProvider);
-    final text = jokerText(context, widget.id);
+    final tuning = ref.watch(
+      gameProvider.select((state) => state.run.config.jokers),
+    );
+    final name = jokerName(context, widget.id);
 
     return Tooltip(
-      message: text.description,
+      message: jokerDescription(context, widget.id, tuning),
       triggerMode: .tap,
       child: AnimatedBuilder(
         animation: _pulse,
@@ -126,7 +129,7 @@ class _JokerChipState extends ConsumerState<JokerChip>
           child: Center(
             widthFactor: 1,
             child: Text(
-              widget.paired ? '★ ${text.name}' : text.name,
+              widget.paired ? '★ $name' : name,
               style: const TextStyle(
                 color: DSColor.jokerInk,
                 fontSize: 12,

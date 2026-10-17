@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 import '../fakes.dart';
 import '../fake_progression_store.dart';
@@ -10,7 +11,7 @@ ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
     overrides: bindProviders(
       bestScores: (ref) => scores ?? FakeBestScores(),
       clock: (ref) => clock,
-      gameRules: (ref) => const DailySeedRules(),
+      gameRules: (ref) => const TwoWorldRules(),
       progressionStore: (ref) => FakeProgressionStore(),
       runStore: (ref) => FakeRunStore(),
     ),
@@ -20,9 +21,19 @@ ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
   return container;
 }
 
-RunStart _launchAt(String instant, GameLaunch launch) => _containerAt(
-  FakeClock(DateTime.parse(instant)),
-).read(runStartForProvider)(launch);
+/// A profile with Twin, Stonemason and Patience unlocked.
+const _profile = Progression(
+  tutorialDone: true,
+  unlockedJokers: {.twin, .stonemason, .patience},
+  worlds: {},
+);
+
+RunStart _launchAt(String instant, GameLaunch launch, {WorldId? world}) =>
+    _containerAt(FakeClock(DateTime.parse(instant))).read(runStartForProvider)(
+      launch,
+      progression: _profile,
+      world: world,
+    );
 
 void main() {
   group('the daily run', () {
@@ -45,6 +56,15 @@ void main() {
       },
     );
 
+    test('offers every joker, whatever the player has unlocked', () {
+      // Given / When
+      final daily = _launchAt('2026-10-16T12:00:00Z', .daily);
+
+      // Then
+      expect(daily.config.world, WorldId.rubble);
+      expect(daily.config.jokerPool, JokerId.values);
+    });
+
     test('changes at midnight UTC', () {
       // Given / When
       final lastSecond = _launchAt('2026-10-16T23:59:59Z', .daily);
@@ -64,13 +84,52 @@ void main() {
       final startFor = _containerAt(clock).read(runStartForProvider);
 
       // When
-      final first = startFor(.practice);
+      final first = startFor(.practice, progression: _profile);
       clock.current = clock.current.add(const Duration(microseconds: 1));
-      final second = startFor(.practice);
+      final second = startFor(.practice, progression: _profile);
 
       // Then
       expect(first.mode, const GameMode.practice());
       expect(second.seed, isNot(first.seed));
+    });
+
+    test("is played in the map's first world, offering only what is "
+        'unlocked', () {
+      // Given / When
+      final practice = _launchAt('2026-10-16T12:00:00Z', .practice);
+
+      // Then
+      expect(practice.config.world, WorldId.rubble);
+      expect(practice.config.jokerPool, [
+        JokerId.patience,
+        JokerId.stonemason,
+        JokerId.twin,
+      ]);
+    });
+  });
+
+  group('a world run', () {
+    test('counts for its world, offering only what is unlocked', () {
+      // Given / When
+      final run = _launchAt('2026-10-16T12:00:00Z', .world, world: .gravity);
+
+      // Then
+      expect(run.mode, const GameMode.world(world: .gravity));
+      expect(run.config.world, WorldId.gravity);
+      expect(run.config.jokerPool, [
+        JokerId.patience,
+        JokerId.stonemason,
+        JokerId.twin,
+      ]);
+    });
+
+    test("naming no world plays the map's first", () {
+      // Given / When
+      final run = _launchAt('2026-10-16T12:00:00Z', .world);
+
+      // Then
+      expect(run.mode, const GameMode.world(world: .rubble));
+      expect(run.config.world, WorldId.rubble);
     });
   });
 

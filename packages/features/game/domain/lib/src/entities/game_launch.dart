@@ -8,4 +8,7 @@ enum GameLaunch {
 
   /// The guided first run, which hands over to a practice run.
   tutorial,
+
+  /// A world of the map, named alongside the launch.
+  world,
 }

@@ -4,12 +4,15 @@ import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:settings_presentation/settings_presentation.dart';
 
+import '../fake_feedback.dart';
 import '../fake_settings_store.dart';
 
 Future<void> _launchWith(settings.AppLanguage language) async {
   final container = ProviderContainer(
     overrides: settings.bindProviders(
+      appDetails: (ref) async => testAppDetails,
       clearProgress: (ref) => () async {},
+      composeEmail: (ref) => FakeMailApp().compose,
       settingsStore: (ref) =>
           FakeSettingsStore(settings.AppSettings(language: language)),
     ),

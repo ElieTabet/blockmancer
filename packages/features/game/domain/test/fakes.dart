@@ -14,14 +14,32 @@ final class FakeClock implements Clock {
   DateTime now() => current;
 }
 
-/// Rules whose daily seed is the date as `yyyymmdd` plus one, so a test can
-/// tell a seed from a day. Nothing else is called.
-final class DailySeedRules implements GameRules {
-  const DailySeedRules();
+/// Rules on a map of Rubble then Gravity, whose daily seed is the date as
+/// `yyyymmdd` plus one, so a test can tell a seed from a day. Beating Rubble's
+/// boss unlocks Stonemason and Quarry. Nothing else is called.
+final class TwoWorldRules implements GameRules {
+  const TwoWorldRules();
+
+  @override
+  List<JokerId> get startingJokers => const [.patience, .twin];
+
+  @override
+  List<WorldId> get worldOrder => const [.rubble, .gravity];
+
+  @override
+  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
+      _config.copyWith(jokerPool: jokerPool, world: world);
 
   @override
   int dailySeed({required int day, required int month, required int year}) =>
       year * 10000 + month * 100 + day + 1;
+
+  @override
+  WorldId? nextWorld(WorldId world) => world == .rubble ? .gravity : null;
+
+  @override
+  List<JokerId> unlocksOf(WorldId world) =>
+      world == .rubble ? const [.stonemason, .quarry] : const [];
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -80,25 +98,27 @@ const _config = RunConfig(
   world: .rubble,
 );
 
+/// A Rubble run in [phase], whose third star takes 8000 points.
+RunState runIn(RunPhase phase, {int revivesUsed = 0, int runTotal = 0}) =>
+    RunState(
+      board: Board.empty(),
+      config: _config,
+      jokers: const [],
+      phase: phase,
+      pickIndex: 1,
+      piecesLeft: 5,
+      piecesRngState: 0,
+      revivesUsed: revivesUsed,
+      roundIndex: 0,
+      runTotal: runTotal,
+      score: 40,
+      seed: 7,
+      stonesRngState: 0,
+      storedMult: 0,
+      streak: 0,
+      tray: const [0, 1, 2],
+    );
+
 /// A practice run in [phase].
-SavedRun savedIn(RunPhase phase) => SavedRun(
-  mode: const .practice(),
-  run: RunState(
-    board: Board.empty(),
-    config: _config,
-    jokers: const [],
-    phase: phase,
-    pickIndex: 1,
-    piecesLeft: 5,
-    piecesRngState: 0,
-    revivesUsed: 0,
-    roundIndex: 0,
-    runTotal: 0,
-    score: 40,
-    seed: 7,
-    stonesRngState: 0,
-    storedMult: 0,
-    streak: 0,
-    tray: const [0, 1, 2],
-  ),
-);
+SavedRun savedIn(RunPhase phase) =>
+    SavedRun(mode: const .practice(), run: runIn(phase));

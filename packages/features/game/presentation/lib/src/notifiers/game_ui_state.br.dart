@@ -19,8 +19,15 @@ abstract class GameUiState with _$GameUiState {
     /// The guided first run: never saved, and never measured against a best.
     @Default(false) bool isTutorial,
 
+    /// What the finished run earned on the map; null until the run has ended
+    /// and it is kept, and for good in a run that earns nothing there.
+    ProgressionChange? progress,
+
     /// The finished run against its mode's best; null until the run has ended
     /// and the best has been read, and for good if it couldn't be.
     RunEndRecord? record,
+
+    /// Whether the player has been shown what the run unlocked.
+    @Default(false) bool unlocksSeen,
   }) = _GameUiState;
 }

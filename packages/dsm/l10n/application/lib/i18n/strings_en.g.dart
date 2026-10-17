@@ -63,6 +63,9 @@ class Translations$game$en {
 	/// en: 'Practice · a new run every time'
 	String get practiceSubtitle => 'Practice · a new run every time';
 
+	/// en: '$world · earn its three stars'
+	String worldSubtitle({required Object world}) => '${world} · earn its three stars';
+
 	/// en: 'Back to the menu'
 	String get leave => 'Back to the menu';
 
@@ -76,6 +79,8 @@ class Translations$game$en {
 	late final Translations$game$offers$en offers = Translations$game$offers$en.internal(_root);
 	late final Translations$game$lost$en lost = Translations$game$lost$en.internal(_root);
 	late final Translations$game$end$en end = Translations$game$end$en.internal(_root);
+	late final Translations$game$unlocks$en unlocks = Translations$game$unlocks$en.internal(_root);
+	late final Translations$game$worlds$en worlds = Translations$game$worlds$en.internal(_root);
 	late final Translations$game$jokers$en jokers = Translations$game$jokers$en.internal(_root);
 }
 
@@ -148,6 +153,11 @@ class Translations$settings$en {
 	late final Translations$settings$reduceMotion$en reduceMotion = Translations$settings$reduceMotion$en.internal(_root);
 	late final Translations$settings$language$en language = Translations$settings$language$en.internal(_root);
 	late final Translations$settings$tutorial$en tutorial = Translations$settings$tutorial$en.internal(_root);
+	late final Translations$settings$feedback$en feedback = Translations$settings$feedback$en.internal(_root);
+
+	/// en: 'Version'
+	String get version => 'Version';
+
 	late final Translations$settings$reset$en reset = Translations$settings$reset$en.internal(_root);
 }
 
@@ -189,8 +199,8 @@ class Translations$game$round$en {
 	/// en: 'Round · $index / $count'
 	String regular({required Object index, required Object count}) => 'Round · ${index} / ${count}';
 
-	/// en: 'Boss · Rubble'
-	String get boss => 'Boss · Rubble';
+	/// en: 'Boss · $world'
+	String boss({required Object world}) => 'Boss · ${world}';
 
 	/// en: '/ $target'
 	String target({required Object target}) => '/ ${target}';
@@ -359,6 +369,56 @@ class Translations$game$end$en {
 
 	/// en: 'Play again'
 	String get retry => 'Play again';
+
+	late final Translations$game$end$stars$en stars = Translations$game$end$stars$en.internal(_root);
+}
+
+// Path: game.unlocks
+class Translations$game$unlocks$en {
+	Translations$game$unlocks$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Unlocked'
+	String get label => 'Unlocked';
+
+	/// en: 'New world: $world'
+	String newWorld({required Object world}) => 'New world: ${world}';
+
+	/// en: 'New jokers'
+	String get newJokers => 'New jokers';
+
+	/// en: 'These jokers can now turn up in your runs.'
+	String get jokersNote => 'These jokers can now turn up in your runs.';
+
+	/// en: 'Continue'
+	String get next => 'Continue';
+}
+
+// Path: game.worlds
+class Translations$game$worlds$en {
+	Translations$game$worlds$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Rubble'
+	String get rubble => 'Rubble';
+
+	/// en: 'Gravity'
+	String get gravity => 'Gravity';
+
+	/// en: 'Fog'
+	String get fog => 'Fog';
+
+	/// en: 'Speed'
+	String get speed => 'Speed';
+
+	/// en: 'Mirror'
+	String get mirror => 'Mirror';
 }
 
 // Path: game.jokers
@@ -482,6 +542,30 @@ class Translations$settings$tutorial$en {
 	String get subtitle => 'How to play, step by step';
 }
 
+// Path: settings.feedback
+class Translations$settings$feedback$en {
+	Translations$settings$feedback$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Send feedback'
+	String get title => 'Send feedback';
+
+	/// en: 'Opens an email to the team'
+	String get subtitle => 'Opens an email to the team';
+
+	/// en: 'No mail app'
+	String get unavailableTitle => 'No mail app';
+
+	/// en: 'We couldn't open a mail app. Write to us at $address.'
+	String unavailableMessage({required Object address}) => 'We couldn\'t open a mail app. Write to us at ${address}.';
+
+	/// en: 'OK'
+	String get ok => 'OK';
+}
+
 // Path: settings.reset
 class Translations$settings$reset$en {
 	Translations$settings$reset$en.internal(this._root);
@@ -509,6 +593,33 @@ class Translations$settings$reset$en {
 	String get cancel => 'Cancel';
 }
 
+// Path: game.end.stars
+class Translations$game$end$stars$en {
+	Translations$game$end$stars$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Beat the boss'
+	String get bossBeaten => 'Beat the boss';
+
+	/// en: 'Beat the boss without reviving'
+	String get noRevive => 'Beat the boss without reviving';
+
+	/// en: 'Reach $points'
+	String threshold({required Object points}) => 'Reach ${points}';
+
+	/// en: 'Star earned'
+	String get earned => 'Star earned';
+
+	/// en: 'New star'
+	String get newStar => 'New star';
+
+	/// en: 'Star not earned yet'
+	String get missing => 'Star not earned yet';
+}
+
 // Path: game.jokers.stonemason
 class Translations$game$jokers$stonemason$en {
 	Translations$game$jokers$stonemason$en.internal(this._root);
@@ -520,8 +631,11 @@ class Translations$game$jokers$stonemason$en {
 	/// en: 'Stonemason'
 	String get name => 'Stonemason';
 
-	/// en: '+50 chips for each stone cleared. 2 extra stones every round.'
-	String get description => '+50 chips for each stone cleared. 2 extra stones every round.';
+	/// en: '(one) {+$chips chips for each stone cleared. 1 extra stone every round.} (other) {+$chips chips for each stone cleared. $stones extra stones every round.}'
+	String description({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones,
+		one: '+${chips} chips for each stone cleared. 1 extra stone every round.',
+		other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.',
+	);
 }
 
 // Path: game.jokers.combo
@@ -535,8 +649,8 @@ class Translations$game$jokers$combo$en {
 	/// en: 'Combo King'
 	String get name => 'Combo King';
 
-	/// en: '+1 mult for every clearing move in a row.'
-	String get description => '+1 mult for every clearing move in a row.';
+	/// en: '+$mult mult for every clearing move in a row.'
+	String description({required Object mult}) => '+${mult} mult for every clearing move in a row.';
 }
 
 // Path: game.jokers.patience
@@ -550,8 +664,8 @@ class Translations$game$jokers$patience$en {
 	/// en: 'Patience'
 	String get name => 'Patience';
 
-	/// en: 'Each move without a clear stores +2 mult for your next clear.'
-	String get description => 'Each move without a clear stores +2 mult for your next clear.';
+	/// en: 'Each move without a clear stores +$mult mult for your next clear.'
+	String description({required Object mult}) => 'Each move without a clear stores +${mult} mult for your next clear.';
 }
 
 // Path: game.jokers.precision
@@ -565,8 +679,8 @@ class Translations$game$jokers$precision$en {
 	/// en: 'Precision'
 	String get name => 'Precision';
 
-	/// en: '+6 mult when a 1–2 cell piece completes a line.'
-	String get description => '+6 mult when a 1–2 cell piece completes a line.';
+	/// en: '+$mult mult when a 1–$size cell piece completes a line.'
+	String description({required Object mult, required Object size}) => '+${mult} mult when a 1–${size} cell piece completes a line.';
 }
 
 // Path: game.jokers.collector
@@ -580,8 +694,8 @@ class Translations$game$jokers$collector$en {
 	/// en: 'Collector'
 	String get name => 'Collector';
 
-	/// en: '+1 mult on every clear for each joker you own.'
-	String get description => '+1 mult on every clear for each joker you own.';
+	/// en: '+$mult mult on every clear for each joker you own.'
+	String description({required Object mult}) => '+${mult} mult on every clear for each joker you own.';
 }
 
 // Path: game.jokers.twin
@@ -595,8 +709,8 @@ class Translations$game$jokers$twin$en {
 	/// en: 'Twin Lines'
 	String get name => 'Twin Lines';
 
-	/// en: '×3 mult when you clear 2 or more lines at once.'
-	String get description => '×3 mult when you clear 2 or more lines at once.';
+	/// en: '×$factor mult when you clear $lines or more lines at once.'
+	String description({required Object factor, required Object lines}) => '×${factor} mult when you clear ${lines} or more lines at once.';
 }
 
 // Path: game.jokers.column
@@ -610,8 +724,8 @@ class Translations$game$jokers$column$en {
 	/// en: 'Column Hunter'
 	String get name => 'Column Hunter';
 
-	/// en: '×2 mult when your move clears a column.'
-	String get description => '×2 mult when your move clears a column.';
+	/// en: '×$factor mult when your move clears a column.'
+	String description({required Object factor}) => '×${factor} mult when your move clears a column.';
 }
 
 // Path: game.jokers.heavy
@@ -625,8 +739,8 @@ class Translations$game$jokers$heavy$en {
 	/// en: 'Heavyweight'
 	String get name => 'Heavyweight';
 
-	/// en: '×2 mult when a piece of 4+ cells completes a line.'
-	String get description => '×2 mult when a piece of 4+ cells completes a line.';
+	/// en: '×$factor mult when a piece of $size+ cells completes a line.'
+	String description({required Object factor, required Object size}) => '×${factor} mult when a piece of ${size}+ cells completes a line.';
 }
 
 // Path: game.jokers.sweep
@@ -640,8 +754,8 @@ class Translations$game$jokers$sweep$en {
 	/// en: 'Clean Sweep'
 	String get name => 'Clean Sweep';
 
-	/// en: '+500 points when the board becomes completely empty.'
-	String get description => '+500 points when the board becomes completely empty.';
+	/// en: '+$points points when the board becomes completely empty.'
+	String description({required Object points}) => '+${points} points when the board becomes completely empty.';
 }
 
 // Path: game.jokers.quarry
@@ -655,8 +769,11 @@ class Translations$game$jokers$quarry$en {
 	/// en: 'Quarry'
 	String get name => 'Quarry';
 
-	/// en: 'Every clear drops a new stone on a random empty cell.'
-	String get description => 'Every clear drops a new stone on a random empty cell.';
+	/// en: '(one) {Every clear drops a new stone on a random empty cell.} (other) {Every clear drops $stones new stones on random empty cells.}'
+	String description({required num stones}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones,
+		one: 'Every clear drops a new stone on a random empty cell.',
+		other: 'Every clear drops ${stones} new stones on random empty cells.',
+	);
 }
 
 // Path: game.jokers.bigbox
@@ -670,8 +787,8 @@ class Translations$game$jokers$bigbox$en {
 	/// en: 'Big Box'
 	String get name => 'Big Box';
 
-	/// en: 'Pieces of 5+ cells show up 3× more often.'
-	String get description => 'Pieces of 5+ cells show up 3× more often.';
+	/// en: 'Pieces of $size+ cells show up $factor× more often.'
+	String description({required Object size, required Object factor}) => 'Pieces of ${size}+ cells show up ${factor}× more often.';
 }
 
 // Path: game.jokers.tiny
@@ -685,8 +802,8 @@ class Translations$game$jokers$tiny$en {
 	/// en: 'Tiny Tools'
 	String get name => 'Tiny Tools';
 
-	/// en: 'Pieces of 1–2 cells show up 3× more often.'
-	String get description => 'Pieces of 1–2 cells show up 3× more often.';
+	/// en: 'Pieces of 1–$size cells show up $factor× more often.'
+	String description({required Object size, required Object factor}) => 'Pieces of 1–${size} cells show up ${factor}× more often.';
 }
 
 // Path: game.jokers.pockets
@@ -700,8 +817,11 @@ class Translations$game$jokers$pockets$en {
 	/// en: 'Deep Pockets'
 	String get name => 'Deep Pockets';
 
-	/// en: '+4 pieces every round.'
-	String get description => '+4 pieces every round.';
+	/// en: '(one) {+1 piece every round.} (other) {+$pieces pieces every round.}'
+	String description({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(pieces,
+		one: '+1 piece every round.',
+		other: '+${pieces} pieces every round.',
+	);
 }
 
 // Path: game.jokers.saver
@@ -715,8 +835,8 @@ class Translations$game$jokers$saver$en {
 	/// en: 'Saver'
 	String get name => 'Saver';
 
-	/// en: 'Each unused piece when you beat a round gives +40 run points.'
-	String get description => 'Each unused piece when you beat a round gives +40 run points.';
+	/// en: 'Each unused piece when you beat a round gives +$points run points.'
+	String description({required Object points}) => 'Each unused piece when you beat a round gives +${points} run points.';
 }
 
 // Path: game.jokers.anchor
@@ -730,8 +850,8 @@ class Translations$game$jokers$anchor$en {
 	/// en: 'Anchor'
 	String get name => 'Anchor';
 
-	/// en: '+4 mult when your move clears the bottom row.'
-	String get description => '+4 mult when your move clears the bottom row.';
+	/// en: '+$mult mult when your move clears the bottom row.'
+	String description({required Object mult}) => '+${mult} mult when your move clears the bottom row.';
 }
 
 // Path: game.jokers.avalanche
@@ -745,8 +865,8 @@ class Translations$game$jokers$avalanche$en {
 	/// en: 'Avalanche'
 	String get name => 'Avalanche';
 
-	/// en: '+25 chips for each filled cell left in the bottom 2 rows after a clear.'
-	String get description => '+25 chips for each filled cell left in the bottom 2 rows after a clear.';
+	/// en: '+$chips chips for each filled cell left in the bottom 2 rows after a clear.'
+	String description({required Object chips}) => '+${chips} chips for each filled cell left in the bottom 2 rows after a clear.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -760,6 +880,7 @@ extension on Translations {
 			'game.title' => 'Blockmancer',
 			'game.subtitle' => 'Daily run · same pieces for everyone',
 			'game.practiceSubtitle' => 'Practice · a new run every time',
+			'game.worldSubtitle' => ({required Object world}) => '${world} · earn its three stars',
 			'game.leave' => 'Back to the menu',
 			'game.tutorial.drag' => 'Drag a piece onto the board',
 			'game.tutorial.clear' => 'Fill a row to clear it',
@@ -769,7 +890,7 @@ extension on Translations {
 			'game.tutorial.skip' => 'Skip',
 			'game.runTotal' => ({required Object total}) => 'Run ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Round · ${index} / ${count}',
-			'game.round.boss' => 'Boss · Rubble',
+			'game.round.boss' => ({required Object world}) => 'Boss · ${world}',
 			'game.round.target' => ({required Object target}) => '/ ${target}',
 			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: '${count} piece left', other: '${count} pieces left', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
@@ -813,38 +934,54 @@ extension on Translations {
 			'game.end.best' => ({required Object points}) => 'Best: ${points}',
 			'game.end.newBest' => 'New best!',
 			'game.end.retry' => 'Play again',
+			'game.end.stars.bossBeaten' => 'Beat the boss',
+			'game.end.stars.noRevive' => 'Beat the boss without reviving',
+			'game.end.stars.threshold' => ({required Object points}) => 'Reach ${points}',
+			'game.end.stars.earned' => 'Star earned',
+			'game.end.stars.newStar' => 'New star',
+			'game.end.stars.missing' => 'Star not earned yet',
+			'game.unlocks.label' => 'Unlocked',
+			'game.unlocks.newWorld' => ({required Object world}) => 'New world: ${world}',
+			'game.unlocks.newJokers' => 'New jokers',
+			'game.unlocks.jokersNote' => 'These jokers can now turn up in your runs.',
+			'game.unlocks.next' => 'Continue',
+			'game.worlds.rubble' => 'Rubble',
+			'game.worlds.gravity' => 'Gravity',
+			'game.worlds.fog' => 'Fog',
+			'game.worlds.speed' => 'Speed',
+			'game.worlds.mirror' => 'Mirror',
 			'game.jokers.stonemason.name' => 'Stonemason',
-			'game.jokers.stonemason.description' => '+50 chips for each stone cleared. 2 extra stones every round.',
+			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones, one: '+${chips} chips for each stone cleared. 1 extra stone every round.', other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.', ), 
 			'game.jokers.combo.name' => 'Combo King',
-			'game.jokers.combo.description' => '+1 mult for every clearing move in a row.',
+			'game.jokers.combo.description' => ({required Object mult}) => '+${mult} mult for every clearing move in a row.',
 			'game.jokers.patience.name' => 'Patience',
-			'game.jokers.patience.description' => 'Each move without a clear stores +2 mult for your next clear.',
+			'game.jokers.patience.description' => ({required Object mult}) => 'Each move without a clear stores +${mult} mult for your next clear.',
 			'game.jokers.precision.name' => 'Precision',
-			'game.jokers.precision.description' => '+6 mult when a 1–2 cell piece completes a line.',
+			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult when a 1–${size} cell piece completes a line.',
 			'game.jokers.collector.name' => 'Collector',
-			'game.jokers.collector.description' => '+1 mult on every clear for each joker you own.',
+			'game.jokers.collector.description' => ({required Object mult}) => '+${mult} mult on every clear for each joker you own.',
 			'game.jokers.twin.name' => 'Twin Lines',
-			'game.jokers.twin.description' => '×3 mult when you clear 2 or more lines at once.',
+			'game.jokers.twin.description' => ({required Object factor, required Object lines}) => '×${factor} mult when you clear ${lines} or more lines at once.',
 			'game.jokers.column.name' => 'Column Hunter',
-			'game.jokers.column.description' => '×2 mult when your move clears a column.',
+			'game.jokers.column.description' => ({required Object factor}) => '×${factor} mult when your move clears a column.',
 			'game.jokers.heavy.name' => 'Heavyweight',
-			'game.jokers.heavy.description' => '×2 mult when a piece of 4+ cells completes a line.',
+			'game.jokers.heavy.description' => ({required Object factor, required Object size}) => '×${factor} mult when a piece of ${size}+ cells completes a line.',
 			'game.jokers.sweep.name' => 'Clean Sweep',
-			'game.jokers.sweep.description' => '+500 points when the board becomes completely empty.',
+			'game.jokers.sweep.description' => ({required Object points}) => '+${points} points when the board becomes completely empty.',
 			'game.jokers.quarry.name' => 'Quarry',
-			'game.jokers.quarry.description' => 'Every clear drops a new stone on a random empty cell.',
+			'game.jokers.quarry.description' => ({required num stones}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones, one: 'Every clear drops a new stone on a random empty cell.', other: 'Every clear drops ${stones} new stones on random empty cells.', ), 
 			'game.jokers.bigbox.name' => 'Big Box',
-			'game.jokers.bigbox.description' => 'Pieces of 5+ cells show up 3× more often.',
+			'game.jokers.bigbox.description' => ({required Object size, required Object factor}) => 'Pieces of ${size}+ cells show up ${factor}× more often.',
 			'game.jokers.tiny.name' => 'Tiny Tools',
-			'game.jokers.tiny.description' => 'Pieces of 1–2 cells show up 3× more often.',
+			'game.jokers.tiny.description' => ({required Object size, required Object factor}) => 'Pieces of 1–${size} cells show up ${factor}× more often.',
 			'game.jokers.pockets.name' => 'Deep Pockets',
-			'game.jokers.pockets.description' => '+4 pieces every round.',
+			'game.jokers.pockets.description' => ({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(pieces, one: '+1 piece every round.', other: '+${pieces} pieces every round.', ), 
 			'game.jokers.saver.name' => 'Saver',
-			'game.jokers.saver.description' => 'Each unused piece when you beat a round gives +40 run points.',
+			'game.jokers.saver.description' => ({required Object points}) => 'Each unused piece when you beat a round gives +${points} run points.',
 			'game.jokers.anchor.name' => 'Anchor',
-			'game.jokers.anchor.description' => '+4 mult when your move clears the bottom row.',
+			'game.jokers.anchor.description' => ({required Object mult}) => '+${mult} mult when your move clears the bottom row.',
 			'game.jokers.avalanche.name' => 'Avalanche',
-			'game.jokers.avalanche.description' => '+25 chips for each filled cell left in the bottom 2 rows after a clear.',
+			'game.jokers.avalanche.description' => ({required Object chips}) => '+${chips} chips for each filled cell left in the bottom 2 rows after a clear.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',
@@ -871,6 +1008,12 @@ extension on Translations {
 			'settings.language.fr' => 'Français',
 			'settings.tutorial.title' => 'Replay tutorial',
 			'settings.tutorial.subtitle' => 'How to play, step by step',
+			'settings.feedback.title' => 'Send feedback',
+			'settings.feedback.subtitle' => 'Opens an email to the team',
+			'settings.feedback.unavailableTitle' => 'No mail app',
+			'settings.feedback.unavailableMessage' => ({required Object address}) => 'We couldn\'t open a mail app. Write to us at ${address}.',
+			'settings.feedback.ok' => 'OK',
+			'settings.version' => 'Version',
 			'settings.reset.title' => 'Reset progress',
 			'settings.reset.subtitle' => 'Your best scores and the run in progress',
 			'settings.reset.confirmTitle' => 'Reset progress?',

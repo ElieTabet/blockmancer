@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
-import 'package:shared_domain/shared_domain.dart' show Progression;
+import 'package:shared_domain/shared_domain.dart' show Progression, WorldId;
 import 'package:game_presentation/game_presentation.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
@@ -71,7 +71,8 @@ final class FakeGameRouting implements GameRouting {
 /// settings leave reduce motion off unless [reduceMotion] turns it on and
 /// sound and haptics on unless [soundOn] or [hapticsOn] turn them off, sounds
 /// go nowhere unless [playSound] takes them, and the tutorial is kept as seen
-/// nowhere unless [markTutorialSeen] keeps it.
+/// nowhere unless [markTutorialSeen] keeps it. The screen is opened with
+/// [progression], a new player's unless given, which [progressionStore] keeps.
 List<Override> gameOverrides(
   FakeGameRules rules, {
   game.BestScores? bestScores,
@@ -79,18 +80,23 @@ List<Override> gameOverrides(
   game.GameLaunch launch = .daily,
   MarkTutorialSeenFun? markTutorialSeen,
   PlaySoundFun? playSound,
+  Progression? progression,
+  game.ProgressionStore? progressionStore,
   bool reduceMotion = false,
   RewardedActionFun? rewardedAction,
   game.SavedRun? resumed,
   GameRouting? routing,
   game.RunStore? runStore,
   bool soundOn = true,
+  WorldId? world,
 }) => [
   ...game.bindProviders(
     bestScores: (ref) => bestScores ?? FakeBestScores(),
     clock: (ref) => const FakeClock(),
     gameRules: (ref) => rules,
-    progressionStore: (ref) => _MemoryProgressionStore(),
+    progressionStore: (ref) =>
+        progressionStore ??
+        FakeProgressionStore(game.startingProgression(rules)),
     runStore: (ref) => runStore ?? FakeRunStore(),
   ),
   ...bindProviders(
@@ -104,20 +110,21 @@ List<Override> gameOverrides(
   ...bindRoutingProviders(gameRouting: (ref) => routing ?? FakeGameRouting()),
   animationsDisabledProvider.overrideWithValue(false),
   gameLaunchProvider.overrideWithValue(launch),
+  if (progression != null)
+    launchProgressionProvider.overrideWithValue(progression),
+  launchedWorldProvider.overrideWithValue(world),
   resumedRunProvider.overrideWithValue(resumed),
 ];
 
-/// The progression kept in memory, starting from nothing earned.
-final class _MemoryProgressionStore implements game.ProgressionStore {
-  Progression _saved = const Progression(
-    tutorialDone: false,
-    unlockedJokers: {},
-    worlds: {},
-  );
+/// The progression kept in memory, from [saved].
+final class FakeProgressionStore implements game.ProgressionStore {
+  FakeProgressionStore(this.saved);
+
+  Progression saved;
 
   @override
-  Future<Progression> load() async => _saved;
+  Future<Progression> load() async => saved;
 
   @override
-  Future<void> save(Progression progression) async => _saved = progression;
+  Future<void> save(Progression progression) async => saved = progression;
 }

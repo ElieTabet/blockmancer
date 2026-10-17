@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_domain/settings_domain.dart';
 
+import '../fake_feedback.dart';
 import '../fake_settings_store.dart';
 import '../pump_settings.dart';
 
@@ -179,6 +180,60 @@ void main() {
 
     // Then
     expect(routing.calls, ['replay tutorial']);
+  });
+
+  testWidgets(
+    'Given a release build, When Settings opens, Then the Version row shows the version and the build',
+    (tester) async {
+      // Given / When
+      await pumpSettings(tester);
+
+      // Then
+      expect(find.text('Version'), findsOneWidget);
+      expect(find.text('1.0.0 (2)'), findsOneWidget);
+    },
+  );
+
+  group('sending feedback', () {
+    testWidgets(
+      'Given a mail app, When Send feedback is tapped, Then a draft to support opens',
+      (tester) async {
+        // Given
+        final mailApp = FakeMailApp();
+        await pumpSettings(tester, mailApp: mailApp);
+
+        // When
+        await tester.ensureVisible(find.text('Send feedback'));
+        await tester.tap(find.text('Send feedback'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(mailApp.drafts.single.path, 'support@elietabet.com');
+        expect(find.text('No mail app'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Given no mail app, When Send feedback is tapped, Then the address is shown to write to',
+      (tester) async {
+        // Given
+        await pumpSettings(tester, mailApp: FakeMailApp(installed: false));
+
+        // When
+        await tester.ensureVisible(find.text('Send feedback'));
+        await tester.tap(find.text('Send feedback'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(find.text('No mail app'), findsOneWidget);
+        expect(
+          find.text(
+            "We couldn't open a mail app. Write to us at support@elietabet.com.",
+          ),
+          findsOneWidget,
+        );
+      },
+    );
   });
 
   testWidgets('the close button closes Settings', (tester) async {

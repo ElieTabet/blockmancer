@@ -5,7 +5,7 @@ part 'profile_dto.br.g.dart';
 
 /// The profile's schema version. Bump it with each change to these DTOs, and
 /// teach `migrateProfile` to bring the previous version up to it.
-const profileVersion = 2;
+const profileVersion = 3;
 
 /// Brings a profile written by an earlier version up to [profileVersion], one
 /// version at a time; a version this build doesn't know is unreadable.
@@ -15,6 +15,10 @@ Map<String, dynamic> migrateProfile(
 }) => switch (json['version']) {
   1 => migrateProfile(
     _fromVersion1(json, startingProgression: startingProgression),
+    startingProgression: startingProgression,
+  ),
+  2 => migrateProfile(
+    _fromVersion2(json),
     startingProgression: startingProgression,
   ),
   profileVersion => json,
@@ -35,6 +39,16 @@ Map<String, dynamic> _fromVersion1(
   'version': 2,
 };
 
+/// Version 2 kept no world bests: there were no world runs to keep them for.
+Map<String, dynamic> _fromVersion2(Map<String, dynamic> json) => {
+  ...json,
+  'bests': <String, dynamic>{
+    ...json['bests'] as Map<String, dynamic>,
+    'worlds': <String, dynamic>{},
+  },
+  'version': 3,
+};
+
 @JsonSerializable(explicitToJson: true)
 final class ProfileDto {
   const ProfileDto({
@@ -48,7 +62,7 @@ final class ProfileDto {
 
   /// A profile with no bests, at [startingProgression].
   factory ProfileDto.starting(Progression startingProgression) => ProfileDto(
-    bests: const BestsDto(daily: {}),
+    bests: const BestsDto(daily: {}, worlds: {}),
     progression: .fromDomain(startingProgression),
     version: profileVersion,
   );
@@ -63,7 +77,7 @@ final class ProfileDto {
 /// Each mode's best run total.
 @JsonSerializable()
 final class BestsDto {
-  const BestsDto({required this.daily, this.practice});
+  const BestsDto({required this.daily, required this.worlds, this.practice});
 
   factory BestsDto.fromJson(Map<String, dynamic> json) =>
       _$BestsDtoFromJson(json);
@@ -72,6 +86,9 @@ final class BestsDto {
   /// — a year of them is a few kilobytes.
   final Map<String, int> daily;
   final int? practice;
+
+  /// Keyed by the world's name.
+  final Map<String, int> worlds;
 
   Map<String, dynamic> toJson() => _$BestsDtoToJson(this);
 }

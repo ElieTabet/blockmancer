@@ -51,6 +51,8 @@ final class TutorialNotifierProvider
           TutorialNotifierProvider.$allTransitiveDependencies3,
           TutorialNotifierProvider.$allTransitiveDependencies4,
           TutorialNotifierProvider.$allTransitiveDependencies5,
+          TutorialNotifierProvider.$allTransitiveDependencies6,
+          TutorialNotifierProvider.$allTransitiveDependencies7,
         },
       );
 
@@ -58,11 +60,15 @@ final class TutorialNotifierProvider
   static final $allTransitiveDependencies1 = gameProvider;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies3 = playbackProvider;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies4 =
-      PlaybackNotifierProvider.$allTransitiveDependencies3;
-  static final $allTransitiveDependencies5 =
-      PlaybackNotifierProvider.$allTransitiveDependencies4;
+      GameNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = playbackProvider;
+  static final $allTransitiveDependencies6 =
+      PlaybackNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      PlaybackNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$tutorialNotifierHash();

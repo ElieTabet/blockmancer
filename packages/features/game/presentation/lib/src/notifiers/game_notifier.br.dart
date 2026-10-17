@@ -17,7 +17,9 @@ part 'game_notifier.br.g.dart';
 ///
 /// What it plays is saved after every action, so a killed app resumes it —
 /// all but the tutorial, which is played once and left.
-@Riverpod(dependencies: [gameLaunch, resumedRun])
+@Riverpod(
+  dependencies: [gameLaunch, launchProgression, launchedWorld, resumedRun],
+)
 class GameNotifier extends _$GameNotifier {
   var _reviving = false;
 
@@ -37,7 +39,7 @@ class GameNotifier extends _$GameNotifier {
     }
 
     // Nothing to resume means the save was lost: today's run instead.
-    final start = ref.read(runStartForProvider)(launch);
+    final start = _startFor(launch, world: ref.watch(launchedWorldProvider));
 
     if (launch == .tutorial) {
       return GameUiState(
@@ -51,6 +53,9 @@ class GameNotifier extends _$GameNotifier {
 
     return _fresh(start);
   }
+
+  /// Moves on from what the run unlocked to how it ended.
+  void closeUnlocks() => state = state.copyWith(unlocksSeen: true);
 
   void endRun() => _apply(_rules.endRun(state.run));
 
@@ -76,14 +81,19 @@ class GameNotifier extends _$GameNotifier {
   }
 
   /// Leaves the tutorial for a practice run, from its starting pick.
-  void playPractice() =>
-      state = _fresh(ref.read(runStartForProvider)(.practice));
+  void playPractice() => state = _fresh(_startFor(.practice));
 
   /// Plays the same mode again from its first pick: the same daily run, even
-  /// past midnight, or a new practice run.
+  /// past midnight, or a new practice or world run. Its jokers are the ones
+  /// the screen was opened with: what this run unlocked comes with the next.
   void retry() => state = _fresh(switch (state.mode) {
-    DailyMode() => (mode: state.mode, seed: state.run.seed),
-    PracticeMode() => ref.read(runStartForProvider)(.practice),
+    DailyMode() => (
+      config: state.run.config,
+      mode: state.mode,
+      seed: state.run.seed,
+    ),
+    PracticeMode() => _startFor(.practice),
+    WorldMode(:final world) => _startFor(.world, world: world),
   });
 
   /// Revives once the reward it costs has been earned. A second tap while the
@@ -127,7 +137,10 @@ class GameNotifier extends _$GameNotifier {
 
     if (state.isTutorial) return;
 
-    if (ended) unawaited(_recordEnd(run));
+    if (ended) {
+      unawaited(_recordEnd(run));
+      unawaited(_recordProgress(run));
+    }
 
     unawaited(_save(SavedRun(mode: state.mode, run: run)));
   }
@@ -152,16 +165,48 @@ class GameNotifier extends _$GameNotifier {
     }
   }
 
+  Future<void> _recordProgress(RunState run) async {
+    final recordProgression = ref.read(recordProgressionProvider);
+
+    try {
+      final progress = await recordProgression(state.mode, run);
+
+      // Not if the player has already started again.
+      if (progress == null || !ref.mounted || !identical(state.run, run)) {
+        return;
+      }
+
+      state = state.copyWith(progress: progress);
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Recording the progression failed; nothing earned is shown',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
   /// A new run. Not saved until its first action: opening a run by mistake
   /// and backing out leaves the saved one standing.
   GameUiState _fresh(RunStart start) {
-    final (:mode, :seed) = start;
+    final (:config, :mode, :seed) = start;
 
     return GameUiState(
       lastEvents: const [],
       mode: mode,
       moveCount: 0,
-      run: _rules.startRun(config: _rules.defaultConfig, seed: seed),
+      run: _rules.startRun(config: config, seed: seed),
+    );
+  }
+
+  RunStart _startFor(GameLaunch launch, {WorldId? world}) {
+    final runStartFor = ref.read(runStartForProvider);
+
+    return runStartFor(
+      launch,
+      progression: ref.read(launchProgressionProvider),
+      world: world,
     );
   }
 

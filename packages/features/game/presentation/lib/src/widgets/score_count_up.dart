@@ -278,7 +278,7 @@ final class _FiredLine extends StatelessWidget {
         for (final pulse in fired)
           context.t.game.banner.fired(
             effect: _effect(context, pulse.delta),
-            joker: jokerText(context, pulse.joker).name,
+            joker: jokerName(context, pulse.joker),
           ),
       ].join(' · '),
       maxLines: 1,

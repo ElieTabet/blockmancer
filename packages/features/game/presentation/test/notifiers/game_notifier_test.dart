@@ -17,18 +17,24 @@ void main() {
   ProviderContainer container({
     FakeBestScores? bestScores,
     GameLaunch launch = .daily,
+    Progression? progression,
+    ProgressionStore? progressionStore,
     RewardedActionFun? rewardedAction,
     SavedRun? resumed,
     FakeRunStore? runStore,
+    WorldId? world,
   }) {
     final container = ProviderContainer(
       overrides: gameOverrides(
         rules,
         bestScores: bestScores,
         launch: launch,
+        progression: progression,
+        progressionStore: progressionStore,
         rewardedAction: rewardedAction,
         resumed: resumed,
         runStore: runStore,
+        world: world,
       ),
     );
     addTearDown(container.dispose);
@@ -72,6 +78,65 @@ void main() {
       rules.calls.where((call) => call.startsWith('startRun')),
       hasLength(2),
     );
+  });
+
+  group('the jokers a run may offer', () {
+    test('are every joker in a daily run', () {
+      // Given / When
+      container().read(gameProvider);
+
+      // Then
+      expect(rules.configured.single.jokerPool, JokerId.values);
+    });
+
+    test("are only the player's in practice", () {
+      // Given / When
+      container(launch: .practice).read(gameProvider);
+
+      // Then
+      final (:jokerPool, :world) = rules.configured.single;
+      expect(jokerPool, [JokerId.patience, JokerId.twin]);
+      expect(world, WorldId.rubble);
+    });
+
+    test('are the ones the screen was opened with in a world run', () {
+      // Given
+      const progression = Progression(
+        tutorialDone: true,
+        unlockedJokers: {.quarry, .twin},
+        worlds: {},
+      );
+
+      // When
+      final state = container(
+        launch: .world,
+        progression: progression,
+        world: .gravity,
+      ).read(gameProvider);
+
+      // Then
+      expect(state.mode, const GameMode.world(world: .gravity));
+      final (:jokerPool, :world) = rules.configured.single;
+      expect(jokerPool, [JokerId.quarry, JokerId.twin]);
+      expect(world, WorldId.gravity);
+    });
+  });
+
+  test('playing a world again plays the same world on a new seed', () {
+    // Given
+    final game = container(launch: .world, world: .gravity);
+    rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 1)]);
+    game.read(gameProvider.notifier).endRun();
+
+    // When
+    game.read(gameProvider.notifier).retry();
+
+    // Then
+    expect(game.read(gameProvider).mode, const GameMode.world(world: .gravity));
+    expect(rules.configured.map((config) => config.world), [
+      WorldId.gravity,
+      WorldId.gravity,
+    ]);
   });
 
   test('a move keeps what it did and counts as a new move', () {
@@ -452,6 +517,65 @@ void main() {
         expect(game.read(gameProvider).record, isNull);
       },
     );
+  });
+
+  group('when a world run ends', () {
+    late FakeProgressionStore store;
+
+    setUp(() => store = FakeProgressionStore(startingProgression(rules)));
+
+    test('beating its boss keeps and shows what it unlocked', () async {
+      // Given
+      final game = container(
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+      rules.next = (runIn(const .won()), const [GameEvent.runWon(total: 0)]);
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      final progress = game.read(gameProvider).progress;
+      expect(progress?.unlockedWorld, WorldId.gravity);
+      expect(progress?.unlockedJokers, [JokerId.stonemason, JokerId.quarry]);
+      expect(store.saved.worlds[WorldId.gravity]?.unlocked, isTrue);
+    });
+
+    test('what it unlocked is shown once, then the run end', () async {
+      // Given
+      final game = container(
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+      rules.next = (runIn(const .won()), const [GameEvent.runWon(total: 0)]);
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // When
+      game.read(gameProvider.notifier).closeUnlocks();
+
+      // Then
+      expect(game.read(gameProvider).unlocksSeen, isTrue);
+    });
+
+    test('a daily run leaves the map as it was', () async {
+      // Given
+      final before = store.saved;
+      final game = container(progressionStore: store);
+      rules.next = (runIn(const .won()), const [GameEvent.runWon(total: 0)]);
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      expect(game.read(gameProvider).progress, isNull);
+      expect(store.saved, before);
+    });
   });
 
   group('saving the run', () {

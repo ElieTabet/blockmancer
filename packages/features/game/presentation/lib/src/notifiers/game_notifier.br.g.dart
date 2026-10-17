@@ -38,16 +38,22 @@ final class GameNotifierProvider
         isAutoDispose: true,
         dependencies: <ProviderOrFamily>[
           gameLaunchProvider,
+          launchProgressionProvider,
+          launchedWorldProvider,
           resumedRunProvider,
         ],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           GameNotifierProvider.$allTransitiveDependencies0,
           GameNotifierProvider.$allTransitiveDependencies1,
-        ],
+          GameNotifierProvider.$allTransitiveDependencies2,
+          GameNotifierProvider.$allTransitiveDependencies3,
+        },
       );
 
   static final $allTransitiveDependencies0 = gameLaunchProvider;
-  static final $allTransitiveDependencies1 = resumedRunProvider;
+  static final $allTransitiveDependencies1 = launchProgressionProvider;
+  static final $allTransitiveDependencies2 = launchedWorldProvider;
+  static final $allTransitiveDependencies3 = resumedRunProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameNotifierHash();
@@ -65,7 +71,7 @@ final class GameNotifierProvider
   }
 }
 
-String _$gameNotifierHash() => r'f4dc9429452c60df7e6e61ce96d59b5896383cf3';
+String _$gameNotifierHash() => r'f24d3347c1890f75dc505fad5f4023db2843f501';
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.

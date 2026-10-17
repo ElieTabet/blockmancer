@@ -282,6 +282,20 @@ void main() {
     });
   }
 
+  test('a world run comes back as the run of its world', () async {
+    // Given
+    final saved = SavedRun(
+      mode: const .world(world: .gravity),
+      run: _midRound,
+    );
+
+    // When
+    final loaded = await _relaunchedWith(saved);
+
+    // Then
+    expect(loaded, saved);
+  });
+
   test('nothing is resumed before a run has been saved', () async {
     expect(await const SharedPreferencesRunStore().load(), isNull);
   });
@@ -306,7 +320,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 5);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 6);
   });
 
   for (final (name, raw) in [

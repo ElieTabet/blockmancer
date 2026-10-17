@@ -7,7 +7,9 @@ import 'package:settings_presentation/src/notifiers/settings_state_notifier.br.d
 import 'package:settings_presentation/src/widgets/language_row.dart';
 import 'package:settings_presentation/src/widgets/replay_tutorial_row.dart';
 import 'package:settings_presentation/src/widgets/reset_progress_row.dart';
+import 'package:settings_presentation/src/widgets/send_feedback_row.dart';
 import 'package:settings_presentation/src/widgets/toggle_row.dart';
+import 'package:settings_presentation/src/widgets/version_row.dart';
 
 /// What the player can change, one row each.
 final class SettingsWidget extends StatelessWidget {
@@ -32,7 +34,9 @@ final class SettingsWidget extends StatelessWidget {
               ToggleRow(toggle: .reduceMotion),
               LanguageRow(),
               ReplayTutorialRow(),
+              SendFeedbackRow(),
               ResetProgressRow(),
+              VersionRow(),
             ],
           ),
         ),

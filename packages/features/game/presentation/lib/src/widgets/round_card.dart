@@ -5,6 +5,7 @@ import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/painting/round_progress_painter.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
+import 'package:game_presentation/src/widgets/world_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 /// The round in play: which one, the score against its target, and how many
@@ -44,12 +45,13 @@ final class RoundTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (index, count, isBoss) = ref.watch(
+    final (index, count, isBoss, world) = ref.watch(
       gameProvider.select(
         (state) => (
           state.run.roundIndex + 1,
           state.run.config.rounds.length,
           state.run.round.isBoss,
+          state.run.config.world,
         ),
       ),
     );
@@ -58,7 +60,9 @@ final class RoundTitle extends ConsumerWidget {
     return Text(
       maxLines: 1,
       overflow: .ellipsis,
-      isBoss ? round.boss : round.regular(count: count, index: index),
+      isBoss
+          ? round.boss(world: worldName(context, world))
+          : round.regular(count: count, index: index),
       style: TextStyle(
         color: isBoss ? DSGameColor.bossRound : DSGameColor.regularRound,
         fontSize: 14,

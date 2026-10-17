@@ -186,6 +186,53 @@ final class ResetProgressProvider
 
 String _$resetProgressHash() => r'eb8209e70a22991acc5fa3809a3389022f2a94bd';
 
+/// See [SendFeedbackBehavior].
+
+@ProviderFor(sendFeedback)
+final sendFeedbackProvider = SendFeedbackProvider._();
+
+/// See [SendFeedbackBehavior].
+
+final class SendFeedbackProvider
+    extends
+        $FunctionalProvider<SendFeedbackFun, SendFeedbackFun, SendFeedbackFun>
+    with $Provider<SendFeedbackFun> {
+  /// See [SendFeedbackBehavior].
+  SendFeedbackProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sendFeedbackProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sendFeedbackHash();
+
+  @$internal
+  @override
+  $ProviderElement<SendFeedbackFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SendFeedbackFun create(Ref ref) {
+    return sendFeedback(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SendFeedbackFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SendFeedbackFun>(value),
+    );
+  }
+}
+
+String _$sendFeedbackHash() => r'6b4eb90394b83e8fd2ff6f9f4c3cbaef876f9116';
+
 @ProviderFor(soundOn)
 final soundOnProvider = SoundOnProvider._();
 

@@ -3,6 +3,7 @@
     "title": "Blockmancer",
     "subtitle": "Daily run · same pieces for everyone",
     "practiceSubtitle": "Practice · a new run every time",
+    "worldSubtitle": "$world · earn its three stars",
     "leave": "Back to the menu",
     "tutorial": {
       "drag": "Drag a piece onto the board",
@@ -15,7 +16,7 @@
     "runTotal": "Run $total",
     "round": {
       "regular": "Round · $index / $count",
-      "boss": "Boss · Rubble",
+      "boss": "Boss · $world",
       "target": "/ $target",
       "piecesLeft(param=count)": {
         "one": "$count piece left",
@@ -69,72 +70,103 @@
       "noJokers": "none",
       "best": "Best: $points",
       "newBest": "New best!",
-      "retry": "Play again"
+      "retry": "Play again",
+      "stars": {
+        "bossBeaten": "Beat the boss",
+        "noRevive": "Beat the boss without reviving",
+        "threshold": "Reach $points",
+        "earned": "Star earned",
+        "newStar": "New star",
+        "missing": "Star not earned yet"
+      }
+    },
+    "unlocks": {
+      "label": "Unlocked",
+      "newWorld": "New world: $world",
+      "newJokers": "New jokers",
+      "jokersNote": "These jokers can now turn up in your runs.",
+      "next": "Continue"
+    },
+    "worlds": {
+      "rubble": "Rubble",
+      "gravity": "Gravity",
+      "fog": "Fog",
+      "speed": "Speed",
+      "mirror": "Mirror"
     },
     "jokers": {
       "stonemason": {
         "name": "Stonemason",
-        "description": "+50 chips for each stone cleared. 2 extra stones every round."
+        "description(param=stones)": {
+          "one": "+$chips chips for each stone cleared. 1 extra stone every round.",
+          "other": "+$chips chips for each stone cleared. $stones extra stones every round."
+        }
       },
       "combo": {
         "name": "Combo King",
-        "description": "+1 mult for every clearing move in a row."
+        "description": "+$mult mult for every clearing move in a row."
       },
       "patience": {
         "name": "Patience",
-        "description": "Each move without a clear stores +2 mult for your next clear."
+        "description": "Each move without a clear stores +$mult mult for your next clear."
       },
       "precision": {
         "name": "Precision",
-        "description": "+6 mult when a 1–2 cell piece completes a line."
+        "description": "+$mult mult when a 1–$size cell piece completes a line."
       },
       "collector": {
         "name": "Collector",
-        "description": "+1 mult on every clear for each joker you own."
+        "description": "+$mult mult on every clear for each joker you own."
       },
       "twin": {
         "name": "Twin Lines",
-        "description": "×3 mult when you clear 2 or more lines at once."
+        "description": "×$factor mult when you clear $lines or more lines at once."
       },
       "column": {
         "name": "Column Hunter",
-        "description": "×2 mult when your move clears a column."
+        "description": "×$factor mult when your move clears a column."
       },
       "heavy": {
         "name": "Heavyweight",
-        "description": "×2 mult when a piece of 4+ cells completes a line."
+        "description": "×$factor mult when a piece of $size+ cells completes a line."
       },
       "sweep": {
         "name": "Clean Sweep",
-        "description": "+500 points when the board becomes completely empty."
+        "description": "+$points points when the board becomes completely empty."
       },
       "quarry": {
         "name": "Quarry",
-        "description": "Every clear drops a new stone on a random empty cell."
+        "description(param=stones)": {
+          "one": "Every clear drops a new stone on a random empty cell.",
+          "other": "Every clear drops $stones new stones on random empty cells."
+        }
       },
       "bigbox": {
         "name": "Big Box",
-        "description": "Pieces of 5+ cells show up 3× more often."
+        "description": "Pieces of $size+ cells show up $factor× more often."
       },
       "tiny": {
         "name": "Tiny Tools",
-        "description": "Pieces of 1–2 cells show up 3× more often."
+        "description": "Pieces of 1–$size cells show up $factor× more often."
       },
       "pockets": {
         "name": "Deep Pockets",
-        "description": "+4 pieces every round."
+        "description(param=pieces)": {
+          "one": "+1 piece every round.",
+          "other": "+$pieces pieces every round."
+        }
       },
       "saver": {
         "name": "Saver",
-        "description": "Each unused piece when you beat a round gives +40 run points."
+        "description": "Each unused piece when you beat a round gives +$points run points."
       },
       "anchor": {
         "name": "Anchor",
-        "description": "+4 mult when your move clears the bottom row."
+        "description": "+$mult mult when your move clears the bottom row."
       },
       "avalanche": {
         "name": "Avalanche",
-        "description": "+25 chips for each filled cell left in the bottom 2 rows after a clear."
+        "description": "+$chips chips for each filled cell left in the bottom 2 rows after a clear."
       }
     }
   },
@@ -181,6 +213,14 @@
       "title": "Replay tutorial",
       "subtitle": "How to play, step by step"
     },
+    "feedback": {
+      "title": "Send feedback",
+      "subtitle": "Opens an email to the team",
+      "unavailableTitle": "No mail app",
+      "unavailableMessage": "We couldn't open a mail app. Write to us at $address.",
+      "ok": "OK"
+    },
+    "version": "Version",
     "reset": {
       "title": "Reset progress",
       "subtitle": "Your best scores and the run in progress",

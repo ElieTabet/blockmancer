@@ -1,6 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:settings_domain/src/behaviors/reset_progress_behavior.dart';
+import 'package:settings_domain/src/behaviors/send_feedback_behavior.dart';
 import 'package:settings_domain/src/contracts/settings_store.dart';
+import 'package:settings_domain/src/entities/app_details.br.dart';
 import 'package:settings_domain/src/entities/app_language.dart';
 import 'package:settings_domain/src/entities/app_settings.br.dart';
 import 'package:settings_domain/src/notifiers/settings_notifier.br.dart';
@@ -13,6 +15,8 @@ part 'providers.br.g.dart';
 // load, each reads as a first launch has it.
 
 typedef ResetProgressFun = Future<void> Function();
+
+typedef SendFeedbackFun = Future<bool> Function();
 
 const _defaults = AppSettings();
 
@@ -37,6 +41,13 @@ ResetProgressFun resetProgress(Ref ref) => ResetProgressBehavior(
   resetTutorial: ref.watch(settingsProvider.notifier).resetTutorial,
 ).call;
 
+/// See [SendFeedbackBehavior].
+@riverpod
+SendFeedbackFun sendFeedback(Ref ref) => SendFeedbackBehavior(
+  appDetails: ref.watch(di.appDetailsProvider.future),
+  composeEmail: ref.watch(di.composeEmailProvider),
+).call;
+
 @riverpod
 bool soundOn(Ref ref) =>
     ref.watch(settingsProvider).value?.sound ?? _defaults.sound;
@@ -49,9 +60,13 @@ Future<bool> tutorialSeen(Ref ref) => ref.watch(
 );
 
 List<Override> bindProviders({
+  required Future<AppDetails> Function(Ref ref) appDetails,
   required di.ClearProgressFun Function(Ref ref) clearProgress,
+  required di.ComposeEmailFun Function(Ref ref) composeEmail,
   required SettingsStore Function(Ref ref) settingsStore,
 }) => [
+  di.appDetailsProvider.overrideWith(appDetails),
   di.clearProgressProvider.overrideWith(clearProgress),
+  di.composeEmailProvider.overrideWith(composeEmail),
   di.settingsStoreProvider.overrideWith(settingsStore),
 ];

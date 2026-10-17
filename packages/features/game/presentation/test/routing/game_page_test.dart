@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/game_presentation.dart';
 import 'package:l10n_application/l10n_application.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 import '../fake_game_rules.dart';
 import '../game_overrides.dart';
@@ -97,6 +98,79 @@ void main() {
       },
     );
   }
+
+  group('a world run', () {
+    Future<FakeGameRules> openWorld(
+      WidgetTester tester,
+      ProgressionStore store,
+    ) async {
+      final rules = FakeGameRules(
+        start: runIn(const .pickingJoker(offers: [.twin]), pickIndex: 0),
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: gameOverrides(rules, progressionStore: store),
+          child: TranslationProvider(
+            child: MaterialApp(
+              theme: DSTheme.instance.darkTheme,
+              home: const GamePage(launch: .world, world: .gravity),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      return rules;
+    }
+
+    testWidgets("offers the jokers this device's progression unlocked", (
+      tester,
+    ) async {
+      // Given
+      final store = FakeProgressionStore(
+        const Progression(
+          tutorialDone: true,
+          unlockedJokers: {.quarry, .twin},
+          worlds: {},
+        ),
+      );
+
+      // When
+      final rules = await openWorld(tester, store);
+
+      // Then
+      expect(find.text('Pick your starting joker'), findsOneWidget);
+      final (:jokerPool, :world) = rules.configured.single;
+      expect(jokerPool, [JokerId.quarry, JokerId.twin]);
+      expect(world, WorldId.gravity);
+    });
+
+    testWidgets(
+      "offers a new player's jokers when the progression is out of reach",
+      (tester) async {
+        // Given / When
+        final rules = await openWorld(tester, _UnreachableProgressionStore());
+
+        // Then
+        expect(find.text('Pick your starting joker'), findsOneWidget);
+        expect(rules.configured.single.jokerPool, [
+          JokerId.patience,
+          JokerId.twin,
+        ]);
+      },
+    );
+  });
+}
+
+/// Progression storage that can't be reached at all.
+final class _UnreachableProgressionStore implements ProgressionStore {
+  @override
+  Future<Progression> load() => Future.error(StateError('no storage'));
+
+  @override
+  Future<void> save(Progression progression) => throw StateError('no storage');
 }
 
 /// Storage that can't be reached at all.

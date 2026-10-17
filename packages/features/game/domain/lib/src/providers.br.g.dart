@@ -144,7 +144,112 @@ final class ClearProgressProvider
   }
 }
 
-String _$clearProgressHash() => r'6236ca04eba501fd7cb3c49a879b67f9c7b6a848';
+String _$clearProgressHash() => r'00fef86e532af07696c82f61b88d971b991e797b';
+
+/// What the player has earned across runs, as this device keeps it.
+
+@ProviderFor(progression)
+final progressionProvider = ProgressionProvider._();
+
+/// What the player has earned across runs, as this device keeps it.
+
+final class ProgressionProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Progression>,
+          Progression,
+          FutureOr<Progression>
+        >
+    with $FutureModifier<Progression>, $FutureProvider<Progression> {
+  /// What the player has earned across runs, as this device keeps it.
+  ProgressionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'progressionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$progressionHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Progression> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Progression> create(Ref ref) {
+    return progression(ref);
+  }
+}
+
+String _$progressionHash() => r'd5ef8901cb6c69644074bfd17991c4d85b4d3089';
+
+/// See [RecordProgressionBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+@ProviderFor(recordProgression)
+final recordProgressionProvider = RecordProgressionProvider._();
+
+/// See [RecordProgressionBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+final class RecordProgressionProvider
+    extends
+        $FunctionalProvider<
+          RecordProgressionFun,
+          RecordProgressionFun,
+          RecordProgressionFun
+        >
+    with $Provider<RecordProgressionFun> {
+  /// See [RecordProgressionBehavior].
+  ///
+  /// Kept alive because it refreshes [progressionProvider] after an await, by
+  /// when an auto-disposed provider's ref may be gone.
+  RecordProgressionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recordProgressionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$recordProgressionHash();
+
+  @$internal
+  @override
+  $ProviderElement<RecordProgressionFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  RecordProgressionFun create(Ref ref) {
+    return recordProgression(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RecordProgressionFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RecordProgressionFun>(value),
+    );
+  }
+}
+
+String _$recordProgressionHash() => r'85963c5719272d158f407d3041b4b80de947d10e';
 
 /// Keeps a finished run's total if it beats its mode's best, and says so.
 ///
@@ -241,7 +346,7 @@ final class RunStartForProvider
   }
 }
 
-String _$runStartForHash() => r'c02f48cfe5f287087dfb95a55f6517de7be70b0a';
+String _$runStartForHash() => r'ef3a184b7b3dd7886cb0f42afb542b7eb5048bfe';
 
 /// Whether a run is saved to resume.
 
@@ -280,6 +385,61 @@ final class HasSavedRunProvider
 }
 
 String _$hasSavedRunHash() => r'305e7ff8111ee1c05fbc7d7c9dc06a729a67539a';
+
+/// What the player has earned across runs. Throws when the device's storage
+/// can't be reached at all.
+
+@ProviderFor(loadProgression)
+final loadProgressionProvider = LoadProgressionProvider._();
+
+/// What the player has earned across runs. Throws when the device's storage
+/// can't be reached at all.
+
+final class LoadProgressionProvider
+    extends
+        $FunctionalProvider<
+          LoadProgressionFun,
+          LoadProgressionFun,
+          LoadProgressionFun
+        >
+    with $Provider<LoadProgressionFun> {
+  /// What the player has earned across runs. Throws when the device's storage
+  /// can't be reached at all.
+  LoadProgressionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'loadProgressionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$loadProgressionHash();
+
+  @$internal
+  @override
+  $ProviderElement<LoadProgressionFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  LoadProgressionFun create(Ref ref) {
+    return loadProgression(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LoadProgressionFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LoadProgressionFun>(value),
+    );
+  }
+}
+
+String _$loadProgressionHash() => r'785dd3946efa5f7c9e8f9d05fdb159f862ae5d3e';
 
 /// The run saved on this device, or null when there is none to resume.
 /// Throws when the device's storage can't be reached at all.
@@ -428,7 +588,7 @@ final class TodaysDailyBestProvider
   }
 }
 
-String _$todaysDailyBestHash() => r'ce960fcf2619f8949e001c1ecbf058a42d39a685';
+String _$todaysDailyBestHash() => r'1f3a5fb8aa143639cb24cc78ace0a4994f4c74e7';
 
 /// What a new profile starts from, worked out from the rules so the storage
 /// never needs to know them.

@@ -76,13 +76,15 @@ const testConfig = RunConfig(
 );
 
 /// Scripted rules: every move answers [next], and every call is recorded.
-/// Shape ids are singles; a piece fits wherever the board is empty.
+/// Shape ids are singles; a piece fits wherever the board is empty. The map
+/// is Rubble then Gravity, and a new player has Patience and Twin.
 final class FakeGameRules implements GameRules {
   FakeGameRules({required this.start});
 
-  static const _noMap = 'the screen has no world map yet';
-
   final calls = <String>[];
+
+  /// The joker pool of every run asked for, apart from [calls].
+  final configured = <({List<JokerId> jokerPool, WorldId world})>[];
   Transition? next;
   final RunState start;
 
@@ -90,10 +92,10 @@ final class FakeGameRules implements GameRules {
   RunConfig get defaultConfig => testConfig;
 
   @override
-  List<JokerId> get startingJokers => throw UnimplementedError(_noMap);
+  List<JokerId> get startingJokers => const [.patience, .twin];
 
   @override
-  List<WorldId> get worldOrder => throw UnimplementedError(_noMap);
+  List<WorldId> get worldOrder => const [.rubble, .gravity];
 
   @override
   bool canPlace(
@@ -108,8 +110,11 @@ final class FakeGameRules implements GameRules {
       state.revivesUsed < state.config.revivesPerRun;
 
   @override
-  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
-      throw UnimplementedError(_noMap);
+  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) {
+    configured.add((jokerPool: jokerPool, world: world));
+
+    return testConfig.copyWith(jokerPool: jokerPool, world: world);
+  }
 
   @override
   int dailySeed({required int day, required int month, required int year}) => 1;
@@ -121,13 +126,13 @@ final class FakeGameRules implements GameRules {
   bool fitsSomewhere(RunState state, {required int trayIndex}) => true;
 
   @override
-  bool isPlayable(WorldId world) => throw UnimplementedError(_noMap);
+  bool isPlayable(WorldId world) => world == .rubble || world == .gravity;
 
   @override
   int liveRunTotal(RunState state) => state.runTotal + state.score;
 
   @override
-  WorldId? nextWorld(WorldId world) => throw UnimplementedError(_noMap);
+  WorldId? nextWorld(WorldId world) => world == .rubble ? .gravity : null;
 
   @override
   JokerId partnerOf(JokerId id) => id == .twin ? .patience : .twin;
@@ -188,7 +193,8 @@ final class FakeGameRules implements GameRules {
   }
 
   @override
-  List<JokerId> unlocksOf(WorldId world) => throw UnimplementedError(_noMap);
+  List<JokerId> unlocksOf(WorldId world) =>
+      world == .rubble ? const [.stonemason, .quarry] : const [];
 
   Transition _move(String call, RunState state) {
     calls.add(call);

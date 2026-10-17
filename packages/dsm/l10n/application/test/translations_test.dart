@@ -88,7 +88,7 @@ void main() {
       final strings = [
         t.home.daily.title,
         t.game.round.piecesLeft(count: 2),
-        t.game.jokers.patience.description,
+        t.game.jokers.patience.description(mult: 2),
         t.settings.reset.confirmMessage,
       ];
       expect(strings, everyElement(isNotEmpty), reason: locale.name);
@@ -109,8 +109,8 @@ void main() {
       isNot(english.game.round.piecesLeft(count: 2)),
     );
     expect(
-      french.game.jokers.twin.description,
-      isNot(english.game.jokers.twin.description),
+      french.game.jokers.twin.description(factor: 3, lines: 2),
+      isNot(english.game.jokers.twin.description(factor: 3, lines: 2)),
     );
     expect(
       french.settings.reset.confirmMessage,

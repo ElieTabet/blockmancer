@@ -1,5 +1,5 @@
 name: settings_domain
-description: "settings domain layer — the player's settings (sound, haptics, reduce motion, language, whether the tutorial was seen) and the reset of their progress. Where they are kept, and what progress is, come through slots."
+description: "settings domain layer — the player's settings (sound, haptics, reduce motion, language, whether the tutorial was seen) the reset of their progress, and the feedback email. Where they are kept, what progress is, the app's version and the mail app come through slots."
 publish_to: none
 resolution: workspace
 

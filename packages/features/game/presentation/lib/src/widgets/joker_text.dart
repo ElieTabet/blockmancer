@@ -2,62 +2,77 @@ import 'package:flutter/widgets.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-/// A joker's localised name and description.
-({String description, String name}) jokerText(
-  BuildContext context,
-  JokerId id,
-) {
+String jokerName(BuildContext context, JokerId id) {
   final jokers = context.t.game.jokers;
 
   return switch (id) {
-    .anchor => (
-      description: jokers.anchor.description,
-      name: jokers.anchor.name,
+    .anchor => jokers.anchor.name,
+    .avalanche => jokers.avalanche.name,
+    .bigbox => jokers.bigbox.name,
+    .collector => jokers.collector.name,
+    .column => jokers.column.name,
+    .combo => jokers.combo.name,
+    .heavy => jokers.heavy.name,
+    .patience => jokers.patience.name,
+    .pockets => jokers.pockets.name,
+    .precision => jokers.precision.name,
+    .quarry => jokers.quarry.name,
+    .saver => jokers.saver.name,
+    .stonemason => jokers.stonemason.name,
+    .sweep => jokers.sweep.name,
+    .tiny => jokers.tiny.name,
+    .twin => jokers.twin.name,
+  };
+}
+
+/// What [id] does, with the numbers [tuning] plays it with: a run's own
+/// tuning in a run, so a joker Remote Config retuned never shows the old ones.
+String jokerDescription(BuildContext context, JokerId id, JokerTuning tuning) {
+  final jokers = context.t.game.jokers;
+
+  return switch (id) {
+    .anchor => jokers.anchor.description(mult: tuning.anchorMult),
+    .avalanche => jokers.avalanche.description(
+      chips: tuning.avalancheChipsPerCell,
     ),
-    .avalanche => (
-      description: jokers.avalanche.description,
-      name: jokers.avalanche.name,
+    .bigbox => jokers.bigbox.description(
+      factor: tuning.bigBoxFactor,
+      size: tuning.bigBoxMinPieceSize,
     ),
-    .bigbox => (
-      description: jokers.bigbox.description,
-      name: jokers.bigbox.name,
+    .collector => jokers.collector.description(
+      mult: tuning.collectorMultPerJoker,
     ),
-    .collector => (
-      description: jokers.collector.description,
-      name: jokers.collector.name,
+    .column => jokers.column.description(factor: tuning.columnFactor),
+    .combo => jokers.combo.description(mult: tuning.comboMultPerStreak),
+    .heavy => jokers.heavy.description(
+      factor: tuning.heavyFactor,
+      size: tuning.heavyMinPieceSize,
     ),
-    .column => (
-      description: jokers.column.description,
-      name: jokers.column.name,
+    .patience => jokers.patience.description(
+      mult: tuning.patienceStoredPerMove,
     ),
-    .combo => (description: jokers.combo.description, name: jokers.combo.name),
-    .heavy => (description: jokers.heavy.description, name: jokers.heavy.name),
-    .patience => (
-      description: jokers.patience.description,
-      name: jokers.patience.name,
+    .pockets => jokers.pockets.description(pieces: tuning.pocketsExtraPieces),
+    .precision => jokers.precision.description(
+      mult: tuning.precisionBonusMult,
+      size: tuning.precisionMaxPieceSize,
     ),
-    .pockets => (
-      description: jokers.pockets.description,
-      name: jokers.pockets.name,
+    .quarry => jokers.quarry.description(stones: tuning.quarryStonesPerClear),
+    .saver => jokers.saver.description(points: tuning.saverPointsPerPiece),
+    .stonemason => jokers.stonemason.description(
+      chips: tuning.stonemasonChipsPerStone,
+      stones: tuning.stonemasonExtraStones,
     ),
-    .precision => (
-      description: jokers.precision.description,
-      name: jokers.precision.name,
+    .sweep => jokers.sweep.description(points: tuning.sweepBonus),
+    .tiny => jokers.tiny.description(
+      factor: tuning.tinyFactor,
+      size: tuning.tinyMaxPieceSize,
     ),
-    .quarry => (
-      description: jokers.quarry.description,
-      name: jokers.quarry.name,
+    .twin => jokers.twin.description(
+      factor: tuning.twinFactor,
+      lines: tuning.twinMinLines,
     ),
-    .saver => (description: jokers.saver.description, name: jokers.saver.name),
-    .stonemason => (
-      description: jokers.stonemason.description,
-      name: jokers.stonemason.name,
-    ),
-    .sweep => (description: jokers.sweep.description, name: jokers.sweep.name),
-    .tiny => (description: jokers.tiny.description, name: jokers.tiny.name),
-    .twin => (description: jokers.twin.description, name: jokers.twin.name),
   };
 }
 
 String jokerNames(BuildContext context, Iterable<JokerId> ids) =>
-    ids.map((id) => jokerText(context, id).name).join(', ');
+    ids.map((id) => jokerName(context, id)).join(', ');

@@ -6,6 +6,7 @@ import 'package:game_presentation/src/widgets/game_button.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
+import 'package:game_presentation/src/widgets/run_stars.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -50,6 +51,7 @@ final class RunEndSheet extends ConsumerWidget {
         ),
         SheetTitle(end.total(total: pointsText(context, total))),
         const _BestLine(),
+        const RunStars(),
         Text(
           end.build(
             jokers: jokers.isEmpty ? end.noJokers : jokerNames(context, jokers),

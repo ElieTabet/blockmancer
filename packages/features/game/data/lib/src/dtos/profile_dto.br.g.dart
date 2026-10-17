@@ -23,12 +23,14 @@ Map<String, dynamic> _$ProfileDtoToJson(ProfileDto instance) =>
 
 BestsDto _$BestsDtoFromJson(Map<String, dynamic> json) => BestsDto(
   daily: Map<String, int>.from(json['daily'] as Map),
+  worlds: Map<String, int>.from(json['worlds'] as Map),
   practice: (json['practice'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$BestsDtoToJson(BestsDto instance) => <String, dynamic>{
   'daily': instance.daily,
   'practice': instance.practice,
+  'worlds': instance.worlds,
 };
 
 ProgressionDto _$ProgressionDtoFromJson(Map<String, dynamic> json) =>

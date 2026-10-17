@@ -28,6 +28,16 @@ bool animationsDisabled(Ref ref) => throw UnimplementedError(
 GameLaunch gameLaunch(Ref ref) =>
     throw UnimplementedError('gameLaunchProvider is scoped by GamePage');
 
+/// The progression this screen was opened with, which says the jokers its
+/// runs may offer. Loaded once by `GamePage` before the game starts, like the
+/// saved run; a new player's for a daily run, which offers every joker.
+@Riverpod(dependencies: [])
+Progression launchProgression(Ref ref) => ref.watch(initialProgressionProvider);
+
+/// The world a world launch plays; null for any other launch.
+@Riverpod(dependencies: [])
+WorldId? launchedWorld(Ref ref) => null;
+
 /// Whether the game keeps still: no squash, no burst, no shake.
 @Riverpod(dependencies: [animationsDisabled])
 bool reduceMotion(Ref ref) =>

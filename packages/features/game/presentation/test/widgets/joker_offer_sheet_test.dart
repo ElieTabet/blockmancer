@@ -48,6 +48,28 @@ void main() {
     },
   );
 
+  testWidgets(
+    "Given a run that retunes Twin Lines, When it is offered, Then its card reads the run's numbers",
+    (tester) async {
+      // Given
+      final run = runIn(const .pickingJoker(offers: [.twin, .combo]));
+      final retuned = run.copyWith(
+        config: testConfig.copyWith(
+          jokers: testConfig.jokers.copyWith(twinFactor: 5),
+        ),
+      );
+
+      // When
+      await pumpGame(tester, retuned);
+
+      // Then
+      expect(
+        find.text('×5 mult when you clear 2 or more lines at once.'),
+        findsOneWidget,
+      );
+    },
+  );
+
   testWidgets('the pick cannot be skipped by tapping beside it or going back', (
     tester,
   ) async {

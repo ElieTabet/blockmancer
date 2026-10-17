@@ -41,8 +41,13 @@ void main() {
       () => Future<void>.delayed(const Duration(milliseconds: 100)),
     );
 
-    // After the splash delay it hands off to the tutorial.
+    // After the splash delay it hands off to the tutorial, which opens once
+    // the progression has come over the same channel.
     await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Drag a piece onto the board'), findsOneWidget);

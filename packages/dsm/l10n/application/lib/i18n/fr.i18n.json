@@ -3,6 +3,7 @@
     "title": "Blockmancer",
     "subtitle": "Partie du jour · les mêmes pièces pour tout le monde",
     "practiceSubtitle": "Entraînement · une nouvelle partie à chaque fois",
+    "worldSubtitle": "$world · gagne ses trois étoiles",
     "leave": "Retour au menu",
     "tutorial": {
       "drag": "Fais glisser une pièce sur le plateau",
@@ -15,7 +16,7 @@
     "runTotal": "Partie : $total",
     "round": {
       "regular": "Manche · $index / $count",
-      "boss": "Boss · Gravats",
+      "boss": "Boss · $world",
       "target": "/ $target",
       "piecesLeft(param=count)": {
         "one": "$count pièce restante",
@@ -69,72 +70,103 @@
       "noJokers": "aucun",
       "best": "Record : $points",
       "newBest": "Nouveau record !",
-      "retry": "Rejouer"
+      "retry": "Rejouer",
+      "stars": {
+        "bossBeaten": "Bats le boss",
+        "noRevive": "Bats le boss sans seconde chance",
+        "threshold": "Atteins $points",
+        "earned": "Étoile gagnée",
+        "newStar": "Nouvelle étoile",
+        "missing": "Étoile pas encore gagnée"
+      }
+    },
+    "unlocks": {
+      "label": "Débloqué",
+      "newWorld": "Nouveau monde : $world",
+      "newJokers": "Nouveaux jokers",
+      "jokersNote": "Ces jokers peuvent maintenant apparaître dans tes parties.",
+      "next": "Continuer"
+    },
+    "worlds": {
+      "rubble": "Gravats",
+      "gravity": "Gravité",
+      "fog": "Brouillard",
+      "speed": "Vitesse",
+      "mirror": "Miroir"
     },
     "jokers": {
       "stonemason": {
         "name": "Tailleur de pierre",
-        "description": "+50 jetons par pierre effacée. 2 pierres de plus à chaque manche."
+        "description(param=stones)": {
+          "one": "+$chips jetons par pierre effacée. 1 pierre de plus à chaque manche.",
+          "other": "+$chips jetons par pierre effacée. $stones pierres de plus à chaque manche."
+        }
       },
       "combo": {
         "name": "Roi du combo",
-        "description": "+1 mult par coup d'affilée qui efface une ligne."
+        "description": "+$mult mult par coup d'affilée qui efface une ligne."
       },
       "patience": {
         "name": "Patience",
-        "description": "Chaque coup qui n'efface rien met +2 mult de côté pour ta prochaine ligne."
+        "description": "Chaque coup qui n'efface rien met +$mult mult de côté pour ta prochaine ligne."
       },
       "precision": {
         "name": "Précision",
-        "description": "+6 mult quand une pièce de 1 ou 2 cases complète une ligne."
+        "description": "+$mult mult quand une pièce de 1 à $size cases complète une ligne."
       },
       "collector": {
         "name": "Collectionneur",
-        "description": "À chaque ligne effacée, +1 mult par joker que tu as."
+        "description": "À chaque ligne effacée, +$mult mult par joker que tu as."
       },
       "twin": {
         "name": "Lignes jumelles",
-        "description": "×3 mult quand tu effaces 2 lignes ou plus d'un coup."
+        "description": "×$factor mult quand tu effaces $lines lignes ou plus d'un coup."
       },
       "column": {
         "name": "Chasseur de colonnes",
-        "description": "×2 mult quand ton coup efface une colonne."
+        "description": "×$factor mult quand ton coup efface une colonne."
       },
       "heavy": {
         "name": "Poids lourd",
-        "description": "×2 mult quand une pièce de 4 cases ou plus complète une ligne."
+        "description": "×$factor mult quand une pièce de $size cases ou plus complète une ligne."
       },
       "sweep": {
         "name": "Grand ménage",
-        "description": "+500 points quand tu vides entièrement le plateau."
+        "description": "+$points points quand tu vides entièrement le plateau."
       },
       "quarry": {
         "name": "Carrière",
-        "description": "Chaque ligne effacée fait tomber une pierre sur une case vide au hasard."
+        "description(param=stones)": {
+          "one": "Chaque ligne effacée fait tomber une pierre sur une case vide au hasard.",
+          "other": "Chaque ligne effacée fait tomber $stones pierres sur des cases vides au hasard."
+        }
       },
       "bigbox": {
         "name": "Grand format",
-        "description": "Les pièces de 5 cases ou plus arrivent 3× plus souvent."
+        "description": "Les pièces de $size cases ou plus arrivent $factor× plus souvent."
       },
       "tiny": {
         "name": "Petits outils",
-        "description": "Les pièces de 1 ou 2 cases arrivent 3× plus souvent."
+        "description": "Les pièces de 1 à $size cases arrivent $factor× plus souvent."
       },
       "pockets": {
         "name": "Poches pleines",
-        "description": "+4 pièces à chaque manche."
+        "description(param=pieces)": {
+          "one": "+1 pièce à chaque manche.",
+          "other": "+$pieces pièces à chaque manche."
+        }
       },
       "saver": {
         "name": "Épargnant",
-        "description": "Chaque pièce non jouée à la fin d'une manche gagnée rapporte +40 points de partie."
+        "description": "Chaque pièce non jouée à la fin d'une manche gagnée rapporte +$points points de partie."
       },
       "anchor": {
         "name": "Ancre",
-        "description": "+4 mult quand ton coup efface la ligne du bas."
+        "description": "+$mult mult quand ton coup efface la ligne du bas."
       },
       "avalanche": {
         "name": "Avalanche",
-        "description": "Après chaque ligne effacée, +25 jetons par case pleine restée dans les 2 lignes du bas."
+        "description": "Après chaque ligne effacée, +$chips jetons par case pleine restée dans les 2 lignes du bas."
       }
     }
   },
@@ -181,6 +213,14 @@
       "title": "Revoir le tutoriel",
       "subtitle": "Comment jouer, pas à pas"
     },
+    "feedback": {
+      "title": "Envoyer un avis",
+      "subtitle": "Ouvre un e-mail à l'équipe",
+      "unavailableTitle": "Pas d'app de mail",
+      "unavailableMessage": "Impossible d'ouvrir une app de mail. Écris-nous à $address.",
+      "ok": "OK"
+    },
+    "version": "Version",
     "reset": {
       "title": "Réinitialiser la progression",
       "subtitle": "Tes records et la partie en cours",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/widgets/joker_card.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:l10n_application/l10n_application.dart';
@@ -114,65 +115,25 @@ final class JokerOfferCard extends ConsumerWidget {
     final completesPair = ref.watch(
       gameProvider.select((state) => state.run.jokers.contains(partner)),
     );
-    final text = jokerText(context, id);
     final offers = context.t.game.offers;
-    final partnerName = jokerText(context, partner).name;
+    final partnerName = jokerName(context, partner);
 
     return DSPressable(
       onTap: () => ref.read(gameProvider.notifier).pickJoker(id),
-      child: Container(
-        padding: const .all(DSSpace.small),
-        decoration: ShapeDecoration(
-          color: DSColor.jokerSurface,
-          shape: RoundedRectangleBorder(
-            borderRadius: .circular(DSCornerRadius.large),
-            side: BorderSide(
-              color: completesPair ? DSColor.accent : DSColor.joker,
-              width: 2,
-            ),
+      child: JokerCard(
+        id: id,
+        borderColor: completesPair ? DSColor.accent : DSColor.joker,
+        footer: Text(
+          completesPair
+              ? offers.completesPair(joker: partnerName)
+              : offers.pairsWith(joker: partnerName),
+          style: TextStyle(
+            color: completesPair ? DSColor.accent : DSColor.textMuted,
+            fontSize: 12,
+            fontWeight: .w700,
           ),
         ),
-        child: Row(
-          spacing: DSSpace.small,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: .start,
-                spacing: DSSpace.xxxsmall,
-                children: [
-                  Text(
-                    text.name,
-                    style: DSFont.display(
-                      const TextStyle(
-                        color: DSColor.jokerInk,
-                        fontSize: 17,
-                        fontWeight: .w600,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    text.description,
-                    style: const TextStyle(
-                      color: DSColor.textMuted,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    completesPair
-                        ? offers.completesPair(joker: partnerName)
-                        : offers.pairsWith(joker: partnerName),
-                    style: TextStyle(
-                      color: completesPair ? DSColor.accent : DSColor.textMuted,
-                      fontSize: 12,
-                      fontWeight: .w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            _TakeLabel(label: offers.take),
-          ],
-        ),
+        trailing: _TakeLabel(label: offers.take),
       ),
     );
   }

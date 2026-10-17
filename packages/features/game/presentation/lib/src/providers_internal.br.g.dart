@@ -107,6 +107,104 @@ final class GameLaunchProvider
 
 String _$gameLaunchHash() => r'e51edee4c82db8687ffb8ccaa510735fef6fa061';
 
+/// The progression this screen was opened with, which says the jokers its
+/// runs may offer. Loaded once by `GamePage` before the game starts, like the
+/// saved run; a new player's for a daily run, which offers every joker.
+
+@ProviderFor(launchProgression)
+final launchProgressionProvider = LaunchProgressionProvider._();
+
+/// The progression this screen was opened with, which says the jokers its
+/// runs may offer. Loaded once by `GamePage` before the game starts, like the
+/// saved run; a new player's for a daily run, which offers every joker.
+
+final class LaunchProgressionProvider
+    extends $FunctionalProvider<Progression, Progression, Progression>
+    with $Provider<Progression> {
+  /// The progression this screen was opened with, which says the jokers its
+  /// runs may offer. Loaded once by `GamePage` before the game starts, like the
+  /// saved run; a new player's for a daily run, which offers every joker.
+  LaunchProgressionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'launchProgressionProvider',
+        isAutoDispose: true,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$launchProgressionHash();
+
+  @$internal
+  @override
+  $ProviderElement<Progression> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Progression create(Ref ref) {
+    return launchProgression(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Progression value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Progression>(value),
+    );
+  }
+}
+
+String _$launchProgressionHash() => r'f0ae0a9eb9df3755b84b2b743f8ea6e109410030';
+
+/// The world a world launch plays; null for any other launch.
+
+@ProviderFor(launchedWorld)
+final launchedWorldProvider = LaunchedWorldProvider._();
+
+/// The world a world launch plays; null for any other launch.
+
+final class LaunchedWorldProvider
+    extends $FunctionalProvider<WorldId?, WorldId?, WorldId?>
+    with $Provider<WorldId?> {
+  /// The world a world launch plays; null for any other launch.
+  LaunchedWorldProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'launchedWorldProvider',
+        isAutoDispose: true,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$launchedWorldHash();
+
+  @$internal
+  @override
+  $ProviderElement<WorldId?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  WorldId? create(Ref ref) {
+    return launchedWorld(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(WorldId? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<WorldId?>(value),
+    );
+  }
+}
+
+String _$launchedWorldHash() => r'4325d92866141141e7f1170eb5a7cf9ebe8801af';
+
 /// Whether the game keeps still: no squash, no burst, no shake.
 
 @ProviderFor(reduceMotion)
@@ -235,6 +333,8 @@ final class RoundScoreShownProvider
           RoundScoreShownProvider.$allTransitiveDependencies3,
           RoundScoreShownProvider.$allTransitiveDependencies4,
           RoundScoreShownProvider.$allTransitiveDependencies5,
+          RoundScoreShownProvider.$allTransitiveDependencies6,
+          RoundScoreShownProvider.$allTransitiveDependencies7,
         },
       );
 
@@ -243,11 +343,15 @@ final class RoundScoreShownProvider
       GameNotifierProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies3 = playbackProvider;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies4 =
-      PlaybackNotifierProvider.$allTransitiveDependencies3;
-  static final $allTransitiveDependencies5 =
-      PlaybackNotifierProvider.$allTransitiveDependencies4;
+      GameNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = playbackProvider;
+  static final $allTransitiveDependencies6 =
+      PlaybackNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      PlaybackNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$roundScoreShownHash();
@@ -302,6 +406,8 @@ final class ShownRunProvider
           ShownRunProvider.$allTransitiveDependencies3,
           ShownRunProvider.$allTransitiveDependencies4,
           ShownRunProvider.$allTransitiveDependencies5,
+          ShownRunProvider.$allTransitiveDependencies6,
+          ShownRunProvider.$allTransitiveDependencies7,
         },
       );
 
@@ -310,11 +416,15 @@ final class ShownRunProvider
       GameNotifierProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies3 = playbackProvider;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies4 =
-      PlaybackNotifierProvider.$allTransitiveDependencies3;
-  static final $allTransitiveDependencies5 =
-      PlaybackNotifierProvider.$allTransitiveDependencies4;
+      GameNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = playbackProvider;
+  static final $allTransitiveDependencies6 =
+      PlaybackNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      PlaybackNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$shownRunHash();
@@ -369,6 +479,10 @@ final class TrayFitsProvider extends $FunctionalProvider<bool, bool, bool>
       GameNotifierProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      GameNotifierProvider.$allTransitiveDependencies3;
 
   @override
   String debugGetCreateSourceHash() => _$trayFitsHash();
@@ -422,11 +536,13 @@ final class TrayFitsFamily extends $Family
         retry: null,
         name: r'trayFitsProvider',
         dependencies: <ProviderOrFamily>[gameProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           TrayFitsProvider.$allTransitiveDependencies0,
           TrayFitsProvider.$allTransitiveDependencies1,
           TrayFitsProvider.$allTransitiveDependencies2,
-        ],
+          TrayFitsProvider.$allTransitiveDependencies3,
+          TrayFitsProvider.$allTransitiveDependencies4,
+        },
         isAutoDispose: true,
       );
 
@@ -467,6 +583,8 @@ final class TutorialHintProvider
           TutorialHintProvider.$allTransitiveDependencies4,
           TutorialHintProvider.$allTransitiveDependencies5,
           TutorialHintProvider.$allTransitiveDependencies6,
+          TutorialHintProvider.$allTransitiveDependencies7,
+          TutorialHintProvider.$allTransitiveDependencies8,
         },
       );
 
@@ -475,13 +593,17 @@ final class TutorialHintProvider
       GameNotifierProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies3 = tutorialProvider;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies4 =
-      TutorialNotifierProvider.$allTransitiveDependencies3;
-  static final $allTransitiveDependencies5 =
-      TutorialNotifierProvider.$allTransitiveDependencies4;
+      GameNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = tutorialProvider;
   static final $allTransitiveDependencies6 =
       TutorialNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      TutorialNotifierProvider.$allTransitiveDependencies6;
+  static final $allTransitiveDependencies8 =
+      TutorialNotifierProvider.$allTransitiveDependencies7;
 
   @override
   String debugGetCreateSourceHash() => _$tutorialHintHash();

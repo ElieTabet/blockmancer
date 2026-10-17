@@ -47,6 +47,8 @@ final class GameFeedbackProvider extends $NotifierProvider<GameFeedback, void> {
           GameFeedbackProvider.$allTransitiveDependencies3,
           GameFeedbackProvider.$allTransitiveDependencies4,
           GameFeedbackProvider.$allTransitiveDependencies5,
+          GameFeedbackProvider.$allTransitiveDependencies6,
+          GameFeedbackProvider.$allTransitiveDependencies7,
         },
       );
 
@@ -55,11 +57,15 @@ final class GameFeedbackProvider extends $NotifierProvider<GameFeedback, void> {
       GameNotifierProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies3 = playbackProvider;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies4 =
-      PlaybackNotifierProvider.$allTransitiveDependencies3;
-  static final $allTransitiveDependencies5 =
-      PlaybackNotifierProvider.$allTransitiveDependencies4;
+      GameNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = playbackProvider;
+  static final $allTransitiveDependencies6 =
+      PlaybackNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      PlaybackNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$gameFeedbackHash();
@@ -77,7 +83,7 @@ final class GameFeedbackProvider extends $NotifierProvider<GameFeedback, void> {
   }
 }
 
-String _$gameFeedbackHash() => r'63af717e5dcf40d623dc7894bc92eeed4a9586cd';
+String _$gameFeedbackHash() => r'ed650b5fbc813b7a4a740afadda85760e8eb6885';
 
 /// Plays each move's sounds and haptics as its beats play back, each obeying
 /// its own switch in Settings. Reduce motion stills the board, not the sound.

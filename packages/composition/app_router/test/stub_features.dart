@@ -35,7 +35,8 @@ List<Override> stubFeatures({
     bestScores: (ref) => const _NoBestScores(),
     clock: (ref) => const _NoonClock(),
     gameRules: (ref) => const BlockmancerEngine(),
-    progressionStore: (ref) => _MemoryProgressionStore(),
+    progressionStore: (ref) =>
+        _MemoryProgressionStore(ref.watch(game.initialProgressionProvider)),
     runStore: (ref) => runStore ?? _NoRunStore(),
   ),
   ...game_ui.bindProviders(
@@ -53,7 +54,15 @@ List<Override> stubFeatures({
     practiceBest: (ref) async => null,
   ),
   ...settings.bindProviders(
+    appDetails: (ref) async => const settings.AppDetails(
+      build: '1',
+      device: 'unknown',
+      os: 'unknown',
+      version: '1.0.0',
+    ),
     clearProgress: (ref) => ref.watch(game.clearProgressProvider),
+    composeEmail: (ref) =>
+        (mailto) async => false,
     settingsStore: (ref) => const _FirstLaunchSettingsStore(),
   ),
   ...splash_ui.bindProviders(tutorialSeen: (ref) async => tutorialSeen),
@@ -116,13 +125,11 @@ final class _NoonClock implements game.Clock {
   DateTime now() => DateTime.utc(2026, 10, 17, 12);
 }
 
-/// The progression kept in memory, starting from nothing earned.
+/// The progression kept in memory, from a new player's.
 final class _MemoryProgressionStore implements game.ProgressionStore {
-  Progression _saved = const Progression(
-    tutorialDone: false,
-    unlockedJokers: {},
-    worlds: {},
-  );
+  _MemoryProgressionStore(this._saved);
+
+  Progression _saved;
 
   @override
   Future<Progression> load() async => _saved;

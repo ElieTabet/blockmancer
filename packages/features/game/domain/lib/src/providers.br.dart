@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
+import 'package:game_domain/src/behaviors/record_progression_behavior.dart';
 import 'package:game_domain/src/behaviors/record_run_end_behavior.dart';
+import 'package:game_domain/src/behaviors/run_start_for_behavior.dart';
 import 'package:game_domain/src/behaviors/save_run_behavior.dart';
 import 'package:game_domain/src/contracts/best_scores.dart';
 import 'package:game_domain/src/contracts/clock.dart';
@@ -9,8 +11,10 @@ import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/contracts/run_store.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
 import 'package:game_domain/src/entities/game_mode.br.dart';
+import 'package:game_domain/src/entities/progression_change.br.dart';
 import 'package:game_domain/src/entities/run_end.dart';
 import 'package:game_domain/src/entities/run_end_record.br.dart';
+import 'package:game_domain/src/entities/run_start.dart';
 import 'package:game_domain/src/entities/saved_run.br.dart';
 import 'package:game_domain/src/entities/starting_progression.dart';
 import 'package:game_domain/src/providers_di.br.dart' as di;
@@ -23,18 +27,23 @@ part 'providers.br.g.dart';
 
 typedef ClearProgressFun = Future<void> Function();
 
+/// See [RecordProgressionBehavior].
+typedef RecordProgressionFun =
+    Future<ProgressionChange?> Function(GameMode mode, RunState run);
+
 typedef RecordRunEndFun =
     Future<RunEndRecord> Function(GameMode mode, int total);
 
-/// A run to start: the mode it counts for, and the seed the rules play it on.
-typedef RunStart = ({GameMode mode, int seed});
+/// See [RunStartForBehavior]. A function, so each launch reads the clock
+/// afresh.
+typedef RunStartForFun =
+    RunStart Function(
+      GameLaunch launch, {
+      required Progression progression,
+      WorldId? world,
+    });
 
-/// The run [GameLaunch] asks for, as of now: today's daily run, or a practice
-/// run on a fresh seed. A function, so each launch reads the clock afresh.
-/// A resume normally starts nothing — it loads the saved run — so it only gets
-/// here when the save was lost, and starts today's daily instead. The tutorial
-/// plays the rules' own fixed run, and counts as the practice it hands over to.
-typedef RunStartForFun = RunStart Function(GameLaunch launch);
+typedef LoadProgressionFun = Future<Progression> Function();
 
 typedef LoadSavedRunFun = Future<SavedRun?> Function();
 
@@ -53,7 +62,9 @@ Future<int?> bestScore(Ref ref, GameMode mode) =>
 @Riverpod(keepAlive: true)
 ClearProgressFun clearProgress(Ref ref) {
   final clear = ClearProgressBehavior(
+    progression: ref.watch(di.progressionStoreProvider),
     scores: ref.watch(di.bestScoresProvider),
+    startingProgression: ref.watch(initialProgressionProvider),
     store: ref.watch(di.runStoreProvider),
   );
 
@@ -62,6 +73,32 @@ ClearProgressFun clearProgress(Ref ref) {
 
     ref.invalidate(bestScoreProvider);
     ref.invalidate(hasSavedRunProvider);
+    ref.invalidate(progressionProvider);
+  };
+}
+
+/// What the player has earned across runs, as this device keeps it.
+@riverpod
+Future<Progression> progression(Ref ref) =>
+    ref.watch(loadProgressionProvider)();
+
+/// See [RecordProgressionBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+@Riverpod(keepAlive: true)
+RecordProgressionFun recordProgression(Ref ref) {
+  final record = RecordProgressionBehavior(
+    rules: ref.watch(di.gameRulesProvider),
+    store: ref.watch(di.progressionStoreProvider),
+  );
+
+  return (mode, run) async {
+    final change = await record(mode, run);
+
+    if (change != null) ref.invalidate(progressionProvider);
+
+    return change;
   };
 }
 
@@ -83,24 +120,21 @@ RecordRunEndFun recordRunEnd(Ref ref) {
 }
 
 @riverpod
-RunStartForFun runStartFor(Ref ref) {
-  final clock = ref.watch(di.clockProvider);
-  final rules = ref.watch(di.gameRulesProvider);
-
-  return (launch) => switch (launch) {
-    .daily || .resume => dailyRunOn(clock.now(), rules: rules),
-    // Any 32 bits will do: practice runs are not meant to be replayed.
-    .practice || .tutorial => (
-      mode: const .practice(),
-      seed: clock.now().microsecondsSinceEpoch & 0xFFFFFFFF,
-    ),
-  };
-}
+RunStartForFun runStartFor(Ref ref) => RunStartForBehavior(
+  clock: ref.watch(di.clockProvider),
+  rules: ref.watch(di.gameRulesProvider),
+).call;
 
 /// Whether a run is saved to resume.
 @riverpod
 Future<bool> hasSavedRun(Ref ref) async =>
     await ref.watch(loadSavedRunProvider)() != null;
+
+/// What the player has earned across runs. Throws when the device's storage
+/// can't be reached at all.
+@riverpod
+LoadProgressionFun loadProgression(Ref ref) =>
+    ref.watch(di.progressionStoreProvider).load;
 
 /// The run saved on this device, or null when there is none to resume.
 /// Throws when the device's storage can't be reached at all.
@@ -134,7 +168,7 @@ SaveRunFun saveRun(Ref ref) {
 @riverpod
 Future<int?> todaysDailyBest(Ref ref) {
   final now = ref.watch(di.clockProvider).now().toUtc();
-  final (:mode, seed: _) = dailyRunOn(
+  final (config: _, :mode, seed: _) = dailyRunOn(
     now,
     rules: ref.watch(di.gameRulesProvider),
   );
@@ -146,18 +180,6 @@ Future<int?> todaysDailyBest(Ref ref) {
   ref.onDispose(midnight.cancel);
 
   return ref.watch(bestScoreProvider(mode).future);
-}
-
-/// The daily run of the UTC day [now] falls on. Keyed by that day itself, not
-/// by the seed: the seed is the rules' to derive, and may change without
-/// orphaning the saved bests.
-RunStart dailyRunOn(DateTime now, {required GameRules rules}) {
-  final day = now.toUtc();
-
-  return (
-    mode: .daily(day: day.year * 10000 + day.month * 100 + day.day),
-    seed: rules.dailySeed(day: day.day, month: day.month, year: day.year),
-  );
 }
 
 /// What a new profile starts from, worked out from the rules so the storage

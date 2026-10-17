@@ -22,7 +22,8 @@ blockmancer/
 │   ├── shared_domain/    # Entities shared across features (the game's RunState/GameEvent/…) + contracts (GameRules) — pure Dart, no logic
 │   ├── utilities/        # Horizontal infrastructure — no feature knowledge
 │   │   ├── ads/              # Rewarded ads behind `RewardedAds.show()` — no network yet, so every reward is granted (phase 3 brings AdMob)
-│   │   ├── external_links/   # Hands a link to the OS (browser, mail draft) — the only place url_launcher is known; unused yet
+│   │   ├── app_info/         # The app's version and the device it runs on (`readAppInfo()`, never throws) — the only place package_info_plus and device_info_plus are known
+│   │   ├── external_links/   # Hands a link to the OS (browser, mail draft) — the only place url_launcher is known; Settings' feedback email uses `composeEmail`
 │   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
 │   │   ├── sounds/           # The game's sound effects, decoded into memory up front behind GameSounds — the only place flutter_soloud is known
 │   │   ├── telemetry/        # Firebase Analytics + Crashlytics behind one switch — the only place either is known
@@ -320,9 +321,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 5`; `migrate(json)` brings an older version up to date one
+  wire format. The schema has `version: 6`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes
@@ -340,13 +341,42 @@ What a player has earned across runs is one `Progression` (`shared_domain`): per
   bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
   both read and write it, each update a read and a write with no await between, so neither wipes
   the other.
-- **Version 2.** A device without a profile is version 1: the `best.*` keys and
+- **Version 3.** A device without a profile is version 1: the `best.*` keys and
   `settings.tutorialSeen`. `migrateProfile` turns that into version 2 on first read (bests kept,
-  `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys. An
-  unreadable profile starts fresh and is replaced by the next write.
+  `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys; version 3
+  adds a best per world (`bests.worlds`), empty for older profiles. An unreadable profile starts
+  fresh and is replaced by the next write.
 - **Starting state:** `game_domain`'s `startingProgression(rules)` (exposed as
   `initialProgressionProvider`): the first world unlocked and `rules.startingJokers` — worked out
-  from the rules, so storage never knows them.
+  from the rules, so storage never knows them. Settings' reset progress puts it back
+  (`ClearProgressBehavior`), alongside the bests and the saved run.
+- **Three kinds of run.** `GameMode` is `daily`, `practice` or `world(world)`; a world run is
+  pushed as `GameRoute(launch: .world, world: …)` (nothing pushes one until the world map lands;
+  Home's two cards stay Daily and Practice). `RunStartForBehavior` (`runStartFor`) gives each its
+  `RunConfig`: the **daily** is the first world with **every** joker, whatever the player has
+  unlocked, so everyone plays the same run; **practice** is the first world and a **world run**
+  its own world, both offering only `unlockedJokers` (in `JokerId` order — the rules draw in their
+  own order anyway). The tutorial still plays the rules' fixed run.
+- **Loaded once.** `GamePage` reads the progression once before the game starts (every launch but
+  the daily, which doesn't need it), like the saved run, and scopes it in as
+  `launchProgressionProvider`; one it can't read plays with a new player's jokers. Retry keeps
+  the screen's progression, so what a run unlocked is offered from the next run opened, and a
+  resumed run keeps the config it was saved with.
+- **What a run earns.** At a world run's end `GameNotifier` calls `recordProgression`
+  (`RecordProgressionBehavior`, keepAlive, then refreshes `progressionProvider`). The first win
+  over the world's boss marks it beaten, unlocks the next world (playable or not — the map shows
+  "coming soon" from `isPlayable`) and adds `rules.unlocksOf(world)` to `unlockedJokers`; a second
+  win unlocks nothing. Stars: ★1 the boss beaten, ★2 beaten with `revivesUsed == 0`, ★3 a run
+  total of at least `config.starThreshold` — independent of the boss. Nothing is ever taken back
+  (each star ORed into what was earned). It returns a `ProgressionChange` (`newStars`, `stars`,
+  `unlockedWorld`, `unlockedJokers`) kept as `GameUiState.progress`. **Daily and practice runs
+  never touch progression**: the daily is everyone's competition and practice is free play.
+- **The celebration.** A run that unlocked something shows `UnlockSheet` first — "New world: …"
+  and the unlocked jokers' cards (`JokerCard`, the offer card's look) — and its Continue
+  (`closeUnlocks`) hands over to the run's end, so Play again stays the last thing on screen.
+  `RunEndSheet` then shows the world's three stars (`RunStars`), each with its objective; the new
+  ones in amber, popping in one after the other, still under reduce motion. A daily or practice
+  end shows no stars.
 
 ## Tutorial
 
@@ -427,7 +457,8 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
-`flutter_inappwebview`, `flutter_soloud`, `push`, `sounds`, `telemetry`, `url_launcher`, `ads` or
+`flutter_inappwebview`, `flutter_soloud`, `push`, `sounds`, `telemetry`, `url_launcher`, `ads`,
+`app_info`, `package_info_plus`, `device_info_plus`, `external_links` or
 `blockmancer_engine` directly** — a
 feature declares a contract and the composition layer injects the implementation, exactly as it does
 for routing.
@@ -479,6 +510,13 @@ The player's settings, kept on the device; there is no account to sync them to. 
   `settings_presentation`, which maps `AppLanguage` to slang's `LocaleSettings`) right after
   telemetry and before push, whose channel is named in the language the app shows. System re-reads
   the phone's locale.
+- **Version and feedback:** the Version row shows `settings_domain`'s `AppDetails` as "1.0.0 (2)",
+  and Send feedback runs `SendFeedbackBehavior`: a `mailto:support@elietabet.com` draft whose
+  subject and labels stay in English (support reads them) with the version, build, device and OS
+  prefilled. When no mail app opens, a popup shows the address. Both come through slots —
+  `appDetails` (keepAlive, `app_info`'s `readAppInfo` mapped field by field) and `composeEmail`
+  (`external_links`). `launchUrl` is called without `canLaunchUrl`, so neither iOS's
+  `LSApplicationQueriesSchemes` nor Android's `<queries>` is needed.
 
 ## Push notifications
 

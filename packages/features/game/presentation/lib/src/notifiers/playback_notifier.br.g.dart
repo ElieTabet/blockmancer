@@ -37,6 +37,8 @@ final class PlaybackNotifierProvider
           PlaybackNotifierProvider.$allTransitiveDependencies2,
           PlaybackNotifierProvider.$allTransitiveDependencies3,
           PlaybackNotifierProvider.$allTransitiveDependencies4,
+          PlaybackNotifierProvider.$allTransitiveDependencies5,
+          PlaybackNotifierProvider.$allTransitiveDependencies6,
         },
       );
 
@@ -45,8 +47,12 @@ final class PlaybackNotifierProvider
       GameNotifierProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       GameNotifierProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies3 = reduceMotionProvider;
+  static final $allTransitiveDependencies3 =
+      GameNotifierProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies4 =
+      GameNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = reduceMotionProvider;
+  static final $allTransitiveDependencies6 =
       ReduceMotionProvider.$allTransitiveDependencies0;
 
   @override

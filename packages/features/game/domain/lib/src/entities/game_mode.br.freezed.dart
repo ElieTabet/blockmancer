@@ -55,12 +55,13 @@ extension GameModePatterns on GameMode {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DailyMode value)?  daily,TResult Function( PracticeMode value)?  practice,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DailyMode value)?  daily,TResult Function( PracticeMode value)?  practice,TResult Function( WorldMode value)?  world,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case DailyMode() when daily != null:
 return daily(_that);case PracticeMode() when practice != null:
-return practice(_that);case _:
+return practice(_that);case WorldMode() when world != null:
+return world(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return practice(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DailyMode value)  daily,required TResult Function( PracticeMode value)  practice,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DailyMode value)  daily,required TResult Function( PracticeMode value)  practice,required TResult Function( WorldMode value)  world,}){
 final _that = this;
 switch (_that) {
 case DailyMode():
 return daily(_that);case PracticeMode():
-return practice(_that);}
+return practice(_that);case WorldMode():
+return world(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +99,13 @@ return practice(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DailyMode value)?  daily,TResult? Function( PracticeMode value)?  practice,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DailyMode value)?  daily,TResult? Function( PracticeMode value)?  practice,TResult? Function( WorldMode value)?  world,}){
 final _that = this;
 switch (_that) {
 case DailyMode() when daily != null:
 return daily(_that);case PracticeMode() when practice != null:
-return practice(_that);case _:
+return practice(_that);case WorldMode() when world != null:
+return world(_that);case _:
   return null;
 
 }
@@ -119,11 +122,12 @@ return practice(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int day)?  daily,TResult Function()?  practice,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int day)?  daily,TResult Function()?  practice,TResult Function( WorldId world)?  world,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case DailyMode() when daily != null:
 return daily(_that.day);case PracticeMode() when practice != null:
-return practice();case _:
+return practice();case WorldMode() when world != null:
+return world(_that.world);case _:
   return orElse();
 
 }
@@ -141,11 +145,12 @@ return practice();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int day)  daily,required TResult Function()  practice,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int day)  daily,required TResult Function()  practice,required TResult Function( WorldId world)  world,}) {final _that = this;
 switch (_that) {
 case DailyMode():
 return daily(_that.day);case PracticeMode():
-return practice();}
+return practice();case WorldMode():
+return world(_that.world);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +164,12 @@ return practice();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int day)?  daily,TResult? Function()?  practice,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int day)?  daily,TResult? Function()?  practice,TResult? Function( WorldId world)?  world,}) {final _that = this;
 switch (_that) {
 case DailyMode() when daily != null:
 return daily(_that.day);case PracticeMode() when practice != null:
-return practice();case _:
+return practice();case WorldMode() when world != null:
+return world(_that.world);case _:
   return null;
 
 }
@@ -268,5 +274,71 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class WorldMode implements GameMode {
+  const WorldMode({required this.world});
+  
+
+ final  WorldId world;
+
+/// Create a copy of GameMode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$WorldModeCopyWith<WorldMode> get copyWith => _$WorldModeCopyWithImpl<WorldMode>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorldMode&&(identical(other.world, world) || other.world == world));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,world);
+
+@override
+String toString() {
+  return 'GameMode.world(world: $world)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $WorldModeCopyWith<$Res> implements $GameModeCopyWith<$Res> {
+  factory $WorldModeCopyWith(WorldMode value, $Res Function(WorldMode) _then) = _$WorldModeCopyWithImpl;
+@useResult
+$Res call({
+ WorldId world
+});
+
+
+
+
+}
+/// @nodoc
+class _$WorldModeCopyWithImpl<$Res>
+    implements $WorldModeCopyWith<$Res> {
+  _$WorldModeCopyWithImpl(this._self, this._then);
+
+  final WorldMode _self;
+  final $Res Function(WorldMode) _then;
+
+/// Create a copy of GameMode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? world = null,}) {
+  return _then(WorldMode(
+world: null == world ? _self.world : world // ignore: cast_nullable_to_non_nullable
+as WorldId,
+  ));
+}
+
+
+}
 
 // dart format on

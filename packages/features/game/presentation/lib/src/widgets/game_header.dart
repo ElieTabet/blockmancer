@@ -6,6 +6,7 @@ import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/widgets/compact_screen.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
+import 'package:game_presentation/src/widgets/world_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 final class GameHeader extends StatelessWidget {
@@ -54,18 +55,25 @@ final class LeaveButton extends ConsumerWidget {
   );
 }
 
-/// Which run this is: today's daily, or practice.
+/// Which run this is: today's daily, practice, or a world's.
 final class ModeLine extends ConsumerWidget {
   const ModeLine({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPractice = ref.watch(
-      gameProvider.select((state) => state.mode is PracticeMode),
-    );
+    final mode = ref.watch(gameProvider.select((state) => state.mode));
+    final game = context.t.game;
+
+    final label = switch (mode) {
+      DailyMode() => game.subtitle,
+      PracticeMode() => game.practiceSubtitle,
+      WorldMode(:final world) => game.worldSubtitle(
+        world: worldName(context, world),
+      ),
+    };
 
     return Text(
-      isPractice ? context.t.game.practiceSubtitle : context.t.game.subtitle,
+      label,
       style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
     );
   }

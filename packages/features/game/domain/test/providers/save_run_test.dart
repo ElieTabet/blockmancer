@@ -16,7 +16,7 @@ void main() {
       overrides: bindProviders(
         bestScores: (ref) => FakeBestScores(),
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17)),
-        gameRules: (ref) => const DailySeedRules(),
+        gameRules: (ref) => const TwoWorldRules(),
         progressionStore: (ref) => FakeProgressionStore(),
         runStore: (ref) => store,
       ),

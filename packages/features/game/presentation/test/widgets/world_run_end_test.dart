@@ -1,0 +1,161 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:shared_domain/shared_domain.dart';
+
+import '../fake_game_rules.dart';
+import '../game_overrides.dart';
+import '../pump_game.dart';
+
+/// Ends a run opened from a lost round, as [ended] says it ended.
+Future<void> _endAs(
+  WidgetTester tester,
+  FakeGameRules rules,
+  RunState ended,
+) async {
+  rules.next = (ended, [GameEvent.runOver(total: ended.runTotal)]);
+  await tester.tap(find.text('End run'));
+  await tester.pumpAndSettle();
+}
+
+void main() {
+  late FakeProgressionStore store;
+
+  setUp(() {
+    store = FakeProgressionStore(
+      startingProgression(FakeGameRules(start: runIn(const .playing()))),
+    );
+  });
+
+  testWidgets(
+    'beating a world boss for the first time shows the new world and its two '
+    'jokers, then how the run ended',
+    (tester) async {
+      // Given
+      final rules = await pumpGame(
+        tester,
+        runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+
+      // When
+      await _endAs(tester, rules, runIn(const .won(), runTotal: 3000));
+
+      // Then
+      expect(find.text('New world: Gravity'), findsOneWidget);
+      expect(find.text('Stonemason'), findsOneWidget);
+      expect(find.text('Quarry'), findsOneWidget);
+      expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsNothing);
+
+      // When
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      // Then
+      expect(find.text('New world: Gravity'), findsNothing);
+      expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsOneWidget);
+    },
+  );
+
+  testWidgets("a world run's end shows the stars it earned as new", (
+    tester,
+  ) async {
+    // Given: Rubble's boss already beaten once, after a revive
+    store.saved = store.saved.copyWith(
+      worlds: {
+        ...store.saved.worlds,
+        WorldId.rubble: const WorldProgress(
+          bossBeaten: true,
+          stars: WorldStars(
+            bossBeaten: true,
+            noRevive: false,
+            scoreThreshold: false,
+          ),
+          unlocked: true,
+        ),
+      },
+    );
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+      launch: .world,
+      progressionStore: store,
+      world: .rubble,
+    );
+
+    // When: beaten again without a revive, short of the threshold
+    await _endAs(tester, rules, runIn(const .won(), runTotal: 3000));
+
+    // Then: straight to the end, the first star kept and the second new
+    expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsOneWidget);
+    expect(find.text('Beat the boss'), findsOneWidget);
+    expect(find.text('Beat the boss without reviving'), findsOneWidget);
+    expect(find.text('Reach 8,000'), findsOneWidget);
+    expect(find.bySemanticsLabel('Star earned'), findsOneWidget);
+    expect(find.bySemanticsLabel('New star'), findsOneWidget);
+    expect(find.bySemanticsLabel('Star not earned yet'), findsOneWidget);
+  });
+
+  for (final (name, reduceMotion) in [
+    ('pops in', false),
+    ('keeps still under reduce motion', true),
+  ]) {
+    testWidgets('a new star $name', (tester) async {
+      // Given
+      final rules = await pumpGame(
+        tester,
+        runIn(const .roundLost(reason: .noRoom)),
+        launch: .world,
+        progressionStore: store,
+        reduceMotion: reduceMotion,
+        world: .rubble,
+      );
+      rules.next = (
+        runIn(const .over(), runTotal: 9000),
+        const [GameEvent.runOver(total: 9000)],
+      );
+
+      // When: the threshold reached, short of the boss
+      await tester.tap(find.text('End run'));
+      for (var frame = 0; frame < 4; frame++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+
+      // Then
+      final star = tester.widget<ScaleTransition>(
+        find.ancestor(
+          of: find.bySemanticsLabel('New star'),
+          matching: find.byType(ScaleTransition),
+        ),
+      );
+      expect(star.scale.value, reduceMotion ? 1.0 : lessThan(1.0));
+      await tester.pumpAndSettle();
+    });
+  }
+
+  testWidgets('a daily run earns no stars, so its end shows none', (
+    tester,
+  ) async {
+    // Given / When
+    await pumpGame(tester, runIn(const .won(), runTotal: 9000));
+
+    // Then
+    expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsOneWidget);
+    expect(find.text('Beat the boss'), findsNothing);
+  });
+
+  testWidgets("a world run's header names its world", (tester) async {
+    // Given / When
+    await pumpGame(
+      tester,
+      runIn(const .playing()),
+      launch: .world,
+      world: .gravity,
+    );
+
+    // Then
+    expect(find.text('Gravity · earn its three stars'), findsOneWidget);
+  });
+}

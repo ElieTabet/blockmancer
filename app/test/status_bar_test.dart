@@ -52,6 +52,11 @@ void main() {
     );
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
+    // The tutorial opens once the progression has come over the same channel.
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
+    await tester.pumpAndSettle();
 
     expect(find.text('Drag a piece onto the board'), findsOneWidget);
     expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);

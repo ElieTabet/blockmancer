@@ -11,6 +11,7 @@ SavedRunDto _$SavedRunDtoFromJson(Map<String, dynamic> json) => SavedRunDto(
   run: RunStateDto.fromJson(json['run'] as Map<String, dynamic>),
   version: (json['version'] as num).toInt(),
   day: (json['day'] as num?)?.toInt(),
+  world: json['world'] as String?,
 );
 
 Map<String, dynamic> _$SavedRunDtoToJson(SavedRunDto instance) =>
@@ -19,6 +20,7 @@ Map<String, dynamic> _$SavedRunDtoToJson(SavedRunDto instance) =>
       'mode': instance.mode,
       'run': instance.run.toJson(),
       'version': instance.version,
+      'world': instance.world,
     };
 
 RunStateDto _$RunStateDtoFromJson(Map<String, dynamic> json) => RunStateDto(
