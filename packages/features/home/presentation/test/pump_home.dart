@@ -161,11 +161,13 @@ final rubbleBeaten = freshProgression().copyWith(
 /// of 17 October 2026, its marker still unless [reduceMotion] is off.
 /// Announcing jokers does nothing unless [markJokersAnnounced] says otherwise.
 /// [screen] is Home unless another of its screens is given, on a [viewSize]
-/// view.
+/// view, with the game's [collection] of jokers unless [jokerCollection] says
+/// otherwise.
 Future<FakeHomeRouting> pumpHome(
   WidgetTester tester, {
   int? dailyBest,
   bool hasSavedRun = false,
+  JokerCollection jokerCollection = collection,
   MarkJokersAnnouncedFun? markJokersAnnounced,
   int? practiceBest,
   Future<Progression> Function()? progression,
@@ -186,7 +188,7 @@ Future<FakeHomeRouting> pumpHome(
           dailyBest: (ref) async => dailyBest,
           dailyDate: (ref) => DateTime.utc(2026, 10, 17),
           hasSavedRun: (ref) async => hasSavedRun,
-          jokerCollection: (ref) => collection,
+          jokerCollection: (ref) => jokerCollection,
           markJokersAnnounced: (ref) => markJokersAnnounced ?? () async {},
           practiceBest: (ref) async => practiceBest,
           progression: (ref) => progression?.call() ?? _fresh(),

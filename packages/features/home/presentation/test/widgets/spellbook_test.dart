@@ -116,6 +116,40 @@ void main() {
     );
   });
 
+  testWidgets('Given a catalog of another size, When the Spellbook opens, '
+      'Then it shows every card of it, pair by pair', (tester) async {
+    // Given: 3 pairs, one of them unlocked
+    const small = JokerCollection(
+      pairs: [
+        JokerPair(first: .combo, second: .collector, unlock: .starting()),
+        JokerPair(
+          first: .stonemason,
+          second: .quarry,
+          unlock: .boss(world: .rubble),
+        ),
+        JokerPair(first: .fullhouse, second: .brink, unlock: .stars(count: 4)),
+      ],
+      tuning: tuning,
+    );
+
+    // When
+    await pumpHome(
+      tester,
+      jokerCollection: small,
+      progression: () async => freshProgression().copyWith(
+        unlockedJokers: const {.combo, .collector},
+      ),
+      screen: const SpellbookWidget(),
+      viewSize: const Size(390, 1300),
+    );
+
+    // Then
+    expect(find.byType(SpellbookCard), findsNWidgets(6));
+    expect(find.byType(UnlockedJokerCard), findsNWidgets(2));
+    expect(find.byType(LockedJokerCard), findsNWidgets(4));
+    expect(find.text('2 of 6 jokers unlocked'), findsOneWidget);
+  });
+
   testWidgets('Given an unlocked card, When it is tapped, Then its sheet '
       'opens in full', (tester) async {
     // Given
