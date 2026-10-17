@@ -55,6 +55,7 @@ melos:
         flutter_inappwebview: ^6.1.5 # The only webview engine; no feature depends on it directly (packages/utilities/webviews)
         flutter_local_notifications: ^22.3.1 # Android has no foreground display of its own — this is what draws it (packages/utilities/push)
         flutter_riverpod: ^3.3.1
+        flutter_soloud: ^5.2.1 # sound effects preloaded in memory and mixed natively over FFI: no per-play channel hop or decode, so a sound lands with the touch (packages/utilities/sounds)
         freezed_annotation: ^3.1.0
         google_fonts: ^6.3.1
         intl: ^0.20.2

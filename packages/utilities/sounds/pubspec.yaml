@@ -1,0 +1,28 @@
+name: sounds
+description: "The game's sound effects, preloaded and played with minimal latency — the only place flutter_soloud is known."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_soloud: ^5.2.1
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+# Listed one by one so LICENSES.md, beside them, is not bundled.
+flutter:
+  assets:
+    - assets/sounds/clear.ogg
+    - assets/sounds/joker.ogg
+    - assets/sounds/place.ogg
+    - assets/sounds/round_lost.ogg
+    - assets/sounds/round_won.ogg
+    - assets/sounds/tap.ogg
