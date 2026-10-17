@@ -202,14 +202,12 @@ Transition revive(RunState state) {
           Cell(col: col, row: row): const .empty(),
     }),
     piecesLeft: state.piecesLeft + state.config.revivePieces,
+    revivePiecesLeft: state.revivePiecesLeft + state.config.revivePieces,
     revivesUsed: state.revivesUsed + 1,
   );
 
   return _settle(
-    _refillIfEmpty(effectsOf(state.jokers), (
-      next,
-      [.revived(rows: cleared)],
-    ), byRevive: true),
+    _refillIfEmpty(effectsOf(state.jokers), (next, [.revived(rows: cleared)])),
   );
 }
 
@@ -249,12 +247,9 @@ int? _playableShape(RunState state, int trayIndex) {
 
 /// Draws the next tray when the current one is played out and pieces remain.
 /// Only a tray dealt in full from the round's own pieces can earn Hat Trick:
-/// a short one, or one dealt [byRevive], starts with no clear mask.
-Transition _refillIfEmpty(
-  List<JokerEffect> jokers,
-  Transition transition, {
-  bool byRevive = false,
-}) {
+/// a short one, or one holding any of a revive's pieces, starts with no clear
+/// mask.
+Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
   final (state, events) = transition;
 
   if (state.tray.any((slot) => slot != null) || state.piecesLeft == 0) {
@@ -277,12 +272,16 @@ Transition _refillIfEmpty(
     }
   }
 
+  final piecesLeft = state.piecesLeft - count;
+  final ownPiecesOnly = piecesLeft >= state.revivePiecesLeft;
+
   return (
     state.copyWith(
-      piecesLeft: state.piecesLeft - count,
+      piecesLeft: piecesLeft,
       piecesRngState: rng.state,
+      revivePiecesLeft: ownPiecesOnly ? state.revivePiecesLeft : piecesLeft,
       tray: tray,
-      trayClearMask: count == traySize && !byRevive ? 0 : null,
+      trayClearMask: count == traySize && ownPiecesOnly ? 0 : null,
     ),
     [...events, .trayRefilled(tray: tray)],
   );
@@ -359,6 +358,7 @@ Transition _startRound(Transition transition) {
       runSeed: state.seed,
       stream: .pieces,
     ),
+    revivePiecesLeft: 0,
     roundIndex: roundIndex,
     score: 0,
     stonesRngState: stonesRng.state,

@@ -114,7 +114,8 @@ Map<String, dynamic> _fromVersion5(Map<String, dynamic> json) => {
 /// Version 6 knew neither the stars' four jokers nor Hat Trick's tray: its
 /// runs go on drawing from the pool they saved, which lacks them, so the new
 /// numbers only complete the schema, and the tray in hand can't earn Hat
-/// Trick. The star unlocks are the ones version 7 first shipped, as literals.
+/// Trick. It didn't track a revive's pieces apart, so none are counted. The
+/// star unlocks are the ones version 7 first shipped, as literals.
 Map<String, dynamic> _fromVersion6(Map<String, dynamic> json) {
   final run = json['run'] as Map<String, dynamic>;
   final config = run['config'] as Map<String, dynamic>;
@@ -135,6 +136,7 @@ Map<String, dynamic> _fromVersion6(Map<String, dynamic> json) {
         },
         'starUnlocks': _version7StarUnlocks,
       },
+      'revivePiecesLeft': 0,
       'trayClearMask': null,
     },
     'version': 7,
@@ -259,6 +261,7 @@ final class RunStateDto {
     required this.pickIndex,
     required this.piecesLeft,
     required this.piecesRngState,
+    required this.revivePiecesLeft,
     required this.revivesUsed,
     required this.roundIndex,
     required this.runTotal,
@@ -279,6 +282,7 @@ final class RunStateDto {
     pickIndex: run.pickIndex,
     piecesLeft: run.piecesLeft,
     piecesRngState: run.piecesRngState,
+    revivePiecesLeft: run.revivePiecesLeft,
     revivesUsed: run.revivesUsed,
     roundIndex: run.roundIndex,
     runTotal: run.runTotal,
@@ -303,6 +307,7 @@ final class RunStateDto {
   final int pickIndex;
   final int piecesLeft;
   final int piecesRngState;
+  final int revivePiecesLeft;
   final int revivesUsed;
   final int roundIndex;
   final int runTotal;
@@ -329,6 +334,7 @@ final class RunStateDto {
       pickIndex: pickIndex,
       piecesLeft: piecesLeft,
       piecesRngState: piecesRngState,
+      revivePiecesLeft: revivePiecesLeft,
       revivesUsed: revivesUsed,
       roundIndex: roundIndex,
       runTotal: runTotal,

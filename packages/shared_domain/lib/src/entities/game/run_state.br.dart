@@ -42,6 +42,10 @@ abstract class RunState with _$RunState {
     /// Shape ids; `null` is a slot already played.
     required List<int?> tray,
 
+    /// The pieces a revive added this round not dealt yet. They are dealt
+    /// after the round's own, so they are the last of [piecesLeft].
+    @Default(0) int revivePiecesLeft,
+
     /// The tray slots whose piece cleared a line, one bit per slot, since the
     /// tray was dealt. `null` when the tray can't earn Hat Trick: dealt short,
     /// dealt from a revive's pieces, or not dealt at all.

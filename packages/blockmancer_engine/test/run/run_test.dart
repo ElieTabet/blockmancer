@@ -959,6 +959,80 @@ void main() {
       expect(next.trayClearMask, isNull);
     });
 
+    /// No room for the 2×2 left in hand with [piecesLeft] to deal; a revive
+    /// empties rows 0 and 1, where it then fits without clearing anything.
+    RunState stuckWithSquare({required int piecesLeft}) =>
+        _playing(joker: .hattrick).copyWith(
+          board: boardFrom([
+            ...List.filled(3, '#######.'),
+            '........',
+            ...List.filled(4, '#.#.#.#.'),
+          ]),
+          phase: const .roundLost(reason: .noRoom),
+          piecesLeft: piecesLeft,
+          tray: [null, null, 9],
+          trayClearMask: 0x3,
+        );
+
+    test("a full tray dealt from a revive's pieces, after the tray in hand, "
+        'can never earn it', () {
+      // Given: revived with no piece of the round's own left to deal
+      final (revived, _) = revive(stuckWithSquare(piecesLeft: 0));
+
+      // When: the last piece in hand is played, and the revive's 3 are dealt
+      final (next, _) = place(revived, anchor: topLeft, trayIndex: 2);
+
+      // Then
+      expect(next.tray.whereType<int>(), hasLength(3));
+      expect(next.trayClearMask, isNull);
+      expect(next.revivePiecesLeft, 0);
+    });
+
+    test("the round's own pieces are dealt first, and can still earn it", () {
+      // Given: revived with 3 of the round's own pieces left to deal
+      final (revived, _) = revive(stuckWithSquare(piecesLeft: 3));
+
+      // When
+      final (next, _) = place(revived, anchor: topLeft, trayIndex: 2);
+
+      // Then: the round's own 3 make a tray that counts, the revive's wait
+      expect(next.trayClearMask, 0);
+      expect(next.piecesLeft, 3);
+      expect(next.revivePiecesLeft, 3);
+    });
+
+    test("a tray mixing the round's own pieces with a revive's can never "
+        'earn it', () {
+      // Given: revived with 1 of the round's own pieces left to deal
+      final (revived, _) = revive(stuckWithSquare(piecesLeft: 1));
+
+      // When
+      final (next, _) = place(revived, anchor: topLeft, trayIndex: 2);
+
+      // Then
+      expect(next.tray.whereType<int>(), hasLength(3));
+      expect(next.trayClearMask, isNull);
+      expect(next.revivePiecesLeft, 1);
+    });
+
+    test("a new round forgets the last round's revive pieces", () {
+      // Given: a revive's pieces still to deal when the round is won
+      final won = threeToClear().copyWith(revivePiecesLeft: 3);
+
+      // When: the round is won and the next one starts
+      final (picking, _) = place(
+        won.copyWith(score: 249),
+        anchor: const Cell(col: 7, row: 0),
+        trayIndex: 0,
+      );
+      final offers = (picking.phase as PickingJokerPhase).offers;
+      final (next, _) = pickJoker(picking, id: offers.first);
+
+      // Then
+      expect(next.revivePiecesLeft, 0);
+      expect(next.trayClearMask, 0);
+    });
+
     test('a revive that leaves the tray in place keeps what it cleared', () {
       // Given: no room for the 3×3 left in a tray whose first piece cleared
       final state = _playing(joker: .hattrick).copyWith(
