@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   design_system: any
   game_presentation: any
+  home_presentation: any
   splash_presentation: any
   push_notifications_presentation: any
   l10n_application: any

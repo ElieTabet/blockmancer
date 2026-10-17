@@ -41,6 +41,7 @@ class TranslationsFr extends Translations with BaseTranslations<AppLocale, Trans
 	// Translations
 	@override late final _Translations$game$fr game = _Translations$game$fr._(_root);
 	@override late final _Translations$push$fr push = _Translations$push$fr._(_root);
+	@override late final _Translations$home$fr home = _Translations$home$fr._(_root);
 }
 
 // Path: game
@@ -50,9 +51,10 @@ class _Translations$game$fr extends Translations$game$en {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get tabLabel => 'Jouer';
 	@override String get title => 'Blockmancer';
 	@override String get subtitle => 'Partie du jour · les mêmes pièces pour tous';
+	@override String get practiceSubtitle => 'Entraînement · une partie neuve à chaque fois';
+	@override String get leave => 'Retour au menu';
 	@override String runTotal({required Object total}) => 'Partie ${total}';
 	@override late final _Translations$game$round$fr round = _Translations$game$round$fr._(_root);
 	@override late final _Translations$game$banner$fr banner = _Translations$game$banner$fr._(_root);
@@ -71,6 +73,22 @@ class _Translations$push$fr extends Translations$push$en {
 	// Translations
 	@override String get channelName => 'Annonces';
 	@override String get channelDescription => 'Nouvelles et messages de l\'application.';
+}
+
+// Path: home
+class _Translations$home$fr extends Translations$home$en {
+	_Translations$home$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get tabLabel => 'Jouer';
+	@override String get title => 'Blockmancer';
+	@override String get tagline => 'Posez des pièces, effacez des lignes, combinez vos jokers.';
+	@override late final _Translations$home$daily$fr daily = _Translations$home$daily$fr._(_root);
+	@override late final _Translations$home$practice$fr practice = _Translations$home$practice$fr._(_root);
+	@override String best({required Object points}) => 'Record : ${points}';
+	@override String get noBest => 'Pas encore de partie';
 }
 
 // Path: game.round
@@ -185,6 +203,28 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$tiny$fr tiny = _Translations$game$jokers$tiny$fr._(_root);
 	@override late final _Translations$game$jokers$pockets$fr pockets = _Translations$game$jokers$pockets$fr._(_root);
 	@override late final _Translations$game$jokers$saver$fr saver = _Translations$game$jokers$saver$fr._(_root);
+}
+
+// Path: home.daily
+class _Translations$home$daily$fr extends Translations$home$daily$en {
+	_Translations$home$daily$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Partie du jour';
+	@override String get subtitle => 'Les mêmes pièces pour tous aujourd\'hui';
+}
+
+// Path: home.practice
+class _Translations$home$practice$fr extends Translations$home$practice$en {
+	_Translations$home$practice$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Entraînement';
+	@override String get subtitle => 'Une partie neuve à chaque fois';
 }
 
 // Path: game.jokers.stonemason
@@ -349,9 +389,10 @@ class _Translations$game$jokers$saver$fr extends Translations$game$jokers$saver$
 extension on TranslationsFr {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'game.tabLabel' => 'Jouer',
 			'game.title' => 'Blockmancer',
 			'game.subtitle' => 'Partie du jour · les mêmes pièces pour tous',
+			'game.practiceSubtitle' => 'Entraînement · une partie neuve à chaque fois',
+			'game.leave' => 'Retour au menu',
 			'game.runTotal' => ({required Object total}) => 'Partie ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Manche · ${index} / ${count}',
 			'game.round.boss' => 'Boss · Gravats',
@@ -426,6 +467,15 @@ extension on TranslationsFr {
 			'game.jokers.saver.description' => 'Chaque pièce inutilisée quand tu gagnes une manche rapporte +40 points de partie.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Nouvelles et messages de l\'application.',
+			'home.tabLabel' => 'Jouer',
+			'home.title' => 'Blockmancer',
+			'home.tagline' => 'Posez des pièces, effacez des lignes, combinez vos jokers.',
+			'home.daily.title' => 'Partie du jour',
+			'home.daily.subtitle' => 'Les mêmes pièces pour tous aujourd\'hui',
+			'home.practice.title' => 'Entraînement',
+			'home.practice.subtitle' => 'Une partie neuve à chaque fois',
+			'home.best' => ({required Object points}) => 'Record : ${points}',
+			'home.noBest' => 'Pas encore de partie',
 			_ => null,
 		};
 	}

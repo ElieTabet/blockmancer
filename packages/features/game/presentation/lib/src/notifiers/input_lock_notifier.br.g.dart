@@ -30,9 +30,16 @@ final class InputLockNotifierProvider
         retry: null,
         name: r'inputLockProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[gameProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          InputLockNotifierProvider.$allTransitiveDependencies0,
+          InputLockNotifierProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = gameProvider;
+  static final $allTransitiveDependencies1 =
+      GameNotifierProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$inputLockNotifierHash();
@@ -50,7 +57,7 @@ final class InputLockNotifierProvider
   }
 }
 
-String _$inputLockNotifierHash() => r'fec1465a4d8f90051bb2d5d1cf2318d9790557e4';
+String _$inputLockNotifierHash() => r'2b93a52ccf5e4733d34cb2690970908d54bd938d';
 
 /// Whether the screen ignores touches: for [scoreReveal] after a move that
 /// clears, so a finger already reaching for the next piece doesn't play it

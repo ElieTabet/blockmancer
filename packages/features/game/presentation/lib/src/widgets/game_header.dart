@@ -13,6 +13,8 @@ final class GameHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: [
+      // Room for the leave button, which GameWidget lays over the sheets.
+      const SizedBox.square(dimension: kMinInteractiveDimension),
       Expanded(
         child: Column(
           crossAxisAlignment: .start,
@@ -27,17 +29,42 @@ final class GameHeader extends StatelessWidget {
                 ),
               ),
             ),
-            if (!isCompactScreen(context))
-              Text(
-                context.t.game.subtitle,
-                style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
-              ),
+            if (!isCompactScreen(context)) const ModeLine(),
           ],
         ),
       ),
       const RunTotalChip(),
     ],
   );
+}
+
+/// Back to the menu. The run is left as it stands.
+final class LeaveButton extends ConsumerWidget {
+  const LeaveButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => IconButton(
+    onPressed: () => ref.read(gameProvider.notifier).leave(context),
+    icon: const Icon(Icons.arrow_back_rounded, color: DSColor.white),
+    tooltip: context.t.game.leave,
+  );
+}
+
+/// Which run this is: today's daily, or practice.
+final class ModeLine extends ConsumerWidget {
+  const ModeLine({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPractice = ref.watch(
+      gameProvider.select((state) => state.mode is PracticeMode),
+    );
+
+    return Text(
+      isPractice ? context.t.game.practiceSubtitle : context.t.game.subtitle,
+      style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
+    );
+  }
 }
 
 /// The run total, the round in play included.

@@ -1,8 +1,9 @@
 {
   "game": {
-    "tabLabel": "Play",
     "title": "Blockmancer",
     "subtitle": "Daily run · same pieces for everyone",
+    "practiceSubtitle": "Practice · a new run every time",
+    "leave": "Back to the menu",
     "runTotal": "Run $total",
     "round": {
       "regular": "Round · $index / $count",
@@ -122,5 +123,20 @@
   "push": {
     "channelName": "Announcements",
     "channelDescription": "News and messages from the app."
+  },
+  "home": {
+    "tabLabel": "Play",
+    "title": "Blockmancer",
+    "tagline": "Place pieces, clear lines, build joker combos.",
+    "daily": {
+      "title": "Daily run",
+      "subtitle": "Same pieces for everyone today"
+    },
+    "practice": {
+      "title": "Practice",
+      "subtitle": "A new run every time"
+    },
+    "best": "Best: $points",
+    "noBest": "No run yet"
   }
 }

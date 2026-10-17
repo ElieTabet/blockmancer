@@ -50,6 +50,46 @@ final class BestScoresProvider
 
 String _$bestScoresHash() => r'7cdda2be00059baacd975dd0f072dae92c2472d6';
 
+@ProviderFor(clock)
+final clockProvider = ClockProvider._();
+
+final class ClockProvider extends $FunctionalProvider<Clock, Clock, Clock>
+    with $Provider<Clock> {
+  ClockProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clockProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$clockHash();
+
+  @$internal
+  @override
+  $ProviderElement<Clock> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Clock create(Ref ref) {
+    return clock(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Clock value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Clock>(value),
+    );
+  }
+}
+
+String _$clockHash() => r'b653369ba50137730cd13dc493ff7ddd9dc8b9b6';
+
 /// The game's rules. Composition binds the engine; the game never imports it,
 /// so its screens can only draw what the rules say. Here rather than in
 /// presentation because the domain decides each mode's seed with them.

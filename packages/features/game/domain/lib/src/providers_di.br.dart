@@ -1,4 +1,5 @@
 import 'package:game_domain/src/contracts/best_scores.dart';
+import 'package:game_domain/src/contracts/clock.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -10,6 +11,11 @@ part 'providers_di.br.g.dart';
 @riverpod
 BestScores bestScores(Ref ref) => throw UnimplementedError(
   'bestScoresProvider must be overridden by the composition layer',
+);
+
+@riverpod
+Clock clock(Ref ref) => throw UnimplementedError(
+  'clockProvider must be overridden by the composition layer',
 );
 
 /// The game's rules. Composition binds the engine; the game never imports it,

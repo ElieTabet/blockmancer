@@ -1,3 +1,4 @@
+import 'package:game_presentation/src/routing/game_routing.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'providers_di.br.g.dart';
@@ -8,6 +9,11 @@ part 'providers_di.br.g.dart';
 /// Shows the reward a revive costs; true once it has been earned. A reward
 /// that couldn't be shown is false, never an error.
 typedef RewardedActionFun = Future<bool> Function();
+
+@riverpod
+GameRouting gameRouting(Ref ref) => throw UnimplementedError(
+  'gameRoutingProvider must be overridden by the composition layer (app_router)',
+);
 
 @riverpod
 RewardedActionFun rewardedAction(Ref ref) => throw UnimplementedError(

@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/notifiers/game_ui_state.br.dart';
 import 'package:game_presentation/src/package_name.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
+import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:timber/timber.dart';
@@ -12,7 +14,7 @@ part 'game_notifier.br.g.dart';
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
-@riverpod
+@Riverpod(dependencies: [gameLaunch])
 class GameNotifier extends _$GameNotifier {
   var _reviving = false;
 
@@ -20,7 +22,7 @@ class GameNotifier extends _$GameNotifier {
   GameUiState build() {
     ref.watch(gameRulesProvider);
 
-    return _fresh();
+    return _fresh(ref.read(runStartForProvider)(ref.watch(gameLaunchProvider)));
   }
 
   void endRun() => _apply(_rules.endRun(state.run));
@@ -36,8 +38,15 @@ class GameNotifier extends _$GameNotifier {
     _apply(_rules.place(state.run, anchor: anchor, trayIndex: trayIndex));
   }
 
-  /// Starts the same mode's run again from its first pick.
-  void retry() => state = _fresh();
+  void leave(BuildContext context) =>
+      ref.read(gameRoutingProvider).onLeaveRequested(context);
+
+  /// Plays the same mode again from its first pick: the same daily run, even
+  /// past midnight, or a new practice run.
+  void retry() => state = _fresh(switch (state.mode) {
+    DailyMode() => (mode: state.mode, seed: state.run.seed),
+    PracticeMode() => ref.read(runStartForProvider)(.practice),
+  });
 
   /// Revives once the reward it costs has been earned. A second tap while the
   /// reward is showing is ignored.
@@ -103,8 +112,8 @@ class GameNotifier extends _$GameNotifier {
     }
   }
 
-  GameUiState _fresh() {
-    final (:mode, :seed) = ref.read(todaysDailyRunProvider);
+  GameUiState _fresh(RunStart start) {
+    final (:mode, :seed) = start;
 
     return GameUiState(
       lastEvents: const [],

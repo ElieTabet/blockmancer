@@ -1,6 +1,6 @@
 // Smoke test: the app boots through the composition layer (app_router's
 // AppRouter + app_providers' overrides) into the initial splash screen, which
-// then hands off to login — mirroring how Application wires things in
+// then hands off to Home — mirroring how Application wires things in
 // lib/application, without importing any feature package.
 
 import 'package:app_providers/app_providers.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 void main() {
-  testWidgets('boots to the splash screen, then hands off to login', (
+  testWidgets('boots to the splash screen, then hands off to Home', (
     WidgetTester tester,
   ) async {
     final appRouter = AppRouter();
@@ -31,13 +31,13 @@ void main() {
     );
     await tester.pump(); // first frame — splash schedules its hand-off
 
-    // Splash is showing: login isn't there yet.
-    expect(find.text('Continue as a guest'), findsNothing);
+    // Splash is showing: Home isn't there yet.
+    expect(find.text('Daily run'), findsNothing);
 
-    // After the splash delay it hands off to the game, on its starting pick.
+    // After the splash delay it hands off to Home.
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    expect(find.text('Pick your starting joker'), findsOneWidget);
+    expect(find.text('Daily run'), findsOneWidget);
   });
 }

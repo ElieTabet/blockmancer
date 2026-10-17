@@ -1,5 +1,5 @@
 name: game_data
-description: "game data layer — the run's best scores on the device, through shared_preferences."
+description: "game data layer — the run's best scores on the device, through shared_preferences, and the device's clock."
 publish_to: none
 resolution: workspace
 

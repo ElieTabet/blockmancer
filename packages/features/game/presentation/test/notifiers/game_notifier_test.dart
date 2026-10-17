@@ -16,12 +16,14 @@ void main() {
 
   ProviderContainer container({
     FakeBestScores? bestScores,
+    GameLaunch launch = .daily,
     RewardedActionFun? rewardedAction,
   }) {
     final container = ProviderContainer(
       overrides: gameOverrides(
         rules,
         bestScores: bestScores,
+        launch: launch,
         rewardedAction: rewardedAction,
       ),
     );
@@ -40,6 +42,32 @@ void main() {
 
     // Then
     expect(rules.calls, ['startRun 1']);
+  });
+
+  test('a practice run counts for practice, on a seed of its own', () {
+    // Given / When
+    final state = container(launch: .practice).read(gameProvider);
+
+    // Then
+    expect(state.mode, const GameMode.practice());
+    expect(rules.calls.single, isNot('startRun 1'));
+  });
+
+  test('playing practice again draws a new practice run', () {
+    // Given
+    final game = container(launch: .practice);
+    rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 1)]);
+    game.read(gameProvider.notifier).endRun();
+
+    // When
+    game.read(gameProvider.notifier).retry();
+
+    // Then
+    expect(game.read(gameProvider).mode, const GameMode.practice());
+    expect(
+      rules.calls.where((call) => call.startsWith('startRun')),
+      hasLength(2),
+    );
   });
 
   test('a move keeps what it did and counts as a new move', () {

@@ -1,15 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/widgets/game_widget.dart';
 
 part 'game_router.br.gr.dart';
 
-/// Path segment for the game feature's route.
-///
-/// Relative, with no leading slash: the page is a tab child, so it resolves
-/// under the shell's own segment.
+/// Path for the game feature's route. Absolute: the game is pushed over the
+/// tab shell, not one of its tabs.
 enum GameRoutePath {
-  game('game');
+  game('/game');
 
   const GameRoutePath(this.path);
 
@@ -24,8 +25,13 @@ abstract class GameRouter extends RootStackRouter {}
 
 @RoutePage(name: 'GameRoute')
 final class GamePage extends StatelessWidget {
-  const GamePage({super.key});
+  const GamePage({required this.launch, super.key});
+
+  final GameLaunch launch;
 
   @override
-  Widget build(BuildContext context) => const GameWidget();
+  Widget build(BuildContext context) => ProviderScope(
+    overrides: [gameLaunchProvider.overrideWithValue(launch)],
+    child: const GameWidget(),
+  );
 }

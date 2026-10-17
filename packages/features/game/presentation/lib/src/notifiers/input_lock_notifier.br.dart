@@ -13,7 +13,7 @@ const scoreReveal = Duration(milliseconds: 600);
 /// Whether the screen ignores touches: for [scoreReveal] after a move that
 /// clears, so a finger already reaching for the next piece doesn't play it
 /// before the breakdown has been seen.
-@riverpod
+@Riverpod(dependencies: [GameNotifier])
 class InputLockNotifier extends _$InputLockNotifier {
   Timer? _unlock;
 

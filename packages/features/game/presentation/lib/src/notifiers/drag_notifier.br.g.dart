@@ -27,9 +27,16 @@ final class DragNotifierProvider
         retry: null,
         name: r'dragProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[gameProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          DragNotifierProvider.$allTransitiveDependencies0,
+          DragNotifierProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = gameProvider;
+  static final $allTransitiveDependencies1 =
+      GameNotifierProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$dragNotifierHash();
@@ -47,7 +54,7 @@ final class DragNotifierProvider
   }
 }
 
-String _$dragNotifierHash() => r'047d7a930a47aa84611ec6bebd1a2e04458edd7e';
+String _$dragNotifierHash() => r'2cb188bc63aa646a4eaf9ab717013f4b011a9ea2';
 
 /// The drag shadow. Updated only when the hovered cell changes, not on every
 /// pointer move: the finger itself is tracked outside Riverpod.

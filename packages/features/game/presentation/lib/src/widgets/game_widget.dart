@@ -69,6 +69,20 @@ class _GameWidgetState extends State<GameWidget> {
               ),
             ),
             const Positioned.fill(child: PhaseOverlay()),
+            // Over the sheets' scrim, so the menu is never out of reach.
+            const Positioned(
+              left: 0,
+              top: 0,
+              child: SafeArea(
+                child: Padding(
+                  padding: .symmetric(
+                    horizontal: DSSpace.medium,
+                    vertical: DSSpace.small,
+                  ),
+                  child: LeaveButton(),
+                ),
+              ),
+            ),
           ],
         ),
       ),

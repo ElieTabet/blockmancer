@@ -8,7 +8,7 @@ part 'drag_notifier.br.g.dart';
 
 /// The drag shadow. Updated only when the hovered cell changes, not on every
 /// pointer move: the finger itself is tracked outside Riverpod.
-@riverpod
+@Riverpod(dependencies: [GameNotifier])
 class DragNotifier extends _$DragNotifier {
   @override
   DragPreview? build() => null;

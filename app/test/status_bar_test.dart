@@ -40,14 +40,14 @@ void main() {
       ),
     );
 
-    // Splash first, then the hand-off to the game. Neither has an app bar.
+    // Splash first, then the hand-off to Home. Neither has an app bar.
     await tester.pump();
     expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
 
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    expect(find.text('Pick your starting joker'), findsOneWidget);
+    expect(find.text('Daily run'), findsOneWidget);
     expect(SystemChrome.latestStyle, SystemUiOverlayStyle.light);
   });
 }

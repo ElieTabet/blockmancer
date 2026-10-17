@@ -353,4 +353,44 @@ void main() {
     expect(find.textContaining('Best'), findsNothing);
     scores.gate!.complete();
   });
+
+  testWidgets('a practice run says it is practice', (tester) async {
+    // Given / When
+    await pumpGame(tester, runIn(const .playing()), launch: .practice);
+
+    // Then
+    expect(find.text('Practice · a new run every time'), findsOneWidget);
+  });
+
+  testWidgets('the back arrow leaves for the menu', (tester) async {
+    // Given
+    final routing = FakeGameRouting();
+    await pumpGame(tester, runIn(const .playing()), routing: routing);
+
+    // When
+    await tester.tap(find.byTooltip('Back to the menu'));
+    await tester.pump();
+
+    // Then
+    expect(routing.calls, ['leave']);
+  });
+
+  testWidgets('the menu can be reached while a joker is being picked', (
+    tester,
+  ) async {
+    // Given
+    final routing = FakeGameRouting();
+    await pumpGame(
+      tester,
+      runIn(const .pickingJoker(offers: [.twin]), pickIndex: 0),
+      routing: routing,
+    );
+
+    // When
+    await tester.tap(find.byTooltip('Back to the menu'));
+    await tester.pump();
+
+    // Then
+    expect(routing.calls, ['leave']);
+  });
 }

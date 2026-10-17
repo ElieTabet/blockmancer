@@ -1,7 +1,7 @@
 import 'package:app_router/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_presentation/game_presentation.dart' show GameRoute;
+import 'package:home_presentation/home_presentation.dart' show HomeRoute;
 import 'package:splash_presentation/splash_presentation.dart' show SplashRoute;
 
 import 'pump_app_router.dart';
@@ -27,7 +27,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(rootStackNames(router), [TabShellRoute.name]);
-    expect(activeTab(router), GameRoute.name);
+    expect(activeTab(router), HomeRoute.name);
   });
 
   // A cold start from a tap: the push arrives while the splash is still up,

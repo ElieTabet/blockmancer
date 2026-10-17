@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:app_router/src/app_router.dart' show AppRouter, TabShellRoute;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
-import 'package:game_presentation/game_presentation.dart' show GameRoute;
+import 'package:home_presentation/home_presentation.dart' show HomeRoute;
 import 'package:push_notifications_presentation/push_notifications_presentation.dart'
     show PushNotificationsRouting;
 import 'package:splash_presentation/splash_presentation.dart' show SplashRoute;
@@ -32,7 +32,7 @@ final class PushNotificationsRoutingImpl implements PushNotificationsRouting {
 
   @override
   void onHomeOpened() => _openOnceSettled(
-    (root) => root.navigate(const TabShellRoute(children: [GameRoute()])),
+    (root) => root.navigate(const TabShellRoute(children: [HomeRoute()])),
   );
 
   /// Opens on the frame after the stack settles — it changes mid-frame, and a

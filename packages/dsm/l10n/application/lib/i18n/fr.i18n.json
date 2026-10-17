@@ -1,8 +1,9 @@
 {
   "game": {
-    "tabLabel": "Jouer",
     "title": "Blockmancer",
     "subtitle": "Partie du jour · les mêmes pièces pour tous",
+    "practiceSubtitle": "Entraînement · une partie neuve à chaque fois",
+    "leave": "Retour au menu",
     "runTotal": "Partie $total",
     "round": {
       "regular": "Manche · $index / $count",
@@ -122,5 +123,20 @@
   "push": {
     "channelName": "Annonces",
     "channelDescription": "Nouvelles et messages de l'application."
+  },
+  "home": {
+    "tabLabel": "Jouer",
+    "title": "Blockmancer",
+    "tagline": "Posez des pièces, effacez des lignes, combinez vos jokers.",
+    "daily": {
+      "title": "Partie du jour",
+      "subtitle": "Les mêmes pièces pour tous aujourd'hui"
+    },
+    "practice": {
+      "title": "Entraînement",
+      "subtitle": "Une partie neuve à chaque fois"
+    },
+    "best": "Record : $points",
+    "noBest": "Pas encore de partie"
   }
 }

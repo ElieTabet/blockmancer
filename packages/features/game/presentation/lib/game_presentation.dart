@@ -3,3 +3,4 @@
 // and forwards the player's moves.
 export 'src/providers.br.dart';
 export 'src/routing/game_router.br.dart';
+export 'src/routing/game_routing.dart';

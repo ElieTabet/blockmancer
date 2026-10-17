@@ -27,9 +27,13 @@ final class GameNotifierProvider
         retry: null,
         name: r'gameProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[gameLaunchProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          GameNotifierProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = gameLaunchProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameNotifierHash();
@@ -47,7 +51,7 @@ final class GameNotifierProvider
   }
 }
 
-String _$gameNotifierHash() => r'26b0f5acfdf29caf4d3300580dbd9314ace69316';
+String _$gameNotifierHash() => r'becf754c34fb6be7a8de26ae11d43c2c2cd74875';
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.

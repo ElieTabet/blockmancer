@@ -5,9 +5,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'providers_internal.br.g.dart';
 
+/// What this game screen was opened to play. Scoped by `GamePage`, which each
+/// route push builds afresh, so every visit plays its own run.
+@Riverpod(dependencies: [])
+GameLaunch gameLaunch(Ref ref) =>
+    throw UnimplementedError('gameLaunchProvider is scoped by GamePage');
+
 /// Whether the tray piece at [index] fits anywhere — cached, so the board scan
 /// runs once per change of the board or the tray, not in a widget's selector.
-@riverpod
+@Riverpod(dependencies: [GameNotifier])
 bool trayFits(Ref ref, int index) {
   ref.watch(
     gameProvider.select(

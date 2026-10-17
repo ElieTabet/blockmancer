@@ -4,6 +4,7 @@ import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
+import 'package:home_presentation/home_presentation.dart' as home_ui;
 import 'package:push/push.dart' as push;
 import 'package:push_notifications_domain/push_notifications_domain.dart'
     as push_notifications_domain;
@@ -72,7 +73,14 @@ List<Override> featureBindingOverrides({
   // these slots.
   ...game.bindProviders(
     bestScores: (ref) => const SharedPreferencesBestScores(),
+    clock: (ref) => const SystemClock(),
     gameRules: (ref) => const BlockmancerEngine(),
   ),
   ...game_ui.bindProviders(rewardedAction: (ref) => const RewardedAds().show),
+  // Home shows the game's bests without knowing the game.
+  ...home_ui.bindProviders(
+    dailyBest: (ref) => ref.watch(game.todaysDailyBestProvider.future),
+    practiceBest: (ref) =>
+        ref.watch(game.bestScoreProvider(const .practice()).future),
+  ),
 ];

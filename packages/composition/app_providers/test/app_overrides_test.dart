@@ -19,6 +19,7 @@ import 'package:push_notifications_domain/push_notifications_domain.dart'
     as push_notifications;
 import 'package:push_notifications_presentation/src/providers_di.br.dart'
     as push_notifications_di;
+import 'package:shared_domain/shared_domain.dart';
 import 'package:telemetry/telemetry.dart';
 
 void main() {
@@ -39,7 +40,38 @@ void main() {
       container.read(game.bestScoresProvider),
       isA<SharedPreferencesBestScores>(),
     );
+    expect(container.read(game.clockProvider), isA<SystemClock>());
   });
+
+  // The day is the game's to decide and the seed the engine's: this is the one
+  // place both are real.
+  test(
+    'two players on the same UTC day, wherever they are, play the same run',
+    () {
+      // Given: 10:00 in New York and 01:00 the next morning in Tokyo
+      const engine = BlockmancerEngine();
+      final newYork = game.dailyRunOn(
+        DateTime.parse('2026-10-16T10:00:00-05:00'),
+        rules: engine,
+      );
+      final tokyo = game.dailyRunOn(
+        DateTime.parse('2026-10-17T01:00:00+09:00'),
+        rules: engine,
+      );
+
+      // When: each takes the first joker offered
+      RunState firstRound(int seed) {
+        final start = engine.startRun(config: engine.defaultConfig, seed: seed);
+        final offers = (start.phase as PickingJokerPhase).offers;
+
+        return engine.pickJoker(start, id: offers.first).$1;
+      }
+
+      // Then: the same pieces, from the same seed
+      expect(tokyo, newYork);
+      expect(firstRound(tokyo.seed), firstRound(newYork.seed));
+    },
+  );
 
   test('a revive costs nothing until there is an ad network', () async {
     expect(

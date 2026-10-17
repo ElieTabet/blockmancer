@@ -8,6 +8,55 @@ part of 'providers_internal.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// What this game screen was opened to play. Scoped by `GamePage`, which each
+/// route push builds afresh, so every visit plays its own run.
+
+@ProviderFor(gameLaunch)
+final gameLaunchProvider = GameLaunchProvider._();
+
+/// What this game screen was opened to play. Scoped by `GamePage`, which each
+/// route push builds afresh, so every visit plays its own run.
+
+final class GameLaunchProvider
+    extends $FunctionalProvider<GameLaunch, GameLaunch, GameLaunch>
+    with $Provider<GameLaunch> {
+  /// What this game screen was opened to play. Scoped by `GamePage`, which each
+  /// route push builds afresh, so every visit plays its own run.
+  GameLaunchProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'gameLaunchProvider',
+        isAutoDispose: true,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$gameLaunchHash();
+
+  @$internal
+  @override
+  $ProviderElement<GameLaunch> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GameLaunch create(Ref ref) {
+    return gameLaunch(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GameLaunch value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GameLaunch>(value),
+    );
+  }
+}
+
+String _$gameLaunchHash() => r'e51edee4c82db8687ffb8ccaa510735fef6fa061';
+
 /// Whether the tray piece at [index] fits anywhere — cached, so the board scan
 /// runs once per change of the board or the tray, not in a widget's selector.
 
@@ -31,6 +80,10 @@ final class TrayFitsProvider extends $FunctionalProvider<bool, bool, bool>
          dependencies: null,
          $allTransitiveDependencies: null,
        );
+
+  static final $allTransitiveDependencies0 = gameProvider;
+  static final $allTransitiveDependencies1 =
+      GameNotifierProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$trayFitsHash();
@@ -72,7 +125,7 @@ final class TrayFitsProvider extends $FunctionalProvider<bool, bool, bool>
   }
 }
 
-String _$trayFitsHash() => r'8c943a60f65ba38762a58ae989e05bf3d7102c6f';
+String _$trayFitsHash() => r'd639cf6d6f030c2158cd04fdafb6b1e384e0b55c';
 
 /// Whether the tray piece at [index] fits anywhere — cached, so the board scan
 /// runs once per change of the board or the tray, not in a widget's selector.
@@ -83,8 +136,11 @@ final class TrayFitsFamily extends $Family
     : super(
         retry: null,
         name: r'trayFitsProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[gameProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          TrayFitsProvider.$allTransitiveDependencies0,
+          TrayFitsProvider.$allTransitiveDependencies1,
+        ],
         isAutoDispose: true,
       );
 

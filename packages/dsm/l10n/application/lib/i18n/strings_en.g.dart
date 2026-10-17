@@ -42,6 +42,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final Translations$game$en game = Translations$game$en.internal(_root);
 	late final Translations$push$en push = Translations$push$en.internal(_root);
+	late final Translations$home$en home = Translations$home$en.internal(_root);
 }
 
 // Path: game
@@ -52,14 +53,17 @@ class Translations$game$en {
 
 	// Translations
 
-	/// en: 'Play'
-	String get tabLabel => 'Play';
-
 	/// en: 'Blockmancer'
 	String get title => 'Blockmancer';
 
 	/// en: 'Daily run · same pieces for everyone'
 	String get subtitle => 'Daily run · same pieces for everyone';
+
+	/// en: 'Practice · a new run every time'
+	String get practiceSubtitle => 'Practice · a new run every time';
+
+	/// en: 'Back to the menu'
+	String get leave => 'Back to the menu';
 
 	/// en: 'Run $total'
 	String runTotal({required Object total}) => 'Run ${total}';
@@ -85,6 +89,33 @@ class Translations$push$en {
 
 	/// en: 'News and messages from the app.'
 	String get channelDescription => 'News and messages from the app.';
+}
+
+// Path: home
+class Translations$home$en {
+	Translations$home$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Play'
+	String get tabLabel => 'Play';
+
+	/// en: 'Blockmancer'
+	String get title => 'Blockmancer';
+
+	/// en: 'Place pieces, clear lines, build joker combos.'
+	String get tagline => 'Place pieces, clear lines, build joker combos.';
+
+	late final Translations$home$daily$en daily = Translations$home$daily$en.internal(_root);
+	late final Translations$home$practice$en practice = Translations$home$practice$en.internal(_root);
+
+	/// en: 'Best: $points'
+	String best({required Object points}) => 'Best: ${points}';
+
+	/// en: 'No run yet'
+	String get noBest => 'No run yet';
 }
 
 // Path: game.round
@@ -285,6 +316,36 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$tiny$en tiny = Translations$game$jokers$tiny$en.internal(_root);
 	late final Translations$game$jokers$pockets$en pockets = Translations$game$jokers$pockets$en.internal(_root);
 	late final Translations$game$jokers$saver$en saver = Translations$game$jokers$saver$en.internal(_root);
+}
+
+// Path: home.daily
+class Translations$home$daily$en {
+	Translations$home$daily$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Daily run'
+	String get title => 'Daily run';
+
+	/// en: 'Same pieces for everyone today'
+	String get subtitle => 'Same pieces for everyone today';
+}
+
+// Path: home.practice
+class Translations$home$practice$en {
+	Translations$home$practice$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Practice'
+	String get title => 'Practice';
+
+	/// en: 'A new run every time'
+	String get subtitle => 'A new run every time';
 }
 
 // Path: game.jokers.stonemason
@@ -505,9 +566,10 @@ class Translations$game$jokers$saver$en {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'game.tabLabel' => 'Play',
 			'game.title' => 'Blockmancer',
 			'game.subtitle' => 'Daily run · same pieces for everyone',
+			'game.practiceSubtitle' => 'Practice · a new run every time',
+			'game.leave' => 'Back to the menu',
 			'game.runTotal' => ({required Object total}) => 'Run ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Round · ${index} / ${count}',
 			'game.round.boss' => 'Boss · Rubble',
@@ -582,6 +644,15 @@ extension on Translations {
 			'game.jokers.saver.description' => 'Each unused piece when you beat a round gives +40 run points.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
+			'home.tabLabel' => 'Play',
+			'home.title' => 'Blockmancer',
+			'home.tagline' => 'Place pieces, clear lines, build joker combos.',
+			'home.daily.title' => 'Daily run',
+			'home.daily.subtitle' => 'Same pieces for everyone today',
+			'home.practice.title' => 'Practice',
+			'home.practice.subtitle' => 'A new run every time',
+			'home.best' => ({required Object points}) => 'Best: ${points}',
+			'home.noBest' => 'No run yet',
 			_ => null,
 		};
 	}

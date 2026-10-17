@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:game_presentation/game_presentation.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/widgets/game_widget.dart';
 import 'package:l10n_application/l10n_application.dart';
@@ -17,7 +18,9 @@ Future<FakeGameRules> pumpGame(
   WidgetTester tester,
   RunState start, {
   BestScores? bestScores,
+  GameLaunch launch = .daily,
   RewardedActionFun? rewardedAction,
+  GameRouting? routing,
   Size size = const Size(390, 844),
 }) async {
   tester.view.physicalSize = size * 3;
@@ -31,7 +34,9 @@ Future<FakeGameRules> pumpGame(
       overrides: gameOverrides(
         rules,
         bestScores: bestScores,
+        launch: launch,
         rewardedAction: rewardedAction,
+        routing: routing,
       ),
       child: TranslationProvider(
         child: MaterialApp(

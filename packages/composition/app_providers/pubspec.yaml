@@ -20,9 +20,11 @@ dependencies:
   game_data: any
   game_domain: any
   game_presentation: any
+  home_presentation: any
   riverpod_annotation: ^4.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_riverpod: ^3.3.1     # ProviderContainer, for the composition wiring test
+  shared_domain: any           # the engine's RunState, for the daily-seed test
