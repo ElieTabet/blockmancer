@@ -9,17 +9,17 @@ part of 'settings_state_notifier.br.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Settings' choices. Holds nothing: each change is the player's settings to
-/// keep, and leaving is [SettingsRouting]'s to follow.
+/// keep, and closing is [SettingsRouting]'s to follow.
 
 @ProviderFor(SettingsStateNotifier)
 final settingsStateProvider = SettingsStateNotifierProvider._();
 
 /// Settings' choices. Holds nothing: each change is the player's settings to
-/// keep, and leaving is [SettingsRouting]'s to follow.
+/// keep, and closing is [SettingsRouting]'s to follow.
 final class SettingsStateNotifierProvider
     extends $NotifierProvider<SettingsStateNotifier, void> {
   /// Settings' choices. Holds nothing: each change is the player's settings to
-  /// keep, and leaving is [SettingsRouting]'s to follow.
+  /// keep, and closing is [SettingsRouting]'s to follow.
   SettingsStateNotifierProvider._()
     : super(
         from: null,
@@ -48,10 +48,10 @@ final class SettingsStateNotifierProvider
 }
 
 String _$settingsStateNotifierHash() =>
-    r'f418eb01fcb7c0e9ca476962af1116523e9bc31e';
+    r'd2eb472266383d185831f05af8d9ae7eba78f298';
 
 /// Settings' choices. Holds nothing: each change is the player's settings to
-/// keep, and leaving is [SettingsRouting]'s to follow.
+/// keep, and closing is [SettingsRouting]'s to follow.
 
 abstract class _$SettingsStateNotifier extends $Notifier<void> {
   void build();

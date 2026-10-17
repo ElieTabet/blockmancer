@@ -134,8 +134,8 @@ class Translations$settings$en {
 	/// en: 'Settings'
 	String get title => 'Settings';
 
-	/// en: 'Back to the menu'
-	String get back => 'Back to the menu';
+	/// en: 'Close'
+	String get close => 'Close';
 
 	/// en: 'Sound'
 	String get sound => 'Sound';
@@ -773,7 +773,7 @@ extension on Translations {
 			'home.noBest' => 'No run yet',
 			'home.settings' => 'Settings',
 			'settings.title' => 'Settings',
-			'settings.back' => 'Back to the menu',
+			'settings.close' => 'Close',
 			'settings.sound' => 'Sound',
 			'settings.haptics' => 'Haptics',
 			'settings.reduceMotion.title' => 'Reduce motion',

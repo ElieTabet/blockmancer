@@ -9,14 +9,14 @@ import 'package:timber/timber.dart';
 part 'settings_state_notifier.br.g.dart';
 
 /// Settings' choices. Holds nothing: each change is the player's settings to
-/// keep, and leaving is [SettingsRouting]'s to follow.
+/// keep, and closing is [SettingsRouting]'s to follow.
 @riverpod
 class SettingsStateNotifier extends _$SettingsStateNotifier {
   @override
   void build() {}
 
-  void leave(BuildContext context) =>
-      ref.read(di.settingsRoutingProvider).onBackRequested(context);
+  void close(BuildContext context) =>
+      ref.read(di.settingsRoutingProvider).onCloseRequested(context);
 
   Future<void> resetProgress() async {
     final resetProgress = ref.read(resetProgressProvider);

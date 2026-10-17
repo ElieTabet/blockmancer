@@ -7,31 +7,32 @@ import 'pump_app_router.dart';
 import 'stub_features.dart';
 
 // The real route tree: what is under test is that Settings opens over the
-// shell, and that back lands on the tab it was opened from.
+// shell, and that closing it lands on the tab it was opened from.
 void main() {
-  testWidgets('the gear opens Settings over the shell, and back returns Home', (
-    tester,
-  ) async {
-    // Given
-    final router = await pumpAppRouter(
-      tester,
-      deepLink: [const TabShellRoute()],
-    );
+  testWidgets(
+    'the gear opens Settings over the shell, and closing it returns Home',
+    (tester) async {
+      // Given
+      final router = await pumpAppRouter(
+        tester,
+        deepLink: [const TabShellRoute()],
+      );
 
-    // When
-    await tester.tap(find.bySemanticsLabel(homeSettingsLabel));
-    await tester.pumpAndSettle();
+      // When
+      await tester.tap(find.bySemanticsLabel(homeSettingsLabel));
+      await tester.pumpAndSettle();
 
-    // Then
-    expect(rootStackNames(router), [TabShellRoute.name, SettingsRoute.name]);
-    expect(find.text('Reset progress'), findsOneWidget);
+      // Then
+      expect(rootStackNames(router), [TabShellRoute.name, SettingsRoute.name]);
+      expect(find.text('Reset progress'), findsOneWidget);
 
-    // When
-    await tester.tap(find.bySemanticsLabel(settingsBackLabel));
-    await tester.pumpAndSettle();
+      // When
+      await tester.tap(find.bySemanticsLabel(settingsCloseLabel));
+      await tester.pumpAndSettle();
 
-    // Then
-    expect(rootStackNames(router), [TabShellRoute.name]);
-    expect(find.text(homeDailyTitle), findsOneWidget);
-  });
+      // Then
+      expect(rootStackNames(router), [TabShellRoute.name]);
+      expect(find.text(homeDailyTitle), findsOneWidget);
+    },
+  );
 }

@@ -7,6 +7,6 @@ final class SettingsRoutingImpl implements SettingsRouting {
   const SettingsRoutingImpl();
 
   @override
-  void onBackRequested(BuildContext context) =>
+  void onCloseRequested(BuildContext context) =>
       AutoRouter.of(context).maybePop();
 }

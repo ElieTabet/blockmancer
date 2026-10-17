@@ -102,7 +102,7 @@ class _Translations$settings$fr extends Translations$settings$en {
 
 	// Translations
 	@override String get title => 'Réglages';
-	@override String get back => 'Retour au menu';
+	@override String get close => 'Fermer';
 	@override String get sound => 'Son';
 	@override String get haptics => 'Vibrations';
 	@override late final _Translations$settings$reduceMotion$fr reduceMotion = _Translations$settings$reduceMotion$fr._(_root);
@@ -553,7 +553,7 @@ extension on TranslationsFr {
 			'home.noBest' => 'Pas encore de partie',
 			'home.settings' => 'Réglages',
 			'settings.title' => 'Réglages',
-			'settings.back' => 'Retour au menu',
+			'settings.close' => 'Fermer',
 			'settings.sound' => 'Son',
 			'settings.haptics' => 'Vibrations',
 			'settings.reduceMotion.title' => 'Réduire les animations',

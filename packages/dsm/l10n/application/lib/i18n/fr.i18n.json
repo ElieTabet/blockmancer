@@ -148,7 +148,7 @@
   },
   "settings": {
     "title": "Réglages",
-    "back": "Retour au menu",
+    "close": "Fermer",
     "sound": "Son",
     "haptics": "Vibrations",
     "reduceMotion": {

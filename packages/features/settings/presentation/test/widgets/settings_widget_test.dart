@@ -169,15 +169,15 @@ void main() {
     });
   });
 
-  testWidgets('the back arrow leaves Settings', (tester) async {
+  testWidgets('the close button closes Settings', (tester) async {
     // Given
     final routing = await pumpSettings(tester);
 
     // When
-    await tester.tap(find.bySemanticsLabel('Back to the menu'));
+    await tester.tap(find.bySemanticsLabel('Close'));
     await tester.pump();
 
     // Then
-    expect(routing.calls, ['back']);
+    expect(routing.calls, ['close']);
   });
 }

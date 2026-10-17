@@ -39,35 +39,38 @@ final class SettingsWidget extends StatelessWidget {
   );
 }
 
+/// The title, and the way out at the top right, where a sheet that slid up
+/// is closed from.
 final class SettingsHeader extends StatelessWidget {
   const SettingsHeader({super.key});
 
   @override
   Widget build(BuildContext context) => Row(
-    spacing: DSSpace.xsmall,
     children: [
-      const SettingsBackButton(),
-      Text(
-        context.t.settings.title,
-        style: DSFont.display(
-          const TextStyle(
-            color: DSColor.white,
-            fontSize: 32,
-            fontWeight: .w700,
+      Expanded(
+        child: Text(
+          context.t.settings.title,
+          style: DSFont.display(
+            const TextStyle(
+              color: DSColor.white,
+              fontSize: 32,
+              fontWeight: .w700,
+            ),
           ),
         ),
       ),
+      const SettingsCloseButton(),
     ],
   );
 }
 
-/// Back to the menu.
-final class SettingsBackButton extends ConsumerWidget {
-  const SettingsBackButton({super.key});
+final class SettingsCloseButton extends ConsumerWidget {
+  const SettingsCloseButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => DSGameBackButton(
-    onTap: () => ref.read(settingsStateProvider.notifier).leave(context),
-    semanticLabel: context.t.settings.back,
+  Widget build(BuildContext context, WidgetRef ref) => DSGameIconButton(
+    icon: Icons.close_rounded,
+    onTap: () => ref.read(settingsStateProvider.notifier).close(context),
+    semanticLabel: context.t.settings.close,
   );
 }

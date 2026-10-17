@@ -25,6 +25,7 @@ export 'src/components/foundations/buttons/ds_back_button.dart';
 export 'src/components/foundations/buttons/ds_button.dart';
 export 'src/components/foundations/buttons/ds_error_button.dart';
 export 'src/components/foundations/buttons/ds_game_back_button.dart';
+export 'src/components/foundations/buttons/ds_game_icon_button.dart';
 export 'src/components/foundations/buttons/ds_icon_button.dart';
 export 'src/components/foundations/buttons/ds_pressable.dart';
 export 'src/components/foundations/buttons/ds_primary_button.dart';

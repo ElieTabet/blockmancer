@@ -6,5 +6,5 @@ final class FakeSettingsRouting implements SettingsRouting {
   final calls = <String>[];
 
   @override
-  void onBackRequested(BuildContext context) => calls.add('back');
+  void onCloseRequested(BuildContext context) => calls.add('close');
 }

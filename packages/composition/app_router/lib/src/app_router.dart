@@ -27,7 +27,14 @@ final class AppRouter extends RootStackRouter implements AutoRouteGuard {
     // Over the shell, not a tab: a run fills the screen, and back returns to
     // the tab it was started from.
     AutoRoute(path: GameRoutePath.game.path, page: GameRoute.page),
-    AutoRoute(path: SettingsRoutePath.settings.path, page: SettingsRoute.page),
+    // A side trip from Home rather than a place in the game: it slides up and
+    // is closed, where a run is pushed and left.
+    CustomRoute(
+      path: SettingsRoutePath.settings.path,
+      page: SettingsRoute.page,
+      fullscreenDialog: true,
+      transitionsBuilder: TransitionsBuilders.slideBottom,
+    ),
     // Faded in, not pushed: the launch shows it with no transition at all, but
     // lifting a block brings it back over the blocking screen.
     CustomRoute(
