@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
+import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
 import 'package:game_domain/src/behaviors/record_progression_behavior.dart';
 import 'package:game_domain/src/behaviors/record_run_end_behavior.dart';
 import 'package:game_domain/src/behaviors/run_start_for_behavior.dart';
@@ -167,10 +168,9 @@ SaveRunFun saveRun(Ref ref) {
 /// Today's daily best, renewed with [todaysDailyDateProvider].
 @riverpod
 Future<int?> todaysDailyBest(Ref ref) {
-  final (config: _, :mode, seed: _) = dailyRunOn(
-    ref.watch(todaysDailyDateProvider),
+  final (config: _, :mode, seed: _) = DailyRunBehavior(
     rules: ref.watch(di.gameRulesProvider),
-  );
+  )(ref.watch(todaysDailyDateProvider));
 
   return ref.watch(bestScoreProvider(mode).future);
 }

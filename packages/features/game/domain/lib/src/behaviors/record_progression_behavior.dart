@@ -4,8 +4,10 @@ import 'package:game_domain/src/entities/progression_change.br.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// Keeps what a finished world run earned: its world's stars, and on the first
-/// win over its boss, the next world and the jokers the win unlocks. Nothing
-/// is ever taken back, so a worse run changes nothing.
+/// win over its boss, the jokers the win unlocks and the next world — if the
+/// rules can play it yet: a coming-soon world stays locked, so nothing ever
+/// announces or opens a world without a run. Nothing is ever taken back, so a
+/// worse run changes nothing.
 ///
 /// Only world runs count: the daily is everyone's competition and practice is
 /// free play, so neither touches the map. The third star is the run total
@@ -47,7 +49,11 @@ class RecordProgressionBehavior {
     final firstWin = bossBeaten && !was.bossBeaten;
     final next = firstWin ? _rules.nextWorld(world) : null;
     final unlockedWorld =
-        next != null && !(before.worlds[next]?.unlocked ?? false) ? next : null;
+        next != null &&
+            _rules.isPlayable(next) &&
+            !(before.worlds[next]?.unlocked ?? false)
+        ? next
+        : null;
     final unlockedJokers = [
       if (firstWin)
         for (final joker in _rules.unlocksOf(world))
@@ -75,6 +81,7 @@ class RecordProgressionBehavior {
         noRevive: stars.noRevive && !was.stars.noRevive,
         scoreThreshold: stars.scoreThreshold && !was.stars.scoreThreshold,
       ),
+      progression: after,
       stars: stars,
       unlockedJokers: unlockedJokers,
       unlockedWorld: unlockedWorld,

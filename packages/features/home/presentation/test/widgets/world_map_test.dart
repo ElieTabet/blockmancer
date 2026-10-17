@@ -115,52 +115,6 @@ void main() {
     expect(_marker(.gravity), findsOneWidget);
   });
 
-  testWidgets('Given a new player, When Rubble is tapped, '
-      'Then its run is requested', (tester) async {
-    // Given
-    final routing = await pumpHome(tester);
-
-    // When
-    await tester.tap(_node(.rubble));
-    await tester.pump();
-
-    // Then
-    expect(routing.calls, ['world:rubble']);
-  });
-
-  testWidgets("Given Rubble's boss beaten, When Rubble is tapped, "
-      'Then its run is requested again, for the stars it lacks', (
-    tester,
-  ) async {
-    // Given
-    final routing = await pumpHome(
-      tester,
-      progression: () async => rubbleBeaten,
-    );
-
-    // When
-    await tester.tap(_node(.rubble));
-    await tester.pump();
-
-    // Then
-    expect(routing.calls, ['world:rubble']);
-  });
-
-  for (final world in const [WorldId.gravity, WorldId.fog]) {
-    testWidgets('Given a new player, When ${world.name} is tapped, '
-        'Then no run is requested', (tester) async {
-      // Given
-      final routing = await pumpHome(tester);
-
-      // When
-      await tester.tap(_node(world));
-      await tester.pump();
-
-      // Then
-      expect(routing.calls, isEmpty);
-    });
-  }
-
   testWidgets('Given motion allowed, When time passes, '
       'Then the "you are here" pin bobs', (tester) async {
     // Given

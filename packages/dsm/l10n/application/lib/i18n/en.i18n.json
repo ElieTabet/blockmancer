@@ -197,6 +197,21 @@
       "comingSoon": "Coming soon",
       "stars": "Stars: $count of 3"
     },
+    "sheet": {
+      "done": "Done",
+      "current": "In progress",
+      "bossRule": {
+        "rubble": "The boss starts with stones on the board.",
+        "gravity": "In the boss round, every piece falls to the bottom."
+      },
+      "bossTarget": "Beat the boss: $points points",
+      "stars": "Stars",
+      "threshold": "Reach $points points in a run",
+      "unlocks": "Beating its boss unlocks",
+      "start": "Start run",
+      "replay": "Replay for the missing star",
+      "lockedHint": "Beat the previous boss to unlock"
+    },
     "best": "Best: $points",
     "noBest": "No run yet",
     "settings": "Settings"

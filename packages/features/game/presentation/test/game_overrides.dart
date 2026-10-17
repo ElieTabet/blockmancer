@@ -116,15 +116,24 @@ List<Override> gameOverrides(
   resumedRunProvider.overrideWithValue(resumed),
 ];
 
-/// The progression kept in memory, from [saved].
+/// The progression kept in memory, from [saved]. Writes wait for [gate] when
+/// one is set, and throw once [broken].
 final class FakeProgressionStore implements game.ProgressionStore {
   FakeProgressionStore(this.saved);
 
+  var broken = false;
+  Completer<void>? gate;
   Progression saved;
 
   @override
   Future<Progression> load() async => saved;
 
   @override
-  Future<void> save(Progression progression) async => saved = progression;
+  Future<void> save(Progression progression) async {
+    await gate?.future;
+
+    if (broken) throw StateError('storage unavailable');
+
+    saved = progression;
+  }
 }

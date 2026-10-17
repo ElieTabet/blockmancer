@@ -33,6 +33,8 @@ import 'package:sounds/sounds.dart';
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 import 'package:telemetry/telemetry.dart';
 
+import 'engine_game.dart';
+import 'fake_clock.dart';
 import 'fake_random.dart';
 import 'fake_sound_engine.dart';
 
@@ -72,14 +74,17 @@ void main() {
     () {
       // Given: 10:00 in New York and 01:00 the next morning in Tokyo
       const engine = BlockmancerEngine();
-      final newYork = game.dailyRunOn(
-        DateTime.parse('2026-10-16T10:00:00-05:00'),
-        rules: engine,
-      );
-      final tokyo = game.dailyRunOn(
-        DateTime.parse('2026-10-17T01:00:00+09:00'),
-        rules: engine,
-      );
+      game.RunStart dailyAt(String instant) {
+        final container = engineGame(clock: FakeClock(DateTime.parse(instant)));
+
+        return container.read(game.runStartForProvider)(
+          .daily,
+          progression: container.read(game.initialProgressionProvider),
+        );
+      }
+
+      final newYork = dailyAt('2026-10-16T10:00:00-05:00');
+      final tokyo = dailyAt('2026-10-17T01:00:00+09:00');
 
       // When: each takes the first joker offered
       RunState firstRound(int seed) {

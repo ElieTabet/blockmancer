@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_domain/src/entities/game/joker_id.dart';
+import 'package:shared_domain/src/entities/game/joker_tuning.br.dart';
 import 'package:shared_domain/src/entities/game/world_id.dart';
 
 part 'world_summary.br.freezed.dart';
@@ -12,6 +13,9 @@ abstract class WorldSummary with _$WorldSummary {
     /// [playable].
     required int bossTarget,
     required WorldId id,
+
+    /// The numbers [unlocks] play with, for describing them.
+    required JokerTuning jokerTuning,
 
     /// Whether it has its rules yet; the others are "coming soon".
     required bool playable,

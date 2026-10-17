@@ -11,6 +11,7 @@ WorldSummary _summaryOf(WorldId world, {required GameRules rules}) {
     return WorldSummary(
       bossTarget: 0,
       id: world,
+      jokerTuning: rules.defaultConfig.jokers,
       playable: false,
       starThreshold: 0,
       unlocks: rules.unlocksOf(world),
@@ -22,6 +23,7 @@ WorldSummary _summaryOf(WorldId world, {required GameRules rules}) {
   return WorldSummary(
     bossTarget: config.rounds.last.target,
     id: world,
+    jokerTuning: rules.defaultConfig.jokers,
     playable: true,
     starThreshold: config.starThreshold,
     unlocks: rules.unlocksOf(world),

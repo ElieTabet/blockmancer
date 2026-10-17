@@ -16,7 +16,8 @@ mixin _$WorldSummary {
 
 /// The points its boss round asks for; 0 for a world that isn't
 /// [playable].
- int get bossTarget; WorldId get id;/// Whether it has its rules yet; the others are "coming soon".
+ int get bossTarget; WorldId get id;/// The numbers [unlocks] play with, for describing them.
+ JokerTuning get jokerTuning;/// Whether it has its rules yet; the others are "coming soon".
  bool get playable;/// The run total that earns its third star; 0 for a world that isn't
 /// [playable].
  int get starThreshold;/// The jokers beating its boss unlocks.
@@ -31,16 +32,16 @@ $WorldSummaryCopyWith<WorldSummary> get copyWith => _$WorldSummaryCopyWithImpl<W
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorldSummary&&(identical(other.bossTarget, bossTarget) || other.bossTarget == bossTarget)&&(identical(other.id, id) || other.id == id)&&(identical(other.playable, playable) || other.playable == playable)&&(identical(other.starThreshold, starThreshold) || other.starThreshold == starThreshold)&&const DeepCollectionEquality().equals(other.unlocks, unlocks));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorldSummary&&(identical(other.bossTarget, bossTarget) || other.bossTarget == bossTarget)&&(identical(other.id, id) || other.id == id)&&(identical(other.jokerTuning, jokerTuning) || other.jokerTuning == jokerTuning)&&(identical(other.playable, playable) || other.playable == playable)&&(identical(other.starThreshold, starThreshold) || other.starThreshold == starThreshold)&&const DeepCollectionEquality().equals(other.unlocks, unlocks));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,bossTarget,id,playable,starThreshold,const DeepCollectionEquality().hash(unlocks));
+int get hashCode => Object.hash(runtimeType,bossTarget,id,jokerTuning,playable,starThreshold,const DeepCollectionEquality().hash(unlocks));
 
 @override
 String toString() {
-  return 'WorldSummary(bossTarget: $bossTarget, id: $id, playable: $playable, starThreshold: $starThreshold, unlocks: $unlocks)';
+  return 'WorldSummary(bossTarget: $bossTarget, id: $id, jokerTuning: $jokerTuning, playable: $playable, starThreshold: $starThreshold, unlocks: $unlocks)';
 }
 
 
@@ -51,11 +52,11 @@ abstract mixin class $WorldSummaryCopyWith<$Res>  {
   factory $WorldSummaryCopyWith(WorldSummary value, $Res Function(WorldSummary) _then) = _$WorldSummaryCopyWithImpl;
 @useResult
 $Res call({
- int bossTarget, WorldId id, bool playable, int starThreshold, List<JokerId> unlocks
+ int bossTarget, WorldId id, JokerTuning jokerTuning, bool playable, int starThreshold, List<JokerId> unlocks
 });
 
 
-
+$JokerTuningCopyWith<$Res> get jokerTuning;
 
 }
 /// @nodoc
@@ -68,17 +69,27 @@ class _$WorldSummaryCopyWithImpl<$Res>
 
 /// Create a copy of WorldSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bossTarget = null,Object? id = null,Object? playable = null,Object? starThreshold = null,Object? unlocks = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bossTarget = null,Object? id = null,Object? jokerTuning = null,Object? playable = null,Object? starThreshold = null,Object? unlocks = null,}) {
   return _then(_self.copyWith(
 bossTarget: null == bossTarget ? _self.bossTarget : bossTarget // ignore: cast_nullable_to_non_nullable
 as int,id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as WorldId,playable: null == playable ? _self.playable : playable // ignore: cast_nullable_to_non_nullable
+as WorldId,jokerTuning: null == jokerTuning ? _self.jokerTuning : jokerTuning // ignore: cast_nullable_to_non_nullable
+as JokerTuning,playable: null == playable ? _self.playable : playable // ignore: cast_nullable_to_non_nullable
 as bool,starThreshold: null == starThreshold ? _self.starThreshold : starThreshold // ignore: cast_nullable_to_non_nullable
 as int,unlocks: null == unlocks ? _self.unlocks : unlocks // ignore: cast_nullable_to_non_nullable
 as List<JokerId>,
   ));
 }
-
+/// Create a copy of WorldSummary
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$JokerTuningCopyWith<$Res> get jokerTuning {
+  
+  return $JokerTuningCopyWith<$Res>(_self.jokerTuning, (value) {
+    return _then(_self.copyWith(jokerTuning: value));
+  });
+}
 }
 
 
@@ -160,10 +171,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int bossTarget,  WorldId id,  bool playable,  int starThreshold,  List<JokerId> unlocks)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int bossTarget,  WorldId id,  JokerTuning jokerTuning,  bool playable,  int starThreshold,  List<JokerId> unlocks)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WorldSummary() when $default != null:
-return $default(_that.bossTarget,_that.id,_that.playable,_that.starThreshold,_that.unlocks);case _:
+return $default(_that.bossTarget,_that.id,_that.jokerTuning,_that.playable,_that.starThreshold,_that.unlocks);case _:
   return orElse();
 
 }
@@ -181,10 +192,10 @@ return $default(_that.bossTarget,_that.id,_that.playable,_that.starThreshold,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int bossTarget,  WorldId id,  bool playable,  int starThreshold,  List<JokerId> unlocks)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int bossTarget,  WorldId id,  JokerTuning jokerTuning,  bool playable,  int starThreshold,  List<JokerId> unlocks)  $default,) {final _that = this;
 switch (_that) {
 case _WorldSummary():
-return $default(_that.bossTarget,_that.id,_that.playable,_that.starThreshold,_that.unlocks);case _:
+return $default(_that.bossTarget,_that.id,_that.jokerTuning,_that.playable,_that.starThreshold,_that.unlocks);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +212,10 @@ return $default(_that.bossTarget,_that.id,_that.playable,_that.starThreshold,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int bossTarget,  WorldId id,  bool playable,  int starThreshold,  List<JokerId> unlocks)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int bossTarget,  WorldId id,  JokerTuning jokerTuning,  bool playable,  int starThreshold,  List<JokerId> unlocks)?  $default,) {final _that = this;
 switch (_that) {
 case _WorldSummary() when $default != null:
-return $default(_that.bossTarget,_that.id,_that.playable,_that.starThreshold,_that.unlocks);case _:
+return $default(_that.bossTarget,_that.id,_that.jokerTuning,_that.playable,_that.starThreshold,_that.unlocks);case _:
   return null;
 
 }
@@ -216,13 +227,15 @@ return $default(_that.bossTarget,_that.id,_that.playable,_that.starThreshold,_th
 
 
 class _WorldSummary implements WorldSummary {
-  const _WorldSummary({required this.bossTarget, required this.id, required this.playable, required this.starThreshold, required final  List<JokerId> unlocks}): _unlocks = unlocks;
+  const _WorldSummary({required this.bossTarget, required this.id, required this.jokerTuning, required this.playable, required this.starThreshold, required final  List<JokerId> unlocks}): _unlocks = unlocks;
   
 
 /// The points its boss round asks for; 0 for a world that isn't
 /// [playable].
 @override final  int bossTarget;
 @override final  WorldId id;
+/// The numbers [unlocks] play with, for describing them.
+@override final  JokerTuning jokerTuning;
 /// Whether it has its rules yet; the others are "coming soon".
 @override final  bool playable;
 /// The run total that earns its third star; 0 for a world that isn't
@@ -248,16 +261,16 @@ _$WorldSummaryCopyWith<_WorldSummary> get copyWith => __$WorldSummaryCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorldSummary&&(identical(other.bossTarget, bossTarget) || other.bossTarget == bossTarget)&&(identical(other.id, id) || other.id == id)&&(identical(other.playable, playable) || other.playable == playable)&&(identical(other.starThreshold, starThreshold) || other.starThreshold == starThreshold)&&const DeepCollectionEquality().equals(other._unlocks, _unlocks));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorldSummary&&(identical(other.bossTarget, bossTarget) || other.bossTarget == bossTarget)&&(identical(other.id, id) || other.id == id)&&(identical(other.jokerTuning, jokerTuning) || other.jokerTuning == jokerTuning)&&(identical(other.playable, playable) || other.playable == playable)&&(identical(other.starThreshold, starThreshold) || other.starThreshold == starThreshold)&&const DeepCollectionEquality().equals(other._unlocks, _unlocks));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,bossTarget,id,playable,starThreshold,const DeepCollectionEquality().hash(_unlocks));
+int get hashCode => Object.hash(runtimeType,bossTarget,id,jokerTuning,playable,starThreshold,const DeepCollectionEquality().hash(_unlocks));
 
 @override
 String toString() {
-  return 'WorldSummary(bossTarget: $bossTarget, id: $id, playable: $playable, starThreshold: $starThreshold, unlocks: $unlocks)';
+  return 'WorldSummary(bossTarget: $bossTarget, id: $id, jokerTuning: $jokerTuning, playable: $playable, starThreshold: $starThreshold, unlocks: $unlocks)';
 }
 
 
@@ -268,11 +281,11 @@ abstract mixin class _$WorldSummaryCopyWith<$Res> implements $WorldSummaryCopyWi
   factory _$WorldSummaryCopyWith(_WorldSummary value, $Res Function(_WorldSummary) _then) = __$WorldSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- int bossTarget, WorldId id, bool playable, int starThreshold, List<JokerId> unlocks
+ int bossTarget, WorldId id, JokerTuning jokerTuning, bool playable, int starThreshold, List<JokerId> unlocks
 });
 
 
-
+@override $JokerTuningCopyWith<$Res> get jokerTuning;
 
 }
 /// @nodoc
@@ -285,18 +298,28 @@ class __$WorldSummaryCopyWithImpl<$Res>
 
 /// Create a copy of WorldSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? bossTarget = null,Object? id = null,Object? playable = null,Object? starThreshold = null,Object? unlocks = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? bossTarget = null,Object? id = null,Object? jokerTuning = null,Object? playable = null,Object? starThreshold = null,Object? unlocks = null,}) {
   return _then(_WorldSummary(
 bossTarget: null == bossTarget ? _self.bossTarget : bossTarget // ignore: cast_nullable_to_non_nullable
 as int,id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as WorldId,playable: null == playable ? _self.playable : playable // ignore: cast_nullable_to_non_nullable
+as WorldId,jokerTuning: null == jokerTuning ? _self.jokerTuning : jokerTuning // ignore: cast_nullable_to_non_nullable
+as JokerTuning,playable: null == playable ? _self.playable : playable // ignore: cast_nullable_to_non_nullable
 as bool,starThreshold: null == starThreshold ? _self.starThreshold : starThreshold // ignore: cast_nullable_to_non_nullable
 as int,unlocks: null == unlocks ? _self._unlocks : unlocks // ignore: cast_nullable_to_non_nullable
 as List<JokerId>,
   ));
 }
 
-
+/// Create a copy of WorldSummary
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$JokerTuningCopyWith<$Res> get jokerTuning {
+  
+  return $JokerTuningCopyWith<$Res>(_self.jokerTuning, (value) {
+    return _then(_self.copyWith(jokerTuning: value));
+  });
+}
 }
 
 // dart format on

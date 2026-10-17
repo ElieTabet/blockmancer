@@ -1,18 +1,19 @@
 // The offers are the engine's to draw and the pool game_domain's to choose:
-// this is the one place both are real. Whole runs are played by the engine's
-// balance bot, reached in its src/ because it isn't part of the rules'
-// contract.
+// this is the one place both are real.
 
 import 'package:app_providers/app_providers.dart';
 import 'package:app_router/app_router.dart';
-import 'package:blockmancer_engine/src/bot/greedy_policy.dart';
+import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:shared_domain/shared_domain.dart';
 
-/// Runs played per mode: enough for every joker a pool holds to turn up.
-const _runs = 40;
+import 'engine_game.dart';
+import 'fake_progression_store.dart';
+
+/// Runs started per mode: enough for every joker a pool holds to be offered.
+const _seeds = 200;
 
 void main() {
   late ProviderContainer container;
@@ -24,60 +25,81 @@ void main() {
     addTearDown(container.dispose);
   });
 
-  /// Every joker offered across [_runs] whole runs of [config], the bot
-  /// taking a [preferred] joker whenever one is offered.
-  Set<JokerId> offeredAcross(
-    RunConfig config, {
-    required List<JokerId> preferred,
-  }) {
+  /// Every joker offered as the starting pick of [_seeds] runs of [config].
+  Set<JokerId> offeredAcross(RunConfig config) {
     final rules = container.read(game.gameRulesProvider);
-    final offered = <JokerId>{};
 
-    for (var seed = 0; seed < _runs; seed++) {
-      var state = rules.startRun(config: config, seed: seed);
-
-      for (
-        var move = greedyMove(state, build: preferred);
-        move != null;
-        move = greedyMove(state, build: preferred)
-      ) {
-        if (state.phase case PickingJokerPhase(:final offers)) {
-          offered.addAll(offers);
-        }
-
-        state = switch (move) {
-          EndMove() => rules.endRun(state),
-          PickMove(:final id) => rules.pickJoker(state, id: id),
-          PlaceMove(:final anchor, :final trayIndex) => rules.place(
-            state,
-            anchor: anchor,
-            trayIndex: trayIndex,
-          ),
-          ReviveMove() => rules.revive(state),
-        }.$1;
-      }
-    }
-
-    return offered;
+    return {
+      for (var seed = 0; seed < _seeds; seed++)
+        if (rules.startRun(config: config, seed: seed).phase
+            case PickingJokerPhase(:final offers))
+          ...offers,
+    };
   }
 
-  test('a fresh profile is never offered a locked joker in world runs, and '
-      'daily runs can be', () {
-    // Given: a new player
+  test('Given a new player, When a world run starts, Then it offers only the '
+      'jokers they have unlocked, and the daily offers the others too', () {
+    // Given
     final fresh = container.read(game.initialProgressionProvider);
     final locked = JokerId.values.toSet().difference(fresh.unlockedJokers);
     final startFor = container.read(game.runStartForProvider);
-    final world = startFor(.world, progression: fresh, world: .rubble);
-    final daily = startFor(.daily, progression: fresh);
 
-    // When: both are played through, the bot reaching for locked jokers
-    final inWorldRuns = offeredAcross(world.config, preferred: locked.toList());
-    final inDailyRuns = offeredAcross(daily.config, preferred: locked.toList());
+    // When
+    final rubble = startFor(.world, progression: fresh, world: .rubble);
+    final gravity = startFor(.world, progression: fresh, world: .gravity);
+    final daily = startFor(.daily, progression: fresh);
 
     // Then
     expect(locked, isNotEmpty);
-    expect(inWorldRuns.intersection(locked), isEmpty);
-    expect(inWorldRuns, fresh.unlockedJokers);
-    expect(inDailyRuns.intersection(locked), isNotEmpty);
+    expect(rubble.config.jokerPool.toSet(), fresh.unlockedJokers);
+    expect(gravity.config.jokerPool.toSet(), fresh.unlockedJokers);
+    expect(offeredAcross(rubble.config).intersection(locked), isEmpty);
+    expect(offeredAcross(gravity.config).intersection(locked), isEmpty);
+    expect(offeredAcross(daily.config).intersection(locked), isNotEmpty);
   });
+
+  test(
+    'Given Gravity open, When its boss falls for the first time, Then '
+    'Anchor and Avalanche unlock and Fog, still coming soon, stays locked',
+    () async {
+      // Given
+      const rules = BlockmancerEngine();
+      final fresh = game.startingProgression(rules);
+      final store = FakeProgressionStore(
+        fresh.copyWith(
+          worlds: {
+            ...fresh.worlds,
+            WorldId.gravity: fresh.worlds[WorldId.gravity]!.copyWith(
+              unlocked: true,
+            ),
+          },
+        ),
+      );
+      final gameContainer = engineGame(progressionStore: store);
+      final won = rules
+          .startRun(
+            config: rules.configFor(
+              .gravity,
+              jokerPool: fresh.unlockedJokers.toList(),
+            ),
+            seed: 1,
+          )
+          .copyWith(phase: const .won());
+
+      // When
+      final change = await gameContainer.read(game.recordProgressionProvider)(
+        const .world(world: .gravity),
+        won,
+      );
+
+      // Then
+      expect(change?.unlockedJokers, [JokerId.anchor, JokerId.avalanche]);
+      expect(change?.unlockedWorld, isNull);
+      expect(
+        store.saved.unlockedJokers,
+        containsAll([JokerId.anchor, JokerId.avalanche]),
+      );
+      expect(store.saved.worlds[WorldId.fog]?.unlocked, isFalse);
+    },
+  );
 }

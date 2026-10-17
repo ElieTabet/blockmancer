@@ -41,6 +41,15 @@ WorldId? hereWorld(Ref ref) {
       ?.id;
 }
 
+/// Whether runs may offer [joker] already; false until the progression is
+/// read.
+@riverpod
+bool jokerOwned(Ref ref, JokerId joker) => ref.watch(
+  progressionProvider.select(
+    (progression) => progression.value?.unlockedJokers.contains(joker) ?? false,
+  ),
+);
+
 /// The legs of the trail between the worlds the player has walked: every one
 /// up to [hereWorldProvider].
 @riverpod
@@ -76,3 +85,7 @@ WorldNodeShown worldNode(Ref ref, WorldId world) {
     stars: progress?.stars ?? _noStars,
   );
 }
+
+@riverpod
+WorldSummary worldSummary(Ref ref, WorldId world) =>
+    ref.watch(worldsProvider).firstWhere((summary) => summary.id == world);

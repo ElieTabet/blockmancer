@@ -36,5 +36,5 @@ dev_dependencies:
   build_runner: 2.16.0
   riverpod_generator: 4.0.3
   flutter_riverpod: ^3.3.1     # ProviderContainer, for the composition wiring test
-  package_info_plus: any       # a release's version and build, for the Settings wiring test
+  package_info_plus: ^10.2.2       # a release's version and build, for the Settings wiring test
   shared_domain: any           # the engine's RunState, for the daily-seed test

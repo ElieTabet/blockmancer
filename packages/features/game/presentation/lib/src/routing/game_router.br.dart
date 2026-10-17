@@ -84,8 +84,12 @@ class _GamePageState extends ConsumerState<GamePage> {
 
   /// Played with a new player's jokers rather than stranded on a blank screen.
   Future<Progression> _loadProgression() async {
+    // Both read up front: the page may be gone by the time the load fails.
+    final load = ref.read(loadProgressionProvider);
+    final newPlayer = ref.read(initialProgressionProvider);
+
     try {
-      return await ref.read(loadProgressionProvider)();
+      return await load();
     } on Object catch (error, stackTrace) {
       Timber.e(
         tag: packageName,
@@ -94,7 +98,7 @@ class _GamePageState extends ConsumerState<GamePage> {
         stackTrace: stackTrace,
       );
 
-      return ref.read(initialProgressionProvider);
+      return newPlayer;
     }
   }
 
@@ -102,8 +106,10 @@ class _GamePageState extends ConsumerState<GamePage> {
   /// before the first move, so the run out of reach isn't overwritten unless
   /// the player plays on.
   Future<SavedRun?> _loadResumed() async {
+    final load = ref.read(loadSavedRunProvider);
+
     try {
-      return await ref.read(loadSavedRunProvider)();
+      return await load();
     } on Object catch (error, stackTrace) {
       Timber.e(
         tag: packageName,

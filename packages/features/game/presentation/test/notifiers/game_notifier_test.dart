@@ -122,6 +122,16 @@ void main() {
     });
   });
 
+  test("a world launch naming a world that is coming soon plays the map's "
+      'first rather than failing', () {
+    // Given / When
+    final state = container(launch: .world, world: .fog).read(gameProvider);
+
+    // Then
+    expect(state.mode, const GameMode.world(world: .rubble));
+    expect(rules.configured.single.world, WorldId.rubble);
+  });
+
   test('playing a world again plays the same world on a new seed', () {
     // Given
     final game = container(launch: .world, world: .gravity);
@@ -544,6 +554,73 @@ void main() {
       expect(store.saved.worlds[WorldId.gravity]?.unlocked, isTrue);
     });
 
+    test('waits on what it earned until it is kept', () async {
+      // Given: a slow write
+      store.gate = Completer<void>();
+      final game = container(
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+      rules.next = (runIn(const .won()), const [GameEvent.runWon(total: 0)]);
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+
+      // Then
+      expect(game.read(gameProvider).progressPending, isTrue);
+
+      // When
+      store.gate!.complete();
+      await pumpEventQueue();
+
+      // Then
+      expect(game.read(gameProvider).progressPending, isFalse);
+      expect(game.read(gameProvider).progress?.unlockedWorld, WorldId.gravity);
+    });
+
+    test('stops waiting when what it earned cannot be kept', () async {
+      // Given
+      store.broken = true;
+      final game = container(
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+      rules.next = (runIn(const .won()), const [GameEvent.runWon(total: 0)]);
+
+      // When
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // Then
+      expect(game.read(gameProvider).progressPending, isFalse);
+      expect(game.read(gameProvider).progress, isNull);
+    });
+
+    test('playing again offers the jokers it unlocked', () async {
+      // Given
+      final game = container(
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+      rules.next = (runIn(const .won()), const [GameEvent.runWon(total: 0)]);
+      game.read(gameProvider.notifier).endRun();
+      await pumpEventQueue();
+
+      // When
+      game.read(gameProvider.notifier).retry();
+
+      // Then
+      expect(rules.configured.last.jokerPool, [
+        JokerId.patience,
+        JokerId.quarry,
+        JokerId.stonemason,
+        JokerId.twin,
+      ]);
+    });
+
     test('what it unlocked is shown once, then the run end', () async {
       // Given
       final game = container(
@@ -574,6 +651,7 @@ void main() {
 
       // Then
       expect(game.read(gameProvider).progress, isNull);
+      expect(game.read(gameProvider).progressPending, isFalse);
       expect(store.saved, before);
     });
   });

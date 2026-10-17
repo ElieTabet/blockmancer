@@ -77,7 +77,8 @@ const testConfig = RunConfig(
 
 /// Scripted rules: every move answers [next], and every call is recorded.
 /// Shape ids are singles; a piece fits wherever the board is empty. The map
-/// is Rubble then Gravity, and a new player has Patience and Twin.
+/// is the engine's, cut short: Rubble, Gravity, then Fog with no rules yet.
+/// A new player has Patience and Twin.
 final class FakeGameRules implements GameRules {
   FakeGameRules({required this.start});
 
@@ -95,7 +96,7 @@ final class FakeGameRules implements GameRules {
   List<JokerId> get startingJokers => const [.patience, .twin];
 
   @override
-  List<WorldId> get worldOrder => const [.rubble, .gravity];
+  List<WorldId> get worldOrder => const [.rubble, .gravity, .fog];
 
   @override
   bool canPlace(
@@ -111,6 +112,10 @@ final class FakeGameRules implements GameRules {
 
   @override
   RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) {
+    if (!isPlayable(world)) {
+      throw ArgumentError.value(world, 'world', 'is not playable');
+    }
+
     configured.add((jokerPool: jokerPool, world: world));
 
     return testConfig.copyWith(jokerPool: jokerPool, world: world);
@@ -132,7 +137,11 @@ final class FakeGameRules implements GameRules {
   int liveRunTotal(RunState state) => state.runTotal + state.score;
 
   @override
-  WorldId? nextWorld(WorldId world) => world == .rubble ? .gravity : null;
+  WorldId? nextWorld(WorldId world) => switch (world) {
+    .rubble => .gravity,
+    .gravity => .fog,
+    .fog || .mirror || .speed => null,
+  };
 
   @override
   JokerId partnerOf(JokerId id) => id == .twin ? .patience : .twin;
@@ -193,8 +202,11 @@ final class FakeGameRules implements GameRules {
   }
 
   @override
-  List<JokerId> unlocksOf(WorldId world) =>
-      world == .rubble ? const [.stonemason, .quarry] : const [];
+  List<JokerId> unlocksOf(WorldId world) => switch (world) {
+    .rubble => const [.stonemason, .quarry],
+    .gravity => const [.anchor, .avalanche],
+    .fog || .mirror || .speed => const [],
+  };
 
   Transition _move(String call, RunState state) {
     calls.add(call);

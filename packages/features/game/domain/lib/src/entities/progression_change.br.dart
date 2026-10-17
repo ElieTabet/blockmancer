@@ -10,6 +10,10 @@ abstract class ProgressionChange with _$ProgressionChange {
     /// The stars this run earned that the world had not awarded before.
     required WorldStars newStars,
 
+    /// Everything earned so far, this run included: what the next run's
+    /// jokers are drawn from.
+    required Progression progression,
+
     /// Every star the world has awarded, this run's included.
     required WorldStars stars,
     required List<JokerId> unlockedJokers,

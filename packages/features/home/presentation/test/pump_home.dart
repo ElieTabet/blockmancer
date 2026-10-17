@@ -9,11 +9,39 @@ import 'package:shared_domain/shared_domain.dart';
 
 import 'fake_home_routing.dart';
 
+/// The jokers' numbers. Stonemason's and Quarry's are uncommon, so a test
+/// can tell a description filled from them.
+const tuning = JokerTuning(
+  anchorMult: 4,
+  avalancheChipsPerCell: 25,
+  bigBoxFactor: 3,
+  bigBoxMinPieceSize: 5,
+  collectorMultPerJoker: 1,
+  columnFactor: 2,
+  comboMultPerStreak: 1,
+  heavyFactor: 2,
+  heavyMinPieceSize: 4,
+  patienceStoredPerMove: 2,
+  pocketsExtraPieces: 4,
+  precisionBonusMult: 6,
+  precisionMaxPieceSize: 2,
+  quarryStonesPerClear: 3,
+  saverPointsPerPiece: 40,
+  stonemasonChipsPerStone: 75,
+  stonemasonExtraStones: 4,
+  sweepBonus: 500,
+  tinyFactor: 3,
+  tinyMaxPieceSize: 2,
+  twinFactor: 3,
+  twinMinLines: 2,
+);
+
 /// The game's map: Rubble and Gravity playable, then three coming soon.
 const mapWorlds = [
   WorldSummary(
     bossTarget: 1500,
     id: .rubble,
+    jokerTuning: tuning,
     playable: true,
     starThreshold: 8000,
     unlocks: [.stonemason, .quarry],
@@ -21,6 +49,7 @@ const mapWorlds = [
   WorldSummary(
     bossTarget: 2000,
     id: .gravity,
+    jokerTuning: tuning,
     playable: true,
     starThreshold: 9000,
     unlocks: [.anchor, .avalanche],
@@ -28,6 +57,7 @@ const mapWorlds = [
   WorldSummary(
     bossTarget: 0,
     id: .fog,
+    jokerTuning: tuning,
     playable: false,
     starThreshold: 0,
     unlocks: [],
@@ -35,6 +65,7 @@ const mapWorlds = [
   WorldSummary(
     bossTarget: 0,
     id: .speed,
+    jokerTuning: tuning,
     playable: false,
     starThreshold: 0,
     unlocks: [],
@@ -42,6 +73,7 @@ const mapWorlds = [
   WorldSummary(
     bossTarget: 0,
     id: .mirror,
+    jokerTuning: tuning,
     playable: false,
     starThreshold: 0,
     unlocks: [],
@@ -68,8 +100,10 @@ Progression freshProgression({WorldStars rubbleStars = noStars}) => Progression(
   },
 );
 
-/// Rubble's boss beaten without a revive, which opened Gravity.
+/// Rubble's boss beaten without a revive, which opened Gravity and its two
+/// jokers.
 final rubbleBeaten = freshProgression().copyWith(
+  unlockedJokers: const {.quarry, .stonemason},
   worlds: {
     ...freshProgression().worlds,
     .rubble: const WorldProgress(

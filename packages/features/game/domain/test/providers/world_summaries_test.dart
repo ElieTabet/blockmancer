@@ -13,6 +13,9 @@ final class _FogComingRules implements GameRules {
   static const _known = TwoWorldRules();
 
   @override
+  RunConfig get defaultConfig => _known.configFor(.rubble, jokerPool: const []);
+
+  @override
   List<WorldId> get worldOrder => const [.rubble, .gravity, .fog];
 
   @override
@@ -36,7 +39,7 @@ void main() {
   test('Given a map whose last world has no rules yet, '
       'When the map is summed up, '
       'Then each world comes in the map\'s order with its boss target, third '
-      'star and unlocks, and the last is coming soon', () {
+      'star, unlocks and their tuning, and the last is coming soon', () {
     // Given
     final container = ProviderContainer(
       overrides: bindProviders(
@@ -53,10 +56,12 @@ void main() {
     final worlds = container.read(worldSummariesProvider);
 
     // Then
-    expect(worlds, const [
+    final tuning = const _FogComingRules().defaultConfig.jokers;
+    expect(worlds, [
       WorldSummary(
         bossTarget: 250,
         id: .rubble,
+        jokerTuning: tuning,
         playable: true,
         starThreshold: 8000,
         unlocks: [.stonemason, .quarry],
@@ -64,13 +69,15 @@ void main() {
       WorldSummary(
         bossTarget: 250,
         id: .gravity,
+        jokerTuning: tuning,
         playable: true,
         starThreshold: 8000,
-        unlocks: [],
+        unlocks: [.anchor, .avalanche],
       ),
       WorldSummary(
         bossTarget: 0,
         id: .fog,
+        jokerTuning: tuning,
         playable: false,
         starThreshold: 0,
         unlocks: [],

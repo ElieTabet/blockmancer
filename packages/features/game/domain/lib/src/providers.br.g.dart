@@ -585,7 +585,7 @@ final class TodaysDailyBestProvider
   }
 }
 
-String _$todaysDailyBestHash() => r'81b37f5424cfcd74084b40e3bf740483482e323a';
+String _$todaysDailyBestHash() => r'88ec2f5293f2fad945ce7d3e68958c099288c256';
 
 /// The UTC day today's daily run is played on, at its midnight, renewed at the
 /// next UTC midnight when that day is over.

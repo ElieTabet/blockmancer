@@ -14,9 +14,10 @@ final class FakeClock implements Clock {
   DateTime now() => current;
 }
 
-/// Rules on a map of Rubble then Gravity, whose daily seed is the date as
-/// `yyyymmdd` plus one, so a test can tell a seed from a day. Beating Rubble's
-/// boss unlocks Stonemason and Quarry. Nothing else is called.
+/// Rules on the engine's map, cut short: Rubble, then Gravity, then Fog, which
+/// has no rules yet. The daily seed is the date as `yyyymmdd` plus one, so a
+/// test can tell a seed from a day. Beating Rubble's boss unlocks Stonemason
+/// and Quarry, Gravity's Anchor and Avalanche. Nothing else is called.
 final class TwoWorldRules implements GameRules {
   const TwoWorldRules();
 
@@ -24,22 +25,37 @@ final class TwoWorldRules implements GameRules {
   List<JokerId> get startingJokers => const [.patience, .twin];
 
   @override
-  List<WorldId> get worldOrder => const [.rubble, .gravity];
+  List<WorldId> get worldOrder => const [.rubble, .gravity, .fog];
 
   @override
-  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
-      _config.copyWith(jokerPool: jokerPool, world: world);
+  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) {
+    if (!isPlayable(world)) {
+      throw ArgumentError.value(world, 'world', 'is not playable');
+    }
+
+    return _config.copyWith(jokerPool: jokerPool, world: world);
+  }
 
   @override
   int dailySeed({required int day, required int month, required int year}) =>
       year * 10000 + month * 100 + day + 1;
 
   @override
-  WorldId? nextWorld(WorldId world) => world == .rubble ? .gravity : null;
+  bool isPlayable(WorldId world) => world == .rubble || world == .gravity;
 
   @override
-  List<JokerId> unlocksOf(WorldId world) =>
-      world == .rubble ? const [.stonemason, .quarry] : const [];
+  WorldId? nextWorld(WorldId world) => switch (world) {
+    .rubble => .gravity,
+    .gravity => .fog,
+    .fog || .mirror || .speed => null,
+  };
+
+  @override
+  List<JokerId> unlocksOf(WorldId world) => switch (world) {
+    .rubble => const [.stonemason, .quarry],
+    .gravity => const [.anchor, .avalanche],
+    .fog || .mirror || .speed => const [],
+  };
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

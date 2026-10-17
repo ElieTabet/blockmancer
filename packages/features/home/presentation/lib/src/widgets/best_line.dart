@@ -2,7 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_presentation/src/providers_di.br.dart';
-import 'package:intl/intl.dart';
+import 'package:home_presentation/src/widgets/points_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 
 enum HomeMode { daily, practice }
@@ -23,11 +23,7 @@ final class BestLine extends ConsumerWidget {
 
     return switch (best) {
       AsyncData(value: final points?) => Text(
-        home.best(
-          points: NumberFormat.decimalPattern(
-            Localizations.localeOf(context).toLanguageTag(),
-          ).format(points),
-        ),
+        home.best(points: pointsText(context, points)),
         style: const TextStyle(
           color: DSColor.accent,
           fontSize: 13,

@@ -16,8 +16,9 @@ enum _Sheet { end, lost, offers, unlocks }
 /// which sheet is up, so there is no route to keep in step with it.
 ///
 /// A sheet waits for the move that led to it to play back, so the score lands
-/// before the joker pick covers it. What a run unlocked comes before its end:
-/// the end stays up once the player has seen it, to play again from.
+/// before the joker pick covers it. A finished run shows nothing until what it
+/// earned is kept, then what it unlocked before its end: the end stays up once
+/// the player has seen it, to play again from.
 final class PhaseOverlay extends ConsumerWidget {
   const PhaseOverlay({super.key});
 
@@ -28,10 +29,12 @@ final class PhaseOverlay extends ConsumerWidget {
         (state) => switch (state.run.phase) {
           PickingJokerPhase() => _Sheet.offers,
           RoundLostPhase() => _Sheet.lost,
-          WonPhase() || OverPhase() =>
-            (state.progress?.unlocksAnything ?? false) && !state.unlocksSeen
-                ? _Sheet.unlocks
-                : _Sheet.end,
+          WonPhase() || OverPhase() when state.progressPending => null,
+          WonPhase() || OverPhase()
+              when (state.progress?.unlocksAnything ?? false) &&
+                  !state.unlocksSeen =>
+            _Sheet.unlocks,
+          WonPhase() || OverPhase() => _Sheet.end,
           PlayingPhase() => null,
         },
       ),

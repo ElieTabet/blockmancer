@@ -48,6 +48,29 @@ void main() {
     },
   );
 
+  for (final device in ["Élie's Pixel 7 Pro & co #1 +=?%", '日本']) {
+    test(
+      'Given a phone named "$device", When feedback is sent, Then the draft names it exactly',
+      () async {
+        // Given
+        final mailApp = FakeMailApp();
+        final container = launchWith(
+          FakeSettingsStore(),
+          appDetails: testAppDetails.copyWith(device: device),
+          mailApp: mailApp,
+        );
+
+        // When
+        await container.read(sendFeedbackProvider)();
+
+        // Then
+        final sent = Uri.parse(mailApp.drafts.single.toString());
+        expect(sent.queryParameters['body'], contains('Device: $device\n'));
+        expect(sent.queryParameters['subject'], 'Blockmancer feedback');
+      },
+    );
+  }
+
   test(
     'Given no mail app, When feedback is sent, Then it answers that nothing opened',
     () async {

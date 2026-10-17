@@ -99,11 +99,68 @@ void main() {
     );
   }
 
+  testWidgets(
+    'a world run continued, revived and then won celebrates its unlock and '
+    'keeps only the first star',
+    (tester) async {
+      // Given: a Rubble run saved on its boss's lost round
+      final rules = FakeGameRules(start: runIn(const .playing()));
+      final progression = FakeProgressionStore(startingProgression(rules));
+      final runs = FakeRunStore()
+        ..saved = SavedRun(
+          mode: const .world(world: .rubble),
+          run: runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+        );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: gameOverrides(
+            rules,
+            progressionStore: progression,
+            runStore: runs,
+          ),
+          child: TranslationProvider(
+            child: MaterialApp(
+              theme: DSTheme.instance.darkTheme,
+              home: const GamePage(launch: .resume),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // When: revived, then the boss beaten
+      rules.next = (
+        runIn(const .roundLost(reason: .noRoom), revivesUsed: 1, roundIndex: 1),
+        const [],
+      );
+      await tester.tap(find.text('Revive · clear 2 rows + 3 pieces'));
+      await tester.pumpAndSettle();
+      rules.next = (
+        runIn(const .won(), revivesUsed: 1, runTotal: 3000),
+        const [GameEvent.runWon(total: 3000)],
+      );
+      await tester.tap(find.text('End run'));
+      await tester.pumpAndSettle();
+
+      // Then
+      expect(find.text('New world: Gravity'), findsOneWidget);
+      expect(
+        progression.saved.worlds[WorldId.rubble]?.stars,
+        const WorldStars(
+          bossBeaten: true,
+          noRevive: false,
+          scoreThreshold: false,
+        ),
+      );
+    },
+  );
+
   group('a world run', () {
     Future<FakeGameRules> openWorld(
       WidgetTester tester,
-      ProgressionStore store,
-    ) async {
+      ProgressionStore store, {
+      WorldId world = .gravity,
+    }) async {
       final rules = FakeGameRules(
         start: runIn(const .pickingJoker(offers: [.twin]), pickIndex: 0),
       );
@@ -114,7 +171,7 @@ void main() {
           child: TranslationProvider(
             child: MaterialApp(
               theme: DSTheme.instance.darkTheme,
-              home: const GamePage(launch: .world, world: .gravity),
+              home: GamePage(launch: .world, world: world),
             ),
           ),
         ),
@@ -161,6 +218,24 @@ void main() {
         ]);
       },
     );
+
+    testWidgets("naming a world that is coming soon plays the map's first", (
+      tester,
+    ) async {
+      // Given / When
+      final rules = await openWorld(
+        tester,
+        FakeProgressionStore(
+          startingProgression(FakeGameRules(start: runIn(const .playing()))),
+        ),
+        world: .fog,
+      );
+
+      // Then
+      expect(tester.takeException(), isNull);
+      expect(find.text('Pick your starting joker'), findsOneWidget);
+      expect(rules.configured.single.world, WorldId.rubble);
+    });
   });
 }
 

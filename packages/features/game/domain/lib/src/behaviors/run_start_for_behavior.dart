@@ -1,3 +1,4 @@
+import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
 import 'package:game_domain/src/contracts/clock.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
 import 'package:game_domain/src/entities/run_start.dart';
@@ -10,8 +11,10 @@ import 'package:shared_domain/shared_domain.dart';
 /// and counts as the practice it hands over to.
 ///
 /// Practice plays the map's first world, and a world run the world it names
-/// (the first when it names none). Both offer only the jokers [Progression]
-/// has unlocked; the daily offers them all.
+/// (the first when it names none, or names one the rules can't play yet: the
+/// map never offers one, so a launch naming it plays on rather than failing).
+/// Both offer only the jokers [Progression] has unlocked; the daily offers
+/// them all.
 class RunStartForBehavior {
   final Clock _clock;
   final GameRules _rules;
@@ -25,10 +28,12 @@ class RunStartForBehavior {
     required Progression progression,
     WorldId? world,
   }) {
-    final played = world ?? _rules.worldOrder.first;
+    final played = world != null && _rules.isPlayable(world)
+        ? world
+        : _rules.worldOrder.first;
 
     return switch (launch) {
-      .daily || .resume => dailyRunOn(_clock.now(), rules: _rules),
+      .daily || .resume => DailyRunBehavior(rules: _rules)(_clock.now()),
       .practice || .tutorial => (
         config: _unlockedConfig(_rules.worldOrder.first, progression),
         mode: const .practice(),

@@ -25,7 +25,8 @@ Finder _in(WorldId world, Finder matching) => find.descendant(
 // that what its run earned is on the map the moment the run is left.
 void main() {
   testWidgets("Given a new player's map, "
-      "When Rubble is opened and its boss beaten, and the run is left, "
+      "When Rubble's run is started from its sheet and its boss beaten, and "
+      'the run is left, '
       'Then Home shows Rubble done with its stars and Gravity where the '
       'player is', (tester) async {
     // Given
@@ -35,8 +36,10 @@ void main() {
     );
     expect(_in(.rubble, find.byIcon(Icons.location_on_rounded)), findsOne);
 
-    // When: Rubble opened from the map
+    // When: Rubble's sheet opened from the map, and its run started
     await tester.tap(find.text('Rubble'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start run'));
     await tester.pumpAndSettle();
 
     // Then

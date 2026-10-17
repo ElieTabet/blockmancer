@@ -285,7 +285,7 @@ engine's events and never recomputes a rule.
   engine's own mulberry32 over 32-bit arithmetic, so a seed gives the same run on the VM and on the
   web. Callers pass the date in for a daily seed: `game_domain` reads it from its injected `Clock`
   (`SystemClock` in `game_data`; never `DateTime.now()` elsewhere), keys the daily run by the UTC
-  day and asks the rules for that day's seed (`dailyRunOn`).
+  day and asks the rules for that day's seed (`DailyRunBehavior`, internal to `game_domain`).
 - **Replayable.** A run is its seed and its moves: `GameRules.replay({config, moves, seed})` folds a
   list of `shared_domain`'s `RunMove`s (`pick`, `place`, `revive`, `end`) back into the final
   `RunState`, refusing any move the run couldn't have made. This is what a server will check a score
@@ -355,22 +355,35 @@ What a player has earned across runs is one `Progression` (`shared_domain`): per
   `RunConfig`: the **daily** is the first world with **every** joker, whatever the player has
   unlocked, so everyone plays the same run; **practice** is the first world and a **world run**
   its own world, both offering only `unlockedJokers` (in `JokerId` order — the rules draw in their
-  own order anyway). The tutorial still plays the rules' fixed run.
+  own order anyway). A world launch naming a world the rules can't play yet plays the first world
+  instead: the map never offers one, so this only keeps a stray launch from crashing in
+  `configFor`. The daily's own start (`DailyRunBehavior`) isn't exported, so nothing outside
+  `game_domain` can start it for any instant but the `Clock`'s. The tutorial still plays the
+  rules' fixed run.
 - **Loaded once.** `GamePage` reads the progression once before the game starts (every launch but
   the daily, which doesn't need it), like the saved run, and scopes it in as
-  `launchProgressionProvider`; one it can't read plays with a new player's jokers. Retry keeps
-  the screen's progression, so what a run unlocked is offered from the next run opened, and a
-  resumed run keeps the config it was saved with.
+  `launchProgressionProvider`; one it can't read plays with a new player's jokers. Play again
+  starts from the latest progression the screen knows — each `ProgressionChange` carries the
+  `progression` it left — so the jokers an unlock sheet just announced are in the next run's pool.
+  A resumed run keeps the config it was saved with.
 - **What a run earns.** At a world run's end `GameNotifier` calls `recordProgression`
   (`RecordProgressionBehavior`, keepAlive, then refreshes `progressionProvider`). The first win
-  over the world's boss marks it beaten, unlocks the next world (playable or not — the map shows
-  "coming soon" from `isPlayable`) and adds `rules.unlocksOf(world)` to `unlockedJokers`; a second
-  win unlocks nothing. Stars: ★1 the boss beaten, ★2 beaten with `revivesUsed == 0`, ★3 a run
-  total of at least `config.starThreshold` — independent of the boss. Nothing is ever taken back
-  (each star ORed into what was earned). It returns a `ProgressionChange` (`newStars`, `stars`,
-  `unlockedWorld`, `unlockedJokers`) kept as `GameUiState.progress`. **Daily and practice runs
-  never touch progression**: the daily is everyone's competition and practice is free play.
-- **The celebration.** A run that unlocked something shows `UnlockSheet` first — "New world: …"
+  over the world's boss marks it beaten, adds `rules.unlocksOf(world)` to `unlockedJokers` and
+  unlocks the next world **if the rules can play it** (`isPlayable`): a coming-soon world stays
+  locked, so beating Gravity announces Anchor and Avalanche and no world. The release that gives
+  Fog its rules must therefore open it for players who beat Gravity before (a profile migration
+  keyed on Gravity's `bossBeaten`). A second win unlocks nothing. Stars: ★1 the boss beaten, ★2
+  beaten with `revivesUsed == 0`, ★3 a run total of at least `config.starThreshold` — independent
+  of the boss. Nothing is ever taken back (each star ORed into what was earned). It returns a
+  `ProgressionChange` (`newStars`, `progression`, `stars`, `unlockedWorld`, `unlockedJokers`)
+  kept as `GameUiState.progress`.
+  **Daily and practice runs never touch progression**: the daily is everyone's competition and
+  practice is free play.
+- **The celebration.** The run's end waits for what it earned: the move that ends a run sets
+  `GameUiState.progressPending`, and `PhaseOverlay` shows nothing until `recordProgression`
+  answers — so the run end can't flash first, nor Play again discard the unlock. A write that
+  fails also ends the wait (logged): the end then shows without stars. A run that unlocked
+  something shows `UnlockSheet` first — "New world: …" (or "New jokers" when no world opened)
   and the unlocked jokers' cards (`JokerCard`, the offer card's look) — and its Continue
   (`closeUnlocks`) hands over to the run's end, so Play again stays the last thing on screen.
   `RunEndSheet` then shows the world's three stars (`RunStars`), each with its objective; the new
@@ -385,7 +398,8 @@ header, beside the gear.
 
 - **What it reads.** `game_domain`'s `worldSummaries` fills home's `worlds` slot: a
   `WorldSummary` (`shared_domain`) per world in `worldOrder`, with `playable`, its boss's target,
-  its ★3 threshold and its unlocks, read from the rules (0 for a world that isn't playable).
+  its ★3 threshold, its unlocks and the `JokerTuning` that describes them (the rules'
+  `defaultConfig`), read from the rules (0 for a world that isn't playable).
   `progressionProvider.future` fills `progression`, and `todaysDailyDate` (the UTC day the daily
   is keyed by) fills `dailyDate`.
 - **A node** (`worldNodeProvider`, home): coming soon when not `playable`, locked until
@@ -394,9 +408,16 @@ header, beside the gear.
 - **Fresh on return.** `recordProgression` invalidates `progressionProvider` at a run's end, and
   Home's slot watches its future, so the map has changed by the time the run is left
   (`app_router`'s `world_map_test`).
-- **Taps** go through `HomeNotifier.onWorldTapped`: a current or done world pushes its run; a
-  locked or coming-soon one does nothing. It is the one place to change when a world's detail
-  sheet comes first.
+- **The sheet.** Tapping any node opens its `WorldSheet` (`showWorldSheet`, a modal bottom sheet
+  in the game's palette): status (Done / In progress / Locked / Coming soon), the boss rule in a
+  sentence, the boss's target, the three star objectives with what is earned, and the jokers the
+  boss unlocks as joker cards (named and described by home's own `joker_text.dart`, with the
+  summary's tuning; "Unlocked" once `unlockedJokers` holds them). An open world gets Start run,
+  or Replay for the missing star once its boss is beaten with a star still to earn; a locked one
+  says "Beat the previous boss to unlock"; a coming-soon one shows only its name. The sheet pops
+  `true` on play, and the node then calls `HomeNotifier.openWorld`, which pushes
+  `GameRoute(launch: .world, world: …)`: the widget shows the sheet, as Settings' rows show
+  their popups, because a notifier only hands its `BuildContext` to routing.
 - **Smooth.** The trail is one `CustomPainter` behind a `RepaintBoundary`, repainted only when the
   player gets further; each node watches its own world. The pin's bob is the only per-frame work,
   in its own layer, and it holds still under the phone's or Settings' reduce motion (home's

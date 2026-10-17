@@ -93,6 +93,7 @@ class _Translations$home$fr extends Translations$home$en {
 	@override late final _Translations$home$resume$fr resume = _Translations$home$resume$fr._(_root);
 	@override late final _Translations$home$practice$fr practice = _Translations$home$practice$fr._(_root);
 	@override late final _Translations$home$map$fr map = _Translations$home$map$fr._(_root);
+	@override late final _Translations$home$sheet$fr sheet = _Translations$home$sheet$fr._(_root);
 	@override String best({required Object points}) => 'Record : ${points}';
 	@override String get noBest => 'Pas encore de partie';
 	@override String get settings => 'Réglages';
@@ -325,6 +326,25 @@ class _Translations$home$map$fr extends Translations$home$map$en {
 	@override String get locked => 'Verrouillé';
 	@override String get comingSoon => 'Bientôt';
 	@override String stars({required Object count}) => 'Étoiles : ${count} sur 3';
+}
+
+// Path: home.sheet
+class _Translations$home$sheet$fr extends Translations$home$sheet$en {
+	_Translations$home$sheet$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get done => 'Terminé';
+	@override String get current => 'En cours';
+	@override late final _Translations$home$sheet$bossRule$fr bossRule = _Translations$home$sheet$bossRule$fr._(_root);
+	@override String bossTarget({required Object points}) => 'Bats le boss : ${points} points';
+	@override String get stars => 'Étoiles';
+	@override String threshold({required Object points}) => 'Atteins ${points} points en une partie';
+	@override String get unlocks => 'Battre son boss débloque';
+	@override String get start => 'Lancer la partie';
+	@override String get replay => 'Rejouer pour l\'étoile manquante';
+	@override String get lockedHint => 'Bats le boss précédent pour le débloquer';
 }
 
 // Path: settings.reduceMotion
@@ -591,6 +611,17 @@ class _Translations$game$jokers$avalanche$fr extends Translations$game$jokers$av
 	@override String description({required Object chips}) => 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les 2 lignes du bas.';
 }
 
+// Path: home.sheet.bossRule
+class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossRule$en {
+	_Translations$home$sheet$bossRule$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get rubble => 'Le boss commence avec des pierres sur le plateau.';
+	@override String get gravity => 'Pendant la manche du boss, chaque pièce tombe tout en bas.';
+}
+
 /// The flat map containing all translations for locale <fr>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -720,6 +751,17 @@ extension on TranslationsFr {
 			'home.map.locked' => 'Verrouillé',
 			'home.map.comingSoon' => 'Bientôt',
 			'home.map.stars' => ({required Object count}) => 'Étoiles : ${count} sur 3',
+			'home.sheet.done' => 'Terminé',
+			'home.sheet.current' => 'En cours',
+			'home.sheet.bossRule.rubble' => 'Le boss commence avec des pierres sur le plateau.',
+			'home.sheet.bossRule.gravity' => 'Pendant la manche du boss, chaque pièce tombe tout en bas.',
+			'home.sheet.bossTarget' => ({required Object points}) => 'Bats le boss : ${points} points',
+			'home.sheet.stars' => 'Étoiles',
+			'home.sheet.threshold' => ({required Object points}) => 'Atteins ${points} points en une partie',
+			'home.sheet.unlocks' => 'Battre son boss débloque',
+			'home.sheet.start' => 'Lancer la partie',
+			'home.sheet.replay' => 'Rejouer pour l\'étoile manquante',
+			'home.sheet.lockedHint' => 'Bats le boss précédent pour le débloquer',
 			'home.best' => ({required Object points}) => 'Record : ${points}',
 			'home.noBest' => 'Pas encore de partie',
 			'home.settings' => 'Réglages',

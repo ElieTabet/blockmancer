@@ -11,7 +11,7 @@ export 'src/entities/game_mode.br.dart';
 export 'src/entities/progression_change.br.dart';
 export 'src/entities/run_end.dart';
 export 'src/entities/run_end_record.br.dart';
-export 'src/entities/run_start.dart';
+export 'src/entities/run_start.dart' show RunStart;
 export 'src/entities/saved_run.br.dart';
 export 'src/entities/starting_progression.dart';
 export 'src/providers.br.dart';

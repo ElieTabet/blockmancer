@@ -57,6 +57,96 @@ final class HereWorldProvider
 
 String _$hereWorldHash() => r'9173234aa1f24dfcd43b16aa8c888da3f0552143';
 
+/// Whether runs may offer [joker] already; false until the progression is
+/// read.
+
+@ProviderFor(jokerOwned)
+final jokerOwnedProvider = JokerOwnedFamily._();
+
+/// Whether runs may offer [joker] already; false until the progression is
+/// read.
+
+final class JokerOwnedProvider extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether runs may offer [joker] already; false until the progression is
+  /// read.
+  JokerOwnedProvider._({
+    required JokerOwnedFamily super.from,
+    required JokerId super.argument,
+  }) : super(
+         retry: null,
+         name: r'jokerOwnedProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$jokerOwnedHash();
+
+  @override
+  String toString() {
+    return r'jokerOwnedProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    final argument = this.argument as JokerId;
+    return jokerOwned(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is JokerOwnedProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$jokerOwnedHash() => r'3cfd08d35922af83fe2e5b95c30483f7826924e6';
+
+/// Whether runs may offer [joker] already; false until the progression is
+/// read.
+
+final class JokerOwnedFamily extends $Family
+    with $FunctionalFamilyOverride<bool, JokerId> {
+  JokerOwnedFamily._()
+    : super(
+        retry: null,
+        name: r'jokerOwnedProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Whether runs may offer [joker] already; false until the progression is
+  /// read.
+
+  JokerOwnedProvider call(JokerId joker) =>
+      JokerOwnedProvider._(argument: joker, from: this);
+
+  @override
+  String toString() => r'jokerOwnedProvider';
+}
+
 /// The legs of the trail between the worlds the player has walked: every one
 /// up to [hereWorldProvider].
 
@@ -194,4 +284,81 @@ final class WorldNodeFamily extends $Family
 
   @override
   String toString() => r'worldNodeProvider';
+}
+
+@ProviderFor(worldSummary)
+final worldSummaryProvider = WorldSummaryFamily._();
+
+final class WorldSummaryProvider
+    extends $FunctionalProvider<WorldSummary, WorldSummary, WorldSummary>
+    with $Provider<WorldSummary> {
+  WorldSummaryProvider._({
+    required WorldSummaryFamily super.from,
+    required WorldId super.argument,
+  }) : super(
+         retry: null,
+         name: r'worldSummaryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$worldSummaryHash();
+
+  @override
+  String toString() {
+    return r'worldSummaryProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<WorldSummary> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  WorldSummary create(Ref ref) {
+    final argument = this.argument as WorldId;
+    return worldSummary(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(WorldSummary value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<WorldSummary>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is WorldSummaryProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$worldSummaryHash() => r'efb160ee549f47931bb78c118917823bf58dae67';
+
+final class WorldSummaryFamily extends $Family
+    with $FunctionalFamilyOverride<WorldSummary, WorldId> {
+  WorldSummaryFamily._()
+    : super(
+        retry: null,
+        name: r'worldSummaryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  WorldSummaryProvider call(WorldId world) =>
+      WorldSummaryProvider._(argument: world, from: this);
+
+  @override
+  String toString() => r'worldSummaryProvider';
 }

@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 mixin _$ProgressionChange {
 
 /// The stars this run earned that the world had not awarded before.
- WorldStars get newStars;/// Every star the world has awarded, this run's included.
+ WorldStars get newStars;/// Everything earned so far, this run included: what the next run's
+/// jokers are drawn from.
+ Progression get progression;/// Every star the world has awarded, this run's included.
  WorldStars get stars; List<JokerId> get unlockedJokers; WorldId? get unlockedWorld;
 /// Create a copy of ProgressionChange
 /// with the given fields replaced by the non-null parameter values.
@@ -27,16 +29,16 @@ $ProgressionChangeCopyWith<ProgressionChange> get copyWith => _$ProgressionChang
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgressionChange&&(identical(other.newStars, newStars) || other.newStars == newStars)&&(identical(other.stars, stars) || other.stars == stars)&&const DeepCollectionEquality().equals(other.unlockedJokers, unlockedJokers)&&(identical(other.unlockedWorld, unlockedWorld) || other.unlockedWorld == unlockedWorld));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgressionChange&&(identical(other.newStars, newStars) || other.newStars == newStars)&&(identical(other.progression, progression) || other.progression == progression)&&(identical(other.stars, stars) || other.stars == stars)&&const DeepCollectionEquality().equals(other.unlockedJokers, unlockedJokers)&&(identical(other.unlockedWorld, unlockedWorld) || other.unlockedWorld == unlockedWorld));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,newStars,stars,const DeepCollectionEquality().hash(unlockedJokers),unlockedWorld);
+int get hashCode => Object.hash(runtimeType,newStars,progression,stars,const DeepCollectionEquality().hash(unlockedJokers),unlockedWorld);
 
 @override
 String toString() {
-  return 'ProgressionChange(newStars: $newStars, stars: $stars, unlockedJokers: $unlockedJokers, unlockedWorld: $unlockedWorld)';
+  return 'ProgressionChange(newStars: $newStars, progression: $progression, stars: $stars, unlockedJokers: $unlockedJokers, unlockedWorld: $unlockedWorld)';
 }
 
 
@@ -47,11 +49,11 @@ abstract mixin class $ProgressionChangeCopyWith<$Res>  {
   factory $ProgressionChangeCopyWith(ProgressionChange value, $Res Function(ProgressionChange) _then) = _$ProgressionChangeCopyWithImpl;
 @useResult
 $Res call({
- WorldStars newStars, WorldStars stars, List<JokerId> unlockedJokers, WorldId? unlockedWorld
+ WorldStars newStars, Progression progression, WorldStars stars, List<JokerId> unlockedJokers, WorldId? unlockedWorld
 });
 
 
-$WorldStarsCopyWith<$Res> get newStars;$WorldStarsCopyWith<$Res> get stars;
+$WorldStarsCopyWith<$Res> get newStars;$ProgressionCopyWith<$Res> get progression;$WorldStarsCopyWith<$Res> get stars;
 
 }
 /// @nodoc
@@ -64,10 +66,11 @@ class _$ProgressionChangeCopyWithImpl<$Res>
 
 /// Create a copy of ProgressionChange
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? newStars = null,Object? stars = null,Object? unlockedJokers = null,Object? unlockedWorld = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? newStars = null,Object? progression = null,Object? stars = null,Object? unlockedJokers = null,Object? unlockedWorld = freezed,}) {
   return _then(_self.copyWith(
 newStars: null == newStars ? _self.newStars : newStars // ignore: cast_nullable_to_non_nullable
-as WorldStars,stars: null == stars ? _self.stars : stars // ignore: cast_nullable_to_non_nullable
+as WorldStars,progression: null == progression ? _self.progression : progression // ignore: cast_nullable_to_non_nullable
+as Progression,stars: null == stars ? _self.stars : stars // ignore: cast_nullable_to_non_nullable
 as WorldStars,unlockedJokers: null == unlockedJokers ? _self.unlockedJokers : unlockedJokers // ignore: cast_nullable_to_non_nullable
 as List<JokerId>,unlockedWorld: freezed == unlockedWorld ? _self.unlockedWorld : unlockedWorld // ignore: cast_nullable_to_non_nullable
 as WorldId?,
@@ -81,6 +84,15 @@ $WorldStarsCopyWith<$Res> get newStars {
   
   return $WorldStarsCopyWith<$Res>(_self.newStars, (value) {
     return _then(_self.copyWith(newStars: value));
+  });
+}/// Create a copy of ProgressionChange
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProgressionCopyWith<$Res> get progression {
+  
+  return $ProgressionCopyWith<$Res>(_self.progression, (value) {
+    return _then(_self.copyWith(progression: value));
   });
 }/// Create a copy of ProgressionChange
 /// with the given fields replaced by the non-null parameter values.
@@ -173,10 +185,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( WorldStars newStars,  WorldStars stars,  List<JokerId> unlockedJokers,  WorldId? unlockedWorld)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( WorldStars newStars,  Progression progression,  WorldStars stars,  List<JokerId> unlockedJokers,  WorldId? unlockedWorld)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProgressionChange() when $default != null:
-return $default(_that.newStars,_that.stars,_that.unlockedJokers,_that.unlockedWorld);case _:
+return $default(_that.newStars,_that.progression,_that.stars,_that.unlockedJokers,_that.unlockedWorld);case _:
   return orElse();
 
 }
@@ -194,10 +206,10 @@ return $default(_that.newStars,_that.stars,_that.unlockedJokers,_that.unlockedWo
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( WorldStars newStars,  WorldStars stars,  List<JokerId> unlockedJokers,  WorldId? unlockedWorld)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( WorldStars newStars,  Progression progression,  WorldStars stars,  List<JokerId> unlockedJokers,  WorldId? unlockedWorld)  $default,) {final _that = this;
 switch (_that) {
 case _ProgressionChange():
-return $default(_that.newStars,_that.stars,_that.unlockedJokers,_that.unlockedWorld);case _:
+return $default(_that.newStars,_that.progression,_that.stars,_that.unlockedJokers,_that.unlockedWorld);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -214,10 +226,10 @@ return $default(_that.newStars,_that.stars,_that.unlockedJokers,_that.unlockedWo
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( WorldStars newStars,  WorldStars stars,  List<JokerId> unlockedJokers,  WorldId? unlockedWorld)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( WorldStars newStars,  Progression progression,  WorldStars stars,  List<JokerId> unlockedJokers,  WorldId? unlockedWorld)?  $default,) {final _that = this;
 switch (_that) {
 case _ProgressionChange() when $default != null:
-return $default(_that.newStars,_that.stars,_that.unlockedJokers,_that.unlockedWorld);case _:
+return $default(_that.newStars,_that.progression,_that.stars,_that.unlockedJokers,_that.unlockedWorld);case _:
   return null;
 
 }
@@ -229,11 +241,14 @@ return $default(_that.newStars,_that.stars,_that.unlockedJokers,_that.unlockedWo
 
 
 class _ProgressionChange extends ProgressionChange {
-  const _ProgressionChange({required this.newStars, required this.stars, required final  List<JokerId> unlockedJokers, this.unlockedWorld}): _unlockedJokers = unlockedJokers,super._();
+  const _ProgressionChange({required this.newStars, required this.progression, required this.stars, required final  List<JokerId> unlockedJokers, this.unlockedWorld}): _unlockedJokers = unlockedJokers,super._();
   
 
 /// The stars this run earned that the world had not awarded before.
 @override final  WorldStars newStars;
+/// Everything earned so far, this run included: what the next run's
+/// jokers are drawn from.
+@override final  Progression progression;
 /// Every star the world has awarded, this run's included.
 @override final  WorldStars stars;
  final  List<JokerId> _unlockedJokers;
@@ -255,16 +270,16 @@ _$ProgressionChangeCopyWith<_ProgressionChange> get copyWith => __$ProgressionCh
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgressionChange&&(identical(other.newStars, newStars) || other.newStars == newStars)&&(identical(other.stars, stars) || other.stars == stars)&&const DeepCollectionEquality().equals(other._unlockedJokers, _unlockedJokers)&&(identical(other.unlockedWorld, unlockedWorld) || other.unlockedWorld == unlockedWorld));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgressionChange&&(identical(other.newStars, newStars) || other.newStars == newStars)&&(identical(other.progression, progression) || other.progression == progression)&&(identical(other.stars, stars) || other.stars == stars)&&const DeepCollectionEquality().equals(other._unlockedJokers, _unlockedJokers)&&(identical(other.unlockedWorld, unlockedWorld) || other.unlockedWorld == unlockedWorld));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,newStars,stars,const DeepCollectionEquality().hash(_unlockedJokers),unlockedWorld);
+int get hashCode => Object.hash(runtimeType,newStars,progression,stars,const DeepCollectionEquality().hash(_unlockedJokers),unlockedWorld);
 
 @override
 String toString() {
-  return 'ProgressionChange(newStars: $newStars, stars: $stars, unlockedJokers: $unlockedJokers, unlockedWorld: $unlockedWorld)';
+  return 'ProgressionChange(newStars: $newStars, progression: $progression, stars: $stars, unlockedJokers: $unlockedJokers, unlockedWorld: $unlockedWorld)';
 }
 
 
@@ -275,11 +290,11 @@ abstract mixin class _$ProgressionChangeCopyWith<$Res> implements $ProgressionCh
   factory _$ProgressionChangeCopyWith(_ProgressionChange value, $Res Function(_ProgressionChange) _then) = __$ProgressionChangeCopyWithImpl;
 @override @useResult
 $Res call({
- WorldStars newStars, WorldStars stars, List<JokerId> unlockedJokers, WorldId? unlockedWorld
+ WorldStars newStars, Progression progression, WorldStars stars, List<JokerId> unlockedJokers, WorldId? unlockedWorld
 });
 
 
-@override $WorldStarsCopyWith<$Res> get newStars;@override $WorldStarsCopyWith<$Res> get stars;
+@override $WorldStarsCopyWith<$Res> get newStars;@override $ProgressionCopyWith<$Res> get progression;@override $WorldStarsCopyWith<$Res> get stars;
 
 }
 /// @nodoc
@@ -292,10 +307,11 @@ class __$ProgressionChangeCopyWithImpl<$Res>
 
 /// Create a copy of ProgressionChange
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? newStars = null,Object? stars = null,Object? unlockedJokers = null,Object? unlockedWorld = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? newStars = null,Object? progression = null,Object? stars = null,Object? unlockedJokers = null,Object? unlockedWorld = freezed,}) {
   return _then(_ProgressionChange(
 newStars: null == newStars ? _self.newStars : newStars // ignore: cast_nullable_to_non_nullable
-as WorldStars,stars: null == stars ? _self.stars : stars // ignore: cast_nullable_to_non_nullable
+as WorldStars,progression: null == progression ? _self.progression : progression // ignore: cast_nullable_to_non_nullable
+as Progression,stars: null == stars ? _self.stars : stars // ignore: cast_nullable_to_non_nullable
 as WorldStars,unlockedJokers: null == unlockedJokers ? _self._unlockedJokers : unlockedJokers // ignore: cast_nullable_to_non_nullable
 as List<JokerId>,unlockedWorld: freezed == unlockedWorld ? _self.unlockedWorld : unlockedWorld // ignore: cast_nullable_to_non_nullable
 as WorldId?,
@@ -310,6 +326,15 @@ $WorldStarsCopyWith<$Res> get newStars {
   
   return $WorldStarsCopyWith<$Res>(_self.newStars, (value) {
     return _then(_self.copyWith(newStars: value));
+  });
+}/// Create a copy of ProgressionChange
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProgressionCopyWith<$Res> get progression {
+  
+  return $ProgressionCopyWith<$Res>(_self.progression, (value) {
+    return _then(_self.copyWith(progression: value));
   });
 }/// Create a copy of ProgressionChange
 /// with the given fields replaced by the non-null parameter values.

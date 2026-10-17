@@ -77,6 +77,7 @@ melos:
         freezed: ^3.2.5
         json_serializable: ^6.9.4
         mocktail: ^1.0.4
+        package_info_plus: ^10.2.2 # also under dependencies: Melos stamps dev deps only from here, and composition's tests fake the version through it
         riverpod_generator: 4.0.3 # pinned: 4.0.4+ calls FormalParameter.type, absent in the pinned analyzer 10.2.0
         test: ^1.31.1 # runs the pure-Dart packages' suites (blockmancer_engine on the VM and in Chrome, ads), where flutter_test can't
         url_launcher_platform_interface: ^2.3.2 # fakes the launcher platform so external_links' catches are testable off-device

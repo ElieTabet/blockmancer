@@ -117,6 +117,7 @@ class Translations$home$en {
 	late final Translations$home$resume$en resume = Translations$home$resume$en.internal(_root);
 	late final Translations$home$practice$en practice = Translations$home$practice$en.internal(_root);
 	late final Translations$home$map$en map = Translations$home$map$en.internal(_root);
+	late final Translations$home$sheet$en sheet = Translations$home$sheet$en.internal(_root);
 
 	/// en: 'Best: $points'
 	String best({required Object points}) => 'Best: ${points}';
@@ -516,6 +517,44 @@ class Translations$home$map$en {
 	String stars({required Object count}) => 'Stars: ${count} of 3';
 }
 
+// Path: home.sheet
+class Translations$home$sheet$en {
+	Translations$home$sheet$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Done'
+	String get done => 'Done';
+
+	/// en: 'In progress'
+	String get current => 'In progress';
+
+	late final Translations$home$sheet$bossRule$en bossRule = Translations$home$sheet$bossRule$en.internal(_root);
+
+	/// en: 'Beat the boss: $points points'
+	String bossTarget({required Object points}) => 'Beat the boss: ${points} points';
+
+	/// en: 'Stars'
+	String get stars => 'Stars';
+
+	/// en: 'Reach $points points in a run'
+	String threshold({required Object points}) => 'Reach ${points} points in a run';
+
+	/// en: 'Beating its boss unlocks'
+	String get unlocks => 'Beating its boss unlocks';
+
+	/// en: 'Start run'
+	String get start => 'Start run';
+
+	/// en: 'Replay for the missing star'
+	String get replay => 'Replay for the missing star';
+
+	/// en: 'Beat the previous boss to unlock'
+	String get lockedHint => 'Beat the previous boss to unlock';
+}
+
 // Path: settings.reduceMotion
 class Translations$settings$reduceMotion$en {
 	Translations$settings$reduceMotion$en.internal(this._root);
@@ -894,6 +933,21 @@ class Translations$game$jokers$avalanche$en {
 	String description({required Object chips}) => '+${chips} chips for each filled cell left in the bottom 2 rows after a clear.';
 }
 
+// Path: home.sheet.bossRule
+class Translations$home$sheet$bossRule$en {
+	Translations$home$sheet$bossRule$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'The boss starts with stones on the board.'
+	String get rubble => 'The boss starts with stones on the board.';
+
+	/// en: 'In the boss round, every piece falls to the bottom.'
+	String get gravity => 'In the boss round, every piece falls to the bottom.';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -1023,6 +1077,17 @@ extension on Translations {
 			'home.map.locked' => 'Locked',
 			'home.map.comingSoon' => 'Coming soon',
 			'home.map.stars' => ({required Object count}) => 'Stars: ${count} of 3',
+			'home.sheet.done' => 'Done',
+			'home.sheet.current' => 'In progress',
+			'home.sheet.bossRule.rubble' => 'The boss starts with stones on the board.',
+			'home.sheet.bossRule.gravity' => 'In the boss round, every piece falls to the bottom.',
+			'home.sheet.bossTarget' => ({required Object points}) => 'Beat the boss: ${points} points',
+			'home.sheet.stars' => 'Stars',
+			'home.sheet.threshold' => ({required Object points}) => 'Reach ${points} points in a run',
+			'home.sheet.unlocks' => 'Beating its boss unlocks',
+			'home.sheet.start' => 'Start run',
+			'home.sheet.replay' => 'Replay for the missing star',
+			'home.sheet.lockedHint' => 'Beat the previous boss to unlock',
 			'home.best' => ({required Object points}) => 'Best: ${points}',
 			'home.noBest' => 'No run yet',
 			'home.settings' => 'Settings',

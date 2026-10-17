@@ -197,6 +197,21 @@
       "comingSoon": "Bientôt",
       "stars": "Étoiles : $count sur 3"
     },
+    "sheet": {
+      "done": "Terminé",
+      "current": "En cours",
+      "bossRule": {
+        "rubble": "Le boss commence avec des pierres sur le plateau.",
+        "gravity": "Pendant la manche du boss, chaque pièce tombe tout en bas."
+      },
+      "bossTarget": "Bats le boss : $points points",
+      "stars": "Étoiles",
+      "threshold": "Atteins $points points en une partie",
+      "unlocks": "Battre son boss débloque",
+      "start": "Lancer la partie",
+      "replay": "Rejouer pour l'étoile manquante",
+      "lockedHint": "Bats le boss précédent pour le débloquer"
+    },
     "best": "Record : $points",
     "noBest": "Pas encore de partie",
     "settings": "Réglages"

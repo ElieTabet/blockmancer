@@ -234,6 +234,23 @@ void main() {
         );
       },
     );
+
+    testWidgets(
+      'Given a mail app that fails to open, When Send feedback is tapped, Then the address is shown to write to',
+      (tester) async {
+        // Given
+        await pumpSettings(tester, mailApp: FakeMailApp(broken: true));
+
+        // When
+        await tester.ensureVisible(find.text('Send feedback'));
+        await tester.tap(find.text('Send feedback'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(tester.takeException(), isNull);
+        expect(find.text('No mail app'), findsOneWidget);
+      },
+    );
   });
 
   testWidgets('the close button closes Settings', (tester) async {

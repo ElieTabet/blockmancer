@@ -6,12 +6,13 @@ import 'package:home_presentation/src/painting/map_geometry.dart';
 import 'package:home_presentation/src/providers_internal.br.dart';
 import 'package:home_presentation/src/widgets/here_marker.dart';
 import 'package:home_presentation/src/widgets/world_name.dart';
+import 'package:home_presentation/src/widgets/world_sheet.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// One world on the map: its number, its name and its stars, with "you are
-/// here" over it once the player has reached it. What a tap does is
-/// [HomeNotifier.onWorldTapped]'s to decide.
+/// here" over it once the player has reached it. A tap opens its sheet,
+/// whatever its state, and the sheet's play button opens its run.
 final class WorldNode extends ConsumerWidget {
   const WorldNode({required this.world, super.key});
 
@@ -24,8 +25,15 @@ final class WorldNode extends ConsumerWidget {
     );
 
     return DSPressable(
-      onTap: () =>
-          ref.read(homeProvider.notifier).onWorldTapped(context, world),
+      // The sheet is the widget's to show; only where its choice leads goes
+      // through the notifier, as every other choice does.
+      onTap: () async {
+        final play = await showWorldSheet(context, world: world);
+
+        if (play && context.mounted) {
+          ref.read(homeProvider.notifier).openWorld(context, world);
+        }
+      },
       child: Column(
         mainAxisSize: .min,
         children: [

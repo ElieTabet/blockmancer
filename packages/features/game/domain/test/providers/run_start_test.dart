@@ -131,6 +131,16 @@ void main() {
       expect(run.mode, const GameMode.world(world: .rubble));
       expect(run.config.world, WorldId.rubble);
     });
+
+    test("naming a world that is coming soon plays the map's first instead "
+        'of failing', () {
+      // Given / When
+      final run = _launchAt('2026-10-16T12:00:00Z', .world, world: .fog);
+
+      // Then
+      expect(run.mode, const GameMode.world(world: .rubble));
+      expect(run.config.world, WorldId.rubble);
+    });
   });
 
   test('the tutorial counts as practice, never as today’s run', () {

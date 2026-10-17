@@ -12,16 +12,18 @@ const testAppDetails = AppDetails(
   version: '1.0.0',
 );
 
-/// A launch of the app over [store]. Progress clears into [onClearProgress],
+/// A launch of the app over [store], on the phone [appDetails] describes
+/// ([testAppDetails] unless given). Progress clears into [onClearProgress],
 /// and mail drafts open in [mailApp].
 ProviderContainer launchWith(
   SettingsStore store, {
+  AppDetails appDetails = testAppDetails,
   FakeMailApp? mailApp,
   ClearProgressFun? onClearProgress,
 }) {
   final container = ProviderContainer(
     overrides: bindProviders(
-      appDetails: (ref) async => testAppDetails,
+      appDetails: (ref) async => appDetails,
       clearProgress: (ref) => onClearProgress ?? () async {},
       composeEmail: (ref) => (mailApp ?? FakeMailApp()).compose,
       settingsStore: (ref) => store,

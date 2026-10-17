@@ -60,17 +60,46 @@ void main() {
       expect(store.saved, afterFirstWin);
     });
 
-    test('of the last world opens nothing', () async {
-      // Given / When
-      final change = await record(
-        const .world(world: .gravity),
-        runIn(const .won()),
-      );
+    test(
+      'whose next world is coming soon unlocks its jokers, not that world',
+      () async {
+        // Given: Gravity open, and Fog after it with no rules yet
+        store.saved = store.saved.copyWith(
+          worlds: {
+            ...store.saved.worlds,
+            WorldId.gravity: const WorldProgress(
+              bossBeaten: false,
+              stars: _noStars,
+              unlocked: true,
+            ),
+          },
+        );
+
+        // When: Gravity's boss is beaten for the first time
+        final change = await record(
+          const .world(world: .gravity),
+          runIn(const .won()),
+        );
+
+        // Then
+        expect(change?.unlockedWorld, isNull);
+        expect(change?.unlockedJokers, [JokerId.anchor, JokerId.avalanche]);
+        expect(change?.unlocksAnything, isTrue);
+        expect(store.saved.worlds[WorldId.fog]?.unlocked, isFalse);
+        expect(store.saved.worlds[WorldId.gravity]?.bossBeaten, isTrue);
+        expect(
+          store.saved.unlockedJokers,
+          containsAll([JokerId.anchor, JokerId.avalanche]),
+        );
+      },
+    );
+
+    test('says what the progression now holds, for the next run', () async {
+      // Given a fresh profile / When
+      final change = await record(_rubble, runIn(const .won()));
 
       // Then
-      expect(change?.unlockedWorld, isNull);
-      expect(change?.unlockedJokers, isEmpty);
-      expect(store.saved.worlds[WorldId.gravity]?.bossBeaten, isTrue);
+      expect(change?.progression, store.saved);
     });
   });
 

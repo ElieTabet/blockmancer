@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -6,6 +8,14 @@ import 'package:shared_domain/shared_domain.dart';
 import '../fake_game_rules.dart';
 import '../game_overrides.dart';
 import '../pump_game.dart';
+
+/// The icon beside the star objective reading [objective].
+Icon _starOf(WidgetTester tester, String objective) => tester.widget<Icon>(
+  find.descendant(
+    of: find.ancestor(of: find.text(objective), matching: find.byType(Row)),
+    matching: find.byType(Icon),
+  ),
+);
 
 /// Ends a run opened from a lost round, as [ended] says it ended.
 Future<void> _endAs(
@@ -56,6 +66,176 @@ void main() {
       // Then
       expect(find.text('New world: Gravity'), findsNothing);
       expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "beating Gravity's boss for the first time shows its two jokers, and no "
+    'world that is still coming soon',
+    (tester) async {
+      // Given: Gravity open
+      store.saved = store.saved.copyWith(
+        worlds: {
+          ...store.saved.worlds,
+          WorldId.gravity: const WorldProgress(
+            bossBeaten: false,
+            stars: WorldStars(
+              bossBeaten: false,
+              noRevive: false,
+              scoreThreshold: false,
+            ),
+            unlocked: true,
+          ),
+        },
+      );
+      final rules = await pumpGame(
+        tester,
+        runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+        launch: .world,
+        progressionStore: store,
+        world: .gravity,
+      );
+
+      // When
+      await _endAs(tester, rules, runIn(const .won(), runTotal: 3000));
+
+      // Then
+      expect(find.text('New jokers'), findsOneWidget);
+      expect(find.text('Anchor'), findsOneWidget);
+      expect(find.text('Avalanche'), findsOneWidget);
+      expect(find.textContaining('New world'), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'the run end waits for what the run earned, then celebrates it first',
+    (tester) async {
+      // Given: a slow write
+      store.gate = Completer<void>();
+      final rules = await pumpGame(
+        tester,
+        runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+
+      // When: the boss falls, and the write is still going
+      rules.next = (
+        runIn(const .won(), runTotal: 3000),
+        const [GameEvent.runWon(total: 3000)],
+      );
+      await tester.tap(find.text('End run'));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // Then
+      expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsNothing);
+      expect(find.text('Play again'), findsNothing);
+
+      // When
+      store.gate!.complete();
+      await tester.pumpAndSettle();
+
+      // Then
+      expect(find.text('New world: Gravity'), findsOneWidget);
+      expect(find.text('Play again'), findsNothing);
+    },
+  );
+
+  testWidgets('a run whose earnings cannot be kept still ends, without stars', (
+    tester,
+  ) async {
+    // Given
+    store.broken = true;
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+      launch: .world,
+      progressionStore: store,
+      world: .rubble,
+    );
+
+    // When
+    await _endAs(tester, rules, runIn(const .won(), runTotal: 3000));
+
+    // Then
+    expect(tester.takeException(), isNull);
+    expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsOneWidget);
+    expect(find.text('Play again'), findsOneWidget);
+    expect(find.text('Beat the boss'), findsNothing);
+  });
+
+  testWidgets('playing again after an unlock offers the jokers just unlocked', (
+    tester,
+  ) async {
+    // Given: Rubble's boss beaten for the first time, its unlocks seen
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+      launch: .world,
+      progressionStore: store,
+      world: .rubble,
+    );
+    await _endAs(tester, rules, runIn(const .won(), runTotal: 3000));
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+
+    // When
+    await tester.tap(find.text('Play again'));
+    await tester.pump();
+
+    // Then
+    expect(
+      rules.configured.last.jokerPool,
+      containsAll([JokerId.stonemason, JokerId.quarry]),
+    );
+  });
+
+  testWidgets(
+    'beating the boss after a revive shows the no-revive star as not earned',
+    (tester) async {
+      // Given: Rubble's boss beaten before, so the run goes straight to its end
+      store.saved = store.saved.copyWith(
+        worlds: {
+          ...store.saved.worlds,
+          WorldId.rubble: const WorldProgress(
+            bossBeaten: true,
+            stars: WorldStars(
+              bossBeaten: true,
+              noRevive: false,
+              scoreThreshold: false,
+            ),
+            unlocked: true,
+          ),
+        },
+      );
+      final rules = await pumpGame(
+        tester,
+        runIn(const .roundLost(reason: .noRoom), roundIndex: 1),
+        launch: .world,
+        progressionStore: store,
+        world: .rubble,
+      );
+
+      // When: revived, then the boss beaten
+      rules.next = (
+        runIn(const .roundLost(reason: .noRoom), revivesUsed: 1, roundIndex: 1),
+        const [],
+      );
+      await tester.tap(find.text('Revive · clear 2 rows + 3 pieces'));
+      await tester.pumpAndSettle();
+      await _endAs(
+        tester,
+        rules,
+        runIn(const .won(), revivesUsed: 1, runTotal: 3000),
+      );
+
+      // Then
+      expect(find.text('BOSS BEATEN · RUN COMPLETE'), findsOneWidget);
+      expect(
+        _starOf(tester, 'Beat the boss without reviving').semanticLabel,
+        'Star not earned yet',
+      );
     },
   );
 

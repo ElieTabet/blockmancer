@@ -21,6 +21,9 @@ part 'game_notifier.br.g.dart';
   dependencies: [gameLaunch, launchProgression, launchedWorld, resumedRun],
 )
 class GameNotifier extends _$GameNotifier {
+  /// What the next run's jokers are drawn from: the screen's progression,
+  /// until a run here earns more.
+  Progression? _progression;
   var _reviving = false;
 
   @override
@@ -84,8 +87,8 @@ class GameNotifier extends _$GameNotifier {
   void playPractice() => state = _fresh(_startFor(.practice));
 
   /// Plays the same mode again from its first pick: the same daily run, even
-  /// past midnight, or a new practice or world run. Its jokers are the ones
-  /// the screen was opened with: what this run unlocked comes with the next.
+  /// past midnight, or a new practice or world run, offering what the runs
+  /// played here unlocked.
   void retry() => state = _fresh(switch (state.mode) {
     DailyMode() => (
       config: state.run.config,
@@ -132,6 +135,7 @@ class GameNotifier extends _$GameNotifier {
     state = state.copyWith(
       lastEvents: events,
       moveCount: state.moveCount + 1,
+      progressPending: ended && !state.isTutorial,
       run: run,
     );
 
@@ -167,16 +171,10 @@ class GameNotifier extends _$GameNotifier {
 
   Future<void> _recordProgress(RunState run) async {
     final recordProgression = ref.read(recordProgressionProvider);
+    ProgressionChange? progress;
 
     try {
-      final progress = await recordProgression(state.mode, run);
-
-      // Not if the player has already started again.
-      if (progress == null || !ref.mounted || !identical(state.run, run)) {
-        return;
-      }
-
-      state = state.copyWith(progress: progress);
+      progress = await recordProgression(state.mode, run);
     } on Object catch (error, stackTrace) {
       Timber.e(
         tag: packageName,
@@ -185,6 +183,15 @@ class GameNotifier extends _$GameNotifier {
         stackTrace: stackTrace,
       );
     }
+
+    if (!ref.mounted) return;
+
+    _progression = progress?.progression ?? _progression;
+
+    // Not if the player has already started again.
+    if (!identical(state.run, run)) return;
+
+    state = state.copyWith(progress: progress, progressPending: false);
   }
 
   /// A new run. Not saved until its first action: opening a run by mistake
@@ -205,7 +212,7 @@ class GameNotifier extends _$GameNotifier {
 
     return runStartFor(
       launch,
-      progression: ref.read(launchProgressionProvider),
+      progression: _progression ?? ref.read(launchProgressionProvider),
       world: world,
     );
   }
