@@ -91,7 +91,7 @@ void main() {
         fresh.copyWith(
           worlds: {
             ...fresh.worlds,
-            WorldId.rubble: const WorldProgress(
+            .rubble: const WorldProgress(
               bossBeaten: true,
               stars: WorldStars(
                 bossBeaten: true,
@@ -100,9 +100,7 @@ void main() {
               ),
               unlocked: true,
             ),
-            WorldId.gravity: fresh.worlds[WorldId.gravity]!.copyWith(
-              unlocked: true,
-            ),
+            .gravity: fresh.worlds[WorldId.gravity]!.copyWith(unlocked: true),
           },
         ),
       );

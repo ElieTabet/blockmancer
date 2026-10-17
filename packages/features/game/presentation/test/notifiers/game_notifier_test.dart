@@ -102,6 +102,7 @@ void main() {
     test('are the ones the screen was opened with in a world run', () {
       // Given
       const progression = Progression(
+        jokerStats: {},
         tutorialDone: true,
         unlockedJokers: {.quarry, .twin},
         worlds: {},
@@ -639,19 +640,49 @@ void main() {
       expect(game.read(gameProvider).unlocksSeen, isTrue);
     });
 
-    test('a daily run leaves the map as it was', () async {
+    test(
+      "a daily run leaves the map as it was, counting only its jokers' stats",
+      () async {
+        // Given
+        final before = store.saved;
+        final game = container(progressionStore: store);
+        rules.next = (
+          runIn(const .won(), jokers: const [.twin], runTotal: 6400),
+          const [GameEvent.runWon(total: 6400)],
+        );
+
+        // When
+        game.read(gameProvider.notifier).endRun();
+        await pumpEventQueue();
+
+        // Then
+        expect(game.read(gameProvider).progress, isNull);
+        expect(game.read(gameProvider).progressPending, isFalse);
+        expect(
+          store.saved,
+          before.copyWith(
+            jokerStats: const {
+              .twin: JokerStats(bestRunTotal: 6400, runsWon: 1, timesPicked: 1),
+            },
+          ),
+        );
+      },
+    );
+
+    test("a tutorial's end counts nothing", () async {
       // Given
       final before = store.saved;
-      final game = container(progressionStore: store);
-      rules.next = (runIn(const .won()), const [GameEvent.runWon(total: 0)]);
+      final game = container(launch: .tutorial, progressionStore: store);
+      rules.next = (
+        runIn(const .over(), jokers: const [.twin], runTotal: 300),
+        const [GameEvent.runOver(total: 300)],
+      );
 
       // When
       game.read(gameProvider.notifier).endRun();
       await pumpEventQueue();
 
       // Then
-      expect(game.read(gameProvider).progress, isNull);
-      expect(game.read(gameProvider).progressPending, isFalse);
       expect(store.saved, before);
     });
   });

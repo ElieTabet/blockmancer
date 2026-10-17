@@ -344,17 +344,18 @@ One run is saved on the device, so a killed app picks it up where it stood.
 ## Progression and the profile
 
 What a player has earned across runs is one `Progression` (`shared_domain`): per world
-`{unlocked, bossBeaten, stars}`, the jokers runs may offer, and `tutorialDone`.
+`{unlocked, bossBeaten, stars}`, the jokers runs may offer, `jokerStats` (per joker a finished run
+owned: `timesPicked`, `runsWon`, `bestRunTotal`) and `tutorialDone`.
 
 - **Where:** one JSON profile under `profile` (`game_data`'s `profile_dto.br.dart`), holding the
   bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
   both read and write it, each update a read and a write with no await between, so neither wipes
   the other.
-- **Version 3.** A device without a profile is version 1: the `best.*` keys and
+- **Version 4.** A device without a profile is version 1: the `best.*` keys and
   `settings.tutorialSeen`. `migrateProfile` turns that into version 2 on first read (bests kept,
   `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys; version 3
-  adds a best per world (`bests.worlds`), empty for older profiles. An unreadable profile starts
-  fresh and is replaced by the next write.
+  adds a best per world (`bests.worlds`), empty for older profiles; version 4 adds the joker stats,
+  empty for older profiles. An unreadable profile starts fresh and is replaced by the next write.
 - **Starting state:** `game_domain`'s `startingProgression(rules)` (exposed as
   `initialProgressionProvider`): the first world unlocked and `rules.startingJokers` — worked out
   from the rules, so storage never knows them. Settings' reset progress puts it back
@@ -375,8 +376,11 @@ What a player has earned across runs is one `Progression` (`shared_domain`): per
   starts from the latest progression the screen knows — each `ProgressionChange` carries the
   `progression` it left — so the jokers an unlock sheet just announced are in the next run's pool.
   A resumed run keeps the config it was saved with.
-- **What a run earns.** At a world run's end `GameNotifier` calls `recordProgression`
-  (`RecordProgressionBehavior`, keepAlive, then refreshes `progressionProvider`). The first win
+- **What a run earns.** At every run's end but the tutorial's, `GameNotifier` calls
+  `recordProgression` (`RecordProgressionBehavior`, keepAlive, then refreshes
+  `progressionProvider`). Every run counts once in the stats of each joker it owned (a pick
+  counts at the run's end, so an abandoned run never does; the best total counts with the boss
+  beaten or not). The rest is a world run's alone. The first win
   over the world's boss marks it beaten, adds `rules.unlocksOf(world)` to `unlockedJokers` and
   unlocks the next world **if the rules can play it** (`isPlayable`): a coming-soon world stays
   locked, so beating Gravity announces Anchor and Avalanche and no world. The release that gives
@@ -390,8 +394,8 @@ What a player has earned across runs is one `Progression` (`shared_domain`): per
   by the same sheet as a boss's jokers, after them when both come at once. It returns a
   `ProgressionChange` (`newStars`, `progression`, `stars`, `unlockedWorld`, `unlockedJokers`)
   kept as `GameUiState.progress`.
-  **Daily and practice runs never touch progression**: the daily is everyone's competition and
-  practice is free play.
+  **Daily and practice runs never touch the map, only the jokers' stats**: the daily is
+  everyone's competition and practice is free play. `recordProgression` answers `null` for them.
 - **The celebration.** The run's end waits for what it earned: the move that ends a run sets
   `GameUiState.progressPending`, and `PhaseOverlay` shows nothing until `recordProgression`
   answers — so the run end can't flash first, nor Play again discard the unlock. A write that

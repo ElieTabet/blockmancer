@@ -188,6 +188,7 @@ void main() {
       // Given
       final store = FakeProgressionStore(
         const Progression(
+          jokerStats: {},
           tutorialDone: true,
           unlockedJokers: {.quarry, .twin},
           worlds: {},

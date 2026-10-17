@@ -5,7 +5,7 @@ part 'profile_dto.br.g.dart';
 
 /// The profile's schema version. Bump it with each change to these DTOs, and
 /// teach `migrateProfile` to bring the previous version up to it.
-const profileVersion = 3;
+const profileVersion = 4;
 
 /// Brings a profile written by an earlier version up to [profileVersion], one
 /// version at a time; a version this build doesn't know is unreadable.
@@ -19,6 +19,10 @@ Map<String, dynamic> migrateProfile(
   ),
   2 => migrateProfile(
     _fromVersion2(json),
+    startingProgression: startingProgression,
+  ),
+  3 => migrateProfile(
+    _fromVersion3(json),
     startingProgression: startingProgression,
   ),
   profileVersion => json,
@@ -47,6 +51,16 @@ Map<String, dynamic> _fromVersion2(Map<String, dynamic> json) => {
     'worlds': <String, dynamic>{},
   },
   'version': 3,
+};
+
+/// Version 3 kept no joker stats: its players start counting from here.
+Map<String, dynamic> _fromVersion3(Map<String, dynamic> json) => {
+  ...json,
+  'progression': <String, dynamic>{
+    ...json['progression'] as Map<String, dynamic>,
+    'jokerStats': <String, dynamic>{},
+  },
+  'version': 4,
 };
 
 @JsonSerializable(explicitToJson: true)
@@ -96,12 +110,18 @@ final class BestsDto {
 @JsonSerializable(explicitToJson: true)
 final class ProgressionDto {
   const ProgressionDto({
+    required this.jokerStats,
     required this.tutorialDone,
     required this.unlockedJokers,
     required this.worlds,
   });
 
   factory ProgressionDto.fromDomain(Progression progression) => ProgressionDto(
+    jokerStats: {
+      for (final MapEntry(key: joker, value: stats)
+          in progression.jokerStats.entries)
+        joker.name: .fromDomain(stats),
+    },
     tutorialDone: progression.tutorialDone,
     unlockedJokers: [
       for (final joker in progression.unlockedJokers) joker.name,
@@ -116,6 +136,8 @@ final class ProgressionDto {
   factory ProgressionDto.fromJson(Map<String, dynamic> json) =>
       _$ProgressionDtoFromJson(json);
 
+  /// Keyed by the joker's name.
+  final Map<String, JokerStatsDto> jokerStats;
   final bool tutorialDone;
   final List<String> unlockedJokers;
   final Map<String, WorldProgressDto> worlds;
@@ -123,6 +145,10 @@ final class ProgressionDto {
   Map<String, dynamic> toJson() => _$ProgressionDtoToJson(this);
 
   Progression toDomain() => Progression(
+    jokerStats: {
+      for (final MapEntry(key: joker, value: stats) in jokerStats.entries)
+        JokerId.values.byName(joker): stats.toDomain(),
+    },
     tutorialDone: tutorialDone,
     unlockedJokers: {
       for (final joker in unlockedJokers) JokerId.values.byName(joker),
@@ -192,5 +218,35 @@ final class WorldStarsDto {
     bossBeaten: bossBeaten,
     noRevive: noRevive,
     scoreThreshold: scoreThreshold,
+  );
+}
+
+@JsonSerializable()
+final class JokerStatsDto {
+  const JokerStatsDto({
+    required this.bestRunTotal,
+    required this.runsWon,
+    required this.timesPicked,
+  });
+
+  factory JokerStatsDto.fromDomain(JokerStats stats) => JokerStatsDto(
+    bestRunTotal: stats.bestRunTotal,
+    runsWon: stats.runsWon,
+    timesPicked: stats.timesPicked,
+  );
+
+  factory JokerStatsDto.fromJson(Map<String, dynamic> json) =>
+      _$JokerStatsDtoFromJson(json);
+
+  final int bestRunTotal;
+  final int runsWon;
+  final int timesPicked;
+
+  Map<String, dynamic> toJson() => _$JokerStatsDtoToJson(this);
+
+  JokerStats toDomain() => JokerStats(
+    bestRunTotal: bestRunTotal,
+    runsWon: runsWon,
+    timesPicked: timesPicked,
   );
 }

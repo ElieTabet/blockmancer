@@ -98,7 +98,8 @@ RecordProgressionFun recordProgression(Ref ref) {
   return (mode, run) async {
     final change = await record(mode, run);
 
-    if (change != null) ref.invalidate(progressionProvider);
+    // Every run may have changed its jokers' stats, celebrated or not.
+    ref.invalidate(progressionProvider);
 
     return change;
   };

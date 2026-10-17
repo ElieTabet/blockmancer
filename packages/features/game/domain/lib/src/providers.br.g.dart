@@ -249,7 +249,7 @@ final class RecordProgressionProvider
   }
 }
 
-String _$recordProgressionHash() => r'85963c5719272d158f407d3041b4b80de947d10e';
+String _$recordProgressionHash() => r'5ae48de7c28887c22d1243721097fef0fd7c1209';
 
 /// Keeps a finished run's total if it beats its mode's best, and says so.
 ///

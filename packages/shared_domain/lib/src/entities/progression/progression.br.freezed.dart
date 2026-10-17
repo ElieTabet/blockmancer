@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Progression {
 
- bool get tutorialDone; Set<JokerId> get unlockedJokers; Map<WorldId, WorldProgress> get worlds;
+/// Only the jokers some finished run owned.
+ Map<JokerId, JokerStats> get jokerStats; bool get tutorialDone; Set<JokerId> get unlockedJokers; Map<WorldId, WorldProgress> get worlds;
 /// Create a copy of Progression
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +26,16 @@ $ProgressionCopyWith<Progression> get copyWith => _$ProgressionCopyWithImpl<Prog
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Progression&&(identical(other.tutorialDone, tutorialDone) || other.tutorialDone == tutorialDone)&&const DeepCollectionEquality().equals(other.unlockedJokers, unlockedJokers)&&const DeepCollectionEquality().equals(other.worlds, worlds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Progression&&const DeepCollectionEquality().equals(other.jokerStats, jokerStats)&&(identical(other.tutorialDone, tutorialDone) || other.tutorialDone == tutorialDone)&&const DeepCollectionEquality().equals(other.unlockedJokers, unlockedJokers)&&const DeepCollectionEquality().equals(other.worlds, worlds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tutorialDone,const DeepCollectionEquality().hash(unlockedJokers),const DeepCollectionEquality().hash(worlds));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(jokerStats),tutorialDone,const DeepCollectionEquality().hash(unlockedJokers),const DeepCollectionEquality().hash(worlds));
 
 @override
 String toString() {
-  return 'Progression(tutorialDone: $tutorialDone, unlockedJokers: $unlockedJokers, worlds: $worlds)';
+  return 'Progression(jokerStats: $jokerStats, tutorialDone: $tutorialDone, unlockedJokers: $unlockedJokers, worlds: $worlds)';
 }
 
 
@@ -45,7 +46,7 @@ abstract mixin class $ProgressionCopyWith<$Res>  {
   factory $ProgressionCopyWith(Progression value, $Res Function(Progression) _then) = _$ProgressionCopyWithImpl;
 @useResult
 $Res call({
- bool tutorialDone, Set<JokerId> unlockedJokers, Map<WorldId, WorldProgress> worlds
+ Map<JokerId, JokerStats> jokerStats, bool tutorialDone, Set<JokerId> unlockedJokers, Map<WorldId, WorldProgress> worlds
 });
 
 
@@ -62,9 +63,10 @@ class _$ProgressionCopyWithImpl<$Res>
 
 /// Create a copy of Progression
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tutorialDone = null,Object? unlockedJokers = null,Object? worlds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? jokerStats = null,Object? tutorialDone = null,Object? unlockedJokers = null,Object? worlds = null,}) {
   return _then(_self.copyWith(
-tutorialDone: null == tutorialDone ? _self.tutorialDone : tutorialDone // ignore: cast_nullable_to_non_nullable
+jokerStats: null == jokerStats ? _self.jokerStats : jokerStats // ignore: cast_nullable_to_non_nullable
+as Map<JokerId, JokerStats>,tutorialDone: null == tutorialDone ? _self.tutorialDone : tutorialDone // ignore: cast_nullable_to_non_nullable
 as bool,unlockedJokers: null == unlockedJokers ? _self.unlockedJokers : unlockedJokers // ignore: cast_nullable_to_non_nullable
 as Set<JokerId>,worlds: null == worlds ? _self.worlds : worlds // ignore: cast_nullable_to_non_nullable
 as Map<WorldId, WorldProgress>,
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool tutorialDone,  Set<JokerId> unlockedJokers,  Map<WorldId, WorldProgress> worlds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<JokerId, JokerStats> jokerStats,  bool tutorialDone,  Set<JokerId> unlockedJokers,  Map<WorldId, WorldProgress> worlds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Progression() when $default != null:
-return $default(_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
+return $default(_that.jokerStats,_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool tutorialDone,  Set<JokerId> unlockedJokers,  Map<WorldId, WorldProgress> worlds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<JokerId, JokerStats> jokerStats,  bool tutorialDone,  Set<JokerId> unlockedJokers,  Map<WorldId, WorldProgress> worlds)  $default,) {final _that = this;
 switch (_that) {
 case _Progression():
-return $default(_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
+return $default(_that.jokerStats,_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +195,10 @@ return $default(_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool tutorialDone,  Set<JokerId> unlockedJokers,  Map<WorldId, WorldProgress> worlds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<JokerId, JokerStats> jokerStats,  bool tutorialDone,  Set<JokerId> unlockedJokers,  Map<WorldId, WorldProgress> worlds)?  $default,) {final _that = this;
 switch (_that) {
 case _Progression() when $default != null:
-return $default(_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
+return $default(_that.jokerStats,_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
   return null;
 
 }
@@ -208,8 +210,17 @@ return $default(_that.tutorialDone,_that.unlockedJokers,_that.worlds);case _:
 
 
 class _Progression implements Progression {
-  const _Progression({required this.tutorialDone, required final  Set<JokerId> unlockedJokers, required final  Map<WorldId, WorldProgress> worlds}): _unlockedJokers = unlockedJokers,_worlds = worlds;
+  const _Progression({required final  Map<JokerId, JokerStats> jokerStats, required this.tutorialDone, required final  Set<JokerId> unlockedJokers, required final  Map<WorldId, WorldProgress> worlds}): _jokerStats = jokerStats,_unlockedJokers = unlockedJokers,_worlds = worlds;
   
+
+/// Only the jokers some finished run owned.
+ final  Map<JokerId, JokerStats> _jokerStats;
+/// Only the jokers some finished run owned.
+@override Map<JokerId, JokerStats> get jokerStats {
+  if (_jokerStats is EqualUnmodifiableMapView) return _jokerStats;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_jokerStats);
+}
 
 @override final  bool tutorialDone;
  final  Set<JokerId> _unlockedJokers;
@@ -237,16 +248,16 @@ _$ProgressionCopyWith<_Progression> get copyWith => __$ProgressionCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Progression&&(identical(other.tutorialDone, tutorialDone) || other.tutorialDone == tutorialDone)&&const DeepCollectionEquality().equals(other._unlockedJokers, _unlockedJokers)&&const DeepCollectionEquality().equals(other._worlds, _worlds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Progression&&const DeepCollectionEquality().equals(other._jokerStats, _jokerStats)&&(identical(other.tutorialDone, tutorialDone) || other.tutorialDone == tutorialDone)&&const DeepCollectionEquality().equals(other._unlockedJokers, _unlockedJokers)&&const DeepCollectionEquality().equals(other._worlds, _worlds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tutorialDone,const DeepCollectionEquality().hash(_unlockedJokers),const DeepCollectionEquality().hash(_worlds));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_jokerStats),tutorialDone,const DeepCollectionEquality().hash(_unlockedJokers),const DeepCollectionEquality().hash(_worlds));
 
 @override
 String toString() {
-  return 'Progression(tutorialDone: $tutorialDone, unlockedJokers: $unlockedJokers, worlds: $worlds)';
+  return 'Progression(jokerStats: $jokerStats, tutorialDone: $tutorialDone, unlockedJokers: $unlockedJokers, worlds: $worlds)';
 }
 
 
@@ -257,7 +268,7 @@ abstract mixin class _$ProgressionCopyWith<$Res> implements $ProgressionCopyWith
   factory _$ProgressionCopyWith(_Progression value, $Res Function(_Progression) _then) = __$ProgressionCopyWithImpl;
 @override @useResult
 $Res call({
- bool tutorialDone, Set<JokerId> unlockedJokers, Map<WorldId, WorldProgress> worlds
+ Map<JokerId, JokerStats> jokerStats, bool tutorialDone, Set<JokerId> unlockedJokers, Map<WorldId, WorldProgress> worlds
 });
 
 
@@ -274,9 +285,10 @@ class __$ProgressionCopyWithImpl<$Res>
 
 /// Create a copy of Progression
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tutorialDone = null,Object? unlockedJokers = null,Object? worlds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? jokerStats = null,Object? tutorialDone = null,Object? unlockedJokers = null,Object? worlds = null,}) {
   return _then(_Progression(
-tutorialDone: null == tutorialDone ? _self.tutorialDone : tutorialDone // ignore: cast_nullable_to_non_nullable
+jokerStats: null == jokerStats ? _self._jokerStats : jokerStats // ignore: cast_nullable_to_non_nullable
+as Map<JokerId, JokerStats>,tutorialDone: null == tutorialDone ? _self.tutorialDone : tutorialDone // ignore: cast_nullable_to_non_nullable
 as bool,unlockedJokers: null == unlockedJokers ? _self._unlockedJokers : unlockedJokers // ignore: cast_nullable_to_non_nullable
 as Set<JokerId>,worlds: null == worlds ? _self._worlds : worlds // ignore: cast_nullable_to_non_nullable
 as Map<WorldId, WorldProgress>,

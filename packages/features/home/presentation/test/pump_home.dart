@@ -93,6 +93,7 @@ const noStars = WorldStars(
 
 /// A new player's: Rubble open, nothing earned.
 Progression freshProgression({WorldStars rubbleStars = noStars}) => Progression(
+  jokerStats: const {},
   tutorialDone: true,
   unlockedJokers: const {},
   worlds: {

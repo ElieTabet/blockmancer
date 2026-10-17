@@ -3,6 +3,7 @@ import 'package:shared_domain/shared_domain.dart';
 /// Where a new player starts: the map's first world open, nothing earned yet,
 /// and the rules' starting jokers.
 Progression startingProgression(GameRules rules) => Progression(
+  jokerStats: const {},
   tutorialDone: false,
   unlockedJokers: rules.startingJokers.toSet(),
   worlds: {

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_data/game_data.dart';
 import 'package:game_data/src/dtos/profile_dto.br.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'profiles.dart';
@@ -26,6 +27,67 @@ const _version1Profile = <String, dynamic>{
   'version': 1,
 };
 
+/// Rubble's boss beaten with two stars, Gravity open, as version 2 and 3
+/// wrote a progression. Frozen: never regenerate it from today's DTOs.
+const _writtenProgression = <String, dynamic>{
+  'tutorialDone': true,
+  'unlockedJokers': ['patience', 'twin', 'stonemason', 'quarry'],
+  'worlds': {
+    'rubble': {
+      'bossBeaten': true,
+      'stars': {'bossBeaten': true, 'noRevive': true, 'scoreThreshold': false},
+      'unlocked': true,
+    },
+    'gravity': {
+      'bossBeaten': false,
+      'stars': {
+        'bossBeaten': false,
+        'noRevive': false,
+        'scoreThreshold': false,
+      },
+      'unlocked': true,
+    },
+  },
+};
+
+const _version2Profile = <String, dynamic>{
+  'bests': {
+    'daily': {'20261016': 640},
+    'practice': 900,
+  },
+  'progression': _writtenProgression,
+  'version': 2,
+};
+
+const _version3Profile = <String, dynamic>{
+  'bests': {
+    'daily': {'20261016': 640},
+    'practice': 900,
+    'worlds': {'rubble': 5400},
+  },
+  'progression': _writtenProgression,
+  'version': 3,
+};
+
+/// [_writtenProgression] as the domain reads it, with no joker stats yet.
+const _progressed = Progression(
+  jokerStats: {},
+  tutorialDone: true,
+  unlockedJokers: {.patience, .twin, .stonemason, .quarry},
+  worlds: {
+    .rubble: WorldProgress(
+      bossBeaten: true,
+      stars: WorldStars(
+        bossBeaten: true,
+        noRevive: true,
+        scoreThreshold: false,
+      ),
+      unlocked: true,
+    ),
+    .gravity: WorldProgress(bossBeaten: false, stars: noStars, unlocked: true),
+  },
+);
+
 Future<Map<String, dynamic>> _storedProfile() async {
   final raw = (await SharedPreferences.getInstance()).getString('profile');
 
@@ -35,14 +97,14 @@ Future<Map<String, dynamic>> _storedProfile() async {
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  test('a version 1 profile migrates to a valid version 3 one', () {
+  test('a version 1 profile migrates to a valid version 4 one', () {
     // Given / When
     final migrated = ProfileDto.fromJson(
       migrateProfile(_version1Profile, startingProgression: starting),
     );
 
     // Then
-    expect(migrated.version, 3);
+    expect(migrated.version, 4);
     expect(migrated.bests.daily, {'20261016': 640});
     expect(migrated.bests.practice, 900);
     expect(migrated.bests.worlds, isEmpty);
@@ -52,37 +114,53 @@ void main() {
     );
   });
 
-  test(
-    'a version 2 profile keeps its bests and progression, with no world best',
-    () {
-      // Given
-      final version2 = <String, dynamic>{
-        'bests': {
-          'daily': {'20261016': 640},
-          'practice': 900,
-        },
-        'progression': ProgressionDto.fromDomain(
-          starting.copyWith(tutorialDone: true),
-        ).toJson(),
-        'version': 2,
-      };
+  test('a version 2 profile migrates to a valid version 4 one: its bests and '
+      'progression kept, no world best and no joker stats yet', () {
+    // Given / When
+    final migrated = ProfileDto.fromJson(
+      migrateProfile(_version2Profile, startingProgression: starting),
+    );
 
-      // When
+    // Then
+    expect(migrated.version, 4);
+    expect(migrated.bests.daily, {'20261016': 640});
+    expect(migrated.bests.practice, 900);
+    expect(migrated.bests.worlds, isEmpty);
+    expect(migrated.progression.toDomain(), _progressed);
+  });
+
+  test(
+    'a version 3 profile migrates to a valid version 4 one: everything kept, '
+    'its joker stats starting at nothing',
+    () {
+      // Given / When
       final migrated = ProfileDto.fromJson(
-        migrateProfile(version2, startingProgression: starting),
+        migrateProfile(_version3Profile, startingProgression: starting),
       );
 
       // Then
-      expect(migrated.version, 3);
-      expect(migrated.bests.daily, {'20261016': 640});
-      expect(migrated.bests.practice, 900);
-      expect(migrated.bests.worlds, isEmpty);
-      expect(
-        migrated.progression.toDomain(),
-        starting.copyWith(tutorialDone: true),
-      );
+      expect(migrated.version, 4);
+      expect(migrated.bests.worlds, {'rubble': 5400});
+      expect(migrated.progression.jokerStats, isEmpty);
+      expect(migrated.progression.toDomain(), _progressed);
     },
   );
+
+  test('Given a device with a version 3 profile, When it is first read, Then '
+      'its progression is kept with no joker stats', () async {
+    // Given
+    SharedPreferences.setMockInitialValues({
+      'profile': jsonEncode(_version3Profile),
+    });
+
+    // When
+    final progression = await SharedPreferencesProgressionStore(
+      startingProgression: starting,
+    ).load();
+
+    // Then
+    expect(progression, _progressed);
+  });
 
   test('a profile naming no version cannot be migrated', () {
     expect(
@@ -106,7 +184,7 @@ void main() {
     });
 
     test(
-      'When the profile is first read, Then it is written as version 3 and the '
+      'When the profile is first read, Then it is written as version 4 and the '
       'legacy bests are gone',
       () async {
         // When
@@ -117,7 +195,7 @@ void main() {
         // Then
         final stored = await SharedPreferences.getInstance();
         final profile = await _storedProfile();
-        expect(profile['version'], 3);
+        expect(profile['version'], 4);
         expect(profile['bests'], {
           'daily': {'20261016': 640},
           'practice': 900,
@@ -157,7 +235,7 @@ void main() {
 
   test(
     'Given a device with nothing on it, When the profile is first read, Then '
-    'it is a version 3 profile with no bests at the starting progression',
+    'it is a version 4 profile with no bests at the starting progression',
     () async {
       // When
       final progression = await SharedPreferencesProgressionStore(
@@ -167,7 +245,7 @@ void main() {
       // Then
       final profile = await _storedProfile();
       expect(progression, starting);
-      expect(profile['version'], 3);
+      expect(profile['version'], 4);
       expect(profile['bests'], {
         'daily': <String, int>{},
         'practice': null,
@@ -214,7 +292,7 @@ void main() {
       // Then
       expect(progression, starting);
       expect(best, isNull);
-      expect((await _storedProfile())['version'], 3);
+      expect((await _storedProfile())['version'], 4);
       expect(await scores.best(const GameMode.practice()), 1200);
     });
   }

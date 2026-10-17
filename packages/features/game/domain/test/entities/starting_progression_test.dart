@@ -27,6 +27,7 @@ void main() {
     expect(
       progression,
       const Progression(
+        jokerStats: {},
         tutorialDone: false,
         unlockedJokers: {.combo, .patience, .twin},
         worlds: {

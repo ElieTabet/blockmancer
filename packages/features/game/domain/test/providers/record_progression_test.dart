@@ -7,8 +7,8 @@ import '../fake_progression_store.dart';
 import '../fakes.dart';
 
 void main() {
-  test('what a world run earns is what the progression shows next', () async {
-    // Given: the progression shown from a fresh profile
+  /// The game over a fresh profile, its progression shown.
+  ProviderContainer freshGame() {
     final store = FakeProgressionStore()
       ..saved = startingProgression(const TwoWorldRules());
     final container = ProviderContainer(
@@ -22,6 +22,13 @@ void main() {
     );
     addTearDown(container.dispose);
     container.listen(progressionProvider, (_, _) {});
+
+    return container;
+  }
+
+  test('what a world run earns is what the progression shows next', () async {
+    // Given: the progression shown from a fresh profile
+    final container = freshGame();
     expect((await container.read(progressionProvider.future)).unlockedJokers, {
       JokerId.patience,
       JokerId.twin,
@@ -38,4 +45,26 @@ void main() {
     expect(shown.worlds[WorldId.gravity]?.unlocked, isTrue);
     expect(shown.unlockedJokers, contains(JokerId.quarry));
   });
+
+  test(
+    "a daily run's joker stats are what the progression shows next",
+    () async {
+      // Given
+      final container = freshGame();
+      await container.read(progressionProvider.future);
+
+      // When
+      await container.read(recordProgressionProvider)(
+        const .daily(day: 20261017),
+        runIn(const .over(), runTotal: 1200).copyWith(jokers: [.twin]),
+      );
+
+      // Then
+      final shown = await container.read(progressionProvider.future);
+      expect(
+        shown.jokerStats[JokerId.twin],
+        const JokerStats(bestRunTotal: 1200, runsWon: 0, timesPicked: 1),
+      );
+    },
+  );
 }

@@ -4,6 +4,7 @@ import 'package:shared_domain/shared_domain.dart';
 /// The progression kept in memory, starting from nothing earned.
 final class FakeProgressionStore implements ProgressionStore {
   Progression saved = const Progression(
+    jokerStats: {},
     tutorialDone: false,
     unlockedJokers: {},
     worlds: {},

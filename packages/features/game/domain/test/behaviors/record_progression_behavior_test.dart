@@ -278,6 +278,25 @@ void main() {
       );
     });
 
+    test('5 stars unlock nothing beyond the first pair', () async {
+      // Given: 4 stars, the first pair already unlocked
+      holding(
+        gravityStars: const WorldStars(
+          bossBeaten: false,
+          noRevive: false,
+          scoreThreshold: true,
+        ),
+        jokers: {.patience, .twin, .fullhouse, .brink},
+      );
+
+      // When: Gravity's boss falls after a revive, for 5 stars
+      final change = await record(gravity, runIn(const .won(), revivesUsed: 1));
+
+      // Then
+      expect(change?.unlockedJokers, [JokerId.anchor, JokerId.avalanche]);
+      expect(store.saved.unlockedJokers, isNot(contains(JokerId.finisher)));
+    });
+
     test(
       'the run that reaches 6 stars unlocks Finisher and Hat Trick',
       () async {
@@ -329,6 +348,76 @@ void main() {
         ]);
       },
     );
+  });
+
+  group('joker stats', () {
+    test('a finished run counts once for each joker it owned', () async {
+      // Given / When
+      await record(
+        _rubble,
+        runIn(
+          const .over(),
+          runTotal: 3000,
+        ).copyWith(jokers: [.patience, .twin]),
+      );
+
+      // Then
+      const once = JokerStats(bestRunTotal: 3000, runsWon: 0, timesPicked: 1);
+      expect(store.saved.jokerStats, {
+        JokerId.patience: once,
+        JokerId.twin: once,
+      });
+    });
+
+    test('a win counts, and the best total is kept over a worse run', () async {
+      // Given
+      await record(
+        _rubble,
+        runIn(const .won(), runTotal: 9000).copyWith(jokers: [.twin]),
+      );
+
+      // When
+      await record(
+        _rubble,
+        runIn(const .over(), runTotal: 2000).copyWith(jokers: [.twin]),
+      );
+
+      // Then
+      expect(
+        store.saved.jokerStats[JokerId.twin],
+        const JokerStats(bestRunTotal: 9000, runsWon: 1, timesPicked: 2),
+      );
+    });
+
+    for (final (name, mode) in const [
+      ('daily run', GameMode.daily(day: 20261017)),
+      ('practice run', GameMode.practice()),
+    ]) {
+      test('a $name counts its jokers too', () async {
+        // Given / When
+        await record(
+          mode,
+          runIn(const .won(), runTotal: 5000).copyWith(jokers: [.collector]),
+        );
+
+        // Then
+        expect(store.saved.jokerStats, const {
+          JokerId.collector: JokerStats(
+            bestRunTotal: 5000,
+            runsWon: 1,
+            timesPicked: 1,
+          ),
+        });
+      });
+    }
+
+    test('a run with no joker counts nothing', () async {
+      // Given / When
+      await record(_rubble, runIn(const .over(), runTotal: 3000));
+
+      // Then
+      expect(store.saved.jokerStats, isEmpty);
+    });
   });
 
   for (final (name, mode) in const [

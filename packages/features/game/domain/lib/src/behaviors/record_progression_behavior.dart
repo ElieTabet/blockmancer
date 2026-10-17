@@ -1,9 +1,14 @@
+import 'dart:math';
+
 import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/entities/game_mode.br.dart';
 import 'package:game_domain/src/entities/progression_change.br.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-/// Keeps what a finished world run earned: its world's stars, and on the first
+/// Keeps what a finished run earned. Every run counts towards the stats of
+/// the jokers it owned; the tutorial never reaches here.
+///
+/// A world run also earns its world's stars, and on the first
 /// win over its boss, the jokers the win unlocks and the next world — if the
 /// rules can play it yet: a coming-soon world stays locked, so nothing ever
 /// announces or opens a world without a run. Nothing is ever taken back, so a
@@ -14,9 +19,9 @@ import 'package:shared_domain/shared_domain.dart';
 /// That is the run that crosses it, or for a player already past it before
 /// the unlock existed, their next world run.
 ///
-/// Only world runs count: the daily is everyone's competition and practice is
-/// free play, so neither touches the map. The third star is the run total
-/// alone, boss beaten or not.
+/// Only world runs touch the map: the daily is everyone's competition and
+/// practice is free play. The third star is the run total alone, boss beaten
+/// or not.
 class RecordProgressionBehavior {
   static const _nothingEarned = WorldProgress(
     bossBeaten: false,
@@ -36,12 +41,20 @@ class RecordProgressionBehavior {
   }) : _rules = rules,
        _store = store;
 
-  /// Null for a run that isn't a world's.
+  /// Null for a run that isn't a world's: it has nothing to celebrate.
   Future<ProgressionChange?> call(GameMode mode, RunState run) async {
-    if (mode is! WorldMode) return null;
+    final loaded = await _store.load();
+    final before = loaded.copyWith(
+      jokerStats: _withRun(loaded.jokerStats, run),
+    );
+
+    if (mode is! WorldMode) {
+      if (before != loaded) await _store.save(before);
+
+      return null;
+    }
 
     final world = mode.world;
-    final before = await _store.load();
     final was = before.worlds[world] ?? _nothingEarned;
     final bossBeaten = run.phase is WonPhase;
     final stars = WorldStars(
@@ -84,7 +97,7 @@ class RecordProgressionBehavior {
       worlds: worlds,
     );
 
-    if (after != before) await _store.save(after);
+    if (after != loaded) await _store.save(after);
 
     return ProgressionChange(
       newStars: WorldStars(
@@ -98,6 +111,21 @@ class RecordProgressionBehavior {
       unlockedWorld: unlockedWorld,
     );
   }
+
+  /// [stats] with [run] counted for each joker it owned.
+  static Map<JokerId, JokerStats> _withRun(
+    Map<JokerId, JokerStats> stats,
+    RunState run,
+  ) => {
+    ...stats,
+    for (final joker in run.jokers) joker: _counted(stats[joker] ?? .none, run),
+  };
+
+  static JokerStats _counted(JokerStats stats, RunState run) => JokerStats(
+    bestRunTotal: max(stats.bestRunTotal, run.runTotal),
+    runsWon: stats.runsWon + (run.phase is WonPhase ? 1 : 0),
+    timesPicked: stats.timesPicked + 1,
+  );
 
   static int _count(WorldStars stars) => [
     stars.bossBeaten,

@@ -23,6 +23,7 @@ ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
 
 /// A profile with Twin, Stonemason and Patience unlocked.
 const _profile = Progression(
+  jokerStats: {},
   tutorialDone: true,
   unlockedJokers: {.twin, .stonemason, .patience},
   worlds: {},
