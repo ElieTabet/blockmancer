@@ -18,8 +18,8 @@ const homeSettingsLabel = 'Settings';
 const settingsCloseLabel = 'Close';
 
 /// Fills the slots Home, the game and Settings read, so a composition test
-/// mounts the real screens with the real rules, a first launch's settings and,
-/// unless [runStore] keeps one, no saved run.
+/// mounts the real screens with the real rules, a first launch's settings,
+/// no sound or haptics and, unless [runStore] keeps one, no saved run.
 List<Override> stubFeatures({game.RunStore? runStore}) => [
   ...game.bindProviders(
     bestScores: (ref) => const _NoBestScores(),
@@ -28,9 +28,12 @@ List<Override> stubFeatures({game.RunStore? runStore}) => [
     runStore: (ref) => runStore ?? _NoRunStore(),
   ),
   ...game_ui.bindProviders(
+    hapticsOnSetting: (ref) => false,
+    playSound: (ref) => (sound, {speed = 1}) {},
     reduceMotionSetting: (ref) => false,
     rewardedAction: (ref) =>
         () async => true,
+    soundOnSetting: (ref) => false,
   ),
   ...home_ui.bindProviders(
     dailyBest: (ref) async => null,

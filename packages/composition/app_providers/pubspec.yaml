@@ -25,9 +25,12 @@ dependencies:
   settings_data: any
   settings_domain: any
   settings_presentation: any
+  sounds: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: 2.16.0
+  riverpod_generator: 4.0.3
   flutter_riverpod: ^3.3.1     # ProviderContainer, for the composition wiring test
   shared_domain: any           # the engine's RunState, for the daily-seed test

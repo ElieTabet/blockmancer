@@ -6,6 +6,7 @@ import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/widgets/board_view.dart';
 import 'package:game_presentation/src/widgets/drag_area.dart';
+import 'package:game_presentation/src/widgets/feedback_player.dart';
 import 'package:game_presentation/src/widgets/game_header.dart';
 import 'package:game_presentation/src/widgets/input_gate.dart';
 import 'package:game_presentation/src/widgets/joker_chips.dart';
@@ -98,6 +99,7 @@ class _GameWidgetState extends ConsumerState<GameWidget> {
                 ),
               ),
             ),
+            const FeedbackPlayer(),
             const Positioned.fill(child: PhaseOverlay()),
             // Over the sheets' scrim and the playback's tap catcher, so the
             // menu is never out of reach.

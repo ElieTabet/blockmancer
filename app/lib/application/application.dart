@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blockmancer_app/config/app_config.dart';
 import 'package:app_providers/app_providers.dart';
 import 'package:app_router/app_router.dart';
@@ -44,6 +46,10 @@ class Application {
     // First after the container, so the crash handlers cover the rest of boot.
     await initializeTelemetry(_container);
 
+    // Not waited for: the splash outlasts the load, and a sound asked for
+    // before it is ready is skipped rather than late.
+    unawaited(initializeSounds(_container));
+
     // Before push, whose channel is named in the language the app shows.
     await applyStoredLanguage(_container);
 
@@ -65,20 +71,23 @@ class Application {
           // of DSTheme's appBarTheme.
           builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light,
-            child: MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              theme: DSTheme.instance.lightTheme,
-              darkTheme: DSTheme.instance.darkTheme,
-              // Dark whatever the phone is set to. Every surface in this app is
-              // charcoal or the brand colour by design, so following the system
-              // setting would only ever produce a light scheme resolving
-              // against dark artwork. The light theme is kept, and is what a light mode
-              // would switch back on.
-              themeMode: .dark,
-              locale: TranslationProvider.of(context).flutterLocale,
-              supportedLocales: AppLocaleUtils.supportedLocales,
-              localizationsDelegates: GlobalMaterialLocalizations.delegates,
-              routerConfig: _appRouter.config(),
+            child: DSPressFeedback(
+              onPress: () => playTapSound(_container),
+              child: MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                theme: DSTheme.instance.lightTheme,
+                darkTheme: DSTheme.instance.darkTheme,
+                // Dark whatever the phone is set to. Every surface in this app is
+                // charcoal or the brand colour by design, so following the system
+                // setting would only ever produce a light scheme resolving
+                // against dark artwork. The light theme is kept, and is what a light mode
+                // would switch back on.
+                themeMode: .dark,
+                locale: TranslationProvider.of(context).flutterLocale,
+                supportedLocales: AppLocaleUtils.supportedLocales,
+                localizationsDelegates: GlobalMaterialLocalizations.delegates,
+                routerConfig: _appRouter.config(),
+              ),
             ),
           ),
         ),

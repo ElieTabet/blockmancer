@@ -29,6 +29,23 @@ void main() {
     expect(engine.loaded, hasLength(Sound.values.length));
   });
 
+  test('Given sound switched off, When a sound plays, Then nothing is heard, '
+      'and switching it back on is heard again', () async {
+    await sounds.init();
+
+    sounds
+      ..enabled = false
+      ..play(.place);
+
+    expect(engine.played, isEmpty);
+
+    sounds
+      ..enabled = true
+      ..play(.place);
+
+    expect(engine.played, [(Sound.place.assetKey, 1.0)]);
+  });
+
   test('Given no start, When a sound plays, Then nothing is heard', () {
     sounds.play(.tap);
 

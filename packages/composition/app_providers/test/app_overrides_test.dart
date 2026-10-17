@@ -6,12 +6,14 @@
 // read, by consumers), so this reaches into src/ the way the feature tests do.
 
 import 'package:app_providers/app_providers.dart';
+import 'package:app_providers/src/providers_internal.br.dart';
 import 'package:app_router/app_router.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart' as game;
+import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:game_presentation/src/providers_di.br.dart' as game_ui_di;
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
@@ -22,7 +24,10 @@ import 'package:push_notifications_presentation/src/providers_di.br.dart'
 import 'package:settings_data/settings_data.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:shared_domain/shared_domain.dart';
+import 'package:sounds/sounds.dart';
 import 'package:telemetry/telemetry.dart';
+
+import 'fake_sound_engine.dart';
 
 void main() {
   ProviderContainer buildContainer() {
@@ -110,6 +115,97 @@ void main() {
 
     // When / Then
     expect(container.read(game_ui_di.reduceMotionSettingProvider), isTrue);
+  });
+
+  // The game obeys the app's sound and haptics switches without knowing
+  // Settings.
+  test(
+    "the game goes quiet and still when Settings' sound and haptics are off",
+    () {
+      // Given
+      final container = ProviderContainer(
+        overrides: [
+          ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+          settings.hapticsOnProvider.overrideWithValue(false),
+          settings.soundOnProvider.overrideWithValue(false),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // When / Then
+      expect(container.read(game_ui_di.hapticsOnSettingProvider), isFalse);
+      expect(container.read(game_ui_di.soundOnSettingProvider), isFalse);
+    },
+  );
+
+  group('sounds', () {
+    late FakeSoundEngine engine;
+
+    Future<ProviderContainer> buildLoadedContainer({
+      bool soundOn = true,
+    }) async {
+      final container = ProviderContainer(
+        overrides: [
+          ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+          gameSoundsProvider.overrideWithValue(GameSounds(engine: engine)),
+          settings.soundOnProvider.overrideWithValue(soundOn),
+        ],
+      );
+      addTearDown(container.dispose);
+      await initializeSounds(container);
+
+      return container;
+    }
+
+    setUp(() => engine = FakeSoundEngine());
+
+    test(
+      "each of the game's sounds plays its own file, at its speed",
+      () async {
+        // Given
+        final container = await buildLoadedContainer();
+        final playSound = container.read(game_ui_di.playSoundProvider);
+
+        // When
+        for (final sound in game_ui.GameSound.values) {
+          playSound(sound, speed: 1.5);
+        }
+
+        // Then
+        expect(engine.played, [
+          for (final sound in [
+            Sound.clear,
+            Sound.joker,
+            Sound.place,
+            Sound.roundLost,
+            Sound.roundWon,
+          ])
+            (assetKey: sound.assetKey, speed: 1.5),
+        ]);
+      },
+    );
+
+    test('a tap plays the tap sound', () async {
+      // Given
+      final container = await buildLoadedContainer();
+
+      // When
+      playTapSound(container);
+
+      // Then
+      expect(engine.played, [(assetKey: Sound.tap.assetKey, speed: 1.0)]);
+    });
+
+    test("a tap is silent while Settings' sound is off", () async {
+      // Given
+      final container = await buildLoadedContainer(soundOn: false);
+
+      // When
+      playTapSound(container);
+
+      // Then
+      expect(engine.played, isEmpty);
+    });
   });
 
   test('a revive costs nothing until there is an ad network', () async {

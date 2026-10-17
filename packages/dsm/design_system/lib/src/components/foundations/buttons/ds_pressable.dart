@@ -1,7 +1,9 @@
+import 'package:design_system/src/components/foundations/buttons/ds_press_feedback.dart';
 import 'package:flutter/material.dart';
 
 /// Makes [child] tappable, shrinking it under the finger instead of drawing an
-/// ink ripple. A null [onTap] disables it.
+/// ink ripple, and gives a tap the [DSPressFeedback] above it. A null [onTap]
+/// disables it.
 final class DSPressable extends StatefulWidget {
   const DSPressable({
     required this.child,
@@ -56,6 +58,12 @@ final class _DSPressableState extends State<DSPressable>
     if (_controller.status != .forward) _controller.reverse();
   }
 
+  // The feedback first: the action may take this button off the screen.
+  void _tap() {
+    DSPressFeedback.maybeOf(context)?.call();
+    widget.onTap?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     final onTap = widget.onTap;
@@ -70,7 +78,7 @@ final class _DSPressableState extends State<DSPressable>
       label: widget.semanticLabel,
       child: GestureDetector(
         behavior: .opaque,
-        onTap: onTap,
+        onTap: onTap == null ? null : _tap,
         onTapCancel: onTap == null ? null : _release,
         onTapDown: onTap == null ? null : (_) => _press(),
         onTapUp: onTap == null ? null : (_) => _release(),

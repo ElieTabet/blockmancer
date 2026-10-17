@@ -18,6 +18,7 @@ import 'package:game_presentation/src/widgets/tray_view.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
+import '../fake_feedback.dart';
 import '../fake_game_rules.dart';
 import '../game_overrides.dart';
 import '../pump_game.dart';
@@ -112,6 +113,23 @@ void main() {
 
     // Then
     expect(rules.calls, ['place 1 (3, 3)']);
+  });
+
+  testWidgets('a clear on the board is heard as it bursts', (tester) async {
+    // Given
+    final feedback = FakeFeedback();
+    final rules = await pumpGame(
+      tester,
+      runIn(const .playing()),
+      playSound: feedback.play,
+    );
+
+    // When
+    await playMove(tester, rules);
+    await tester.pump(const Duration(seconds: 2));
+
+    // Then
+    expect(feedback.soundsPlayed, [GameSound.clear]);
   });
 
   testWidgets('the round score keeps its old value until the points land', (

@@ -13,6 +13,10 @@ final class GameSounds {
   Future<void>? _initialization;
   bool _ready = false;
 
+  /// The player's switch: while false, [play] stays silent. Whoever owns the
+  /// setting sets it; this class only obeys.
+  bool enabled = true;
+
   /// [engine] is optional so the composition layer can write `GameSounds()`
   /// and stay free of the plugin; it is here for tests.
   GameSounds({SoundEngine? engine}) : _engine = engine ?? SoLoudSoundEngine();
@@ -20,10 +24,11 @@ final class GameSounds {
   /// Safe to call more than once: later calls wait on the first.
   Future<void> init() => _initialization ??= _start();
 
-  /// Does nothing until [init] has loaded every sound, or after it failed.
+  /// Does nothing until [init] has loaded every sound, after it failed, or
+  /// while [enabled] is false.
   /// [speed] is relative, so it raises the pitch with it.
   void play(Sound sound, {double speed = 1}) {
-    if (!_ready) return;
+    if (!_ready || !enabled) return;
 
     try {
       _engine.play(sound.assetKey, speed);

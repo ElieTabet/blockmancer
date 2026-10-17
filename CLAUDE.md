@@ -24,6 +24,7 @@ blockmancer/
 │   │   ├── ads/              # Rewarded ads behind `RewardedAds.show()` — no network yet, so every reward is granted (phase 3 brings AdMob)
 │   │   ├── external_links/   # Hands a link to the OS (browser, mail draft) — the only place url_launcher is known; unused yet
 │   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
+│   │   ├── sounds/           # The game's sound effects, decoded into memory up front behind GameSounds — the only place flutter_soloud is known
 │   │   ├── telemetry/        # Firebase Analytics + Crashlytics behind one switch — the only place either is known
 │   │   ├── timber/           # Logging facade — static Timber over pluggable Tree sinks
 │   │   └── webviews/{domain,presentation}/  # webviews_domain / webviews_presentation — the only place flutter_inappwebview is known; unused yet
@@ -323,6 +324,27 @@ home. Three things keep the drag in the game:
 - **Layout:** `GameWidget`'s `SafeArea` keeps at least `MediaQuery.systemGestureInsetsOf(context).bottom`
   below the tray, so a grab never starts inside the gesture zone.
 
+## Sound and haptics
+
+The game asks for a `GameSound` and never knows the audio engine: `game_presentation` declares
+`playSoundProvider`, `soundOnSettingProvider` and `hapticsOnSettingProvider`, and `app_providers`
+binds them to `GameSounds` (`sounds`) and Settings' switches.
+
+- **When:** `GameFeedback` follows `PlaybackNotifier`'s beats — placing plays `place` with a light
+  haptic, clearing plays `clear` (a little faster, and so higher, each step of the streak, up to
+  1.6×) with a medium one, a combo of 3 or more a heavy one, each joker pulse `joker`. A won round
+  plays `roundWon` with a heavy haptic as its points land; a lost round plays `roundLost` as the
+  move plays out and its sheet comes up. A skip plays nothing it skipped but that outcome. Reduce
+  motion drops the placing and clearing beats, not their feedback.
+- **Switches:** each sound and each haptic obeys its own Settings switch, read as it plays.
+  Haptics are Flutter's `HapticFeedback`, so they need no package.
+- **Taps:** every `DSPressable` calls the `DSPressFeedback` above it, which the app points at
+  `playTapSound`. `GameSounds.enabled` follows Settings' sound switch (`initializeSounds` keeps it in step), so the sound package obeys the switch and composition only wires it.
+- **Mixing:** `AppDelegate` sets the iOS audio session to `.ambient` at launch, so the player's music
+  keeps playing and the silent switch mutes the game; flutter_soloud leaves the category to the
+  app. On Android it takes no audio focus, so other apps play on there too.
+- **Boot:** `initializeSounds` loads every sound into memory, not awaited — the splash outlasts it.
+
 ## Splash & Launch Screen
 
 App startup is two screens in one colour — the brand colour (`DSColor.primary`, the logo's ground) from the first pixel to the cross-fade into Home:
@@ -335,7 +357,8 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
-`flutter_inappwebview`, `push`, `telemetry`, `url_launcher`, `ads` or `blockmancer_engine` directly** — a
+`flutter_inappwebview`, `flutter_soloud`, `push`, `sounds`, `telemetry`, `url_launcher`, `ads` or
+`blockmancer_engine` directly** — a
 feature declares a contract and the composition layer injects the implementation, exactly as it does
 for routing.
 

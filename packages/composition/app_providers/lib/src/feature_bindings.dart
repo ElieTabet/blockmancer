@@ -1,4 +1,5 @@
 import 'package:ads/ads.dart';
+import 'package:app_providers/src/providers_internal.br.dart';
 import 'package:app_router/app_router.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:game_data/game_data.dart';
@@ -80,8 +81,21 @@ List<Override> featureBindingOverrides({
     runStore: (ref) => const SharedPreferencesRunStore(),
   ),
   ...game_ui.bindProviders(
+    hapticsOnSetting: (ref) => ref.watch(settings.hapticsOnProvider),
+    playSound: (ref) {
+      final sounds = ref.watch(gameSoundsProvider);
+
+      return (sound, {speed = 1}) => sounds.play(switch (sound) {
+        .clear => .clear,
+        .joker => .joker,
+        .place => .place,
+        .roundLost => .roundLost,
+        .roundWon => .roundWon,
+      }, speed: speed);
+    },
     reduceMotionSetting: (ref) => ref.watch(settings.reduceMotionOnProvider),
     rewardedAction: (ref) => const RewardedAds().show,
+    soundOnSetting: (ref) => ref.watch(settings.soundOnProvider),
   ),
   // Home shows the game's bests and saved run without knowing the game.
   ...home_ui.bindProviders(
