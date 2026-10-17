@@ -113,12 +113,10 @@ class Translations$home$en {
 	/// en: 'Blockmancer'
 	String get title => 'Blockmancer';
 
-	/// en: 'Place pieces, clear lines, build joker combos.'
-	String get tagline => 'Place pieces, clear lines, build joker combos.';
-
 	late final Translations$home$daily$en daily = Translations$home$daily$en.internal(_root);
 	late final Translations$home$resume$en resume = Translations$home$resume$en.internal(_root);
 	late final Translations$home$practice$en practice = Translations$home$practice$en.internal(_root);
+	late final Translations$home$map$en map = Translations$home$map$en.internal(_root);
 
 	/// en: 'Best: $points'
 	String best({required Object points}) => 'Best: ${points}';
@@ -459,6 +457,9 @@ class Translations$home$daily$en {
 
 	/// en: 'Same pieces for everyone today'
 	String get subtitle => 'Same pieces for everyone today';
+
+	/// en: 'Play'
+	String get play => 'Play';
 }
 
 // Path: home.resume
@@ -486,9 +487,33 @@ class Translations$home$practice$en {
 
 	/// en: 'Practice'
 	String get title => 'Practice';
+}
 
-	/// en: 'A new run every time'
-	String get subtitle => 'A new run every time';
+// Path: home.map
+class Translations$home$map$en {
+	Translations$home$map$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Worlds'
+	String get title => 'Worlds';
+
+	/// en: 'You are here'
+	String get here => 'You are here';
+
+	/// en: 'Boss beaten'
+	String get done => 'Boss beaten';
+
+	/// en: 'Locked'
+	String get locked => 'Locked';
+
+	/// en: 'Coming soon'
+	String get comingSoon => 'Coming soon';
+
+	/// en: 'Stars: $count of 3'
+	String stars({required Object count}) => 'Stars: ${count} of 3';
 }
 
 // Path: settings.reduceMotion
@@ -986,13 +1011,18 @@ extension on Translations {
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',
 			'home.title' => 'Blockmancer',
-			'home.tagline' => 'Place pieces, clear lines, build joker combos.',
 			'home.daily.title' => 'Daily run',
 			'home.daily.subtitle' => 'Same pieces for everyone today',
+			'home.daily.play' => 'Play',
 			'home.resume.title' => 'Continue run',
 			'home.resume.subtitle' => 'Pick up where you left off',
 			'home.practice.title' => 'Practice',
-			'home.practice.subtitle' => 'A new run every time',
+			'home.map.title' => 'Worlds',
+			'home.map.here' => 'You are here',
+			'home.map.done' => 'Boss beaten',
+			'home.map.locked' => 'Locked',
+			'home.map.comingSoon' => 'Coming soon',
+			'home.map.stars' => ({required Object count}) => 'Stars: ${count} of 3',
 			'home.best' => ({required Object points}) => 'Best: ${points}',
 			'home.noBest' => 'No run yet',
 			'home.settings' => 'Settings',

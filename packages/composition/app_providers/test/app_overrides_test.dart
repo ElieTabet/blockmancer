@@ -18,6 +18,7 @@ import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:game_presentation/src/providers_di.br.dart' as game_ui_di;
+import 'package:home_presentation/src/providers_di.br.dart' as home_di;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
@@ -184,6 +185,46 @@ void main() {
 
     // When / Then
     expect(container.read(game_ui_di.reduceMotionSettingProvider), isTrue);
+  });
+
+  // Home draws the map from the game's rules and progression, and keeps its
+  // pin still with Settings' reduce motion, knowing neither package.
+  test("Home's map reads the game's worlds and progression, and Settings' "
+      'reduce motion', () async {
+    // Given: a new player's progression, and reduce motion on
+    final progression = game.startingProgression(const BlockmancerEngine());
+    final container = ProviderContainer(
+      overrides: [
+        ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+        game.progressionProvider.overrideWith((ref) async => progression),
+        settings.reduceMotionOnProvider.overrideWithValue(true),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // When
+    final worlds = container.read(home_di.worldsProvider);
+    final shown = await container.read(home_di.progressionProvider.future);
+
+    // Then
+    expect(worlds, container.read(game.worldSummariesProvider));
+    expect(worlds.map((world) => world.id), [
+      WorldId.rubble,
+      WorldId.gravity,
+      WorldId.fog,
+      WorldId.speed,
+      WorldId.mirror,
+    ]);
+    expect(worlds.where((world) => world.playable).map((world) => world.id), [
+      WorldId.rubble,
+      WorldId.gravity,
+    ]);
+    expect(shown, progression);
+    expect(
+      container.read(home_di.dailyDateProvider),
+      container.read(game.todaysDailyDateProvider),
+    );
+    expect(container.read(home_di.reduceMotionSettingProvider), isTrue);
   });
 
   // The game obeys the app's sound and haptics switches without knowing

@@ -177,18 +177,25 @@
   "home": {
     "tabLabel": "Jouer",
     "title": "Blockmancer",
-    "tagline": "Pose des pièces, efface des lignes, combine tes jokers.",
     "daily": {
       "title": "Partie du jour",
-      "subtitle": "Aujourd'hui, les mêmes pièces pour tout le monde"
+      "subtitle": "Aujourd'hui, les mêmes pièces pour tout le monde",
+      "play": "Jouer"
     },
     "resume": {
       "title": "Reprendre la partie",
       "subtitle": "Reprends là où tu en étais"
     },
     "practice": {
-      "title": "Entraînement",
-      "subtitle": "Une nouvelle partie à chaque fois"
+      "title": "Entraînement"
+    },
+    "map": {
+      "title": "Les mondes",
+      "here": "Tu es ici",
+      "done": "Boss vaincu",
+      "locked": "Verrouillé",
+      "comingSoon": "Bientôt",
+      "stars": "Étoiles : $count sur 3"
     },
     "best": "Record : $points",
     "noBest": "Pas encore de partie",

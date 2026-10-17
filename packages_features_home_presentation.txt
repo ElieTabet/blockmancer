@@ -1,0 +1,2 @@
+bash: ../../../../../scripts/test_package.sh: No such file or directory
+EXIT 127

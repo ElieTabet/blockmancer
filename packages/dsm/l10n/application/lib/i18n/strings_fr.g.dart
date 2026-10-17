@@ -89,10 +89,10 @@ class _Translations$home$fr extends Translations$home$en {
 	// Translations
 	@override String get tabLabel => 'Jouer';
 	@override String get title => 'Blockmancer';
-	@override String get tagline => 'Pose des pièces, efface des lignes, combine tes jokers.';
 	@override late final _Translations$home$daily$fr daily = _Translations$home$daily$fr._(_root);
 	@override late final _Translations$home$resume$fr resume = _Translations$home$resume$fr._(_root);
 	@override late final _Translations$home$practice$fr practice = _Translations$home$practice$fr._(_root);
+	@override late final _Translations$home$map$fr map = _Translations$home$map$fr._(_root);
 	@override String best({required Object points}) => 'Record : ${points}';
 	@override String get noBest => 'Pas encore de partie';
 	@override String get settings => 'Réglages';
@@ -288,6 +288,7 @@ class _Translations$home$daily$fr extends Translations$home$daily$en {
 	// Translations
 	@override String get title => 'Partie du jour';
 	@override String get subtitle => 'Aujourd\'hui, les mêmes pièces pour tout le monde';
+	@override String get play => 'Jouer';
 }
 
 // Path: home.resume
@@ -309,7 +310,21 @@ class _Translations$home$practice$fr extends Translations$home$practice$en {
 
 	// Translations
 	@override String get title => 'Entraînement';
-	@override String get subtitle => 'Une nouvelle partie à chaque fois';
+}
+
+// Path: home.map
+class _Translations$home$map$fr extends Translations$home$map$en {
+	_Translations$home$map$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Les mondes';
+	@override String get here => 'Tu es ici';
+	@override String get done => 'Boss vaincu';
+	@override String get locked => 'Verrouillé';
+	@override String get comingSoon => 'Bientôt';
+	@override String stars({required Object count}) => 'Étoiles : ${count} sur 3';
 }
 
 // Path: settings.reduceMotion
@@ -693,13 +708,18 @@ extension on TranslationsFr {
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',
 			'home.title' => 'Blockmancer',
-			'home.tagline' => 'Pose des pièces, efface des lignes, combine tes jokers.',
 			'home.daily.title' => 'Partie du jour',
 			'home.daily.subtitle' => 'Aujourd\'hui, les mêmes pièces pour tout le monde',
+			'home.daily.play' => 'Jouer',
 			'home.resume.title' => 'Reprendre la partie',
 			'home.resume.subtitle' => 'Reprends là où tu en étais',
 			'home.practice.title' => 'Entraînement',
-			'home.practice.subtitle' => 'Une nouvelle partie à chaque fois',
+			'home.map.title' => 'Les mondes',
+			'home.map.here' => 'Tu es ici',
+			'home.map.done' => 'Boss vaincu',
+			'home.map.locked' => 'Verrouillé',
+			'home.map.comingSoon' => 'Bientôt',
+			'home.map.stars' => ({required Object count}) => 'Étoiles : ${count} sur 3',
 			'home.best' => ({required Object points}) => 'Record : ${points}',
 			'home.noBest' => 'Pas encore de partie',
 			'home.settings' => 'Réglages',

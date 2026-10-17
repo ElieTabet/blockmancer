@@ -177,18 +177,25 @@
   "home": {
     "tabLabel": "Play",
     "title": "Blockmancer",
-    "tagline": "Place pieces, clear lines, build joker combos.",
     "daily": {
       "title": "Daily run",
-      "subtitle": "Same pieces for everyone today"
+      "subtitle": "Same pieces for everyone today",
+      "play": "Play"
     },
     "resume": {
       "title": "Continue run",
       "subtitle": "Pick up where you left off"
     },
     "practice": {
-      "title": "Practice",
-      "subtitle": "A new run every time"
+      "title": "Practice"
+    },
+    "map": {
+      "title": "Worlds",
+      "here": "You are here",
+      "done": "Boss beaten",
+      "locked": "Locked",
+      "comingSoon": "Coming soon",
+      "stars": "Stars: $count of 3"
     },
     "best": "Best: $points",
     "noBest": "No run yet",

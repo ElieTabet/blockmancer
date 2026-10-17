@@ -41,7 +41,7 @@ blockmancer/
 │   │   └── custom_lints/     # Native analyzer-plugin — alphabetical-ordering lints + quick-fixes (IDE-only)
 │   └── features/         # Feature packages, split by layer
 │       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
-│       ├── home/presentation/                    # home_presentation — the first tab: Daily run and Practice, each with its best (read through slots)
+│       ├── home/presentation/                    # home_presentation — the first tab: the world map under today's Daily run, Practice in the header (worlds, progression and bests read through slots)
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
 │       ├── settings/{domain,data,presentation}/  # settings_* — sound, haptics, reduce motion, language and the tutorial flag (domain), on the device (data), and the Settings screen, pushed over the shell from Home's gear (presentation); resetting progress goes through a slot
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
@@ -351,8 +351,7 @@ What a player has earned across runs is one `Progression` (`shared_domain`): per
   from the rules, so storage never knows them. Settings' reset progress puts it back
   (`ClearProgressBehavior`), alongside the bests and the saved run.
 - **Three kinds of run.** `GameMode` is `daily`, `practice` or `world(world)`; a world run is
-  pushed as `GameRoute(launch: .world, world: …)` (nothing pushes one until the world map lands;
-  Home's two cards stay Daily and Practice). `RunStartForBehavior` (`runStartFor`) gives each its
+  pushed as `GameRoute(launch: .world, world: …)`, from its node on the world map. `RunStartForBehavior` (`runStartFor`) gives each its
   `RunConfig`: the **daily** is the first world with **every** joker, whatever the player has
   unlocked, so everyone plays the same run; **practice** is the first world and a **world run**
   its own world, both offering only `unlockedJokers` (in `JokerId` order — the rules draw in their
@@ -377,6 +376,31 @@ What a player has earned across runs is one `Progression` (`shared_domain`): per
   `RunEndSheet` then shows the world's three stars (`RunStars`), each with its objective; the new
   ones in amber, popping in one after the other, still under reduce motion. A daily or practice
   end shows no stars.
+
+### World map
+
+Home is the map: today's Daily card on top (its UTC day, today's best, Play), Continue when a run
+is saved, then the worlds down a winding trail, the first at the top. Practice is the pill in the
+header, beside the gear.
+
+- **What it reads.** `game_domain`'s `worldSummaries` fills home's `worlds` slot: a
+  `WorldSummary` (`shared_domain`) per world in `worldOrder`, with `playable`, its boss's target,
+  its ★3 threshold and its unlocks, read from the rules (0 for a world that isn't playable).
+  `progressionProvider.future` fills `progression`, and `todaysDailyDate` (the UTC day the daily
+  is keyed by) fills `dailyDate`.
+- **A node** (`worldNodeProvider`, home): coming soon when not `playable`, locked until
+  `unlocked`, done once `bossBeaten`, current otherwise. "You are here" sits over the furthest
+  playable world open (`hereWorld`), and the trail is amber up to it.
+- **Fresh on return.** `recordProgression` invalidates `progressionProvider` at a run's end, and
+  Home's slot watches its future, so the map has changed by the time the run is left
+  (`app_router`'s `world_map_test`).
+- **Taps** go through `HomeNotifier.onWorldTapped`: a current or done world pushes its run; a
+  locked or coming-soon one does nothing. It is the one place to change when a world's detail
+  sheet comes first.
+- **Smooth.** The trail is one `CustomPainter` behind a `RepaintBoundary`, repainted only when the
+  player gets further; each node watches its own world. The pin's bob is the only per-frame work,
+  in its own layer, and it holds still under the phone's or Settings' reduce motion (home's
+  `reduceMotionSetting` slot).
 
 ## Tutorial
 

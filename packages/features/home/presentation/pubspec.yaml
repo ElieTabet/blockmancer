@@ -1,5 +1,5 @@
 name: home_presentation
-description: "home presentation layer — the first tab: today's daily run and practice, each with its best. Where a choice leads, and the bests themselves, come through slots."
+description: "home presentation layer — the first tab: the world map under today's daily run, with practice a tap away. Where a choice leads, the worlds, the progression and the bests come through slots."
 publish_to: none
 resolution: workspace
 
@@ -16,6 +16,7 @@ dependencies:
   intl: ^0.20.2
   l10n_application: any
   riverpod_annotation: ^4.0.2
+  shared_domain: any
 
 dev_dependencies:
   flutter_test:

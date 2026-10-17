@@ -1,5 +1,6 @@
 import 'package:home_presentation/src/routing/home_routing.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 part 'providers_di.br.g.dart';
 
@@ -10,6 +11,12 @@ part 'providers_di.br.g.dart';
 @riverpod
 Future<int?> dailyBest(Ref ref) => throw UnimplementedError(
   'dailyBestProvider must be overridden by the composition layer',
+);
+
+/// The UTC day today's daily run is played on, at its midnight.
+@riverpod
+DateTime dailyDate(Ref ref) => throw UnimplementedError(
+  'dailyDateProvider must be overridden by the composition layer',
 );
 
 /// Whether a run is saved to pick up again.
@@ -27,4 +34,24 @@ HomeRouting homeRouting(Ref ref) => throw UnimplementedError(
 @riverpod
 Future<int?> practiceBest(Ref ref) => throw UnimplementedError(
   'practiceBestProvider must be overridden by the composition layer',
+);
+
+/// What the player has earned across runs. Refreshed when a run earns
+/// something, so the map is up to date when the run is left.
+@riverpod
+Future<Progression> progression(Ref ref) => throw UnimplementedError(
+  'progressionProvider must be overridden by the composition layer',
+);
+
+/// Whether the player turned reduce motion on in the app's settings. The
+/// platform's own setting is read by the widget that moves.
+@riverpod
+bool reduceMotionSetting(Ref ref) => throw UnimplementedError(
+  'reduceMotionSettingProvider must be overridden by the composition layer',
+);
+
+/// Every world of the map, in the map's order.
+@riverpod
+List<WorldSummary> worlds(Ref ref) => throw UnimplementedError(
+  'worldsProvider must be overridden by the composition layer',
 );

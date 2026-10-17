@@ -50,8 +50,13 @@ List<Override> stubFeatures({
   ),
   ...home_ui.bindProviders(
     dailyBest: (ref) async => null,
+    dailyDate: (ref) => DateTime.utc(2026, 10, 17),
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     practiceBest: (ref) async => null,
+    progression: (ref) => ref.watch(game.progressionProvider.future),
+    // Still, so the map's "you are here" pin lets pumpAndSettle settle.
+    reduceMotionSetting: (ref) => true,
+    worlds: (ref) => ref.watch(game.worldSummariesProvider),
   ),
   ...settings.bindProviders(
     appDetails: (ref) async => const settings.AppDetails(

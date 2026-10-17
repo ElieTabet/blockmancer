@@ -141,6 +141,19 @@ void main() {
     expect(tutorial.mode, const GameMode.practice());
   });
 
+  test("today's daily date is the UTC day the daily is played on", () {
+    // Given: 01:00 on 17 October in Tokyo, still 16 October in UTC
+    final container = _containerAt(
+      FakeClock(DateTime.parse('2026-10-17T01:00:00+09:00')),
+    );
+
+    // When
+    final date = container.read(todaysDailyDateProvider);
+
+    // Then
+    expect(date, DateTime.utc(2026, 10, 16));
+  });
+
   group("today's daily best", () {
     test('is read for the UTC day it is', () async {
       // Given

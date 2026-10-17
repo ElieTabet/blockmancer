@@ -1,0 +1,80 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:shared_domain/shared_domain.dart';
+
+import '../fake_progression_store.dart';
+import '../fakes.dart';
+
+/// [TwoWorldRules]' map with Fog after it, which has no rules yet.
+final class _FogComingRules implements GameRules {
+  const _FogComingRules();
+
+  static const _known = TwoWorldRules();
+
+  @override
+  List<WorldId> get worldOrder => const [.rubble, .gravity, .fog];
+
+  @override
+  RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) {
+    if (world == .fog) throw ArgumentError.value(world, 'world');
+
+    return _known.configFor(world, jokerPool: jokerPool);
+  }
+
+  @override
+  bool isPlayable(WorldId world) => world != .fog;
+
+  @override
+  List<JokerId> unlocksOf(WorldId world) => _known.unlocksOf(world);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+void main() {
+  test('Given a map whose last world has no rules yet, '
+      'When the map is summed up, '
+      'Then each world comes in the map\'s order with its boss target, third '
+      'star and unlocks, and the last is coming soon', () {
+    // Given
+    final container = ProviderContainer(
+      overrides: bindProviders(
+        bestScores: (ref) => FakeBestScores(),
+        clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),
+        gameRules: (ref) => const _FogComingRules(),
+        progressionStore: (ref) => FakeProgressionStore(),
+        runStore: (ref) => FakeRunStore(),
+      ),
+    );
+    addTearDown(container.dispose);
+
+    // When
+    final worlds = container.read(worldSummariesProvider);
+
+    // Then
+    expect(worlds, const [
+      WorldSummary(
+        bossTarget: 250,
+        id: .rubble,
+        playable: true,
+        starThreshold: 8000,
+        unlocks: [.stonemason, .quarry],
+      ),
+      WorldSummary(
+        bossTarget: 250,
+        id: .gravity,
+        playable: true,
+        starThreshold: 8000,
+        unlocks: [],
+      ),
+      WorldSummary(
+        bossTarget: 0,
+        id: .fog,
+        playable: false,
+        starThreshold: 0,
+        unlocks: [],
+      ),
+    ]);
+  });
+}

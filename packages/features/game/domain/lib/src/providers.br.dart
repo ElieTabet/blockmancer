@@ -17,6 +17,7 @@ import 'package:game_domain/src/entities/run_end_record.br.dart';
 import 'package:game_domain/src/entities/run_start.dart';
 import 'package:game_domain/src/entities/saved_run.br.dart';
 import 'package:game_domain/src/entities/starting_progression.dart';
+import 'package:game_domain/src/entities/world_summaries.dart';
 import 'package:game_domain/src/providers_di.br.dart' as di;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -163,15 +164,22 @@ SaveRunFun saveRun(Ref ref) {
   };
 }
 
-/// Today's daily best, renewed at the next UTC midnight when the day it was
-/// read for is over.
+/// Today's daily best, renewed with [todaysDailyDateProvider].
 @riverpod
 Future<int?> todaysDailyBest(Ref ref) {
-  final now = ref.watch(di.clockProvider).now().toUtc();
   final (config: _, :mode, seed: _) = dailyRunOn(
-    now,
+    ref.watch(todaysDailyDateProvider),
     rules: ref.watch(di.gameRulesProvider),
   );
+
+  return ref.watch(bestScoreProvider(mode).future);
+}
+
+/// The UTC day today's daily run is played on, at its midnight, renewed at the
+/// next UTC midnight when that day is over.
+@riverpod
+DateTime todaysDailyDate(Ref ref) {
+  final now = ref.watch(di.clockProvider).now().toUtc();
   final midnight = Timer(
     DateTime.utc(now.year, now.month, now.day + 1).difference(now),
     ref.invalidateSelf,
@@ -179,8 +187,14 @@ Future<int?> todaysDailyBest(Ref ref) {
 
   ref.onDispose(midnight.cancel);
 
-  return ref.watch(bestScoreProvider(mode).future);
+  return DateTime.utc(now.year, now.month, now.day);
 }
+
+/// Every world of the map in the map's order: whether it can be played yet,
+/// its boss's target, its third star's threshold and what beating it unlocks.
+@riverpod
+List<WorldSummary> worldSummaries(Ref ref) =>
+    worldSummariesOf(ref.watch(di.gameRulesProvider));
 
 /// What a new profile starts from, worked out from the rules so the storage
 /// never needs to know them.

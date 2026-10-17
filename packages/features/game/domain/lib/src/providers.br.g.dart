@@ -549,20 +549,17 @@ final class SaveRunProvider
 
 String _$saveRunHash() => r'ef65f025fc5e0f6ca6b8bc917a8a931b544197dd';
 
-/// Today's daily best, renewed at the next UTC midnight when the day it was
-/// read for is over.
+/// Today's daily best, renewed with [todaysDailyDateProvider].
 
 @ProviderFor(todaysDailyBest)
 final todaysDailyBestProvider = TodaysDailyBestProvider._();
 
-/// Today's daily best, renewed at the next UTC midnight when the day it was
-/// read for is over.
+/// Today's daily best, renewed with [todaysDailyDateProvider].
 
 final class TodaysDailyBestProvider
     extends $FunctionalProvider<AsyncValue<int?>, int?, FutureOr<int?>>
     with $FutureModifier<int?>, $FutureProvider<int?> {
-  /// Today's daily best, renewed at the next UTC midnight when the day it was
-  /// read for is over.
+  /// Today's daily best, renewed with [todaysDailyDateProvider].
   TodaysDailyBestProvider._()
     : super(
         from: null,
@@ -588,7 +585,111 @@ final class TodaysDailyBestProvider
   }
 }
 
-String _$todaysDailyBestHash() => r'1f3a5fb8aa143639cb24cc78ace0a4994f4c74e7';
+String _$todaysDailyBestHash() => r'81b37f5424cfcd74084b40e3bf740483482e323a';
+
+/// The UTC day today's daily run is played on, at its midnight, renewed at the
+/// next UTC midnight when that day is over.
+
+@ProviderFor(todaysDailyDate)
+final todaysDailyDateProvider = TodaysDailyDateProvider._();
+
+/// The UTC day today's daily run is played on, at its midnight, renewed at the
+/// next UTC midnight when that day is over.
+
+final class TodaysDailyDateProvider
+    extends $FunctionalProvider<DateTime, DateTime, DateTime>
+    with $Provider<DateTime> {
+  /// The UTC day today's daily run is played on, at its midnight, renewed at the
+  /// next UTC midnight when that day is over.
+  TodaysDailyDateProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'todaysDailyDateProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$todaysDailyDateHash();
+
+  @$internal
+  @override
+  $ProviderElement<DateTime> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DateTime create(Ref ref) {
+    return todaysDailyDate(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DateTime value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DateTime>(value),
+    );
+  }
+}
+
+String _$todaysDailyDateHash() => r'9d14556e43899ba3153d702940e8607ae82cfb12';
+
+/// Every world of the map in the map's order: whether it can be played yet,
+/// its boss's target, its third star's threshold and what beating it unlocks.
+
+@ProviderFor(worldSummaries)
+final worldSummariesProvider = WorldSummariesProvider._();
+
+/// Every world of the map in the map's order: whether it can be played yet,
+/// its boss's target, its third star's threshold and what beating it unlocks.
+
+final class WorldSummariesProvider
+    extends
+        $FunctionalProvider<
+          List<WorldSummary>,
+          List<WorldSummary>,
+          List<WorldSummary>
+        >
+    with $Provider<List<WorldSummary>> {
+  /// Every world of the map in the map's order: whether it can be played yet,
+  /// its boss's target, its third star's threshold and what beating it unlocks.
+  WorldSummariesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'worldSummariesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$worldSummariesHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<WorldSummary>> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  List<WorldSummary> create(Ref ref) {
+    return worldSummaries(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<WorldSummary> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<WorldSummary>>(value),
+    );
+  }
+}
+
+String _$worldSummariesHash() => r'219571ace5dddb107aa95b813d0527e62f195834';
 
 /// What a new profile starts from, worked out from the rules so the storage
 /// never needs to know them.

@@ -4,6 +4,7 @@ import 'package:game_presentation/game_presentation.dart' show GameRoute;
 import 'package:home_presentation/home_presentation.dart' show HomeRouting;
 import 'package:settings_presentation/settings_presentation.dart'
     show SettingsRoute;
+import 'package:shared_domain/shared_domain.dart' show WorldId;
 
 /// Home's choices each push a screen over the shell: a run, or Settings.
 final class HomeRoutingImpl implements HomeRouting {
@@ -24,4 +25,8 @@ final class HomeRoutingImpl implements HomeRouting {
   @override
   void onSettingsRequested(BuildContext context) =>
       AutoRouter.of(context).push(const SettingsRoute());
+
+  @override
+  void onWorldRequested(BuildContext context, WorldId world) =>
+      AutoRouter.of(context).push(GameRoute(launch: .world, world: world));
 }

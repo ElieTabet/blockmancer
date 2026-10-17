@@ -14,6 +14,7 @@ dependencies:
   game_presentation: any
   home_presentation: any
   settings_presentation: any
+  shared_domain: any
   splash_presentation: any
   push_notifications_presentation: any
   l10n_application: any
@@ -26,7 +27,6 @@ dev_dependencies:
   blockmancer_engine: any
   game_domain: any
   settings_domain: any
-  shared_domain: any
   flutter_test:
     sdk: flutter
   build_runner: 2.16.0

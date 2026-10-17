@@ -117,12 +117,18 @@ List<Override> featureBindingOverrides({
     rewardedAction: (ref) => const RewardedAds().show,
     soundOnSetting: (ref) => ref.watch(settings.soundOnProvider),
   ),
-  // Home shows the game's bests and saved run without knowing the game.
+  // Home shows the game's map, bests and saved run without knowing the game,
+  // and obeys Settings' reduce motion without knowing Settings.
   ...home_ui.bindProviders(
     dailyBest: (ref) => ref.watch(game.todaysDailyBestProvider.future),
+    dailyDate: (ref) => ref.watch(game.todaysDailyDateProvider),
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     practiceBest: (ref) =>
         ref.watch(game.bestScoreProvider(const .practice()).future),
+    // Watched, so a run's end refreshing the progression refreshes the map.
+    progression: (ref) => ref.watch(game.progressionProvider.future),
+    reduceMotionSetting: (ref) => ref.watch(settings.reduceMotionOnProvider),
+    worlds: (ref) => ref.watch(game.worldSummariesProvider),
   ),
   // Settings resets the game's progress without knowing the game, and shows
   // the build and opens the mail app without knowing either plugin.
