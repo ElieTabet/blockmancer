@@ -982,6 +982,22 @@ void main() {
       expect(score.fired, isEmpty);
     });
 
+    test('fires nothing when the last piece clears nothing', () {
+      // Given / When
+      final score = playMove(
+        ['######..'],
+        at: topRight,
+        jokers: const [.finisher],
+        shape: 0,
+        trayEmptied: true,
+      );
+
+      // Then
+      expect(score.mult, 0);
+      expect(score.points, 1);
+      expect(score.fired, isEmpty);
+    });
+
     test('with Hat Trick, a tray cleared by every piece doubles and pays', () {
       // Given / When
       final score = playMove(
