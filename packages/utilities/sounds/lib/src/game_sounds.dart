@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/widgets.dart';
 import 'package:sounds/src/package_name.dart';
 import 'package:sounds/src/sound.dart';
 import 'package:sounds/src/sound_engine.dart';
@@ -13,6 +14,7 @@ import 'package:timber/timber.dart';
 final class GameSounds {
   final SoundEngine _engine;
   Future<void>? _initialization;
+  AppLifecycleListener? _lifecycle;
   final Random _random;
   bool _ready = false;
 
@@ -70,6 +72,7 @@ final class GameSounds {
 
     // Waited out first, or a start still loading would mark it ready again.
     await initialization;
+    _lifecycle?.dispose();
     _ready = false;
 
     try {
@@ -93,10 +96,25 @@ final class GameSounds {
       }
 
       _ready = true;
+      // Another app's audio stops ours while the game is in the background.
+      _lifecycle = AppLifecycleListener(onResume: _restart);
     } catch (error, stackTrace) {
       Timber.e(
         tag: packageName,
         logMessage: 'Starting the sound engine failed',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  Future<void> _restart() async {
+    try {
+      await _engine.restart();
+    } catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Restarting the sound engine failed',
         exception: error,
         stackTrace: stackTrace,
       );

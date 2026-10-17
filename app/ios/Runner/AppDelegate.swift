@@ -20,13 +20,31 @@ import UserNotifications
   }
 
   // The game's sounds play over the player's music rather than stopping it, and
-  // go quiet with the silent switch. flutter_soloud leaves the session's
-  // category to the app, so this is the only place it is set.
+  // go quiet with the silent switch. flutter_soloud leaves the session to the
+  // app, its category and its activation alike, so this is the only place
+  // either is set.
   private func mixSoundWithOtherApps() {
+    let session = AVAudioSession.sharedInstance()
+
     do {
-      try AVAudioSession.sharedInstance().setCategory(.ambient)
+      try session.setCategory(.ambient)
     } catch {
       NSLog("The audio session could not be set to ambient: \(error)")
+    }
+
+    // Another app's audio deactivates ours while the game is in the background,
+    // and nothing turns it back on: without this, the game stays silent until
+    // it is relaunched. Also fires on launch, which is the first activation.
+    NotificationCenter.default.addObserver(
+      forName: UIApplication.didBecomeActiveNotification,
+      object: nil,
+      queue: .main
+    ) { _ in
+      do {
+        try session.setActive(true)
+      } catch {
+        NSLog("The audio session could not be activated: \(error)")
+      }
     }
   }
 

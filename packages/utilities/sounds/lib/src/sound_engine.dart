@@ -10,6 +10,9 @@ abstract interface class SoundEngine {
   Future<void> load(String assetKey);
 
   void play(String assetKey, double speed, double volume);
+
+  /// Starts the output again after the OS stopped it.
+  Future<void> restart();
 }
 
 final class SoLoudSoundEngine implements SoundEngine {
@@ -53,4 +56,10 @@ final class SoLoudSoundEngine implements SoundEngine {
       ..setRelativePlaySpeed(handle, speed)
       ..setPause(handle, false);
   }
+
+  /// SoLoud skips every start while it believes an interruption is under way,
+  /// and iOS doesn't always say when one ended — notably when it ended while
+  /// the app was in the background. Only an explicit start clears that.
+  @override
+  Future<void> restart() => _soLoud.startAudioDevice();
 }

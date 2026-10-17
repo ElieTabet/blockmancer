@@ -486,8 +486,12 @@ binds them to `GameSounds` (`sounds`) and Settings' switches.
 - **Taps:** every `DSPressable` calls the `DSPressFeedback` above it, which the app points at
   `playTapSound`. `GameSounds.enabled` follows Settings' sound switch (`initializeSounds` keeps it in step), so the sound package obeys the switch and composition only wires it.
 - **Mixing:** `AppDelegate` sets the iOS audio session to `.ambient` at launch, so the player's music
-  keeps playing and the silent switch mutes the game; flutter_soloud leaves the category to the
-  app. On Android it takes no audio focus, so other apps play on there too.
+  keeps playing and the silent switch mutes the game, and activates it on every return to the
+  foreground — flutter_soloud leaves both to the app. Another app's audio interrupts ours while the
+  game is in the background, and iOS doesn't always report the interruption's end; flutter_soloud
+  then skips every start until an explicit one, so `GameSounds` calls `startAudioDevice` on each
+  resume, or the game stays silent until relaunched. On Android it takes no audio focus, so other
+  apps play on there too.
 - **Boot:** `initializeSounds` loads every sound into memory, not awaited — the splash outlasts it.
 
 ## Splash & Launch Screen

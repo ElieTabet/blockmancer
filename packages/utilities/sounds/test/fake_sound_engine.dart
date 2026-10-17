@@ -7,6 +7,7 @@ final class FakeSoundEngine implements SoundEngine {
   final played = <(String, double)>[];
   final volumes = <double>[];
   Object? playThrows;
+  var restarts = 0;
 
   @override
   Future<void> dispose() async => disposed = true;
@@ -30,4 +31,7 @@ final class FakeSoundEngine implements SoundEngine {
     played.add((assetKey, speed));
     volumes.add(volume);
   }
+
+  @override
+  Future<void> restart() async => restarts++;
 }

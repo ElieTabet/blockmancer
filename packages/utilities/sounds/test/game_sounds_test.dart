@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sounds/sounds.dart';
 
@@ -9,6 +10,21 @@ import 'fake_sound_engine.dart';
 void main() {
   late FakeSoundEngine engine;
   late GameSounds sounds;
+
+  /// The app sent to the background and brought back, through every state
+  /// the platform passes on the way.
+  void leaveAndComeBack(WidgetTester tester) {
+    for (final AppLifecycleState state in [
+      .inactive,
+      .hidden,
+      .paused,
+      .hidden,
+      .inactive,
+      .resumed,
+    ]) {
+      tester.binding.handleAppLifecycleStateChanged(state);
+    }
+  }
 
   setUp(() {
     engine = FakeSoundEngine();
@@ -181,6 +197,29 @@ void main() {
       ..play(.bossWin);
 
     expect(engine.volumes, [Sound.bossStart.volume, Sound.bossWin.volume]);
+  });
+
+  testWidgets('Given a player who left for an app playing its own audio, When '
+      'they come back to the game, Then its sounds are started again', (
+    tester,
+  ) async {
+    await sounds.init();
+
+    leaveAndComeBack(tester);
+    await sounds.dispose();
+
+    expect(engine.restarts, 1);
+  });
+
+  testWidgets('Given sounds that failed to start, When the player comes back '
+      'to the game, Then nothing is started', (tester) async {
+    engine.initThrows = StateError('no audio device');
+    await sounds.init();
+
+    leaveAndComeBack(tester);
+    await sounds.dispose();
+
+    expect(engine.restarts, 0);
   });
 
   test(

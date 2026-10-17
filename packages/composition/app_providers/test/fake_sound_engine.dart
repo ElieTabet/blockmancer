@@ -16,4 +16,7 @@ final class FakeSoundEngine implements SoundEngine {
   @override
   void play(String assetKey, double speed, double volume) =>
       played.add((assetKey: assetKey, speed: speed));
+
+  @override
+  Future<void> restart() async {}
 }
