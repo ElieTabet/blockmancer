@@ -253,4 +253,14 @@ void main() {
       expect(find.text('1 piece left'), findsOneWidget);
     },
   );
+
+  testWidgets('the round card names the boss rather than numbering it', (
+    tester,
+  ) async {
+    // Given / When
+    await pumpGame(tester, runIn(const .playing(), roundIndex: 1));
+
+    // Then
+    expect(find.text('Boss · Rubble'), findsOneWidget);
+  });
 }

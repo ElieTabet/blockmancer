@@ -6,7 +6,7 @@
     "runTotal": "Run $total",
     "round": {
       "regular": "Round · $index / $count",
-      "boss": "Boss · Rubble · $index / $count",
+      "boss": "Boss · Rubble",
       "target": "/ $target",
       "piecesLeft(param=count)": {
         "one": "$count piece left",

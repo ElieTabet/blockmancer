@@ -81,7 +81,7 @@ class _Translations$game$round$fr extends Translations$game$round$en {
 
 	// Translations
 	@override String regular({required Object index, required Object count}) => 'Manche · ${index} / ${count}';
-	@override String boss({required Object index, required Object count}) => 'Boss · Gravats · ${index} / ${count}';
+	@override String get boss => 'Boss · Gravats';
 	@override String target({required Object target}) => '/ ${target}';
 	@override String piecesLeft({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count,
 		one: '${count} pièce restante',
@@ -352,7 +352,7 @@ extension on TranslationsFr {
 			'game.subtitle' => 'Partie du jour · les mêmes pièces pour tous',
 			'game.runTotal' => ({required Object total}) => 'Partie ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Manche · ${index} / ${count}',
-			'game.round.boss' => ({required Object index, required Object count}) => 'Boss · Gravats · ${index} / ${count}',
+			'game.round.boss' => 'Boss · Gravats',
 			'game.round.target' => ({required Object target}) => '/ ${target}',
 			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: '${count} pièce restante', other: '${count} pièces restantes', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',

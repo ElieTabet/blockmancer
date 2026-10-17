@@ -4,6 +4,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/notifiers/input_lock_notifier.br.dart';
 import 'package:game_presentation/src/widgets/joker_text.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -68,6 +69,7 @@ class _ScoreBannerState extends ConsumerState<ScoreBanner> {
   Timer? _fade;
 
   /// Two lines, reserved even when empty so the board never jumps.
+  static const _fadeOut = Duration(milliseconds: 250);
   static const _height = 40.0;
   static const _shown = Duration(milliseconds: 2500);
   var _visible = false;
@@ -92,7 +94,7 @@ class _ScoreBannerState extends ConsumerState<ScoreBanner> {
       height: _height,
       child: AnimatedOpacity(
         opacity: _visible && text != null ? 1 : 0,
-        duration: const Duration(milliseconds: 250),
+        duration: _visible ? scoreReveal : _fadeOut,
         child: text == null
             ? const SizedBox.shrink()
             : Column(

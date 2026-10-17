@@ -28,4 +28,8 @@ class DSGameColor {
   ];
   static const regularRound = Color(0xFF5EC8FF);
   static const stone = Color(0xFF5A5F7A);
+
+  /// A stone's sunken face, inside its [stone] bevel: flat pieces have none,
+  /// so a stone never reads as one more colour.
+  static const stoneFace = Color(0xFF3B3F57);
 }

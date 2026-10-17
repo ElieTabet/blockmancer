@@ -98,8 +98,8 @@ class Translations$game$round$en {
 	/// en: 'Round · $index / $count'
 	String regular({required Object index, required Object count}) => 'Round · ${index} / ${count}';
 
-	/// en: 'Boss · Rubble · $index / $count'
-	String boss({required Object index, required Object count}) => 'Boss · Rubble · ${index} / ${count}';
+	/// en: 'Boss · Rubble'
+	String get boss => 'Boss · Rubble';
 
 	/// en: '/ $target'
 	String target({required Object target}) => '/ ${target}';
@@ -504,7 +504,7 @@ extension on Translations {
 			'game.subtitle' => 'Daily run · same pieces for everyone',
 			'game.runTotal' => ({required Object total}) => 'Run ${total}',
 			'game.round.regular' => ({required Object index, required Object count}) => 'Round · ${index} / ${count}',
-			'game.round.boss' => ({required Object index, required Object count}) => 'Boss · Rubble · ${index} / ${count}',
+			'game.round.boss' => 'Boss · Rubble',
 			'game.round.target' => ({required Object target}) => '/ ${target}',
 			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: '${count} piece left', other: '${count} pieces left', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',

@@ -10,6 +10,9 @@ final class BoardPainter extends CustomPainter {
   static const _boardRadius = Radius.circular(16);
   static const _cellRadius = Radius.circular(6);
 
+  /// The stone bevel's width, as a share of the cell.
+  static const _stoneBevel = 0.18;
+
   final Board board;
 
   @override
@@ -33,10 +36,22 @@ final class BoardPainter extends CustomPainter {
           StoneCell() => DSGameColor.stone,
         };
 
+        final rect = geometry.cellRect(cell);
+
         canvas.drawRRect(
-          RRect.fromRectAndRadius(geometry.cellRect(cell), _cellRadius),
+          RRect.fromRectAndRadius(rect, _cellRadius),
           Paint()..color = color,
         );
+
+        if (board.at(cell) is StoneCell) {
+          canvas.drawRRect(
+            RRect.fromRectAndRadius(
+              rect.deflate(rect.width * _stoneBevel),
+              _cellRadius / 2,
+            ),
+            Paint()..color = DSGameColor.stoneFace,
+          );
+        }
       }
     }
   }

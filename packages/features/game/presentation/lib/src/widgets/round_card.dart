@@ -56,9 +56,7 @@ final class RoundTitle extends ConsumerWidget {
     return Text(
       maxLines: 1,
       overflow: .ellipsis,
-      isBoss
-          ? round.boss(count: count, index: index)
-          : round.regular(count: count, index: index),
+      isBoss ? round.boss : round.regular(count: count, index: index),
       style: TextStyle(
         color: isBoss ? DSGameColor.bossRound : DSGameColor.regularRound,
         fontSize: 14,
