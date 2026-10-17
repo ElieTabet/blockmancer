@@ -5,8 +5,8 @@ const defaultConfig = RunConfig(
   chipsPerCell: 10,
   jokerPool: JokerId.values,
   jokers: JokerTuning(
-    anchorMult: 4,
-    avalancheChipsPerCell: 25,
+    anchorMult: 6,
+    avalancheChipsPerCell: 40,
     bigBoxFactor: 3,
     bigBoxMinPieceSize: 5,
     brinkFactor: 2,
@@ -14,20 +14,20 @@ const defaultConfig = RunConfig(
     collectorMultPerJoker: 1,
     columnFactor: 2,
     comboMultPerStreak: 1,
-    finisherFactor: 2,
-    fullHouseCellsPerMult: 6,
+    finisherFactor: 3,
+    fullHouseCellsPerMult: 10,
     hatTrickBonus: 300,
     heavyFactor: 2,
-    heavyMinPieceSize: 4,
-    patienceStoredPerMove: 2,
-    pocketsExtraPieces: 4,
+    heavyMinPieceSize: 3,
+    patienceStoredPerMove: 1,
+    pocketsExtraPieces: 8,
     precisionBonusMult: 6,
     precisionMaxPieceSize: 2,
     quarryStonesPerClear: 1,
     saverPointsPerPiece: 40,
-    stonemasonChipsPerStone: 50,
+    stonemasonChipsPerStone: 125,
     stonemasonExtraStones: 2,
-    sweepBonus: 500,
+    sweepBonus: 750,
     tinyFactor: 3,
     tinyMaxPieceSize: 2,
     twinFactor: 3,
@@ -38,17 +38,19 @@ const defaultConfig = RunConfig(
   revivePieces: 3,
   reviveRows: 2,
   revivesPerRun: 1,
+  // Round 3 eased, round 4 and the boss steepened so the boss is the run's
+  // wall (docs/balance/2026-10-18-sprint5.md).
   rounds: [
     RoundSpec(isBoss: false, pieces: 14, stones: 0, target: 250),
     RoundSpec(isBoss: false, pieces: 16, stones: 0, target: 500),
-    RoundSpec(isBoss: false, pieces: 18, stones: 0, target: 900),
-    RoundSpec(isBoss: false, pieces: 20, stones: 0, target: 1400),
-    RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
+    RoundSpec(isBoss: false, pieces: 18, stones: 0, target: 800),
+    RoundSpec(isBoss: false, pieces: 20, stones: 0, target: 2200),
+    RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 5000),
   ],
-  // Near the bot's 80th percentile with its best build, so the third star
-  // takes skill and a good build: patience,twin's 7,916 rounded to the nearest
-  // 250 (docs/balance/2026-10-17-worlds.md).
-  starThreshold: 8000,
+  // The bot's 80th percentile with its best pair, over the runs that completed
+  // it, so the third star takes skill and a good build: patience,twin's
+  // 11,071 rounded to the nearest 250 (docs/balance/2026-10-18-sprint5.md).
+  starThreshold: 11000,
   // Six is every star of today's two worlds.
   starUnlocks: [
     StarUnlock(jokers: [.fullhouse, .brink], stars: 4),
@@ -59,15 +61,15 @@ const defaultConfig = RunConfig(
 );
 
 /// The default run in Gravity, whose boss starts with no stones: its rule is
-/// the fall.
+/// the fall. Its boss asks a little more than Rubble's, since difficulty
+/// rises along the map.
 final gravityConfig = defaultConfig.copyWith(
   rounds: [
     for (final round in defaultConfig.rounds)
-      round.isBoss ? round.copyWith(stones: 0) : round,
+      round.isBoss ? round.copyWith(stones: 0, target: 5250) : round,
   ],
-  // Near the bot's 80th percentile with its best build, so the third star
-  // takes skill and a good build: patience,twin's 8,338 rounded to the nearest
-  // 250 (docs/balance/2026-10-17-worlds.md).
-  starThreshold: 8250,
+  // patience,twin's 11,549 over the runs that completed it, rounded to the
+  // nearest 250 (docs/balance/2026-10-18-sprint5.md).
+  starThreshold: 11500,
   world: .gravity,
 );

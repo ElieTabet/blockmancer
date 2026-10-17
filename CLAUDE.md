@@ -80,7 +80,7 @@ melos run test-engine-web
 # runs that cleared round 4, and over the runs that completed their pair), the jokers a run ends
 # with on average, the share of runs that completed their pair and their P80 total. `--solo` adds
 # a row per joker played alone (docs/balance/<date>.md holds each table, docs/balance-v0.md the
-# first, docs/balance/2026-10-17-worlds.md both worlds and the ★3 thresholds). It plays
+# first, docs/balance/2026-10-18-sprint5.md the Sprint 5 tuning and the ★3 thresholds). It plays
 # `configFor(world, jokerPool: JokerId.values)` — every joker on offer — in Rubble unless
 # `--world gravity`. Melos passes no arguments through, so for
 # `--runs` / `--build` / `--world` run it from the package:
@@ -305,11 +305,13 @@ engine's events and never recomputes a rule.
 - **Tunable.** Every number a designer would tune lives in the immutable `RunConfig`, whose values
   are `defaultConfig`: the rounds' targets, pieces and stones, chips per cleared cell, revives, offers,
   each joker's numbers (`JokerTuning`, which every joker hook is handed), `starThreshold`, the
-  run total that earns a world's third star (Rubble 8,000 and Gravity 8,250, set near the bot's
-  P80 with its best build in docs/balance/2026-10-17-worlds.md), and `starUnlocks`, the jokers the
+  run total that earns a world's third star (Rubble 11,000 and Gravity 11,500, the bot's P80 with
+  its best pair over the runs that completed it, in docs/balance/2026-10-18-sprint5.md, which also
+  holds each world's boss target and why every number moved), and `starUnlocks`, the jokers the
   stars held across worlds unlock (4★ Full House and On the Brink, 6★ Finisher and Hat Trick).
   No rule reads either of the last two; the run's end does. No
-  rule hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit. This
+  rule hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit: the
+  rule tests read the test-only `briefConfig`, the brief's numbers, and the seeded goldens too. This
   is what Remote Config will feed.
 - **Worlds.** `RunConfig.world` (`WorldId`) picks a `WorldRule` (`lib/src/worlds/`) that holds in the
   boss only: its round setup (Rubble's stones, from `RoundSpec.stones`) and `transformAnchor`, where

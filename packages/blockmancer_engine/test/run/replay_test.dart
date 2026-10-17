@@ -1,9 +1,9 @@
-import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/run/replay.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../autoplay.dart';
+import '../brief_config.dart';
 
 void main() {
   // Each seed's bot gets to take a joker of its build.
@@ -19,7 +19,7 @@ void main() {
 
       // When
       final replayed = replay(
-        config: defaultConfig,
+        config: briefConfig,
         moves: played.moves,
         seed: seed,
       );
@@ -36,7 +36,7 @@ void main() {
 
   test('a run offering only part of the jokers replays to the same end', () {
     // Given
-    final config = defaultConfig.copyWith(
+    final config = briefConfig.copyWith(
       jokerPool: const [.collector, .combo, .patience, .twin],
     );
     final played = autoplay(7, config: config);
@@ -62,7 +62,7 @@ void main() {
 
     // When / Then
     expect(
-      () => replay(config: defaultConfig, moves: tampered, seed: 7),
+      () => replay(config: briefConfig, moves: tampered, seed: 7),
       throwsArgumentError,
     );
   });

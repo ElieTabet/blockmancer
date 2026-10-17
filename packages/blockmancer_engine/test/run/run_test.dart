@@ -1,14 +1,14 @@
-import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/run/engine.dart';
 import 'package:blockmancer_engine/src/run/offers.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../board_picture.dart';
+import '../brief_config.dart';
 import '../play_move.dart';
 
 const _seed = 20261016;
-const _config = defaultConfig;
+const _config = briefConfig;
 
 /// A run in its first round, having started with [joker].
 RunState _playing({JokerId joker = .twin}) {

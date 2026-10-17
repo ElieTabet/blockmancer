@@ -1,13 +1,13 @@
 import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
-import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
+import '../brief_config.dart';
 import '../play_move.dart';
 
-final _tuning = defaultConfig.jokers;
+final _tuning = briefConfig.jokers;
 
 // Each joker alone, then with its partner. Shapes: 0 single, 1 horizontal
 // domino, 3 horizontal three, 10 horizontal four.
@@ -15,7 +15,7 @@ void main() {
   const baseSetup = RoundSetup(pieces: 14, stones: 0);
 
   List<int> weightsOf(List<JokerId> jokers) =>
-      pieceWeights(effectsOf(jokers), defaultConfig.jokers);
+      pieceWeights(effectsOf(jokers), briefConfig.jokers);
 
   group('Stonemason', () {
     test('adds 50 chips per stone cleared', () {

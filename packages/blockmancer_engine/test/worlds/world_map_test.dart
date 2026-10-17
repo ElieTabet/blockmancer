@@ -26,8 +26,8 @@ void main() {
   });
 
   test('each world names the run total that earns its third star', () {
-    expect(rules.configFor(.rubble, jokerPool: pool).starThreshold, 8000);
-    expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 8250);
+    expect(rules.configFor(.rubble, jokerPool: pool).starThreshold, 11000);
+    expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 11500);
   });
 
   for (final world in const [WorldId.fog, WorldId.mirror, WorldId.speed]) {

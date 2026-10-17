@@ -1,8 +1,9 @@
-import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/run/engine.dart';
 import 'package:blockmancer_engine/src/run/replay.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
+
+import 'brief_config.dart';
 
 /// A whole run played with a fixed strategy, and what it did.
 typedef Autoplayed = ({
@@ -18,7 +19,7 @@ typedef Autoplayed = ({
 Autoplayed autoplay(
   int seed, {
   List<JokerId> build = const [],
-  RunConfig config = defaultConfig,
+  RunConfig config = briefConfig,
 }) {
   var state = startRun(config: config, seed: seed);
   final events = <GameEvent>[];

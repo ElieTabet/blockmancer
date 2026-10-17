@@ -1,12 +1,12 @@
-import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
 import '../autoplay.dart';
+import '../brief_config.dart';
 
 /// The 14 jokers there were before Gravity's. New jokers join the end of the
 /// draw order, so a run offering only these plays exactly as it did then.
-final _before = defaultConfig.copyWith(
+final _before = briefConfig.copyWith(
   jokerPool: const [
     .bigbox,
     .collector,
@@ -26,7 +26,7 @@ final _before = defaultConfig.copyWith(
 );
 
 /// The 16 jokers there were before the stars' four.
-final _beforeStars = defaultConfig.copyWith(
+final _beforeStars = briefConfig.copyWith(
   jokerPool: [..._before.jokerPool, .anchor, .avalanche],
 );
 
