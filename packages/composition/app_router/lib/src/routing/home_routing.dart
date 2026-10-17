@@ -1,12 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:game_presentation/game_presentation.dart' show GameRoute;
-import 'package:home_presentation/home_presentation.dart' show HomeRouting;
+import 'package:home_presentation/home_presentation.dart'
+    show HomeRouting, SpellbookRoute;
 import 'package:settings_presentation/settings_presentation.dart'
     show SettingsRoute;
 import 'package:shared_domain/shared_domain.dart' show WorldId;
 
-/// Home's choices each push a screen over the shell: a run, or Settings.
+/// Home's choices each push a screen over the shell: a run, the Spellbook or
+/// Settings.
 final class HomeRoutingImpl implements HomeRouting {
   const HomeRoutingImpl();
 
@@ -25,6 +27,14 @@ final class HomeRoutingImpl implements HomeRouting {
   @override
   void onSettingsRequested(BuildContext context) =>
       AutoRouter.of(context).push(const SettingsRoute());
+
+  @override
+  void onSpellbookCloseRequested(BuildContext context) =>
+      AutoRouter.of(context).maybePop();
+
+  @override
+  void onSpellbookRequested(BuildContext context) =>
+      AutoRouter.of(context).push(const SpellbookRoute());
 
   @override
   void onWorldRequested(BuildContext context, WorldId world) =>

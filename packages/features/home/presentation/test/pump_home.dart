@@ -43,6 +43,31 @@ const tuning = JokerTuning(
   twinMinLines: 2,
 );
 
+/// The game's 20 jokers in their 10 pairs, as the rules order them.
+const collection = JokerCollection(
+  pairs: [
+    JokerPair(first: .combo, second: .collector, unlock: .starting()),
+    JokerPair(first: .patience, second: .twin, unlock: .starting()),
+    JokerPair(first: .precision, second: .tiny, unlock: .starting()),
+    JokerPair(first: .column, second: .sweep, unlock: .starting()),
+    JokerPair(first: .heavy, second: .bigbox, unlock: .starting()),
+    JokerPair(first: .pockets, second: .saver, unlock: .starting()),
+    JokerPair(
+      first: .stonemason,
+      second: .quarry,
+      unlock: .boss(world: .rubble),
+    ),
+    JokerPair(
+      first: .anchor,
+      second: .avalanche,
+      unlock: .boss(world: .gravity),
+    ),
+    JokerPair(first: .fullhouse, second: .brink, unlock: .stars(count: 4)),
+    JokerPair(first: .finisher, second: .hattrick, unlock: .stars(count: 6)),
+  ],
+  tuning: tuning,
+);
+
 /// The game's map: Rubble and Gravity playable, then three coming soon.
 const mapWorlds = [
   WorldSummary(
@@ -135,6 +160,8 @@ final rubbleBeaten = freshProgression().copyWith(
 /// Mounts Home on a screen tall enough for the whole map, on today's daily
 /// of 17 October 2026, its marker still unless [reduceMotion] is off.
 /// Announcing jokers does nothing unless [markJokersAnnounced] says otherwise.
+/// [screen] is Home unless another of its screens is given, on a [viewSize]
+/// view.
 Future<FakeHomeRouting> pumpHome(
   WidgetTester tester, {
   int? dailyBest,
@@ -143,8 +170,10 @@ Future<FakeHomeRouting> pumpHome(
   int? practiceBest,
   Future<Progression> Function()? progression,
   bool reduceMotion = true,
+  Widget screen = const HomeWidget(),
+  Size viewSize = const Size(390, 1300),
 }) async {
-  tester.view.physicalSize = const Size(1170, 3900);
+  tester.view.physicalSize = viewSize * 3;
   tester.view.devicePixelRatio = 3.0;
   addTearDown(tester.view.reset);
 
@@ -157,6 +186,7 @@ Future<FakeHomeRouting> pumpHome(
           dailyBest: (ref) async => dailyBest,
           dailyDate: (ref) => DateTime.utc(2026, 10, 17),
           hasSavedRun: (ref) async => hasSavedRun,
+          jokerCollection: (ref) => collection,
           markJokersAnnounced: (ref) => markJokersAnnounced ?? () async {},
           practiceBest: (ref) async => practiceBest,
           progression: (ref) => progression?.call() ?? _fresh(),
@@ -166,10 +196,7 @@ Future<FakeHomeRouting> pumpHome(
         ...bindRoutingProviders(homeRouting: (ref) => routing),
       ],
       child: TranslationProvider(
-        child: MaterialApp(
-          theme: DSTheme.instance.darkTheme,
-          home: const HomeWidget(),
-        ),
+        child: MaterialApp(theme: DSTheme.instance.darkTheme, home: screen),
       ),
     ),
   );

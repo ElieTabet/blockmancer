@@ -97,6 +97,7 @@ class _Translations$home$fr extends Translations$home$en {
 	@override String best({required Object points}) => 'Record : ${points}';
 	@override String get noBest => 'Pas encore de partie';
 	@override String get settings => 'Réglages';
+	@override late final _Translations$home$spellbook$fr spellbook = _Translations$home$spellbook$fr._(_root);
 }
 
 // Path: settings
@@ -349,6 +350,29 @@ class _Translations$home$sheet$fr extends Translations$home$sheet$en {
 	@override String get start => 'Lancer la partie';
 	@override String get replay => 'Rejouer pour l\'étoile manquante';
 	@override String get lockedHint => 'Bats le boss précédent pour le débloquer';
+}
+
+// Path: home.spellbook
+class _Translations$home$spellbook$fr extends Translations$home$spellbook$en {
+	_Translations$home$spellbook$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Grimoire';
+	@override String get open => 'Grimoire';
+	@override String get close => 'Fermer';
+	@override String progress({required Object unlocked, required Object total}) => '${unlocked} jokers débloqués sur ${total}';
+	@override String partner({required Object name}) => 'Fait la paire avec ${name}';
+	@override String get picked => 'Choisi';
+	@override String get wins => 'Victoires';
+	@override String get best => 'Record';
+	@override String get locked => 'Verrouillé';
+	@override String unlockBoss({required Object world}) => 'Bats le boss de ${world}';
+	@override String unlockStars({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count,
+		one: 'Récolte 1 étoile',
+		other: 'Récolte ${count} étoiles',
+	);
 }
 
 // Path: settings.reduceMotion
@@ -821,6 +845,17 @@ extension on TranslationsFr {
 			'home.best' => ({required Object points}) => 'Record : ${points}',
 			'home.noBest' => 'Pas encore de partie',
 			'home.settings' => 'Réglages',
+			'home.spellbook.title' => 'Grimoire',
+			'home.spellbook.open' => 'Grimoire',
+			'home.spellbook.close' => 'Fermer',
+			'home.spellbook.progress' => ({required Object unlocked, required Object total}) => '${unlocked} jokers débloqués sur ${total}',
+			'home.spellbook.partner' => ({required Object name}) => 'Fait la paire avec ${name}',
+			'home.spellbook.picked' => 'Choisi',
+			'home.spellbook.wins' => 'Victoires',
+			'home.spellbook.best' => 'Record',
+			'home.spellbook.locked' => 'Verrouillé',
+			'home.spellbook.unlockBoss' => ({required Object world}) => 'Bats le boss de ${world}',
+			'home.spellbook.unlockStars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: 'Récolte 1 étoile', other: 'Récolte ${count} étoiles', ), 
 			'settings.title' => 'Réglages',
 			'settings.close' => 'Fermer',
 			'settings.sound' => 'Son',

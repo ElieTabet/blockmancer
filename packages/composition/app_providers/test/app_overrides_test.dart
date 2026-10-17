@@ -231,9 +231,43 @@ void main() {
     );
     expect(container.read(home_di.reduceMotionSettingProvider), isTrue);
     expect(
+      container.read(home_di.jokerCollectionProvider),
+      container.read(game.jokerCollectionProvider),
+    );
+    expect(
       container.read(home_di.markJokersAnnouncedProvider),
       same(container.read(game.markJokersAnnouncedProvider)),
     );
+  });
+
+  // The Spellbook's pairs are the engine's: every joker once, its partner
+  // beside it, in the order a player unlocks them.
+  test('the joker collection holds the 20 jokers in their 10 pairs', () {
+    // Given / When
+    final collection = buildContainer().read(game.jokerCollectionProvider);
+
+    // Then
+    const engine = BlockmancerEngine();
+    expect(collection.pairs, hasLength(10));
+    expect(
+      collection.pairs.expand((pair) => [pair.first, pair.second]).toSet(),
+      JokerId.values.toSet(),
+    );
+    for (final pair in collection.pairs) {
+      expect(engine.partnerOf(pair.first), pair.second);
+    }
+    expect(
+      [for (final pair in collection.pairs.skip(6)) pair.unlock],
+      const [
+        JokerUnlock.boss(world: .rubble),
+        JokerUnlock.boss(world: .gravity),
+        JokerUnlock.stars(count: 4),
+        JokerUnlock.stars(count: 6),
+      ],
+    );
+    expect(collection.pairs.take(6).map((pair) => pair.unlock).toSet(), {
+      const JokerUnlock.starting(),
+    });
   });
 
   // The game obeys the app's sound and haptics switches without knowing

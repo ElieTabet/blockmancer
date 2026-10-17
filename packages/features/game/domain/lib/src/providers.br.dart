@@ -14,6 +14,7 @@ import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/contracts/run_store.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
 import 'package:game_domain/src/entities/game_mode.br.dart';
+import 'package:game_domain/src/entities/joker_collection_of.dart';
 import 'package:game_domain/src/entities/progression_change.br.dart';
 import 'package:game_domain/src/entities/run_end.dart';
 import 'package:game_domain/src/entities/run_end_record.br.dart';
@@ -91,6 +92,11 @@ ClearProgressFun clearProgress(Ref ref) {
 @riverpod
 Future<Progression> progression(Ref ref) =>
     ref.watch(loadProgressionProvider)();
+
+/// Every joker in pairs, with how each pair is unlocked.
+@riverpod
+JokerCollection jokerCollection(Ref ref) =>
+    jokerCollectionOf(ref.watch(di.gameRulesProvider));
 
 /// See [MarkJokersAnnouncedBehavior].
 ///

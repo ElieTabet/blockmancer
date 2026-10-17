@@ -19,6 +19,13 @@ final class FakeHomeRouting implements HomeRouting {
   void onSettingsRequested(BuildContext context) => calls.add('settings');
 
   @override
+  void onSpellbookCloseRequested(BuildContext context) =>
+      calls.add('spellbook:close');
+
+  @override
+  void onSpellbookRequested(BuildContext context) => calls.add('spellbook');
+
+  @override
   void onWorldRequested(BuildContext context, WorldId world) =>
       calls.add('world:${world.name}');
 }

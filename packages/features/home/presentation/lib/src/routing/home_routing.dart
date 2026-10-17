@@ -12,5 +12,9 @@ abstract interface class HomeRouting {
 
   void onSettingsRequested(BuildContext context);
 
+  void onSpellbookCloseRequested(BuildContext context);
+
+  void onSpellbookRequested(BuildContext context);
+
   void onWorldRequested(BuildContext context, WorldId world);
 }

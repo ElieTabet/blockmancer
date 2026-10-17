@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:home_presentation/src/widgets/home_widget.dart';
+import 'package:home_presentation/src/widgets/spellbook_widget.dart';
 
 part 'home_router.br.gr.dart';
 
@@ -12,6 +13,16 @@ enum HomeRoutePath {
   home('home');
 
   const HomeRoutePath(this.path);
+
+  final String path;
+}
+
+/// The Spellbook's path: absolute, as it is pushed over the shell like
+/// Settings rather than being a tab child.
+enum SpellbookRoutePath {
+  spellbook('/spellbook');
+
+  const SpellbookRoutePath(this.path);
 
   final String path;
 }
@@ -28,4 +39,12 @@ final class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const HomeWidget();
+}
+
+@RoutePage(name: 'SpellbookRoute')
+final class SpellbookPage extends StatelessWidget {
+  const SpellbookPage({super.key});
+
+  @override
+  Widget build(BuildContext context) => const SpellbookWidget();
 }

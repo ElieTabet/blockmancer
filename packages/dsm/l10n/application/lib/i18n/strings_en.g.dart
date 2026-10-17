@@ -127,6 +127,8 @@ class Translations$home$en {
 
 	/// en: 'Settings'
 	String get settings => 'Settings';
+
+	late final Translations$home$spellbook$en spellbook = Translations$home$spellbook$en.internal(_root);
 }
 
 // Path: settings
@@ -557,6 +559,51 @@ class Translations$home$sheet$en {
 
 	/// en: 'Beat the previous boss to unlock'
 	String get lockedHint => 'Beat the previous boss to unlock';
+}
+
+// Path: home.spellbook
+class Translations$home$spellbook$en {
+	Translations$home$spellbook$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Spellbook'
+	String get title => 'Spellbook';
+
+	/// en: 'Spellbook'
+	String get open => 'Spellbook';
+
+	/// en: 'Close'
+	String get close => 'Close';
+
+	/// en: '$unlocked of $total jokers unlocked'
+	String progress({required Object unlocked, required Object total}) => '${unlocked} of ${total} jokers unlocked';
+
+	/// en: 'Pairs with $name'
+	String partner({required Object name}) => 'Pairs with ${name}';
+
+	/// en: 'Picked'
+	String get picked => 'Picked';
+
+	/// en: 'Wins'
+	String get wins => 'Wins';
+
+	/// en: 'Best'
+	String get best => 'Best';
+
+	/// en: 'Locked'
+	String get locked => 'Locked';
+
+	/// en: 'Beat the $world boss'
+	String unlockBoss({required Object world}) => 'Beat the ${world} boss';
+
+	/// en: '(one) {Collect 1 star} (other) {Collect $count stars}'
+	String unlockStars({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count,
+		one: 'Collect 1 star',
+		other: 'Collect ${count} stars',
+	);
 }
 
 // Path: settings.reduceMotion
@@ -1163,6 +1210,17 @@ extension on Translations {
 			'home.best' => ({required Object points}) => 'Best: ${points}',
 			'home.noBest' => 'No run yet',
 			'home.settings' => 'Settings',
+			'home.spellbook.title' => 'Spellbook',
+			'home.spellbook.open' => 'Spellbook',
+			'home.spellbook.close' => 'Close',
+			'home.spellbook.progress' => ({required Object unlocked, required Object total}) => '${unlocked} of ${total} jokers unlocked',
+			'home.spellbook.partner' => ({required Object name}) => 'Pairs with ${name}',
+			'home.spellbook.picked' => 'Picked',
+			'home.spellbook.wins' => 'Wins',
+			'home.spellbook.best' => 'Best',
+			'home.spellbook.locked' => 'Locked',
+			'home.spellbook.unlockBoss' => ({required Object world}) => 'Beat the ${world} boss',
+			'home.spellbook.unlockStars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: 'Collect 1 star', other: 'Collect ${count} stars', ), 
 			'settings.title' => 'Settings',
 			'settings.close' => 'Close',
 			'settings.sound' => 'Sound',

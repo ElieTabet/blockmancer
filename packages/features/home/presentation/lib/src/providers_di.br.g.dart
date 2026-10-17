@@ -171,6 +171,56 @@ final class HomeRoutingProvider
 
 String _$homeRoutingHash() => r'f4b1c7ede18731892790e8691cb0907802710838';
 
+/// Every joker in pairs, with how each pair is unlocked: the rules', so it
+/// never changes while the app runs.
+
+@ProviderFor(jokerCollection)
+final jokerCollectionProvider = JokerCollectionProvider._();
+
+/// Every joker in pairs, with how each pair is unlocked: the rules', so it
+/// never changes while the app runs.
+
+final class JokerCollectionProvider
+    extends
+        $FunctionalProvider<JokerCollection, JokerCollection, JokerCollection>
+    with $Provider<JokerCollection> {
+  /// Every joker in pairs, with how each pair is unlocked: the rules', so it
+  /// never changes while the app runs.
+  JokerCollectionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'jokerCollectionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$jokerCollectionHash();
+
+  @$internal
+  @override
+  $ProviderElement<JokerCollection> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  JokerCollection create(Ref ref) {
+    return jokerCollection(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(JokerCollection value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<JokerCollection>(value),
+    );
+  }
+}
+
+String _$jokerCollectionHash() => r'321a8010cc1d5845c14cf389bb2ca872b0dcab44';
+
 /// Forgets the jokers [Progression.unannouncedJokers] holds, once the map has
 /// announced them.
 

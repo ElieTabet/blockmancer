@@ -230,7 +230,23 @@
     },
     "best": "Record : $points",
     "noBest": "Pas encore de partie",
-    "settings": "Réglages"
+    "settings": "Réglages",
+    "spellbook": {
+      "title": "Grimoire",
+      "open": "Grimoire",
+      "close": "Fermer",
+      "progress": "$unlocked jokers débloqués sur $total",
+      "partner": "Fait la paire avec $name",
+      "picked": "Choisi",
+      "wins": "Victoires",
+      "best": "Record",
+      "locked": "Verrouillé",
+      "unlockBoss": "Bats le boss de $world",
+      "unlockStars(param=count)": {
+        "one": "Récolte 1 étoile",
+        "other": "Récolte $count étoiles"
+      }
+    }
   },
   "settings": {
     "title": "Réglages",

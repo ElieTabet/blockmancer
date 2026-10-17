@@ -25,3 +25,19 @@ class HomeRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [SpellbookPage]
+class SpellbookRoute extends PageRouteInfo<void> {
+  const SpellbookRoute({List<PageRouteInfo>? children})
+    : super(SpellbookRoute.name, initialChildren: children);
+
+  static const String name = 'SpellbookRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SpellbookPage();
+    },
+  );
+}

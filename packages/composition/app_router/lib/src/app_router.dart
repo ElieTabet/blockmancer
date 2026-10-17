@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:game_presentation/game_presentation.dart'
     show GameRoute, GameRoutePath;
 import 'package:home_presentation/home_presentation.dart'
-    show HomeRoute, HomeRoutePath;
+    show HomeRoute, HomeRoutePath, SpellbookRoute, SpellbookRoutePath;
 import 'package:settings_presentation/settings_presentation.dart'
     show SettingsRoute, SettingsRoutePath;
 import 'package:splash_presentation/splash_presentation.dart'
@@ -32,6 +32,13 @@ final class AppRouter extends RootStackRouter implements AutoRouteGuard {
     CustomRoute(
       path: SettingsRoutePath.settings.path,
       page: SettingsRoute.page,
+      fullscreenDialog: true,
+      transitionsBuilder: TransitionsBuilders.slideBottom,
+    ),
+    // A side trip from Home's header, like Settings.
+    CustomRoute(
+      path: SpellbookRoutePath.spellbook.path,
+      page: SpellbookRoute.page,
       fullscreenDialog: true,
       transitionsBuilder: TransitionsBuilders.slideBottom,
     ),

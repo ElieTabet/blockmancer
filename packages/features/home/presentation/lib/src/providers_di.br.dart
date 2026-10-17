@@ -30,6 +30,13 @@ HomeRouting homeRouting(Ref ref) => throw UnimplementedError(
   'homeRoutingProvider must be overridden by the composition layer (app_router)',
 );
 
+/// Every joker in pairs, with how each pair is unlocked: the rules', so it
+/// never changes while the app runs.
+@riverpod
+JokerCollection jokerCollection(Ref ref) => throw UnimplementedError(
+  'jokerCollectionProvider must be overridden by the composition layer',
+);
+
 typedef MarkJokersAnnouncedFun = Future<void> Function();
 
 /// Forgets the jokers [Progression.unannouncedJokers] holds, once the map has

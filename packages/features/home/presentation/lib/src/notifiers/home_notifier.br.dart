@@ -11,6 +11,9 @@ class HomeNotifier extends _$HomeNotifier {
   @override
   void build() {}
 
+  void closeSpellbook(BuildContext context) =>
+      ref.read(homeRoutingProvider).onSpellbookCloseRequested(context);
+
   void openContinue(BuildContext context) =>
       ref.read(homeRoutingProvider).onContinueRequested(context);
 
@@ -22,6 +25,9 @@ class HomeNotifier extends _$HomeNotifier {
 
   void openSettings(BuildContext context) =>
       ref.read(homeRoutingProvider).onSettingsRequested(context);
+
+  void openSpellbook(BuildContext context) =>
+      ref.read(homeRoutingProvider).onSpellbookRequested(context);
 
   void openWorld(BuildContext context, WorldId world) =>
       ref.read(homeRoutingProvider).onWorldRequested(context, world);

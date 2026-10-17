@@ -90,8 +90,51 @@ WorldNodeShown worldNode(Ref ref, WorldId world) {
 WorldSummary worldSummary(Ref ref, WorldId world) =>
     ref.watch(worldsProvider).firstWhere((summary) => summary.id == world);
 
-/// The numbers the jokers play with, to describe them: the rules' defaults,
-/// which every world's summary carries.
+/// The numbers the jokers play with, to describe them.
 @riverpod
-JokerTuning jokerTuning(Ref ref) =>
-    ref.watch(worldsProvider.select((worlds) => worlds.first.jokerTuning));
+JokerTuning jokerTuning(Ref ref) => ref.watch(
+  jokerCollectionProvider.select((collection) => collection.tuning),
+);
+
+/// How the player's runs went with [joker]; nothing before its first pick.
+@riverpod
+JokerStats jokerStats(Ref ref, JokerId joker) =>
+    ref.watch(
+      progressionProvider.select(
+        (progression) => progression.value?.jokerStats[joker],
+      ),
+    ) ??
+    .none;
+
+/// The joker [joker] pairs with.
+@riverpod
+JokerId jokerPartner(Ref ref, JokerId joker) {
+  final pair = ref
+      .watch(jokerCollectionProvider)
+      .pairs
+      .firstWhere((pair) => pair.first == joker || pair.second == joker);
+
+  return pair.first == joker ? pair.second : pair.first;
+}
+
+/// What it takes to unlock [joker].
+@riverpod
+JokerUnlock jokerUnlock(Ref ref, JokerId joker) => ref
+    .watch(jokerCollectionProvider)
+    .pairs
+    .firstWhere((pair) => pair.first == joker || pair.second == joker)
+    .unlock;
+
+/// How many of the collection's jokers the player has unlocked, and of how
+/// many.
+@riverpod
+({int total, int unlocked}) spellbookProgress(Ref ref) {
+  final total = ref.watch(jokerCollectionProvider).pairs.length * 2;
+  final unlocked = ref.watch(
+    progressionProvider.select(
+      (progression) => progression.value?.unlockedJokers.length ?? 0,
+    ),
+  );
+
+  return (total: total, unlocked: unlocked);
+}

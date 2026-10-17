@@ -41,7 +41,7 @@ blockmancer/
 │   │   └── custom_lints/     # Native analyzer-plugin — alphabetical-ordering lints + quick-fixes (IDE-only)
 │   └── features/         # Feature packages, split by layer
 │       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
-│       ├── home/presentation/                    # home_presentation — the first tab: the world map under today's Daily run, Practice in the header (worlds, progression and bests read through slots)
+│       ├── home/presentation/                    # home_presentation — the first tab: the world map under today's Daily run, Practice and the Spellbook in the header (worlds, jokers, progression and bests read through slots)
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
 │       ├── settings/{domain,data,presentation}/  # settings_* — sound, haptics, reduce motion, language and the tutorial flag (domain), on the device (data), and the Settings screen, pushed over the shell from Home's gear (presentation); resetting progress goes through a slot
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
@@ -448,6 +448,22 @@ header, beside the gear.
   player gets further; each node watches its own world. The pin's bob is the only per-frame work,
   in its own layer, and it holds still under the phone's or Settings' reduce motion (home's
   `reduceMotionSetting` slot).
+
+### Spellbook
+
+The joker collection, opened from the book in Home's header: `SpellbookRoute`
+(`home_presentation`, absolute `/spellbook`) slides up over the shell like Settings, and its close
+button pops it (`HomeRouting.onSpellbookRequested` / `onSpellbookCloseRequested`).
+
+- **What it reads.** `game_domain`'s `jokerCollectionOf(rules)` fills home's `jokerCollection`
+  slot: a `JokerCollection` (`shared_domain`) of the 10 `JokerPair`s, each with its
+  `JokerUnlock` (`starting`, `boss(world)`, `stars(count)`) and the rules' `JokerTuning` — a new
+  player's pairs first, then each world's boss's, then the stars'. Whether a joker is unlocked
+  and its `JokerStats` come from the `progression` slot.
+- **The cards.** One `JokerPairRow` per pair in a lazy `SliverList`, the partners side by side
+  and joined by a star. A card watches only its own joker: unlocked, its name, effect, partner and
+  three stats; locked, a silhouette and how to unlock it ("Beat the Gravity boss", "Collect 4
+  stars"), with no stats even when a daily run has counted some. A tap opens `JokerSheet`.
 
 ## Tutorial
 

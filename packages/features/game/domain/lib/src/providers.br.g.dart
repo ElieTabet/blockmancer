@@ -190,6 +190,53 @@ final class ProgressionProvider
 
 String _$progressionHash() => r'd5ef8901cb6c69644074bfd17991c4d85b4d3089';
 
+/// Every joker in pairs, with how each pair is unlocked.
+
+@ProviderFor(jokerCollection)
+final jokerCollectionProvider = JokerCollectionProvider._();
+
+/// Every joker in pairs, with how each pair is unlocked.
+
+final class JokerCollectionProvider
+    extends
+        $FunctionalProvider<JokerCollection, JokerCollection, JokerCollection>
+    with $Provider<JokerCollection> {
+  /// Every joker in pairs, with how each pair is unlocked.
+  JokerCollectionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'jokerCollectionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$jokerCollectionHash();
+
+  @$internal
+  @override
+  $ProviderElement<JokerCollection> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  JokerCollection create(Ref ref) {
+    return jokerCollection(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(JokerCollection value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<JokerCollection>(value),
+    );
+  }
+}
+
+String _$jokerCollectionHash() => r'cdb3f224090b309308bfbb824751888c26cbaca2';
+
 /// See [MarkJokersAnnouncedBehavior].
 ///
 /// Kept alive because it refreshes [progressionProvider] after an await, by

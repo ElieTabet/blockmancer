@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_presentation/src/notifiers/home_notifier.br.dart';
 import 'package:home_presentation/src/widgets/best_line.dart';
 import 'package:home_presentation/src/widgets/settings_button.dart';
+import 'package:home_presentation/src/widgets/spellbook_button.dart';
 import 'package:l10n_application/l10n_application.dart';
 
-/// The game's name, with practice and Settings a tap away.
+/// The game's name, with practice, the Spellbook and Settings a tap away.
 final class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
 
@@ -32,6 +33,7 @@ final class HomeHeader extends StatelessWidget {
         ),
       ),
       const PracticeButton(),
+      const SpellbookButton(),
       const SettingsButton(),
     ],
   );

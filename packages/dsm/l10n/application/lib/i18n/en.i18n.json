@@ -230,7 +230,23 @@
     },
     "best": "Best: $points",
     "noBest": "No run yet",
-    "settings": "Settings"
+    "settings": "Settings",
+    "spellbook": {
+      "title": "Spellbook",
+      "open": "Spellbook",
+      "close": "Close",
+      "progress": "$unlocked of $total jokers unlocked",
+      "partner": "Pairs with $name",
+      "picked": "Picked",
+      "wins": "Wins",
+      "best": "Best",
+      "locked": "Locked",
+      "unlockBoss": "Beat the $world boss",
+      "unlockStars(param=count)": {
+        "one": "Collect 1 star",
+        "other": "Collect $count stars"
+      }
+    }
   },
   "settings": {
     "title": "Settings",
