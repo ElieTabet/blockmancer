@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_presentation/src/providers_di.br.dart';
-import 'package:settings_presentation/src/widgets/settings_card.dart';
+import 'package:settings_presentation/src/widgets/settings_group.dart';
 
-/// Remove ads, with the price the store shows this player; once owned, a
-/// thank-you that can't be bought again.
+/// Remove ads with the price the store shows this player, never one of ours;
+/// once owned, a row that says so and can't be bought again.
 final class RemoveAdsRow extends ConsumerWidget {
   const RemoveAdsRow({super.key});
 
@@ -15,11 +15,10 @@ final class RemoveAdsRow extends ConsumerWidget {
     final removeAds = context.t.settings.removeAds;
 
     if (ref.watch(removeAdsOwnedProvider)) {
-      return SettingsCard(
-        child: SettingLabel(
-          title: removeAds.owned,
-          subtitle: removeAds.ownedSubtitle,
-        ),
+      return SettingsRow(
+        semanticLabel: removeAds.ownedLabel,
+        title: removeAds.owned,
+        trailing: const Icon(Icons.check_rounded, color: DSColor.positive),
       );
     }
 
@@ -27,7 +26,7 @@ final class RemoveAdsRow extends ConsumerWidget {
       removeAdsPriceProvider.select((price) => price.value),
     );
 
-    return DSPressable(
+    return SettingsRow(
       onTap: () async {
         final opened = await ref.read(buyRemoveAdsProvider)();
 
@@ -40,14 +39,20 @@ final class RemoveAdsRow extends ConsumerWidget {
           buttonLabel: removeAds.ok,
         );
       },
-      child: SettingsCard(
-        child: SettingLabel(
-          title: removeAds.title,
-          subtitle: price == null
-              ? removeAds.subtitleNoPrice
-              : removeAds.subtitle(price: price),
-        ),
-      ),
+      semanticLabel: price == null
+          ? removeAds.title
+          : removeAds.withPrice(price: price),
+      title: removeAds.title,
+      trailing: price == null
+          ? null
+          : Text(
+              price,
+              style: const TextStyle(
+                color: DSColor.accent,
+                fontSize: 16,
+                fontWeight: .w700,
+              ),
+            ),
     );
   }
 }
@@ -61,7 +66,7 @@ final class RestorePurchasesRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final restore = context.t.settings.restore;
 
-    return DSPressable(
+    return SettingsRow(
       onTap: () async {
         final restored = await ref.read(restorePurchasesProvider)();
 
@@ -74,9 +79,7 @@ final class RestorePurchasesRow extends ConsumerWidget {
           buttonLabel: restore.ok,
         );
       },
-      child: SettingsCard(
-        child: SettingLabel(title: restore.title, subtitle: restore.subtitle),
-      ),
+      title: restore.title,
     );
   }
 }

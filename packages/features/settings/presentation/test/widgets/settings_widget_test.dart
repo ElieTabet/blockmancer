@@ -30,7 +30,24 @@ void main() {
     expect(_switchOf(tester, 'Sound'), isTrue);
     expect(_switchOf(tester, 'Haptics'), isFalse);
     expect(_switchOf(tester, 'Reduce motion'), isTrue);
-    expect(find.text('Calmer animations, no screen shake'), findsOneWidget);
+    expect(_switchOf(tester, 'Daily reminder'), isTrue);
+  });
+
+  testWidgets('Given Settings, When it opens, Then its sections come in '
+      'order, each under its name in capitals', (tester) async {
+    // Given / When
+    await pumpSettings(tester, testBuild: false);
+
+    // Then
+    final tops = [
+      for (final header in ['GAME', 'PURCHASES', 'HELP', 'PRIVACY & LEGAL'])
+        tester.getTopLeft(find.text(header)).dy,
+    ];
+    expect(tops, orderedEquals([...tops]..sort()));
+    expect(
+      tester.getTopLeft(find.text('Reset progress')).dy,
+      greaterThan(tops.last),
+    );
   });
 
   for (final (title, read) in [
@@ -129,8 +146,13 @@ void main() {
       await tester.tap(find.text('Reset progress'));
       await tester.pumpAndSettle();
 
-      // Then
+      // Then: what goes is spelled out, and backing out comes first
       expect(find.text('Reset progress?'), findsOneWidget);
+      expect(find.textContaining('This erases your stars'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.text('Cancel')).dy,
+        lessThan(tester.getTopLeft(find.text('Erase everything')).dy),
+      );
       expect(cleared, isEmpty);
     });
 
@@ -167,7 +189,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // When
-      await tester.tap(find.text('Reset'));
+      await tester.tap(find.text('Erase everything'));
       await tester.pumpAndSettle();
 
       // Then
@@ -177,30 +199,28 @@ void main() {
     });
   });
 
-  testWidgets('Replay tutorial opens the tutorial', (tester) async {
+  testWidgets('How to play opens the tutorial', (tester) async {
     // Given
     final routing = await pumpSettings(tester);
+    await tester.ensureVisible(find.text('How to play'));
+    await tester.pumpAndSettle();
 
     // When
-    await tester.tap(find.text('Replay tutorial'));
+    await tester.tap(find.text('How to play'));
     await tester.pump();
 
     // Then
     expect(routing.calls, ['replay tutorial']);
   });
 
-  testWidgets(
-    'Given a release build, When Settings opens, Then the Version row shows the version, without the build',
-    (tester) async {
-      // Given / When
-      await pumpSettings(tester);
+  testWidgets('Given a release build, When Settings opens, Then its footer '
+      'names the app, its version and its build', (tester) async {
+    // Given / When
+    await pumpSettings(tester, testBuild: false);
 
-      // Then
-      expect(find.text('Version'), findsOneWidget);
-      expect(find.text('1.0.0'), findsOneWidget);
-      expect(find.textContaining('(2)'), findsNothing);
-    },
-  );
+    // Then
+    expect(find.text('Blockmancer 1.0.0 (2)'), findsOneWidget);
+  });
 
   group('sending feedback', () {
     testWidgets(
@@ -340,15 +360,14 @@ void main() {
         await tester.ensureVisible(find.text('Remove ads'));
         await tester.pumpAndSettle();
 
+        // Then: the store's own price, in the player's currency
+        expect(find.text('3,99 €'), findsOneWidget);
+
         // When
         await tester.tap(find.text('Remove ads'));
         await tester.pumpAndSettle();
 
         // Then
-        expect(
-          find.text(r'No more ads between runs, for good · $3.99'),
-          findsOneWidget,
-        );
         expect(purchases, ['buy']);
       },
     );
@@ -372,15 +391,30 @@ void main() {
     );
 
     testWidgets(
-      'Given Remove ads owned, When Settings opens, Then it thanks the player '
-      'and offers nothing to buy',
+      'Given Remove ads owned, When its row is tapped, Then it says ads are '
+      'removed and offers nothing to buy',
       (tester) async {
-        // Given / When
-        await pumpSettings(tester, ownsRemoveAds: true);
+        // Given
+        final purchases = <String>[];
+        final semantics = tester.ensureSemantics();
+        await pumpSettings(tester, ownsRemoveAds: true, purchases: purchases);
+        await tester.ensureVisible(find.text('Ads removed'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Ads removed'));
+        await tester.pumpAndSettle();
 
         // Then
-        expect(find.text('Ads removed. Thank you!'), findsOneWidget);
         expect(find.text('Remove ads'), findsNothing);
+        expect(find.text('3,99 €'), findsNothing);
+        expect(purchases, isEmpty);
+        expect(find.bySemanticsLabel('Ads removed, purchased'), findsOneWidget);
+        expect(
+          tester.getSemantics(find.text('Ads removed')),
+          isNot(isSemantics(isButton: true)),
+        );
+        semantics.dispose();
       },
     );
 
@@ -459,15 +493,15 @@ void main() {
     );
 
     testWidgets(
-      'Given Settings, When the privacy policy and support are tapped, Then '
-      "each opens on the studio's site",
+      'Given Settings, When the privacy policy, the legal notice and support '
+      "are tapped, Then each opens on the studio's site",
       (tester) async {
         // Given
         final links = <String>[];
         await pumpSettings(tester, links: links);
 
         // When
-        for (final row in ['Privacy policy', 'Support']) {
+        for (final row in ['Privacy policy', 'Legal notice', 'Support']) {
           await tester.ensureVisible(find.text(row));
           await tester.pumpAndSettle();
           await tester.tap(find.text(row));
@@ -477,23 +511,68 @@ void main() {
         // Then
         expect(links, [
           'https://studio.elietabet.com/privacy',
+          'https://studio.elietabet.com/legal',
           'https://studio.elietabet.com/support',
         ]);
+      },
+    );
+
+    testWidgets(
+      'Given a screen reader, When it reaches a row that leaves the app, Then '
+      'it says so',
+      (tester) async {
+        // Given
+        final semantics = tester.ensureSemantics();
+
+        // When
+        await pumpSettings(tester);
+
+        // Then
+        expect(
+          tester.getSemantics(find.text('Privacy policy')),
+          isSemantics(
+            hint: 'Opens outside the app',
+            isButton: true,
+            label: 'Privacy policy',
+          ),
+        );
+        semantics.dispose();
       },
     );
   });
 
   group('test tools', () {
     testWidgets(
-      "Given a release build, When Settings opens, Then neither tester's row "
-      'is there',
+      'Given a release build, When Settings opens, Then there is no TESTERS '
+      'section',
       (tester) async {
         // Given / When
         await pumpSettings(tester, testBuild: false);
 
         // Then
+        expect(find.text('TESTERS'), findsNothing);
         expect(find.text('Share test stats'), findsNothing);
         expect(find.text('Test crash'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Given a test build, When Settings opens, Then the TESTERS section is '
+      'at the bottom, above the footer',
+      (tester) async {
+        // Given / When
+        await pumpSettings(tester);
+
+        // Then
+        expect(find.text('TESTERS'), findsOneWidget);
+        expect(
+          tester.getTopLeft(find.text('Share test stats')).dy,
+          greaterThan(tester.getTopLeft(find.text('Reset progress')).dy),
+        );
+        expect(
+          tester.getTopLeft(find.text('Blockmancer 1.0.0 (2)')).dy,
+          greaterThan(tester.getTopLeft(find.text('Test crash')).dy),
+        );
       },
     );
 
@@ -515,6 +594,27 @@ void main() {
       },
     );
   });
+
+  for (final locale in AppLocale.values) {
+    testWidgets(
+      'Given the largest text size, When Settings opens in ${locale.name}, '
+      'Then every row fits without overflowing',
+      (tester) async {
+        // Given
+        LocaleSettings.setLocaleSync(locale);
+
+        // When: a layout overflow fails the test
+        await pumpSettings(tester, textScale: 2);
+        await tester.scrollUntilVisible(
+          find.text('Blockmancer 1.0.0 (2)'),
+          200,
+        );
+
+        // Then
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('the close button closes Settings', (tester) async {
     // Given

@@ -4,18 +4,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_domain/settings_domain.dart';
 import 'package:settings_presentation/src/notifiers/settings_state_notifier.br.dart';
-import 'package:settings_presentation/src/widgets/settings_card.dart';
 
+/// The language, its three choices under its name: side by side they would
+/// crowd the row in French and at large text sizes.
 final class LanguageRow extends StatelessWidget {
   const LanguageRow({super.key});
 
   @override
-  Widget build(BuildContext context) => SettingsCard(
+  Widget build(BuildContext context) => Padding(
+    padding: const .all(DSSpace.medium),
     child: Column(
       crossAxisAlignment: .stretch,
       spacing: DSSpace.small,
       children: [
-        SettingLabel(title: context.t.settings.language.title),
+        Semantics(
+          header: true,
+          child: Text(
+            context.t.settings.language.title,
+            style: const TextStyle(
+              color: DSColor.white,
+              fontSize: 16,
+              fontWeight: .w600,
+            ),
+          ),
+        ),
         const LanguageChoice(),
       ],
     ),

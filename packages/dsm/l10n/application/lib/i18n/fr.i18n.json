@@ -321,88 +321,68 @@
   "settings": {
     "title": "Réglages",
     "close": "Fermer",
+    "sections": {
+      "game": "Jeu",
+      "purchases": "Achats",
+      "help": "Aide",
+      "privacy": "Confidentialité et mentions légales",
+      "testers": "Testeurs"
+    },
     "sound": "Son",
     "haptics": "Vibrations",
-    "reduceMotion": {
-      "title": "Réduire les animations",
-      "subtitle": "Des animations plus douces, sans tremblement de l'écran"
-    },
-    "dailyReminder": {
-      "title": "Rappel quotidien",
-      "subtitle": "La partie du jour, à 18 h"
-    },
+    "reduceMotion": "Réduire les animations",
+    "dailyReminder": "Rappel quotidien",
     "language": {
       "title": "Langue",
       "system": "Système",
       "en": "English",
       "fr": "Français"
     },
-    "tutorial": {
-      "title": "Revoir le tutoriel",
-      "subtitle": "Comment jouer, pas à pas"
-    },
+    "opensOutside": "S'ouvre hors de l'application",
+    "tutorial": "Comment jouer",
     "feedback": {
       "title": "Envoyer un avis",
-      "subtitle": "Ouvre un e-mail à l'équipe",
       "unavailableTitle": "Pas d'app de mail",
       "unavailableMessage": "Impossible d'ouvrir une app de mail. Écris-nous à $address.",
       "ok": "OK"
     },
-    "testCrash": {
-      "title": "Plantage de test",
-      "subtitle": "Fais planter l'app pour vérifier que les rapports arrivent"
-    },
+    "testCrash": "Plantage de test",
     "testStats": {
       "title": "Partager les stats de test",
-      "subtitle": "Envoie à l'équipe comment tu joues",
       "unavailableTitle": "Partage impossible",
       "unavailableMessage": "La feuille de partage ne s'est pas ouverte. Réessaie dans un instant.",
       "ok": "OK"
     },
-    "version": "Version",
+    "footer": "Blockmancer $version ($build)",
     "reset": {
       "title": "Réinitialiser la progression",
-      "subtitle": "Tes records et la partie en cours",
-      "confirmTitle": "Réinitialiser la progression ?",
-      "confirmMessage": "Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.",
-      "confirm": "Réinitialiser",
+      "confirmTitle": "Réinitialiser la progression ?",
+      "confirmMessage": "Cela efface tes étoiles, les mondes et jokers débloqués, tes records et ta série quotidienne, les stats du Grimoire et la partie en cours. Tes réglages et tes achats restent. Impossible de revenir en arrière.",
+      "confirm": "Tout effacer",
       "cancel": "Annuler"
     },
-    "privacyChoices": {
-      "title": "Choix de confidentialité",
-      "subtitle": "Change ce que tu as accepté pour les pubs"
-    },
-    "privacyPolicy": {
-      "title": "Politique de confidentialité",
-      "subtitle": "Comment Blockmancer traite tes données"
-    },
-    "support": {
-      "title": "Assistance",
-      "subtitle": "De l'aide, et comment nous joindre"
-    },
+    "privacyChoices": "Choix de confidentialité",
+    "privacyPolicy": "Politique de confidentialité",
+    "legalNotice": "Mentions légales",
+    "support": "Assistance",
     "removeAds": {
       "title": "Supprimer les pubs",
-      "subtitle": "Plus de pubs entre les parties, pour de bon · $price",
-      "subtitleNoPrice": "Plus de pubs entre les parties, pour de bon",
-      "owned": "Pubs supprimées. Merci !",
-      "ownedSubtitle": "La pub facultative pour revivre reste",
+      "owned": "Pubs supprimées",
+      "ownedLabel": "Pubs supprimées, achat effectué",
+      "withPrice": "Supprimer les pubs, $price",
       "unavailableTitle": "Boutique indisponible",
       "unavailableMessage": "Impossible de joindre la boutique. Réessaie dans un instant.",
       "ok": "OK"
     },
     "restore": {
       "title": "Restaurer les achats",
-      "subtitle": "Déjà acheté Supprimer les pubs ? Récupère-le ici",
       "restoredTitle": "Achats restaurés",
       "restoredMessage": "Les pubs sont supprimées sur cet appareil.",
       "noneTitle": "Rien à restaurer",
       "noneMessage": "Aucun achat trouvé pour ce compte de la boutique.",
       "ok": "OK"
     },
-    "rate": {
-      "title": "Noter Blockmancer",
-      "subtitle": "Dis ce que tu en penses, sur la boutique"
-    }
+    "rate": "Noter Blockmancer"
   },
   "update": {
     "required": {

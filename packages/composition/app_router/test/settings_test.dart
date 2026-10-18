@@ -39,7 +39,7 @@ void main() {
   );
 
   testWidgets(
-    "Settings' Replay tutorial opens the tutorial, and back returns Home",
+    "Settings' How to play opens the tutorial, and back returns Home",
     (tester) async {
       // Given
       final router = await pumpAppRouter(
@@ -50,7 +50,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // When
-      await tester.tap(find.text('Replay tutorial'));
+      await tester.ensureVisible(find.text('How to play'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('How to play'));
       await tester.pumpAndSettle();
 
       // Then: Settings closed, the tutorial over the shell

@@ -494,6 +494,47 @@ final class PrivacyChoicesRequiredProvider
 String _$privacyChoicesRequiredHash() =>
     r'1e35ce0834ff63c161e06ad84e2ddc021d98340a';
 
+@ProviderFor(openLegalNotice)
+final openLegalNoticeProvider = OpenLegalNoticeProvider._();
+
+final class OpenLegalNoticeProvider
+    extends $FunctionalProvider<OpenLinkFun, OpenLinkFun, OpenLinkFun>
+    with $Provider<OpenLinkFun> {
+  OpenLegalNoticeProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'openLegalNoticeProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$openLegalNoticeHash();
+
+  @$internal
+  @override
+  $ProviderElement<OpenLinkFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  OpenLinkFun create(Ref ref) {
+    return openLegalNotice(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OpenLinkFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OpenLinkFun>(value),
+    );
+  }
+}
+
+String _$openLegalNoticeHash() => r'6e92bc125d1338c02cab1e03cc14ccc5e857ce12';
+
 @ProviderFor(openPrivacyPolicy)
 final openPrivacyPolicyProvider = OpenPrivacyPolicyProvider._();
 

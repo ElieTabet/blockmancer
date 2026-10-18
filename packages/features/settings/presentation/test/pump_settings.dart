@@ -14,7 +14,9 @@ import 'fake_settings_store.dart';
 /// Mounts Settings over [store], on a phone. Each clearing of the progress is
 /// recorded in [clearedProgress], mail drafts open in [mailApp], and the test
 /// stats are shared into [shareSheet]. A [testBuild] shows the testers' rows;
-/// a test crash is recorded in [crashes].
+/// a test crash is recorded in [crashes]. The store prices Remove ads at
+/// [removeAdsPrice], already in the player's currency. Text is drawn at
+/// [textScale].
 Future<FakeSettingsRouting> pumpSettings(
   WidgetTester tester, {
   List<String>? clearedProgress,
@@ -26,13 +28,14 @@ Future<FakeSettingsRouting> pumpSettings(
   List<String>? links,
   bool ownsRemoveAds = false,
   List<String>? purchases,
-  String? removeAdsPrice = r'$3.99',
+  String? removeAdsPrice = '3,99 €',
   bool restoreFinds = false,
   bool storeOpens = true,
   FakeMailApp? mailApp,
   FakeShareSheet? shareSheet,
   FakeSettingsStore? store,
   bool testBuild = true,
+  double textScale = 1,
 }) async {
   final routing = FakeSettingsRouting();
 
@@ -89,6 +92,12 @@ Future<FakeSettingsRouting> pumpSettings(
       ],
       child: TranslationProvider(
         child: MaterialApp(
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            child: child!,
+          ),
           theme: DSTheme.instance.darkTheme,
           home: const SettingsWidget(),
         ),

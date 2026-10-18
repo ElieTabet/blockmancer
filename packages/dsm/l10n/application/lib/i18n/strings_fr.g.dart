@@ -113,23 +113,26 @@ class _Translations$settings$fr extends Translations$settings$en {
 	// Translations
 	@override String get title => 'Réglages';
 	@override String get close => 'Fermer';
+	@override late final _Translations$settings$sections$fr sections = _Translations$settings$sections$fr._(_root);
 	@override String get sound => 'Son';
 	@override String get haptics => 'Vibrations';
-	@override late final _Translations$settings$reduceMotion$fr reduceMotion = _Translations$settings$reduceMotion$fr._(_root);
-	@override late final _Translations$settings$dailyReminder$fr dailyReminder = _Translations$settings$dailyReminder$fr._(_root);
+	@override String get reduceMotion => 'Réduire les animations';
+	@override String get dailyReminder => 'Rappel quotidien';
 	@override late final _Translations$settings$language$fr language = _Translations$settings$language$fr._(_root);
-	@override late final _Translations$settings$tutorial$fr tutorial = _Translations$settings$tutorial$fr._(_root);
+	@override String get opensOutside => 'S\'ouvre hors de l\'application';
+	@override String get tutorial => 'Comment jouer';
 	@override late final _Translations$settings$feedback$fr feedback = _Translations$settings$feedback$fr._(_root);
-	@override late final _Translations$settings$testCrash$fr testCrash = _Translations$settings$testCrash$fr._(_root);
+	@override String get testCrash => 'Plantage de test';
 	@override late final _Translations$settings$testStats$fr testStats = _Translations$settings$testStats$fr._(_root);
-	@override String get version => 'Version';
+	@override String footer({required Object version, required Object build}) => 'Blockmancer ${version} (${build})';
 	@override late final _Translations$settings$reset$fr reset = _Translations$settings$reset$fr._(_root);
-	@override late final _Translations$settings$privacyChoices$fr privacyChoices = _Translations$settings$privacyChoices$fr._(_root);
-	@override late final _Translations$settings$privacyPolicy$fr privacyPolicy = _Translations$settings$privacyPolicy$fr._(_root);
-	@override late final _Translations$settings$support$fr support = _Translations$settings$support$fr._(_root);
+	@override String get privacyChoices => 'Choix de confidentialité';
+	@override String get privacyPolicy => 'Politique de confidentialité';
+	@override String get legalNotice => 'Mentions légales';
+	@override String get support => 'Assistance';
 	@override late final _Translations$settings$removeAds$fr removeAds = _Translations$settings$removeAds$fr._(_root);
 	@override late final _Translations$settings$restore$fr restore = _Translations$settings$restore$fr._(_root);
-	@override late final _Translations$settings$rate$fr rate = _Translations$settings$rate$fr._(_root);
+	@override String get rate => 'Noter Blockmancer';
 }
 
 // Path: update
@@ -460,26 +463,18 @@ class _Translations$home$spellbook$fr extends Translations$home$spellbook$en {
 	);
 }
 
-// Path: settings.reduceMotion
-class _Translations$settings$reduceMotion$fr extends Translations$settings$reduceMotion$en {
-	_Translations$settings$reduceMotion$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+// Path: settings.sections
+class _Translations$settings$sections$fr extends Translations$settings$sections$en {
+	_Translations$settings$sections$fr._(TranslationsFr root) : this._root = root, super.internal(root);
 
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Réduire les animations';
-	@override String get subtitle => 'Des animations plus douces, sans tremblement de l\'écran';
-}
-
-// Path: settings.dailyReminder
-class _Translations$settings$dailyReminder$fr extends Translations$settings$dailyReminder$en {
-	_Translations$settings$dailyReminder$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Rappel quotidien';
-	@override String get subtitle => 'La partie du jour, à 18 h';
+	@override String get game => 'Jeu';
+	@override String get purchases => 'Achats';
+	@override String get help => 'Aide';
+	@override String get privacy => 'Confidentialité et mentions légales';
+	@override String get testers => 'Testeurs';
 }
 
 // Path: settings.language
@@ -495,17 +490,6 @@ class _Translations$settings$language$fr extends Translations$settings$language$
 	@override String get fr => 'Français';
 }
 
-// Path: settings.tutorial
-class _Translations$settings$tutorial$fr extends Translations$settings$tutorial$en {
-	_Translations$settings$tutorial$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Revoir le tutoriel';
-	@override String get subtitle => 'Comment jouer, pas à pas';
-}
-
 // Path: settings.feedback
 class _Translations$settings$feedback$fr extends Translations$settings$feedback$en {
 	_Translations$settings$feedback$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -514,21 +498,9 @@ class _Translations$settings$feedback$fr extends Translations$settings$feedback$
 
 	// Translations
 	@override String get title => 'Envoyer un avis';
-	@override String get subtitle => 'Ouvre un e-mail à l\'équipe';
 	@override String get unavailableTitle => 'Pas d\'app de mail';
 	@override String unavailableMessage({required Object address}) => 'Impossible d\'ouvrir une app de mail. Écris-nous à ${address}.';
 	@override String get ok => 'OK';
-}
-
-// Path: settings.testCrash
-class _Translations$settings$testCrash$fr extends Translations$settings$testCrash$en {
-	_Translations$settings$testCrash$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Plantage de test';
-	@override String get subtitle => 'Fais planter l\'app pour vérifier que les rapports arrivent';
 }
 
 // Path: settings.testStats
@@ -539,7 +511,6 @@ class _Translations$settings$testStats$fr extends Translations$settings$testStat
 
 	// Translations
 	@override String get title => 'Partager les stats de test';
-	@override String get subtitle => 'Envoie à l\'équipe comment tu joues';
 	@override String get unavailableTitle => 'Partage impossible';
 	@override String get unavailableMessage => 'La feuille de partage ne s\'est pas ouverte. Réessaie dans un instant.';
 	@override String get ok => 'OK';
@@ -553,44 +524,10 @@ class _Translations$settings$reset$fr extends Translations$settings$reset$en {
 
 	// Translations
 	@override String get title => 'Réinitialiser la progression';
-	@override String get subtitle => 'Tes records et la partie en cours';
-	@override String get confirmTitle => 'Réinitialiser la progression ?';
-	@override String get confirmMessage => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.';
-	@override String get confirm => 'Réinitialiser';
+	@override String get confirmTitle => 'Réinitialiser la progression ?';
+	@override String get confirmMessage => 'Cela efface tes étoiles, les mondes et jokers débloqués, tes records et ta série quotidienne, les stats du Grimoire et la partie en cours. Tes réglages et tes achats restent. Impossible de revenir en arrière.';
+	@override String get confirm => 'Tout effacer';
 	@override String get cancel => 'Annuler';
-}
-
-// Path: settings.privacyChoices
-class _Translations$settings$privacyChoices$fr extends Translations$settings$privacyChoices$en {
-	_Translations$settings$privacyChoices$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Choix de confidentialité';
-	@override String get subtitle => 'Change ce que tu as accepté pour les pubs';
-}
-
-// Path: settings.privacyPolicy
-class _Translations$settings$privacyPolicy$fr extends Translations$settings$privacyPolicy$en {
-	_Translations$settings$privacyPolicy$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Politique de confidentialité';
-	@override String get subtitle => 'Comment Blockmancer traite tes données';
-}
-
-// Path: settings.support
-class _Translations$settings$support$fr extends Translations$settings$support$en {
-	_Translations$settings$support$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Assistance';
-	@override String get subtitle => 'De l\'aide, et comment nous joindre';
 }
 
 // Path: settings.removeAds
@@ -601,10 +538,9 @@ class _Translations$settings$removeAds$fr extends Translations$settings$removeAd
 
 	// Translations
 	@override String get title => 'Supprimer les pubs';
-	@override String subtitle({required Object price}) => 'Plus de pubs entre les parties, pour de bon · ${price}';
-	@override String get subtitleNoPrice => 'Plus de pubs entre les parties, pour de bon';
-	@override String get owned => 'Pubs supprimées. Merci !';
-	@override String get ownedSubtitle => 'La pub facultative pour revivre reste';
+	@override String get owned => 'Pubs supprimées';
+	@override String get ownedLabel => 'Pubs supprimées, achat effectué';
+	@override String withPrice({required Object price}) => 'Supprimer les pubs, ${price}';
 	@override String get unavailableTitle => 'Boutique indisponible';
 	@override String get unavailableMessage => 'Impossible de joindre la boutique. Réessaie dans un instant.';
 	@override String get ok => 'OK';
@@ -618,23 +554,11 @@ class _Translations$settings$restore$fr extends Translations$settings$restore$en
 
 	// Translations
 	@override String get title => 'Restaurer les achats';
-	@override String get subtitle => 'Déjà acheté Supprimer les pubs ? Récupère-le ici';
 	@override String get restoredTitle => 'Achats restaurés';
 	@override String get restoredMessage => 'Les pubs sont supprimées sur cet appareil.';
 	@override String get noneTitle => 'Rien à restaurer';
 	@override String get noneMessage => 'Aucun achat trouvé pour ce compte de la boutique.';
 	@override String get ok => 'OK';
-}
-
-// Path: settings.rate
-class _Translations$settings$rate$fr extends Translations$settings$rate$en {
-	_Translations$settings$rate$fr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Noter Blockmancer';
-	@override String get subtitle => 'Dis ce que tu en penses, sur la boutique';
 }
 
 // Path: update.required
@@ -1207,60 +1131,54 @@ extension on TranslationsFr {
 			'home.spellbook.unlockStars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: 'Récolte 1 étoile', other: 'Récolte ${count} étoiles', ), 
 			'settings.title' => 'Réglages',
 			'settings.close' => 'Fermer',
+			'settings.sections.game' => 'Jeu',
+			'settings.sections.purchases' => 'Achats',
+			'settings.sections.help' => 'Aide',
+			'settings.sections.privacy' => 'Confidentialité et mentions légales',
+			'settings.sections.testers' => 'Testeurs',
 			'settings.sound' => 'Son',
 			'settings.haptics' => 'Vibrations',
-			'settings.reduceMotion.title' => 'Réduire les animations',
-			'settings.reduceMotion.subtitle' => 'Des animations plus douces, sans tremblement de l\'écran',
-			'settings.dailyReminder.title' => 'Rappel quotidien',
-			'settings.dailyReminder.subtitle' => 'La partie du jour, à 18 h',
+			'settings.reduceMotion' => 'Réduire les animations',
+			'settings.dailyReminder' => 'Rappel quotidien',
 			'settings.language.title' => 'Langue',
 			'settings.language.system' => 'Système',
 			'settings.language.en' => 'English',
 			'settings.language.fr' => 'Français',
-			'settings.tutorial.title' => 'Revoir le tutoriel',
-			'settings.tutorial.subtitle' => 'Comment jouer, pas à pas',
+			'settings.opensOutside' => 'S\'ouvre hors de l\'application',
+			'settings.tutorial' => 'Comment jouer',
 			'settings.feedback.title' => 'Envoyer un avis',
-			'settings.feedback.subtitle' => 'Ouvre un e-mail à l\'équipe',
 			'settings.feedback.unavailableTitle' => 'Pas d\'app de mail',
 			'settings.feedback.unavailableMessage' => ({required Object address}) => 'Impossible d\'ouvrir une app de mail. Écris-nous à ${address}.',
 			'settings.feedback.ok' => 'OK',
-			'settings.testCrash.title' => 'Plantage de test',
-			'settings.testCrash.subtitle' => 'Fais planter l\'app pour vérifier que les rapports arrivent',
+			'settings.testCrash' => 'Plantage de test',
 			'settings.testStats.title' => 'Partager les stats de test',
-			'settings.testStats.subtitle' => 'Envoie à l\'équipe comment tu joues',
 			'settings.testStats.unavailableTitle' => 'Partage impossible',
 			'settings.testStats.unavailableMessage' => 'La feuille de partage ne s\'est pas ouverte. Réessaie dans un instant.',
 			'settings.testStats.ok' => 'OK',
-			'settings.version' => 'Version',
+			'settings.footer' => ({required Object version, required Object build}) => 'Blockmancer ${version} (${build})',
 			'settings.reset.title' => 'Réinitialiser la progression',
-			'settings.reset.subtitle' => 'Tes records et la partie en cours',
-			'settings.reset.confirmTitle' => 'Réinitialiser la progression ?',
-			'settings.reset.confirmMessage' => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.',
-			'settings.reset.confirm' => 'Réinitialiser',
+			'settings.reset.confirmTitle' => 'Réinitialiser la progression ?',
+			'settings.reset.confirmMessage' => 'Cela efface tes étoiles, les mondes et jokers débloqués, tes records et ta série quotidienne, les stats du Grimoire et la partie en cours. Tes réglages et tes achats restent. Impossible de revenir en arrière.',
+			'settings.reset.confirm' => 'Tout effacer',
 			'settings.reset.cancel' => 'Annuler',
-			'settings.privacyChoices.title' => 'Choix de confidentialité',
-			'settings.privacyChoices.subtitle' => 'Change ce que tu as accepté pour les pubs',
-			'settings.privacyPolicy.title' => 'Politique de confidentialité',
-			'settings.privacyPolicy.subtitle' => 'Comment Blockmancer traite tes données',
-			'settings.support.title' => 'Assistance',
-			'settings.support.subtitle' => 'De l\'aide, et comment nous joindre',
+			'settings.privacyChoices' => 'Choix de confidentialité',
+			'settings.privacyPolicy' => 'Politique de confidentialité',
+			'settings.legalNotice' => 'Mentions légales',
+			'settings.support' => 'Assistance',
 			'settings.removeAds.title' => 'Supprimer les pubs',
-			'settings.removeAds.subtitle' => ({required Object price}) => 'Plus de pubs entre les parties, pour de bon · ${price}',
-			'settings.removeAds.subtitleNoPrice' => 'Plus de pubs entre les parties, pour de bon',
-			'settings.removeAds.owned' => 'Pubs supprimées. Merci !',
-			'settings.removeAds.ownedSubtitle' => 'La pub facultative pour revivre reste',
+			'settings.removeAds.owned' => 'Pubs supprimées',
+			'settings.removeAds.ownedLabel' => 'Pubs supprimées, achat effectué',
+			'settings.removeAds.withPrice' => ({required Object price}) => 'Supprimer les pubs, ${price}',
 			'settings.removeAds.unavailableTitle' => 'Boutique indisponible',
 			'settings.removeAds.unavailableMessage' => 'Impossible de joindre la boutique. Réessaie dans un instant.',
 			'settings.removeAds.ok' => 'OK',
 			'settings.restore.title' => 'Restaurer les achats',
-			'settings.restore.subtitle' => 'Déjà acheté Supprimer les pubs ? Récupère-le ici',
 			'settings.restore.restoredTitle' => 'Achats restaurés',
 			'settings.restore.restoredMessage' => 'Les pubs sont supprimées sur cet appareil.',
 			'settings.restore.noneTitle' => 'Rien à restaurer',
 			'settings.restore.noneMessage' => 'Aucun achat trouvé pour ce compte de la boutique.',
 			'settings.restore.ok' => 'OK',
-			'settings.rate.title' => 'Noter Blockmancer',
-			'settings.rate.subtitle' => 'Dis ce que tu en penses, sur la boutique',
+			'settings.rate' => 'Noter Blockmancer',
 			'update.required.title' => 'Mise à jour requise',
 			'update.required.body' => 'Cette version de Blockmancer n\'est plus prise en charge. Mets à jour pour continuer à jouer ; ta progression est conservée.',
 			'update.required.button' => 'Mettre à jour',

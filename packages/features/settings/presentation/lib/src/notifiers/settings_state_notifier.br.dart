@@ -55,6 +55,9 @@ class SettingsStateNotifier extends _$SettingsStateNotifier {
     }
   }
 
+  /// Whether the legal notice opened in the browser.
+  Future<bool> openLegalNotice() => ref.read(openLegalNoticeProvider)();
+
   /// Whether the privacy policy opened in the browser.
   Future<bool> openPrivacyPolicy() => ref.read(openPrivacyPolicyProvider)();
 

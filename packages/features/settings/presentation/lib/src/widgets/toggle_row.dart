@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_domain/settings_domain.dart';
 import 'package:settings_presentation/src/notifiers/settings_state_notifier.br.dart';
-import 'package:settings_presentation/src/widgets/settings_card.dart';
 
 enum SettingsToggle { dailyReminder, haptics, reduceMotion, sound }
 
@@ -17,17 +16,11 @@ final class ToggleRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = context.t.settings;
-    final (title, subtitle) = switch (toggle) {
-      .dailyReminder => (
-        settings.dailyReminder.title,
-        settings.dailyReminder.subtitle,
-      ),
-      .haptics => (settings.haptics, null),
-      .reduceMotion => (
-        settings.reduceMotion.title,
-        settings.reduceMotion.subtitle,
-      ),
-      .sound => (settings.sound, null),
+    final title = switch (toggle) {
+      .dailyReminder => settings.dailyReminder,
+      .haptics => settings.haptics,
+      .reduceMotion => settings.reduceMotion,
+      .sound => settings.sound,
     };
     final on = ref.watch(switch (toggle) {
       .dailyReminder => dailyReminderOnProvider,
@@ -57,25 +50,43 @@ final class ToggleRow extends ConsumerWidget {
     return MergeSemantics(
       child: DSPressable(
         onTap: () => set(!on),
-        child: SettingsCard(
-          child: Row(
-            spacing: DSSpace.small,
-            children: [
-              Expanded(
-                child: SettingLabel(title: title, subtitle: subtitle),
-              ),
-              Switch(
-                value: on,
-                onChanged: set,
-                activeThumbColor: DSColor.primary,
-                activeTrackColor: DSColor.accent,
-                inactiveThumbColor: DSColor.textMuted,
-                inactiveTrackColor: DSColor.sheet,
-                trackOutlineColor: const WidgetStatePropertyAll(
-                  DSColor.cardBorder,
+        pressedScale: 0.98,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 52),
+          child: Padding(
+            padding: const .symmetric(
+              horizontal: DSSpace.medium,
+              vertical: DSSpace.xxsmall,
+            ),
+            child: Row(
+              spacing: DSSpace.small,
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: DSColor.white,
+                      fontSize: 16,
+                      fontWeight: .w600,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Switch(
+                  value: on,
+                  onChanged: set,
+                  // The whole row is the target, so the switch needn't pad
+                  // itself to one: the row keeps the others' height.
+                  materialTapTargetSize: .shrinkWrap,
+                  activeThumbColor: DSColor.primary,
+                  activeTrackColor: DSColor.accent,
+                  inactiveThumbColor: DSColor.textMuted,
+                  inactiveTrackColor: DSColor.sheet,
+                  trackOutlineColor: const WidgetStatePropertyAll(
+                    DSColor.cardBorder,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -150,30 +150,57 @@ class Translations$settings$en {
 	/// en: 'Close'
 	String get close => 'Close';
 
+	late final Translations$settings$sections$en sections = Translations$settings$sections$en.internal(_root);
+
 	/// en: 'Sound'
 	String get sound => 'Sound';
 
 	/// en: 'Haptics'
 	String get haptics => 'Haptics';
 
-	late final Translations$settings$reduceMotion$en reduceMotion = Translations$settings$reduceMotion$en.internal(_root);
-	late final Translations$settings$dailyReminder$en dailyReminder = Translations$settings$dailyReminder$en.internal(_root);
+	/// en: 'Reduce motion'
+	String get reduceMotion => 'Reduce motion';
+
+	/// en: 'Daily reminder'
+	String get dailyReminder => 'Daily reminder';
+
 	late final Translations$settings$language$en language = Translations$settings$language$en.internal(_root);
-	late final Translations$settings$tutorial$en tutorial = Translations$settings$tutorial$en.internal(_root);
+
+	/// en: 'Opens outside the app'
+	String get opensOutside => 'Opens outside the app';
+
+	/// en: 'How to play'
+	String get tutorial => 'How to play';
+
 	late final Translations$settings$feedback$en feedback = Translations$settings$feedback$en.internal(_root);
-	late final Translations$settings$testCrash$en testCrash = Translations$settings$testCrash$en.internal(_root);
+
+	/// en: 'Test crash'
+	String get testCrash => 'Test crash';
+
 	late final Translations$settings$testStats$en testStats = Translations$settings$testStats$en.internal(_root);
 
-	/// en: 'Version'
-	String get version => 'Version';
+	/// en: 'Blockmancer $version ($build)'
+	String footer({required Object version, required Object build}) => 'Blockmancer ${version} (${build})';
 
 	late final Translations$settings$reset$en reset = Translations$settings$reset$en.internal(_root);
-	late final Translations$settings$privacyChoices$en privacyChoices = Translations$settings$privacyChoices$en.internal(_root);
-	late final Translations$settings$privacyPolicy$en privacyPolicy = Translations$settings$privacyPolicy$en.internal(_root);
-	late final Translations$settings$support$en support = Translations$settings$support$en.internal(_root);
+
+	/// en: 'Privacy choices'
+	String get privacyChoices => 'Privacy choices';
+
+	/// en: 'Privacy policy'
+	String get privacyPolicy => 'Privacy policy';
+
+	/// en: 'Legal notice'
+	String get legalNotice => 'Legal notice';
+
+	/// en: 'Support'
+	String get support => 'Support';
+
 	late final Translations$settings$removeAds$en removeAds = Translations$settings$removeAds$en.internal(_root);
 	late final Translations$settings$restore$en restore = Translations$settings$restore$en.internal(_root);
-	late final Translations$settings$rate$en rate = Translations$settings$rate$en.internal(_root);
+
+	/// en: 'Rate Blockmancer'
+	String get rate => 'Rate Blockmancer';
 }
 
 // Path: update
@@ -735,34 +762,28 @@ class Translations$home$spellbook$en {
 	);
 }
 
-// Path: settings.reduceMotion
-class Translations$settings$reduceMotion$en {
-	Translations$settings$reduceMotion$en.internal(this._root);
+// Path: settings.sections
+class Translations$settings$sections$en {
+	Translations$settings$sections$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
 
-	/// en: 'Reduce motion'
-	String get title => 'Reduce motion';
+	/// en: 'Game'
+	String get game => 'Game';
 
-	/// en: 'Calmer animations, no screen shake'
-	String get subtitle => 'Calmer animations, no screen shake';
-}
+	/// en: 'Purchases'
+	String get purchases => 'Purchases';
 
-// Path: settings.dailyReminder
-class Translations$settings$dailyReminder$en {
-	Translations$settings$dailyReminder$en.internal(this._root);
+	/// en: 'Help'
+	String get help => 'Help';
 
-	final Translations _root; // ignore: unused_field
+	/// en: 'Privacy & legal'
+	String get privacy => 'Privacy & legal';
 
-	// Translations
-
-	/// en: 'Daily reminder'
-	String get title => 'Daily reminder';
-
-	/// en: 'Today's daily run, at 6 pm'
-	String get subtitle => 'Today\'s daily run, at 6 pm';
+	/// en: 'Testers'
+	String get testers => 'Testers';
 }
 
 // Path: settings.language
@@ -786,21 +807,6 @@ class Translations$settings$language$en {
 	String get fr => 'Français';
 }
 
-// Path: settings.tutorial
-class Translations$settings$tutorial$en {
-	Translations$settings$tutorial$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Replay tutorial'
-	String get title => 'Replay tutorial';
-
-	/// en: 'How to play, step by step'
-	String get subtitle => 'How to play, step by step';
-}
-
 // Path: settings.feedback
 class Translations$settings$feedback$en {
 	Translations$settings$feedback$en.internal(this._root);
@@ -812,9 +818,6 @@ class Translations$settings$feedback$en {
 	/// en: 'Send feedback'
 	String get title => 'Send feedback';
 
-	/// en: 'Opens an email to the team'
-	String get subtitle => 'Opens an email to the team';
-
 	/// en: 'No mail app'
 	String get unavailableTitle => 'No mail app';
 
@@ -823,21 +826,6 @@ class Translations$settings$feedback$en {
 
 	/// en: 'OK'
 	String get ok => 'OK';
-}
-
-// Path: settings.testCrash
-class Translations$settings$testCrash$en {
-	Translations$settings$testCrash$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Test crash'
-	String get title => 'Test crash';
-
-	/// en: 'Crash the app to check crash reports arrive'
-	String get subtitle => 'Crash the app to check crash reports arrive';
 }
 
 // Path: settings.testStats
@@ -850,9 +838,6 @@ class Translations$settings$testStats$en {
 
 	/// en: 'Share test stats'
 	String get title => 'Share test stats';
-
-	/// en: 'Send the team how you've been playing'
-	String get subtitle => 'Send the team how you\'ve been playing';
 
 	/// en: 'Couldn't share'
 	String get unavailableTitle => 'Couldn\'t share';
@@ -875,65 +860,17 @@ class Translations$settings$reset$en {
 	/// en: 'Reset progress'
 	String get title => 'Reset progress';
 
-	/// en: 'Your best scores and the run in progress'
-	String get subtitle => 'Your best scores and the run in progress';
-
 	/// en: 'Reset progress?'
 	String get confirmTitle => 'Reset progress?';
 
-	/// en: 'Your best scores and the run in progress will be deleted. This can't be undone.'
-	String get confirmMessage => 'Your best scores and the run in progress will be deleted. This can\'t be undone.';
+	/// en: 'This erases your stars, the worlds and jokers you unlocked, your best scores and daily streak, the Spellbook's stats and the run in progress. Your settings and purchases stay. This can't be undone.'
+	String get confirmMessage => 'This erases your stars, the worlds and jokers you unlocked, your best scores and daily streak, the Spellbook\'s stats and the run in progress. Your settings and purchases stay. This can\'t be undone.';
 
-	/// en: 'Reset'
-	String get confirm => 'Reset';
+	/// en: 'Erase everything'
+	String get confirm => 'Erase everything';
 
 	/// en: 'Cancel'
 	String get cancel => 'Cancel';
-}
-
-// Path: settings.privacyChoices
-class Translations$settings$privacyChoices$en {
-	Translations$settings$privacyChoices$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Privacy choices'
-	String get title => 'Privacy choices';
-
-	/// en: 'Change what you agreed to for ads'
-	String get subtitle => 'Change what you agreed to for ads';
-}
-
-// Path: settings.privacyPolicy
-class Translations$settings$privacyPolicy$en {
-	Translations$settings$privacyPolicy$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Privacy policy'
-	String get title => 'Privacy policy';
-
-	/// en: 'How Blockmancer handles your data'
-	String get subtitle => 'How Blockmancer handles your data';
-}
-
-// Path: settings.support
-class Translations$settings$support$en {
-	Translations$settings$support$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Support'
-	String get title => 'Support';
-
-	/// en: 'Help, and how to reach us'
-	String get subtitle => 'Help, and how to reach us';
 }
 
 // Path: settings.removeAds
@@ -947,17 +884,14 @@ class Translations$settings$removeAds$en {
 	/// en: 'Remove ads'
 	String get title => 'Remove ads';
 
-	/// en: 'No more ads between runs, for good · $price'
-	String subtitle({required Object price}) => 'No more ads between runs, for good · ${price}';
+	/// en: 'Ads removed'
+	String get owned => 'Ads removed';
 
-	/// en: 'No more ads between runs, for good'
-	String get subtitleNoPrice => 'No more ads between runs, for good';
+	/// en: 'Ads removed, purchased'
+	String get ownedLabel => 'Ads removed, purchased';
 
-	/// en: 'Ads removed. Thank you!'
-	String get owned => 'Ads removed. Thank you!';
-
-	/// en: 'The revive's optional ad stays'
-	String get ownedSubtitle => 'The revive\'s optional ad stays';
+	/// en: 'Remove ads, $price'
+	String withPrice({required Object price}) => 'Remove ads, ${price}';
 
 	/// en: 'Store unavailable'
 	String get unavailableTitle => 'Store unavailable';
@@ -980,9 +914,6 @@ class Translations$settings$restore$en {
 	/// en: 'Restore purchases'
 	String get title => 'Restore purchases';
 
-	/// en: 'Bought Remove ads before? Get it back here'
-	String get subtitle => 'Bought Remove ads before? Get it back here';
-
 	/// en: 'Purchases restored'
 	String get restoredTitle => 'Purchases restored';
 
@@ -997,21 +928,6 @@ class Translations$settings$restore$en {
 
 	/// en: 'OK'
 	String get ok => 'OK';
-}
-
-// Path: settings.rate
-class Translations$settings$rate$en {
-	Translations$settings$rate$en.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Rate Blockmancer'
-	String get title => 'Rate Blockmancer';
-
-	/// en: 'Tell others what you think, on the store'
-	String get subtitle => 'Tell others what you think, on the store';
 }
 
 // Path: update.required
@@ -1732,60 +1648,54 @@ extension on Translations {
 			'home.spellbook.unlockStars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: 'Collect 1 star', other: 'Collect ${count} stars', ), 
 			'settings.title' => 'Settings',
 			'settings.close' => 'Close',
+			'settings.sections.game' => 'Game',
+			'settings.sections.purchases' => 'Purchases',
+			'settings.sections.help' => 'Help',
+			'settings.sections.privacy' => 'Privacy & legal',
+			'settings.sections.testers' => 'Testers',
 			'settings.sound' => 'Sound',
 			'settings.haptics' => 'Haptics',
-			'settings.reduceMotion.title' => 'Reduce motion',
-			'settings.reduceMotion.subtitle' => 'Calmer animations, no screen shake',
-			'settings.dailyReminder.title' => 'Daily reminder',
-			'settings.dailyReminder.subtitle' => 'Today\'s daily run, at 6 pm',
+			'settings.reduceMotion' => 'Reduce motion',
+			'settings.dailyReminder' => 'Daily reminder',
 			'settings.language.title' => 'Language',
 			'settings.language.system' => 'System',
 			'settings.language.en' => 'English',
 			'settings.language.fr' => 'Français',
-			'settings.tutorial.title' => 'Replay tutorial',
-			'settings.tutorial.subtitle' => 'How to play, step by step',
+			'settings.opensOutside' => 'Opens outside the app',
+			'settings.tutorial' => 'How to play',
 			'settings.feedback.title' => 'Send feedback',
-			'settings.feedback.subtitle' => 'Opens an email to the team',
 			'settings.feedback.unavailableTitle' => 'No mail app',
 			'settings.feedback.unavailableMessage' => ({required Object address}) => 'We couldn\'t open a mail app. Write to us at ${address}.',
 			'settings.feedback.ok' => 'OK',
-			'settings.testCrash.title' => 'Test crash',
-			'settings.testCrash.subtitle' => 'Crash the app to check crash reports arrive',
+			'settings.testCrash' => 'Test crash',
 			'settings.testStats.title' => 'Share test stats',
-			'settings.testStats.subtitle' => 'Send the team how you\'ve been playing',
 			'settings.testStats.unavailableTitle' => 'Couldn\'t share',
 			'settings.testStats.unavailableMessage' => 'The share sheet didn\'t open. Try again in a moment.',
 			'settings.testStats.ok' => 'OK',
-			'settings.version' => 'Version',
+			'settings.footer' => ({required Object version, required Object build}) => 'Blockmancer ${version} (${build})',
 			'settings.reset.title' => 'Reset progress',
-			'settings.reset.subtitle' => 'Your best scores and the run in progress',
 			'settings.reset.confirmTitle' => 'Reset progress?',
-			'settings.reset.confirmMessage' => 'Your best scores and the run in progress will be deleted. This can\'t be undone.',
-			'settings.reset.confirm' => 'Reset',
+			'settings.reset.confirmMessage' => 'This erases your stars, the worlds and jokers you unlocked, your best scores and daily streak, the Spellbook\'s stats and the run in progress. Your settings and purchases stay. This can\'t be undone.',
+			'settings.reset.confirm' => 'Erase everything',
 			'settings.reset.cancel' => 'Cancel',
-			'settings.privacyChoices.title' => 'Privacy choices',
-			'settings.privacyChoices.subtitle' => 'Change what you agreed to for ads',
-			'settings.privacyPolicy.title' => 'Privacy policy',
-			'settings.privacyPolicy.subtitle' => 'How Blockmancer handles your data',
-			'settings.support.title' => 'Support',
-			'settings.support.subtitle' => 'Help, and how to reach us',
+			'settings.privacyChoices' => 'Privacy choices',
+			'settings.privacyPolicy' => 'Privacy policy',
+			'settings.legalNotice' => 'Legal notice',
+			'settings.support' => 'Support',
 			'settings.removeAds.title' => 'Remove ads',
-			'settings.removeAds.subtitle' => ({required Object price}) => 'No more ads between runs, for good · ${price}',
-			'settings.removeAds.subtitleNoPrice' => 'No more ads between runs, for good',
-			'settings.removeAds.owned' => 'Ads removed. Thank you!',
-			'settings.removeAds.ownedSubtitle' => 'The revive\'s optional ad stays',
+			'settings.removeAds.owned' => 'Ads removed',
+			'settings.removeAds.ownedLabel' => 'Ads removed, purchased',
+			'settings.removeAds.withPrice' => ({required Object price}) => 'Remove ads, ${price}',
 			'settings.removeAds.unavailableTitle' => 'Store unavailable',
 			'settings.removeAds.unavailableMessage' => 'The store couldn\'t be reached. Try again in a moment.',
 			'settings.removeAds.ok' => 'OK',
 			'settings.restore.title' => 'Restore purchases',
-			'settings.restore.subtitle' => 'Bought Remove ads before? Get it back here',
 			'settings.restore.restoredTitle' => 'Purchases restored',
 			'settings.restore.restoredMessage' => 'Ads are removed on this device.',
 			'settings.restore.noneTitle' => 'Nothing to restore',
 			'settings.restore.noneMessage' => 'No purchase was found for this store account.',
 			'settings.restore.ok' => 'OK',
-			'settings.rate.title' => 'Rate Blockmancer',
-			'settings.rate.subtitle' => 'Tell others what you think, on the store',
+			'settings.rate' => 'Rate Blockmancer',
 			'update.required.title' => 'Update required',
 			'update.required.body' => 'This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.',
 			'update.required.button' => 'Update',

@@ -4,18 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_presentation/src/notifiers/settings_state_notifier.br.dart';
+import 'package:settings_presentation/src/widgets/help_rows.dart';
 import 'package:settings_presentation/src/widgets/language_row.dart';
 import 'package:settings_presentation/src/widgets/privacy_rows.dart';
 import 'package:settings_presentation/src/widgets/purchase_rows.dart';
-import 'package:settings_presentation/src/widgets/rate_row.dart';
-import 'package:settings_presentation/src/widgets/replay_tutorial_row.dart';
 import 'package:settings_presentation/src/widgets/reset_progress_row.dart';
-import 'package:settings_presentation/src/widgets/send_feedback_row.dart';
+import 'package:settings_presentation/src/widgets/settings_footer.dart';
+import 'package:settings_presentation/src/widgets/settings_group.dart';
 import 'package:settings_presentation/src/widgets/test_tools_rows.dart';
 import 'package:settings_presentation/src/widgets/toggle_row.dart';
-import 'package:settings_presentation/src/widgets/version_row.dart';
 
-/// What the player can change, one row each.
+/// What the player can change, in sections of one card each.
 final class SettingsWidget extends StatelessWidget {
   const SettingsWidget({super.key});
 
@@ -33,24 +32,36 @@ final class SettingsWidget extends StatelessWidget {
             padding: .all(DSSpace.medium),
             child: Column(
               crossAxisAlignment: .stretch,
-              spacing: DSSpace.small,
+              spacing: DSSpace.large,
               children: [
                 SettingsHeader(),
-                SizedBox(height: DSSpace.xsmall),
-                ToggleRow(toggle: .sound),
-                ToggleRow(toggle: .haptics),
-                ToggleRow(toggle: .reduceMotion),
-                ToggleRow(toggle: .dailyReminder),
-                LanguageRow(),
-                ReplayTutorialRow(),
-                RemoveAdsRow(),
-                RestorePurchasesRow(),
-                SendFeedbackRow(),
-                RateRow(),
-                PrivacyRows(),
+                SettingsSection(
+                  kind: .game,
+                  rows: [
+                    ToggleRow(toggle: .sound),
+                    ToggleRow(toggle: .haptics),
+                    ToggleRow(toggle: .reduceMotion),
+                    ToggleRow(toggle: .dailyReminder),
+                    LanguageRow(),
+                  ],
+                ),
+                SettingsSection(
+                  kind: .purchases,
+                  rows: [RemoveAdsRow(), RestorePurchasesRow()],
+                ),
+                SettingsSection(
+                  kind: .help,
+                  rows: [
+                    HowToPlayRow(),
+                    SupportRow(),
+                    SendFeedbackRow(),
+                    RateRow(),
+                  ],
+                ),
+                PrivacySection(),
                 ResetProgressRow(),
-                VersionRow(),
-                TestToolsRows(),
+                TestersSection(),
+                SettingsFooter(),
               ],
             ),
           ),

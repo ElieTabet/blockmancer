@@ -498,3 +498,23 @@ Three changes from the review of this file, each its own commit.
 - **Ask on iOS while the app is open at 18:00:** iOS shows a local notification in the foreground
   only through the notification-centre delegate, which Firebase Messaging owns; the reminder may
   not show while the player is in the app, which is when it's least needed.
+
+## Settings redesign
+
+- **The footer carries the build again** ("Blockmancer 1.0.0 (2)"), as asked, replacing the Version
+  row that showed the version alone.
+- **Legal notice** opens `https://studio.elietabet.com/legal`, beside the privacy policy and
+  support pages; the page has to exist there before release (docs/console-setup.md).
+- **TESTERS** keeps Test crash under Share test stats: Task 1's way to check Crashlytics. The
+  section sits after Reset progress and before the footer, so the footer stays last.
+- **Trailing marks:** "›" for How to play (the tutorial) and Privacy choices (the consent form,
+  shown over the app); the leave-the-app icon for Support, Privacy policy, Legal notice (the web),
+  Send feedback (mail), Rate Blockmancer (the store) and Share test stats (the share sheet).
+  Restore purchases and Reset progress act in place and have none.
+- **"Ads removed ✓"** is the title "Ads removed" with a check icon at the row's end, which a
+  screen reader reads as "Ads removed, purchased".
+- **The destructive confirmation** changed in the design system, for every caller (only Reset
+  today): Cancel leads, in the amber of a default action, and the destructive button follows,
+  outlined in red. Popup buttons grow with their label instead of clipping at large text sizes.
+- **Language** puts its segmented control under its name, inside the GAME card: beside it, three
+  segments don't fit a phone's width in French or at large text sizes.

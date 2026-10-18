@@ -38,7 +38,11 @@ final class DSSegmentedButton<T> extends StatelessWidget {
       ),
       segments: [
         for (final entry in _segments.entries)
-          ButtonSegment(value: entry.key, label: Text(entry.value)),
+          // Wraps rather than clips at a large text size.
+          ButtonSegment(
+            value: entry.key,
+            label: Text(entry.value, textAlign: .center),
+          ),
       ],
       selected: {_selected},
       onSelectionChanged: (selection) => _onSelected(selection.first),

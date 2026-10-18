@@ -179,13 +179,22 @@ void main() {
 
     expect(dialog.backgroundColor, DSColor.card);
     expect(shape.side.color, DSColor.cardBorder);
+    // The red button follows Cancel, outlined rather than filled.
+    expect(
+      tester.getTopLeft(find.text('Cancel')).dy,
+      lessThan(tester.getTopLeft(find.text('Reset')).dy),
+    );
+    expect(
+      tester.widget<Text>(find.text('Reset')).style?.color,
+      DSColor.negative,
+    );
     expect(
       find.byWidgetPredicate(
         (widget) =>
             widget is Container &&
             (widget.decoration as BoxDecoration?)?.color == DSColor.negative,
       ),
-      findsOneWidget,
+      findsNothing,
     );
   });
 }

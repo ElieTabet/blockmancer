@@ -87,6 +87,10 @@ const privacyPolicyUrl = 'https://studio.elietabet.com/privacy';
 
 const supportUrl = 'https://studio.elietabet.com/support';
 
+/// The publisher's legal notice (mentions légales), which French law asks
+/// an app to show.
+const legalNoticeUrl = 'https://studio.elietabet.com/legal';
+
 typedef OpenLinkFun = Future<bool> Function();
 
 /// Whether Settings offers "Privacy choices": only where the consent form
@@ -94,6 +98,13 @@ typedef OpenLinkFun = Future<bool> Function();
 @riverpod
 bool privacyChoicesRequired(Ref ref) =>
     ref.watch(consentProvider)?.privacyOptionsRequired ?? false;
+
+@riverpod
+OpenLinkFun openLegalNotice(Ref ref) {
+  final openUrl = ref.watch(di.openUrlProvider);
+
+  return () => openUrl(legalNoticeUrl);
+}
 
 @riverpod
 OpenLinkFun openPrivacyPolicy(Ref ref) {

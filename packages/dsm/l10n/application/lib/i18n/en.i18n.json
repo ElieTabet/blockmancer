@@ -321,88 +321,68 @@
   "settings": {
     "title": "Settings",
     "close": "Close",
+    "sections": {
+      "game": "Game",
+      "purchases": "Purchases",
+      "help": "Help",
+      "privacy": "Privacy & legal",
+      "testers": "Testers"
+    },
     "sound": "Sound",
     "haptics": "Haptics",
-    "reduceMotion": {
-      "title": "Reduce motion",
-      "subtitle": "Calmer animations, no screen shake"
-    },
-    "dailyReminder": {
-      "title": "Daily reminder",
-      "subtitle": "Today's daily run, at 6 pm"
-    },
+    "reduceMotion": "Reduce motion",
+    "dailyReminder": "Daily reminder",
     "language": {
       "title": "Language",
       "system": "System",
       "en": "English",
       "fr": "Français"
     },
-    "tutorial": {
-      "title": "Replay tutorial",
-      "subtitle": "How to play, step by step"
-    },
+    "opensOutside": "Opens outside the app",
+    "tutorial": "How to play",
     "feedback": {
       "title": "Send feedback",
-      "subtitle": "Opens an email to the team",
       "unavailableTitle": "No mail app",
       "unavailableMessage": "We couldn't open a mail app. Write to us at $address.",
       "ok": "OK"
     },
-    "testCrash": {
-      "title": "Test crash",
-      "subtitle": "Crash the app to check crash reports arrive"
-    },
+    "testCrash": "Test crash",
     "testStats": {
       "title": "Share test stats",
-      "subtitle": "Send the team how you've been playing",
       "unavailableTitle": "Couldn't share",
       "unavailableMessage": "The share sheet didn't open. Try again in a moment.",
       "ok": "OK"
     },
-    "version": "Version",
+    "footer": "Blockmancer $version ($build)",
     "reset": {
       "title": "Reset progress",
-      "subtitle": "Your best scores and the run in progress",
       "confirmTitle": "Reset progress?",
-      "confirmMessage": "Your best scores and the run in progress will be deleted. This can't be undone.",
-      "confirm": "Reset",
+      "confirmMessage": "This erases your stars, the worlds and jokers you unlocked, your best scores and daily streak, the Spellbook's stats and the run in progress. Your settings and purchases stay. This can't be undone.",
+      "confirm": "Erase everything",
       "cancel": "Cancel"
     },
-    "privacyChoices": {
-      "title": "Privacy choices",
-      "subtitle": "Change what you agreed to for ads"
-    },
-    "privacyPolicy": {
-      "title": "Privacy policy",
-      "subtitle": "How Blockmancer handles your data"
-    },
-    "support": {
-      "title": "Support",
-      "subtitle": "Help, and how to reach us"
-    },
+    "privacyChoices": "Privacy choices",
+    "privacyPolicy": "Privacy policy",
+    "legalNotice": "Legal notice",
+    "support": "Support",
     "removeAds": {
       "title": "Remove ads",
-      "subtitle": "No more ads between runs, for good · $price",
-      "subtitleNoPrice": "No more ads between runs, for good",
-      "owned": "Ads removed. Thank you!",
-      "ownedSubtitle": "The revive's optional ad stays",
+      "owned": "Ads removed",
+      "ownedLabel": "Ads removed, purchased",
+      "withPrice": "Remove ads, $price",
       "unavailableTitle": "Store unavailable",
       "unavailableMessage": "The store couldn't be reached. Try again in a moment.",
       "ok": "OK"
     },
     "restore": {
       "title": "Restore purchases",
-      "subtitle": "Bought Remove ads before? Get it back here",
       "restoredTitle": "Purchases restored",
       "restoredMessage": "Ads are removed on this device.",
       "noneTitle": "Nothing to restore",
       "noneMessage": "No purchase was found for this store account.",
       "ok": "OK"
     },
-    "rate": {
-      "title": "Rate Blockmancer",
-      "subtitle": "Tell others what you think, on the store"
-    }
+    "rate": "Rate Blockmancer"
   },
   "update": {
     "required": {

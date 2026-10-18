@@ -57,6 +57,13 @@ So a release build on your own phone never serves you live ads (AdMob forbids cl
 4. Also in AdMob → **Settings → Test devices → Add test device** (name, platform, the same id):
    that covers builds made before the id was in the file.
 
+## The studio site
+
+Settings links to three pages on **studio.elietabet.com**, which must be live before release:
+`/privacy` (privacy policy, also given to both stores and the consent form), `/support`, and
+`/legal` (legal notice: the publisher's name, address, contact and host, which French law asks
+for).
+
 ## Firebase
 
 ### 1. Apps and config files (done)

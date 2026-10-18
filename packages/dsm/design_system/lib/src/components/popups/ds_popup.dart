@@ -78,18 +78,33 @@ abstract final class DSPopup {
       (context) => _DSPopupBody(
         title: title,
         message: message,
-        actions: [
-          _DSPopupButton(
-            label: confirmLabel,
-            onTap: () => Navigator.of(context).pop(true),
-            style: isDestructive ? .destructive : .primary,
-          ),
-          _DSPopupButton(
-            label: cancelLabel,
-            onTap: () => Navigator.of(context).pop(false),
-            style: .secondary,
-          ),
-        ],
+        // Destroying is never the default: backing out leads, and the
+        // destroying button follows it, outlined in red.
+        actions: isDestructive
+            ? [
+                _DSPopupButton(
+                  label: cancelLabel,
+                  onTap: () => Navigator.of(context).pop(false),
+                  style: .primary,
+                ),
+                _DSPopupButton(
+                  label: confirmLabel,
+                  onTap: () => Navigator.of(context).pop(true),
+                  style: .destructive,
+                ),
+              ]
+            : [
+                _DSPopupButton(
+                  label: confirmLabel,
+                  onTap: () => Navigator.of(context).pop(true),
+                  style: .primary,
+                ),
+                _DSPopupButton(
+                  label: cancelLabel,
+                  onTap: () => Navigator.of(context).pop(false),
+                  style: .secondary,
+                ),
+              ],
       ),
     );
 
@@ -222,7 +237,8 @@ final class _DSPopupBody extends StatelessWidget {
 
 enum _DSPopupButtonStyle { destructive, primary, secondary }
 
-/// A game button: amber to go ahead, red to destroy, outlined to back out.
+/// A game button: amber to go ahead, outlined to back out, outlined in red
+/// to destroy.
 final class _DSPopupButton extends StatelessWidget {
   const _DSPopupButton({
     required this.label,
@@ -230,7 +246,7 @@ final class _DSPopupButton extends StatelessWidget {
     required this.style,
   });
 
-  static const _height = 54.0;
+  static const _minHeight = 54.0;
 
   final String label;
   final VoidCallback onTap;
@@ -239,7 +255,7 @@ final class _DSPopupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (background, border, text) = switch (style) {
-      .destructive => (DSColor.negative, DSColor.negative, DSColor.primary),
+      .destructive => (DSColor.sheet, DSColor.negative, DSColor.negative),
       .primary => (DSColor.accent, DSColor.accent, DSColor.primary),
       .secondary => (DSColor.sheet, DSColor.cardBorder, DSColor.white),
     };
@@ -247,7 +263,13 @@ final class _DSPopupButton extends StatelessWidget {
     return DSPressable(
       onTap: onTap,
       child: Container(
-        height: _height,
+        // At least this tall, and taller for a label that wraps at a large
+        // text size rather than clipping it.
+        constraints: const BoxConstraints(minHeight: _minHeight),
+        padding: const .symmetric(
+          horizontal: DSSpace.medium,
+          vertical: DSSpace.xsmall,
+        ),
         alignment: .center,
         decoration: BoxDecoration(
           color: background,
@@ -256,6 +278,7 @@ final class _DSPopupButton extends StatelessWidget {
         ),
         child: Text(
           label,
+          textAlign: .center,
           style: DSFont.display(
             TextStyle(color: text, fontSize: 18, fontWeight: .w700),
           ),

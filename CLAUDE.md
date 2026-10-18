@@ -591,7 +591,7 @@ and replayable from Settings.
 - **Routing:** `SplashStateNotifier` waits for the flag during the splash wait and decides itself:
   unseen calls `SplashRouting.onFirstLaunch`, which `replaceAll([TabShellRoute(), GameRoute(launch:
   .tutorial)])`, so back lands on Home. Seen calls `onInitialized`. A flag that can't be read goes
-  Home. Settings' Replay tutorial row calls `onReplayTutorialRequested`, which pops Settings and
+  Home. Settings' How to play row calls `onReplayTutorialRequested`, which pops Settings and
   pushes the tutorial.
 - **The run:** `GameLaunch.tutorial` plays `GameRules.tutorialRun` (a fixed board, no joker), counted
   as practice. `GameUiState.isTutorial` keeps it from ever being saved or measured against a best.
@@ -735,8 +735,9 @@ interstitials gone for good; the rewarded revive stays.
 - **`purchases`** (`StorePurchases`) wraps `in_app_purchase` (StoreKit 2 on iOS) and acknowledges
   every purchase it hands over.
 - **The game** reads it through `game_domain`'s `adsRemoved` slot: `betweenRuns` shows nothing.
-- **Settings:** `RemoveAdsRow` (the store's price for this player; "Ads removed. Thank you!" once
-  owned) and `RestorePurchasesRow` (says whether anything was found), through slots.
+- **Settings:** `RemoveAdsRow` (the store's localized price at the row's end, never one of ours;
+  "Ads removed" with a check, not tappable, once owned) and `RestorePurchasesRow` (says whether
+  anything was found), through slots.
 
 ## Rating prompt
 
@@ -786,10 +787,10 @@ Ads in the EEA and the UK need the player's consent first: Google's UMP form, be
   waits for it; ads do.
 - **iOS tracking:** the IDFA explainer set up in AdMob shows Apple's ATT alert itself when the
   player continues; declining leaves ads non-personalised. No ATT package.
-- **Settings:** `PrivacyRows` — **Privacy choices** (reopens the form, then takes the new answer)
-  only when UMP says the player must be able to change it (`privacyChoicesRequired`), then
-  **Privacy policy** and **Support** on `studio.elietabet.com` (`privacyPolicyUrl`, `supportUrl`,
-  opened through the `openUrl` slot).
+- **Settings:** `PrivacySection` — **Privacy choices** (reopens the form, then takes the new
+  answer) only when UMP says the player must be able to change it (`privacyChoicesRequired`), then
+  **Privacy policy** and **Legal notice** on `studio.elietabet.com` (`privacyPolicyUrl`,
+  `legalNoticeUrl`; **Support**'s `supportUrl` sits under Help), opened through the `openUrl` slot.
 - **Testing the EEA form:** a test build with `UMP_DEBUG_EEA=true` and `UMP_TEST_DEVICE_ID`
   (docs/console-setup.md, AdMob).
 - **Native:** the AdMob app ids come from `app/env/prod.json` in every build: Gradle's
@@ -826,14 +827,23 @@ The player's settings, kept on the device; there is no account to sync them to. 
   `settings_presentation`, which maps `AppLanguage` to slang's `LocaleSettings`) right after
   telemetry and before push, whose channel is named in the language the app shows. System re-reads
   the phone's locale.
-- **Version and feedback:** the Version row shows `settings_domain`'s `AppDetails` version alone ("1.0.0"; the build goes in the feedback email),
-  and Send feedback runs `SendFeedbackBehavior`: a `mailto:support@elietabet.com` draft whose
+- **The screen** is iOS inset-grouped in the game's palette: sections under a small capitalised
+  name, one card each (`SettingsSection`, `SettingsGroup`, rows split by hairlines), in order GAME
+  (the four switches, Language's segmented control), PURCHASES, HELP (How to play, Support, Send
+  feedback, Rate Blockmancer), PRIVACY & LEGAL, then Reset progress alone on a card in red, the
+  TESTERS section in a test build only, and the footer. A row (`SettingsRow`, at least 52 high,
+  title only) ends in a switch, the price, "›" for a screen of the app, or the leave-the-app icon
+  for the store, mail and the web, whose screen-reader hint says so (`DSPressable.semanticHint`).
+  Titles wrap rather than clip at large text sizes, in both languages (a test at 2× in each).
+  Reset's confirmation spells out what is erased; its red button comes after Cancel, which leads.
+- **Version and feedback:** the footer shows `settings_domain`'s `AppDetails` as "Blockmancer
+  1.0.0 (2)", and Send feedback runs `SendFeedbackBehavior`: a `mailto:support@elietabet.com` draft whose
   subject and labels stay in English (support reads them) with the version, build, device and OS
   prefilled. When no mail app opens, a popup shows the address. Both come through slots —
   `appDetails` (keepAlive, `app_info`'s `readAppInfo` mapped field by field) and `composeEmail`
   (`external_links`). `launchUrl` is called without `canLaunchUrl`, so neither iOS's
   `LSApplicationQueriesSchemes` nor Android's `<queries>` is needed.
-- **Share test stats:** the row before Version calls `SettingsStateNotifier.shareTestStats`.
+- **Share test stats:** the TESTERS section's first row calls `SettingsStateNotifier.shareTestStats`.
   `settings_domain`'s `TestStatsSummaryBehavior` builds the summary — the `exportTestStats` slot's
   JSON (play_stats', see [Local stats](#local-stats)) with the app's version and build added,
   never its device or OS — and the notifier hands it to `settings_presentation`'s `shareText` slot
