@@ -409,7 +409,13 @@ void main() {
         expect(find.text('Remove ads'), findsNothing);
         expect(find.text('3,99 €'), findsNothing);
         expect(purchases, isEmpty);
-        expect(find.bySemanticsLabel('Ads removed, purchased'), findsOneWidget);
+        expect(
+          find.bySemanticsLabel(
+            'Ads removed, purchased: no ads between runs, and revives without '
+            'a video',
+          ),
+          findsOneWidget,
+        );
         expect(
           tester.getSemantics(find.text('Ads removed')),
           isNot(isSemantics(isButton: true)),

@@ -452,6 +452,23 @@ AskForReviewFun askForReview(Ref ref) =>
       return true;
     };
 
+typedef TrackReviveFun = void Function(ReviveSource source);
+
+/// Counts a revive, with what paid for it.
+@riverpod
+TrackReviveFun trackRevive(Ref ref) {
+  final sink = ref.watch(di.analyticsSinkProvider);
+
+  return (source) => sink.log(.revive(source: source));
+}
+
+/// Whether a revive costs a rewarded ad: always, unless the player bought
+/// Remove ads, which grants it with no video. The limit per run is the same
+/// either way: that is the rules'.
+@riverpod
+Future<bool> reviveNeedsAd(Ref ref) async =>
+    !await ref.watch(di.adsRemovedProvider.future);
+
 /// Counts what an ad came to: shown, its reward earned, or why it failed.
 @riverpod
 TrackAdFun trackAd(Ref ref) {

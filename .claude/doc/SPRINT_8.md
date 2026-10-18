@@ -75,8 +75,9 @@ both platforms.
 
 ## Task 4 — Remove ads purchase
 
-- One non-consumable: **Remove ads**, $3.99 (price set in the stores). It removes interstitials permanently and keeps
-  the rewarded revive (players like it, and it's opt-in).
+- One non-consumable: **Remove ads**, $3.99 (price set in the stores). It removes interstitials permanently, and
+  with it the revive is granted without an ad: same revive limit per run as everyone, just no video. The lost
+  sheet shows "Revive" (no ad icon) instead of "Watch an ad to revive".
 - Settings → "Remove ads" and "Restore purchases" (Apple requires restore).
 - Entitlement stored locally and re-checked from the store on launch; restored on reinstall.
 - Analytics events: `purchase_started`, `purchase_completed`, `purchase_restored`, `purchase_failed`.

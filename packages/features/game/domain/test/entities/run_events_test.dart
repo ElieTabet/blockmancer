@@ -71,7 +71,8 @@ void main() {
       ]);
     });
 
-    test('a revive, and the lost round it plays on not as an end', () {
+    test('a revive is not counted from the move, nor the lost round it plays '
+        'on as an end', () {
       // Given / When
       final events = runEventsOf(
         const .practice(),
@@ -84,8 +85,8 @@ void main() {
         ),
       );
 
-      // Then
-      expect(events, const [AnalyticsEvent.revive()]);
+      // Then: trackRevive counts it, with what paid for it
+      expect(events, isEmpty);
     });
 
     test('a lost round given up as its end, with the score it had', () {

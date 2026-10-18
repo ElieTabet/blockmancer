@@ -60,7 +60,9 @@ void main() {
 
     expect(find.text('Out of pieces'), findsOneWidget);
     expect(find.text('120 of 250 points this round.'), findsOneWidget);
-    expect(find.text('Revive · clear 2 rows + 3 pieces'), findsOneWidget);
+    expect(find.text('Watch an ad to revive'), findsOneWidget);
+    expect(find.byIcon(Icons.smart_display_rounded), findsOneWidget);
+    expect(find.text('Clears 2 rows and adds 3 pieces'), findsOneWidget);
 
     // When
     await tester.tap(find.text('End run'));
@@ -79,7 +81,7 @@ void main() {
 
     // Then
     expect(find.text('No room left'), findsOneWidget);
-    expect(find.text('Revive · clear 2 rows + 3 pieces'), findsNothing);
+    expect(find.text('Watch an ad to revive'), findsNothing);
   });
 
   testWidgets('the board draws what the run holds', (tester) async {
@@ -188,7 +190,7 @@ void main() {
     );
 
     // When
-    await tester.tap(find.text('Revive · clear 2 rows + 3 pieces'));
+    await tester.tap(find.text('Watch an ad to revive'));
     await tester.pump();
 
     // Then
@@ -339,12 +341,44 @@ void main() {
     );
 
     // When
-    await tester.tap(find.text('Revive · clear 2 rows + 3 pieces'));
+    await tester.tap(find.text('Watch an ad to revive'));
     await tester.pump();
 
     // Then
     expect(rules.calls, isNot(contains('revive')));
     expect(find.text('Out of pieces'), findsOneWidget);
+  });
+
+  testWidgets('Given Remove ads owned, When a round is lost, Then the sheet '
+      'offers a plain Revive, with no ad, and taking it revives', (
+    tester,
+  ) async {
+    // Given
+    var asked = 0;
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .outOfPieces)),
+      adsRemoved: true,
+      rewardedAction: () async {
+        asked++;
+
+        return const .earned();
+      },
+      rewardedAdReady: false,
+    );
+
+    // Then: no ad to wait for, so no ad needed to be loaded either
+    expect(find.text('Revive'), findsOneWidget);
+    expect(find.text('Watch an ad to revive'), findsNothing);
+    expect(find.byIcon(Icons.smart_display_rounded), findsNothing);
+
+    // When
+    await tester.tap(find.text('Revive'));
+    await tester.pump();
+
+    // Then
+    expect(rules.calls.last, 'revive');
+    expect(asked, 0);
   });
 
   testWidgets('with no rewarded ad loaded, the revive says so and does nothing '

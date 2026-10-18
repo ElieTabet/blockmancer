@@ -79,7 +79,9 @@
       "noRoom": "No room left",
       "flooded": "Flooded",
       "progress": "$score of $target points this round.",
-      "revive": "Revive · clear $rows rows + $pieces pieces",
+      "revive": "Revive",
+      "watchAdToRevive": "Watch an ad to revive",
+      "reviveEffect": "Clears $rows rows and adds $pieces pieces",
       "endRun": "End run",
       "reviveUnavailable": "No ad to revive with right now"
     },
@@ -368,7 +370,7 @@
     "removeAds": {
       "title": "Remove ads",
       "owned": "Ads removed",
-      "ownedLabel": "Ads removed, purchased",
+      "ownedLabel": "Ads removed, purchased: no ads between runs, and revives without a video",
       "withPrice": "Remove ads, $price",
       "unavailableTitle": "Store unavailable",
       "unavailableMessage": "The store couldn't be reached. Try again in a moment.",
@@ -377,7 +379,7 @@
     "restore": {
       "title": "Restore purchases",
       "restoredTitle": "Purchases restored",
-      "restoredMessage": "Ads are removed on this device.",
+      "restoredMessage": "Ads are removed on this device, and revives need no video.",
       "noneTitle": "Nothing to restore",
       "noneMessage": "No purchase was found for this store account.",
       "ok": "OK"

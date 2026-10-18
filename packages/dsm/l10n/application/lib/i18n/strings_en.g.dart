@@ -422,8 +422,14 @@ class Translations$game$lost$en {
 	/// en: '$score of $target points this round.'
 	String progress({required Object score, required Object target}) => '${score} of ${target} points this round.';
 
-	/// en: 'Revive · clear $rows rows + $pieces pieces'
-	String revive({required Object rows, required Object pieces}) => 'Revive · clear ${rows} rows + ${pieces} pieces';
+	/// en: 'Revive'
+	String get revive => 'Revive';
+
+	/// en: 'Watch an ad to revive'
+	String get watchAdToRevive => 'Watch an ad to revive';
+
+	/// en: 'Clears $rows rows and adds $pieces pieces'
+	String reviveEffect({required Object rows, required Object pieces}) => 'Clears ${rows} rows and adds ${pieces} pieces';
 
 	/// en: 'End run'
 	String get endRun => 'End run';
@@ -887,8 +893,8 @@ class Translations$settings$removeAds$en {
 	/// en: 'Ads removed'
 	String get owned => 'Ads removed';
 
-	/// en: 'Ads removed, purchased'
-	String get ownedLabel => 'Ads removed, purchased';
+	/// en: 'Ads removed, purchased: no ads between runs, and revives without a video'
+	String get ownedLabel => 'Ads removed, purchased: no ads between runs, and revives without a video';
 
 	/// en: 'Remove ads, $price'
 	String withPrice({required Object price}) => 'Remove ads, ${price}';
@@ -917,8 +923,8 @@ class Translations$settings$restore$en {
 	/// en: 'Purchases restored'
 	String get restoredTitle => 'Purchases restored';
 
-	/// en: 'Ads are removed on this device.'
-	String get restoredMessage => 'Ads are removed on this device.';
+	/// en: 'Ads are removed on this device, and revives need no video.'
+	String get restoredMessage => 'Ads are removed on this device, and revives need no video.';
 
 	/// en: 'Nothing to restore'
 	String get noneTitle => 'Nothing to restore';
@@ -1511,7 +1517,9 @@ extension on Translations {
 			'game.lost.noRoom' => 'No room left',
 			'game.lost.flooded' => 'Flooded',
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} of ${target} points this round.',
-			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Revive · clear ${rows} rows + ${pieces} pieces',
+			'game.lost.revive' => 'Revive',
+			'game.lost.watchAdToRevive' => 'Watch an ad to revive',
+			'game.lost.reviveEffect' => ({required Object rows, required Object pieces}) => 'Clears ${rows} rows and adds ${pieces} pieces',
 			'game.lost.endRun' => 'End run',
 			'game.lost.reviveUnavailable' => 'No ad to revive with right now',
 			'game.end.won' => 'Boss beaten · run complete',
@@ -1684,14 +1692,14 @@ extension on Translations {
 			'settings.support' => 'Support',
 			'settings.removeAds.title' => 'Remove ads',
 			'settings.removeAds.owned' => 'Ads removed',
-			'settings.removeAds.ownedLabel' => 'Ads removed, purchased',
+			'settings.removeAds.ownedLabel' => 'Ads removed, purchased: no ads between runs, and revives without a video',
 			'settings.removeAds.withPrice' => ({required Object price}) => 'Remove ads, ${price}',
 			'settings.removeAds.unavailableTitle' => 'Store unavailable',
 			'settings.removeAds.unavailableMessage' => 'The store couldn\'t be reached. Try again in a moment.',
 			'settings.removeAds.ok' => 'OK',
 			'settings.restore.title' => 'Restore purchases',
 			'settings.restore.restoredTitle' => 'Purchases restored',
-			'settings.restore.restoredMessage' => 'Ads are removed on this device.',
+			'settings.restore.restoredMessage' => 'Ads are removed on this device, and revives need no video.',
 			'settings.restore.noneTitle' => 'Nothing to restore',
 			'settings.restore.noneMessage' => 'No purchase was found for this store account.',
 			'settings.restore.ok' => 'OK',

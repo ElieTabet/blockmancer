@@ -518,3 +518,22 @@ Three changes from the review of this file, each its own commit.
   outlined in red. Popup buttons grow with their label instead of clipping at large text sizes.
 - **Language** puts its segmented control under its name, inside the GAME card: beside it, three
   segments don't fit a phone's width in French or at large text sizes.
+
+## Remove ads grants the revive
+
+- **The rule changed, as asked:** with Remove ads, a revive needs no ad. The revives per run are
+  everyone's (the rules' `canRevive`), so owning it changes the cost, never the count.
+- **Decided in game_domain** (`reviveNeedsAd`, from the `adsRemoved` slot); the lost sheet and
+  `GameNotifier.revive` ask it. Until the entitlement is read, or if it can't be, the ad is
+  assumed: a free revive is never shown and then taken back.
+- **The lost sheet:** "Revive" for an owner; "Watch an ad to revive" with an ad icon otherwise.
+  What the revive does ("Clears 2 rows and adds 3 pieces") moved under the button, the same for
+  both, from the button's old label.
+- **Analytics:** `revive` now carries `source` (`ad` | `owned`). `GameNotifier` logs it through
+  `trackRevive` after the revive, instead of `runEventsOf` deriving it from the move, which can't
+  tell what paid. The testers' on-device count of revives is unchanged.
+- **"Settings row, purchase dialog":** the purchase sheet is the store's, showing the product's
+  description, which changes in the consoles (docs/console-setup.md: App Store Connect and Play
+  in English and French, and the review notes). In the app: the owned row's screen-reader label
+  and the restore dialog's message now mention the revive without video. The row itself stays
+  title-only ("Remove ads" with its price, "Ads removed" once owned).

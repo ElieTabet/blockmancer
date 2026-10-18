@@ -705,8 +705,9 @@ plays Google's test units (`TestAdUnits`). `startAds` (boot) preloads both and c
 a run's start preloads again (`preloadAds`).
 
 - **Rewarded revive.** `RewardedActionFun` answers an `AdResult` (`earned`, `closed`, `failed`);
-  only `earned` revives. `ReviveButton` watches `rewardedAdReady`: with none loaded it reads "No ad
-  to revive with right now" and can't be tapped.
+  only `earned` revives. `ReviveButton` reads "Watch an ad to revive" with an ad icon, and watches
+  `rewardedAdReady`: with none loaded it reads "No ad to revive with right now" and can't be
+  tapped. With Remove ads there is no ad at all (see Remove ads).
 - **Interstitial between runs** (`game_domain`'s `betweenRuns`): `GameNotifier.retry` and `leave`
   wait for it when the run on screen has ended (never mid-run, never in the tutorial). It shows when
   `interstitialDue` allows it: not in the device's first session (`firstSession`, counted at boot),
@@ -723,7 +724,8 @@ a run's start preloads again (`preloadAds`).
 
 One non-consumable, `blockmancer.remove_ads` on both stores (`IAP_REMOVE_ADS` in
 `app/env/prod.json`, passed to the shop as `removeAdsProductId`; $3.99, priced in the stores):
-interstitials gone for good; the rewarded revive stays.
+interstitials gone for good, and the revive granted with no video: the same revives per run as
+everyone (the rules' `canRevive`), just no ad.
 
 - **`shop_domain`'s `RemoveAdsNotifier`** (keepAlive) owns it: kept on the device
   (`shop_data`'s `SharedPreferencesEntitlementStore`, `purchases.removeAds`), so it holds offline,
@@ -734,7 +736,10 @@ interstitials gone for good; the rewarded revive stays.
   `unavailable`, or the store's code).
 - **`purchases`** (`StorePurchases`) wraps `in_app_purchase` (StoreKit 2 on iOS) and acknowledges
   every purchase it hands over.
-- **The game** reads it through `game_domain`'s `adsRemoved` slot: `betweenRuns` shows nothing.
+- **The game** reads it through `game_domain`'s `adsRemoved` slot: `betweenRuns` shows nothing,
+  and `reviveNeedsAd` is false, so `GameNotifier.revive` revives at once without calling
+  `rewardedAction`, and the lost sheet shows a plain "Revive" with no ad icon (assumed to need the
+  ad until the entitlement is read). `trackRevive` logs `revive(source: ad | owned)`.
 - **Settings:** `RemoveAdsRow` (the store's localized price at the row's end, never one of ours;
   "Ads removed" with a check, not tappable, once owned) and `RestorePurchasesRow` (says whether
   anything was found), through slots.
@@ -864,7 +869,9 @@ whatever a test build counted on the phone at launch (`discardTestStatsOutsideTe
 - **What is counted** (`game_domain`, through its `analyticsSink` slot): `runEventsOf` maps a move —
   `run_start(mode, world)` at a fresh run's starting pick (so a run opened by mistake counts
   nothing), `joker_pick(id, offered)`, `round_end(round, won, score)` when a round is won or a lost
-  one given up (a revive plays it on), `revive` — and `runEndEventsOf` a run's end, once
+  one given up (a revive plays it on) — `GameNotifier` logs `revive(source)` itself, through
+  `trackRevive`, since only it knows whether an ad or Remove ads paid for it — and
+  `runEndEventsOf` a run's end, once
   `recordProgression` answers: `run_end(total, won, stars_earned)` and `world_unlock(world)`.
   `GameNotifier` calls `trackMove` from `_apply` and `trackRunEnd` from `_recordProgress`; the
   tutorial counts nothing.

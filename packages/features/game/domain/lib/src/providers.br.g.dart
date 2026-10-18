@@ -1510,6 +1510,96 @@ final class AskForReviewProvider
 
 String _$askForReviewHash() => r'dd416e687db8ea7f0901d68c8a0f0d5e02074b5a';
 
+/// Counts a revive, with what paid for it.
+
+@ProviderFor(trackRevive)
+final trackReviveProvider = TrackReviveProvider._();
+
+/// Counts a revive, with what paid for it.
+
+final class TrackReviveProvider
+    extends $FunctionalProvider<TrackReviveFun, TrackReviveFun, TrackReviveFun>
+    with $Provider<TrackReviveFun> {
+  /// Counts a revive, with what paid for it.
+  TrackReviveProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trackReviveProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$trackReviveHash();
+
+  @$internal
+  @override
+  $ProviderElement<TrackReviveFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TrackReviveFun create(Ref ref) {
+    return trackRevive(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TrackReviveFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TrackReviveFun>(value),
+    );
+  }
+}
+
+String _$trackReviveHash() => r'fee17bc3bc54a5ce4bd509982412727328312bf4';
+
+/// Whether a revive costs a rewarded ad: always, unless the player bought
+/// Remove ads, which grants it with no video. The limit per run is the same
+/// either way: that is the rules'.
+
+@ProviderFor(reviveNeedsAd)
+final reviveNeedsAdProvider = ReviveNeedsAdProvider._();
+
+/// Whether a revive costs a rewarded ad: always, unless the player bought
+/// Remove ads, which grants it with no video. The limit per run is the same
+/// either way: that is the rules'.
+
+final class ReviveNeedsAdProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether a revive costs a rewarded ad: always, unless the player bought
+  /// Remove ads, which grants it with no video. The limit per run is the same
+  /// either way: that is the rules'.
+  ReviveNeedsAdProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reviveNeedsAdProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reviveNeedsAdHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return reviveNeedsAd(ref);
+  }
+}
+
+String _$reviveNeedsAdHash() => r'a42d1bc3bfae38038e705a0eb361dba7d18f25ba';
+
 /// Counts what an ad came to: shown, its reward earned, or why it failed.
 
 @ProviderFor(trackAd)

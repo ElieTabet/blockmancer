@@ -65,10 +65,47 @@ final class RoundLostSheet extends ConsumerWidget {
   }
 }
 
-/// The revive, for the rewarded ad it costs: while none is loaded, it says so
-/// and can't be tapped, rather than tapped for nothing.
+/// The revive, and what it does. With Remove ads it is simply "Revive";
+/// otherwise it costs a rewarded ad, and while none is loaded it says so and
+/// can't be tapped, rather than tapped for nothing.
 final class ReviveButton extends ConsumerWidget {
   const ReviveButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Until the entitlement is read, the ad is assumed: never a free revive
+    // shown and then taken back.
+    final needsAd = ref.watch(
+      reviveNeedsAdProvider.select((needsAd) => needsAd.value ?? true),
+    );
+    final adReady = ref.watch(
+      rewardedAdReadyProvider.select((ready) => ready.value ?? false),
+    );
+    final lost = context.t.game.lost;
+    final revive = ref.read(gameProvider.notifier).revive;
+
+    return Column(
+      spacing: DSSpace.xxsmall,
+      children: [
+        if (!needsAd)
+          GameButton(label: lost.revive, onPressed: revive)
+        else if (adReady)
+          GameButton(
+            icon: Icons.smart_display_rounded,
+            label: lost.watchAdToRevive,
+            onPressed: revive,
+          )
+        else
+          GameButton(label: lost.reviveUnavailable, onPressed: null),
+        const ReviveEffect(),
+      ],
+    );
+  }
+}
+
+/// What a revive does: the rows it empties and the pieces it adds.
+final class ReviveEffect extends ConsumerWidget {
+  const ReviveEffect({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,16 +114,10 @@ final class ReviveButton extends ConsumerWidget {
         (state) => (state.run.config.reviveRows, state.run.config.revivePieces),
       ),
     );
-    final adReady = ref.watch(
-      rewardedAdReadyProvider.select((ready) => ready.value ?? false),
-    );
-    final lost = context.t.game.lost;
 
-    return GameButton(
-      label: adReady
-          ? lost.revive(pieces: pieces, rows: rows)
-          : lost.reviveUnavailable,
-      onPressed: adReady ? ref.read(gameProvider.notifier).revive : null,
+    return Text(
+      context.t.game.lost.reviveEffect(pieces: pieces, rows: rows),
+      style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
     );
   }
 }

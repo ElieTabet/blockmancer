@@ -5,7 +5,8 @@ import 'package:shared_domain/shared_domain.dart';
 /// What a move did, as analytics counts it. A run starts at its starting
 /// pick, as saving does, so a run opened by mistake and left counts nothing.
 /// A round ends when it is won, or when a lost round is given up: a revive
-/// plays it on.
+/// plays it on. A revive itself is counted by `trackRevive`, which knows what
+/// paid for it.
 List<AnalyticsEvent> runEventsOf(
   GameMode mode,
   RunState before,
@@ -24,7 +25,6 @@ List<AnalyticsEvent> runEventsOf(
         RoundWon(:final roundIndex, :final score) => <AnalyticsEvent>[
           .roundEnd(round: roundIndex + 1, score: score, won: true),
         ],
-        Revived() => const <AnalyticsEvent>[.revive()],
         _ => const <AnalyticsEvent>[],
       },
     if (before.phase is RoundLostPhase && after.phase is OverPhase)

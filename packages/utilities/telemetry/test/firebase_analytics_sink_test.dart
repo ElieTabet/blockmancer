@@ -32,7 +32,8 @@ void main() {
       'joker_pick',
       {'id': 'twin', 'offered': 'twin,combo'},
     );
-    expectMapped(const .revive(), 'revive', {});
+    expectMapped(const .revive(source: .ad), 'revive', {'source': 'ad'});
+    expectMapped(const .revive(source: .owned), 'revive', {'source': 'owned'});
     expectMapped(const .adShown(kind: .interstitial), 'ad_shown', {
       'type': 'interstitial',
     });
@@ -92,7 +93,7 @@ void main() {
     ).thenThrow(Exception('not initialised'));
 
     // When / Then
-    FirebaseAnalyticsSink(analytics: analytics).log(const .revive());
+    FirebaseAnalyticsSink(analytics: analytics).log(const .revive(source: .ad));
     await Future<void>.delayed(Duration.zero);
   });
 
@@ -102,10 +103,10 @@ void main() {
     final firebase = _RecordingSink();
 
     // When
-    CompositeAnalyticsSink([device, firebase]).log(const .revive());
+    CompositeAnalyticsSink([device, firebase]).log(const .revive(source: .ad));
 
     // Then
-    expect(device.events, [const AnalyticsEvent.revive()]);
-    expect(firebase.events, [const AnalyticsEvent.revive()]);
+    expect(device.events, [const AnalyticsEvent.revive(source: .ad)]);
+    expect(firebase.events, [const AnalyticsEvent.revive(source: .ad)]);
   });
 }

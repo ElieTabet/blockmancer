@@ -16,10 +16,12 @@ import 'game_overrides.dart';
 /// scripted by the returned fake, and lets any sheet it opens on arrive. [disableAnimations] is the platform's reduce
 /// motion; [reduceMotion] the app's own setting. [playSound] hears the sounds,
 /// and [markTutorialSeen] the tutorial being kept as seen. A [GameLaunch.world]
-/// plays [world], keeping what it earns in [progressionStore].
+/// plays [world], keeping what it earns in [progressionStore]. [adsRemoved]
+/// is Remove ads owned.
 Future<FakeGameRules> pumpGame(
   WidgetTester tester,
   RunState start, {
+  bool adsRemoved = false,
   BestScores? bestScores,
   bool disableAnimations = false,
   Engagement engagement = const Engagement(),
@@ -52,6 +54,7 @@ Future<FakeGameRules> pumpGame(
     ProviderScope(
       overrides: gameOverrides(
         rules,
+        adsRemoved: adsRemoved,
         bestScores: bestScores,
         launch: launch,
         markTutorialSeen: markTutorialSeen,

@@ -173,15 +173,27 @@ class GameNotifier extends _$GameNotifier {
     });
   }
 
-  /// Revives once the reward it costs has been earned. A second tap while the
-  /// reward is showing is ignored.
+  /// Revives: at once with Remove ads, otherwise once the rewarded ad it
+  /// costs has been earned. Either way within the run's revives, which are
+  /// the rules' to count. A second tap while the reward is showing is
+  /// ignored.
   Future<void> revive() async {
     if (_reviving || !_rules.canRevive(state.run)) return;
 
     _reviving = true;
     final rewardedAction = ref.read(rewardedActionProvider);
+    final trackRevive = ref.read(trackReviveProvider);
 
     try {
+      if (!await _reviveNeedsAd()) {
+        if (!ref.mounted || !_rules.canRevive(state.run)) return;
+
+        _apply(_rules.revive(state.run));
+        trackRevive(.owned);
+
+        return;
+      }
+
       final result = await rewardedAction();
 
       if (!ref.mounted) return;
@@ -192,6 +204,7 @@ class GameNotifier extends _$GameNotifier {
       if (result is! AdEarned || !_rules.canRevive(state.run)) return;
 
       _apply(_rules.revive(state.run));
+      trackRevive(.ad);
     } on Object catch (error, stackTrace) {
       Timber.e(
         tag: packageName,
@@ -205,6 +218,22 @@ class GameNotifier extends _$GameNotifier {
   }
 
   GameRules get _rules => ref.read(gameRulesProvider);
+
+  /// An entitlement that can't be read costs the ad, as without one.
+  Future<bool> _reviveNeedsAd() async {
+    try {
+      return await ref.read(reviveNeedsAdProvider.future);
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Reading Remove ads failed; the revive asks for its ad',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+
+      return true;
+    }
+  }
 
   /// Waits out the between-runs ad of a run that has ended (never in the
   /// tutorial, nor mid-run); false while one is already being waited on.

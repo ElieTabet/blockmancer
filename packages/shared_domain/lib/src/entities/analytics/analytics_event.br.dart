@@ -5,6 +5,9 @@ import 'package:shared_domain/src/entities/game/world_id.dart';
 
 part 'analytics_event.br.freezed.dart';
 
+/// What paid for a revive: a rewarded ad watched, or Remove ads owned.
+enum ReviveSource { ad, owned }
+
 /// The kind of run a `runStart` names.
 enum RunKind { daily, practice, world }
 
@@ -53,7 +56,8 @@ sealed class AnalyticsEvent with _$AnalyticsEvent {
   const factory AnalyticsEvent.reviewPromptRequested() =
       ReviewPromptRequestedEvent;
 
-  const factory AnalyticsEvent.revive() = ReviveEvent;
+  const factory AnalyticsEvent.revive({required ReviveSource source}) =
+      ReviveEvent;
 
   /// Round [round], from 1, ended: won, or lost and given up.
   const factory AnalyticsEvent.roundEnd({

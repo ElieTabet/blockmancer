@@ -230,12 +230,13 @@ App Store Connect → the app → **Monetization → In-App Purchases** → **+*
 - Reference name: `Remove ads`
 - Product ID: **`blockmancer.remove_ads`** ✅ (exactly; the app asks for this id)
 - Price: **$3.99** (Price Schedule → United States, $3.99; other countries follow Apple's tiers)
-- Localizations: English "Remove ads" / "No more ads between runs, for good. The revive's
-  optional ad stays."; French "Supprimer les pubs" / "Plus de pubs entre les parties, pour de bon.
-  La pub facultative pour revivre reste."
+- Localizations: English "Remove ads" / "No more ads between runs, and revive without watching
+  a video. For good."; French "Supprimer les pubs" / "Plus de pubs entre les parties, et revivre
+  sans regarder de vidéo. Pour de bon."
 - Review screenshot: Settings with the **Remove ads** row (any test build)
 - Review notes: "Settings → Remove ads buys it; Settings → Restore purchases restores it. It
-  removes the interstitial between runs; the rewarded ad offered to revive stays, opt-in."
+  removes the interstitial between runs, and a revive no longer asks for a rewarded ad (the
+  number of revives per run is unchanged)."
 - Then add it to the app version's **In-App Purchases** section before submitting the build.
 
 To test: App Store Connect → **Users and Access → Sandbox → Testers** → add a tester; on the

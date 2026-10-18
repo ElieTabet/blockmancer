@@ -155,7 +155,7 @@ return worldUnlock(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String code,  AdKind kind)?  adFailed,TResult Function()?  adRewardEarned,TResult Function( AdKind kind)?  adShown,TResult Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult Function( String product)?  purchaseCompleted,TResult Function( String code,  String product)?  purchaseFailed,TResult Function( String product)?  purchaseRestored,TResult Function( String product)?  purchaseStarted,TResult Function()?  reviewPromptRequested,TResult Function()?  revive,TResult Function( int round,  int score,  bool won)?  roundEnd,TResult Function( int starsEarned,  int total,  bool won)?  runEnd,TResult Function( RunKind mode,  WorldId world)?  runStart,TResult Function( WorldId world)?  worldUnlock,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String code,  AdKind kind)?  adFailed,TResult Function()?  adRewardEarned,TResult Function( AdKind kind)?  adShown,TResult Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult Function( String product)?  purchaseCompleted,TResult Function( String code,  String product)?  purchaseFailed,TResult Function( String product)?  purchaseRestored,TResult Function( String product)?  purchaseStarted,TResult Function()?  reviewPromptRequested,TResult Function( ReviveSource source)?  revive,TResult Function( int round,  int score,  bool won)?  roundEnd,TResult Function( int starsEarned,  int total,  bool won)?  runEnd,TResult Function( RunKind mode,  WorldId world)?  runStart,TResult Function( WorldId world)?  worldUnlock,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case AdFailedEvent() when adFailed != null:
 return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent() when adRewardEarned != null:
@@ -167,7 +167,7 @@ return purchaseFailed(_that.code,_that.product);case PurchaseRestoredEvent() whe
 return purchaseRestored(_that.product);case PurchaseStartedEvent() when purchaseStarted != null:
 return purchaseStarted(_that.product);case ReviewPromptRequestedEvent() when reviewPromptRequested != null:
 return reviewPromptRequested();case ReviveEvent() when revive != null:
-return revive();case RoundEndEvent() when roundEnd != null:
+return revive(_that.source);case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent() when runEnd != null:
 return runEnd(_that.starsEarned,_that.total,_that.won);case RunStartEvent() when runStart != null:
 return runStart(_that.mode,_that.world);case WorldUnlockEvent() when worldUnlock != null:
@@ -189,7 +189,7 @@ return worldUnlock(_that.world);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String code,  AdKind kind)  adFailed,required TResult Function()  adRewardEarned,required TResult Function( AdKind kind)  adShown,required TResult Function( JokerId id,  List<JokerId> offered)  jokerPick,required TResult Function( String product)  purchaseCompleted,required TResult Function( String code,  String product)  purchaseFailed,required TResult Function( String product)  purchaseRestored,required TResult Function( String product)  purchaseStarted,required TResult Function()  reviewPromptRequested,required TResult Function()  revive,required TResult Function( int round,  int score,  bool won)  roundEnd,required TResult Function( int starsEarned,  int total,  bool won)  runEnd,required TResult Function( RunKind mode,  WorldId world)  runStart,required TResult Function( WorldId world)  worldUnlock,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String code,  AdKind kind)  adFailed,required TResult Function()  adRewardEarned,required TResult Function( AdKind kind)  adShown,required TResult Function( JokerId id,  List<JokerId> offered)  jokerPick,required TResult Function( String product)  purchaseCompleted,required TResult Function( String code,  String product)  purchaseFailed,required TResult Function( String product)  purchaseRestored,required TResult Function( String product)  purchaseStarted,required TResult Function()  reviewPromptRequested,required TResult Function( ReviveSource source)  revive,required TResult Function( int round,  int score,  bool won)  roundEnd,required TResult Function( int starsEarned,  int total,  bool won)  runEnd,required TResult Function( RunKind mode,  WorldId world)  runStart,required TResult Function( WorldId world)  worldUnlock,}) {final _that = this;
 switch (_that) {
 case AdFailedEvent():
 return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent():
@@ -201,7 +201,7 @@ return purchaseFailed(_that.code,_that.product);case PurchaseRestoredEvent():
 return purchaseRestored(_that.product);case PurchaseStartedEvent():
 return purchaseStarted(_that.product);case ReviewPromptRequestedEvent():
 return reviewPromptRequested();case ReviveEvent():
-return revive();case RoundEndEvent():
+return revive(_that.source);case RoundEndEvent():
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent():
 return runEnd(_that.starsEarned,_that.total,_that.won);case RunStartEvent():
 return runStart(_that.mode,_that.world);case WorldUnlockEvent():
@@ -219,7 +219,7 @@ return worldUnlock(_that.world);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String code,  AdKind kind)?  adFailed,TResult? Function()?  adRewardEarned,TResult? Function( AdKind kind)?  adShown,TResult? Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult? Function( String product)?  purchaseCompleted,TResult? Function( String code,  String product)?  purchaseFailed,TResult? Function( String product)?  purchaseRestored,TResult? Function( String product)?  purchaseStarted,TResult? Function()?  reviewPromptRequested,TResult? Function()?  revive,TResult? Function( int round,  int score,  bool won)?  roundEnd,TResult? Function( int starsEarned,  int total,  bool won)?  runEnd,TResult? Function( RunKind mode,  WorldId world)?  runStart,TResult? Function( WorldId world)?  worldUnlock,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String code,  AdKind kind)?  adFailed,TResult? Function()?  adRewardEarned,TResult? Function( AdKind kind)?  adShown,TResult? Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult? Function( String product)?  purchaseCompleted,TResult? Function( String code,  String product)?  purchaseFailed,TResult? Function( String product)?  purchaseRestored,TResult? Function( String product)?  purchaseStarted,TResult? Function()?  reviewPromptRequested,TResult? Function( ReviveSource source)?  revive,TResult? Function( int round,  int score,  bool won)?  roundEnd,TResult? Function( int starsEarned,  int total,  bool won)?  runEnd,TResult? Function( RunKind mode,  WorldId world)?  runStart,TResult? Function( WorldId world)?  worldUnlock,}) {final _that = this;
 switch (_that) {
 case AdFailedEvent() when adFailed != null:
 return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent() when adRewardEarned != null:
@@ -231,7 +231,7 @@ return purchaseFailed(_that.code,_that.product);case PurchaseRestoredEvent() whe
 return purchaseRestored(_that.product);case PurchaseStartedEvent() when purchaseStarted != null:
 return purchaseStarted(_that.product);case ReviewPromptRequestedEvent() when reviewPromptRequested != null:
 return reviewPromptRequested();case ReviveEvent() when revive != null:
-return revive();case RoundEndEvent() when roundEnd != null:
+return revive(_that.source);case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent() when runEnd != null:
 return runEnd(_that.starsEarned,_that.total,_that.won);case RunStartEvent() when runStart != null:
 return runStart(_that.mode,_that.world);case WorldUnlockEvent() when worldUnlock != null:
@@ -785,33 +785,67 @@ String toString() {
 
 
 class ReviveEvent implements AnalyticsEvent {
-  const ReviveEvent();
+  const ReviveEvent({required this.source});
   
 
+ final  ReviveSource source;
 
-
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ReviveEventCopyWith<ReviveEvent> get copyWith => _$ReviveEventCopyWithImpl<ReviveEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReviveEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReviveEvent&&(identical(other.source, source) || other.source == source));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,source);
 
 @override
 String toString() {
-  return 'AnalyticsEvent.revive()';
+  return 'AnalyticsEvent.revive(source: $source)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class $ReviveEventCopyWith<$Res> implements $AnalyticsEventCopyWith<$Res> {
+  factory $ReviveEventCopyWith(ReviveEvent value, $Res Function(ReviveEvent) _then) = _$ReviveEventCopyWithImpl;
+@useResult
+$Res call({
+ ReviveSource source
+});
 
 
+
+
+}
+/// @nodoc
+class _$ReviveEventCopyWithImpl<$Res>
+    implements $ReviveEventCopyWith<$Res> {
+  _$ReviveEventCopyWithImpl(this._self, this._then);
+
+  final ReviveEvent _self;
+  final $Res Function(ReviveEvent) _then;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? source = null,}) {
+  return _then(ReviveEvent(
+source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
+as ReviveSource,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

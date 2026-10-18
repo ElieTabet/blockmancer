@@ -442,6 +442,83 @@ void main() {
       expect(shown, 0);
     });
 
+    test('Given Remove ads owned, When the player revives, Then the round '
+        'plays on without a rewarded ad, counted as owned', () async {
+      // Given
+      var shown = 0;
+      final analytics = FakeAnalyticsSink();
+      final game = container(
+        adsRemoved: true,
+        analytics: analytics,
+        rewardedAction: () async {
+          shown++;
+
+          return const .earned();
+        },
+      );
+      final revived = runIn(const .playing(), revivesUsed: 1);
+      rules.next = (
+        revived,
+        const [
+          GameEvent.revived(rows: [0, 1]),
+        ],
+      );
+
+      // When
+      await game.read(gameProvider.notifier).revive();
+
+      // Then
+      expect(shown, 0);
+      expect(game.read(gameProvider).run, revived);
+      expect(
+        analytics.logged,
+        contains(const AnalyticsEvent.revive(source: .owned)),
+      );
+      expect(analytics.logged.whereType<AdShownEvent>(), isEmpty);
+    });
+
+    test(
+      'Given Remove ads owned and the run\'s revive spent, When the player '
+      'revives again, Then nothing happens: the limit is everyone\'s',
+      () async {
+        // Given
+        rules = FakeGameRules(
+          start: runIn(const .roundLost(reason: .noRoom), revivesUsed: 1),
+        );
+        final game = container(adsRemoved: true);
+
+        // When
+        await game.read(gameProvider.notifier).revive();
+
+        // Then
+        expect(rules.calls, isNot(contains('revive')));
+        expect(
+          game.read(gameProvider).run.phase,
+          const RunPhase.roundLost(reason: .noRoom),
+        );
+      },
+    );
+
+    test('Given no Remove ads, When the reward is earned, Then the revive is '
+        'counted as paid by an ad', () async {
+      // Given
+      final analytics = FakeAnalyticsSink();
+      final game = container(analytics: analytics);
+      rules.next = (runIn(const .playing(), revivesUsed: 1), const []);
+
+      // When
+      await game.read(gameProvider.notifier).revive();
+
+      // Then
+      expect(
+        analytics.logged,
+        containsAllInOrder(const [
+          AnalyticsEvent.adShown(kind: .rewarded),
+          AnalyticsEvent.revive(source: .ad),
+        ]),
+      );
+    });
+
     test(
       'a rewarded ad closed before its reward leaves the round lost',
       () async {

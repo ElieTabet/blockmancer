@@ -53,7 +53,7 @@ void main() {
       AnalyticsEvent.jokerPick(id: .combo, offered: [.combo, .twin, .tiny]),
       AnalyticsEvent.roundEnd(round: 1, score: 300, won: true),
       AnalyticsEvent.roundEnd(round: 2, score: 600, won: true),
-      AnalyticsEvent.revive(),
+      AnalyticsEvent.revive(source: .ad),
       AnalyticsEvent.roundEnd(round: 3, score: 950, won: true),
       AnalyticsEvent.roundEnd(round: 4, score: 1500, won: true),
       AnalyticsEvent.roundEnd(round: 5, score: 2100, won: true),
@@ -192,7 +192,7 @@ void main() {
   test('Given stats counted, When they are discarded, Then nothing is kept on '
       'the device, the events logged before included', () async {
     // Given
-    final played = stats()..log(const .revive());
+    final played = stats()..log(const .revive(source: .owned));
 
     // When
     await played.discard();

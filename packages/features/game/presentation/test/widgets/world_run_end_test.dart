@@ -222,7 +222,7 @@ void main() {
         runIn(const .roundLost(reason: .noRoom), revivesUsed: 1, roundIndex: 1),
         const [],
       );
-      await tester.tap(find.text('Revive · clear 2 rows + 3 pieces'));
+      await tester.tap(find.text('Watch an ad to revive'));
       await tester.pumpAndSettle();
       await _endAs(
         tester,

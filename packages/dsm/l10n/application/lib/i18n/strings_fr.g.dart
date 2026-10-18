@@ -254,7 +254,9 @@ class _Translations$game$lost$fr extends Translations$game$lost$en {
 	@override String get noRoom => 'Plus de place';
 	@override String get flooded => 'Submergé';
 	@override String progress({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.';
-	@override String revive({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces';
+	@override String get revive => 'Revivre';
+	@override String get watchAdToRevive => 'Regarder une pub pour revivre';
+	@override String reviveEffect({required Object rows, required Object pieces}) => 'Efface ${rows} lignes et ajoute ${pieces} pièces';
 	@override String get endRun => 'Terminer la partie';
 	@override String get reviveUnavailable => 'Pas de pub pour revivre pour l\'instant';
 }
@@ -539,7 +541,7 @@ class _Translations$settings$removeAds$fr extends Translations$settings$removeAd
 	// Translations
 	@override String get title => 'Supprimer les pubs';
 	@override String get owned => 'Pubs supprimées';
-	@override String get ownedLabel => 'Pubs supprimées, achat effectué';
+	@override String get ownedLabel => 'Pubs supprimées, achat effectué : plus de pubs entre les parties, et revivre sans vidéo';
 	@override String withPrice({required Object price}) => 'Supprimer les pubs, ${price}';
 	@override String get unavailableTitle => 'Boutique indisponible';
 	@override String get unavailableMessage => 'Impossible de joindre la boutique. Réessaie dans un instant.';
@@ -555,7 +557,7 @@ class _Translations$settings$restore$fr extends Translations$settings$restore$en
 	// Translations
 	@override String get title => 'Restaurer les achats';
 	@override String get restoredTitle => 'Achats restaurés';
-	@override String get restoredMessage => 'Les pubs sont supprimées sur cet appareil.';
+	@override String get restoredMessage => 'Les pubs sont supprimées sur cet appareil, et revivre se fait sans vidéo.';
 	@override String get noneTitle => 'Rien à restaurer';
 	@override String get noneMessage => 'Aucun achat trouvé pour ce compte de la boutique.';
 	@override String get ok => 'OK';
@@ -994,7 +996,9 @@ extension on TranslationsFr {
 			'game.lost.noRoom' => 'Plus de place',
 			'game.lost.flooded' => 'Submergé',
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.',
-			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces',
+			'game.lost.revive' => 'Revivre',
+			'game.lost.watchAdToRevive' => 'Regarder une pub pour revivre',
+			'game.lost.reviveEffect' => ({required Object rows, required Object pieces}) => 'Efface ${rows} lignes et ajoute ${pieces} pièces',
 			'game.lost.endRun' => 'Terminer la partie',
 			'game.lost.reviveUnavailable' => 'Pas de pub pour revivre pour l\'instant',
 			'game.end.won' => 'Boss vaincu · partie réussie',
@@ -1167,14 +1171,14 @@ extension on TranslationsFr {
 			'settings.support' => 'Assistance',
 			'settings.removeAds.title' => 'Supprimer les pubs',
 			'settings.removeAds.owned' => 'Pubs supprimées',
-			'settings.removeAds.ownedLabel' => 'Pubs supprimées, achat effectué',
+			'settings.removeAds.ownedLabel' => 'Pubs supprimées, achat effectué : plus de pubs entre les parties, et revivre sans vidéo',
 			'settings.removeAds.withPrice' => ({required Object price}) => 'Supprimer les pubs, ${price}',
 			'settings.removeAds.unavailableTitle' => 'Boutique indisponible',
 			'settings.removeAds.unavailableMessage' => 'Impossible de joindre la boutique. Réessaie dans un instant.',
 			'settings.removeAds.ok' => 'OK',
 			'settings.restore.title' => 'Restaurer les achats',
 			'settings.restore.restoredTitle' => 'Achats restaurés',
-			'settings.restore.restoredMessage' => 'Les pubs sont supprimées sur cet appareil.',
+			'settings.restore.restoredMessage' => 'Les pubs sont supprimées sur cet appareil, et revivre se fait sans vidéo.',
 			'settings.restore.noneTitle' => 'Rien à restaurer',
 			'settings.restore.noneMessage' => 'Aucun achat trouvé pour ce compte de la boutique.',
 			'settings.restore.ok' => 'OK',

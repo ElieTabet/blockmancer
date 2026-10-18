@@ -41,19 +41,29 @@ void main() {
 
   test('a move is counted in the sink composition binds', () {
     // When
-    container.read(trackMoveProvider)(
-      const .practice(),
-      runIn(const .roundLost(reason: .noRoom)),
-      (
-        runIn(const .playing()),
-        const [
-          GameEvent.revived(rows: [0, 1]),
-        ],
-      ),
-    );
+    container.read(
+      trackMoveProvider,
+    )(const .practice(), runIn(const .playing()), (
+      runIn(const .pickingJoker(offers: [])),
+      const [GameEvent.roundWon(bonus: 0, roundIndex: 0, score: 300)],
+    ));
 
     // Then
-    expect(sink.logged, const [AnalyticsEvent.revive()]);
+    expect(sink.logged, const [
+      AnalyticsEvent.roundEnd(round: 1, score: 300, won: true),
+    ]);
+  });
+
+  test('a revive is counted with what paid for it', () {
+    // When
+    container.read(trackReviveProvider)(.ad);
+    container.read(trackReviveProvider)(.owned);
+
+    // Then
+    expect(sink.logged, const [
+      AnalyticsEvent.revive(source: .ad),
+      AnalyticsEvent.revive(source: .owned),
+    ]);
   });
 
   test("a run's end is counted in the sink composition binds", () {

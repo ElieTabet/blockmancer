@@ -71,7 +71,7 @@ final class GameNotifierProvider
   }
 }
 
-String _$gameNotifierHash() => r'6657bd19fd355fde2b7abdcd2203699e1136d736';
+String _$gameNotifierHash() => r'f76185f1283a5dcea8880f55c4223a67b83cd6f9';
 
 /// The run on screen. Every rule is [GameRules]': this only forwards the
 /// player's actions and keeps what each one did.
