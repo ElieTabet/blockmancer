@@ -305,3 +305,19 @@ Three changes from the review of this file, each its own commit.
   nothing. "Instead" rules out both on one move, which Ember did for a day (+3 and ×4).
   `emberFactor` goes back from 4 to 2; both numbers stay in `JokerTuning`, so the save (version
   10) doesn't change.
+
+### b. `random` at 10,000 runs, and the order of the bosses
+
+- **Rule:** re-run `random` at 10,000 runs in each world; change a value only if its boss win
+  stops falling Rubble > Gravity > Fog > Tide > Mirror.
+- **Finding:** 27.3 / 27.4 / 26.6 / 23.1 / 26.7% — Gravity above Rubble, Mirror above Tide.
+- **Change:** three boss targets, the smallest moves that restore the order from the exact curve
+  on the same seeds: Gravity 4,125, Fog 4,375, Mirror 4,750 (27.3 / 26.3 / 25.8 / 23.1 / 22.4%).
+  Round 3 at 72%, the overall boss win above 25% and Mirror's 47% once round 4 is cleared stay
+  as they are: the rule allowed only the order to be fixed. They are in
+  docs/balance/2026-10-18-sprint7.md for the next tuning.
+
+### c. Version
+
+- Already 1.0.0 (build 3) since the version fix; nothing changed. The build number goes up at
+  release.

@@ -75,7 +75,7 @@ const defaultConfig = RunConfig(
 final gravityConfig = defaultConfig.copyWith(
   rounds: [
     for (final round in defaultConfig.rounds)
-      round.isBoss ? round.copyWith(stones: 0, target: 4000) : round,
+      round.isBoss ? round.copyWith(stones: 0, target: 4125) : round,
   ],
   // patience,twin's 10,579 over the runs that completed it, rounded down to
   // 250 (docs/balance/2026-10-18-sprint7.md).
@@ -89,7 +89,7 @@ final fogConfig = defaultConfig.copyWith(
   rounds: [
     for (final round in defaultConfig.rounds)
       round.isBoss
-          ? round.copyWith(fog: 8, fogStones: 3, stones: 0, target: 4250)
+          ? round.copyWith(fog: 8, fogStones: 3, stones: 0, target: 4375)
           : round,
   ],
   // patience,twin's 10,548 (docs/balance/2026-10-18-sprint7.md).
@@ -117,7 +117,7 @@ final tideConfig = defaultConfig.copyWith(
 final mirrorConfig = defaultConfig.copyWith(
   rounds: [
     for (final round in defaultConfig.rounds)
-      round.isBoss ? round.copyWith(stones: 0, target: 4250) : round,
+      round.isBoss ? round.copyWith(stones: 0, target: 4750) : round,
   ],
   // patience,twin's 10,542 (docs/balance/2026-10-18-sprint7.md).
   starThreshold: 10500,
