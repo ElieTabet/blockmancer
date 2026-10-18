@@ -128,9 +128,51 @@ void main() {
     },
   );
 
+  test('Given Gravity open, When its boss falls for the first time, Then '
+      'Anchor and Avalanche unlock, and Fog opens', () async {
+    // Given
+    const rules = BlockmancerEngine();
+    final fresh = game.startingProgression(rules);
+    final store = FakeProgressionStore(
+      fresh.copyWith(
+        worlds: {
+          ...fresh.worlds,
+          WorldId.gravity: fresh.worlds[WorldId.gravity]!.copyWith(
+            unlocked: true,
+          ),
+        },
+      ),
+    );
+    final gameContainer = engineGame(progressionStore: store);
+    final won = rules
+        .startRun(
+          config: rules.configFor(
+            .gravity,
+            jokerPool: fresh.unlockedJokers.toList(),
+          ),
+          seed: 1,
+        )
+        .copyWith(phase: const .won());
+
+    // When
+    final change = await gameContainer.read(game.recordProgressionProvider)(
+      const .world(world: .gravity),
+      won,
+    );
+
+    // Then
+    expect(change?.unlockedJokers, [JokerId.anchor, JokerId.avalanche]);
+    expect(change?.unlockedWorld, WorldId.fog);
+    expect(
+      store.saved.unlockedJokers,
+      containsAll([JokerId.anchor, JokerId.avalanche]),
+    );
+    expect(store.saved.worlds[WorldId.fog]?.unlocked, isTrue);
+  });
+
   test(
-    'Given Gravity open, When its boss falls for the first time, Then '
-    'Anchor and Avalanche unlock and Fog, still coming soon, stays locked',
+    'Given Fog open, When its boss falls for the first time, Then Lantern and '
+    'Ember unlock, and Tide, still coming soon, stays locked',
     () async {
       // Given
       const rules = BlockmancerEngine();
@@ -139,9 +181,7 @@ void main() {
         fresh.copyWith(
           worlds: {
             ...fresh.worlds,
-            WorldId.gravity: fresh.worlds[WorldId.gravity]!.copyWith(
-              unlocked: true,
-            ),
+            WorldId.fog: fresh.worlds[WorldId.fog]!.copyWith(unlocked: true),
           },
         ),
       );
@@ -149,7 +189,7 @@ void main() {
       final won = rules
           .startRun(
             config: rules.configFor(
-              .gravity,
+              .fog,
               jokerPool: fresh.unlockedJokers.toList(),
             ),
             seed: 1,
@@ -158,18 +198,14 @@ void main() {
 
       // When
       final change = await gameContainer.read(game.recordProgressionProvider)(
-        const .world(world: .gravity),
+        const .world(world: .fog),
         won,
       );
 
       // Then
-      expect(change?.unlockedJokers, [JokerId.anchor, JokerId.avalanche]);
+      expect(change?.unlockedJokers, [JokerId.lantern, JokerId.ember]);
       expect(change?.unlockedWorld, isNull);
-      expect(
-        store.saved.unlockedJokers,
-        containsAll([JokerId.anchor, JokerId.avalanche]),
-      );
-      expect(store.saved.worlds[WorldId.fog]?.unlocked, isFalse);
+      expect(store.saved.worlds[WorldId.tide]?.unlocked, isFalse);
     },
   );
 }

@@ -41,7 +41,14 @@ final class _OfferHeading extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (isStart, saverBonus, nextIndex, nextTarget, nextIsBoss) = ref.watch(
+    final (
+      isStart,
+      saverBonus,
+      nextIndex,
+      nextTarget,
+      nextIsBoss,
+      world,
+    ) = ref.watch(
       gameProvider.select((state) {
         // Still selected for a frame after the last pick, when the next round
         // has started and pickIndex is past the final round.
@@ -55,6 +62,7 @@ final class _OfferHeading extends ConsumerWidget {
           state.run.pickIndex + 1,
           next?.target ?? 0,
           next?.isBoss ?? false,
+          state.run.config.world,
         );
       }),
     );
@@ -70,7 +78,13 @@ final class _OfferHeading extends ConsumerWidget {
     final subtitle = isStart
         ? offers.startSubtitle
         : nextIsBoss
-        ? offers.nextBoss(target: nextTarget)
+        ? switch (world) {
+            .fog => offers.nextBoss.fog(target: nextTarget),
+            .gravity => offers.nextBoss.gravity(target: nextTarget),
+            .mirror => offers.nextBoss.mirror(target: nextTarget),
+            .rubble => offers.nextBoss.rubble(target: nextTarget),
+            .tide => offers.nextBoss.tide(target: nextTarget),
+          }
         : offers.nextRound(index: nextIndex, target: nextTarget);
 
     return Column(

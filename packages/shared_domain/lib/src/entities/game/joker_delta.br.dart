@@ -16,6 +16,10 @@ sealed class JokerDelta with _$JokerDelta {
   /// Patience's bank after this move.
   const factory JokerDelta.multStored({required int total}) = MultStored;
 
+  /// Stones and fog taken off the board beside the lines a move cleared.
+  const factory JokerDelta.obstaclesRemoved({required List<Cell> cells}) =
+      ObstaclesRemoved;
+
   const factory JokerDelta.piecesAdded({required int amount}) = PiecesAdded;
 
   /// Flat points added to the move, outside chips × mult.

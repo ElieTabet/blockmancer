@@ -95,9 +95,10 @@ final class WorldSheet extends ConsumerWidget {
     final rules = context.t.home.sheet.bossRule;
 
     return switch (world) {
+      .fog => rules.fog,
       .gravity => rules.gravity,
       .rubble => rules.rubble,
-      .fog || .mirror || .tide => null,
+      .mirror || .tide => null,
     };
   }
 }

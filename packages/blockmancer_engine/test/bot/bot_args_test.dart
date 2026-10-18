@@ -14,7 +14,7 @@ void main() {
     expect(args.world, WorldId.rubble);
   });
 
-  test('the reference builds are both baselines, then each of the 10 pairs '
+  test('the reference builds are both baselines, then each pair '
       'once', () {
     // Given / When
     final pairs = [
@@ -24,7 +24,7 @@ void main() {
 
     // Then
     expect(referenceBuilds.take(2), ['random', 'empty']);
-    expect(pairs, hasLength(10));
+    expect(pairs, hasLength(jokerCatalog.length ~/ 2));
     for (final [first, second] in pairs) {
       expect(jokerEffect(first).partner, second);
     }
@@ -44,6 +44,10 @@ void main() {
       );
     },
   );
+
+  test('--world fog plays Fog', () {
+    expect(parseBotArgs(const ['--world', 'fog']).world, WorldId.fog);
+  });
 
   test('--world gravity plays Gravity', () {
     expect(parseBotArgs(const ['--world', 'gravity']).world, WorldId.gravity);
@@ -118,7 +122,6 @@ void main() {
     ['--build', 'none'],
     ['--build', 'patience,combo'],
     ['--build', 'patience,wizard'],
-    ['--world', 'fog'],
     ['--world', 'atlantis'],
     ['--world'],
     ['--runs', 'many'],

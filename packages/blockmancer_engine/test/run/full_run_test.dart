@@ -30,6 +30,17 @@ final _beforeStars = briefConfig.copyWith(
   jokerPool: [..._before.jokerPool, .anchor, .avalanche],
 );
 
+/// The 20 jokers there were before Fog's two.
+final _beforeFog = briefConfig.copyWith(
+  jokerPool: [
+    ..._beforeStars.jokerPool,
+    .brink,
+    .finisher,
+    .fullhouse,
+    .hattrick,
+  ],
+);
+
 void main() {
   test('a seeded run plays to its end and replays identically', () {
     // Given
@@ -48,10 +59,13 @@ void main() {
     );
   });
 
-  test('the run of 20261016 with every joker opens on Finisher and Hat Trick, '
-      'and ends in round 3', () {
+  test('the run of 20261016 with the jokers before Fog\'s opens on Finisher '
+      'and Hat Trick, and ends in round 3', () {
     // Given / When
-    final (events: _, moves: _, :state) = autoplay(20261016);
+    final (events: _, moves: _, :state) = autoplay(
+      20261016,
+      config: _beforeFog,
+    );
 
     // Then
     expect(state.phase, const RunPhase.over());

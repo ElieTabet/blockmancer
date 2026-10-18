@@ -13,10 +13,12 @@ String jokerName(BuildContext context, JokerId id) {
     .collector => jokers.collector.name,
     .column => jokers.column.name,
     .combo => jokers.combo.name,
+    .ember => jokers.ember.name,
     .finisher => jokers.finisher.name,
     .fullhouse => jokers.fullhouse.name,
     .hattrick => jokers.hattrick.name,
     .heavy => jokers.heavy.name,
+    .lantern => jokers.lantern.name,
     .patience => jokers.patience.name,
     .pockets => jokers.pockets.name,
     .precision => jokers.precision.name,
@@ -58,6 +60,7 @@ String jokerDescription(
     ),
     .column => jokers.column.description(factor: tuning.columnFactor),
     .combo => jokers.combo.description(mult: tuning.comboMultPerStreak),
+    .ember => jokers.ember.description(factor: tuning.emberFactor),
     .finisher => jokers.finisher.description(factor: tuning.finisherFactor),
     .fullhouse => jokers.fullhouse.description(
       cells: tuning.fullHouseCellsPerMult,
@@ -71,6 +74,7 @@ String jokerDescription(
       factor: tuning.heavyFactor,
       size: tuning.heavyMinPieceSize,
     ),
+    .lantern => jokers.lantern.description,
     .patience => jokers.patience.description(
       mult: tuning.patienceStoredPerMove,
     ),

@@ -170,6 +170,10 @@ class _Translations$game$banner$fr extends Translations$game$banner$en {
 	@override String multAdded({required Object amount}) => '+${amount} mult';
 	@override String multMultiplied({required Object factor}) => '×${factor} mult';
 	@override String multStored({required Object total}) => 'mult en réserve : ${total}';
+	@override String obstaclesRemoved({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count,
+		one: '${count} effacée à côté',
+		other: '${count} effacées à côté',
+	);
 	@override String pointsAdded({required Object amount}) => '+${amount}';
 	@override String runPointsAdded({required Object amount}) => '+${amount} points de partie';
 	@override String get stoneDropped => 'nouvelle pierre';
@@ -189,7 +193,7 @@ class _Translations$game$offers$fr extends Translations$game$offers$en {
 	@override String get roundTitle => 'Manche gagnée !';
 	@override String saverBonus({required Object points}) => 'Épargnant +${points}';
 	@override String nextRound({required Object index, required Object target}) => 'Choisis un joker. À suivre : manche ${index} · ${target} pts.';
-	@override String nextBoss({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, avec des pierres.';
+	@override late final _Translations$game$offers$nextBoss$fr nextBoss = _Translations$game$offers$nextBoss$fr._(_root);
 	@override String build({required Object jokers}) => 'Tes jokers : ${jokers}';
 	@override String completesPair({required Object joker}) => '★ Forme une paire avec ${joker}';
 	@override String pairsWith({required Object joker}) => 'En paire avec : ${joker}';
@@ -284,6 +288,8 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$brink$fr brink = _Translations$game$jokers$brink$fr._(_root);
 	@override late final _Translations$game$jokers$finisher$fr finisher = _Translations$game$jokers$finisher$fr._(_root);
 	@override late final _Translations$game$jokers$hattrick$fr hattrick = _Translations$game$jokers$hattrick$fr._(_root);
+	@override late final _Translations$game$jokers$lantern$fr lantern = _Translations$game$jokers$lantern$fr._(_root);
+	@override late final _Translations$game$jokers$ember$fr ember = _Translations$game$jokers$ember$fr._(_root);
 }
 
 // Path: home.daily
@@ -452,6 +458,20 @@ class _Translations$settings$reset$fr extends Translations$settings$reset$en {
 	@override String get confirmMessage => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.';
 	@override String get confirm => 'Réinitialiser';
 	@override String get cancel => 'Annuler';
+}
+
+// Path: game.offers.nextBoss
+class _Translations$game$offers$nextBoss$fr extends Translations$game$offers$nextBoss$en {
+	_Translations$game$offers$nextBoss$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String rubble({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, avec des pierres.';
+	@override String gravity({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, et les pièces tombent.';
+	@override String fog({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, dans le brouillard.';
+	@override String tide({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, quand la marée monte.';
+	@override String mirror({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, dans le miroir.';
 }
 
 // Path: game.end.stars
@@ -701,6 +721,28 @@ class _Translations$game$jokers$hattrick$fr extends Translations$game$jokers$hat
 	@override String description({required Object points, required Object pieces}) => '+${points} points quand chacune des ${pieces} pièces d\'une main complète efface une ligne.';
 }
 
+// Path: game.jokers.lantern
+class _Translations$game$jokers$lantern$fr extends Translations$game$jokers$lantern$en {
+	_Translations$game$jokers$lantern$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Lanterne';
+	@override String get description => 'Les pierres et le brouillard à côté d\'une ligne effacée partent avec elle.';
+}
+
+// Path: game.jokers.ember
+class _Translations$game$jokers$ember$fr extends Translations$game$jokers$ember$en {
+	_Translations$game$jokers$ember$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Braise';
+	@override String description({required Object factor}) => '×${factor} mult quand ton coup retire une pierre ou une case de brouillard.';
+}
+
 // Path: home.sheet.bossRule
 class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossRule$en {
 	_Translations$home$sheet$bossRule$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -709,6 +751,7 @@ class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossR
 
 	// Translations
 	@override String get rubble => 'Le boss commence avec des pierres sur le plateau.';
+	@override String get fog => 'Le brouillard cache des cases. Pose à côté pour voir ce qu\'il y a dessous.';
 	@override String get gravity => 'Pendant la manche du boss, chaque pièce tombe tout en bas.';
 }
 
@@ -748,6 +791,7 @@ extension on TranslationsFr {
 			'game.banner.multAdded' => ({required Object amount}) => '+${amount} mult',
 			'game.banner.multMultiplied' => ({required Object factor}) => '×${factor} mult',
 			'game.banner.multStored' => ({required Object total}) => 'mult en réserve : ${total}',
+			'game.banner.obstaclesRemoved' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: '${count} effacée à côté', other: '${count} effacées à côté', ), 
 			'game.banner.pointsAdded' => ({required Object amount}) => '+${amount}',
 			'game.banner.runPointsAdded' => ({required Object amount}) => '+${amount} points de partie',
 			'game.banner.stoneDropped' => 'nouvelle pierre',
@@ -758,7 +802,11 @@ extension on TranslationsFr {
 			'game.offers.roundTitle' => 'Manche gagnée !',
 			'game.offers.saverBonus' => ({required Object points}) => 'Épargnant +${points}',
 			'game.offers.nextRound' => ({required Object index, required Object target}) => 'Choisis un joker. À suivre : manche ${index} · ${target} pts.',
-			'game.offers.nextBoss' => ({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, avec des pierres.',
+			'game.offers.nextBoss.rubble' => ({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, avec des pierres.',
+			'game.offers.nextBoss.gravity' => ({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, et les pièces tombent.',
+			'game.offers.nextBoss.fog' => ({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, dans le brouillard.',
+			'game.offers.nextBoss.tide' => ({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, quand la marée monte.',
+			'game.offers.nextBoss.mirror' => ({required Object target}) => 'Choisis un joker. À suivre : le boss · ${target} pts, dans le miroir.',
 			'game.offers.build' => ({required Object jokers}) => 'Tes jokers : ${jokers}',
 			'game.offers.completesPair' => ({required Object joker}) => '★ Forme une paire avec ${joker}',
 			'game.offers.pairsWith' => ({required Object joker}) => 'En paire avec : ${joker}',
@@ -833,6 +881,10 @@ extension on TranslationsFr {
 			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult quand tu joues la dernière pièce de ta main.',
 			'game.jokers.hattrick.name' => 'Coup du chapeau',
 			'game.jokers.hattrick.description' => ({required Object points, required Object pieces}) => '+${points} points quand chacune des ${pieces} pièces d\'une main complète efface une ligne.',
+			'game.jokers.lantern.name' => 'Lanterne',
+			'game.jokers.lantern.description' => 'Les pierres et le brouillard à côté d\'une ligne effacée partent avec elle.',
+			'game.jokers.ember.name' => 'Braise',
+			'game.jokers.ember.description' => ({required Object factor}) => '×${factor} mult quand ton coup retire une pierre ou une case de brouillard.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',
@@ -852,6 +904,7 @@ extension on TranslationsFr {
 			'home.sheet.done' => 'Terminé',
 			'home.sheet.current' => 'En cours',
 			'home.sheet.bossRule.rubble' => 'Le boss commence avec des pierres sur le plateau.',
+			'home.sheet.bossRule.fog' => 'Le brouillard cache des cases. Pose à côté pour voir ce qu\'il y a dessous.',
 			'home.sheet.bossRule.gravity' => 'Pendant la manche du boss, chaque pièce tombe tout en bas.',
 			'home.sheet.bossTarget' => ({required Object points}) => 'Bats le boss : ${points} points',
 			'home.sheet.stars' => 'Étoiles',

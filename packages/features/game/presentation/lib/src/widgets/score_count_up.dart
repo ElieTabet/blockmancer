@@ -315,6 +315,9 @@ String _effect(BuildContext context, JokerDelta delta) {
     MultAdded(:final amount) => banner.multAdded(amount: amount),
     MultMultiplied(:final factor) => banner.multMultiplied(factor: factor),
     MultStored(:final total) => banner.multStored(total: total),
+    ObstaclesRemoved(:final cells) => banner.obstaclesRemoved(
+      count: cells.length,
+    ),
     PiecesAdded(:final amount) => banner.piecesAdded(amount: amount),
     PointsAdded(:final amount) => banner.pointsAdded(amount: amount),
     RunPointsAdded(:final amount) => banner.runPointsAdded(amount: amount),

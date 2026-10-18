@@ -226,6 +226,7 @@ void main() {
     expect(worlds.where((world) => world.playable).map((world) => world.id), [
       WorldId.rubble,
       WorldId.gravity,
+      WorldId.fog,
     ]);
     expect(shown, progression);
     expect(
@@ -245,13 +246,13 @@ void main() {
 
   // The Spellbook's pairs are the engine's: every joker once, its partner
   // beside it, in the order a player unlocks them.
-  test('the joker collection holds the 20 jokers in their 10 pairs', () {
+  test('the joker collection holds every joker in its pair', () {
     // Given / When
     final collection = buildContainer().read(game.jokerCollectionProvider);
 
     // Then
     const engine = BlockmancerEngine();
-    expect(collection.pairs, hasLength(10));
+    expect(collection.pairs, hasLength(JokerId.values.length ~/ 2));
     expect(
       collection.pairs.expand((pair) => [pair.first, pair.second]).toSet(),
       JokerId.values.toSet(),
@@ -264,6 +265,7 @@ void main() {
       const [
         JokerUnlock.boss(world: .rubble),
         JokerUnlock.boss(world: .gravity),
+        JokerUnlock.boss(world: .fog),
         JokerUnlock.stars(count: 4),
         JokerUnlock.stars(count: 6),
       ],

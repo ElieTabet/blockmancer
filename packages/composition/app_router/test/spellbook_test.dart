@@ -1,6 +1,7 @@
 import 'package:app_router/app_router.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_presentation/home_presentation.dart' show SpellbookRoute;
+import 'package:shared_domain/shared_domain.dart';
 
 import 'pump_app_router.dart';
 import 'stub_features.dart';
@@ -24,7 +25,10 @@ void main() {
 
       // Then
       expect(rootStackNames(router), [TabShellRoute.name, SpellbookRoute.name]);
-      expect(find.text('12 of 20 jokers unlocked'), findsOneWidget);
+      expect(
+        find.text('12 of ${JokerId.values.length} jokers unlocked'),
+        findsOneWidget,
+      );
 
       // When
       await tester.tap(find.bySemanticsLabel('Close'));

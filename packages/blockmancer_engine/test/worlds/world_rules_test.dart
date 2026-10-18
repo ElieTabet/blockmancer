@@ -1,6 +1,7 @@
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 import 'package:blockmancer_engine/src/run/default_config.dart';
+import 'package:blockmancer_engine/src/worlds/fog_rule.dart';
 import 'package:blockmancer_engine/src/worlds/gravity_rule.dart';
 import 'package:blockmancer_engine/src/worlds/plain_rule.dart';
 import 'package:blockmancer_engine/src/worlds/rubble_rule.dart';
@@ -27,7 +28,12 @@ void main() {
     expect(ruleOfRound(gravityConfig, round), isA<PlainRule>());
   });
 
-  for (final world in const [WorldId.fog, WorldId.mirror, WorldId.tide]) {
+  test('the Fog boss plays by the fog', () {
+    expect(ruleOfRound(fogConfig, boss), isA<FogRule>());
+    expect(ruleOfRound(fogConfig, round), isA<PlainRule>());
+  });
+
+  for (final world in const [WorldId.mirror, WorldId.tide]) {
     test('a run in ${world.name}, coming soon, is refused', () {
       expect(
         () => ruleOfRound(defaultConfig.copyWith(world: world), boss),

@@ -16,16 +16,16 @@ final List<JokerId> startingJokers = [
 
 RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
     switch (world) {
+      .fog => fogConfig.copyWith(jokerPool: jokerPool),
       .gravity => gravityConfig.copyWith(jokerPool: jokerPool),
       .rubble => defaultConfig.copyWith(jokerPool: jokerPool),
-      .fog ||
       .mirror ||
       .tide => throw ArgumentError.value(world, 'world', 'is not playable'),
     };
 
 bool isPlayable(WorldId world) => switch (world) {
-  .gravity || .rubble => true,
-  .fog || .mirror || .tide => false,
+  .fog || .gravity || .rubble => true,
+  .mirror || .tide => false,
 };
 
 WorldId? nextWorld(WorldId world) {
@@ -35,7 +35,8 @@ WorldId? nextWorld(WorldId world) {
 }
 
 List<JokerId> unlocksOf(WorldId world) => switch (world) {
+  .fog => const [.lantern, .ember],
   .gravity => const [.anchor, .avalanche],
   .rubble => const [.stonemason, .quarry],
-  .fog || .mirror || .tide => const [],
+  .mirror || .tide => const [],
 };

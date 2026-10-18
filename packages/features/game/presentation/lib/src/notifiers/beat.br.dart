@@ -64,6 +64,13 @@ sealed class Beat with _$Beat {
   const factory Beat.points({required Duration duration, required int points}) =
       PointsBeat;
 
+  /// The fog lifted off [cells] puffs away; the board already shows what it
+  /// hid.
+  const factory Beat.revealing({
+    required List<Cell> cells,
+    required Duration duration,
+  }) = RevealingBeat;
+
   /// `chips × mult` appears, with the move's flat [bonus].
   const factory Beat.product({
     required int bonus,

@@ -36,6 +36,10 @@
       "multAdded": "+$amount mult",
       "multMultiplied": "×$factor mult",
       "multStored": "mult en réserve : $total",
+      "obstaclesRemoved(param=count)": {
+        "one": "$count effacée à côté",
+        "other": "$count effacées à côté"
+      },
       "pointsAdded": "+$amount",
       "runPointsAdded": "+$amount points de partie",
       "stoneDropped": "nouvelle pierre",
@@ -48,7 +52,13 @@
       "roundTitle": "Manche gagnée !",
       "saverBonus": "Épargnant +$points",
       "nextRound": "Choisis un joker. À suivre : manche $index · $target pts.",
-      "nextBoss": "Choisis un joker. À suivre : le boss · $target pts, avec des pierres.",
+      "nextBoss": {
+        "rubble": "Choisis un joker. À suivre : le boss · $target pts, avec des pierres.",
+        "gravity": "Choisis un joker. À suivre : le boss · $target pts, et les pièces tombent.",
+        "fog": "Choisis un joker. À suivre : le boss · $target pts, dans le brouillard.",
+        "tide": "Choisis un joker. À suivre : le boss · $target pts, quand la marée monte.",
+        "mirror": "Choisis un joker. À suivre : le boss · $target pts, dans le miroir."
+      },
       "build": "Tes jokers : $jokers",
       "completesPair": "★ Forme une paire avec $joker",
       "pairsWith": "En paire avec : $joker",
@@ -186,6 +196,14 @@
       "hattrick": {
         "name": "Coup du chapeau",
         "description": "+$points points quand chacune des $pieces pièces d'une main complète efface une ligne."
+      },
+      "lantern": {
+        "name": "Lanterne",
+        "description": "Les pierres et le brouillard à côté d'une ligne effacée partent avec elle."
+      },
+      "ember": {
+        "name": "Braise",
+        "description": "×$factor mult quand ton coup retire une pierre ou une case de brouillard."
       }
     }
   },
@@ -221,6 +239,7 @@
       "current": "En cours",
       "bossRule": {
         "rubble": "Le boss commence avec des pierres sur le plateau.",
+        "fog": "Le brouillard cache des cases. Pose à côté pour voir ce qu'il y a dessous.",
         "gravity": "Pendant la manche du boss, chaque pièce tombe tout en bas."
       },
       "bossTarget": "Bats le boss : $points points",

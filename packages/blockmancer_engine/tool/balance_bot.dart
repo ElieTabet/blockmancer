@@ -9,7 +9,7 @@
 // always take any offer and `empty` skip every pick. `--solo` adds every joker alone. With no
 // `--build` or `--solo`, both baselines and every pair run. "pair done" is a
 // run ending with the build's jokers, a solo's one included. `--world` is rubble (the
-// default) or gravity, whose rule holds in the boss. Offers draw from every
+// default) or any playable world, whose rule holds in the boss. Offers draw from every
 // joker, so any build can be offered whatever the player has unlocked. Seeds
 // are 1 to --runs, so a table is reproducible.
 import 'dart:io';
@@ -89,7 +89,7 @@ BotArgs _parse(List<String> args) {
       ..writeln('${error.message}: ${error.source}')
       ..writeln(
         'Usage: dart run tool/balance_bot.dart [--runs N] '
-        '[--world rubble|gravity] [--solo] [--build random|empty|a|a,b]...',
+        '[--world rubble|gravity|fog] [--solo] [--build random|empty|a|a,b]...',
       );
     exit(64);
   }

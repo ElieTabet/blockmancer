@@ -4,6 +4,7 @@ import 'package:blockmancer_engine/src/random/mulberry32.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
+import '../board_picture.dart';
 import '../brief_config.dart';
 import '../play_move.dart';
 
@@ -1099,6 +1100,133 @@ void main() {
       // Then
       expect(score.points, 1 + 160);
       expect(score.fired.map((fired) => fired.joker), [JokerId.finisher]);
+    });
+  });
+
+  group('Lantern', () {
+    test('takes the stones and fog beside a cleared line off the board, for no '
+        'chips', () {
+      // Given / When: a stone and a fog cell under row 0
+      final score = playMove(
+        ['#######.', 'S..F....'],
+        at: topRight,
+        jokers: const [.lantern],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.board.isEmpty, isTrue);
+      expect(score.chips, 80);
+      expect(score.fired, const [
+        JokerFired(
+          delta: .obstaclesRemoved(
+            cells: [Cell(col: 0, row: 1), Cell(col: 3, row: 1)],
+          ),
+          joker: .lantern,
+        ),
+      ]);
+    });
+
+    test('leaves filled cells, and obstacles not beside the line', () {
+      // Given / When
+      final score = playMove(
+        ['#######.', '#.......', 'S.......'],
+        at: topRight,
+        jokers: const [.lantern],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.board, boardFrom(['........', '#.......', 'S.......']));
+      expect(score.fired, isEmpty);
+    });
+
+    test('takes nothing on a move that clears nothing', () {
+      // Given / When
+      final score = playMove(
+        ['S.......'],
+        at: const Cell(col: 0, row: 1),
+        jokers: const [.lantern],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.board.at(topLeft), const CellState.stone());
+      expect(score.fired, isEmpty);
+    });
+
+    test('with Ember, a stone it takes beside the line doubles the mult', () {
+      // Given / When: nothing in row 0 but its filled cells
+      final score = playMove(
+        ['#######.', '.....S..'],
+        at: topRight,
+        jokers: const [.lantern, .ember],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 2);
+      expect(score.points, 1 + 80 * 2);
+    });
+  });
+
+  group('Ember', () {
+    test('doubles the mult when the cleared line holds a stone', () {
+      // Given / When
+      final score = playMove(
+        ['###S###.'],
+        at: topRight,
+        jokers: const [.ember],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 2);
+      expect(score.fired, const [
+        JokerFired(delta: .multMultiplied(factor: 2), joker: .ember),
+      ]);
+    });
+
+    test('doubles it for fog in the line too, whatever the fog hid', () {
+      for (final picture in const ['###F###.', '###H###.']) {
+        // Given / When
+        final score = playMove(
+          [picture],
+          at: topRight,
+          jokers: const [.ember],
+          shape: 0,
+        );
+
+        // Then
+        expect(score.mult, 2, reason: picture);
+      }
+    });
+
+    test('stays quiet when the move takes no stone and no fog', () {
+      // Given / When
+      final score = playMove(
+        ['#######.', 'S.......'],
+        at: topRight,
+        jokers: const [.ember],
+        shape: 0,
+      );
+
+      // Then: the stone sits beside the row, but only Lantern takes it
+      expect(score.mult, 1);
+      expect(score.fired, isEmpty);
+    });
+
+    test('with Lantern, doubles once however much is taken', () {
+      // Given / When
+      final score = playMove(
+        ['###S###.', 'SFSF....'],
+        at: topRight,
+        jokers: const [.lantern, .ember],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 2);
     });
   });
 

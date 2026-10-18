@@ -1,4 +1,5 @@
 import 'package:shared_domain/shared_domain.dart';
+import 'package:blockmancer_engine/src/board/placement.br.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 
 /// One joker's rules. Every hook defaults to doing nothing, so a joker
@@ -11,6 +12,10 @@ abstract class JokerEffect {
 
   /// The joker this one pairs with: offers favour it once this one is owned.
   JokerId get partner;
+
+  /// On a clearing move, before it is scored: what the clear takes off the
+  /// board besides its lines.
+  ClearResult extendClear(ClearResult clear) => clear;
 
   /// After a move is scored, cleared or not.
   AfterMove afterMove(AfterMove after, MoveContext move) => after;

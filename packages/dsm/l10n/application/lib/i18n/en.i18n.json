@@ -36,6 +36,10 @@
       "multAdded": "+$amount mult",
       "multMultiplied": "×$factor mult",
       "multStored": "mult stored · $total ready",
+      "obstaclesRemoved(param=count)": {
+        "one": "$count cleared beside the line",
+        "other": "$count cleared beside the line"
+      },
       "pointsAdded": "+$amount",
       "runPointsAdded": "+$amount run points",
       "stoneDropped": "new stone",
@@ -48,7 +52,13 @@
       "roundTitle": "Round cleared!",
       "saverBonus": "Saver +$points",
       "nextRound": "Pick a joker. Next: round $index · $target pts.",
-      "nextBoss": "Pick a joker. Next: Boss · $target pts with stones.",
+      "nextBoss": {
+        "rubble": "Pick a joker. Next: Boss · $target pts with stones.",
+        "gravity": "Pick a joker. Next: Boss · $target pts, and pieces fall.",
+        "fog": "Pick a joker. Next: Boss · $target pts in the fog.",
+        "tide": "Pick a joker. Next: Boss · $target pts as the tide rises.",
+        "mirror": "Pick a joker. Next: Boss · $target pts in the mirror."
+      },
       "build": "Your build: $jokers",
       "completesPair": "★ Completes a pair with your $joker",
       "pairsWith": "Pairs with: $joker",
@@ -186,6 +196,14 @@
       "hattrick": {
         "name": "Hat Trick",
         "description": "+$points points when each of the $pieces pieces of a full tray clears a line."
+      },
+      "lantern": {
+        "name": "Lantern",
+        "description": "Stones and fog beside a cleared line are cleared with it."
+      },
+      "ember": {
+        "name": "Ember",
+        "description": "×$factor mult when your move clears a stone or a fog cell."
       }
     }
   },
@@ -221,6 +239,7 @@
       "current": "In progress",
       "bossRule": {
         "rubble": "The boss starts with stones on the board.",
+        "fog": "Fog hides cells. Fill next to it to see what's underneath.",
         "gravity": "In the boss round, every piece falls to the bottom."
       },
       "bossTarget": "Beat the boss: $points points",

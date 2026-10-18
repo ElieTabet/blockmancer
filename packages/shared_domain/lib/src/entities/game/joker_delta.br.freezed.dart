@@ -55,14 +55,15 @@ extension JokerDeltaPatterns on JokerDelta {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChipsAdded value)?  chipsAdded,TResult Function( MultAdded value)?  multAdded,TResult Function( MultMultiplied value)?  multMultiplied,TResult Function( MultStored value)?  multStored,TResult Function( PiecesAdded value)?  piecesAdded,TResult Function( PointsAdded value)?  pointsAdded,TResult Function( RunPointsAdded value)?  runPointsAdded,TResult Function( StoneDropped value)?  stoneDropped,TResult Function( StonesAdded value)?  stonesAdded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChipsAdded value)?  chipsAdded,TResult Function( MultAdded value)?  multAdded,TResult Function( MultMultiplied value)?  multMultiplied,TResult Function( MultStored value)?  multStored,TResult Function( ObstaclesRemoved value)?  obstaclesRemoved,TResult Function( PiecesAdded value)?  piecesAdded,TResult Function( PointsAdded value)?  pointsAdded,TResult Function( RunPointsAdded value)?  runPointsAdded,TResult Function( StoneDropped value)?  stoneDropped,TResult Function( StonesAdded value)?  stonesAdded,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ChipsAdded() when chipsAdded != null:
 return chipsAdded(_that);case MultAdded() when multAdded != null:
 return multAdded(_that);case MultMultiplied() when multMultiplied != null:
 return multMultiplied(_that);case MultStored() when multStored != null:
-return multStored(_that);case PiecesAdded() when piecesAdded != null:
+return multStored(_that);case ObstaclesRemoved() when obstaclesRemoved != null:
+return obstaclesRemoved(_that);case PiecesAdded() when piecesAdded != null:
 return piecesAdded(_that);case PointsAdded() when pointsAdded != null:
 return pointsAdded(_that);case RunPointsAdded() when runPointsAdded != null:
 return runPointsAdded(_that);case StoneDropped() when stoneDropped != null:
@@ -85,14 +86,15 @@ return stonesAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChipsAdded value)  chipsAdded,required TResult Function( MultAdded value)  multAdded,required TResult Function( MultMultiplied value)  multMultiplied,required TResult Function( MultStored value)  multStored,required TResult Function( PiecesAdded value)  piecesAdded,required TResult Function( PointsAdded value)  pointsAdded,required TResult Function( RunPointsAdded value)  runPointsAdded,required TResult Function( StoneDropped value)  stoneDropped,required TResult Function( StonesAdded value)  stonesAdded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChipsAdded value)  chipsAdded,required TResult Function( MultAdded value)  multAdded,required TResult Function( MultMultiplied value)  multMultiplied,required TResult Function( MultStored value)  multStored,required TResult Function( ObstaclesRemoved value)  obstaclesRemoved,required TResult Function( PiecesAdded value)  piecesAdded,required TResult Function( PointsAdded value)  pointsAdded,required TResult Function( RunPointsAdded value)  runPointsAdded,required TResult Function( StoneDropped value)  stoneDropped,required TResult Function( StonesAdded value)  stonesAdded,}){
 final _that = this;
 switch (_that) {
 case ChipsAdded():
 return chipsAdded(_that);case MultAdded():
 return multAdded(_that);case MultMultiplied():
 return multMultiplied(_that);case MultStored():
-return multStored(_that);case PiecesAdded():
+return multStored(_that);case ObstaclesRemoved():
+return obstaclesRemoved(_that);case PiecesAdded():
 return piecesAdded(_that);case PointsAdded():
 return pointsAdded(_that);case RunPointsAdded():
 return runPointsAdded(_that);case StoneDropped():
@@ -111,14 +113,15 @@ return stonesAdded(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChipsAdded value)?  chipsAdded,TResult? Function( MultAdded value)?  multAdded,TResult? Function( MultMultiplied value)?  multMultiplied,TResult? Function( MultStored value)?  multStored,TResult? Function( PiecesAdded value)?  piecesAdded,TResult? Function( PointsAdded value)?  pointsAdded,TResult? Function( RunPointsAdded value)?  runPointsAdded,TResult? Function( StoneDropped value)?  stoneDropped,TResult? Function( StonesAdded value)?  stonesAdded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChipsAdded value)?  chipsAdded,TResult? Function( MultAdded value)?  multAdded,TResult? Function( MultMultiplied value)?  multMultiplied,TResult? Function( MultStored value)?  multStored,TResult? Function( ObstaclesRemoved value)?  obstaclesRemoved,TResult? Function( PiecesAdded value)?  piecesAdded,TResult? Function( PointsAdded value)?  pointsAdded,TResult? Function( RunPointsAdded value)?  runPointsAdded,TResult? Function( StoneDropped value)?  stoneDropped,TResult? Function( StonesAdded value)?  stonesAdded,}){
 final _that = this;
 switch (_that) {
 case ChipsAdded() when chipsAdded != null:
 return chipsAdded(_that);case MultAdded() when multAdded != null:
 return multAdded(_that);case MultMultiplied() when multMultiplied != null:
 return multMultiplied(_that);case MultStored() when multStored != null:
-return multStored(_that);case PiecesAdded() when piecesAdded != null:
+return multStored(_that);case ObstaclesRemoved() when obstaclesRemoved != null:
+return obstaclesRemoved(_that);case PiecesAdded() when piecesAdded != null:
 return piecesAdded(_that);case PointsAdded() when pointsAdded != null:
 return pointsAdded(_that);case RunPointsAdded() when runPointsAdded != null:
 return runPointsAdded(_that);case StoneDropped() when stoneDropped != null:
@@ -140,13 +143,14 @@ return stonesAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int amount)?  chipsAdded,TResult Function( int amount)?  multAdded,TResult Function( int factor)?  multMultiplied,TResult Function( int total)?  multStored,TResult Function( int amount)?  piecesAdded,TResult Function( int amount)?  pointsAdded,TResult Function( int amount)?  runPointsAdded,TResult Function( Cell cell)?  stoneDropped,TResult Function( int amount)?  stonesAdded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int amount)?  chipsAdded,TResult Function( int amount)?  multAdded,TResult Function( int factor)?  multMultiplied,TResult Function( int total)?  multStored,TResult Function( List<Cell> cells)?  obstaclesRemoved,TResult Function( int amount)?  piecesAdded,TResult Function( int amount)?  pointsAdded,TResult Function( int amount)?  runPointsAdded,TResult Function( Cell cell)?  stoneDropped,TResult Function( int amount)?  stonesAdded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ChipsAdded() when chipsAdded != null:
 return chipsAdded(_that.amount);case MultAdded() when multAdded != null:
 return multAdded(_that.amount);case MultMultiplied() when multMultiplied != null:
 return multMultiplied(_that.factor);case MultStored() when multStored != null:
-return multStored(_that.total);case PiecesAdded() when piecesAdded != null:
+return multStored(_that.total);case ObstaclesRemoved() when obstaclesRemoved != null:
+return obstaclesRemoved(_that.cells);case PiecesAdded() when piecesAdded != null:
 return piecesAdded(_that.amount);case PointsAdded() when pointsAdded != null:
 return pointsAdded(_that.amount);case RunPointsAdded() when runPointsAdded != null:
 return runPointsAdded(_that.amount);case StoneDropped() when stoneDropped != null:
@@ -169,13 +173,14 @@ return stonesAdded(_that.amount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int amount)  chipsAdded,required TResult Function( int amount)  multAdded,required TResult Function( int factor)  multMultiplied,required TResult Function( int total)  multStored,required TResult Function( int amount)  piecesAdded,required TResult Function( int amount)  pointsAdded,required TResult Function( int amount)  runPointsAdded,required TResult Function( Cell cell)  stoneDropped,required TResult Function( int amount)  stonesAdded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int amount)  chipsAdded,required TResult Function( int amount)  multAdded,required TResult Function( int factor)  multMultiplied,required TResult Function( int total)  multStored,required TResult Function( List<Cell> cells)  obstaclesRemoved,required TResult Function( int amount)  piecesAdded,required TResult Function( int amount)  pointsAdded,required TResult Function( int amount)  runPointsAdded,required TResult Function( Cell cell)  stoneDropped,required TResult Function( int amount)  stonesAdded,}) {final _that = this;
 switch (_that) {
 case ChipsAdded():
 return chipsAdded(_that.amount);case MultAdded():
 return multAdded(_that.amount);case MultMultiplied():
 return multMultiplied(_that.factor);case MultStored():
-return multStored(_that.total);case PiecesAdded():
+return multStored(_that.total);case ObstaclesRemoved():
+return obstaclesRemoved(_that.cells);case PiecesAdded():
 return piecesAdded(_that.amount);case PointsAdded():
 return pointsAdded(_that.amount);case RunPointsAdded():
 return runPointsAdded(_that.amount);case StoneDropped():
@@ -194,13 +199,14 @@ return stonesAdded(_that.amount);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int amount)?  chipsAdded,TResult? Function( int amount)?  multAdded,TResult? Function( int factor)?  multMultiplied,TResult? Function( int total)?  multStored,TResult? Function( int amount)?  piecesAdded,TResult? Function( int amount)?  pointsAdded,TResult? Function( int amount)?  runPointsAdded,TResult? Function( Cell cell)?  stoneDropped,TResult? Function( int amount)?  stonesAdded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int amount)?  chipsAdded,TResult? Function( int amount)?  multAdded,TResult? Function( int factor)?  multMultiplied,TResult? Function( int total)?  multStored,TResult? Function( List<Cell> cells)?  obstaclesRemoved,TResult? Function( int amount)?  piecesAdded,TResult? Function( int amount)?  pointsAdded,TResult? Function( int amount)?  runPointsAdded,TResult? Function( Cell cell)?  stoneDropped,TResult? Function( int amount)?  stonesAdded,}) {final _that = this;
 switch (_that) {
 case ChipsAdded() when chipsAdded != null:
 return chipsAdded(_that.amount);case MultAdded() when multAdded != null:
 return multAdded(_that.amount);case MultMultiplied() when multMultiplied != null:
 return multMultiplied(_that.factor);case MultStored() when multStored != null:
-return multStored(_that.total);case PiecesAdded() when piecesAdded != null:
+return multStored(_that.total);case ObstaclesRemoved() when obstaclesRemoved != null:
+return obstaclesRemoved(_that.cells);case PiecesAdded() when piecesAdded != null:
 return piecesAdded(_that.amount);case PointsAdded() when pointsAdded != null:
 return pointsAdded(_that.amount);case RunPointsAdded() when runPointsAdded != null:
 return runPointsAdded(_that.amount);case StoneDropped() when stoneDropped != null:
@@ -471,6 +477,78 @@ class _$MultStoredCopyWithImpl<$Res>
   return _then(MultStored(
 total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
 as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class ObstaclesRemoved implements JokerDelta {
+  const ObstaclesRemoved({required final  List<Cell> cells}): _cells = cells;
+  
+
+ final  List<Cell> _cells;
+ List<Cell> get cells {
+  if (_cells is EqualUnmodifiableListView) return _cells;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_cells);
+}
+
+
+/// Create a copy of JokerDelta
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ObstaclesRemovedCopyWith<ObstaclesRemoved> get copyWith => _$ObstaclesRemovedCopyWithImpl<ObstaclesRemoved>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ObstaclesRemoved&&const DeepCollectionEquality().equals(other._cells, _cells));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_cells));
+
+@override
+String toString() {
+  return 'JokerDelta.obstaclesRemoved(cells: $cells)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ObstaclesRemovedCopyWith<$Res> implements $JokerDeltaCopyWith<$Res> {
+  factory $ObstaclesRemovedCopyWith(ObstaclesRemoved value, $Res Function(ObstaclesRemoved) _then) = _$ObstaclesRemovedCopyWithImpl;
+@useResult
+$Res call({
+ List<Cell> cells
+});
+
+
+
+
+}
+/// @nodoc
+class _$ObstaclesRemovedCopyWithImpl<$Res>
+    implements $ObstaclesRemovedCopyWith<$Res> {
+  _$ObstaclesRemovedCopyWithImpl(this._self, this._then);
+
+  final ObstaclesRemoved _self;
+  final $Res Function(ObstaclesRemoved) _then;
+
+/// Create a copy of JokerDelta
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? cells = null,}) {
+  return _then(ObstaclesRemoved(
+cells: null == cells ? _self._cells : cells // ignore: cast_nullable_to_non_nullable
+as List<Cell>,
   ));
 }
 

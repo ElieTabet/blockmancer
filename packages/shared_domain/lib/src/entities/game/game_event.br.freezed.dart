@@ -55,10 +55,12 @@ extension GameEventPatterns on GameEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( JokerFired value)?  jokerFired,TResult Function( LinesCleared value)?  linesCleared,TResult Function( OffersPresented value)?  offersPresented,TResult Function( PiecePlaced value)?  piecePlaced,TResult Function( Revived value)?  revived,TResult Function( RoundLost value)?  roundLost,TResult Function( RoundStarted value)?  roundStarted,TResult Function( RoundWon value)?  roundWon,TResult Function( RunOver value)?  runOver,TResult Function( RunWon value)?  runWon,TResult Function( ScoreAdded value)?  scoreAdded,TResult Function( StonePlaced value)?  stonePlaced,TResult Function( TrayRefilled value)?  trayRefilled,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( FogPlaced value)?  fogPlaced,TResult Function( FogRevealed value)?  fogRevealed,TResult Function( JokerFired value)?  jokerFired,TResult Function( LinesCleared value)?  linesCleared,TResult Function( OffersPresented value)?  offersPresented,TResult Function( PiecePlaced value)?  piecePlaced,TResult Function( Revived value)?  revived,TResult Function( RoundLost value)?  roundLost,TResult Function( RoundStarted value)?  roundStarted,TResult Function( RoundWon value)?  roundWon,TResult Function( RunOver value)?  runOver,TResult Function( RunWon value)?  runWon,TResult Function( ScoreAdded value)?  scoreAdded,TResult Function( StonePlaced value)?  stonePlaced,TResult Function( TrayRefilled value)?  trayRefilled,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case JokerFired() when jokerFired != null:
+case FogPlaced() when fogPlaced != null:
+return fogPlaced(_that);case FogRevealed() when fogRevealed != null:
+return fogRevealed(_that);case JokerFired() when jokerFired != null:
 return jokerFired(_that);case LinesCleared() when linesCleared != null:
 return linesCleared(_that);case OffersPresented() when offersPresented != null:
 return offersPresented(_that);case PiecePlaced() when piecePlaced != null:
@@ -89,10 +91,12 @@ return trayRefilled(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( JokerFired value)  jokerFired,required TResult Function( LinesCleared value)  linesCleared,required TResult Function( OffersPresented value)  offersPresented,required TResult Function( PiecePlaced value)  piecePlaced,required TResult Function( Revived value)  revived,required TResult Function( RoundLost value)  roundLost,required TResult Function( RoundStarted value)  roundStarted,required TResult Function( RoundWon value)  roundWon,required TResult Function( RunOver value)  runOver,required TResult Function( RunWon value)  runWon,required TResult Function( ScoreAdded value)  scoreAdded,required TResult Function( StonePlaced value)  stonePlaced,required TResult Function( TrayRefilled value)  trayRefilled,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( FogPlaced value)  fogPlaced,required TResult Function( FogRevealed value)  fogRevealed,required TResult Function( JokerFired value)  jokerFired,required TResult Function( LinesCleared value)  linesCleared,required TResult Function( OffersPresented value)  offersPresented,required TResult Function( PiecePlaced value)  piecePlaced,required TResult Function( Revived value)  revived,required TResult Function( RoundLost value)  roundLost,required TResult Function( RoundStarted value)  roundStarted,required TResult Function( RoundWon value)  roundWon,required TResult Function( RunOver value)  runOver,required TResult Function( RunWon value)  runWon,required TResult Function( ScoreAdded value)  scoreAdded,required TResult Function( StonePlaced value)  stonePlaced,required TResult Function( TrayRefilled value)  trayRefilled,}){
 final _that = this;
 switch (_that) {
-case JokerFired():
+case FogPlaced():
+return fogPlaced(_that);case FogRevealed():
+return fogRevealed(_that);case JokerFired():
 return jokerFired(_that);case LinesCleared():
 return linesCleared(_that);case OffersPresented():
 return offersPresented(_that);case PiecePlaced():
@@ -119,10 +123,12 @@ return trayRefilled(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( JokerFired value)?  jokerFired,TResult? Function( LinesCleared value)?  linesCleared,TResult? Function( OffersPresented value)?  offersPresented,TResult? Function( PiecePlaced value)?  piecePlaced,TResult? Function( Revived value)?  revived,TResult? Function( RoundLost value)?  roundLost,TResult? Function( RoundStarted value)?  roundStarted,TResult? Function( RoundWon value)?  roundWon,TResult? Function( RunOver value)?  runOver,TResult? Function( RunWon value)?  runWon,TResult? Function( ScoreAdded value)?  scoreAdded,TResult? Function( StonePlaced value)?  stonePlaced,TResult? Function( TrayRefilled value)?  trayRefilled,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( FogPlaced value)?  fogPlaced,TResult? Function( FogRevealed value)?  fogRevealed,TResult? Function( JokerFired value)?  jokerFired,TResult? Function( LinesCleared value)?  linesCleared,TResult? Function( OffersPresented value)?  offersPresented,TResult? Function( PiecePlaced value)?  piecePlaced,TResult? Function( Revived value)?  revived,TResult? Function( RoundLost value)?  roundLost,TResult? Function( RoundStarted value)?  roundStarted,TResult? Function( RoundWon value)?  roundWon,TResult? Function( RunOver value)?  runOver,TResult? Function( RunWon value)?  runWon,TResult? Function( ScoreAdded value)?  scoreAdded,TResult? Function( StonePlaced value)?  stonePlaced,TResult? Function( TrayRefilled value)?  trayRefilled,}){
 final _that = this;
 switch (_that) {
-case JokerFired() when jokerFired != null:
+case FogPlaced() when fogPlaced != null:
+return fogPlaced(_that);case FogRevealed() when fogRevealed != null:
+return fogRevealed(_that);case JokerFired() when jokerFired != null:
 return jokerFired(_that);case LinesCleared() when linesCleared != null:
 return linesCleared(_that);case OffersPresented() when offersPresented != null:
 return offersPresented(_that);case PiecePlaced() when piecePlaced != null:
@@ -152,9 +158,11 @@ return trayRefilled(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult Function( List<JokerId> offers)?  offersPresented,TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult Function( List<int> rows)?  revived,TResult Function( LossReason reason)?  roundLost,TResult Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult Function( int total)?  runOver,TResult Function( int total)?  runWon,TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult Function( Cell cell)?  stonePlaced,TResult Function( List<int?> tray)?  trayRefilled,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<Cell> cells)?  fogPlaced,TResult Function( bool becameStone,  Cell cell)?  fogRevealed,TResult Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult Function( List<JokerId> offers)?  offersPresented,TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult Function( List<int> rows)?  revived,TResult Function( LossReason reason)?  roundLost,TResult Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult Function( int total)?  runOver,TResult Function( int total)?  runWon,TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult Function( Cell cell)?  stonePlaced,TResult Function( List<int?> tray)?  trayRefilled,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case JokerFired() when jokerFired != null:
+case FogPlaced() when fogPlaced != null:
+return fogPlaced(_that.cells);case FogRevealed() when fogRevealed != null:
+return fogRevealed(_that.becameStone,_that.cell);case JokerFired() when jokerFired != null:
 return jokerFired(_that.delta,_that.joker);case LinesCleared() when linesCleared != null:
 return linesCleared(_that.cells,_that.cols,_that.rows);case OffersPresented() when offersPresented != null:
 return offersPresented(_that.offers);case PiecePlaced() when piecePlaced != null:
@@ -185,9 +193,11 @@ return trayRefilled(_that.tray);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( JokerDelta delta,  JokerId joker)  jokerFired,required TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)  linesCleared,required TResult Function( List<JokerId> offers)  offersPresented,required TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)  piecePlaced,required TResult Function( List<int> rows)  revived,required TResult Function( LossReason reason)  roundLost,required TResult Function( int pieces,  int roundIndex,  int target)  roundStarted,required TResult Function( int bonus,  int roundIndex,  int score)  roundWon,required TResult Function( int total)  runOver,required TResult Function( int total)  runWon,required TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)  scoreAdded,required TResult Function( Cell cell)  stonePlaced,required TResult Function( List<int?> tray)  trayRefilled,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<Cell> cells)  fogPlaced,required TResult Function( bool becameStone,  Cell cell)  fogRevealed,required TResult Function( JokerDelta delta,  JokerId joker)  jokerFired,required TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)  linesCleared,required TResult Function( List<JokerId> offers)  offersPresented,required TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)  piecePlaced,required TResult Function( List<int> rows)  revived,required TResult Function( LossReason reason)  roundLost,required TResult Function( int pieces,  int roundIndex,  int target)  roundStarted,required TResult Function( int bonus,  int roundIndex,  int score)  roundWon,required TResult Function( int total)  runOver,required TResult Function( int total)  runWon,required TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)  scoreAdded,required TResult Function( Cell cell)  stonePlaced,required TResult Function( List<int?> tray)  trayRefilled,}) {final _that = this;
 switch (_that) {
-case JokerFired():
+case FogPlaced():
+return fogPlaced(_that.cells);case FogRevealed():
+return fogRevealed(_that.becameStone,_that.cell);case JokerFired():
 return jokerFired(_that.delta,_that.joker);case LinesCleared():
 return linesCleared(_that.cells,_that.cols,_that.rows);case OffersPresented():
 return offersPresented(_that.offers);case PiecePlaced():
@@ -214,9 +224,11 @@ return trayRefilled(_that.tray);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult? Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult? Function( List<JokerId> offers)?  offersPresented,TResult? Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult? Function( List<int> rows)?  revived,TResult? Function( LossReason reason)?  roundLost,TResult? Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult? Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult? Function( int total)?  runOver,TResult? Function( int total)?  runWon,TResult? Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult? Function( Cell cell)?  stonePlaced,TResult? Function( List<int?> tray)?  trayRefilled,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<Cell> cells)?  fogPlaced,TResult? Function( bool becameStone,  Cell cell)?  fogRevealed,TResult? Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult? Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult? Function( List<JokerId> offers)?  offersPresented,TResult? Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult? Function( List<int> rows)?  revived,TResult? Function( LossReason reason)?  roundLost,TResult? Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult? Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult? Function( int total)?  runOver,TResult? Function( int total)?  runWon,TResult? Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult? Function( Cell cell)?  stonePlaced,TResult? Function( List<int?> tray)?  trayRefilled,}) {final _that = this;
 switch (_that) {
-case JokerFired() when jokerFired != null:
+case FogPlaced() when fogPlaced != null:
+return fogPlaced(_that.cells);case FogRevealed() when fogRevealed != null:
+return fogRevealed(_that.becameStone,_that.cell);case JokerFired() when jokerFired != null:
 return jokerFired(_that.delta,_that.joker);case LinesCleared() when linesCleared != null:
 return linesCleared(_that.cells,_that.cols,_that.rows);case OffersPresented() when offersPresented != null:
 return offersPresented(_that.offers);case PiecePlaced() when piecePlaced != null:
@@ -235,6 +247,155 @@ return trayRefilled(_that.tray);case _:
 }
 }
 
+}
+
+/// @nodoc
+
+
+class FogPlaced implements GameEvent {
+  const FogPlaced({required final  List<Cell> cells}): _cells = cells;
+  
+
+ final  List<Cell> _cells;
+ List<Cell> get cells {
+  if (_cells is EqualUnmodifiableListView) return _cells;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_cells);
+}
+
+
+/// Create a copy of GameEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FogPlacedCopyWith<FogPlaced> get copyWith => _$FogPlacedCopyWithImpl<FogPlaced>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FogPlaced&&const DeepCollectionEquality().equals(other._cells, _cells));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_cells));
+
+@override
+String toString() {
+  return 'GameEvent.fogPlaced(cells: $cells)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FogPlacedCopyWith<$Res> implements $GameEventCopyWith<$Res> {
+  factory $FogPlacedCopyWith(FogPlaced value, $Res Function(FogPlaced) _then) = _$FogPlacedCopyWithImpl;
+@useResult
+$Res call({
+ List<Cell> cells
+});
+
+
+
+
+}
+/// @nodoc
+class _$FogPlacedCopyWithImpl<$Res>
+    implements $FogPlacedCopyWith<$Res> {
+  _$FogPlacedCopyWithImpl(this._self, this._then);
+
+  final FogPlaced _self;
+  final $Res Function(FogPlaced) _then;
+
+/// Create a copy of GameEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? cells = null,}) {
+  return _then(FogPlaced(
+cells: null == cells ? _self._cells : cells // ignore: cast_nullable_to_non_nullable
+as List<Cell>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class FogRevealed implements GameEvent {
+  const FogRevealed({required this.becameStone, required this.cell});
+  
+
+ final  bool becameStone;
+ final  Cell cell;
+
+/// Create a copy of GameEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FogRevealedCopyWith<FogRevealed> get copyWith => _$FogRevealedCopyWithImpl<FogRevealed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FogRevealed&&(identical(other.becameStone, becameStone) || other.becameStone == becameStone)&&(identical(other.cell, cell) || other.cell == cell));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,becameStone,cell);
+
+@override
+String toString() {
+  return 'GameEvent.fogRevealed(becameStone: $becameStone, cell: $cell)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FogRevealedCopyWith<$Res> implements $GameEventCopyWith<$Res> {
+  factory $FogRevealedCopyWith(FogRevealed value, $Res Function(FogRevealed) _then) = _$FogRevealedCopyWithImpl;
+@useResult
+$Res call({
+ bool becameStone, Cell cell
+});
+
+
+$CellCopyWith<$Res> get cell;
+
+}
+/// @nodoc
+class _$FogRevealedCopyWithImpl<$Res>
+    implements $FogRevealedCopyWith<$Res> {
+  _$FogRevealedCopyWithImpl(this._self, this._then);
+
+  final FogRevealed _self;
+  final $Res Function(FogRevealed) _then;
+
+/// Create a copy of GameEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? becameStone = null,Object? cell = null,}) {
+  return _then(FogRevealed(
+becameStone: null == becameStone ? _self.becameStone : becameStone // ignore: cast_nullable_to_non_nullable
+as bool,cell: null == cell ? _self.cell : cell // ignore: cast_nullable_to_non_nullable
+as Cell,
+  ));
+}
+
+/// Create a copy of GameEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CellCopyWith<$Res> get cell {
+  
+  return $CellCopyWith<$Res>(_self.cell, (value) {
+    return _then(_self.copyWith(cell: value));
+  });
+}
 }
 
 /// @nodoc

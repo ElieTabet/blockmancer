@@ -15,18 +15,21 @@ const _mult = Duration(milliseconds: 200);
 const _place = Duration(milliseconds: 120);
 const _product = Duration(milliseconds: 250);
 const _pulse = Duration(milliseconds: 180);
+const _reveal = Duration(milliseconds: 260);
 
 /// Every beat's length with reduce motion on: long enough to read the numbers
 /// arrive in order, too short to be motion.
 const _still = Duration(milliseconds: 100);
 
 /// The beats that play a move back, in order: the piece landing, the lines
-/// bursting, then the score counted up — chips, mult, each joker that fired
+/// bursting (with what Lantern took beside them), the fog it lifted puffing
+/// away, then the score counted up — chips, mult, each joker that fired
 /// on the way, the product — and landing in the round score. Jokers that fire
 /// once the score is in, such as a won round's bonus, pulse after it lands.
 ///
 /// Every value is read from [events] and the runs either side of the move.
-/// With [reduceMotion] the squash, the burst and the shakes are left out and
+/// With [reduceMotion] the squash, the burst, the puff and the shakes are left
+/// out and
 /// the rest is brief, but the same numbers land in the same order.
 List<Beat> beatsFor({
   required RunState after,
@@ -58,6 +61,13 @@ List<Beat> beatsFor({
   final win = bossBeaten && !reduceMotion ? Shake.strong : Shake.none;
   final scoring = pulsesIn(events.take(scoredAt < 0 ? 0 : scoredAt));
   final afterwards = pulsesIn(events.skip(scoredAt + 1));
+  final revealed = [
+    for (final event in events.whereType<FogRevealed>()) event.cell,
+  ];
+  final revealing = [
+    if (revealed.isNotEmpty && !reduceMotion)
+      Beat.revealing(cells: revealed, duration: _reveal),
+  ];
 
   if (cleared == null || score == null) {
     return [
@@ -70,13 +80,18 @@ List<Beat> beatsFor({
           duration: _place,
           shake: win,
         ),
+      ...revealing,
       ...scoring,
       ...afterwards,
     ];
   }
 
   final clearing = [
-    for (final cell in cleared.cells)
+    for (final cell in [
+      ...cleared.cells,
+      for (final fired in events.whereType<JokerFired>())
+        if (fired.delta case ObstaclesRemoved(:final cells)) ...cells,
+    ])
       (
         cell: cell,
         state: switch (before.board.at(cell)) {
@@ -103,6 +118,7 @@ List<Beat> beatsFor({
         duration: _clear,
         shake: lines >= 2 ? .light : .none,
       ),
+    ...revealing,
     if (after.streak >= _comboFrom)
       .combo(duration: paced(_combo), streak: after.streak),
     .countingChips(chips: score.chips, duration: paced(_chips)),

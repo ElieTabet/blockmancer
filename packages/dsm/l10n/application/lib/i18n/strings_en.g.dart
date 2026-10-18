@@ -258,6 +258,12 @@ class Translations$game$banner$en {
 	/// en: 'mult stored · $total ready'
 	String multStored({required Object total}) => 'mult stored · ${total} ready';
 
+	/// en: '(one) {$count cleared beside the line} (other) {$count cleared beside the line}'
+	String obstaclesRemoved({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count,
+		one: '${count} cleared beside the line',
+		other: '${count} cleared beside the line',
+	);
+
 	/// en: '+$amount'
 	String pointsAdded({required Object amount}) => '+${amount}';
 
@@ -297,8 +303,7 @@ class Translations$game$offers$en {
 	/// en: 'Pick a joker. Next: round $index · $target pts.'
 	String nextRound({required Object index, required Object target}) => 'Pick a joker. Next: round ${index} · ${target} pts.';
 
-	/// en: 'Pick a joker. Next: Boss · $target pts with stones.'
-	String nextBoss({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts with stones.';
+	late final Translations$game$offers$nextBoss$en nextBoss = Translations$game$offers$nextBoss$en.internal(_root);
 
 	/// en: 'Your build: $jokers'
 	String build({required Object jokers}) => 'Your build: ${jokers}';
@@ -450,6 +455,8 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$brink$en brink = Translations$game$jokers$brink$en.internal(_root);
 	late final Translations$game$jokers$finisher$en finisher = Translations$game$jokers$finisher$en.internal(_root);
 	late final Translations$game$jokers$hattrick$en hattrick = Translations$game$jokers$hattrick$en.internal(_root);
+	late final Translations$game$jokers$lantern$en lantern = Translations$game$jokers$lantern$en.internal(_root);
+	late final Translations$game$jokers$ember$en ember = Translations$game$jokers$ember$en.internal(_root);
 }
 
 // Path: home.daily
@@ -731,6 +738,30 @@ class Translations$settings$reset$en {
 
 	/// en: 'Cancel'
 	String get cancel => 'Cancel';
+}
+
+// Path: game.offers.nextBoss
+class Translations$game$offers$nextBoss$en {
+	Translations$game$offers$nextBoss$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Pick a joker. Next: Boss · $target pts with stones.'
+	String rubble({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts with stones.';
+
+	/// en: 'Pick a joker. Next: Boss · $target pts, and pieces fall.'
+	String gravity({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts, and pieces fall.';
+
+	/// en: 'Pick a joker. Next: Boss · $target pts in the fog.'
+	String fog({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts in the fog.';
+
+	/// en: 'Pick a joker. Next: Boss · $target pts as the tide rises.'
+	String tide({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts as the tide rises.';
+
+	/// en: 'Pick a joker. Next: Boss · $target pts in the mirror.'
+	String mirror({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts in the mirror.';
 }
 
 // Path: game.end.stars
@@ -1072,6 +1103,36 @@ class Translations$game$jokers$hattrick$en {
 	String description({required Object points, required Object pieces}) => '+${points} points when each of the ${pieces} pieces of a full tray clears a line.';
 }
 
+// Path: game.jokers.lantern
+class Translations$game$jokers$lantern$en {
+	Translations$game$jokers$lantern$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Lantern'
+	String get name => 'Lantern';
+
+	/// en: 'Stones and fog beside a cleared line are cleared with it.'
+	String get description => 'Stones and fog beside a cleared line are cleared with it.';
+}
+
+// Path: game.jokers.ember
+class Translations$game$jokers$ember$en {
+	Translations$game$jokers$ember$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Ember'
+	String get name => 'Ember';
+
+	/// en: '×$factor mult when your move clears a stone or a fog cell.'
+	String description({required Object factor}) => '×${factor} mult when your move clears a stone or a fog cell.';
+}
+
 // Path: home.sheet.bossRule
 class Translations$home$sheet$bossRule$en {
 	Translations$home$sheet$bossRule$en.internal(this._root);
@@ -1082,6 +1143,9 @@ class Translations$home$sheet$bossRule$en {
 
 	/// en: 'The boss starts with stones on the board.'
 	String get rubble => 'The boss starts with stones on the board.';
+
+	/// en: 'Fog hides cells. Fill next to it to see what's underneath.'
+	String get fog => 'Fog hides cells. Fill next to it to see what\'s underneath.';
 
 	/// en: 'In the boss round, every piece falls to the bottom.'
 	String get gravity => 'In the boss round, every piece falls to the bottom.';
@@ -1123,6 +1187,7 @@ extension on Translations {
 			'game.banner.multAdded' => ({required Object amount}) => '+${amount} mult',
 			'game.banner.multMultiplied' => ({required Object factor}) => '×${factor} mult',
 			'game.banner.multStored' => ({required Object total}) => 'mult stored · ${total} ready',
+			'game.banner.obstaclesRemoved' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: '${count} cleared beside the line', other: '${count} cleared beside the line', ), 
 			'game.banner.pointsAdded' => ({required Object amount}) => '+${amount}',
 			'game.banner.runPointsAdded' => ({required Object amount}) => '+${amount} run points',
 			'game.banner.stoneDropped' => 'new stone',
@@ -1133,7 +1198,11 @@ extension on Translations {
 			'game.offers.roundTitle' => 'Round cleared!',
 			'game.offers.saverBonus' => ({required Object points}) => 'Saver +${points}',
 			'game.offers.nextRound' => ({required Object index, required Object target}) => 'Pick a joker. Next: round ${index} · ${target} pts.',
-			'game.offers.nextBoss' => ({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts with stones.',
+			'game.offers.nextBoss.rubble' => ({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts with stones.',
+			'game.offers.nextBoss.gravity' => ({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts, and pieces fall.',
+			'game.offers.nextBoss.fog' => ({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts in the fog.',
+			'game.offers.nextBoss.tide' => ({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts as the tide rises.',
+			'game.offers.nextBoss.mirror' => ({required Object target}) => 'Pick a joker. Next: Boss · ${target} pts in the mirror.',
 			'game.offers.build' => ({required Object jokers}) => 'Your build: ${jokers}',
 			'game.offers.completesPair' => ({required Object joker}) => '★ Completes a pair with your ${joker}',
 			'game.offers.pairsWith' => ({required Object joker}) => 'Pairs with: ${joker}',
@@ -1208,6 +1277,10 @@ extension on Translations {
 			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult when you play the last piece in your tray.',
 			'game.jokers.hattrick.name' => 'Hat Trick',
 			'game.jokers.hattrick.description' => ({required Object points, required Object pieces}) => '+${points} points when each of the ${pieces} pieces of a full tray clears a line.',
+			'game.jokers.lantern.name' => 'Lantern',
+			'game.jokers.lantern.description' => 'Stones and fog beside a cleared line are cleared with it.',
+			'game.jokers.ember.name' => 'Ember',
+			'game.jokers.ember.description' => ({required Object factor}) => '×${factor} mult when your move clears a stone or a fog cell.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',
@@ -1227,6 +1300,7 @@ extension on Translations {
 			'home.sheet.done' => 'Done',
 			'home.sheet.current' => 'In progress',
 			'home.sheet.bossRule.rubble' => 'The boss starts with stones on the board.',
+			'home.sheet.bossRule.fog' => 'Fog hides cells. Fill next to it to see what\'s underneath.',
 			'home.sheet.bossRule.gravity' => 'In the boss round, every piece falls to the bottom.',
 			'home.sheet.bossTarget' => ({required Object points}) => 'Beat the boss: ${points} points',
 			'home.sheet.stars' => 'Stars',

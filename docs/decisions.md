@@ -92,3 +92,31 @@ reading chosen and why. Newest task last.
 - **Testing a hook no world uses.** The engine looks rules up through `worldRuleLookup`, which only
   tests replace with a fake rule; the game never does.
 - **Momentum's streak** starts each round at 0, as the clear streak does.
+
+## Task 2: Fog, Lantern and Ember
+
+- **Where the fog goes.** "8 fog cells on empty cells, positions from the stones stream" draws
+  each from the same cells a stone may land on (`stoneCells`): empty cells that wouldn't complete a
+  line, since fog counts as occupied and a line full of fog at the boss's start would be credited
+  to whatever move came next. The first 3 laid hide a stone.
+- **Which fog lifts.** Fog sharing a side with any cell of the placed piece lifts, even where that
+  cell was cleared on the same move: it was placed there. Fog inside the cleared lines went with
+  them before the reveal (place, score and clear, Lantern, reveal).
+- **Lantern and stones under fog.** Lantern takes a fog cell whatever it hid; the hidden stone goes
+  with it, never revealed.
+- **What Lantern's removals count for.** For Ember, as the sprint says, and for Full House's
+  "occupied as the piece lands" (they were occupied); not for Stonemason, whose chips are per
+  stone cleared in a line, since Lantern's removals add no chips.
+- **Ember's count.** Stones and fog cells (whatever they hid) in the cleared lines, plus Lantern's
+  removals; one or more doubles the mult once.
+- **Two more world-rule hooks.** Fog needs to change the board at the boss's start and after each
+  move, which neither of Task 1's hooks does: `onBoardSetup` and `afterPlacement`.
+- **The bot and hidden stones.** The greedy bot scores a move by placing it, which reveals fog; its
+  tie-break (fewest occupied cells) would see a revealed stone. It counts a fog cell that turned to
+  stone as empty, so a reveal's outcome never steers it, as the sprint requires.
+- **Provisional numbers.** Fog's boss target (5,500) and ★3 threshold (12,000) are a step above
+  Gravity's until Task 6 sets them from the bot.
+- **The pick sheet's boss line** said "with stones" for every world, Gravity's included; it now
+  names each world's twist.
+- **The "every joker" seeded golden** now plays the 20 jokers before Fog, like the other frozen
+  goldens, so each new joker doesn't re-pin it.

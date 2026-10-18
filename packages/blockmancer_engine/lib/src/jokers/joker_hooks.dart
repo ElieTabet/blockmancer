@@ -34,10 +34,14 @@ final class MoveContext {
   final int traySize;
   final JokerTuning tuning;
 
-  /// Filled cells and stones once the piece has landed, before its lines
-  /// clear: every cleared cell was occupied, so they are added back.
+  /// Filled cells, stones and fog once the piece has landed, before its lines
+  /// clear: every cleared or removed cell was occupied, so they are added
+  /// back.
   int get occupiedAfterPlacing =>
-      Board.cellCount - clear.board.emptyCells.length + clear.cells.length;
+      Board.cellCount -
+      clear.board.emptyCells.length +
+      clear.cells.length +
+      clear.removed.length;
 }
 
 /// Chips and mult as they pass through the jokers, with what fired so far.

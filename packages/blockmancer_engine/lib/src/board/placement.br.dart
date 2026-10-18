@@ -15,6 +15,13 @@ abstract class ClearResult with _$ClearResult {
     required List<int> cols,
     required List<int> rows,
     required int stonesCleared,
+
+    /// Stones and fog the move took off the board, in its lines (fog counted
+    /// whatever it hid) and beside them (Lantern): what Ember reads.
+    @Default(0) int obstaclesCleared,
+
+    /// Cells taken off the board beside the cleared lines, row-major.
+    @Default([]) List<Cell> removed,
   }) = _ClearResult;
 
   const ClearResult._();
@@ -97,5 +104,39 @@ ClearResult resolveClears(Board board) {
     cols: cols,
     rows: rows,
     stonesCleared: cells.where((cell) => board.at(cell) is StoneCell).length,
+    obstaclesCleared: cells.where((cell) => _isObstacle(board.at(cell))).length,
+  );
+}
+
+bool _isObstacle(CellState cell) => cell is StoneCell || cell is FogCell;
+
+/// The cells sharing a side with [cell], on the board or not.
+List<Cell> orthogonalNeighbours(Cell cell) => [
+  Cell(col: cell.col, row: cell.row - 1),
+  Cell(col: cell.col - 1, row: cell.row),
+  Cell(col: cell.col + 1, row: cell.row),
+  Cell(col: cell.col, row: cell.row + 1),
+];
+
+/// Takes the stones and fog beside [clear]'s lines off the board too.
+ClearResult clearObstaclesBeside(ClearResult clear) {
+  final lines = clear.cells.toSet();
+  final beside = {
+    for (final cell in clear.cells)
+      for (final neighbour in orthogonalNeighbours(cell))
+        if (clear.board.contains(neighbour) &&
+            !lines.contains(neighbour) &&
+            _isObstacle(clear.board.at(neighbour)))
+          neighbour,
+  }.toList()..sort((a, b) => a.row != b.row ? a.row - b.row : a.col - b.col);
+
+  if (beside.isEmpty) return clear;
+
+  return clear.copyWith(
+    board: clear.board.withCells({
+      for (final cell in beside) cell: const .empty(),
+    }),
+    obstaclesCleared: clear.obstaclesCleared + beside.length,
+    removed: [...clear.removed, ...beside],
   );
 }

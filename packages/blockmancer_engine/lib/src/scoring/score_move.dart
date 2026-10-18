@@ -55,8 +55,9 @@ MoveScore scoreMove({
   required int? trayClearMask,
   required bool trayEmptied,
 }) {
+  final (extended, removals) = _extendClear(clear, jokers);
   final move = MoveContext(
-    clear: clear,
+    clear: extended,
     jokerCount: jokers.length,
     pieceSize: pieceSize,
     storedMult: storedMult,
@@ -72,6 +73,7 @@ MoveScore scoreMove({
   if (clear.clearedAny) {
     step = ScoreStep(
       chips: config.chipsPerCell * clear.cells.length,
+      fired: removals,
       mult: clear.lineCount,
     );
     step = jokers.fold(step, (step, joker) => joker.onAdditive(move, step));
@@ -82,7 +84,11 @@ MoveScore scoreMove({
   }
 
   final after = jokers.fold(
-    AfterMove(board: clear.board, stonesRng: stonesRng, storedMult: storedMult),
+    AfterMove(
+      board: extended.board,
+      stonesRng: stonesRng,
+      storedMult: storedMult,
+    ),
     (after, joker) => joker.afterMove(after, move),
   );
 
@@ -101,4 +107,32 @@ MoveScore scoreMove({
     storedMult: after.storedMult,
     streak: move.streak,
   );
+}
+
+/// [clear] with what each joker takes off the board beside its lines, and a
+/// fired event per joker that took any. Only a clearing move has lines.
+(ClearResult, List<JokerFired>) _extendClear(
+  ClearResult clear,
+  List<JokerEffect> jokers,
+) {
+  if (!clear.clearedAny) return (clear, const []);
+
+  var extended = clear;
+  final fired = <JokerFired>[];
+
+  for (final joker in jokers) {
+    final before = extended.removed.length;
+    extended = joker.extendClear(extended);
+
+    if (extended.removed.length > before) {
+      fired.add(
+        JokerFired(
+          delta: .obstaclesRemoved(cells: extended.removed.sublist(before)),
+          joker: joker.id,
+        ),
+      );
+    }
+  }
+
+  return (extended, fired);
 }

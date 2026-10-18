@@ -80,3 +80,17 @@ final gravityConfig = defaultConfig.copyWith(
   starThreshold: 11500,
   world: .gravity,
 );
+
+/// The default run in Fog, whose boss starts with no stones but 8 fog cells,
+/// 3 of them hiding a stone. Its boss target and ★3 threshold are a step above
+/// Gravity's until Sprint 7's balance pass sets them from the bot.
+final fogConfig = defaultConfig.copyWith(
+  rounds: [
+    for (final round in defaultConfig.rounds)
+      round.isBoss
+          ? round.copyWith(fog: 8, fogStones: 3, stones: 0, target: 5500)
+          : round,
+  ],
+  starThreshold: 12000,
+  world: .fog,
+);

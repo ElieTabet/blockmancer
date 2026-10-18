@@ -75,7 +75,10 @@ class _EffectsLayerState extends ConsumerState<_EffectsLayer>
   }
 
   void _draw(Beat? beat) {
-    final drawn = beat is PlacingBeat || beat is ClearingBeat ? beat : null;
+    final drawn = switch (beat) {
+      PlacingBeat() || ClearingBeat() || RevealingBeat() => beat,
+      _ => null,
+    };
 
     if (drawn == null && _beat == null) return;
 

@@ -70,6 +70,26 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Given the Fog boss next, When the pick is offered, Then the heading names '
+    'the fog rather than stones',
+    (tester) async {
+      // Given
+      final run = runIn(
+        const .pickingJoker(offers: [.twin, .combo]),
+      ).copyWith(config: testConfig.copyWith(world: .fog));
+
+      // When
+      await pumpGame(tester, run);
+
+      // Then
+      expect(
+        find.text('Pick a joker. Next: Boss · 2000 pts in the fog.'),
+        findsOneWidget,
+      );
+    },
+  );
+
   testWidgets('the pick cannot be skipped by tapping beside it or going back', (
     tester,
   ) async {

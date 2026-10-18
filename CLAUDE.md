@@ -75,14 +75,14 @@ melos run test
 melos run test-engine-web
 
 # Play 2,000 seeded runs for each reference build (the baselines `random` and `empty`, then each
-# of the 10 pairs) with the greedy balance bot, and print the share of runs clearing each round,
+# of the pairs) with the greedy balance bot, and print the share of runs clearing each round,
 # the 50th and 80th percentile totals (nearest rank), the boss win rate (over every run, over the
 # runs that cleared round 4, and over the runs that completed their pair), the jokers a run ends
 # with on average, the share of runs that completed their pair and their P80 total. `--solo` adds
 # a row per joker played alone (docs/balance/<date>.md holds each table, docs/balance-v0.md the
 # first, docs/balance/2026-10-18-sprint5.md the Sprint 5 tuning and the ★3 thresholds). It plays
 # `configFor(world, jokerPool: JokerId.values)` — every joker on offer — in Rubble unless
-# `--world gravity`. Melos passes no arguments through, so for
+# `--world` names another playable world (gravity, fog). Melos passes no arguments through, so for
 # `--runs` / `--build` / `--world` run it from the package:
 #   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 #   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build random --solo
@@ -274,12 +274,13 @@ engine's events and never recomputes a rule.
   `const BlockmancerEngine()`. Rule data and rule decisions stay behind the contract (`defaultConfig`,
   `shape(id)`, `partnerOf(id)`, `canRevive`, `liveRunTotal`), so no feature computes a rule and
   `shared_domain`'s entities only read their own fields.
-- **Jokers and worlds.** 20 jokers in 10 pairs in `jokerCatalog` (hook and draw order; new ones
+- **Jokers and worlds.** 22 jokers in 11 pairs in `jokerCatalog` (hook and draw order; new ones
   are appended, so a pool without them draws exactly as before — Anchor and Avalanche, Gravity's,
-  then the stars' Full House, On the Brink, Finisher and Hat Trick come last). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
+  then the stars' Full House, On the Brink, Finisher and Hat Trick, then Fog's Lantern and Ember
+  come last). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
   pool's list order, and the pair bias only proposes a partner in the pool; `defaultConfig`'s pool
   is every joker, as the daily run's is. The map is rule data behind the contract too:
-  `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (Rubble, Gravity),
+  `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (Rubble, Gravity, Fog),
   `unlocksOf(world)` and `startingJokers` (every joker neither a world nor the stars unlock: 12).
 - **What a joker reads.** Each hook gets a `MoveContext`: the clear, the piece's size, the streak,
   Patience's bank, `occupiedAfterPlacing` (filled cells and stones once the piece has landed, before
@@ -323,7 +324,18 @@ engine's events and never recomputes a rule.
   round's first, which may lose the round (no tray is dealt then, and the round stays lost).
   `canPlace`, `preview`, `place`, `fitsSomewhere` and the round's "no room" all go through
   `transformPlacement`, and `PiecePlaced` carries the landing cells; a `RunMove.place` keeps the
-  drop point, so replay re-applies the rule. Fog, Mirror and Tide have no rule yet and throw.
+  drop point, so replay re-applies the rule. Two more hooks serve Fog: `onBoardSetup`, the board
+  a round starts on once its stones are down (drawing from the stones stream), and
+  `afterPlacement`, the board once a move has scored and cleared. Mirror and Tide have no rule yet
+  and throw.
+- **Fog.** The boss starts with `RoundSpec.fog` fog cells (8) on empty cells from the stones
+  stream, the first `fogStones` (3) hiding a stone (`FogPlaced`). A move is: place, score and
+  clear, the jokers' removals beside the lines (Lantern, through `JokerEffect.extendClear`, which
+  adds no chips), then every fog cell sharing a side with a cell of the placed piece lifts, to
+  empty or to the stone it hid (`FogRevealed`). Ember reads `ClearResult.obstaclesCleared`: the
+  stones and fog the move took off, in its lines or beside them. Fog's boss target and ★3 are
+  provisional (a step above Gravity's) until Sprint 7's balance pass. The bot's tie-break counts a
+  fog cell that turned to stone as empty, so what fog hides never steers it.
   Tests swap in a fake rule through `worldRuleLookup`.
 - **Fog cells.** `CellState.fog(hidesStone:)` blocks a piece and counts as occupied, for lines
   and for Full House and On the Brink, like a stone. A cleared line takes its fog with it, and

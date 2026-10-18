@@ -141,6 +141,7 @@ Transition place(
       ? mask | 1 << trayIndex
       : mask;
 
+  final rule = ruleOfRound(state.config, state.round);
   final score = scoreMove(
     clear: clear,
     config: state.config,
@@ -173,9 +174,14 @@ Transition place(
     ),
     for (final cell in score.stonesDropped) .stonePlaced(cell: cell),
   ];
+  final (board, worldEvents) = rule.afterPlacement(
+    board: score.board,
+    placed: landing,
+  );
+  events.addAll(worldEvents);
 
   final next = state.copyWith(
-    board: score.board,
+    board: board,
     score: state.score + score.points,
     stonesRngState: score.stonesRng.state,
     storedMult: score.storedMult,
@@ -369,6 +375,11 @@ Transition _startRound(Transition transition) {
     board = board.withCells({cells[index]: const .stone()});
     started.add(.stonePlaced(cell: cells[index]));
   }
+
+  final (fogged, rngAfterFog, laid) = rule.onBoardSetup(board, spec, stonesRng);
+  board = fogged;
+  stonesRng = rngAfterFog;
+  started.addAll(laid);
 
   final round = state.copyWith(
     board: board,

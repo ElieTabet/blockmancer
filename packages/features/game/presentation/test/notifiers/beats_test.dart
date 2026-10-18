@@ -324,6 +324,88 @@ void main() {
     expect(landing.countUp, greaterThan(landing.duration));
   });
 
+  test('fog a placement lifts puffs away once the piece is down', () {
+    // Given / When
+    final played = beats([
+      placed,
+      score(chips: 0, mult: 0),
+      const GameEvent.fogRevealed(
+        becameStone: true,
+        cell: Cell(col: 6, row: 0),
+      ),
+    ]);
+
+    // Then
+    expect(played.whereType<PlacingBeat>(), hasLength(1));
+    expect(
+      played.whereType<RevealingBeat>().single,
+      const Beat.revealing(
+        cells: [Cell(col: 6, row: 0)],
+        duration: Duration(milliseconds: 260),
+      ),
+    );
+    expect(played.indexWhere((beat) => beat is RevealingBeat), 2);
+  });
+
+  test('fog lifted by a clear puffs away after the burst', () {
+    // Given / When
+    final played = beats([
+      placed,
+      oneLine,
+      score(),
+      const GameEvent.fogRevealed(
+        becameStone: false,
+        cell: Cell(col: 7, row: 1),
+      ),
+    ]);
+
+    // Then
+    expect(
+      played.indexWhere((beat) => beat is RevealingBeat),
+      played.indexWhere((beat) => beat is ClearingBeat) + 1,
+    );
+  });
+
+  test('with reduce motion on, lifted fog is simply gone', () {
+    // Given / When
+    final played = beats([
+      placed,
+      score(chips: 0, mult: 0),
+      const GameEvent.fogRevealed(
+        becameStone: false,
+        cell: Cell(col: 6, row: 0),
+      ),
+    ], reduceMotion: true);
+
+    // Then
+    expect(played.whereType<RevealingBeat>(), isEmpty);
+  });
+
+  test('what Lantern takes beside the line bursts with it', () {
+    // Given: a stone under the row
+    final before = runIn(
+      const .playing(),
+      board: rowBefore.withCells({const Cell(col: 2, row: 1): const .stone()}),
+    );
+
+    // When
+    final played = beats([
+      placed,
+      oneLine,
+      const GameEvent.jokerFired(
+        delta: .obstaclesRemoved(cells: [Cell(col: 2, row: 1)]),
+        joker: .lantern,
+      ),
+      score(),
+    ], before: before);
+
+    // Then
+    expect(played.whereType<ClearingBeat>().single.cells.last, (
+      cell: const Cell(col: 2, row: 1),
+      state: const CellState.stone(),
+    ));
+  });
+
   test('a move with no events plays nothing', () {
     // Given / When / Then
     expect(beats(const []), isEmpty);

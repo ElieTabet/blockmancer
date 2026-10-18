@@ -70,7 +70,8 @@ void main() {
       // Given
       final context = await _pumpContext(tester);
 
-      for (final id in JokerId.values) {
+      // Lantern has no number to retune.
+      for (final id in JokerId.values.where((id) => id != .lantern)) {
         // When
         final before = jokerDescription(
           context,

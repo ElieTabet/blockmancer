@@ -9,8 +9,9 @@ import 'package:game_presentation/src/painting/board_painter.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// What a beat draws over the board, on its own layer so the board itself
-/// never repaints for it: the placed piece squashing into its cells, or the
-/// cleared cells flashing white and bursting into particles of their colour.
+/// never repaints for it: the placed piece squashing into its cells, the
+/// cleared cells flashing white and bursting into particles of their colour,
+/// or lifted fog puffing away.
 final class BoardEffectsPainter extends CustomPainter {
   BoardEffectsPainter({required this.beat, required this.progress})
     : super(repaint: progress);
@@ -73,8 +74,28 @@ final class BoardEffectsPainter extends CustomPainter {
         for (final (:cell, :state) in cells) {
           _burst(canvas, geometry, cell, cellColor(state), burst);
         }
+      case RevealingBeat(:final cells):
+        for (final cell in cells) {
+          _puff(canvas, geometry.cellRect(cell), progress.value);
+        }
       default:
         return;
+    }
+  }
+
+  /// A cloud swelling out of [rect] as it fades.
+  void _puff(Canvas canvas, Rect rect, double lift) {
+    final eased = Curves.easeOut.transform(lift);
+
+    _paint.color = DSGameColor.fog.withValues(alpha: 0.8 * (1 - eased));
+
+    for (final (dx, dy, size) in fogPuffs) {
+      canvas.drawCircle(
+        rect.center +
+            Offset(dx * rect.width, dy * rect.height) * (1 + eased * 1.4),
+        rect.width * size * (1 + eased * 0.6),
+        _paint,
+      );
     }
   }
 

@@ -51,7 +51,7 @@ RunMove _bestPlacement(RunState state) {
         final (next, _) = place(state, anchor: anchor, trayIndex: trayIndex);
         // The run total, so a winning move's bonuses count too.
         final gain = liveRunTotal(next) - before;
-        final occupied = Board.cellCount - next.board.emptyCells.length;
+        final occupied = _occupiedAsSeen(state.board, next.board);
 
         if (gain > bestGain || (gain == bestGain && occupied < bestOccupied)) {
           best = .place(anchor: anchor, trayIndex: trayIndex);
@@ -65,3 +65,13 @@ RunMove _bestPlacement(RunState state) {
   // Playing means some tray piece fits: the engine settles otherwise.
   return best!;
 }
+
+/// The cells [after] occupies, a fog cell of [before] that turned to stone
+/// counted as empty: whether fog hid a stone is the rules' secret, so the bot
+/// may not prefer a move for what it would reveal.
+int _occupiedAsSeen(Board before, Board after) => [
+  for (var index = 0; index < Board.cellCount; index++)
+    if (after.cells[index] is! EmptyCell &&
+        !(before.cells[index] is FogCell && after.cells[index] is StoneCell))
+      index,
+].length;

@@ -386,6 +386,20 @@ void main() {
     expect(score.mult, 1 + 2 * 24);
   });
 
+  test('Ember multiplies by its configured factor', () {
+    // Given / When
+    final score = playMove(
+      ['###S###.'],
+      at: topRight,
+      config: tunedConfig,
+      jokers: const [.ember],
+      shape: 0,
+    );
+
+    // Then
+    expect(score.mult, 26);
+  });
+
   group('On the Brink', () {
     test('multiplies by its factor at its configured occupied cells', () {
       // Given / When: 8 in row 0, 7 in row 1 and 5 in row 2 make 20

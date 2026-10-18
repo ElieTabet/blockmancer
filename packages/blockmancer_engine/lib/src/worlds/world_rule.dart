@@ -1,5 +1,6 @@
 import 'package:blockmancer_engine/src/board/placement.br.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
+import 'package:blockmancer_engine/src/random/mulberry32.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// A world's twist on the rules. Every hook defaults to the plain rules, so a
@@ -13,6 +14,22 @@ abstract class WorldRule {
 
   /// How a round the rule holds in starts, before the jokers add to it.
   RoundSetup onRoundSetup(RoundSetup setup, RoundSpec round) => setup;
+
+  /// The board a round the rule holds in starts on, once its stones are down,
+  /// drawing from the stones stream [stonesRng]; with the events that say
+  /// what it added.
+  (Board, Mulberry32, List<GameEvent>) onBoardSetup(
+    Board board,
+    RoundSpec round,
+    Mulberry32 stonesRng,
+  ) => (board, stonesRng, const []);
+
+  /// The board once a piece that filled [placed] has scored, cleared and had
+  /// the jokers' say; with the events that say what changed.
+  (Board, List<GameEvent>) afterPlacement({
+    required Board board,
+    required List<Cell> placed,
+  }) => (board, const []);
 
   /// The run a new tray is about to be dealt into; [firstOfRound] for the
   /// round's first tray. A run it leaves lost is dealt nothing.

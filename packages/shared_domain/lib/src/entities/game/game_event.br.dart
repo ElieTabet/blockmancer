@@ -9,6 +9,16 @@ part 'game_event.br.freezed.dart';
 /// What a move did, in order. The UI animates these; it never recomputes a rule.
 @freezed
 sealed class GameEvent with _$GameEvent {
+  /// Fog laid on [cells] as the round starts (Fog's boss).
+  const factory GameEvent.fogPlaced({required List<Cell> cells}) = FogPlaced;
+
+  /// A fog cell beside the piece just placed lifted: empty now, or a stone
+  /// if it hid one.
+  const factory GameEvent.fogRevealed({
+    required bool becameStone,
+    required Cell cell,
+  }) = FogRevealed;
+
   const factory GameEvent.jokerFired({
     required JokerDelta delta,
     required JokerId joker,

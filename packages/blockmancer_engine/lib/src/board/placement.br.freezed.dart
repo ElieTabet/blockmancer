@@ -16,7 +16,10 @@ mixin _$ClearResult {
 
  Board get board;/// Distinct cells, row-major: where a row and a column cross, the shared
 /// cell is here once.
- List<Cell> get cells; List<int> get cols; List<int> get rows; int get stonesCleared;
+ List<Cell> get cells; List<int> get cols; List<int> get rows; int get stonesCleared;/// Stones and fog the move took off the board, in its lines (fog counted
+/// whatever it hid) and beside them (Lantern): what Ember reads.
+ int get obstaclesCleared;/// Cells taken off the board beside the cleared lines, row-major.
+ List<Cell> get removed;
 /// Create a copy of ClearResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,16 +30,16 @@ $ClearResultCopyWith<ClearResult> get copyWith => _$ClearResultCopyWithImpl<Clea
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClearResult&&(identical(other.board, board) || other.board == board)&&const DeepCollectionEquality().equals(other.cells, cells)&&const DeepCollectionEquality().equals(other.cols, cols)&&const DeepCollectionEquality().equals(other.rows, rows)&&(identical(other.stonesCleared, stonesCleared) || other.stonesCleared == stonesCleared));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClearResult&&(identical(other.board, board) || other.board == board)&&const DeepCollectionEquality().equals(other.cells, cells)&&const DeepCollectionEquality().equals(other.cols, cols)&&const DeepCollectionEquality().equals(other.rows, rows)&&(identical(other.stonesCleared, stonesCleared) || other.stonesCleared == stonesCleared)&&(identical(other.obstaclesCleared, obstaclesCleared) || other.obstaclesCleared == obstaclesCleared)&&const DeepCollectionEquality().equals(other.removed, removed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,board,const DeepCollectionEquality().hash(cells),const DeepCollectionEquality().hash(cols),const DeepCollectionEquality().hash(rows),stonesCleared);
+int get hashCode => Object.hash(runtimeType,board,const DeepCollectionEquality().hash(cells),const DeepCollectionEquality().hash(cols),const DeepCollectionEquality().hash(rows),stonesCleared,obstaclesCleared,const DeepCollectionEquality().hash(removed));
 
 @override
 String toString() {
-  return 'ClearResult(board: $board, cells: $cells, cols: $cols, rows: $rows, stonesCleared: $stonesCleared)';
+  return 'ClearResult(board: $board, cells: $cells, cols: $cols, rows: $rows, stonesCleared: $stonesCleared, obstaclesCleared: $obstaclesCleared, removed: $removed)';
 }
 
 
@@ -47,7 +50,7 @@ abstract mixin class $ClearResultCopyWith<$Res>  {
   factory $ClearResultCopyWith(ClearResult value, $Res Function(ClearResult) _then) = _$ClearResultCopyWithImpl;
 @useResult
 $Res call({
- Board board, List<Cell> cells, List<int> cols, List<int> rows, int stonesCleared
+ Board board, List<Cell> cells, List<int> cols, List<int> rows, int stonesCleared, int obstaclesCleared, List<Cell> removed
 });
 
 
@@ -64,14 +67,16 @@ class _$ClearResultCopyWithImpl<$Res>
 
 /// Create a copy of ClearResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? board = null,Object? cells = null,Object? cols = null,Object? rows = null,Object? stonesCleared = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? board = null,Object? cells = null,Object? cols = null,Object? rows = null,Object? stonesCleared = null,Object? obstaclesCleared = null,Object? removed = null,}) {
   return _then(_self.copyWith(
 board: null == board ? _self.board : board // ignore: cast_nullable_to_non_nullable
 as Board,cells: null == cells ? _self.cells : cells // ignore: cast_nullable_to_non_nullable
 as List<Cell>,cols: null == cols ? _self.cols : cols // ignore: cast_nullable_to_non_nullable
 as List<int>,rows: null == rows ? _self.rows : rows // ignore: cast_nullable_to_non_nullable
 as List<int>,stonesCleared: null == stonesCleared ? _self.stonesCleared : stonesCleared // ignore: cast_nullable_to_non_nullable
-as int,
+as int,obstaclesCleared: null == obstaclesCleared ? _self.obstaclesCleared : obstaclesCleared // ignore: cast_nullable_to_non_nullable
+as int,removed: null == removed ? _self.removed : removed // ignore: cast_nullable_to_non_nullable
+as List<Cell>,
   ));
 }
 /// Create a copy of ClearResult
@@ -165,10 +170,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Board board,  List<Cell> cells,  List<int> cols,  List<int> rows,  int stonesCleared)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Board board,  List<Cell> cells,  List<int> cols,  List<int> rows,  int stonesCleared,  int obstaclesCleared,  List<Cell> removed)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ClearResult() when $default != null:
-return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleared);case _:
+return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleared,_that.obstaclesCleared,_that.removed);case _:
   return orElse();
 
 }
@@ -186,10 +191,10 @@ return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleare
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Board board,  List<Cell> cells,  List<int> cols,  List<int> rows,  int stonesCleared)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Board board,  List<Cell> cells,  List<int> cols,  List<int> rows,  int stonesCleared,  int obstaclesCleared,  List<Cell> removed)  $default,) {final _that = this;
 switch (_that) {
 case _ClearResult():
-return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleared);case _:
+return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleared,_that.obstaclesCleared,_that.removed);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +211,10 @@ return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleare
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Board board,  List<Cell> cells,  List<int> cols,  List<int> rows,  int stonesCleared)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Board board,  List<Cell> cells,  List<int> cols,  List<int> rows,  int stonesCleared,  int obstaclesCleared,  List<Cell> removed)?  $default,) {final _that = this;
 switch (_that) {
 case _ClearResult() when $default != null:
-return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleared);case _:
+return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleared,_that.obstaclesCleared,_that.removed);case _:
   return null;
 
 }
@@ -221,7 +226,7 @@ return $default(_that.board,_that.cells,_that.cols,_that.rows,_that.stonesCleare
 
 
 class _ClearResult extends ClearResult {
-  const _ClearResult({required this.board, required final  List<Cell> cells, required final  List<int> cols, required final  List<int> rows, required this.stonesCleared}): _cells = cells,_cols = cols,_rows = rows,super._();
+  const _ClearResult({required this.board, required final  List<Cell> cells, required final  List<int> cols, required final  List<int> rows, required this.stonesCleared, this.obstaclesCleared = 0, final  List<Cell> removed = const []}): _cells = cells,_cols = cols,_rows = rows,_removed = removed,super._();
   
 
 @override final  Board board;
@@ -251,6 +256,18 @@ class _ClearResult extends ClearResult {
 }
 
 @override final  int stonesCleared;
+/// Stones and fog the move took off the board, in its lines (fog counted
+/// whatever it hid) and beside them (Lantern): what Ember reads.
+@override@JsonKey() final  int obstaclesCleared;
+/// Cells taken off the board beside the cleared lines, row-major.
+ final  List<Cell> _removed;
+/// Cells taken off the board beside the cleared lines, row-major.
+@override@JsonKey() List<Cell> get removed {
+  if (_removed is EqualUnmodifiableListView) return _removed;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_removed);
+}
+
 
 /// Create a copy of ClearResult
 /// with the given fields replaced by the non-null parameter values.
@@ -262,16 +279,16 @@ _$ClearResultCopyWith<_ClearResult> get copyWith => __$ClearResultCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClearResult&&(identical(other.board, board) || other.board == board)&&const DeepCollectionEquality().equals(other._cells, _cells)&&const DeepCollectionEquality().equals(other._cols, _cols)&&const DeepCollectionEquality().equals(other._rows, _rows)&&(identical(other.stonesCleared, stonesCleared) || other.stonesCleared == stonesCleared));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClearResult&&(identical(other.board, board) || other.board == board)&&const DeepCollectionEquality().equals(other._cells, _cells)&&const DeepCollectionEquality().equals(other._cols, _cols)&&const DeepCollectionEquality().equals(other._rows, _rows)&&(identical(other.stonesCleared, stonesCleared) || other.stonesCleared == stonesCleared)&&(identical(other.obstaclesCleared, obstaclesCleared) || other.obstaclesCleared == obstaclesCleared)&&const DeepCollectionEquality().equals(other._removed, _removed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,board,const DeepCollectionEquality().hash(_cells),const DeepCollectionEquality().hash(_cols),const DeepCollectionEquality().hash(_rows),stonesCleared);
+int get hashCode => Object.hash(runtimeType,board,const DeepCollectionEquality().hash(_cells),const DeepCollectionEquality().hash(_cols),const DeepCollectionEquality().hash(_rows),stonesCleared,obstaclesCleared,const DeepCollectionEquality().hash(_removed));
 
 @override
 String toString() {
-  return 'ClearResult(board: $board, cells: $cells, cols: $cols, rows: $rows, stonesCleared: $stonesCleared)';
+  return 'ClearResult(board: $board, cells: $cells, cols: $cols, rows: $rows, stonesCleared: $stonesCleared, obstaclesCleared: $obstaclesCleared, removed: $removed)';
 }
 
 
@@ -282,7 +299,7 @@ abstract mixin class _$ClearResultCopyWith<$Res> implements $ClearResultCopyWith
   factory _$ClearResultCopyWith(_ClearResult value, $Res Function(_ClearResult) _then) = __$ClearResultCopyWithImpl;
 @override @useResult
 $Res call({
- Board board, List<Cell> cells, List<int> cols, List<int> rows, int stonesCleared
+ Board board, List<Cell> cells, List<int> cols, List<int> rows, int stonesCleared, int obstaclesCleared, List<Cell> removed
 });
 
 
@@ -299,14 +316,16 @@ class __$ClearResultCopyWithImpl<$Res>
 
 /// Create a copy of ClearResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? board = null,Object? cells = null,Object? cols = null,Object? rows = null,Object? stonesCleared = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? board = null,Object? cells = null,Object? cols = null,Object? rows = null,Object? stonesCleared = null,Object? obstaclesCleared = null,Object? removed = null,}) {
   return _then(_ClearResult(
 board: null == board ? _self.board : board // ignore: cast_nullable_to_non_nullable
 as Board,cells: null == cells ? _self._cells : cells // ignore: cast_nullable_to_non_nullable
 as List<Cell>,cols: null == cols ? _self._cols : cols // ignore: cast_nullable_to_non_nullable
 as List<int>,rows: null == rows ? _self._rows : rows // ignore: cast_nullable_to_non_nullable
 as List<int>,stonesCleared: null == stonesCleared ? _self.stonesCleared : stonesCleared // ignore: cast_nullable_to_non_nullable
-as int,
+as int,obstaclesCleared: null == obstaclesCleared ? _self.obstaclesCleared : obstaclesCleared // ignore: cast_nullable_to_non_nullable
+as int,removed: null == removed ? _self._removed : removed // ignore: cast_nullable_to_non_nullable
+as List<Cell>,
   ));
 }
 
