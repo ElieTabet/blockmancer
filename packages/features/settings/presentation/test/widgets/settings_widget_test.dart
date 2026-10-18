@@ -189,14 +189,15 @@ void main() {
   });
 
   testWidgets(
-    'Given a release build, When Settings opens, Then the Version row shows the version and the build',
+    'Given a release build, When Settings opens, Then the Version row shows the version, without the build',
     (tester) async {
       // Given / When
       await pumpSettings(tester);
 
       // Then
       expect(find.text('Version'), findsOneWidget);
-      expect(find.text('1.0.0 (2)'), findsOneWidget);
+      expect(find.text('1.0.0'), findsOneWidget);
+      expect(find.textContaining('(2)'), findsNothing);
     },
   );
 

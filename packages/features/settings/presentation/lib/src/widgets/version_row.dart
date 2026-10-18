@@ -21,20 +21,21 @@ final class VersionRow extends StatelessWidget {
   );
 }
 
-/// "1.0.0 (2)": the version, then the build. Empty until both are read.
+/// "1.0.0", without the build: the feedback email carries that. Empty until
+/// read.
 final class VersionValue extends ConsumerWidget {
   const VersionValue({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final details = ref.watch(
-      appDetailsProvider.select((details) => details.value),
+    final version = ref.watch(
+      appDetailsProvider.select((details) => details.value?.version),
     );
 
-    if (details == null) return const SizedBox.shrink();
+    if (version == null) return const SizedBox.shrink();
 
     return Text(
-      '${details.version} (${details.build})',
+      version,
       style: const TextStyle(color: DSColor.textMuted, fontSize: 16),
     );
   }

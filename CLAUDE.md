@@ -798,7 +798,7 @@ The player's settings, kept on the device; there is no account to sync them to. 
   `settings_presentation`, which maps `AppLanguage` to slang's `LocaleSettings`) right after
   telemetry and before push, whose channel is named in the language the app shows. System re-reads
   the phone's locale.
-- **Version and feedback:** the Version row shows `settings_domain`'s `AppDetails` as "1.0.0 (2)",
+- **Version and feedback:** the Version row shows `settings_domain`'s `AppDetails` version alone ("1.0.0"; the build goes in the feedback email),
   and Send feedback runs `SendFeedbackBehavior`: a `mailto:support@elietabet.com` draft whose
   subject and labels stay in English (support reads them) with the version, build, device and OS
   prefilled. When no mail app opens, a popup shows the address. Both come through slots —
