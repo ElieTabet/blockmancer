@@ -22,8 +22,10 @@ final class JokerCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tuning = ref.watch(
-      gameProvider.select((state) => state.run.config.jokers),
+    final (tuning, traySize) = ref.watch(
+      gameProvider.select(
+        (state) => (state.run.config.jokers, state.run.config.traySize),
+      ),
     );
     final footer = this.footer;
     final trailing = this.trailing;
@@ -56,7 +58,7 @@ final class JokerCard extends ConsumerWidget {
                   ),
                 ),
                 Text(
-                  jokerDescription(context, id, tuning),
+                  jokerDescription(context, id, tuning, traySize: traySize),
                   style: const TextStyle(
                     color: DSColor.textMuted,
                     fontSize: 13,

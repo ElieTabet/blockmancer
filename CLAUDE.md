@@ -302,6 +302,9 @@ engine's events and never recomputes a rule.
   list of `shared_domain`'s `RunMove`s (`pick`, `place`, `revive`, `end`) back into the final
   `RunState`, refusing any move the run couldn't have made. This is what a server will check a score
   with.
+- **Joker texts read the config.** Every number a joker's description shows comes from the
+  `RunConfig` it is shown for (`JokerTuning`, and `traySize` for Hat Trick): the run's own in a run,
+  the rules' `defaultConfig` in the Spellbook and on the map. No l10n string holds a joker number.
 - **Tunable.** Every number a designer would tune lives in the immutable `RunConfig`, whose values
   are `defaultConfig`: the rounds' targets, pieces and stones, chips per cleared cell, revives, offers,
   each joker's numbers (`JokerTuning`, which every joker hook is handed), `starThreshold`, the
@@ -341,9 +344,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 7`; `migrate(json)` brings an older version up to date one
+  wire format. The schema has `version: 8`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick; the saved pool is kept, so an old run never offers a new joker), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick, 7 → 8 Avalanche's two rows and Full House's +1 mult, constants until then; the saved pool is kept, so an old run never offers a new joker), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes

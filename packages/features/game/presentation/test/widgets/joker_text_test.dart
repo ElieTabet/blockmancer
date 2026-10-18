@@ -10,6 +10,7 @@ import '../fake_game_rules.dart';
 const _retuned = JokerTuning(
   anchorMult: 11,
   avalancheChipsPerCell: 12,
+  avalancheRows: 3,
   bigBoxFactor: 13,
   bigBoxMinPieceSize: 14,
   brinkFactor: 33,
@@ -19,6 +20,7 @@ const _retuned = JokerTuning(
   comboMultPerStreak: 17,
   finisherFactor: 35,
   fullHouseCellsPerMult: 36,
+  fullHouseMultPerBlock: 4,
   hatTrickBonus: 37,
   heavyFactor: 18,
   heavyMinPieceSize: 19,
@@ -65,8 +67,18 @@ void main() {
 
       for (final id in JokerId.values) {
         // When
-        final before = jokerDescription(context, id, testConfig.jokers);
-        final after = jokerDescription(context, id, _retuned);
+        final before = jokerDescription(
+          context,
+          id,
+          testConfig.jokers,
+          traySize: testConfig.traySize,
+        );
+        final after = jokerDescription(
+          context,
+          id,
+          _retuned,
+          traySize: testConfig.traySize,
+        );
 
         // Then
         expect(after, isNot(before), reason: id.name);
@@ -82,7 +94,12 @@ void main() {
       final tuning = testConfig.jokers.copyWith(twinFactor: 5, twinMinLines: 3);
 
       // When
-      final description = jokerDescription(context, .twin, tuning);
+      final description = jokerDescription(
+        context,
+        .twin,
+        tuning,
+        traySize: testConfig.traySize,
+      );
 
       // Then
       expect(description, '×5 mult when you clear 3 or more lines at once.');
@@ -99,8 +116,8 @@ void main() {
 
       // When
       final described = [
-        jokerDescription(context, .quarry, one),
-        jokerDescription(context, .quarry, two),
+        jokerDescription(context, .quarry, one, traySize: testConfig.traySize),
+        jokerDescription(context, .quarry, two, traySize: testConfig.traySize),
       ];
 
       // Then
@@ -108,6 +125,54 @@ void main() {
         'Every clear drops a new stone on a random empty cell.',
         'Every clear drops 2 new stones on random empty cells.',
       ]);
+    },
+  );
+
+  testWidgets(
+    'Given a 4-piece tray, When Hat Trick is described, Then it asks for all 4',
+    (tester) async {
+      // Given
+      final context = await _pumpContext(tester);
+
+      // When
+      final description = jokerDescription(
+        context,
+        .hattrick,
+        testConfig.jokers,
+        traySize: 4,
+      );
+
+      // Then
+      expect(description, contains('each of the 4 pieces'));
+    },
+  );
+
+  testWidgets(
+    'Given a retuned run, When each joker is described, Then every number it '
+    'shows is one of the run\'s',
+    (tester) async {
+      // Given: every tunable distinct, and a 7-piece tray
+      final context = await _pumpContext(tester);
+      final numbers = {
+        for (final match in RegExp(r'\d+').allMatches('$_retuned'))
+          match.group(0),
+        '7',
+      };
+
+      for (final id in JokerId.values) {
+        // When
+        final description = jokerDescription(
+          context,
+          id,
+          _retuned,
+          traySize: 7,
+        );
+
+        // Then
+        for (final match in RegExp(r'\d+').allMatches(description)) {
+          expect(numbers, contains(match.group(0)), reason: description);
+        }
+      }
     },
   );
 }

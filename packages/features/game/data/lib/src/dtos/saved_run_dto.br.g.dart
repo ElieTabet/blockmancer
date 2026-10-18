@@ -122,6 +122,7 @@ JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
     JokerTuningDto(
       anchorMult: (json['anchorMult'] as num).toInt(),
       avalancheChipsPerCell: (json['avalancheChipsPerCell'] as num).toInt(),
+      avalancheRows: (json['avalancheRows'] as num).toInt(),
       bigBoxFactor: (json['bigBoxFactor'] as num).toInt(),
       bigBoxMinPieceSize: (json['bigBoxMinPieceSize'] as num).toInt(),
       brinkFactor: (json['brinkFactor'] as num).toInt(),
@@ -131,6 +132,7 @@ JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
       comboMultPerStreak: (json['comboMultPerStreak'] as num).toInt(),
       finisherFactor: (json['finisherFactor'] as num).toInt(),
       fullHouseCellsPerMult: (json['fullHouseCellsPerMult'] as num).toInt(),
+      fullHouseMultPerBlock: (json['fullHouseMultPerBlock'] as num).toInt(),
       hatTrickBonus: (json['hatTrickBonus'] as num).toInt(),
       heavyFactor: (json['heavyFactor'] as num).toInt(),
       heavyMinPieceSize: (json['heavyMinPieceSize'] as num).toInt(),
@@ -153,6 +155,7 @@ Map<String, dynamic> _$JokerTuningDtoToJson(JokerTuningDto instance) =>
     <String, dynamic>{
       'anchorMult': instance.anchorMult,
       'avalancheChipsPerCell': instance.avalancheChipsPerCell,
+      'avalancheRows': instance.avalancheRows,
       'bigBoxFactor': instance.bigBoxFactor,
       'bigBoxMinPieceSize': instance.bigBoxMinPieceSize,
       'brinkFactor': instance.brinkFactor,
@@ -162,6 +165,7 @@ Map<String, dynamic> _$JokerTuningDtoToJson(JokerTuningDto instance) =>
       'comboMultPerStreak': instance.comboMultPerStreak,
       'finisherFactor': instance.finisherFactor,
       'fullHouseCellsPerMult': instance.fullHouseCellsPerMult,
+      'fullHouseMultPerBlock': instance.fullHouseMultPerBlock,
       'hatTrickBonus': instance.hatTrickBonus,
       'heavyFactor': instance.heavyFactor,
       'heavyMinPieceSize': instance.heavyMinPieceSize,

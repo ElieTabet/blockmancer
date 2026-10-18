@@ -771,9 +771,9 @@ class Translations$game$jokers$stonemason$en {
 	/// en: 'Stonemason'
 	String get name => 'Stonemason';
 
-	/// en: '(one) {+$chips chips for each stone cleared. 1 extra stone every round.} (other) {+$chips chips for each stone cleared. $stones extra stones every round.}'
+	/// en: '(one) {+$chips chips for each stone cleared. $stones extra stone every round.} (other) {+$chips chips for each stone cleared. $stones extra stones every round.}'
 	String description({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones,
-		one: '+${chips} chips for each stone cleared. 1 extra stone every round.',
+		one: '+${chips} chips for each stone cleared. ${stones} extra stone every round.',
 		other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.',
 	);
 }
@@ -819,8 +819,8 @@ class Translations$game$jokers$precision$en {
 	/// en: 'Precision'
 	String get name => 'Precision';
 
-	/// en: '+$mult mult when a 1–$size cell piece completes a line.'
-	String description({required Object mult, required Object size}) => '+${mult} mult when a 1–${size} cell piece completes a line.';
+	/// en: '+$mult mult when a piece of up to $size cells completes a line.'
+	String description({required Object mult, required Object size}) => '+${mult} mult when a piece of up to ${size} cells completes a line.';
 }
 
 // Path: game.jokers.collector
@@ -942,8 +942,8 @@ class Translations$game$jokers$tiny$en {
 	/// en: 'Tiny Tools'
 	String get name => 'Tiny Tools';
 
-	/// en: 'Pieces of 1–$size cells show up $factor× more often.'
-	String description({required Object size, required Object factor}) => 'Pieces of 1–${size} cells show up ${factor}× more often.';
+	/// en: 'Pieces of up to $size cells show up $factor× more often.'
+	String description({required Object size, required Object factor}) => 'Pieces of up to ${size} cells show up ${factor}× more often.';
 }
 
 // Path: game.jokers.pockets
@@ -957,9 +957,9 @@ class Translations$game$jokers$pockets$en {
 	/// en: 'Deep Pockets'
 	String get name => 'Deep Pockets';
 
-	/// en: '(one) {+1 piece every round.} (other) {+$pieces pieces every round.}'
+	/// en: '(one) {+$pieces piece every round.} (other) {+$pieces pieces every round.}'
 	String description({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(pieces,
-		one: '+1 piece every round.',
+		one: '+${pieces} piece every round.',
 		other: '+${pieces} pieces every round.',
 	);
 }
@@ -1005,8 +1005,11 @@ class Translations$game$jokers$avalanche$en {
 	/// en: 'Avalanche'
 	String get name => 'Avalanche';
 
-	/// en: '+$chips chips for each filled cell left in the bottom 2 rows after a clear.'
-	String description({required Object chips}) => '+${chips} chips for each filled cell left in the bottom 2 rows after a clear.';
+	/// en: '(one) {+$chips chips for each filled cell left in the bottom row after a clear.} (other) {+$chips chips for each filled cell left in the bottom $rows rows after a clear.}'
+	String description({required num rows, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(rows,
+		one: '+${chips} chips for each filled cell left in the bottom row after a clear.',
+		other: '+${chips} chips for each filled cell left in the bottom ${rows} rows after a clear.',
+	);
 }
 
 // Path: game.jokers.fullhouse
@@ -1020,8 +1023,8 @@ class Translations$game$jokers$fullhouse$en {
 	/// en: 'Full House'
 	String get name => 'Full House';
 
-	/// en: '+1 mult for every $cells occupied cells, stones included, as your piece lands.'
-	String description({required Object cells}) => '+1 mult for every ${cells} occupied cells, stones included, as your piece lands.';
+	/// en: '+$mult mult for every $cells occupied cells, stones included, as your piece lands.'
+	String description({required Object mult, required Object cells}) => '+${mult} mult for every ${cells} occupied cells, stones included, as your piece lands.';
 }
 
 // Path: game.jokers.brink
@@ -1065,8 +1068,8 @@ class Translations$game$jokers$hattrick$en {
 	/// en: 'Hat Trick'
 	String get name => 'Hat Trick';
 
-	/// en: '+$points points when each of the 3 pieces of a full tray clears a line.'
-	String description({required Object points}) => '+${points} points when each of the 3 pieces of a full tray clears a line.';
+	/// en: '+$points points when each of the $pieces pieces of a full tray clears a line.'
+	String description({required Object points, required Object pieces}) => '+${points} points when each of the ${pieces} pieces of a full tray clears a line.';
 }
 
 // Path: home.sheet.bossRule
@@ -1166,13 +1169,13 @@ extension on Translations {
 			'game.worlds.speed' => 'Speed',
 			'game.worlds.mirror' => 'Mirror',
 			'game.jokers.stonemason.name' => 'Stonemason',
-			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones, one: '+${chips} chips for each stone cleared. 1 extra stone every round.', other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.', ), 
+			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones, one: '+${chips} chips for each stone cleared. ${stones} extra stone every round.', other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.', ), 
 			'game.jokers.combo.name' => 'Combo King',
 			'game.jokers.combo.description' => ({required Object mult}) => '+${mult} mult for every clearing move in a row.',
 			'game.jokers.patience.name' => 'Patience',
 			'game.jokers.patience.description' => ({required Object mult}) => 'Each move without a clear stores +${mult} mult for your next clear.',
 			'game.jokers.precision.name' => 'Precision',
-			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult when a 1–${size} cell piece completes a line.',
+			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult when a piece of up to ${size} cells completes a line.',
 			'game.jokers.collector.name' => 'Collector',
 			'game.jokers.collector.description' => ({required Object mult}) => '+${mult} mult on every clear for every two jokers you own.',
 			'game.jokers.twin.name' => 'Twin Lines',
@@ -1188,23 +1191,23 @@ extension on Translations {
 			'game.jokers.bigbox.name' => 'Big Box',
 			'game.jokers.bigbox.description' => ({required Object size, required Object factor}) => 'Pieces of ${size}+ cells show up ${factor}× more often.',
 			'game.jokers.tiny.name' => 'Tiny Tools',
-			'game.jokers.tiny.description' => ({required Object size, required Object factor}) => 'Pieces of 1–${size} cells show up ${factor}× more often.',
+			'game.jokers.tiny.description' => ({required Object size, required Object factor}) => 'Pieces of up to ${size} cells show up ${factor}× more often.',
 			'game.jokers.pockets.name' => 'Deep Pockets',
-			'game.jokers.pockets.description' => ({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(pieces, one: '+1 piece every round.', other: '+${pieces} pieces every round.', ), 
+			'game.jokers.pockets.description' => ({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(pieces, one: '+${pieces} piece every round.', other: '+${pieces} pieces every round.', ), 
 			'game.jokers.saver.name' => 'Saver',
 			'game.jokers.saver.description' => ({required Object points}) => 'Each unused piece when you beat a round gives +${points} run points.',
 			'game.jokers.anchor.name' => 'Anchor',
 			'game.jokers.anchor.description' => ({required Object mult}) => '+${mult} mult when your move clears the bottom row.',
 			'game.jokers.avalanche.name' => 'Avalanche',
-			'game.jokers.avalanche.description' => ({required Object chips}) => '+${chips} chips for each filled cell left in the bottom 2 rows after a clear.',
+			'game.jokers.avalanche.description' => ({required num rows, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(rows, one: '+${chips} chips for each filled cell left in the bottom row after a clear.', other: '+${chips} chips for each filled cell left in the bottom ${rows} rows after a clear.', ), 
 			'game.jokers.fullhouse.name' => 'Full House',
-			'game.jokers.fullhouse.description' => ({required Object cells}) => '+1 mult for every ${cells} occupied cells, stones included, as your piece lands.',
+			'game.jokers.fullhouse.description' => ({required Object mult, required Object cells}) => '+${mult} mult for every ${cells} occupied cells, stones included, as your piece lands.',
 			'game.jokers.brink.name' => 'On the Brink',
 			'game.jokers.brink.description' => ({required Object factor, required Object cells}) => '×${factor} mult when ${cells} or more cells are occupied, stones included, as your piece lands.',
 			'game.jokers.finisher.name' => 'Finisher',
 			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult when you play the last piece in your tray.',
 			'game.jokers.hattrick.name' => 'Hat Trick',
-			'game.jokers.hattrick.description' => ({required Object points}) => '+${points} points when each of the 3 pieces of a full tray clears a line.',
+			'game.jokers.hattrick.description' => ({required Object points, required Object pieces}) => '+${points} points when each of the ${pieces} pieces of a full tray clears a line.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',

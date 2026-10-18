@@ -66,6 +66,12 @@ After placing, every full row and every full column clears at once (stones in a 
 - `streak` = consecutive moves that cleared at least one line (resets to 0 on a non-clearing move).
 
 ### 4.3 Jokers (14, designed in 7 pairs)
+
+**Source of truth: `RunConfig`.** Every number below is a default. The values the game plays with
+are `RunConfig.jokers` (`JokerTuning`) and `RunConfig.traySize`, set in `blockmancer_engine`'s
+`default_config.dart`, and every joker text (Spellbook, pick sheet, joker bar, unlock sheets) reads
+its numbers from there; no string holds a literal number.
+
 | Id | Name | Effect | Type | Partner |
 |---|---|---|---|---|
 | `stonemason` | Stonemason | +50 chips per stone cleared; +2 stones at the start of every round | chips | `quarry` |

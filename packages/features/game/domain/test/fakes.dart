@@ -90,6 +90,7 @@ const _config = RunConfig(
   jokers: JokerTuning(
     anchorMult: 4,
     avalancheChipsPerCell: 25,
+    avalancheRows: 2,
     bigBoxFactor: 3,
     bigBoxMinPieceSize: 5,
     brinkFactor: 2,
@@ -99,6 +100,7 @@ const _config = RunConfig(
     comboMultPerStreak: 1,
     finisherFactor: 2,
     fullHouseCellsPerMult: 6,
+    fullHouseMultPerBlock: 1,
     hatTrickBonus: 300,
     heavyFactor: 2,
     heavyMinPieceSize: 4,

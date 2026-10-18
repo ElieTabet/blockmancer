@@ -90,10 +90,12 @@ WorldNodeShown worldNode(Ref ref, WorldId world) {
 WorldSummary worldSummary(Ref ref, WorldId world) =>
     ref.watch(worldsProvider).firstWhere((summary) => summary.id == world);
 
-/// The numbers the jokers play with, to describe them.
+/// The numbers and the tray the jokers play with, to describe them.
 @riverpod
-JokerTuning jokerTuning(Ref ref) => ref.watch(
-  jokerCollectionProvider.select((collection) => collection.tuning),
+({int traySize, JokerTuning tuning}) jokerTuning(Ref ref) => ref.watch(
+  jokerCollectionProvider.select(
+    (collection) => (traySize: collection.traySize, tuning: collection.tuning),
+  ),
 );
 
 /// How the player's runs went with [joker]; nothing before its first pick.

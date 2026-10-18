@@ -16,6 +16,7 @@ import 'fake_home_routing.dart';
 const tuning = JokerTuning(
   anchorMult: 4,
   avalancheChipsPerCell: 25,
+  avalancheRows: 2,
   bigBoxFactor: 3,
   bigBoxMinPieceSize: 5,
   brinkFactor: 2,
@@ -25,6 +26,7 @@ const tuning = JokerTuning(
   comboMultPerStreak: 1,
   finisherFactor: 2,
   fullHouseCellsPerMult: 6,
+  fullHouseMultPerBlock: 1,
   hatTrickBonus: 300,
   heavyFactor: 2,
   heavyMinPieceSize: 4,
@@ -65,6 +67,7 @@ const collection = JokerCollection(
     JokerPair(first: .fullhouse, second: .brink, unlock: .stars(count: 4)),
     JokerPair(first: .finisher, second: .hattrick, unlock: .stars(count: 6)),
   ],
+  traySize: 3,
   tuning: tuning,
 );
 

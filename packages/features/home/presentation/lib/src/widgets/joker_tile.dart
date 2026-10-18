@@ -15,7 +15,7 @@ final class JokerTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tuning = ref.watch(jokerTuningProvider);
+    final (:traySize, :tuning) = ref.watch(jokerTuningProvider);
     final owned = ref.watch(jokerOwnedProvider(joker));
 
     return Container(
@@ -61,7 +61,7 @@ final class JokerTile extends ConsumerWidget {
             ],
           ),
           Text(
-            jokerDescription(context, joker, tuning),
+            jokerDescription(context, joker, tuning, traySize: traySize),
             style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
           ),
         ],

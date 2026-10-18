@@ -37,7 +37,7 @@ final class UnlockedJokerCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tuning = ref.watch(jokerTuningProvider);
+    final (:traySize, :tuning) = ref.watch(jokerTuningProvider);
     final partner = ref.watch(jokerPartnerProvider(joker));
 
     return Container(
@@ -64,7 +64,7 @@ final class UnlockedJokerCard extends ConsumerWidget {
             ),
           ),
           Text(
-            jokerDescription(context, joker, tuning),
+            jokerDescription(context, joker, tuning, traySize: traySize),
             style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
           ),
           Text(

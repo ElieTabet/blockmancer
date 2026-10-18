@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 7;
+const savedRunVersion = 8;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -18,6 +18,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
       4 => migrate(_fromVersion4(json)),
       5 => migrate(_fromVersion5(json)),
       6 => migrate(_fromVersion6(json)),
+      7 => migrate(_fromVersion7(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -138,6 +139,29 @@ Map<String, dynamic> _fromVersion6(Map<String, dynamic> json) {
       'trayClearMask': null,
     },
     'version': 7,
+  };
+}
+
+/// Version 7 hard-coded Avalanche's two bottom rows and Full House's +1 mult
+/// per block of cells; they are tunable since version 8.
+Map<String, dynamic> _fromVersion7(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{
+        ...config,
+        'jokers': <String, dynamic>{
+          ...config['jokers'] as Map<String, dynamic>,
+          'avalancheRows': 2,
+          'fullHouseMultPerBlock': 1,
+        },
+      },
+    },
+    'version': 8,
   };
 }
 
@@ -454,6 +478,7 @@ final class JokerTuningDto {
   const JokerTuningDto({
     required this.anchorMult,
     required this.avalancheChipsPerCell,
+    required this.avalancheRows,
     required this.bigBoxFactor,
     required this.bigBoxMinPieceSize,
     required this.brinkFactor,
@@ -463,6 +488,7 @@ final class JokerTuningDto {
     required this.comboMultPerStreak,
     required this.finisherFactor,
     required this.fullHouseCellsPerMult,
+    required this.fullHouseMultPerBlock,
     required this.hatTrickBonus,
     required this.heavyFactor,
     required this.heavyMinPieceSize,
@@ -484,6 +510,7 @@ final class JokerTuningDto {
   factory JokerTuningDto.fromDomain(JokerTuning tuning) => JokerTuningDto(
     anchorMult: tuning.anchorMult,
     avalancheChipsPerCell: tuning.avalancheChipsPerCell,
+    avalancheRows: tuning.avalancheRows,
     bigBoxFactor: tuning.bigBoxFactor,
     bigBoxMinPieceSize: tuning.bigBoxMinPieceSize,
     brinkFactor: tuning.brinkFactor,
@@ -493,6 +520,7 @@ final class JokerTuningDto {
     comboMultPerStreak: tuning.comboMultPerStreak,
     finisherFactor: tuning.finisherFactor,
     fullHouseCellsPerMult: tuning.fullHouseCellsPerMult,
+    fullHouseMultPerBlock: tuning.fullHouseMultPerBlock,
     hatTrickBonus: tuning.hatTrickBonus,
     heavyFactor: tuning.heavyFactor,
     heavyMinPieceSize: tuning.heavyMinPieceSize,
@@ -516,6 +544,7 @@ final class JokerTuningDto {
 
   final int anchorMult;
   final int avalancheChipsPerCell;
+  final int avalancheRows;
   final int bigBoxFactor;
   final int bigBoxMinPieceSize;
   final int brinkFactor;
@@ -525,6 +554,7 @@ final class JokerTuningDto {
   final int comboMultPerStreak;
   final int finisherFactor;
   final int fullHouseCellsPerMult;
+  final int fullHouseMultPerBlock;
   final int hatTrickBonus;
   final int heavyFactor;
   final int heavyMinPieceSize;
@@ -547,6 +577,7 @@ final class JokerTuningDto {
   JokerTuning toDomain() => JokerTuning(
     anchorMult: anchorMult,
     avalancheChipsPerCell: avalancheChipsPerCell,
+    avalancheRows: avalancheRows,
     bigBoxFactor: bigBoxFactor,
     bigBoxMinPieceSize: bigBoxMinPieceSize,
     brinkFactor: brinkFactor,
@@ -556,6 +587,7 @@ final class JokerTuningDto {
     comboMultPerStreak: comboMultPerStreak,
     finisherFactor: finisherFactor,
     fullHouseCellsPerMult: fullHouseCellsPerMult,
+    fullHouseMultPerBlock: fullHouseMultPerBlock,
     hatTrickBonus: hatTrickBonus,
     heavyFactor: heavyFactor,
     heavyMinPieceSize: heavyMinPieceSize,

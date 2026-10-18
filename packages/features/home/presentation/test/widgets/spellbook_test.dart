@@ -56,6 +56,32 @@ void main() {
   );
 
   testWidgets(
+    "Given rules that retune Combo King, When the Spellbook opens, Then its "
+    "card reads the rules' numbers",
+    (tester) async {
+      // Given / When
+      await pumpHome(
+        tester,
+        jokerCollection: collection.copyWith(
+          tuning: tuning.copyWith(comboMultPerStreak: 3),
+        ),
+        progression: () async => _player,
+        screen: const SpellbookWidget(),
+        viewSize: const Size(390, 844),
+      );
+
+      // Then
+      expect(
+        find.descendant(
+          of: _card(.combo),
+          matching: find.text('+3 mult for every clearing move in a row.'),
+        ),
+        findsOneWidget,
+      );
+    },
+  );
+
+  testWidgets(
     'Given a locked joker, When the Spellbook shows it, Then its card '
     'is a silhouette with the way to unlock it',
     (tester) async {
@@ -129,6 +155,7 @@ void main() {
         ),
         JokerPair(first: .fullhouse, second: .brink, unlock: .stars(count: 4)),
       ],
+      traySize: 3,
       tuning: tuning,
     );
 

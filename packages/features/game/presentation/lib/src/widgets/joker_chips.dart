@@ -86,13 +86,15 @@ class _JokerChipState extends ConsumerState<JokerChip>
     );
 
     final still = ref.watch(reduceMotionProvider);
-    final tuning = ref.watch(
-      gameProvider.select((state) => state.run.config.jokers),
+    final (tuning, traySize) = ref.watch(
+      gameProvider.select(
+        (state) => (state.run.config.jokers, state.run.config.traySize),
+      ),
     );
     final name = jokerName(context, widget.id);
 
     return Tooltip(
-      message: jokerDescription(context, widget.id, tuning),
+      message: jokerDescription(context, widget.id, tuning, traySize: traySize),
       triggerMode: .tap,
       child: AnimatedBuilder(
         animation: _pulse,

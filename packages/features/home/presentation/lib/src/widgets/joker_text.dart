@@ -29,14 +29,21 @@ String jokerName(BuildContext context, JokerId id) {
   };
 }
 
-/// What [id] does, with the numbers [tuning] plays it with.
-String jokerDescription(BuildContext context, JokerId id, JokerTuning tuning) {
+/// What [id] does, with the numbers [tuning] and a [traySize] tray play it
+/// with.
+String jokerDescription(
+  BuildContext context,
+  JokerId id,
+  JokerTuning tuning, {
+  required int traySize,
+}) {
   final jokers = context.t.game.jokers;
 
   return switch (id) {
     .anchor => jokers.anchor.description(mult: tuning.anchorMult),
     .avalanche => jokers.avalanche.description(
       chips: tuning.avalancheChipsPerCell,
+      rows: tuning.avalancheRows,
     ),
     .bigbox => jokers.bigbox.description(
       factor: tuning.bigBoxFactor,
@@ -54,8 +61,12 @@ String jokerDescription(BuildContext context, JokerId id, JokerTuning tuning) {
     .finisher => jokers.finisher.description(factor: tuning.finisherFactor),
     .fullhouse => jokers.fullhouse.description(
       cells: tuning.fullHouseCellsPerMult,
+      mult: tuning.fullHouseMultPerBlock,
     ),
-    .hattrick => jokers.hattrick.description(points: tuning.hatTrickBonus),
+    .hattrick => jokers.hattrick.description(
+      pieces: traySize,
+      points: tuning.hatTrickBonus,
+    ),
     .heavy => jokers.heavy.description(
       factor: tuning.heavyFactor,
       size: tuning.heavyMinPieceSize,

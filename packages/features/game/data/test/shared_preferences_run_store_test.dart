@@ -8,10 +8,12 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The numbers version 1 played with, when they were constants of the build,
-/// and the defaults versions 4 and 7 gave the jokers they added.
+/// and the defaults versions 4, 7 and 8 gave the jokers and numbers they
+/// added.
 const _version1Tuning = JokerTuning(
   anchorMult: 4,
   avalancheChipsPerCell: 25,
+  avalancheRows: 2,
   bigBoxFactor: 3,
   bigBoxMinPieceSize: 5,
   brinkFactor: 2,
@@ -21,6 +23,7 @@ const _version1Tuning = JokerTuning(
   comboMultPerStreak: 1,
   finisherFactor: 2,
   fullHouseCellsPerMult: 6,
+  fullHouseMultPerBlock: 1,
   hatTrickBonus: 300,
   heavyFactor: 2,
   heavyMinPieceSize: 4,
@@ -44,6 +47,7 @@ const _version1Tuning = JokerTuning(
 const _tuning = JokerTuning(
   anchorMult: 19,
   avalancheChipsPerCell: 21,
+  avalancheRows: 6,
   bigBoxFactor: 15,
   bigBoxMinPieceSize: 9,
   brinkFactor: 24,
@@ -53,6 +57,7 @@ const _tuning = JokerTuning(
   comboMultPerStreak: 10,
   finisherFactor: 25,
   fullHouseCellsPerMult: 22,
+  fullHouseMultPerBlock: 23,
   hatTrickBonus: 950,
   heavyFactor: 12,
   heavyMinPieceSize: 5,
@@ -299,9 +304,9 @@ const _version6Save = """
 /// What version 7 fills in for a save from before it: the numbers and unlocks
 /// it first shipped for the stars' jokers, and a tray that can't earn Hat
 /// Trick.
-RunState _beforeVersion7(RunState run) => run.copyWith(
-  config: run.config.copyWith(
-    jokers: run.config.jokers.copyWith(
+RunState _beforeVersion7(RunState run) => _beforeVersion8(run).copyWith(
+  config: _beforeVersion8(run).config.copyWith(
+    jokers: _beforeVersion8(run).config.jokers.copyWith(
       brinkFactor: 2,
       brinkMinOccupied: 40,
       finisherFactor: 2,
@@ -314,6 +319,18 @@ RunState _beforeVersion7(RunState run) => run.copyWith(
     ],
   ),
   trayClearMask: null,
+);
+
+/// What version 8 fills in for a save from before it: the two bottom rows
+/// Avalanche counted and the +1 mult Full House added when they were
+/// constants.
+RunState _beforeVersion8(RunState run) => run.copyWith(
+  config: run.config.copyWith(
+    jokers: run.config.jokers.copyWith(
+      avalancheRows: 2,
+      fullHouseMultPerBlock: 1,
+    ),
+  ),
 );
 
 /// The 14 jokers before version 4 added Anchor and Avalanche.
@@ -417,7 +434,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 7);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 8);
   });
 
   for (final (name, raw) in [
@@ -652,6 +669,36 @@ void main() {
         SavedRun(
           mode: const .daily(day: 20261017),
           run: _beforeVersion7(_midRound),
+        ),
+      );
+    },
+  );
+
+  test(
+    "a save from version 7 resumes with Avalanche's two rows and Full House's "
+    '+1 mult',
+    () async {
+      // Given: today's save as version 7 wrote it, without the two numbers
+      final json = SavedRunDto.fromDomain(
+        SavedRun(mode: const .daily(day: 20261017), run: _midRound),
+      ).toJson()..['version'] = 7;
+      final config =
+          (json['run'] as Map<String, dynamic>)['config']
+              as Map<String, dynamic>;
+      (config['jokers'] as Map<String, dynamic>)
+        ..remove('avalancheRows')
+        ..remove('fullHouseMultPerBlock');
+      SharedPreferences.setMockInitialValues({'run.saved': jsonEncode(json)});
+
+      // When
+      final loaded = await const SharedPreferencesRunStore().load();
+
+      // Then
+      expect(
+        loaded,
+        SavedRun(
+          mode: const .daily(day: 20261017),
+          run: _beforeVersion8(_midRound),
         ),
       );
     },

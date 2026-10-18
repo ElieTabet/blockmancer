@@ -3,7 +3,8 @@ import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 
 /// +[JokerTuning.avalancheChipsPerCell] chips for every filled cell left in
-/// the two bottom rows once the move's lines have cleared. Stones don't count:
+/// the [JokerTuning.avalancheRows] bottom rows once the move's lines have
+/// cleared. Stones don't count:
 /// the joker rewards what the player stacked.
 final class Avalanche extends JokerEffect {
   const Avalanche();
@@ -17,7 +18,7 @@ final class Avalanche extends JokerEffect {
   @override
   ScoreStep onAdditive(MoveContext move, ScoreStep step) {
     final filled = move.clear.board.cells
-        .skip((Board.size - 2) * Board.size)
+        .skip((Board.size - move.tuning.avalancheRows) * Board.size)
         .whereType<FilledCell>()
         .length;
 

@@ -39,3 +39,19 @@ reading chosen and why. Newest task last.
 - **Saved runs:** a run saved before this build plays the new rule once resumed. Rules aren't
   versioned in the save (only their numbers are), and a mid-run save is rare enough not to warrant
   it.
+
+### 0c. Joker texts read their numbers from RunConfig
+
+- **Finding:** every description already read `JokerTuning`, but four numbers sat in the strings:
+  Hat Trick's "3 pieces", Avalanche's "2 rows", Full House's "+1 mult" and the "1–" lower bound of
+  Precision and Tiny Tools.
+- **Reading:** a number the player reads must be one `RunConfig` holds. Hat Trick's is
+  `RunConfig.traySize`, passed to `jokerDescription` (home gets it through
+  `JokerCollection.traySize`); Avalanche's and Full House's were engine constants, now
+  `JokerTuning.avalancheRows` (2) and `JokerTuning.fullHouseMultPerBlock` (1), read by the effects.
+  The "1" of "1–2 cells" is the smallest piece, not a tunable, so the two strings now say "a piece
+  of up to $size cells". The plural forms' "1" (Stonemason, Deep Pockets) became the parameter too.
+- **Why:** "all numbers go in `RunConfig`" (SPRINTS_6_7, rules common to every task); a test
+  checks every number in every description is one of the config's.
+- **Save:** the two new fields make the saved run version 8; older saves get 2 and 1, the values
+  their builds played.

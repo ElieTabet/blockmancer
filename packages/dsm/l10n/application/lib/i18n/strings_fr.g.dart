@@ -478,7 +478,7 @@ class _Translations$game$jokers$stonemason$fr extends Translations$game$jokers$s
 	// Translations
 	@override String get name => 'Tailleur de pierre';
 	@override String description({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(stones,
-		one: '+${chips} jetons par pierre effacée. 1 pierre de plus à chaque manche.',
+		one: '+${chips} jetons par pierre effacée. ${stones} pierre de plus à chaque manche.',
 		other: '+${chips} jetons par pierre effacée. ${stones} pierres de plus à chaque manche.',
 	);
 }
@@ -513,7 +513,7 @@ class _Translations$game$jokers$precision$fr extends Translations$game$jokers$pr
 
 	// Translations
 	@override String get name => 'Précision';
-	@override String description({required Object mult, required Object size}) => '+${mult} mult quand une pièce de 1 à ${size} cases complète une ligne.';
+	@override String description({required Object mult, required Object size}) => '+${mult} mult quand une pièce de ${size} cases au plus complète une ligne.';
 }
 
 // Path: game.jokers.collector
@@ -604,7 +604,7 @@ class _Translations$game$jokers$tiny$fr extends Translations$game$jokers$tiny$en
 
 	// Translations
 	@override String get name => 'Petits outils';
-	@override String description({required Object size, required Object factor}) => 'Les pièces de 1 à ${size} cases arrivent ${factor}× plus souvent.';
+	@override String description({required Object size, required Object factor}) => 'Les pièces de ${size} cases au plus arrivent ${factor}× plus souvent.';
 }
 
 // Path: game.jokers.pockets
@@ -616,7 +616,7 @@ class _Translations$game$jokers$pockets$fr extends Translations$game$jokers$pock
 	// Translations
 	@override String get name => 'Poches pleines';
 	@override String description({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(pieces,
-		one: '+1 pièce à chaque manche.',
+		one: '+${pieces} pièce à chaque manche.',
 		other: '+${pieces} pièces à chaque manche.',
 	);
 }
@@ -651,7 +651,10 @@ class _Translations$game$jokers$avalanche$fr extends Translations$game$jokers$av
 
 	// Translations
 	@override String get name => 'Avalanche';
-	@override String description({required Object chips}) => 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les 2 lignes du bas.';
+	@override String description({required num rows, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(rows,
+		one: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans la ligne du bas.',
+		other: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les ${rows} lignes du bas.',
+	);
 }
 
 // Path: game.jokers.fullhouse
@@ -662,7 +665,7 @@ class _Translations$game$jokers$fullhouse$fr extends Translations$game$jokers$fu
 
 	// Translations
 	@override String get name => 'Salle comble';
-	@override String description({required Object cells}) => '+1 mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.';
+	@override String description({required Object mult, required Object cells}) => '+${mult} mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.';
 }
 
 // Path: game.jokers.brink
@@ -695,7 +698,7 @@ class _Translations$game$jokers$hattrick$fr extends Translations$game$jokers$hat
 
 	// Translations
 	@override String get name => 'Coup du chapeau';
-	@override String description({required Object points}) => '+${points} points quand chacune des 3 pièces d\'une main complète efface une ligne.';
+	@override String description({required Object points, required Object pieces}) => '+${points} points quand chacune des ${pieces} pièces d\'une main complète efface une ligne.';
 }
 
 // Path: home.sheet.bossRule
@@ -791,13 +794,13 @@ extension on TranslationsFr {
 			'game.worlds.speed' => 'Vitesse',
 			'game.worlds.mirror' => 'Miroir',
 			'game.jokers.stonemason.name' => 'Tailleur de pierre',
-			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(stones, one: '+${chips} jetons par pierre effacée. 1 pierre de plus à chaque manche.', other: '+${chips} jetons par pierre effacée. ${stones} pierres de plus à chaque manche.', ), 
+			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(stones, one: '+${chips} jetons par pierre effacée. ${stones} pierre de plus à chaque manche.', other: '+${chips} jetons par pierre effacée. ${stones} pierres de plus à chaque manche.', ), 
 			'game.jokers.combo.name' => 'Roi du combo',
 			'game.jokers.combo.description' => ({required Object mult}) => '+${mult} mult par coup d\'affilée qui efface une ligne.',
 			'game.jokers.patience.name' => 'Patience',
 			'game.jokers.patience.description' => ({required Object mult}) => 'Chaque coup qui n\'efface rien met +${mult} mult de côté pour ta prochaine ligne.',
 			'game.jokers.precision.name' => 'Précision',
-			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult quand une pièce de 1 à ${size} cases complète une ligne.',
+			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult quand une pièce de ${size} cases au plus complète une ligne.',
 			'game.jokers.collector.name' => 'Collectionneur',
 			'game.jokers.collector.description' => ({required Object mult}) => 'À chaque ligne effacée, +${mult} mult pour chaque paire de jokers que tu as.',
 			'game.jokers.twin.name' => 'Lignes jumelles',
@@ -813,23 +816,23 @@ extension on TranslationsFr {
 			'game.jokers.bigbox.name' => 'Grand format',
 			'game.jokers.bigbox.description' => ({required Object size, required Object factor}) => 'Les pièces de ${size} cases ou plus arrivent ${factor}× plus souvent.',
 			'game.jokers.tiny.name' => 'Petits outils',
-			'game.jokers.tiny.description' => ({required Object size, required Object factor}) => 'Les pièces de 1 à ${size} cases arrivent ${factor}× plus souvent.',
+			'game.jokers.tiny.description' => ({required Object size, required Object factor}) => 'Les pièces de ${size} cases au plus arrivent ${factor}× plus souvent.',
 			'game.jokers.pockets.name' => 'Poches pleines',
-			'game.jokers.pockets.description' => ({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(pieces, one: '+1 pièce à chaque manche.', other: '+${pieces} pièces à chaque manche.', ), 
+			'game.jokers.pockets.description' => ({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(pieces, one: '+${pieces} pièce à chaque manche.', other: '+${pieces} pièces à chaque manche.', ), 
 			'game.jokers.saver.name' => 'Épargnant',
 			'game.jokers.saver.description' => ({required Object points}) => 'Chaque pièce non jouée à la fin d\'une manche gagnée rapporte +${points} points de partie.',
 			'game.jokers.anchor.name' => 'Ancre',
 			'game.jokers.anchor.description' => ({required Object mult}) => '+${mult} mult quand ton coup efface la ligne du bas.',
 			'game.jokers.avalanche.name' => 'Avalanche',
-			'game.jokers.avalanche.description' => ({required Object chips}) => 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les 2 lignes du bas.',
+			'game.jokers.avalanche.description' => ({required num rows, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(rows, one: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans la ligne du bas.', other: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les ${rows} lignes du bas.', ), 
 			'game.jokers.fullhouse.name' => 'Salle comble',
-			'game.jokers.fullhouse.description' => ({required Object cells}) => '+1 mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.',
+			'game.jokers.fullhouse.description' => ({required Object mult, required Object cells}) => '+${mult} mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.',
 			'game.jokers.brink.name' => 'Sur le fil',
 			'game.jokers.brink.description' => ({required Object factor, required Object cells}) => '×${factor} mult si ${cells} cases ou plus sont occupées, pierres comprises, quand ta pièce se pose.',
 			'game.jokers.finisher.name' => 'Finisseur',
 			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult quand tu joues la dernière pièce de ta main.',
 			'game.jokers.hattrick.name' => 'Coup du chapeau',
-			'game.jokers.hattrick.description' => ({required Object points}) => '+${points} points quand chacune des 3 pièces d\'une main complète efface une ligne.',
+			'game.jokers.hattrick.description' => ({required Object points, required Object pieces}) => '+${points} points quand chacune des ${pieces} pièces d\'une main complète efface une ligne.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',

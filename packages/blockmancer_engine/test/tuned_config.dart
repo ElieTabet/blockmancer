@@ -6,6 +6,7 @@ import 'package:shared_domain/shared_domain.dart';
 const tunedJokers = JokerTuning(
   anchorMult: 19,
   avalancheChipsPerCell: 21,
+  avalancheRows: 6,
   bigBoxFactor: 15,
   bigBoxMinPieceSize: 9,
   brinkFactor: 22,
@@ -15,6 +16,7 @@ const tunedJokers = JokerTuning(
   comboMultPerStreak: 10,
   finisherFactor: 23,
   fullHouseCellsPerMult: 3,
+  fullHouseMultPerBlock: 24,
   hatTrickBonus: 950,
   heavyFactor: 12,
   heavyMinPieceSize: 5,

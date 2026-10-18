@@ -13,6 +13,9 @@ abstract class JokerCollection with _$JokerCollection {
     /// The new player's pairs first, then each world's, then the stars'.
     required List<JokerPair> pairs,
 
+    /// The tray the jokers play with, for describing Hat Trick.
+    required int traySize,
+
     /// The numbers the jokers play with, for describing them.
     required JokerTuning tuning,
   }) = _JokerCollection;

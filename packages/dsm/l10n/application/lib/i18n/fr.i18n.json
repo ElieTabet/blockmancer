@@ -98,7 +98,7 @@
       "stonemason": {
         "name": "Tailleur de pierre",
         "description(param=stones)": {
-          "one": "+$chips jetons par pierre effacée. 1 pierre de plus à chaque manche.",
+          "one": "+$chips jetons par pierre effacée. $stones pierre de plus à chaque manche.",
           "other": "+$chips jetons par pierre effacée. $stones pierres de plus à chaque manche."
         }
       },
@@ -112,7 +112,7 @@
       },
       "precision": {
         "name": "Précision",
-        "description": "+$mult mult quand une pièce de 1 à $size cases complète une ligne."
+        "description": "+$mult mult quand une pièce de $size cases au plus complète une ligne."
       },
       "collector": {
         "name": "Collectionneur",
@@ -147,12 +147,12 @@
       },
       "tiny": {
         "name": "Petits outils",
-        "description": "Les pièces de 1 à $size cases arrivent $factor× plus souvent."
+        "description": "Les pièces de $size cases au plus arrivent $factor× plus souvent."
       },
       "pockets": {
         "name": "Poches pleines",
         "description(param=pieces)": {
-          "one": "+1 pièce à chaque manche.",
+          "one": "+$pieces pièce à chaque manche.",
           "other": "+$pieces pièces à chaque manche."
         }
       },
@@ -166,11 +166,14 @@
       },
       "avalanche": {
         "name": "Avalanche",
-        "description": "Après chaque ligne effacée, +$chips jetons par case pleine restée dans les 2 lignes du bas."
+        "description(param=rows)": {
+          "one": "Après chaque ligne effacée, +$chips jetons par case pleine restée dans la ligne du bas.",
+          "other": "Après chaque ligne effacée, +$chips jetons par case pleine restée dans les $rows lignes du bas."
+        }
       },
       "fullhouse": {
         "name": "Salle comble",
-        "description": "+1 mult toutes les $cells cases occupées, pierres comprises, quand ta pièce se pose."
+        "description": "+$mult mult toutes les $cells cases occupées, pierres comprises, quand ta pièce se pose."
       },
       "brink": {
         "name": "Sur le fil",
@@ -182,7 +185,7 @@
       },
       "hattrick": {
         "name": "Coup du chapeau",
-        "description": "+$points points quand chacune des 3 pièces d'une main complète efface une ligne."
+        "description": "+$points points quand chacune des $pieces pièces d'une main complète efface une ligne."
       }
     }
   },

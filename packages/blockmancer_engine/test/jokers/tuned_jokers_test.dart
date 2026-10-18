@@ -348,10 +348,19 @@ void main() {
     });
   });
 
-  test('Avalanche adds its configured chips per cell left at the bottom', () {
-    // Given / When: row 6 keeps 3 cells once row 7 clears
+  test('Avalanche adds its configured chips per cell left in its configured '
+      'bottom rows', () {
+    // Given / When: rows 2 and 6 keep 4 cells once row 7 clears, both within
+    // the bottom 6
     final score = playMove(
-      atBottom(['###.....', '#######.']),
+      atBottom([
+        '#.......',
+        '........',
+        '........',
+        '........',
+        '###.....',
+        '#######.',
+      ]),
       at: bottomRight,
       config: tunedConfig,
       jokers: const [.avalanche],
@@ -359,11 +368,12 @@ void main() {
     );
 
     // Then
-    expect(score.chips, 160 + 3 * 21);
+    expect(score.chips, 160 + 4 * 21);
   });
 
-  test('Full House adds 1 mult per its configured occupied cells', () {
-    // Given / When: 8 in row 0 make 2 mult at 3 cells each
+  test('Full House adds its configured mult per its configured occupied '
+      'cells', () {
+    // Given / When: 8 in row 0 make 2 blocks of 3 cells, 24 mult each
     final score = playMove(
       rowAlmostFull,
       at: topRight,
@@ -373,7 +383,7 @@ void main() {
     );
 
     // Then
-    expect(score.mult, 1 + 2);
+    expect(score.mult, 1 + 2 * 24);
   });
 
   group('On the Brink', () {

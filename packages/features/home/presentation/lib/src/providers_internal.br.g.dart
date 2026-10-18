@@ -363,17 +363,22 @@ final class WorldSummaryFamily extends $Family
   String toString() => r'worldSummaryProvider';
 }
 
-/// The numbers the jokers play with, to describe them.
+/// The numbers and the tray the jokers play with, to describe them.
 
 @ProviderFor(jokerTuning)
 final jokerTuningProvider = JokerTuningProvider._();
 
-/// The numbers the jokers play with, to describe them.
+/// The numbers and the tray the jokers play with, to describe them.
 
 final class JokerTuningProvider
-    extends $FunctionalProvider<JokerTuning, JokerTuning, JokerTuning>
-    with $Provider<JokerTuning> {
-  /// The numbers the jokers play with, to describe them.
+    extends
+        $FunctionalProvider<
+          ({int traySize, JokerTuning tuning}),
+          ({int traySize, JokerTuning tuning}),
+          ({int traySize, JokerTuning tuning})
+        >
+    with $Provider<({int traySize, JokerTuning tuning})> {
+  /// The numbers and the tray the jokers play with, to describe them.
   JokerTuningProvider._()
     : super(
         from: null,
@@ -390,24 +395,26 @@ final class JokerTuningProvider
 
   @$internal
   @override
-  $ProviderElement<JokerTuning> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<({int traySize, JokerTuning tuning})> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
-  JokerTuning create(Ref ref) {
+  ({int traySize, JokerTuning tuning}) create(Ref ref) {
     return jokerTuning(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(JokerTuning value) {
+  Override overrideWithValue(({int traySize, JokerTuning tuning}) value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<JokerTuning>(value),
+      providerOverride:
+          $SyncValueProvider<({int traySize, JokerTuning tuning})>(value),
     );
   }
 }
 
-String _$jokerTuningHash() => r'42ee62fa60f32dff0bead28de1ec9420f038f406';
+String _$jokerTuningHash() => r'bc336286f9fbdedc559ec55cdae974ba1a697212';
 
 /// How the player's runs went with [joker]; nothing before its first pick.
 

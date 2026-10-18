@@ -98,7 +98,7 @@
       "stonemason": {
         "name": "Stonemason",
         "description(param=stones)": {
-          "one": "+$chips chips for each stone cleared. 1 extra stone every round.",
+          "one": "+$chips chips for each stone cleared. $stones extra stone every round.",
           "other": "+$chips chips for each stone cleared. $stones extra stones every round."
         }
       },
@@ -112,7 +112,7 @@
       },
       "precision": {
         "name": "Precision",
-        "description": "+$mult mult when a 1–$size cell piece completes a line."
+        "description": "+$mult mult when a piece of up to $size cells completes a line."
       },
       "collector": {
         "name": "Collector",
@@ -147,12 +147,12 @@
       },
       "tiny": {
         "name": "Tiny Tools",
-        "description": "Pieces of 1–$size cells show up $factor× more often."
+        "description": "Pieces of up to $size cells show up $factor× more often."
       },
       "pockets": {
         "name": "Deep Pockets",
         "description(param=pieces)": {
-          "one": "+1 piece every round.",
+          "one": "+$pieces piece every round.",
           "other": "+$pieces pieces every round."
         }
       },
@@ -166,11 +166,14 @@
       },
       "avalanche": {
         "name": "Avalanche",
-        "description": "+$chips chips for each filled cell left in the bottom 2 rows after a clear."
+        "description(param=rows)": {
+          "one": "+$chips chips for each filled cell left in the bottom row after a clear.",
+          "other": "+$chips chips for each filled cell left in the bottom $rows rows after a clear."
+        }
       },
       "fullhouse": {
         "name": "Full House",
-        "description": "+1 mult for every $cells occupied cells, stones included, as your piece lands."
+        "description": "+$mult mult for every $cells occupied cells, stones included, as your piece lands."
       },
       "brink": {
         "name": "On the Brink",
@@ -182,7 +185,7 @@
       },
       "hattrick": {
         "name": "Hat Trick",
-        "description": "+$points points when each of the 3 pieces of a full tray clears a line."
+        "description": "+$points points when each of the $pieces pieces of a full tray clears a line."
       }
     }
   },

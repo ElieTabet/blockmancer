@@ -7,6 +7,7 @@ const defaultConfig = RunConfig(
   jokers: JokerTuning(
     anchorMult: 6,
     avalancheChipsPerCell: 40,
+    avalancheRows: 2,
     bigBoxFactor: 3,
     bigBoxMinPieceSize: 5,
     brinkFactor: 2,
@@ -16,6 +17,7 @@ const defaultConfig = RunConfig(
     comboMultPerStreak: 1,
     finisherFactor: 3,
     fullHouseCellsPerMult: 10,
+    fullHouseMultPerBlock: 1,
     hatTrickBonus: 300,
     heavyFactor: 2,
     heavyMinPieceSize: 3,

@@ -9,6 +9,9 @@ abstract class JokerTuning with _$JokerTuning {
   const factory JokerTuning({
     required int anchorMult,
     required int avalancheChipsPerCell,
+
+    /// The bottom rows whose filled cells Avalanche counts.
+    required int avalancheRows,
     required int bigBoxFactor,
     required int bigBoxMinPieceSize,
     required int brinkFactor,
@@ -22,6 +25,9 @@ abstract class JokerTuning with _$JokerTuning {
 
     /// Occupied cells, filled and stone, per +1 mult from Full House.
     required int fullHouseCellsPerMult,
+
+    /// The mult Full House adds per [fullHouseCellsPerMult] occupied cells.
+    required int fullHouseMultPerBlock,
     required int hatTrickBonus,
     required int heavyFactor,
     required int heavyMinPieceSize,

@@ -30,5 +30,9 @@ JokerCollection jokerCollectionOf(GameRules rules) {
     pairUp(unlock.jokers, .stars(count: unlock.stars));
   }
 
-  return JokerCollection(pairs: pairs, tuning: rules.defaultConfig.jokers);
+  return JokerCollection(
+    pairs: pairs,
+    traySize: rules.defaultConfig.traySize,
+    tuning: rules.defaultConfig.jokers,
+  );
 }
