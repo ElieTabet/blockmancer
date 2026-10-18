@@ -214,6 +214,7 @@ List<Override> featureBindingOverrides({
 
       return () => purchases.updates;
     },
+    removeAdsProductId: (ref) => iapRemoveAds,
     restorePurchases: (ref) => ref.watch(purchasesProvider).restore,
   ),
   ...settings_ui.bindProviders(

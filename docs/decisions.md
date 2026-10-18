@@ -423,3 +423,20 @@ Three changes from the review of this file, each its own commit.
   cooldown since the last ask has passed.
 - **Recorded before asking:** the ask is kept before the OS is called, so a crash inside the OS's
   sheet can't make the app ask twice.
+
+## Sprint 8: real ids
+
+- **Every id in one file**, as asked: `app/env/prod.json` now holds the AdMob app ids too (Gradle
+  reads them into the manifest; an Xcode build phase writes the iOS one into the built
+  Info.plist, failing the build if it is missing), alongside the ad units, the product id and the
+  leaderboard ids. This replaces Task 2's app ids written in the native files.
+- **Ids every build needs vs release-only:** the app ids are read in every build (the ad SDK stops
+  without one); the ad units, product and leaderboard ids come from the file's dart-defines, which
+  the build scripts pass; a debug run passes it itself (`flutter run
+  --dart-define-from-file=env/prod.json`) to buy or reach the leaderboards.
+- **Play's purchase option id** (`buy`) needs no code: `in_app_purchase` buys the product's default
+  option.
+- **Test devices** come from `ADMOB_TEST_DEVICE_IDS` (empty until the ids are sent), set before the
+  ad SDK starts; AdMob's own test-device list covers the rest.
+- **SKAdNetwork:** the 50 identifiers on AdMob's "SKAdNetwork" page (developers.google.com/admob/
+  ios/privacy/strategies), read from the page itself on 18 October.

@@ -225,6 +225,53 @@ final class PurchaseUpdatesProvider
 
 String _$purchaseUpdatesHash() => r'c8ed7a149e83cc116da010edad38a1118b88fce1';
 
+/// The Remove ads product's id in the stores.
+
+@ProviderFor(removeAdsProductId)
+final removeAdsProductIdProvider = RemoveAdsProductIdProvider._();
+
+/// The Remove ads product's id in the stores.
+
+final class RemoveAdsProductIdProvider
+    extends $FunctionalProvider<String, String, String>
+    with $Provider<String> {
+  /// The Remove ads product's id in the stores.
+  RemoveAdsProductIdProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'removeAdsProductIdProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$removeAdsProductIdHash();
+
+  @$internal
+  @override
+  $ProviderElement<String> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  String create(Ref ref) {
+    return removeAdsProductId(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
+}
+
+String _$removeAdsProductIdHash() =>
+    r'536e0edbcfcd516cfd10d17a2f5a0f26a31663ab';
+
 @ProviderFor(restorePurchases)
 final restorePurchasesProvider = RestorePurchasesProvider._();
 

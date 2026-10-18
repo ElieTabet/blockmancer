@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurper
 import java.util.Properties
 
 plugins {
@@ -14,6 +15,10 @@ plugins {
 val keystoreProperties = Properties().apply {
     rootProject.file("key.properties").takeIf { it.exists() }?.inputStream()?.use(::load)
 }
+
+// app/env/prod.json: every store and AdMob id, Dart's and the manifest's.
+@Suppress("UNCHECKED_CAST")
+val releaseIds = JsonSlurper().parse(rootProject.file("../env/prod.json")) as Map<String, Any>
 
 android {
     namespace = "com.elietabet.blockmancer"
@@ -34,6 +39,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // The native ids every build needs, from the one file of store and
+        // AdMob ids (docs/console-setup.md, Placeholders).
+        manifestPlaceholders["admobAppId"] = releaseIds["ADMOB_APP_ID_ANDROID"] as String
     }
 
     signingConfigs {

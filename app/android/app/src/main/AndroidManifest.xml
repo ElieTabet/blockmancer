@@ -61,11 +61,12 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="announcements"/>
-        <!-- AdMob's app id (not a secret; the ad units, test or real, are
-             chosen in Dart). Without it the ad SDK stops the app at launch. -->
+        <!-- AdMob's app id, from app/env/prod.json through Gradle (every
+             build; the ad units, test or real, are chosen in Dart). Without it
+             the ad SDK stops the app at launch. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9236909266129177~7769371812"/>
+            android:value="${admobAppId}"/>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

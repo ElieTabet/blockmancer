@@ -9,10 +9,17 @@ import 'package:timber/timber.dart';
 /// AdMob's Privacy & messaging shows Apple's tracking alert itself once the
 /// player continues; declining leaves ads non-personalised.
 final class GoogleConsent implements Consent {
-  GoogleConsent({bool debugEea = false, List<String> testDeviceIds = const []})
-    : _debugEea = debugEea,
-      _testDeviceIds = testDeviceIds;
+  /// [testDeviceIds] serve as the consent form's debug devices;
+  /// [adTestDeviceIds] get AdMob's test ads even from a release build.
+  GoogleConsent({
+    List<String> adTestDeviceIds = const [],
+    bool debugEea = false,
+    List<String> testDeviceIds = const [],
+  }) : _adTestDeviceIds = adTestDeviceIds,
+       _debugEea = debugEea,
+       _testDeviceIds = testDeviceIds;
 
+  final List<String> _adTestDeviceIds;
   final _allowed = Completer<bool>();
   final bool _debugEea;
   var _started = false;
@@ -31,6 +38,13 @@ final class GoogleConsent implements Consent {
 
       if (canRequestAds && !_started) {
         _started = true;
+
+        if (_adTestDeviceIds.isNotEmpty) {
+          await MobileAds.instance.updateRequestConfiguration(
+            RequestConfiguration(testDeviceIds: _adTestDeviceIds),
+          );
+        }
+
         await MobileAds.instance.initialize();
       }
 

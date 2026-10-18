@@ -127,8 +127,10 @@ melos run build-android
 # Test builds of the same two (TestFlight, Play internal testing): TEST_TOOLS on
 # (Settings' Share test stats and Test crash, Google's test ad units, Remote
 # Config fetched every 5 minutes). The release scripts refuse to build while
-# app/env/prod.json, the one file of store and AdMob IDs, still holds a
-# PLACEHOLDER_ (scripts/check_release_ids.sh); a test build only warns.
+# app/env/prod.json, the one file of every store, AdMob and leaderboard id
+# (Dart's through dart-defines, the native ones read by Gradle and an Xcode
+# build phase), still holds a PLACEHOLDER_ (scripts/check_release_ids.sh); a
+# test build only warns.
 melos run build-ios-test
 melos run build-android-test
 
@@ -714,8 +716,9 @@ a run's start preloads again (`preloadAds`).
 
 ## Remove ads
 
-One non-consumable, `remove_ads` ($3.99, priced in the stores): interstitials gone for good; the
-rewarded revive stays.
+One non-consumable, `blockmancer.remove_ads` on both stores (`IAP_REMOVE_ADS` in
+`app/env/prod.json`, passed to the shop as `removeAdsProductId`; $3.99, priced in the stores):
+interstitials gone for good; the rewarded revive stays.
 
 - **`shop_domain`'s `RemoveAdsNotifier`** (keepAlive) owns it: kept on the device
   (`shop_data`'s `SharedPreferencesEntitlementStore`, `purchases.removeAds`), so it holds offline,
@@ -762,8 +765,12 @@ Ads in the EEA and the UK need the player's consent first: Google's UMP form, be
   opened through the `openUrl` slot).
 - **Testing the EEA form:** a test build with `UMP_DEBUG_EEA=true` and `UMP_TEST_DEVICE_ID`
   (docs/console-setup.md, AdMob).
-- **Native:** the AdMob app ids are in `Info.plist` (`GADApplicationIdentifier`) and the manifest
-  (`com.google.android.gms.ads.APPLICATION_ID`); without them the ad SDK stops the app at launch.
+- **Native:** the AdMob app ids come from `app/env/prod.json` in every build: Gradle's
+  `manifestPlaceholders` fills the manifest's `com.google.android.gms.ads.APPLICATION_ID`, and the
+  Runner target's "Set AdMob app id" build phase writes `GADApplicationIdentifier` into the built
+  Info.plist (failing the build when the id is missing); without one the ad SDK stops the app at
+  launch. Info.plist lists the 50 SKAdNetwork ids of AdMob's page. `ADMOB_TEST_DEVICE_IDS` (comma
+  separated) gets those phones AdMob's test ads even from a release build.
 
 ## Settings
 

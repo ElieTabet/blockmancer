@@ -44,4 +44,4 @@ final class RemoveAdsPriceProvider
   }
 }
 
-String _$removeAdsPriceHash() => r'be3fbb8f7a8d88152695e9e86533563a334ed5b6';
+String _$removeAdsPriceHash() => r'6017b5652a64674be2ff5072ee841c843767c2b8';

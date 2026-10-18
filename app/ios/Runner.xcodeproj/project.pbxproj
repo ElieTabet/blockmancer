@@ -174,6 +174,7 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				A1D3B0C5E7F90123456789AB /* Set AdMob app id */,
 				773285F73072E9C800354172 /* Upload Crashlytics symbols */,
 			);
 			buildRules = (
@@ -253,6 +254,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A1D3B0C5E7F90123456789AB /* Set AdMob app id */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/../env/prod.json",
+			);
+			name = "Set AdMob app id";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "IDS=\"${SRCROOT}/../env/prod.json\"\nPLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nID=$(plutil -extract ADMOB_APP_ID_IOS raw -o - \"$IDS\" 2>/dev/null)\ncase \"$ID\" in\n  \"\"|PLACEHOLDER_*)\n    echo \"error: ADMOB_APP_ID_IOS is missing from app/env/prod.json; the ad SDK would stop the app at launch\"\n    exit 1 ;;\nesac\n/usr/libexec/PlistBuddy -c \"Set :GADApplicationIdentifier $ID\" \"$PLIST\" 2>/dev/null ||\n  /usr/libexec/PlistBuddy -c \"Add :GADApplicationIdentifier string $ID\" \"$PLIST\"\n";
+		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;

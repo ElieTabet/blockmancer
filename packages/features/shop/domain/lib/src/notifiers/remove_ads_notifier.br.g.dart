@@ -8,19 +8,22 @@ part of 'remove_ads_notifier.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Whether the player owns Remove ads: kept on the device, and confirmed by
+/// Whether the player owns Remove ads (the one product: interstitials gone
+/// for good; the rewarded revive stays): kept on the device, and confirmed by
 /// every purchase or restore the store reports, from launch on. Nothing ever
 /// takes it back (a refund is the store's to handle).
 
 @ProviderFor(RemoveAdsNotifier)
 final removeAdsProvider = RemoveAdsNotifierProvider._();
 
-/// Whether the player owns Remove ads: kept on the device, and confirmed by
+/// Whether the player owns Remove ads (the one product: interstitials gone
+/// for good; the rewarded revive stays): kept on the device, and confirmed by
 /// every purchase or restore the store reports, from launch on. Nothing ever
 /// takes it back (a refund is the store's to handle).
 final class RemoveAdsNotifierProvider
     extends $AsyncNotifierProvider<RemoveAdsNotifier, bool> {
-  /// Whether the player owns Remove ads: kept on the device, and confirmed by
+  /// Whether the player owns Remove ads (the one product: interstitials gone
+  /// for good; the rewarded revive stays): kept on the device, and confirmed by
   /// every purchase or restore the store reports, from launch on. Nothing ever
   /// takes it back (a refund is the store's to handle).
   RemoveAdsNotifierProvider._()
@@ -42,9 +45,10 @@ final class RemoveAdsNotifierProvider
   RemoveAdsNotifier create() => RemoveAdsNotifier();
 }
 
-String _$removeAdsNotifierHash() => r'67d328cea53bd69f19708074ac3b1bcbf9693790';
+String _$removeAdsNotifierHash() => r'ff616dcc77277b21fa2a3d27a33024e4ad64b5da';
 
-/// Whether the player owns Remove ads: kept on the device, and confirmed by
+/// Whether the player owns Remove ads (the one product: interstitials gone
+/// for good; the rewarded revive stays): kept on the device, and confirmed by
 /// every purchase or restore the store reports, from launch on. Nothing ever
 /// takes it back (a refund is the store's to handle).
 

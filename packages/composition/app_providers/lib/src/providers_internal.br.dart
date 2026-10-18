@@ -23,6 +23,10 @@ part 'providers_internal.br.g.dart';
 /// with the device's id from the UMP log as `UMP_TEST_DEVICE_ID`.
 @Riverpod(keepAlive: true)
 Consent consent(Ref ref) => GoogleConsent(
+  adTestDeviceIds: [
+    for (final id in admobTestDeviceIds.split(','))
+      if (id.trim().isNotEmpty) id.trim(),
+  ],
   debugEea:
       ref.watch(testToolsProvider) &&
       const bool.fromEnvironment('UMP_DEBUG_EEA'),

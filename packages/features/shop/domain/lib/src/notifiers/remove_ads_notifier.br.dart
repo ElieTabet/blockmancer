@@ -8,10 +8,8 @@ import 'package:timber/timber.dart';
 
 part 'remove_ads_notifier.br.g.dart';
 
-/// The one product: interstitials gone for good; the rewarded revive stays.
-const removeAdsProductId = 'remove_ads';
-
-/// Whether the player owns Remove ads: kept on the device, and confirmed by
+/// Whether the player owns Remove ads (the one product: interstitials gone
+/// for good; the rewarded revive stays): kept on the device, and confirmed by
 /// every purchase or restore the store reports, from launch on. Nothing ever
 /// takes it back (a refund is the store's to handle).
 @Riverpod(keepAlive: true)
@@ -43,14 +41,13 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
   /// Opens the store's sheet; false when it couldn't open. What comes of it
   /// arrives as an update.
   Future<bool> buy() async {
+    final product = ref.read(di.removeAdsProductIdProvider);
     final sink = ref.read(di.analyticsSinkProvider)
-      ..log(const .purchaseStarted(product: removeAdsProductId));
-    final opened = await ref.read(di.buyProductProvider)(removeAdsProductId);
+      ..log(.purchaseStarted(product: product));
+    final opened = await ref.read(di.buyProductProvider)(product);
 
     if (!opened) {
-      sink.log(
-        const .purchaseFailed(code: 'unavailable', product: removeAdsProductId),
-      );
+      sink.log(.purchaseFailed(code: 'unavailable', product: product));
     }
 
     return opened;
@@ -76,30 +73,27 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
   }
 
   Future<void> _onUpdate(PurchaseUpdate update) async {
-    if (update.productId != removeAdsProductId) return;
+    final product = ref.read(di.removeAdsProductIdProvider);
+
+    if (update.productId != product) return;
 
     final sink = ref.read(di.analyticsSinkProvider);
 
     switch (update.outcome) {
       case .purchased:
-        sink.log(const .purchaseCompleted(product: removeAdsProductId));
+        sink.log(.purchaseCompleted(product: product));
         await _keep();
       case .restored:
         if (_restoring != null) {
-          sink.log(const .purchaseRestored(product: removeAdsProductId));
+          sink.log(.purchaseRestored(product: product));
         }
         await _keep();
         _restoring?.complete();
       case .canceled:
-        sink.log(
-          const .purchaseFailed(code: 'canceled', product: removeAdsProductId),
-        );
+        sink.log(.purchaseFailed(code: 'canceled', product: product));
       case .failed:
         sink.log(
-          .purchaseFailed(
-            code: update.code ?? 'failed',
-            product: removeAdsProductId,
-          ),
+          .purchaseFailed(code: update.code ?? 'failed', product: product),
         );
       case .pending:
         break;

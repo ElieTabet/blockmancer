@@ -10,30 +10,52 @@ it.
 
 ## Placeholders
 
-Every ID the stores and AdMob give us lives in one file, **`app/env/prod.json`**, passed to the
-release builds with `--dart-define-from-file`. Until the real ID is in, it holds a named
-`PLACEHOLDER_…`. `melos run build-ios` / `build-android` refuse to build while one is left
-(`scripts/check_release_ids.sh`); the test builds (`build-ios-test`, `build-android-test`) only
-warn, since they play Google's test ad units.
+Every ID the stores and AdMob give us lives in one file, **`app/env/prod.json`**:
 
-| Key in `app/env/prod.json` | Status | Where the real value comes from |
+- Dart reads it with `String.fromEnvironment`, passed by `--dart-define-from-file=env/prod.json`
+  (the build scripts do; for a debug run, add it to `flutter run`).
+- Android's Gradle reads it into the manifest (`app/android/app/build.gradle.kts`), in every
+  build.
+- An Xcode build phase ("Set AdMob app id") writes the iOS app id into the built `Info.plist`, in
+  every build.
+
+Until a real ID is in, it holds a named `PLACEHOLDER_…`. `melos run build-ios` / `build-android`
+refuse to build while one is left (`scripts/check_release_ids.sh`); the test builds
+(`build-ios-test`, `build-android-test`) only warn.
+
+| Key in `app/env/prod.json` | Status | Used for / where it comes from |
 |---|---|---|
-| `APP_STORE_ID` | `PLACEHOLDER_APP_STORE_ID` | App Store Connect → the app → App Information → **Apple ID** (a number, e.g. `6740000000`). Used for the store link of the update screen and banner. |
-| `ADMOB_REWARDED_IOS` | received | AdMob → iOS app → Ad units → **revive** → Ad unit ID (`ca-app-pub-…/…`) |
-| `ADMOB_REWARDED_ANDROID` | received | AdMob → Android app → Ad units → **revive** |
-| `ADMOB_INTERSTITIAL_IOS` | received | AdMob → iOS app → Ad units → **run_end** |
-| `ADMOB_INTERSTITIAL_ANDROID` | received | AdMob → Android app → Ad units → **run_end** |
+| `ADMOB_APP_ID_IOS` | ✅ done | AdMob iOS **App ID**, every build (Xcode build phase → `GADApplicationIdentifier`) |
+| `ADMOB_APP_ID_ANDROID` | ✅ done | AdMob Android **App ID**, every build (Gradle → `com.google.android.gms.ads.APPLICATION_ID`) |
+| `ADMOB_REWARDED_IOS` | ✅ done | iOS `revive` unit, release builds only |
+| `ADMOB_INTERSTITIAL_IOS` | ✅ done | iOS `run_end` unit, release builds only |
+| `ADMOB_REWARDED_ANDROID` | ✅ done | Android `revive` unit, release builds only |
+| `ADMOB_INTERSTITIAL_ANDROID` | ✅ done | Android `run_end` unit, release builds only |
+| `ADMOB_TEST_DEVICE_IDS` | ⏳ empty | Your phones, comma separated, so a release build serves you test ads (see below) |
+| `IAP_REMOVE_ADS` | ✅ done | `blockmancer.remove_ads`, both stores |
+| `GAME_CENTER_LEADERBOARD_DAILY` | ✅ done | `blockmancer.daily_run` |
+| `GAME_CENTER_LEADERBOARD_BEST` | ✅ done | `blockmancer.best_run` |
+| `APP_STORE_ID` | ❌ placeholder | App Store Connect → the app → App Information → **Apple ID** (a number): the update screen's store link and Rate Blockmancer |
+| `PLAY_GAMES_APP_ID` | ❌ placeholder | Play Console → Play Games Services → Configuration → **project id** (digits) |
+| `PLAY_LEADERBOARD_DAILY` | ❌ placeholder | Play Games Services → Leaderboards → the daily run's **ID** (`CgkI…`) |
+| `PLAY_LEADERBOARD_BEST` | ❌ placeholder | Play Games Services → Leaderboards → the best run's **ID** |
 
-Two IDs are read by native code at launch, so they live in the native files instead (and a
-placeholder there blocks a release build too):
+Debug and test builds always play Google's test ad units, never these.
 
-| Native file | ID | Status |
-|---|---|---|
-| `app/ios/Runner/Info.plist` → `GADApplicationIdentifier` | AdMob iOS **App ID** (`ca-app-pub-…~…`) | received |
-| `app/android/app/src/main/AndroidManifest.xml` → `com.google.android.gms.ads.APPLICATION_ID` | AdMob Android **App ID** | received |
+**Still missing:** `APP_STORE_ID`, the three Play Games ids, and (optional) your test devices.
 
-The product and leaderboard IDs are ours to choose, not placeholders: enter them in the consoles
-exactly as written in their sections below.
+### Your phones as AdMob test devices
+
+So a release build on your own phone never serves you live ads (AdMob forbids clicking your own):
+
+1. Run a release build on the phone (`flutter run --release --dart-define-from-file=env/prod.json`
+   from `app/`), and request an ad (lose a round: the revive loads one).
+2. Copy the id from the log — Android: "Use RequestConfiguration.Builder().setTestDeviceIds(
+   Arrays.asList("33BE2250B43518CCDA7DE426D04EE231"))"; iOS: "GADMobileAds.sharedInstance
+   .requestConfiguration.testDeviceIdentifiers = @[ @"2077ef9a63d2b398840261c8221a0c9b" ]".
+3. Add it to `ADMOB_TEST_DEVICE_IDS` (comma separated) and send it to me, or simply commit it.
+4. Also in AdMob → **Settings → Test devices → Add test device** (name, platform, the same id):
+   that covers builds made before the id was in the file.
 
 ## Firebase
 
@@ -109,7 +131,7 @@ version. All four default to `0.0.0`, which asks nothing.
 
 ## AdMob
 
-### 1. Apps and ad units (done)
+### 1. Apps and ad units ✅
 
 Both apps exist (iOS and Android, publisher `pub-9236909266129177`), each with two ad units:
 
@@ -199,7 +221,7 @@ App Store Connect → the app → **Monetization → In-App Purchases** → **+*
 
 - Type: **Non-Consumable**
 - Reference name: `Remove ads`
-- Product ID: **`remove_ads`** (exactly; the app asks for this id)
+- Product ID: **`blockmancer.remove_ads`** ✅ (exactly; the app asks for this id)
 - Price: **$3.99** (Price Schedule → United States, $3.99; other countries follow Apple's tiers)
 - Localizations: English "Remove ads" / "No more ads between runs, for good. The revive's
   optional ad stays."; French "Supprimer les pubs" / "Plus de pubs entre les parties, pour de bon.
@@ -246,7 +268,7 @@ App content → **Ads** → "Does your app contain ads?" **Yes**. Advertising ID
 Play Console → the app → **Monetize with Play → Products → In-app products** → **Create
 product**:
 
-- Product ID: **`remove_ads`** (exactly)
+- Product ID: **`blockmancer.remove_ads`** ✅ (exactly); purchase option ID: **`buy`**
 - Name / description: as in App Store Connect, in English and French
 - Default price: **USD 3.99** → **Update exchange rates** for the other countries
 - **Activate** it. (Play only lists products once the app has a build with the BILLING permission

@@ -22,8 +22,10 @@ final class _Analytics implements AnalyticsSink {
   void log(AnalyticsEvent event) => logged.add(event);
 }
 
+const _product = 'blockmancer.remove_ads';
+
 PurchaseUpdate _update(PurchaseOutcome outcome, {String? code}) =>
-    (code: code, outcome: outcome, productId: removeAdsProductId);
+    (code: code, outcome: outcome, productId: _product);
 
 void main() {
   late _Analytics analytics;
@@ -45,6 +47,7 @@ void main() {
             (productId) async => r'$3.99',
         purchaseUpdates: (ref) =>
             () => store.stream,
+        removeAdsProductId: (ref) => _product,
         restorePurchases: (ref) => () async {
           calls.add('restore');
           onRestore?.call();
@@ -80,12 +83,12 @@ void main() {
     await settle();
 
     // Then
-    expect(calls, ['buy remove_ads']);
+    expect(calls, ['buy blockmancer.remove_ads']);
     expect(shop.read(removeAdsProvider).value, isTrue);
     expect(entitlement.removed, isTrue);
     expect(analytics.logged, const [
-      AnalyticsEvent.purchaseStarted(product: removeAdsProductId),
-      AnalyticsEvent.purchaseCompleted(product: removeAdsProductId),
+      AnalyticsEvent.purchaseStarted(product: _product),
+      AnalyticsEvent.purchaseCompleted(product: _product),
     ]);
   });
 
@@ -104,10 +107,7 @@ void main() {
     expect(shop.read(removeAdsProvider).value, isFalse);
     expect(
       analytics.logged.last,
-      const AnalyticsEvent.purchaseFailed(
-        code: 'canceled',
-        product: removeAdsProductId,
-      ),
+      const AnalyticsEvent.purchaseFailed(code: 'canceled', product: _product),
     );
   });
 
@@ -138,7 +138,7 @@ void main() {
     // Then
     expect(restored, isTrue);
     expect(analytics.logged, const [
-      AnalyticsEvent.purchaseRestored(product: removeAdsProductId),
+      AnalyticsEvent.purchaseRestored(product: _product),
     ]);
   });
 
