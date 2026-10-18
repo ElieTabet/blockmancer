@@ -218,6 +218,9 @@ class Translations$game$round$en {
 
 	/// en: '+$mult mult stored'
 	String storedMult({required Object mult}) => '+${mult} mult stored';
+
+	/// en: 'Tide in $count'
+	String tideIn({required Object count}) => 'Tide in ${count}';
 }
 
 // Path: game.banner
@@ -331,6 +334,9 @@ class Translations$game$lost$en {
 
 	/// en: 'No room left'
 	String get noRoom => 'No room left';
+
+	/// en: 'Flooded'
+	String get flooded => 'Flooded';
 
 	/// en: '$score of $target points this round.'
 	String progress({required Object score, required Object target}) => '${score} of ${target} points this round.';
@@ -457,6 +463,8 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$hattrick$en hattrick = Translations$game$jokers$hattrick$en.internal(_root);
 	late final Translations$game$jokers$lantern$en lantern = Translations$game$jokers$lantern$en.internal(_root);
 	late final Translations$game$jokers$ember$en ember = Translations$game$jokers$ember$en.internal(_root);
+	late final Translations$game$jokers$sprinter$en sprinter = Translations$game$jokers$sprinter$en.internal(_root);
+	late final Translations$game$jokers$momentum$en momentum = Translations$game$jokers$momentum$en.internal(_root);
 }
 
 // Path: home.daily
@@ -1133,6 +1141,36 @@ class Translations$game$jokers$ember$en {
 	String description({required Object factor}) => '×${factor} mult when your move clears a stone or a fog cell.';
 }
 
+// Path: game.jokers.sprinter
+class Translations$game$jokers$sprinter$en {
+	Translations$game$jokers$sprinter$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Sprinter'
+	String get name => 'Sprinter';
+
+	/// en: '+$mult mult when the first piece of a fresh tray clears a line.'
+	String description({required Object mult}) => '+${mult} mult when the first piece of a fresh tray clears a line.';
+}
+
+// Path: game.jokers.momentum
+class Translations$game$jokers$momentum$en {
+	Translations$game$jokers$momentum$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Momentum'
+	String get name => 'Momentum';
+
+	/// en: '+$mult mult on every clear for each tray in a row whose first piece cleared a line.'
+	String description({required Object mult}) => '+${mult} mult on every clear for each tray in a row whose first piece cleared a line.';
+}
+
 // Path: home.sheet.bossRule
 class Translations$home$sheet$bossRule$en {
 	Translations$home$sheet$bossRule$en.internal(this._root);
@@ -1146,6 +1184,9 @@ class Translations$home$sheet$bossRule$en {
 
 	/// en: 'Fog hides cells. Fill next to it to see what's underneath.'
 	String get fog => 'Fog hides cells. Fill next to it to see what\'s underneath.';
+
+	/// en: 'Every new tray, the tide rises one row. Don't let it push your blocks off the top.'
+	String get tide => 'Every new tray, the tide rises one row. Don\'t let it push your blocks off the top.';
 
 	/// en: 'In the boss round, every piece falls to the bottom.'
 	String get gravity => 'In the boss round, every piece falls to the bottom.';
@@ -1177,6 +1218,7 @@ extension on Translations {
 			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: '${count} piece left', other: '${count} pieces left', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult stored',
+			'game.round.tideIn' => ({required Object count}) => 'Tide in ${count}',
 			'game.banner.chips' => ({required Object chips}) => '${chips} chips',
 			'game.banner.mult' => ({required Object mult}) => '× ${mult} mult',
 			'game.banner.product' => ({required Object total}) => '= ${total}',
@@ -1209,6 +1251,7 @@ extension on Translations {
 			'game.offers.take' => 'Take',
 			'game.lost.outOfPieces' => 'Out of pieces',
 			'game.lost.noRoom' => 'No room left',
+			'game.lost.flooded' => 'Flooded',
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} of ${target} points this round.',
 			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Revive · clear ${rows} rows + ${pieces} pieces',
 			'game.lost.endRun' => 'End run',
@@ -1281,6 +1324,10 @@ extension on Translations {
 			'game.jokers.lantern.description' => 'Stones and fog beside a cleared line are cleared with it.',
 			'game.jokers.ember.name' => 'Ember',
 			'game.jokers.ember.description' => ({required Object factor}) => '×${factor} mult when your move clears a stone or a fog cell.',
+			'game.jokers.sprinter.name' => 'Sprinter',
+			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult when the first piece of a fresh tray clears a line.',
+			'game.jokers.momentum.name' => 'Momentum',
+			'game.jokers.momentum.description' => ({required Object mult}) => '+${mult} mult on every clear for each tray in a row whose first piece cleared a line.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',
@@ -1301,6 +1348,7 @@ extension on Translations {
 			'home.sheet.current' => 'In progress',
 			'home.sheet.bossRule.rubble' => 'The boss starts with stones on the board.',
 			'home.sheet.bossRule.fog' => 'Fog hides cells. Fill next to it to see what\'s underneath.',
+			'home.sheet.bossRule.tide' => 'Every new tray, the tide rises one row. Don\'t let it push your blocks off the top.',
 			'home.sheet.bossRule.gravity' => 'In the boss round, every piece falls to the bottom.',
 			'home.sheet.bossTarget' => ({required Object points}) => 'Beat the boss: ${points} points',
 			'home.sheet.stars' => 'Stars',

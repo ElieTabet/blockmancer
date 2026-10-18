@@ -74,6 +74,7 @@ const referenceBuilds = [
   'fullhouse,brink',
   'finisher,hattrick',
   'lantern,ember',
+  'sprinter,momentum',
 ];
 
 /// Every joker as a solo build, in catalog order.

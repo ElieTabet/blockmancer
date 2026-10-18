@@ -243,6 +243,7 @@ final class RoundStatus extends ConsumerWidget {
           round.piecesLeft(count: pieces),
           style: const TextStyle(color: DSColor.textMuted, fontSize: 12),
         ),
+        const TideCountdown(),
         Text(
           [
             if (streak > 1) round.combo(streak: streak),
@@ -255,6 +256,34 @@ final class RoundStatus extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// In Tide's boss, how many pieces are left in the tray before the tide
+/// rises; nothing in any other round.
+final class TideCountdown extends ConsumerWidget {
+  const TideCountdown({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final inTray = ref.watch(
+      gameProvider.select(
+        (state) => state.run.config.world == .tide && state.run.round.isBoss
+            ? state.run.tray.whereType<int>().length
+            : null,
+      ),
+    );
+
+    if (inTray == null) return const SizedBox.shrink();
+
+    return Text(
+      context.t.game.round.tideIn(count: inTray),
+      style: const TextStyle(
+        color: DSColor.negative,
+        fontSize: 12,
+        fontWeight: .w700,
+      ),
     );
   }
 }

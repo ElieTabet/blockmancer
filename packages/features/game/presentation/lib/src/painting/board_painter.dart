@@ -19,9 +19,11 @@ Color cellColor(CellState state) => switch (state) {
   FogCell() => DSGameColor.fog,
 };
 
-/// The board and what is on it.
+/// The board and what is on it: its cells [rowShift] rows lower (a tide about
+/// to rise), and its top row tinted when [warnTopRow] (the next rise would
+/// flood it).
 final class BoardPainter extends CustomPainter {
-  const BoardPainter(this.board);
+  const BoardPainter(this.board, {this.rowShift = 0, this.warnTopRow = false});
 
   static const _boardRadius = Radius.circular(16);
   static const _cellRadius = Radius.circular(6);
@@ -30,24 +32,28 @@ final class BoardPainter extends CustomPainter {
   static const _stoneBevel = 0.18;
 
   final Board board;
+  final double rowShift;
+  final bool warnTopRow;
 
   @override
   void paint(Canvas canvas, Size size) {
     final geometry = BoardGeometry(size.shortestSide);
 
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Offset.zero & Size.square(geometry.side),
-        _boardRadius,
-      ),
-      Paint()..color = DSGameColor.boardBackground,
+    final frame = RRect.fromRectAndRadius(
+      Offset.zero & Size.square(geometry.side),
+      _boardRadius,
     );
+
+    canvas
+      ..drawRRect(frame, Paint()..color = DSGameColor.boardBackground)
+      ..save()
+      ..clipRRect(frame)
+      ..translate(0, rowShift * geometry.pitch);
 
     for (var row = 0; row < Board.size; row++) {
       for (var col = 0; col < Board.size; col++) {
         final cell = Cell(col: col, row: row);
         final rect = geometry.cellRect(cell);
-
         final state = board.at(cell);
 
         canvas.drawRRect(
@@ -71,10 +77,27 @@ final class BoardPainter extends CustomPainter {
         }
       }
     }
+
+    canvas.restore();
+
+    if (warnTopRow) {
+      for (var col = 0; col < Board.size; col++) {
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            geometry.cellRect(Cell(col: col, row: 0)),
+            _cellRadius,
+          ),
+          Paint()..color = DSGameColor.collision.withValues(alpha: 0.35),
+        );
+      }
+    }
   }
 
   @override
-  bool shouldRepaint(BoardPainter oldDelegate) => oldDelegate.board != board;
+  bool shouldRepaint(BoardPainter oldDelegate) =>
+      oldDelegate.board != board ||
+      oldDelegate.rowShift != rowShift ||
+      oldDelegate.warnTopRow != warnTopRow;
 
   /// A soft cloud over the empty cell: round where a stone is square and
   /// bevelled, so fog never reads as one.

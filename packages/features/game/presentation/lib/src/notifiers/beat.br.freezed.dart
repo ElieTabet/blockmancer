@@ -86,7 +86,7 @@ extension BeatPatterns on Beat {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ClearingBeat value)?  clearing,TResult Function( ComboBeat value)?  combo,TResult Function( CountingChipsBeat value)?  countingChips,TResult Function( CountingMultBeat value)?  countingMult,TResult Function( JokerPulseBeat value)?  jokerPulse,TResult Function( LandingBeat value)?  landing,TResult Function( PlacingBeat value)?  placing,TResult Function( PointsBeat value)?  points,TResult Function( RevealingBeat value)?  revealing,TResult Function( ProductBeat value)?  product,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ClearingBeat value)?  clearing,TResult Function( ComboBeat value)?  combo,TResult Function( CountingChipsBeat value)?  countingChips,TResult Function( CountingMultBeat value)?  countingMult,TResult Function( JokerPulseBeat value)?  jokerPulse,TResult Function( LandingBeat value)?  landing,TResult Function( PlacingBeat value)?  placing,TResult Function( PointsBeat value)?  points,TResult Function( RevealingBeat value)?  revealing,TResult Function( RisingBeat value)?  rising,TResult Function( ProductBeat value)?  product,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ClearingBeat() when clearing != null:
@@ -98,7 +98,8 @@ return jokerPulse(_that);case LandingBeat() when landing != null:
 return landing(_that);case PlacingBeat() when placing != null:
 return placing(_that);case PointsBeat() when points != null:
 return points(_that);case RevealingBeat() when revealing != null:
-return revealing(_that);case ProductBeat() when product != null:
+return revealing(_that);case RisingBeat() when rising != null:
+return rising(_that);case ProductBeat() when product != null:
 return product(_that);case _:
   return orElse();
 
@@ -117,7 +118,7 @@ return product(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ClearingBeat value)  clearing,required TResult Function( ComboBeat value)  combo,required TResult Function( CountingChipsBeat value)  countingChips,required TResult Function( CountingMultBeat value)  countingMult,required TResult Function( JokerPulseBeat value)  jokerPulse,required TResult Function( LandingBeat value)  landing,required TResult Function( PlacingBeat value)  placing,required TResult Function( PointsBeat value)  points,required TResult Function( RevealingBeat value)  revealing,required TResult Function( ProductBeat value)  product,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ClearingBeat value)  clearing,required TResult Function( ComboBeat value)  combo,required TResult Function( CountingChipsBeat value)  countingChips,required TResult Function( CountingMultBeat value)  countingMult,required TResult Function( JokerPulseBeat value)  jokerPulse,required TResult Function( LandingBeat value)  landing,required TResult Function( PlacingBeat value)  placing,required TResult Function( PointsBeat value)  points,required TResult Function( RevealingBeat value)  revealing,required TResult Function( RisingBeat value)  rising,required TResult Function( ProductBeat value)  product,}){
 final _that = this;
 switch (_that) {
 case ClearingBeat():
@@ -129,7 +130,8 @@ return jokerPulse(_that);case LandingBeat():
 return landing(_that);case PlacingBeat():
 return placing(_that);case PointsBeat():
 return points(_that);case RevealingBeat():
-return revealing(_that);case ProductBeat():
+return revealing(_that);case RisingBeat():
+return rising(_that);case ProductBeat():
 return product(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -144,7 +146,7 @@ return product(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ClearingBeat value)?  clearing,TResult? Function( ComboBeat value)?  combo,TResult? Function( CountingChipsBeat value)?  countingChips,TResult? Function( CountingMultBeat value)?  countingMult,TResult? Function( JokerPulseBeat value)?  jokerPulse,TResult? Function( LandingBeat value)?  landing,TResult? Function( PlacingBeat value)?  placing,TResult? Function( PointsBeat value)?  points,TResult? Function( RevealingBeat value)?  revealing,TResult? Function( ProductBeat value)?  product,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ClearingBeat value)?  clearing,TResult? Function( ComboBeat value)?  combo,TResult? Function( CountingChipsBeat value)?  countingChips,TResult? Function( CountingMultBeat value)?  countingMult,TResult? Function( JokerPulseBeat value)?  jokerPulse,TResult? Function( LandingBeat value)?  landing,TResult? Function( PlacingBeat value)?  placing,TResult? Function( PointsBeat value)?  points,TResult? Function( RevealingBeat value)?  revealing,TResult? Function( RisingBeat value)?  rising,TResult? Function( ProductBeat value)?  product,}){
 final _that = this;
 switch (_that) {
 case ClearingBeat() when clearing != null:
@@ -156,7 +158,8 @@ return jokerPulse(_that);case LandingBeat() when landing != null:
 return landing(_that);case PlacingBeat() when placing != null:
 return placing(_that);case PointsBeat() when points != null:
 return points(_that);case RevealingBeat() when revealing != null:
-return revealing(_that);case ProductBeat() when product != null:
+return revealing(_that);case RisingBeat() when rising != null:
+return rising(_that);case ProductBeat() when product != null:
 return product(_that);case _:
   return null;
 
@@ -174,7 +177,7 @@ return product(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<ClearedCell> cells,  Duration duration,  Shake shake)?  clearing,TResult Function( Duration duration,  int streak)?  combo,TResult Function( int chips,  Duration duration)?  countingChips,TResult Function( Duration duration,  int mult)?  countingMult,TResult Function( JokerDelta delta,  Duration duration,  JokerId joker)?  jokerPulse,TResult Function( Duration countUp,  Duration duration,  int score,  Shake shake)?  landing,TResult Function( List<Cell> cells,  List<ClearedCell> clearing,  int colorIndex,  Duration duration,  Shake shake)?  placing,TResult Function( Duration duration,  int points)?  points,TResult Function( List<Cell> cells,  Duration duration)?  revealing,TResult Function( int bonus,  Duration duration,  int lineScore)?  product,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<ClearedCell> cells,  Duration duration,  Shake shake)?  clearing,TResult Function( Duration duration,  int streak)?  combo,TResult Function( int chips,  Duration duration)?  countingChips,TResult Function( Duration duration,  int mult)?  countingMult,TResult Function( JokerDelta delta,  Duration duration,  JokerId joker)?  jokerPulse,TResult Function( Duration countUp,  Duration duration,  int score,  Shake shake)?  landing,TResult Function( List<Cell> cells,  List<ClearedCell> clearing,  int colorIndex,  Duration duration,  Shake shake)?  placing,TResult Function( Duration duration,  int points)?  points,TResult Function( List<Cell> cells,  Duration duration)?  revealing,TResult Function( Duration duration)?  rising,TResult Function( int bonus,  Duration duration,  int lineScore)?  product,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ClearingBeat() when clearing != null:
 return clearing(_that.cells,_that.duration,_that.shake);case ComboBeat() when combo != null:
@@ -185,7 +188,8 @@ return jokerPulse(_that.delta,_that.duration,_that.joker);case LandingBeat() whe
 return landing(_that.countUp,_that.duration,_that.score,_that.shake);case PlacingBeat() when placing != null:
 return placing(_that.cells,_that.clearing,_that.colorIndex,_that.duration,_that.shake);case PointsBeat() when points != null:
 return points(_that.duration,_that.points);case RevealingBeat() when revealing != null:
-return revealing(_that.cells,_that.duration);case ProductBeat() when product != null:
+return revealing(_that.cells,_that.duration);case RisingBeat() when rising != null:
+return rising(_that.duration);case ProductBeat() when product != null:
 return product(_that.bonus,_that.duration,_that.lineScore);case _:
   return orElse();
 
@@ -204,7 +208,7 @@ return product(_that.bonus,_that.duration,_that.lineScore);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<ClearedCell> cells,  Duration duration,  Shake shake)  clearing,required TResult Function( Duration duration,  int streak)  combo,required TResult Function( int chips,  Duration duration)  countingChips,required TResult Function( Duration duration,  int mult)  countingMult,required TResult Function( JokerDelta delta,  Duration duration,  JokerId joker)  jokerPulse,required TResult Function( Duration countUp,  Duration duration,  int score,  Shake shake)  landing,required TResult Function( List<Cell> cells,  List<ClearedCell> clearing,  int colorIndex,  Duration duration,  Shake shake)  placing,required TResult Function( Duration duration,  int points)  points,required TResult Function( List<Cell> cells,  Duration duration)  revealing,required TResult Function( int bonus,  Duration duration,  int lineScore)  product,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<ClearedCell> cells,  Duration duration,  Shake shake)  clearing,required TResult Function( Duration duration,  int streak)  combo,required TResult Function( int chips,  Duration duration)  countingChips,required TResult Function( Duration duration,  int mult)  countingMult,required TResult Function( JokerDelta delta,  Duration duration,  JokerId joker)  jokerPulse,required TResult Function( Duration countUp,  Duration duration,  int score,  Shake shake)  landing,required TResult Function( List<Cell> cells,  List<ClearedCell> clearing,  int colorIndex,  Duration duration,  Shake shake)  placing,required TResult Function( Duration duration,  int points)  points,required TResult Function( List<Cell> cells,  Duration duration)  revealing,required TResult Function( Duration duration)  rising,required TResult Function( int bonus,  Duration duration,  int lineScore)  product,}) {final _that = this;
 switch (_that) {
 case ClearingBeat():
 return clearing(_that.cells,_that.duration,_that.shake);case ComboBeat():
@@ -215,7 +219,8 @@ return jokerPulse(_that.delta,_that.duration,_that.joker);case LandingBeat():
 return landing(_that.countUp,_that.duration,_that.score,_that.shake);case PlacingBeat():
 return placing(_that.cells,_that.clearing,_that.colorIndex,_that.duration,_that.shake);case PointsBeat():
 return points(_that.duration,_that.points);case RevealingBeat():
-return revealing(_that.cells,_that.duration);case ProductBeat():
+return revealing(_that.cells,_that.duration);case RisingBeat():
+return rising(_that.duration);case ProductBeat():
 return product(_that.bonus,_that.duration,_that.lineScore);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -230,7 +235,7 @@ return product(_that.bonus,_that.duration,_that.lineScore);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<ClearedCell> cells,  Duration duration,  Shake shake)?  clearing,TResult? Function( Duration duration,  int streak)?  combo,TResult? Function( int chips,  Duration duration)?  countingChips,TResult? Function( Duration duration,  int mult)?  countingMult,TResult? Function( JokerDelta delta,  Duration duration,  JokerId joker)?  jokerPulse,TResult? Function( Duration countUp,  Duration duration,  int score,  Shake shake)?  landing,TResult? Function( List<Cell> cells,  List<ClearedCell> clearing,  int colorIndex,  Duration duration,  Shake shake)?  placing,TResult? Function( Duration duration,  int points)?  points,TResult? Function( List<Cell> cells,  Duration duration)?  revealing,TResult? Function( int bonus,  Duration duration,  int lineScore)?  product,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<ClearedCell> cells,  Duration duration,  Shake shake)?  clearing,TResult? Function( Duration duration,  int streak)?  combo,TResult? Function( int chips,  Duration duration)?  countingChips,TResult? Function( Duration duration,  int mult)?  countingMult,TResult? Function( JokerDelta delta,  Duration duration,  JokerId joker)?  jokerPulse,TResult? Function( Duration countUp,  Duration duration,  int score,  Shake shake)?  landing,TResult? Function( List<Cell> cells,  List<ClearedCell> clearing,  int colorIndex,  Duration duration,  Shake shake)?  placing,TResult? Function( Duration duration,  int points)?  points,TResult? Function( List<Cell> cells,  Duration duration)?  revealing,TResult? Function( Duration duration)?  rising,TResult? Function( int bonus,  Duration duration,  int lineScore)?  product,}) {final _that = this;
 switch (_that) {
 case ClearingBeat() when clearing != null:
 return clearing(_that.cells,_that.duration,_that.shake);case ComboBeat() when combo != null:
@@ -241,7 +246,8 @@ return jokerPulse(_that.delta,_that.duration,_that.joker);case LandingBeat() whe
 return landing(_that.countUp,_that.duration,_that.score,_that.shake);case PlacingBeat() when placing != null:
 return placing(_that.cells,_that.clearing,_that.colorIndex,_that.duration,_that.shake);case PointsBeat() when points != null:
 return points(_that.duration,_that.points);case RevealingBeat() when revealing != null:
-return revealing(_that.cells,_that.duration);case ProductBeat() when product != null:
+return revealing(_that.cells,_that.duration);case RisingBeat() when rising != null:
+return rising(_that.duration);case ProductBeat() when product != null:
 return product(_that.bonus,_that.duration,_that.lineScore);case _:
   return null;
 
@@ -902,6 +908,72 @@ class _$RevealingBeatCopyWithImpl<$Res>
   return _then(RevealingBeat(
 cells: null == cells ? _self._cells : cells // ignore: cast_nullable_to_non_nullable
 as List<Cell>,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
+as Duration,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class RisingBeat implements Beat {
+  const RisingBeat({required this.duration});
+  
+
+@override final  Duration duration;
+
+/// Create a copy of Beat
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$RisingBeatCopyWith<RisingBeat> get copyWith => _$RisingBeatCopyWithImpl<RisingBeat>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RisingBeat&&(identical(other.duration, duration) || other.duration == duration));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,duration);
+
+@override
+String toString() {
+  return 'Beat.rising(duration: $duration)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $RisingBeatCopyWith<$Res> implements $BeatCopyWith<$Res> {
+  factory $RisingBeatCopyWith(RisingBeat value, $Res Function(RisingBeat) _then) = _$RisingBeatCopyWithImpl;
+@override @useResult
+$Res call({
+ Duration duration
+});
+
+
+
+
+}
+/// @nodoc
+class _$RisingBeatCopyWithImpl<$Res>
+    implements $RisingBeatCopyWith<$Res> {
+  _$RisingBeatCopyWithImpl(this._self, this._then);
+
+  final RisingBeat _self;
+  final $Res Function(RisingBeat) _then;
+
+/// Create a copy of Beat
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? duration = null,}) {
+  return _then(RisingBeat(
+duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
 as Duration,
   ));
 }

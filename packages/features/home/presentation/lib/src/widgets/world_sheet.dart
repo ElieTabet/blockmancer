@@ -98,7 +98,8 @@ final class WorldSheet extends ConsumerWidget {
       .fog => rules.fog,
       .gravity => rules.gravity,
       .rubble => rules.rubble,
-      .mirror || .tide => null,
+      .tide => rules.tide,
+      .mirror => null,
     };
   }
 }

@@ -45,4 +45,32 @@ void main() {
       ),
     );
   });
+
+  test('a board about to rise draws its cells a row lower, its frame where it '
+      'is', () {
+    // Given
+    final painter = BoardPainter(Board.empty(), rowShift: 1);
+
+    // When / Then: the frame, then the first cell a row down
+    expect(
+      (Canvas canvas) => painter.paint(canvas, size),
+      paints
+        ..rrect()
+        ..translate(y: (size.width - 2 * 6 + 3) / Board.size),
+    );
+  });
+
+  test('a top row the next rise would flood is tinted', () {
+    // Given
+    final painter = BoardPainter(
+      Board.empty().withCells({const Cell(col: 3, row: 0): const .stone()}),
+      warnTopRow: true,
+    );
+
+    // When / Then: the board, 64 cells, the stone's bevel and 8 tints
+    expect(
+      (Canvas canvas) => painter.paint(canvas, size),
+      paintsExactlyCountTimes(#drawRRect, 1 + 64 + 1 + Board.size),
+    );
+  });
 }

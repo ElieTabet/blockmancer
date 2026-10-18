@@ -82,7 +82,7 @@ melos run test-engine-web
 # a row per joker played alone (docs/balance/<date>.md holds each table, docs/balance-v0.md the
 # first, docs/balance/2026-10-18-sprint5.md the Sprint 5 tuning and the ★3 thresholds). It plays
 # `configFor(world, jokerPool: JokerId.values)` — every joker on offer — in Rubble unless
-# `--world` names another playable world (gravity, fog). Melos passes no arguments through, so for
+# `--world` names another playable world (gravity, fog, tide). Melos passes no arguments through, so for
 # `--runs` / `--build` / `--world` run it from the package:
 #   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 #   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build random --solo
@@ -274,13 +274,13 @@ engine's events and never recomputes a rule.
   `const BlockmancerEngine()`. Rule data and rule decisions stay behind the contract (`defaultConfig`,
   `shape(id)`, `partnerOf(id)`, `canRevive`, `liveRunTotal`), so no feature computes a rule and
   `shared_domain`'s entities only read their own fields.
-- **Jokers and worlds.** 22 jokers in 11 pairs in `jokerCatalog` (hook and draw order; new ones
+- **Jokers and worlds.** 24 jokers in 12 pairs in `jokerCatalog` (hook and draw order; new ones
   are appended, so a pool without them draws exactly as before — Anchor and Avalanche, Gravity's,
   then the stars' Full House, On the Brink, Finisher and Hat Trick, then Fog's Lantern and Ember
-  come last). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
+  and Tide's Sprinter and Momentum come last). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
   pool's list order, and the pair bias only proposes a partner in the pool; `defaultConfig`'s pool
   is every joker, as the daily run's is. The map is rule data behind the contract too:
-  `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (Rubble, Gravity, Fog),
+  `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (Rubble, Gravity, Fog, Tide),
   `unlocksOf(world)` and `startingJokers` (every joker neither a world nor the stars unlock: 12).
 - **What a joker reads.** Each hook gets a `MoveContext`: the clear, the piece's size, the streak,
   Patience's bank, `occupiedAfterPlacing` (filled cells and stones once the piece has landed, before
@@ -326,8 +326,8 @@ engine's events and never recomputes a rule.
   `transformPlacement`, and `PiecePlaced` carries the landing cells; a `RunMove.place` keeps the
   drop point, so replay re-applies the rule. Two more hooks serve Fog: `onBoardSetup`, the board
   a round starts on once its stones are down (drawing from the stones stream), and
-  `afterPlacement`, the board once a move has scored and cleared. Mirror and Tide have no rule yet
-  and throw.
+  `afterPlacement`, the board once a move has scored and cleared. Mirror has no rule yet and
+  throws.
 - **Fog.** The boss starts with `RoundSpec.fog` fog cells (8) on empty cells from the stones
   stream, the first `fogStones` (3) hiding a stone (`FogPlaced`). A move is: place, score and
   clear, the jokers' removals beside the lines (Lantern, through `JokerEffect.extendClear`, which
@@ -336,6 +336,18 @@ engine's events and never recomputes a rule.
   stones and fog the move took off, in its lines or beside them. Fog's boss target and ★3 are
   provisional (a step above Gravity's) until Sprint 7's balance pass. The bot's tie-break counts a
   fog cell that turned to stone as empty, so what fog hides never steers it.
+- **Tide.** `TideRule.onTrayDealt`: before every tray of the boss but its first, every cell moves
+  up a row and a stone row enters at the bottom, empty in `RoundSpec.tideGaps` (2) columns drawn
+  from the stones stream (`TideRose`); a filled cell, stone or fog pushed off the top loses the
+  round (`LossReason.flooded`), and no tray is dealt. A revive deals a tray, so the tide rises
+  then too. Sprinter reads `MoveContext.firstOfTray` (the move played a tray's first piece, from
+  `RunState.trayDealt`); Momentum reads `momentumStreak`, the trays in a row whose first piece
+  cleared, set as each tray's first piece is played (0 for the rest of a tray whose first missed,
+  and at every round's start). The game shows "Tide in N" (pieces left in the tray) during the
+  boss, tints the top row while the next rise would flood it, and slides the board up a row as
+  the tide rises (its other beats play with the cells where they stood before the rise; under
+  reduce motion it is simply there). Tide's boss target and ★3 are provisional, a step above
+  Fog's.
   Tests swap in a fake rule through `worldRuleLookup`.
 - **Fog cells.** `CellState.fog(hidesStone:)` blocks a piece and counts as occupied, for lines
   and for Full House and On the Brink, like a stone. A cleared line takes its fog with it, and

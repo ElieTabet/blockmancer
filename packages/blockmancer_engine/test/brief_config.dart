@@ -61,3 +61,30 @@ const briefConfig = RunConfig(
   traySize: 3,
   world: .rubble,
 );
+
+/// [briefConfig] offering the 20 jokers there were before Fog's, so a seeded
+/// test keeps its offers as worlds add jokers to the end of the draw order.
+final briefConfigBeforeFog = briefConfig.copyWith(
+  jokerPool: const [
+    .anchor,
+    .avalanche,
+    .bigbox,
+    .brink,
+    .collector,
+    .column,
+    .combo,
+    .finisher,
+    .fullhouse,
+    .hattrick,
+    .heavy,
+    .patience,
+    .pockets,
+    .precision,
+    .quarry,
+    .saver,
+    .stonemason,
+    .sweep,
+    .tiny,
+    .twin,
+  ],
+);

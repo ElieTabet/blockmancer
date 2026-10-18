@@ -19,13 +19,13 @@ RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
       .fog => fogConfig.copyWith(jokerPool: jokerPool),
       .gravity => gravityConfig.copyWith(jokerPool: jokerPool),
       .rubble => defaultConfig.copyWith(jokerPool: jokerPool),
-      .mirror ||
-      .tide => throw ArgumentError.value(world, 'world', 'is not playable'),
+      .tide => tideConfig.copyWith(jokerPool: jokerPool),
+      .mirror => throw ArgumentError.value(world, 'world', 'is not playable'),
     };
 
 bool isPlayable(WorldId world) => switch (world) {
-  .fog || .gravity || .rubble => true,
-  .mirror || .tide => false,
+  .fog || .gravity || .rubble || .tide => true,
+  .mirror => false,
 };
 
 WorldId? nextWorld(WorldId world) {
@@ -38,5 +38,6 @@ List<JokerId> unlocksOf(WorldId world) => switch (world) {
   .fog => const [.lantern, .ember],
   .gravity => const [.anchor, .avalanche],
   .rubble => const [.stonemason, .quarry],
-  .mirror || .tide => const [],
+  .tide => const [.sprinter, .momentum],
+  .mirror => const [],
 };

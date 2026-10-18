@@ -31,14 +31,69 @@ final class BoardView extends StatelessWidget {
   );
 }
 
-final class _BoardLayer extends ConsumerWidget {
+final class _BoardLayer extends ConsumerStatefulWidget {
   const _BoardLayer();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final board = ref.watch(gameProvider.select((state) => state.run.board));
+  ConsumerState<_BoardLayer> createState() => _BoardLayerState();
+}
 
-    return RepaintBoundary(child: CustomPaint(painter: BoardPainter(board)));
+/// Draws the board a row low while a move's tide is still to rise, and lifts
+/// it as the rising beat plays: the move's other beats point at cells where
+/// they stood before the rise.
+class _BoardLayerState extends ConsumerState<_BoardLayer>
+    with SingleTickerProviderStateMixin {
+  late final _rise = AnimationController(vsync: this);
+
+  @override
+  void dispose() {
+    _rise.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(playbackProvider.select((playback) => playback.beat), (_, beat) {
+      if (beat is RisingBeat) {
+        _rise
+          ..duration = beat.duration
+          ..forward(from: 0);
+      }
+    });
+
+    final board = ref.watch(gameProvider.select((state) => state.run.board));
+    final warnTopRow = ref.watch(
+      gameProvider.select(
+        (state) =>
+            state.run.config.world == .tide &&
+            state.run.round.isBoss &&
+            [
+              for (var col = 0; col < Board.size; col++) Cell(col: col, row: 0),
+            ].any((cell) => state.run.board.at(cell) is! EmptyCell),
+      ),
+    );
+    final (riseAhead, rising) = ref.watch(
+      playbackProvider.select(
+        (playback) => (playback.riseAhead, playback.beat is RisingBeat),
+      ),
+    );
+
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _rise,
+        builder: (context, _) => CustomPaint(
+          painter: BoardPainter(
+            board,
+            rowShift: rising
+                ? 1 - Curves.easeOut.transform(_rise.value)
+                : riseAhead
+                ? 1
+                : 0,
+            warnTopRow: warnTopRow,
+          ),
+        ),
+      ),
+    );
   }
 }
 

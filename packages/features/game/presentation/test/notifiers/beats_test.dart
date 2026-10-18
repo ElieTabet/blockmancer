@@ -406,6 +406,35 @@ void main() {
     ));
   });
 
+  test('a tide that rose for the next tray lifts the board last', () {
+    // Given / When
+    final played = beats([
+      placed,
+      oneLine,
+      score(),
+      const GameEvent.tideRose(gapColumns: [2, 5]),
+      const GameEvent.trayRefilled(tray: [0, 0, 0]),
+    ]);
+
+    // Then
+    expect(
+      played.last,
+      const Beat.rising(duration: Duration(milliseconds: 250)),
+    );
+  });
+
+  test('with reduce motion on, the risen board is simply there', () {
+    // Given / When
+    final played = beats([
+      placed,
+      score(chips: 0, mult: 0),
+      const GameEvent.tideRose(gapColumns: [2, 5]),
+    ], reduceMotion: true);
+
+    // Then
+    expect(played.whereType<RisingBeat>(), isEmpty);
+  });
+
   test('a move with no events plays nothing', () {
     // Given / When / Then
     expect(beats(const []), isEmpty);

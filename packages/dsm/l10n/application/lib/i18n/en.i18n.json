@@ -23,7 +23,8 @@
         "other": "$count pieces left"
       },
       "combo": "Combo ×$streak",
-      "storedMult": "+$mult mult stored"
+      "storedMult": "+$mult mult stored",
+      "tideIn": "Tide in $count"
     },
     "banner": {
       "chips": "$chips chips",
@@ -67,6 +68,7 @@
     "lost": {
       "outOfPieces": "Out of pieces",
       "noRoom": "No room left",
+      "flooded": "Flooded",
       "progress": "$score of $target points this round.",
       "revive": "Revive · clear $rows rows + $pieces pieces",
       "endRun": "End run"
@@ -204,6 +206,14 @@
       "ember": {
         "name": "Ember",
         "description": "×$factor mult when your move clears a stone or a fog cell."
+      },
+      "sprinter": {
+        "name": "Sprinter",
+        "description": "+$mult mult when the first piece of a fresh tray clears a line."
+      },
+      "momentum": {
+        "name": "Momentum",
+        "description": "+$mult mult on every clear for each tray in a row whose first piece cleared a line."
       }
     }
   },
@@ -240,6 +250,7 @@
       "bossRule": {
         "rubble": "The boss starts with stones on the board.",
         "fog": "Fog hides cells. Fill next to it to see what's underneath.",
+        "tide": "Every new tray, the tide rises one row. Don't let it push your blocks off the top.",
         "gravity": "In the boss round, every piece falls to the bottom."
       },
       "bossTarget": "Beat the boss: $points points",

@@ -5,6 +5,7 @@ import 'package:blockmancer_engine/src/worlds/fog_rule.dart';
 import 'package:blockmancer_engine/src/worlds/gravity_rule.dart';
 import 'package:blockmancer_engine/src/worlds/plain_rule.dart';
 import 'package:blockmancer_engine/src/worlds/rubble_rule.dart';
+import 'package:blockmancer_engine/src/worlds/tide_rule.dart';
 import 'package:blockmancer_engine/src/worlds/world_rules.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
@@ -33,14 +34,17 @@ void main() {
     expect(ruleOfRound(fogConfig, round), isA<PlainRule>());
   });
 
-  for (final world in const [WorldId.mirror, WorldId.tide]) {
-    test('a run in ${world.name}, coming soon, is refused', () {
-      expect(
-        () => ruleOfRound(defaultConfig.copyWith(world: world), boss),
-        throwsArgumentError,
-      );
-    });
-  }
+  test('the Tide boss plays by the tide', () {
+    expect(ruleOfRound(tideConfig, boss), isA<TideRule>());
+    expect(ruleOfRound(tideConfig, round), isA<PlainRule>());
+  });
+
+  test('a run in Mirror, coming soon, is refused', () {
+    expect(
+      () => ruleOfRound(defaultConfig.copyWith(world: .mirror), boss),
+      throwsArgumentError,
+    );
+  });
 
   test('the Rubble boss starts with the stones its round asks for', () {
     // Given

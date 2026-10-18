@@ -82,6 +82,18 @@ void main() {
     expect(_log(fog.boss), isNot(_log(rubble.boss)));
   });
 
+  test('the same seed plays the same rounds before the boss in Rubble and '
+      'Tide, then a different boss', () {
+    // Given / When
+    final rubble = _placements(defaultConfig, seed);
+    final tide = _placements(tideConfig, seed);
+
+    // Then
+    expect(tide.boss, isNotEmpty);
+    expect(_log(tide.beforeBoss), _log(rubble.beforeBoss));
+    expect(_log(tide.boss), isNot(_log(rubble.boss)));
+  });
+
   test('in Gravity\'s boss, every piece the bot places comes to rest on the '
       'floor, a filled cell or a stone', () {
     // Given / When

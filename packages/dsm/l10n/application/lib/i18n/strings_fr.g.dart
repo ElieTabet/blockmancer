@@ -151,6 +151,7 @@ class _Translations$game$round$fr extends Translations$game$round$en {
 	);
 	@override String combo({required Object streak}) => 'Combo ×${streak}';
 	@override String storedMult({required Object mult}) => '+${mult} mult en réserve';
+	@override String tideIn({required Object count}) => 'Marée dans ${count}';
 }
 
 // Path: game.banner
@@ -209,6 +210,7 @@ class _Translations$game$lost$fr extends Translations$game$lost$en {
 	// Translations
 	@override String get outOfPieces => 'Plus de pièces';
 	@override String get noRoom => 'Plus de place';
+	@override String get flooded => 'Submergé';
 	@override String progress({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.';
 	@override String revive({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces';
 	@override String get endRun => 'Terminer la partie';
@@ -290,6 +292,8 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$hattrick$fr hattrick = _Translations$game$jokers$hattrick$fr._(_root);
 	@override late final _Translations$game$jokers$lantern$fr lantern = _Translations$game$jokers$lantern$fr._(_root);
 	@override late final _Translations$game$jokers$ember$fr ember = _Translations$game$jokers$ember$fr._(_root);
+	@override late final _Translations$game$jokers$sprinter$fr sprinter = _Translations$game$jokers$sprinter$fr._(_root);
+	@override late final _Translations$game$jokers$momentum$fr momentum = _Translations$game$jokers$momentum$fr._(_root);
 }
 
 // Path: home.daily
@@ -743,6 +747,28 @@ class _Translations$game$jokers$ember$fr extends Translations$game$jokers$ember$
 	@override String description({required Object factor}) => '×${factor} mult quand ton coup retire une pierre ou une case de brouillard.';
 }
 
+// Path: game.jokers.sprinter
+class _Translations$game$jokers$sprinter$fr extends Translations$game$jokers$sprinter$en {
+	_Translations$game$jokers$sprinter$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Sprinteur';
+	@override String description({required Object mult}) => '+${mult} mult quand la première pièce d\'une nouvelle main efface une ligne.';
+}
+
+// Path: game.jokers.momentum
+class _Translations$game$jokers$momentum$fr extends Translations$game$jokers$momentum$en {
+	_Translations$game$jokers$momentum$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Élan';
+	@override String description({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par main d\'affilée dont la première pièce a effacé une ligne.';
+}
+
 // Path: home.sheet.bossRule
 class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossRule$en {
 	_Translations$home$sheet$bossRule$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -752,6 +778,7 @@ class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossR
 	// Translations
 	@override String get rubble => 'Le boss commence avec des pierres sur le plateau.';
 	@override String get fog => 'Le brouillard cache des cases. Pose à côté pour voir ce qu\'il y a dessous.';
+	@override String get tide => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.';
 	@override String get gravity => 'Pendant la manche du boss, chaque pièce tombe tout en bas.';
 }
 
@@ -781,6 +808,7 @@ extension on TranslationsFr {
 			'game.round.piecesLeft' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: '${count} pièce restante', other: '${count} pièces restantes', ), 
 			'game.round.combo' => ({required Object streak}) => 'Combo ×${streak}',
 			'game.round.storedMult' => ({required Object mult}) => '+${mult} mult en réserve',
+			'game.round.tideIn' => ({required Object count}) => 'Marée dans ${count}',
 			'game.banner.chips' => ({required Object chips}) => '${chips} jetons',
 			'game.banner.mult' => ({required Object mult}) => '× ${mult} mult',
 			'game.banner.product' => ({required Object total}) => '= ${total}',
@@ -813,6 +841,7 @@ extension on TranslationsFr {
 			'game.offers.take' => 'Prendre',
 			'game.lost.outOfPieces' => 'Plus de pièces',
 			'game.lost.noRoom' => 'Plus de place',
+			'game.lost.flooded' => 'Submergé',
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.',
 			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces',
 			'game.lost.endRun' => 'Terminer la partie',
@@ -885,6 +914,10 @@ extension on TranslationsFr {
 			'game.jokers.lantern.description' => 'Les pierres et le brouillard à côté d\'une ligne effacée partent avec elle.',
 			'game.jokers.ember.name' => 'Braise',
 			'game.jokers.ember.description' => ({required Object factor}) => '×${factor} mult quand ton coup retire une pierre ou une case de brouillard.',
+			'game.jokers.sprinter.name' => 'Sprinteur',
+			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult quand la première pièce d\'une nouvelle main efface une ligne.',
+			'game.jokers.momentum.name' => 'Élan',
+			'game.jokers.momentum.description' => ({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par main d\'affilée dont la première pièce a effacé une ligne.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',
@@ -905,6 +938,7 @@ extension on TranslationsFr {
 			'home.sheet.current' => 'En cours',
 			'home.sheet.bossRule.rubble' => 'Le boss commence avec des pierres sur le plateau.',
 			'home.sheet.bossRule.fog' => 'Le brouillard cache des cases. Pose à côté pour voir ce qu\'il y a dessous.',
+			'home.sheet.bossRule.tide' => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.',
 			'home.sheet.bossRule.gravity' => 'Pendant la manche du boss, chaque pièce tombe tout en bas.',
 			'home.sheet.bossTarget' => ({required Object points}) => 'Bats le boss : ${points} points',
 			'home.sheet.stars' => 'Étoiles',

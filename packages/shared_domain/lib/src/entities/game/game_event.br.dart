@@ -82,4 +82,8 @@ sealed class GameEvent with _$GameEvent {
   /// The whole tray after the draw; `null` is an empty slot.
   const factory GameEvent.trayRefilled({required List<int?> tray}) =
       TrayRefilled;
+
+  /// Every cell moved up a row and a stone row entered at the bottom, empty
+  /// in [gapColumns] (Tide's boss).
+  const factory GameEvent.tideRose({required List<int> gapColumns}) = TideRose;
 }

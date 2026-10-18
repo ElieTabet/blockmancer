@@ -172,7 +172,7 @@ void main() {
 
   test(
     'Given Fog open, When its boss falls for the first time, Then Lantern and '
-    'Ember unlock, and Tide, still coming soon, stays locked',
+    'Ember unlock, and Tide opens',
     () async {
       // Given
       const rules = BlockmancerEngine();
@@ -204,8 +204,47 @@ void main() {
 
       // Then
       expect(change?.unlockedJokers, [JokerId.lantern, JokerId.ember]);
+      expect(change?.unlockedWorld, WorldId.tide);
+      expect(store.saved.worlds[WorldId.tide]?.unlocked, isTrue);
+    },
+  );
+
+  test(
+    'Given Tide open, When its boss falls for the first time, Then Sprinter '
+    'and Momentum unlock, and Mirror, still coming soon, stays locked',
+    () async {
+      // Given
+      const rules = BlockmancerEngine();
+      final fresh = game.startingProgression(rules);
+      final store = FakeProgressionStore(
+        fresh.copyWith(
+          worlds: {
+            ...fresh.worlds,
+            WorldId.tide: fresh.worlds[WorldId.tide]!.copyWith(unlocked: true),
+          },
+        ),
+      );
+      final gameContainer = engineGame(progressionStore: store);
+      final won = rules
+          .startRun(
+            config: rules.configFor(
+              .tide,
+              jokerPool: fresh.unlockedJokers.toList(),
+            ),
+            seed: 1,
+          )
+          .copyWith(phase: const .won());
+
+      // When
+      final change = await gameContainer.read(game.recordProgressionProvider)(
+        const .world(world: .tide),
+        won,
+      );
+
+      // Then
+      expect(change?.unlockedJokers, [JokerId.sprinter, JokerId.momentum]);
       expect(change?.unlockedWorld, isNull);
-      expect(store.saved.worlds[WorldId.tide]?.unlocked, isFalse);
+      expect(store.saved.worlds[WorldId.mirror]?.unlocked, isFalse);
     },
   );
 }

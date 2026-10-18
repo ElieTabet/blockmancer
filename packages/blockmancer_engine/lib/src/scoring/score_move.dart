@@ -54,11 +54,15 @@ MoveScore scoreMove({
   required int storedMult,
   required int? trayClearMask,
   required bool trayEmptied,
+  bool firstOfTray = false,
+  int momentumStreak = 0,
 }) {
   final (extended, removals) = _extendClear(clear, jokers);
   final move = MoveContext(
     clear: extended,
+    firstOfTray: firstOfTray,
     jokerCount: jokers.length,
+    momentumStreak: momentumStreak,
     pieceSize: pieceSize,
     storedMult: storedMult,
     streak: clear.clearedAny ? previousStreak + 1 : 0,

@@ -13,7 +13,9 @@ MoveScore playMove(
   required Cell at,
   required int shape,
   RunConfig config = briefConfig,
+  bool firstOfTray = false,
   List<JokerId> jokers = const [],
+  int momentumStreak = 0,
   int previousStreak = 0,
   int storedMult = 0,
   int? trayClearMask,
@@ -32,6 +34,8 @@ MoveScore playMove(
     storedMult: storedMult,
     trayClearMask: trayClearMask,
     trayEmptied: trayEmptied,
+    firstOfTray: firstOfTray,
+    momentumStreak: momentumStreak,
   );
 }
 

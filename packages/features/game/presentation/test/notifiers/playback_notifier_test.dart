@@ -48,6 +48,35 @@ void main() {
       ..next = (runIn(const .playing(), score: 241), clear);
   });
 
+  testWidgets('a move the tide rose after holds the board a row low until the '
+      'rising beat, then lets it go', (tester) async {
+    // Given
+    rules.next = (
+      runIn(const .playing(), score: 241),
+      [
+        ...clear,
+        const GameEvent.tideRose(gapColumns: [1, 6]),
+      ],
+    );
+    final game = container();
+    final seen = <(bool, Beat?)>[];
+    game.listen(
+      playbackProvider.select(
+        (playback) => (playback.riseAhead, playback.beat),
+      ),
+      (_, next) => seen.add(next),
+    );
+
+    // When
+    place(game);
+    await tester.pump(const Duration(seconds: 3));
+
+    // Then
+    expect(seen.first.$1, isTrue);
+    expect(seen.where((step) => step.$2 is RisingBeat).single.$1, isFalse);
+    expect(game.read(playbackProvider).riseAhead, isFalse);
+  });
+
   testWidgets('a clear plays its beats in order, each joker as it fired', (
     tester,
   ) async {

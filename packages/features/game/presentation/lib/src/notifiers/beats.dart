@@ -16,6 +16,7 @@ const _place = Duration(milliseconds: 120);
 const _product = Duration(milliseconds: 250);
 const _pulse = Duration(milliseconds: 180);
 const _reveal = Duration(milliseconds: 260);
+const _rise = Duration(milliseconds: 250);
 
 /// Every beat's length with reduce motion on: long enough to read the numbers
 /// arrive in order, too short to be motion.
@@ -25,11 +26,12 @@ const _still = Duration(milliseconds: 100);
 /// bursting (with what Lantern took beside them), the fog it lifted puffing
 /// away, then the score counted up — chips, mult, each joker that fired
 /// on the way, the product — and landing in the round score. Jokers that fire
-/// once the score is in, such as a won round's bonus, pulse after it lands.
+/// once the score is in, such as a won round's bonus, pulse after it lands,
+/// and a tide that rose for the next tray lifts the board last.
 ///
 /// Every value is read from [events] and the runs either side of the move.
-/// With [reduceMotion] the squash, the burst, the puff and the shakes are left
-/// out and
+/// With [reduceMotion] the squash, the burst, the puff, the rise and the
+/// shakes are left out and
 /// the rest is brief, but the same numbers land in the same order.
 List<Beat> beatsFor({
   required RunState after,
@@ -64,6 +66,10 @@ List<Beat> beatsFor({
   final revealed = [
     for (final event in events.whereType<FogRevealed>()) event.cell,
   ];
+  final rising = [
+    if (events.any((event) => event is TideRose) && !reduceMotion)
+      const Beat.rising(duration: _rise),
+  ];
   final revealing = [
     if (revealed.isNotEmpty && !reduceMotion)
       Beat.revealing(cells: revealed, duration: _reveal),
@@ -83,6 +89,7 @@ List<Beat> beatsFor({
       ...revealing,
       ...scoring,
       ...afterwards,
+      ...rising,
     ];
   }
 
@@ -136,5 +143,6 @@ List<Beat> beatsFor({
       shake: win,
     ),
     ...afterwards,
+    ...rising,
   ];
 }

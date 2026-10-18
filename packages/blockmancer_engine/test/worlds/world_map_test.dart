@@ -30,20 +30,28 @@ void main() {
     expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 11500);
   });
 
-  for (final world in const [WorldId.mirror, WorldId.tide]) {
-    test('${world.name}, coming soon, is not playable and has no run', () {
-      expect(rules.isPlayable(world), isFalse);
-      expect(
-        () => rules.configFor(world, jokerPool: pool),
-        throwsArgumentError,
-      );
-    });
-  }
+  test('Mirror, coming soon, is not playable and has no run', () {
+    expect(rules.isPlayable(.mirror), isFalse);
+    expect(
+      () => rules.configFor(.mirror, jokerPool: pool),
+      throwsArgumentError,
+    );
+  });
 
-  test('Rubble, Gravity and Fog are playable', () {
+  test('Rubble, Gravity, Fog and Tide are playable', () {
     expect(rules.isPlayable(.rubble), isTrue);
     expect(rules.isPlayable(.gravity), isTrue);
     expect(rules.isPlayable(.fog), isTrue);
+    expect(rules.isPlayable(.tide), isTrue);
+  });
+
+  test('Tide\'s boss rises with 2 gaps and starts with no stones', () {
+    // Given / When
+    final boss = rules.configFor(.tide, jokerPool: pool).rounds.last;
+
+    // Then
+    expect(boss.tideGaps, 2);
+    expect(boss.stones, 0);
   });
 
   test('Fog\'s boss lays 8 fog cells, 3 hiding a stone, and no stones', () {
@@ -79,23 +87,21 @@ void main() {
     expect(rules.nextWorld(.mirror), isNull);
   });
 
-  test(
-    'beating Rubble unlocks Stonemason and Quarry, Gravity Anchor and '
-    'Avalanche, Fog Lantern and Ember, and the worlds to come nothing yet',
-    () {
-      expect(rules.unlocksOf(.rubble), const [
-        JokerId.stonemason,
-        JokerId.quarry,
-      ]);
-      expect(rules.unlocksOf(.gravity), const [
-        JokerId.anchor,
-        JokerId.avalanche,
-      ]);
-      expect(rules.unlocksOf(.fog), const [JokerId.lantern, JokerId.ember]);
-      expect(rules.unlocksOf(.tide), isEmpty);
-      expect(rules.unlocksOf(.mirror), isEmpty);
-    },
-  );
+  test('beating Rubble unlocks Stonemason and Quarry, Gravity Anchor and '
+      'Avalanche, Fog Lantern and Ember, Tide Sprinter and Momentum, and Mirror '
+      'nothing yet', () {
+    expect(rules.unlocksOf(.rubble), const [
+      JokerId.stonemason,
+      JokerId.quarry,
+    ]);
+    expect(rules.unlocksOf(.gravity), const [
+      JokerId.anchor,
+      JokerId.avalanche,
+    ]);
+    expect(rules.unlocksOf(.fog), const [JokerId.lantern, JokerId.ember]);
+    expect(rules.unlocksOf(.tide), const [JokerId.sprinter, JokerId.momentum]);
+    expect(rules.unlocksOf(.mirror), isEmpty);
+  });
 
   test(
     'a new player starts with the 12 jokers neither a world nor the stars unlock',
@@ -116,7 +122,9 @@ void main() {
           JokerId.fullhouse,
           JokerId.hattrick,
           JokerId.lantern,
+          JokerId.momentum,
           JokerId.quarry,
+          JokerId.sprinter,
           JokerId.stonemason,
         }),
       );

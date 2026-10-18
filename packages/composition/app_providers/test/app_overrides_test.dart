@@ -227,6 +227,7 @@ void main() {
       WorldId.rubble,
       WorldId.gravity,
       WorldId.fog,
+      WorldId.tide,
     ]);
     expect(shown, progression);
     expect(
@@ -266,6 +267,7 @@ void main() {
         JokerUnlock.boss(world: .rubble),
         JokerUnlock.boss(world: .gravity),
         JokerUnlock.boss(world: .fog),
+        JokerUnlock.boss(world: .tide),
         JokerUnlock.stars(count: 4),
         JokerUnlock.stars(count: 6),
       ],

@@ -87,6 +87,7 @@ class PlaybackNotifier extends _$PlaybackNotifier {
     state = PlaybackState(
       heldRun: lands ? previous.run : null,
       heldScore: lands ? previous.run.score : null,
+      riseAhead: _beats.any((beat) => beat is RisingBeat),
       step: state.step,
     );
     _skippable = Timer(skipAfter, () => state = state.copyWith(canSkip: true));
@@ -104,6 +105,7 @@ class PlaybackNotifier extends _$PlaybackNotifier {
       held: holds,
       heldRun: beat is LandingBeat ? null : state.heldRun,
       heldScore: beat is LandingBeat ? beat.score : state.heldScore,
+      riseAhead: beat is! RisingBeat && state.riseAhead,
       step: state.step + 1,
     );
 

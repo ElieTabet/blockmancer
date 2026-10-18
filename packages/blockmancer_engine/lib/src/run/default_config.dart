@@ -94,3 +94,18 @@ final fogConfig = defaultConfig.copyWith(
   starThreshold: 12000,
   world: .fog,
 );
+
+/// The default run in Tide, whose boss starts with no stones and rises a row
+/// with every tray but its first, a stone row with 2 gaps entering at the
+/// bottom. Its boss target and ★3 threshold are a step above Fog's until
+/// Sprint 7's balance pass sets them from the bot.
+final tideConfig = defaultConfig.copyWith(
+  rounds: [
+    for (final round in defaultConfig.rounds)
+      round.isBoss
+          ? round.copyWith(stones: 0, target: 5750, tideGaps: 2)
+          : round,
+  ],
+  starThreshold: 12500,
+  world: .tide,
+);

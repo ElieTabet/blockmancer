@@ -15,11 +15,11 @@ void main() {
     test('a run built on ${build.map((joker) => joker.name).join(' + ')} '
         'replays from its seed and moves to the same end', () {
       // Given
-      final played = autoplay(seed, build: build);
+      final played = autoplay(seed, build: build, config: briefConfigBeforeFog);
 
       // When
       final replayed = replay(
-        config: briefConfig,
+        config: briefConfigBeforeFog,
         moves: played.moves,
         seed: seed,
       );

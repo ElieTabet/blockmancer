@@ -14,10 +14,18 @@ final class MoveContext {
     required this.trayEmptied,
     required this.traySize,
     required this.tuning,
+    this.firstOfTray = false,
+    this.momentumStreak = 0,
   });
 
   final ClearResult clear;
+
+  /// Whether this move played the first piece of a freshly dealt tray.
+  final bool firstOfTray;
   final int jokerCount;
+
+  /// Trays in a row, this one included, whose first piece cleared a line.
+  final int momentumStreak;
   final int pieceSize;
 
   /// Patience's bank before this move.

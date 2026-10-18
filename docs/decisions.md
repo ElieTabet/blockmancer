@@ -120,3 +120,27 @@ reading chosen and why. Newest task last.
   names each world's twist.
 - **The "every joker" seeded golden** now plays the 20 jokers before Fog, like the other frozen
   goldens, so each new joker doesn't re-pin it.
+
+## Task 3: Tide, Sprinter and Momentum
+
+- **The order of a rise.** The tide rises, then the flood is judged, then the tray is dealt. A
+  flood still shows the risen board (what left the top is gone), loses the round and deals no
+  tray; a revive deals one, so the tide rises again before it.
+- **Gap columns.** Two distinct columns drawn one after the other from the stones stream (the
+  first among 8, the second among the 7 left). A rise never completes a row; it can complete a
+  column (7 cells under a stone), which clears on the next placement like any line already full.
+- **"Tide in N".** N is the pieces left in the tray in hand, shown only during Tide's boss.
+- **A fresh tray's first piece** (Sprinter, Momentum) is the move made while every piece the tray
+  was dealt is still in it; `RunState.trayDealt` records how many that was, so a short final tray
+  counts too.
+- **Momentum's streak** is set as each tray's first piece is played: one more if it clears, 0 if
+  not (0 for the rest of that tray), and it starts each round at 0. It adds on every clearing move
+  of the tray, the first included.
+- **The slide.** The board already shows a move's result when its playback starts; with a rise, it
+  draws its cells a row lower until the rising beat (the move's last) lifts them, so the piece and
+  the burst land where they stood before the rise. A revive that rises plays only the lift.
+- **Seeded tests and new jokers.** The replay tests now play the 20 jokers before Fog
+  (`briefConfigBeforeFog`), so appending jokers doesn't take their builds off offer.
+- **Provisional numbers.** Tide's boss target (5,750) and ★3 threshold (12,500) are a step above
+  Fog's until Task 6. The greedy bot rarely survives the boss (it ignores the coming rise, as the
+  sprint expects); Task 6 reports it.

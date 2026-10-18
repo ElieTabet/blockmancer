@@ -267,6 +267,43 @@ void main() {
     expect(find.text('Boss · Rubble'), findsOneWidget);
   });
 
+  testWidgets('a round the tide flooded says so', (tester) async {
+    // Given / When
+    await pumpGame(tester, runIn(const .roundLost(reason: .flooded)));
+
+    // Then
+    expect(find.text('Flooded'), findsOneWidget);
+  });
+
+  testWidgets("in Tide's boss, the round card counts the pieces left before "
+      'the tide rises', (tester) async {
+    // Given / When: two singles left in the tray
+    await pumpGame(
+      tester,
+      runIn(
+        const .playing(),
+        roundIndex: 1,
+        tray: const [0, null, 0],
+      ).copyWith(config: testConfig.copyWith(world: .tide)),
+    );
+
+    // Then
+    expect(find.text('Tide in 2'), findsOneWidget);
+  });
+
+  testWidgets('outside Tide\'s boss, no tide is counted', (tester) async {
+    // Given / When
+    await pumpGame(
+      tester,
+      runIn(
+        const .playing(),
+      ).copyWith(config: testConfig.copyWith(world: .tide)),
+    );
+
+    // Then
+    expect(find.textContaining('Tide in'), findsNothing);
+  });
+
   testWidgets('a finished run shows the best it is measured against', (
     tester,
   ) async {

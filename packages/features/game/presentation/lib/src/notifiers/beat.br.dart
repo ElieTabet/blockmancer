@@ -71,6 +71,9 @@ sealed class Beat with _$Beat {
     required Duration duration,
   }) = RevealingBeat;
 
+  /// The tide lifts the board a row, the new stone row sliding in under it.
+  const factory Beat.rising({required Duration duration}) = RisingBeat;
+
   /// `chips × mult` appears, with the move's flat [bonus].
   const factory Beat.product({
     required int bonus,

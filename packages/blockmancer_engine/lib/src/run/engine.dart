@@ -142,10 +142,16 @@ Transition place(
       : mask;
 
   final rule = ruleOfRound(state.config, state.round);
+  final firstOfTray = state.tray.whereType<int>().length == state.trayDealt;
+  final momentumStreak = firstOfTray
+      ? (clear.clearedAny ? state.momentumStreak + 1 : 0)
+      : state.momentumStreak;
   final score = scoreMove(
     clear: clear,
     config: state.config,
     jokers: jokers,
+    firstOfTray: firstOfTray,
+    momentumStreak: momentumStreak,
     pieceSize: shape.size,
     previousStreak: state.streak,
     stonesRng: Mulberry32(state.stonesRngState),
@@ -182,6 +188,7 @@ Transition place(
 
   final next = state.copyWith(
     board: board,
+    momentumStreak: momentumStreak,
     score: state.score + score.points,
     stonesRngState: score.stonesRng.state,
     storedMult: score.storedMult,

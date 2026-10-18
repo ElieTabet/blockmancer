@@ -24,6 +24,10 @@ abstract class PlaybackState with _$PlaybackState {
     /// the run's own.
     int? heldScore,
 
+    /// Whether the move's tide still has to rise: the board shows its cells a
+    /// row lower until the rising beat lifts them.
+    @Default(false) bool riseAhead,
+
     /// Counts the beats played, so the same beat twice running still starts
     /// its animation again.
     @Default(0) int step,

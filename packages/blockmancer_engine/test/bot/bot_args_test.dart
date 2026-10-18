@@ -49,6 +49,10 @@ void main() {
     expect(parseBotArgs(const ['--world', 'fog']).world, WorldId.fog);
   });
 
+  test('--world tide plays Tide', () {
+    expect(parseBotArgs(const ['--world', 'tide']).world, WorldId.tide);
+  });
+
   test('--world gravity plays Gravity', () {
     expect(parseBotArgs(const ['--world', 'gravity']).world, WorldId.gravity);
   });

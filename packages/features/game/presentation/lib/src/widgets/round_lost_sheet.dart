@@ -37,10 +37,11 @@ final class RoundLostSheet extends ConsumerWidget {
     return Column(
       spacing: DSSpace.small,
       children: [
-        SheetTitle(
-          reason == .noRoom ? lost.noRoom : lost.outOfPieces,
-          color: DSColor.negative,
-        ),
+        SheetTitle(switch (reason) {
+          .flooded => lost.flooded,
+          .noRoom => lost.noRoom,
+          .outOfPieces || null => lost.outOfPieces,
+        }, color: DSColor.negative),
         Text(
           lost.progress(
             score: pointsText(context, score),

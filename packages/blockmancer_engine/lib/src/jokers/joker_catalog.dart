@@ -14,10 +14,12 @@ import 'package:blockmancer_engine/src/jokers/effects/full_house.dart';
 import 'package:blockmancer_engine/src/jokers/effects/hat_trick.dart';
 import 'package:blockmancer_engine/src/jokers/effects/heavyweight.dart';
 import 'package:blockmancer_engine/src/jokers/effects/lantern.dart';
+import 'package:blockmancer_engine/src/jokers/effects/momentum.dart';
 import 'package:blockmancer_engine/src/jokers/effects/patience.dart';
 import 'package:blockmancer_engine/src/jokers/effects/precision.dart';
 import 'package:blockmancer_engine/src/jokers/effects/quarry.dart';
 import 'package:blockmancer_engine/src/jokers/effects/saver.dart';
+import 'package:blockmancer_engine/src/jokers/effects/sprinter.dart';
 import 'package:blockmancer_engine/src/jokers/effects/stonemason.dart';
 import 'package:blockmancer_engine/src/jokers/effects/tiny_tools.dart';
 import 'package:blockmancer_engine/src/jokers/effects/twin_lines.dart';
@@ -53,6 +55,8 @@ const List<JokerEffect> jokerCatalog = [
   HatTrick(),
   Lantern(),
   Ember(),
+  Sprinter(),
+  Momentum(),
 ];
 
 JokerEffect jokerEffect(JokerId id) =>

@@ -23,7 +23,8 @@
         "other": "$count pièces restantes"
       },
       "combo": "Combo ×$streak",
-      "storedMult": "+$mult mult en réserve"
+      "storedMult": "+$mult mult en réserve",
+      "tideIn": "Marée dans $count"
     },
     "banner": {
       "chips": "$chips jetons",
@@ -67,6 +68,7 @@
     "lost": {
       "outOfPieces": "Plus de pièces",
       "noRoom": "Plus de place",
+      "flooded": "Submergé",
       "progress": "$score points sur $target pour cette manche.",
       "revive": "Continuer · $rows lignes effacées + $pieces pièces",
       "endRun": "Terminer la partie"
@@ -204,6 +206,14 @@
       "ember": {
         "name": "Braise",
         "description": "×$factor mult quand ton coup retire une pierre ou une case de brouillard."
+      },
+      "sprinter": {
+        "name": "Sprinteur",
+        "description": "+$mult mult quand la première pièce d'une nouvelle main efface une ligne."
+      },
+      "momentum": {
+        "name": "Élan",
+        "description": "À chaque ligne effacée, +$mult mult par main d'affilée dont la première pièce a effacé une ligne."
       }
     }
   },
@@ -240,6 +250,7 @@
       "bossRule": {
         "rubble": "Le boss commence avec des pierres sur le plateau.",
         "fog": "Le brouillard cache des cases. Pose à côté pour voir ce qu'il y a dessous.",
+        "tide": "À chaque nouvelle main, la marée monte d'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.",
         "gravity": "Pendant la manche du boss, chaque pièce tombe tout en bas."
       },
       "bossTarget": "Bats le boss : $points points",
