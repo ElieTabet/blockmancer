@@ -278,3 +278,18 @@ Three changes from the review of this file, each its own commit.
   Ember have nothing to act on before the boss), Pockets/Saver in Tide, and Patience/Twin and
   Precision/Tiny a point or three over 40% (inside the margin). Each is explained in
   docs/balance/2026-10-18-sprint7.md.
+
+## After Task 6
+
+### Ember on every clear
+
+- **Rule (user):** Ember gives +3 mult on every clear, so Lantern + Ember isn't dead for four
+  rounds.
+- **Reading:** added to what Ember did: +`emberMult` (3) in the additive pass on every clearing
+  move, then its ×`emberFactor` (4) when the move takes a stone or fog. A new `JokerTuning` field
+  makes the saved run version 10; older saves resume with 0, the rule they were played with.
+- **Measured (2,000 runs, not re-tuned):** with the base mult at 1, +3 makes every clear score 4×.
+  Lantern/Ember beats the boss in 65–89% of pair-done runs (target 25–40%), and `random`, which
+  picks Ember, clears round 3 in 71% and beats the boss in 28–32% (targets ≈ 65% and 15–25%).
+  At +1: `random` 70% / 27% in Rubble, Lantern/Ember 48% in Rubble and 23% in Gravity. Left at +3
+  as asked; the figures are in docs/balance/2026-10-18-sprint7.md for the next tuning.

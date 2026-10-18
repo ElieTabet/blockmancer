@@ -16,6 +16,7 @@ const defaultConfig = RunConfig(
     columnFactor: 2,
     comboMultPerStreak: 1,
     emberFactor: 4,
+    emberMult: 3,
     finisherFactor: 3,
     fullHouseCellsPerMult: 12,
     fullHouseMultPerBlock: 1,

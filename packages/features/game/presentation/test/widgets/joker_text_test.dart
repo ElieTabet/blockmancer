@@ -19,6 +19,7 @@ const _retuned = JokerTuning(
   columnFactor: 16,
   comboMultPerStreak: 17,
   emberFactor: 3,
+  emberMult: 38,
   finisherFactor: 35,
   fullHouseCellsPerMult: 36,
   fullHouseMultPerBlock: 4,

@@ -17,6 +17,7 @@ const briefConfig = RunConfig(
     columnFactor: 2,
     comboMultPerStreak: 1,
     emberFactor: 2,
+    emberMult: 3,
     finisherFactor: 2,
     fullHouseCellsPerMult: 6,
     fullHouseMultPerBlock: 1,

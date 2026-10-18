@@ -15,6 +15,7 @@ const tunedJokers = JokerTuning(
   columnFactor: 11,
   comboMultPerStreak: 10,
   emberFactor: 26,
+  emberMult: 25,
   finisherFactor: 23,
   fullHouseCellsPerMult: 3,
   fullHouseMultPerBlock: 24,

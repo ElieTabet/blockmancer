@@ -22,6 +22,7 @@ const _version1Tuning = JokerTuning(
   columnFactor: 2,
   comboMultPerStreak: 1,
   emberFactor: 2,
+  emberMult: 0,
   finisherFactor: 2,
   fullHouseCellsPerMult: 6,
   fullHouseMultPerBlock: 1,
@@ -61,6 +62,7 @@ const _tuning = JokerTuning(
   columnFactor: 11,
   comboMultPerStreak: 10,
   emberFactor: 33,
+  emberMult: 38,
   finisherFactor: 25,
   fullHouseCellsPerMult: 22,
   fullHouseMultPerBlock: 23,
@@ -352,12 +354,18 @@ RunState _beforeVersion8(RunState run) => _beforeVersion9(run).copyWith(
   ),
 );
 
+/// What version 10 fills in for a save from before it: Ember's mult on every
+/// clear, none.
+RunState _beforeVersion10(RunState run) => run.copyWith(
+  config: run.config.copyWith(jokers: run.config.jokers.copyWith(emberMult: 0)),
+);
+
 /// What version 9 fills in for a save from before it: the first numbers of
 /// Fog, Tide and Mirror's jokers, no fog or tide in any round, no tray streak,
 /// and the tray in hand read as dealt as it stands.
-RunState _beforeVersion9(RunState run) => run.copyWith(
-  config: run.config.copyWith(
-    jokers: run.config.jokers.copyWith(
+RunState _beforeVersion9(RunState run) => _beforeVersion10(run).copyWith(
+  config: _beforeVersion10(run).config.copyWith(
+    jokers: _beforeVersion10(run).config.jokers.copyWith(
       emberFactor: 2,
       momentumMultPerTray: 2,
       prismChipsPerPair: 15,
@@ -365,7 +373,7 @@ RunState _beforeVersion9(RunState run) => run.copyWith(
       symmetryMult: 4,
     ),
     rounds: [
-      for (final round in run.config.rounds)
+      for (final round in _beforeVersion10(run).config.rounds)
         round.copyWith(fog: 0, fogStones: 0, tideGaps: 0),
     ],
   ),
@@ -493,7 +501,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 9);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 10);
   });
 
   for (final (name, raw) in [
@@ -762,6 +770,30 @@ void main() {
       );
     },
   );
+
+  test("a save from version 9 resumes with Ember's old rule, no mult on every "
+      'clear', () async {
+    // Given: today's save as version 9 wrote it, without Ember's mult
+    final json = SavedRunDto.fromDomain(
+      SavedRun(mode: const .daily(day: 20261017), run: _midRound),
+    ).toJson()..['version'] = 9;
+    final config =
+        (json['run'] as Map<String, dynamic>)['config'] as Map<String, dynamic>;
+    (config['jokers'] as Map<String, dynamic>).remove('emberMult');
+    SharedPreferences.setMockInitialValues({'run.saved': jsonEncode(json)});
+
+    // When
+    final loaded = await const SharedPreferencesRunStore().load();
+
+    // Then
+    expect(
+      loaded,
+      SavedRun(
+        mode: const .daily(day: 20261017),
+        run: _beforeVersion10(_midRound),
+      ),
+    );
+  });
 
   test(
     "a save from version 8 resumes with no fog, no tide and no tray streak",

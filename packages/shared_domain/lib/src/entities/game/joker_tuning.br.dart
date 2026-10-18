@@ -22,6 +22,7 @@ abstract class JokerTuning with _$JokerTuning {
     required int columnFactor,
     required int comboMultPerStreak,
     required int emberFactor,
+    required int emberMult,
     required int finisherFactor,
 
     /// Occupied cells, filled and stone, per +1 mult from Full House.

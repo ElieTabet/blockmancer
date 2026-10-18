@@ -334,8 +334,9 @@ engine's events and never recomputes a rule.
   stream, the first `fogStones` (3) hiding a stone (`FogPlaced`). A move is: place, score and
   clear, the jokers' removals beside the lines (Lantern, through `JokerEffect.extendClear`, which
   adds no chips), then every fog cell sharing a side with a cell of the placed piece lifts, to
-  empty or to the stone it hid (`FogRevealed`). Ember reads `ClearResult.obstaclesCleared`: the
-  stones and fog the move took off, in its lines or beside them. The bot's tie-break counts a
+  empty or to the stone it hid (`FogRevealed`). Ember adds `emberMult` on every clear, then
+  multiplies by `emberFactor` when `ClearResult.obstaclesCleared` counts any: the stones and fog
+  the move took off, in its lines or beside them. The bot's tie-break counts a
   fog cell that turned to stone as empty, so what fog hides never steers it.
 - **Tide.** `TideRule.onTrayDealt`: before every tray a move empties in the boss, every cell moves
   up a row and a stone row enters at the bottom, empty in `RoundSpec.tideGaps` (2) columns drawn
@@ -388,9 +389,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 9`; `migrate(json)` brings an older version up to date one
+  wire format. The schema has `version: 10`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick, 7 → 8 Avalanche's two rows and Full House's +1 mult, constants until then, 8 → 9 fog cells (codes -2, and -3 hiding a stone), the Fog and Tide bosses' counts (`RoundSpec.fog`, `fogStones`, `tideGaps`, 0 for an older save), the tray's `trayDealt` and `momentumStreak`, and the first numbers of Fog's, Tide's and Mirror's jokers; the saved pool is kept, so an old run never offers a new joker), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick, 7 → 8 Avalanche's two rows and Full House's +1 mult, constants until then, 8 → 9 fog cells (codes -2, and -3 hiding a stone), the Fog and Tide bosses' counts (`RoundSpec.fog`, `fogStones`, `tideGaps`, 0 for an older save), the tray's `trayDealt` and `momentumStreak`, and the first numbers of Fog's, Tide's and Mirror's jokers; the saved pool is kept, so an old run never offers a new joker, 9 → 10 Ember's mult on every clear, 0 for an older save), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes

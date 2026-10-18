@@ -1164,28 +1164,48 @@ void main() {
         shape: 0,
       );
 
-      // Then
-      expect(score.mult, 2);
-      expect(score.points, 1 + 80 * 2);
+      // Then: Ember's 3 on the clear, then doubled
+      expect(score.mult, (1 + 3) * 2);
+      expect(score.points, 1 + 80 * 8);
     });
   });
 
   group('Ember', () {
-    test('doubles the mult when the cleared line holds a stone', () {
+    test('adds 3 mult on a clear that takes no stone and no fog', () {
       // Given / When
       final score = playMove(
-        ['###S###.'],
+        rowAlmostFull,
         at: topRight,
         jokers: const [.ember],
         shape: 0,
       );
 
       // Then
-      expect(score.mult, 2);
+      expect(score.mult, 1 + 3);
       expect(score.fired, const [
-        JokerFired(delta: .multMultiplied(factor: 2), joker: .ember),
+        JokerFired(delta: .multAdded(amount: 3), joker: .ember),
       ]);
     });
+
+    test(
+      'adds 3, then doubles the mult when the cleared line holds a stone',
+      () {
+        // Given / When
+        final score = playMove(
+          ['###S###.'],
+          at: topRight,
+          jokers: const [.ember],
+          shape: 0,
+        );
+
+        // Then
+        expect(score.mult, (1 + 3) * 2);
+        expect(score.fired, const [
+          JokerFired(delta: .multAdded(amount: 3), joker: .ember),
+          JokerFired(delta: .multMultiplied(factor: 2), joker: .ember),
+        ]);
+      },
+    );
 
     test('doubles it for fog in the line too, whatever the fog hid', () {
       for (final picture in const ['###F###.', '###H###.']) {
@@ -1198,11 +1218,12 @@ void main() {
         );
 
         // Then
-        expect(score.mult, 2, reason: picture);
+        expect(score.mult, (1 + 3) * 2, reason: picture);
       }
     });
 
-    test('stays quiet when the move takes no stone and no fog', () {
+    test('only adds when the stone sits beside the line, which only Lantern '
+        'takes', () {
       // Given / When
       final score = playMove(
         ['#######.', 'S.......'],
@@ -1211,8 +1232,20 @@ void main() {
         shape: 0,
       );
 
-      // Then: the stone sits beside the row, but only Lantern takes it
-      expect(score.mult, 1);
+      // Then
+      expect(score.mult, 1 + 3);
+    });
+
+    test('fires nothing on a move that clears nothing', () {
+      // Given / When
+      final score = playMove(
+        const ['......#.'],
+        at: topRight,
+        jokers: const [.ember],
+        shape: 0,
+      );
+
+      // Then
       expect(score.fired, isEmpty);
     });
 
@@ -1226,7 +1259,7 @@ void main() {
       );
 
       // Then
-      expect(score.mult, 2);
+      expect(score.mult, (1 + 3) * 2);
     });
   });
 

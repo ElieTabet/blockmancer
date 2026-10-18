@@ -25,7 +25,7 @@ pushed yet.
 | Device bug | `f0a96f5` | A world earned before it had rules opens (Fog for players who beat Gravity early) |
 | 6 | `e396e02` | The balance bot stops flooding Tide's boss on purpose |
 | 6 | `a205abf` | The five worlds tuned against the bot, ★3 thresholds |
-| 6 | `cf0c63e` | Version 1.1.0 (3) |
+| 6 | `cf0c63e` | Version bump (now 1.0.0 (3)) |
 
 After every commit: `melos run analyze` and every package's tests pass, and generated files are
 current. The engine's suite also passes in Chrome on the final commit.
@@ -56,17 +56,21 @@ current. The engine's suite also passes in Chrome on the final commit.
 Round 3: `random` 66%, strong pairs 70–74%, planning pairs within 8 points. Pairs with their pair
 done beat the boss 25–40% of the time, except the planning pairs, Pockets/Saver and Lantern/Ember
 (below, explained in the report) and Patience/Twin and Precision/Tiny a point or three over.
+**Since then Ember adds +3 mult on every clear (on request), which puts `random` over its targets
+(71% at round 3, 28–32% at the bosses) and Lantern/Ember at 65–89%**; the report has the figures
+and what +1 and +2 would do.
 **Not confirmed at 10,000 runs** (stopped at iteration 5 at your call); each figure carries about
 ±2–4 points.
 
 ## Left for you
 
 - **Push:** `! git push origin main`.
-- **Builds:** the version is bumped, but I didn't run `melos run build-ios` / `build-android`:
+- **Builds:** the version is 1.0.0 (3), but I didn't run `melos run build-ios` / `build-android`:
   both upload Dart symbols to Crashlytics, and `app/android/key.properties` is missing, so the
   Android build would be signed with the debug key, which Play refuses.
 - **On a device:** a full run from Rubble to Mirror, and the map at 60 fps in profile mode on a
   mid-range Android phone.
 - **Task 7:** the tester week.
-- **Worth a design look:** Lantern/Ember can't act before the boss (nothing to clear), so it is
-  the weakest pair in every world; Prism alone is strong in Mirror (44% with it owned).
+- **Ember's numbers:** +3 on every clear with ×4 on stones and fog is the strongest joker now;
+  pick its mult (and maybe the factor back to ×2) before the tester week. Prism alone is also
+  strong in Mirror (44% with it owned).

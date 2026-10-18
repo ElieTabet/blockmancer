@@ -214,7 +214,7 @@
       },
       "ember": {
         "name": "Braise",
-        "description": "×$factor mult quand ton coup retire une pierre ou une case de brouillard."
+        "description": "+$mult mult à chaque ligne effacée, et ×$factor quand ton coup retire une pierre ou une case de brouillard."
       },
       "sprinter": {
         "name": "Sprinteur",

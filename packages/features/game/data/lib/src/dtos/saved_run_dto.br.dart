@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 9;
+const savedRunVersion = 10;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -20,6 +20,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
       6 => migrate(_fromVersion6(json)),
       7 => migrate(_fromVersion7(json)),
       8 => migrate(_fromVersion8(json)),
+      9 => migrate(_fromVersion9(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -202,6 +203,28 @@ Map<String, dynamic> _fromVersion8(Map<String, dynamic> json) {
       'trayDealt': (run['tray'] as List<dynamic>).whereType<int>().length,
     },
     'version': 9,
+  };
+}
+
+/// Version 10 gave Ember a mult on every clear; a run saved before it plays
+/// Ember as it did, with none.
+Map<String, dynamic> _fromVersion9(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{
+        ...config,
+        'jokers': <String, dynamic>{
+          ...config['jokers'] as Map<String, dynamic>,
+          'emberMult': 0,
+        },
+      },
+    },
+    'version': 10,
   };
 }
 
@@ -538,6 +561,7 @@ final class JokerTuningDto {
     required this.columnFactor,
     required this.comboMultPerStreak,
     required this.emberFactor,
+    required this.emberMult,
     required this.finisherFactor,
     required this.fullHouseCellsPerMult,
     required this.fullHouseMultPerBlock,
@@ -575,6 +599,7 @@ final class JokerTuningDto {
     columnFactor: tuning.columnFactor,
     comboMultPerStreak: tuning.comboMultPerStreak,
     emberFactor: tuning.emberFactor,
+    emberMult: tuning.emberMult,
     finisherFactor: tuning.finisherFactor,
     fullHouseCellsPerMult: tuning.fullHouseCellsPerMult,
     fullHouseMultPerBlock: tuning.fullHouseMultPerBlock,
@@ -614,6 +639,7 @@ final class JokerTuningDto {
   final int columnFactor;
   final int comboMultPerStreak;
   final int emberFactor;
+  final int emberMult;
   final int finisherFactor;
   final int fullHouseCellsPerMult;
   final int fullHouseMultPerBlock;
@@ -652,6 +678,7 @@ final class JokerTuningDto {
     columnFactor: columnFactor,
     comboMultPerStreak: comboMultPerStreak,
     emberFactor: emberFactor,
+    emberMult: emberMult,
     finisherFactor: finisherFactor,
     fullHouseCellsPerMult: fullHouseCellsPerMult,
     fullHouseMultPerBlock: fullHouseMultPerBlock,

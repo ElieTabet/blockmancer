@@ -64,7 +64,10 @@ String jokerDescription(
     ),
     .column => jokers.column.description(factor: tuning.columnFactor),
     .combo => jokers.combo.description(mult: tuning.comboMultPerStreak),
-    .ember => jokers.ember.description(factor: tuning.emberFactor),
+    .ember => jokers.ember.description(
+      factor: tuning.emberFactor,
+      mult: tuning.emberMult,
+    ),
     .finisher => jokers.finisher.description(factor: tuning.finisherFactor),
     .fullhouse => jokers.fullhouse.description(
       cells: tuning.fullHouseCellsPerMult,

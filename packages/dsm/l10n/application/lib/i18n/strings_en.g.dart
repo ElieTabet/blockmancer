@@ -1195,8 +1195,8 @@ class Translations$game$jokers$ember$en {
 	/// en: 'Ember'
 	String get name => 'Ember';
 
-	/// en: '×$factor mult when your move clears a stone or a fog cell.'
-	String description({required Object factor}) => '×${factor} mult when your move clears a stone or a fog cell.';
+	/// en: '+$mult mult on every clear, and ×$factor when your move clears a stone or a fog cell.'
+	String description({required Object mult, required Object factor}) => '+${mult} mult on every clear, and ×${factor} when your move clears a stone or a fog cell.';
 }
 
 // Path: game.jokers.sprinter
@@ -1421,7 +1421,7 @@ extension on Translations {
 			'game.jokers.lantern.name' => 'Lantern',
 			'game.jokers.lantern.description' => 'Stones and fog beside a cleared line are cleared with it.',
 			'game.jokers.ember.name' => 'Ember',
-			'game.jokers.ember.description' => ({required Object factor}) => '×${factor} mult when your move clears a stone or a fog cell.',
+			'game.jokers.ember.description' => ({required Object mult, required Object factor}) => '+${mult} mult on every clear, and ×${factor} when your move clears a stone or a fog cell.',
 			'game.jokers.sprinter.name' => 'Sprinter',
 			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult when the first piece of a fresh tray clears a line.',
 			'game.jokers.momentum.name' => 'Momentum',

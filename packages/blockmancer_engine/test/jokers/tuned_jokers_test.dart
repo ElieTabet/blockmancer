@@ -386,7 +386,8 @@ void main() {
     expect(score.mult, 1 + 2 * 24);
   });
 
-  test('Ember multiplies by its configured factor', () {
+  test('Ember adds its configured mult, then multiplies by its configured '
+      'factor', () {
     // Given / When
     final score = playMove(
       ['###S###.'],
@@ -397,7 +398,7 @@ void main() {
     );
 
     // Then
-    expect(score.mult, 26);
+    expect(score.mult, (1 + 25) * 26);
   });
 
   test('Sprinter adds its configured mult', () {
