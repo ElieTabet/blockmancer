@@ -107,6 +107,12 @@ List<Override> featureBindingOverrides({
     runStore: (ref) => const SharedPreferencesRunStore(),
     sessionHadError: (ref) => ref.watch(telemetry.sessionHadErrorProvider),
     showInterstitial: (ref) => ref.watch(interstitialAdsProvider).show,
+    submitBestScore: (ref) =>
+        (score) =>
+            ref.watch(leaderboardsProvider).submit(bestLeaderboard, score),
+    submitDailyScore: (ref) =>
+        (score) =>
+            ref.watch(leaderboardsProvider).submit(dailyLeaderboard, score),
   ),
   ...game_ui.bindProviders(
     hapticsOnSetting: (ref) => ref.watch(settings.hapticsOnProvider),
@@ -164,6 +170,9 @@ List<Override> featureBindingOverrides({
     // Watched, so a run's end refreshing the progression refreshes the map.
     progression: (ref) => ref.watch(game.progressionProvider.future),
     reduceMotionSetting: (ref) => ref.watch(settings.reduceMotionOnProvider),
+    showDailyLeaderboard: (ref) =>
+        () =>
+            ref.watch(leaderboardsProvider).show(dailyLeaderboard, today: true),
     updateOffer: (ref) => ref.watch(app_update.updateOfferProvider.future),
     worlds: (ref) => ref.watch(game.worldSummariesProvider),
   ),

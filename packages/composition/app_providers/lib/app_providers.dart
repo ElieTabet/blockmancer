@@ -4,6 +4,7 @@ export 'src/app_overrides.dart';
 export 'src/consent_startup.dart';
 export 'src/feature_bindings.dart';
 export 'src/language_startup.dart';
+export 'src/leaderboards_startup.dart';
 export 'src/purchases_startup.dart';
 export 'src/push_startup.dart';
 export 'src/remote_config_startup.dart';

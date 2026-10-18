@@ -88,6 +88,17 @@ OpenStoreListingFun openStoreListing(Ref ref) => throw UnimplementedError(
   'openStoreListingProvider must be overridden by the composition layer',
 );
 
+/// Shows today's leaderboard (Game Center, Play Games), signing the player
+/// in first when they aren't. Never throws.
+typedef ShowDailyLeaderboardFun = Future<void> Function();
+
+@riverpod
+ShowDailyLeaderboardFun showDailyLeaderboard(
+  Ref ref,
+) => throw UnimplementedError(
+  'showDailyLeaderboardProvider must be overridden by the composition layer',
+);
+
 /// The newer version to offer, or null when there is none or its banner was
 /// closed.
 @riverpod

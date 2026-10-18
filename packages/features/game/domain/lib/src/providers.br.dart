@@ -359,6 +359,26 @@ BetweenRunsFun betweenRuns(Ref ref) => () async {
   if (result is! AdFailed) await engagement.recordInterstitial(now);
 };
 
+typedef SubmitRunScoreFun = Future<void> Function(GameMode mode, int total);
+
+/// Hands a finished run's total to the leaderboards: every run to the
+/// all-time board, a daily run to the day's too, where everyone played the
+/// same pieces. A run that scored nothing has nothing to rank.
+@riverpod
+SubmitRunScoreFun submitRunScore(Ref ref) {
+  final submitBest = ref.watch(di.submitBestScoreProvider);
+  final submitDaily = ref.watch(di.submitDailyScoreProvider);
+
+  return (mode, total) async {
+    if (total <= 0) return;
+
+    await Future.wait([
+      submitBest(total),
+      if (mode is DailyMode) submitDaily(total),
+    ]);
+  };
+}
+
 typedef AskForReviewFun =
     Future<bool> Function({required bool bossBeaten, required bool newStar});
 
@@ -431,6 +451,8 @@ List<Override> bindProviders({
   required RunStore Function(Ref ref) runStore,
   required di.SessionHadErrorFun Function(Ref ref) sessionHadError,
   required di.ShowAdFun Function(Ref ref) showInterstitial,
+  required di.SubmitScoreFun Function(Ref ref) submitBestScore,
+  required di.SubmitScoreFun Function(Ref ref) submitDailyScore,
 }) => [
   di.adsRemovedProvider.overrideWith(adsRemoved),
   di.analyticsSinkProvider.overrideWith(analyticsSink),
@@ -445,6 +467,8 @@ List<Override> bindProviders({
   di.runStoreProvider.overrideWith(runStore),
   di.sessionHadErrorProvider.overrideWith(sessionHadError),
   di.showInterstitialProvider.overrideWith(showInterstitial),
+  di.submitBestScoreProvider.overrideWith(submitBestScore),
+  di.submitDailyScoreProvider.overrideWith(submitDailyScore),
 ];
 
 /// The device's progression with the worlds it has earned open, for every

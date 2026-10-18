@@ -24,6 +24,7 @@ blockmancer/
 │   │   ├── ads/              # AdMob and Google's consent form (UMP) behind `Consent` (gather, privacy options) and `RewardedAds` — the only place google_mobile_ads is known
 │   │   ├── app_info/         # The app's version and the device it runs on (`readAppInfo()`, never throws) — the only place package_info_plus and device_info_plus are known
 │   │   ├── external_links/   # Hands a link or text to the OS (browser, mail draft, share sheet) — the only place url_launcher and share_plus are known; Settings uses `composeEmail` and `shareText`
+│   │   ├── leaderboards/     # Game Center and Play Games behind `Leaderboards` (`signIn`, `submit`, `show`) — the only place games_services is known; `NoLeaderboards` while a platform's ids are placeholders
 │   │   ├── play_stats/       # The testers' numbers: `LocalPlayStats` implements shared_domain's `AnalyticsSink`, counting per day on the device, and exports a JSON summary
 │   │   ├── purchases/        # The stores' in-app purchases behind `Purchases` (buy, restore, price, updates) — the only place in_app_purchase is known, so RevenueCat could replace it
 │   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
@@ -658,13 +659,15 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 ## Injection
 
-There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
+There is no backend: the app makes no HTTP calls and has no account; the only sign-in is the
+platform's game service, for the leaderboards. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
 `firebase_remote_config`, `google_mobile_ads`, `in_app_purchase`, `purchases`,
 `flutter_inappwebview`, `flutter_soloud`, `push`,
 `sounds`, `telemetry`,
 `remote_config`, `url_launcher`, `ads`, `app_info`, `package_info_plus`, `device_info_plus`,
-`external_links`, `share_plus`, `play_stats` or `blockmancer_engine` directly** — a
+`external_links`, `share_plus`, `play_stats`, `games_services`, `leaderboards` or
+`blockmancer_engine` directly** — a
 feature declares a contract and the composition layer injects the implementation, exactly as it does
 for routing.
 
@@ -745,6 +748,28 @@ over at least 2 different days (`Engagement`), no uncaught error this session (t
 version, and `review_cooldown_days` (60, Remote Config) since the last ask. It records the ask
 (`reviewAskedAt`, `reviewAskedVersion`) and logs `review_prompt_requested`; whether the OS shows
 it is the OS's call. Settings' **Rate Blockmancer** (`RateRow`) opens the store page, always.
+
+## Leaderboards
+
+Game Center on iOS, Play Games on Android, behind `leaderboards`' `Leaderboards`
+(`GamesServicesLeaderboards`, over `games_services`; never throws).
+
+- **Two boards:** `blockmancer.daily_run` (Game Center: recurring, every day from 00:00 UTC; Play:
+  a board of its own, opened on its daily view) and `blockmancer.best_run` (all time). Their ids
+  are `release_ids.dart`'s `dailyLeaderboard` / `bestLeaderboard`, from `app/env/prod.json`.
+- **Submitting:** at every run's end but the tutorial's, `GameNotifier` calls `game_domain`'s
+  `submitRunScore`, which decides the boards: every run's total to the all-time board, a daily
+  run's to the day's too, nothing for a total of 0. Its slots (`submitBestScore`,
+  `submitDailyScore`) are bound to the one `Leaderboards` instance, each with its board.
+- **Signing in:** `signInToLeaderboards` (app_providers) once the consent form is done, at
+  launch's post-frame step; a submit or the board signs in again if needed. A refusal leaves the
+  boards empty and never blocks play.
+- **The button:** the daily card's **Leaderboard** (`LeaderboardButton`, its own pressable) calls
+  home's `showDailyLeaderboard` slot.
+- **Placeholders:** a platform whose ids are still `PLACEHOLDER_…` gets `NoLeaderboards`. Android
+  reads `PLAY_GAMES_APP_ID` into the manifest's `com.google.android.gms.games.APP_ID` through a
+  Gradle `resValue` (a string resource, so the numeric id isn't read as a number); iOS carries the
+  Game Center entitlement in `Runner.entitlements`.
 
 ## Consent
 

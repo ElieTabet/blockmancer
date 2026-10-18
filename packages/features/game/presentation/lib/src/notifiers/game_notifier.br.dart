@@ -252,6 +252,7 @@ class GameNotifier extends _$GameNotifier {
       unawaited(_recordEnd(run));
       unawaited(_countRunEnd());
       unawaited(_recordProgress(run));
+      unawaited(_submitScore(run));
     }
 
     unawaited(_save(SavedRun(mode: state.mode, run: run)));
@@ -370,6 +371,21 @@ class GameNotifier extends _$GameNotifier {
     if (!identical(state.run, run)) return;
 
     state = state.copyWith(progress: progress, progressPending: false);
+  }
+
+  Future<void> _submitScore(RunState run) async {
+    final submitRunScore = ref.read(submitRunScoreProvider);
+
+    try {
+      await submitRunScore(state.mode, run.runTotal);
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Submitting the run to the leaderboards failed',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   /// A new run. Not saved until its first action: opening a run by mistake

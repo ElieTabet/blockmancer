@@ -560,6 +560,9 @@ class Translations$home$daily$en {
 
 	/// en: 'Play'
 	String get play => 'Play';
+
+	/// en: 'Leaderboard'
+	String get leaderboard => 'Leaderboard';
 }
 
 // Path: home.resume
@@ -1638,6 +1641,7 @@ extension on Translations {
 			'home.daily.title' => 'Daily run',
 			'home.daily.subtitle' => 'Same pieces for everyone today',
 			'home.daily.play' => 'Play',
+			'home.daily.leaderboard' => 'Leaderboard',
 			'home.resume.title' => 'Continue run',
 			'home.resume.subtitle' => 'Pick up where you left off',
 			'home.practice.title' => 'Practice',

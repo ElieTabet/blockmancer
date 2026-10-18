@@ -37,6 +37,8 @@ ProviderContainer engineGame({
           () => false,
       showInterstitial: (ref) =>
           () async => const AdResult.failed(code: 'no_ads'),
+      submitBestScore: (ref) => (_) async {},
+      submitDailyScore: (ref) => (_) async {},
     ),
   );
   addTearDown(container.dispose);

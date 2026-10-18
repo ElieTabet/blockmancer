@@ -559,6 +559,54 @@ final class OpenStoreListingProvider
 
 String _$openStoreListingHash() => r'c7986f521fe5cd2aa6d28c1ee4059d91efa7cfb4';
 
+@ProviderFor(showDailyLeaderboard)
+final showDailyLeaderboardProvider = ShowDailyLeaderboardProvider._();
+
+final class ShowDailyLeaderboardProvider
+    extends
+        $FunctionalProvider<
+          ShowDailyLeaderboardFun,
+          ShowDailyLeaderboardFun,
+          ShowDailyLeaderboardFun
+        >
+    with $Provider<ShowDailyLeaderboardFun> {
+  ShowDailyLeaderboardProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'showDailyLeaderboardProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$showDailyLeaderboardHash();
+
+  @$internal
+  @override
+  $ProviderElement<ShowDailyLeaderboardFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ShowDailyLeaderboardFun create(Ref ref) {
+    return showDailyLeaderboard(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ShowDailyLeaderboardFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ShowDailyLeaderboardFun>(value),
+    );
+  }
+}
+
+String _$showDailyLeaderboardHash() =>
+    r'96023df72b77eb10cde8ed8e6f092e2863c43646';
+
 /// The newer version to offer, or null when there is none or its banner was
 /// closed.
 

@@ -101,8 +101,13 @@ class Application {
       ),
     );
     // Once the first frame is up: the consent form is drawn over the app.
+    // Then the leaderboards' sign-in, whose sheet must not cover the form.
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => unawaited(gatherConsent(_container)),
+      (_) => unawaited(
+        gatherConsent(
+          _container,
+        ).whenComplete(() => signInToLeaderboards(_container)),
+      ),
     );
   }
 }

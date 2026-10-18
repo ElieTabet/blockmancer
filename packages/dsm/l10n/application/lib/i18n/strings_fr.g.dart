@@ -359,6 +359,7 @@ class _Translations$home$daily$fr extends Translations$home$daily$en {
 	@override String get title => 'Partie du jour';
 	@override String get subtitle => 'Aujourd\'hui, les mêmes pièces pour tout le monde';
 	@override String get play => 'Jouer';
+	@override String get leaderboard => 'Classement';
 }
 
 // Path: home.resume
@@ -1130,6 +1131,7 @@ extension on TranslationsFr {
 			'home.daily.title' => 'Partie du jour',
 			'home.daily.subtitle' => 'Aujourd\'hui, les mêmes pièces pour tout le monde',
 			'home.daily.play' => 'Jouer',
+			'home.daily.leaderboard' => 'Classement',
 			'home.resume.title' => 'Reprendre la partie',
 			'home.resume.subtitle' => 'Reprends là où tu en étais',
 			'home.practice.title' => 'Entraînement',

@@ -251,7 +251,8 @@
     "daily": {
       "title": "Partie du jour",
       "subtitle": "Aujourd'hui, les mêmes pièces pour tout le monde",
-      "play": "Jouer"
+      "play": "Jouer",
+      "leaderboard": "Classement"
     },
     "resume": {
       "title": "Reprendre la partie",

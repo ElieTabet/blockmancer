@@ -66,6 +66,24 @@ void main() {
     });
   }
 
+  testWidgets("Given Home, When the daily card's Leaderboard is tapped, Then "
+      "today's board opens and no run does", (tester) async {
+    // Given
+    var shown = 0;
+    final routing = await pumpHome(
+      tester,
+      showDailyLeaderboard: () async => shown++,
+    );
+
+    // When
+    await tester.tap(find.text('Leaderboard'));
+    await tester.pump();
+
+    // Then
+    expect(shown, 1);
+    expect(routing.calls, isEmpty);
+  });
+
   testWidgets('Given Home, When the gear is tapped, Then Settings opens', (
     tester,
   ) async {

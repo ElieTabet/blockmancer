@@ -33,6 +33,10 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
+    buildFeatures {
+        resValues = true
+    }
+
     defaultConfig {
         applicationId = "com.elietabet.blockmancer"
         minSdk = flutter.minSdkVersion
@@ -42,6 +46,9 @@ android {
         // The native ids every build needs, from the one file of store and
         // AdMob ids (docs/console-setup.md, Placeholders).
         manifestPlaceholders["admobAppId"] = releaseIds["ADMOB_APP_ID_ANDROID"] as String
+        // Numeric, so a string resource: a literal in the manifest would be
+        // read as a number and lose the id.
+        resValue("string", "play_games_app_id", releaseIds["PLAY_GAMES_APP_ID"] as String)
     }
 
     signingConfigs {

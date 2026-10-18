@@ -49,22 +49,32 @@ const iapRemoveAds = String.fromEnvironment(
 /// separated; the ids the ad SDK logs at launch). Empty: none.
 const admobTestDeviceIds = String.fromEnvironment('ADMOB_TEST_DEVICE_IDS');
 
-/// The leaderboards: Game Center's ids are ours, Play Games' are the console's.
-const leaderboardIds = (
-  gameCenterBest: String.fromEnvironment(
-    'GAME_CENTER_LEADERBOARD_BEST',
-    defaultValue: 'PLACEHOLDER_GAME_CENTER_LEADERBOARD_BEST',
+/// Play Games' project id: the manifest's (through Gradle); here only so a
+/// build without one leaves Play Games alone.
+const playGamesAppId = String.fromEnvironment(
+  'PLAY_GAMES_APP_ID',
+  defaultValue: 'PLACEHOLDER_PLAY_GAMES_APP_ID',
+);
+
+/// Today's board (reset every day at 00:00 UTC) and the all-time one: Game
+/// Center's ids are ours, Play Games' are the console's.
+const dailyLeaderboard = (
+  android: String.fromEnvironment(
+    'PLAY_LEADERBOARD_DAILY',
+    defaultValue: 'PLACEHOLDER_PLAY_LEADERBOARD_DAILY',
   ),
-  gameCenterDaily: String.fromEnvironment(
+  ios: String.fromEnvironment(
     'GAME_CENTER_LEADERBOARD_DAILY',
     defaultValue: 'PLACEHOLDER_GAME_CENTER_LEADERBOARD_DAILY',
   ),
-  playBest: String.fromEnvironment(
+);
+const bestLeaderboard = (
+  android: String.fromEnvironment(
     'PLAY_LEADERBOARD_BEST',
     defaultValue: 'PLACEHOLDER_PLAY_LEADERBOARD_BEST',
   ),
-  playDaily: String.fromEnvironment(
-    'PLAY_LEADERBOARD_DAILY',
-    defaultValue: 'PLACEHOLDER_PLAY_LEADERBOARD_DAILY',
+  ios: String.fromEnvironment(
+    'GAME_CENTER_LEADERBOARD_BEST',
+    defaultValue: 'PLACEHOLDER_GAME_CENTER_LEADERBOARD_BEST',
   ),
 );

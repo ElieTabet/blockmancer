@@ -27,6 +27,8 @@ void main() {
     RequestReviewFun? requestReview,
     FakeRunStore? runStore,
     ShowAdFun? showInterstitial,
+    SubmitScoreFun? submitBestScore,
+    SubmitScoreFun? submitDailyScore,
     WorldId? world,
   }) {
     final container = ProviderContainer(
@@ -44,6 +46,8 @@ void main() {
         requestReview: requestReview,
         runStore: runStore,
         showInterstitial: showInterstitial,
+        submitBestScore: submitBestScore,
+        submitDailyScore: submitDailyScore,
         world: world,
       ),
     );
@@ -523,6 +527,31 @@ void main() {
     );
 
     test(
+      "its total reaches the day's leaderboard and the all-time one",
+      () async {
+        // Given
+        final best = <int>[];
+        final daily = <int>[];
+        final game = container(
+          submitBestScore: (score) async => best.add(score),
+          submitDailyScore: (score) async => daily.add(score),
+        );
+        rules.next = (
+          runIn(const .over(), runTotal: 1450),
+          const [GameEvent.runOver(total: 1450)],
+        );
+
+        // When
+        game.read(gameProvider.notifier).endRun();
+        await pumpEventQueue();
+
+        // Then
+        expect(daily, [1450]);
+        expect(best, [1450]);
+      },
+    );
+
+    test(
       'a best that cannot be read leaves the run ended, without one',
       () async {
         // Given
@@ -683,10 +712,16 @@ void main() {
       },
     );
 
-    test("a tutorial's end counts nothing", () async {
+    test("a tutorial's end counts nothing and ranks nowhere", () async {
       // Given
       final before = store.saved;
-      final game = container(launch: .tutorial, progressionStore: store);
+      final submitted = <int>[];
+      final game = container(
+        launch: .tutorial,
+        progressionStore: store,
+        submitBestScore: (score) async => submitted.add(score),
+        submitDailyScore: (score) async => submitted.add(score),
+      );
       rules.next = (
         runIn(const .over(), jokers: const [.twin], runTotal: 300),
         const [GameEvent.runOver(total: 300)],
@@ -698,6 +733,7 @@ void main() {
 
       // Then
       expect(store.saved, before);
+      expect(submitted, isEmpty);
     });
   });
 

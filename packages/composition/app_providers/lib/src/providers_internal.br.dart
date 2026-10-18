@@ -4,6 +4,7 @@ import 'package:ads/ads.dart';
 import 'package:app_providers/src/release_ids.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart' as game;
+import 'package:leaderboards/leaderboards.dart';
 import 'package:play_stats/play_stats.dart';
 import 'package:purchases/purchases.dart';
 import 'package:remote_config/remote_config.dart';
@@ -77,6 +78,20 @@ AnalyticsSink analyticsSink(Ref ref) => ref.watch(testToolsProvider)
 /// purchase is missed.
 @Riverpod(keepAlive: true)
 Purchases purchases(Ref ref) => StorePurchases();
+
+/// One for the app's life. None on a platform whose ids are still
+/// placeholders: Game Center would ask a player to sign in for boards that
+/// don't exist, and Play Games has no project to sign in to.
+@Riverpod(keepAlive: true)
+Leaderboards leaderboards(Ref ref) {
+  final ids = _onIos
+      ? [dailyLeaderboard.ios, bestLeaderboard.ios]
+      : [playGamesAppId, dailyLeaderboard.android, bestLeaderboard.android];
+
+  return ids.any((id) => id.startsWith('PLACEHOLDER_'))
+      ? const NoLeaderboards()
+      : const GamesServicesLeaderboards();
+}
 
 /// One for the app's life: the OS's rating prompt and the store page.
 @Riverpod(keepAlive: true)

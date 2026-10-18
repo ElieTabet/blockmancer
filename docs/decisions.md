@@ -440,3 +440,26 @@ Three changes from the review of this file, each its own commit.
   ad SDK starts; AdMob's own test-device list covers the rest.
 - **SKAdNetwork:** the 50 identifiers on AdMob's "SKAdNetwork" page (developers.google.com/admob/
   ios/privacy/strategies), read from the page itself on 18 October.
+
+## Sprint 8, Task 6: leaderboard
+
+- **Which runs reach which board:** every run's total goes to the all-time board (`best_run`),
+  daily, practice and world runs alike, as the plan said; a daily run's goes to the day's board
+  too. The tutorial reaches neither, nor does a total of 0.
+- **"Silent sign-in after splash":** once the consent form has had the screen (launch's
+  post-frame step), so Game Center's sheet never covers it. Game Center signs a returning player
+  in with a banner; a first-timer sees its sign-in sheet once. A refusal or failure is logged and
+  leaves the boards empty; a later submit or Leaderboard tap tries again.
+- **The daily board on each platform:** Game Center's is a recurring board restarting every day
+  at 00:00 UTC, the daily run's own day. Play has no such board: every leaderboard keeps daily,
+  weekly and all-time views, its day ending at midnight Pacific time. So Play gets a dedicated
+  daily-run board opened on its daily view; its day is 7–8 hours off the run's, so the board can
+  show the end of yesterday's run beside today's for those hours.
+- **Placeholders switch the boards off** on that platform (`NoLeaderboards`): Game Center would
+  ask the player to sign in for boards that don't exist, and Play Games has no project. Play's
+  SDK starts itself at launch (`PlayGamesInitProvider`) whatever the manifest holds; with the
+  placeholder APP_ID, the one place it parses the id catches the error (read in the SDK's
+  bytecode, 21.0.0). Not run: the emulator couldn't start, the disk being full. It is on the
+  device-test list.
+- **The Leaderboard button** sits inside the daily card under Play, as its own pressable. A
+  nested tap goes to the innermost target, so it opens the board and not the run.

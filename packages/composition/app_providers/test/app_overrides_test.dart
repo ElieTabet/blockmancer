@@ -10,6 +10,7 @@ import 'dart:math';
 import 'package:ads/ads.dart';
 import 'package:app_providers/app_providers.dart';
 import 'package:app_providers/src/providers_internal.br.dart';
+import 'package:app_providers/src/release_ids.dart';
 import 'package:app_router/app_router.dart';
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:external_links/external_links.dart' as external_links;
@@ -20,6 +21,7 @@ import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:game_presentation/src/providers_di.br.dart' as game_ui_di;
 import 'package:home_presentation/src/providers_di.br.dart' as home_di;
+import 'package:leaderboards/leaderboards.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:play_stats/play_stats.dart';
 import 'package:push/push.dart';
@@ -365,6 +367,37 @@ void main() {
     },
   );
 
+  test("a run's total reaches each board by its id, and the daily card opens "
+      "today's", () async {
+    // Given
+    final boards = _FakeLeaderboards();
+    final container = ProviderContainer(
+      overrides: [
+        ...appOverrides(
+          collectsTelemetry: false,
+          router: AppRouter(),
+          testTools: false,
+        ),
+        leaderboardsProvider.overrideWithValue(boards),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // When
+    await container.read(game.submitRunScoreProvider)(
+      const .daily(day: 20261018),
+      9200,
+    );
+    await container.read(home_di.showDailyLeaderboardProvider)();
+
+    // Then
+    expect(boards.calls, [
+      'submit best 9200',
+      'submit daily 9200',
+      'show daily today',
+    ]);
+  });
+
   group('sounds', () {
     late FakeSoundEngine engine;
 
@@ -536,4 +569,27 @@ void main() {
     expect(container.read(telemetryProvider), isA<FirebaseTelemetry>());
     expect(container.read(collectsTelemetryProvider), false);
   });
+}
+
+/// Records what was asked of the leaderboards, each board by its name.
+final class _FakeLeaderboards implements Leaderboards {
+  final calls = <String>[];
+
+  String _name(LeaderboardIds board) =>
+      board == dailyLeaderboard ? 'daily' : 'best';
+
+  @override
+  Future<bool> signIn() async {
+    calls.add('sign in');
+
+    return true;
+  }
+
+  @override
+  Future<void> show(LeaderboardIds board, {bool today = false}) async =>
+      calls.add('show ${_name(board)}${today ? ' today' : ''}');
+
+  @override
+  Future<void> submit(LeaderboardIds board, int score) async =>
+      calls.add('submit ${_name(board)} $score');
 }

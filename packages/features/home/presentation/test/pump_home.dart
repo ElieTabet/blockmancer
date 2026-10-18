@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_presentation/home_presentation.dart';
 import 'package:home_presentation/src/providers_di.br.dart'
-    show MarkJokersAnnouncedFun;
+    show MarkJokersAnnouncedFun, ShowDailyLeaderboardFun;
 import 'package:home_presentation/src/widgets/home_widget.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -171,7 +171,8 @@ final rubbleBeaten = freshProgression().copyWith(
 /// Announcing jokers does nothing unless [markJokersAnnounced] says otherwise.
 /// [screen] is Home unless another of its screens is given, on a [viewSize]
 /// view, with the game's [collection] of jokers unless [jokerCollection] says
-/// otherwise.
+/// otherwise. The daily leaderboard shows nothing unless
+/// [showDailyLeaderboard] says otherwise.
 /// A newer version on offer, recording the store opened and the banner
 /// closed.
 final class UpdateOffer {
@@ -202,6 +203,7 @@ Future<FakeHomeRouting> pumpHome(
   Future<Progression> Function()? progression,
   bool reduceMotion = true,
   Widget screen = const HomeWidget(),
+  ShowDailyLeaderboardFun? showDailyLeaderboard,
   UpdateOffer? updateOffer,
   Size viewSize = const Size(390, 1300),
 }) async {
@@ -225,6 +227,7 @@ Future<FakeHomeRouting> pumpHome(
           practiceBest: (ref) async => practiceBest,
           progression: (ref) => progression?.call() ?? _fresh(),
           reduceMotionSetting: (ref) => reduceMotion,
+          showDailyLeaderboard: (ref) => showDailyLeaderboard ?? () async {},
           updateOffer: (ref) async => updateOffer?.latest,
           worlds: (ref) => mapWorlds,
         ),

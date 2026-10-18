@@ -575,3 +575,95 @@ final class SessionHadErrorProvider
 }
 
 String _$sessionHadErrorHash() => r'683e412e2b0b515f76d10ab8dc885bc684849949';
+
+/// The all-time board: every run's total.
+
+@ProviderFor(submitBestScore)
+final submitBestScoreProvider = SubmitBestScoreProvider._();
+
+/// The all-time board: every run's total.
+
+final class SubmitBestScoreProvider
+    extends $FunctionalProvider<SubmitScoreFun, SubmitScoreFun, SubmitScoreFun>
+    with $Provider<SubmitScoreFun> {
+  /// The all-time board: every run's total.
+  SubmitBestScoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'submitBestScoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$submitBestScoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<SubmitScoreFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SubmitScoreFun create(Ref ref) {
+    return submitBestScore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SubmitScoreFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SubmitScoreFun>(value),
+    );
+  }
+}
+
+String _$submitBestScoreHash() => r'2dd3f1f9b87447707dfcaf917adf7fe9ec356ad2';
+
+/// The day's board, which the platform resets every day at 00:00 UTC.
+
+@ProviderFor(submitDailyScore)
+final submitDailyScoreProvider = SubmitDailyScoreProvider._();
+
+/// The day's board, which the platform resets every day at 00:00 UTC.
+
+final class SubmitDailyScoreProvider
+    extends $FunctionalProvider<SubmitScoreFun, SubmitScoreFun, SubmitScoreFun>
+    with $Provider<SubmitScoreFun> {
+  /// The day's board, which the platform resets every day at 00:00 UTC.
+  SubmitDailyScoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'submitDailyScoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$submitDailyScoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<SubmitScoreFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SubmitScoreFun create(Ref ref) {
+    return submitDailyScore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SubmitScoreFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SubmitScoreFun>(value),
+    );
+  }
+}
+
+String _$submitDailyScoreHash() => r'2da033c7846a194441d0230df0858a6e9a0b21e9';

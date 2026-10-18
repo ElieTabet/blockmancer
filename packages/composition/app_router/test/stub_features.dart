@@ -52,6 +52,8 @@ List<Override> stubFeatures({
         () => false,
     showInterstitial: (ref) =>
         () async => const AdResult.failed(code: 'no_ads'),
+    submitBestScore: (ref) => (_) async {},
+    submitDailyScore: (ref) => (_) async {},
   ),
   ...game_ui.bindProviders(
     hapticsOnSetting: (ref) => false,
@@ -77,6 +79,7 @@ List<Override> stubFeatures({
     progression: (ref) => ref.watch(game.progressionProvider.future),
     // Still, so the map's "you are here" pin lets pumpAndSettle settle.
     reduceMotionSetting: (ref) => true,
+    showDailyLeaderboard: (ref) => () async {},
     updateOffer: (ref) async => null,
     worlds: (ref) => ref.watch(game.worldSummariesProvider),
   ),

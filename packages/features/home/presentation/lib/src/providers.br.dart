@@ -16,6 +16,7 @@ List<Override> bindProviders({
   required Future<int?> Function(Ref ref) practiceBest,
   required Future<Progression> Function(Ref ref) progression,
   required bool Function(Ref ref) reduceMotionSetting,
+  required di.ShowDailyLeaderboardFun Function(Ref ref) showDailyLeaderboard,
   required Future<String?> Function(Ref ref) updateOffer,
   required List<WorldSummary> Function(Ref ref) worlds,
 }) => [
@@ -29,6 +30,7 @@ List<Override> bindProviders({
   di.practiceBestProvider.overrideWith(practiceBest),
   di.progressionProvider.overrideWith(progression),
   di.reduceMotionSettingProvider.overrideWith(reduceMotionSetting),
+  di.showDailyLeaderboardProvider.overrideWith(showDailyLeaderboard),
   di.updateOfferProvider.overrideWith(updateOffer),
   di.worldsProvider.overrideWith(worlds),
 ];

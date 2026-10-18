@@ -251,7 +251,8 @@
     "daily": {
       "title": "Daily run",
       "subtitle": "Same pieces for everyone today",
-      "play": "Play"
+      "play": "Play",
+      "leaderboard": "Leaderboard"
     },
     "resume": {
       "title": "Continue run",

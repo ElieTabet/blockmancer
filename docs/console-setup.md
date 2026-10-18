@@ -36,7 +36,7 @@ refuse to build while one is left (`scripts/check_release_ids.sh`); the test bui
 | `GAME_CENTER_LEADERBOARD_DAILY` | ✅ done | `blockmancer.daily_run` |
 | `GAME_CENTER_LEADERBOARD_BEST` | ✅ done | `blockmancer.best_run` |
 | `APP_STORE_ID` | ❌ placeholder | App Store Connect → the app → App Information → **Apple ID** (a number): the update screen's store link and Rate Blockmancer |
-| `PLAY_GAMES_APP_ID` | ❌ placeholder | Play Console → Play Games Services → Configuration → **project id** (digits) |
+| `PLAY_GAMES_APP_ID` | ❌ placeholder | Play Console → Play Games Services → Configuration → **project id** (digits); Gradle → the manifest's `com.google.android.gms.games.APP_ID` |
 | `PLAY_LEADERBOARD_DAILY` | ❌ placeholder | Play Games Services → Leaderboards → the daily run's **ID** (`CgkI…`) |
 | `PLAY_LEADERBOARD_BEST` | ❌ placeholder | Play Games Services → Leaderboards → the best run's **ID** |
 
@@ -241,7 +241,38 @@ Config). To see it: **TestFlight never shows it** (Apple); run a build from Xcod
 (`flutter run --release` from `app/`), where it always shows, but submits nothing. Settings →
 **Rate Blockmancer** opens the App Store page (needs `APP_STORE_ID`).
 
-*(Game Center: Task 6.)*
+### Game Center: the two leaderboards
+
+The code submits every run's total to **`blockmancer.best_run`** and each daily run's to
+**`blockmancer.daily_run`** too, and the daily card's **Leaderboard** opens the daily one. The
+player is signed in once the consent form has gone; a refusal only leaves the boards empty.
+
+1. **Capability.** The Game Center entitlement is committed (`Runner.entitlements`). Xcode →
+   Runner → **Signing & Capabilities** should list **Game Center**; with automatic signing the
+   App ID and profiles pick it up at the next build. (Explicit App IDs have Game Center on by
+   default.)
+2. App Store Connect → the app → **Game Center** (sidebar) → enable it, then **Leaderboards → +**:
+
+   | | Daily run | Best run |
+   |---|---|---|
+   | Type | **Recurring** | **Classic** |
+   | Reference name | Daily run | Best run |
+   | Leaderboard ID | **`blockmancer.daily_run`** ✅ | **`blockmancer.best_run`** ✅ |
+   | Score format type | Integer | Integer |
+   | Score submission type | Best score | Best score |
+   | Sort order | High to low | High to low |
+   | Score range | (leave empty) | (leave empty) |
+   | Recurrence | Starts at **00:00 UTC** (any coming day), duration **1 day**, restarts every **1 day** | — |
+
+   For each, **Localization → +**: English — name "Daily run" / "Best run", score format
+   "Integer", suffix " points" (" point" for one); French — "Partie du jour" / "Meilleure
+   partie", suffix " points". An image is optional.
+3. On the **version** page (App Store tab → the 1.0 version), tick **Game Center** and add both
+   leaderboards, or they won't go live with the app.
+
+**To test:** a development or TestFlight build uses Game Center's sandbox: Settings → Game Center
+→ sign in, then play a daily run to its end; the Leaderboard button shows the score (scores can
+take a minute to appear). Leaderboards don't need review to show in the sandbox.
 
 ## Play Console
 
@@ -284,4 +315,41 @@ Nothing to set up. Play shows its in-app review only for an app installed from P
 internal testing build from the Play Store app, on an account that hasn't reviewed it (Play's
 quota hides it otherwise; internal app sharing shows it every time, with a placeholder submit).
 
-*(Play Games: Task 6.)*
+### Play Games Services: the project and the two leaderboards
+
+Play has no board that resets at a chosen hour: every Play leaderboard keeps its own daily,
+weekly and all-time views, its day ending at midnight Pacific time. So the daily run gets a board
+of its own, opened on its **daily** view, and the best run another, opened on all time. The day
+boundary differs from the run's (00:00 UTC) by 7–8 hours: logged in `docs/decisions.md`.
+
+Until the three Play ids below are in `prod.json`, Android plays without leaderboards (the code
+switches them off) and the manifest carries the placeholder, which the SDK ignores.
+
+1. Play Console → the app → **Grow users → Play Games Services → Setup and management →
+   Configuration** → **Create new Play Games Services project** → **Use an existing Google
+   Cloud project: blockmancer-a153f** (the Firebase project's).
+2. Copy the **project id** (digits, under the game's name) → `PLAY_GAMES_APP_ID`.
+3. **Credentials → Add credential → Android**:
+   - Configure the **OAuth consent screen** if asked (Google Cloud → APIs & Services → OAuth
+     consent screen: External, app name Blockmancer, support email, publish it).
+   - Create the **Android OAuth client**: package **com.elietabet.blockmancer**, SHA-1 of the
+     **app signing key** (Play Console → Test and release → **App integrity → App signing** →
+     App signing key certificate). Add a second credential with the **upload key**'s SHA-1 (same
+     page) so internal-sharing builds sign in, and a third with the debug keystore's
+     (`keytool -list -v -keystore ~/.android/debug.keystore -storepass android`) for
+     `flutter run`.
+4. **Leaderboards → Create leaderboard**, twice:
+
+   | | Daily run | Best run |
+   |---|---|---|
+   | Name | Daily run (FR: Partie du jour) | Best run (FR: Meilleure partie) |
+   | Score formatting | **Numeric**, 0 decimal places | **Numeric**, 0 decimal places |
+   | Ordering | **Larger is better** | **Larger is better** |
+   | Limits | (none) | (none) |
+
+   Save each, then copy its **ID** (`CgkI…`) → `PLAY_LEADERBOARD_DAILY` / `PLAY_LEADERBOARD_BEST`.
+5. **Testers** → add your Google accounts (needed while the Games project is unpublished), then
+   **Review and publish** the Games project once the app goes live.
+
+**To test:** an internal-testing build (or `flutter run` with the debug SHA-1 registered), signed
+in to Play Games with a tester account; play a daily run to its end, then tap **Leaderboard**.

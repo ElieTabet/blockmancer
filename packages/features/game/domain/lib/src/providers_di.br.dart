@@ -94,3 +94,19 @@ typedef SessionHadErrorFun = bool Function();
 SessionHadErrorFun sessionHadError(Ref ref) => throw UnimplementedError(
   'sessionHadErrorProvider must be overridden by the composition layer',
 );
+
+/// Hands a run total to a leaderboard, which keeps the player's best. Never
+/// throws, and never waits on a sign-in the player turned down.
+typedef SubmitScoreFun = Future<void> Function(int score);
+
+/// The all-time board: every run's total.
+@riverpod
+SubmitScoreFun submitBestScore(Ref ref) => throw UnimplementedError(
+  'submitBestScoreProvider must be overridden by the composition layer',
+);
+
+/// The day's board, which the platform resets every day at 00:00 UTC.
+@riverpod
+SubmitScoreFun submitDailyScore(Ref ref) => throw UnimplementedError(
+  'submitDailyScoreProvider must be overridden by the composition layer',
+);

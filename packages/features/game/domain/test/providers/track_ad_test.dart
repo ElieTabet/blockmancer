@@ -30,6 +30,8 @@ void main() {
             () => false,
         showInterstitial: (ref) =>
             () async => const AdResult.closed(),
+        submitBestScore: (ref) => (_) async {},
+        submitDailyScore: (ref) => (_) async {},
       ),
     );
     addTearDown(container.dispose);

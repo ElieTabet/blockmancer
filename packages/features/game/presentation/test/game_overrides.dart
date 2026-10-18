@@ -74,8 +74,9 @@ final class FakeGameRouting implements GameRouting {
 /// settings leave reduce motion off unless [reduceMotion] turns it on and
 /// sound and haptics on unless [soundOn] or [hapticsOn] turn them off, sounds
 /// go nowhere unless [playSound] takes them, and the tutorial is kept as seen
-/// nowhere unless [markTutorialSeen] keeps it, and what the game counts goes
-/// nowhere unless [analytics] keeps it. The screen is opened with
+/// nowhere unless [markTutorialSeen] keeps it, what the game counts goes
+/// nowhere unless [analytics] keeps it, and run totals reach no leaderboard
+/// unless [submitBestScore] or [submitDailyScore] takes them. The screen is opened with
 /// [progression], a new player's unless given, which [progressionStore] keeps.
 List<Override> gameOverrides(
   FakeGameRules rules, {
@@ -99,6 +100,8 @@ List<Override> gameOverrides(
   bool sessionHadError = false,
   game.ShowAdFun? showInterstitial,
   bool soundOn = true,
+  game.SubmitScoreFun? submitBestScore,
+  game.SubmitScoreFun? submitDailyScore,
   WorldId? world,
 }) => [
   ...game.bindProviders(
@@ -120,6 +123,8 @@ List<Override> gameOverrides(
         () => sessionHadError,
     showInterstitial: (ref) =>
         showInterstitial ?? () async => const AdResult.failed(code: 'no_ads'),
+    submitBestScore: (ref) => submitBestScore ?? (_) async {},
+    submitDailyScore: (ref) => submitDailyScore ?? (_) async {},
   ),
   ...bindProviders(
     hapticsOnSetting: (ref) => hapticsOn,

@@ -251,6 +251,58 @@ final class PurchasesProvider
 
 String _$purchasesHash() => r'582bc6336c51c6cddfda440516e6be020389cf27';
 
+/// One for the app's life. None on a platform whose ids are still
+/// placeholders: Game Center would ask a player to sign in for boards that
+/// don't exist, and Play Games has no project to sign in to.
+
+@ProviderFor(leaderboards)
+final leaderboardsProvider = LeaderboardsProvider._();
+
+/// One for the app's life. None on a platform whose ids are still
+/// placeholders: Game Center would ask a player to sign in for boards that
+/// don't exist, and Play Games has no project to sign in to.
+
+final class LeaderboardsProvider
+    extends $FunctionalProvider<Leaderboards, Leaderboards, Leaderboards>
+    with $Provider<Leaderboards> {
+  /// One for the app's life. None on a platform whose ids are still
+  /// placeholders: Game Center would ask a player to sign in for boards that
+  /// don't exist, and Play Games has no project to sign in to.
+  LeaderboardsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'leaderboardsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$leaderboardsHash();
+
+  @$internal
+  @override
+  $ProviderElement<Leaderboards> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Leaderboards create(Ref ref) {
+    return leaderboards(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Leaderboards value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Leaderboards>(value),
+    );
+  }
+}
+
+String _$leaderboardsHash() => r'0de5276bf18ee46d2cc35357ac9c4b00e10ce8f9';
+
 /// One for the app's life: the OS's rating prompt and the store page.
 
 @ProviderFor(storeReview)

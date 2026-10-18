@@ -8,7 +8,7 @@ import 'package:home_presentation/src/widgets/home_card.dart';
 import 'package:intl/intl.dart';
 import 'package:l10n_application/l10n_application.dart';
 
-/// Today's daily run: its day, today's best, and a way in.
+/// Today's daily run: its day, today's best, a way in, and its leaderboard.
 final class DailyCard extends ConsumerWidget {
   const DailyCard({super.key});
 
@@ -51,7 +51,11 @@ final class DailyCard extends ConsumerWidget {
               ],
             ),
           ),
-          const _PlayPill(),
+          const Column(
+            crossAxisAlignment: .end,
+            spacing: DSSpace.xsmall,
+            children: [_PlayPill(), LeaderboardButton()],
+          ),
         ],
       ),
     );
@@ -111,6 +115,40 @@ final class _PlayPill extends StatelessWidget {
           ),
         ),
       ],
+    ),
+  );
+}
+
+/// Today's leaderboard, a tap target of its own inside the card: tapping it
+/// opens the board, not the run.
+final class LeaderboardButton extends ConsumerWidget {
+  const LeaderboardButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => DSPressable(
+    onTap: () => ref.read(showDailyLeaderboardProvider)(),
+    child: Padding(
+      // A finger-sized target around a small label.
+      padding: const .symmetric(vertical: DSSpace.xsmall),
+      child: Row(
+        mainAxisSize: .min,
+        spacing: DSSpace.xxsmall,
+        children: [
+          const Icon(
+            Icons.leaderboard_rounded,
+            color: DSColor.accent,
+            size: 18,
+          ),
+          Text(
+            context.t.home.daily.leaderboard,
+            style: const TextStyle(
+              color: DSColor.accent,
+              fontSize: 13,
+              fontWeight: .w700,
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

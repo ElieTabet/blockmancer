@@ -1258,6 +1258,64 @@ final class BetweenRunsProvider
 
 String _$betweenRunsHash() => r'dfc39d26dd37bc03234baf449b391e906d4e22b4';
 
+/// Hands a finished run's total to the leaderboards: every run to the
+/// all-time board, a daily run to the day's too, where everyone played the
+/// same pieces. A run that scored nothing has nothing to rank.
+
+@ProviderFor(submitRunScore)
+final submitRunScoreProvider = SubmitRunScoreProvider._();
+
+/// Hands a finished run's total to the leaderboards: every run to the
+/// all-time board, a daily run to the day's too, where everyone played the
+/// same pieces. A run that scored nothing has nothing to rank.
+
+final class SubmitRunScoreProvider
+    extends
+        $FunctionalProvider<
+          SubmitRunScoreFun,
+          SubmitRunScoreFun,
+          SubmitRunScoreFun
+        >
+    with $Provider<SubmitRunScoreFun> {
+  /// Hands a finished run's total to the leaderboards: every run to the
+  /// all-time board, a daily run to the day's too, where everyone played the
+  /// same pieces. A run that scored nothing has nothing to rank.
+  SubmitRunScoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'submitRunScoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$submitRunScoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<SubmitRunScoreFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SubmitRunScoreFun create(Ref ref) {
+    return submitRunScore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SubmitRunScoreFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SubmitRunScoreFun>(value),
+    );
+  }
+}
+
+String _$submitRunScoreHash() => r'4ec36090d32cd4c3b57d26797403edf755264506';
+
 /// Asks the OS for its rating prompt when [reviewDue] allows it, as a run's
 /// end has finished celebrating; true when it asked. Never a custom prompt
 /// first: the OS's own, or nothing.
