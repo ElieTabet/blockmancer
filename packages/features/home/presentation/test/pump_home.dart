@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_presentation/home_presentation.dart';
 import 'package:home_presentation/src/providers_di.br.dart'
-    show MarkJokersAnnouncedFun, ShowDailyLeaderboardFun;
+    show MarkJokersAnnouncedFun, MarkSpellbookSeenFun, ShowDailyLeaderboardFun;
 import 'package:home_presentation/src/widgets/home_widget.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
@@ -53,6 +53,35 @@ const tuning = JokerTuning(
 
 /// The game's 20 jokers in their 10 pairs, as the rules order them.
 const collection = JokerCollection(
+  kinds: {
+    .anchor: .additiveMult,
+    .avalanche: .chips,
+    .bigbox: .drawWeight,
+    .brink: .multiplicativeMult,
+    .collector: .additiveMult,
+    .column: .multiplicativeMult,
+    .combo: .additiveMult,
+    .ember: .additiveMult,
+    .finisher: .multiplicativeMult,
+    .fullhouse: .additiveMult,
+    .hattrick: .flatBonus,
+    .heavy: .multiplicativeMult,
+    .lantern: .boardEffect,
+    .momentum: .additiveMult,
+    .patience: .additiveMult,
+    .pockets: .boardEffect,
+    .precision: .additiveMult,
+    .prism: .chips,
+    .quarry: .boardEffect,
+    .saver: .flatBonus,
+    .sprinter: .additiveMult,
+    .stonemason: .chips,
+    .sweep: .flatBonus,
+    .symmetry: .additiveMult,
+    .tiny: .drawWeight,
+    .twin: .multiplicativeMult,
+  },
+  mastery: MasteryThresholds(bronze: 1, gold: 15, silver: 5),
   pairs: [
     JokerPair(first: .combo, second: .collector, unlock: .starting()),
     JokerPair(first: .patience, second: .twin, unlock: .starting()),
@@ -168,7 +197,8 @@ final rubbleBeaten = freshProgression().copyWith(
 
 /// Mounts Home on a screen tall enough for the whole map, on today's daily
 /// of 17 October 2026, its marker still unless [reduceMotion] is off.
-/// Announcing jokers does nothing unless [markJokersAnnounced] says otherwise.
+/// Announcing jokers, and the Spellbook marking its jokers seen, do nothing
+/// unless [markJokersAnnounced] or [markSpellbookSeen] says otherwise.
 /// [screen] is Home unless another of its screens is given, on a [viewSize]
 /// view, with the game's [collection] of jokers unless [jokerCollection] says
 /// otherwise. The daily leaderboard shows nothing unless
@@ -200,6 +230,7 @@ Future<FakeHomeRouting> pumpHome(
   bool hasSavedRun = false,
   JokerCollection jokerCollection = collection,
   MarkJokersAnnouncedFun? markJokersAnnounced,
+  MarkSpellbookSeenFun? markSpellbookSeen,
   int? practiceBest,
   Future<Progression> Function()? progression,
   bool reduceMotion = true,
@@ -225,6 +256,7 @@ Future<FakeHomeRouting> pumpHome(
           hasSavedRun: (ref) async => hasSavedRun,
           jokerCollection: (ref) => jokerCollection,
           markJokersAnnounced: (ref) => markJokersAnnounced ?? () async {},
+          markSpellbookSeen: (ref) => markSpellbookSeen ?? () async {},
           openStoreListing: (ref) => updateOffer?.openStore ?? () async => true,
           practiceBest: (ref) async => practiceBest,
           progression: (ref) => progression?.call() ?? _fresh(),

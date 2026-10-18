@@ -69,11 +69,12 @@ const _version3Profile = <String, dynamic>{
   'version': 3,
 };
 
-/// [_writtenProgression] as the domain reads it, with no joker stats yet and
-/// the card of the boss it beat counted as seen.
+/// [_writtenProgression] as the domain reads it, with no joker stats yet, the
+/// card of the boss it beat counted as seen, and every joker it had too.
 const _progressed = Progression(
   bossCardsSeen: {.rubble},
   jokerStats: {},
+  spellbookSeen: {.patience, .twin, .stonemason, .quarry},
   tutorialDone: true,
   unannouncedJokers: {},
   unlockedJokers: {.patience, .twin, .stonemason, .quarry},
@@ -100,14 +101,14 @@ Future<Map<String, dynamic>> _storedProfile() async {
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  test('a version 1 profile migrates to a valid version 7 one', () {
+  test('a version 1 profile migrates to a valid version 8 one', () {
     // Given / When
     final migrated = ProfileDto.fromJson(
       migrateProfile(_version1Profile, startingProgression: starting),
     );
 
     // Then
-    expect(migrated.version, 7);
+    expect(migrated.version, 8);
     expect(migrated.bests.daily, {'20261016': 640});
     expect(migrated.bests.practice, 900);
     expect(migrated.bests.worlds, isEmpty);
@@ -117,7 +118,7 @@ void main() {
     );
   });
 
-  test('a version 2 profile migrates to a valid version 7 one: its bests and '
+  test('a version 2 profile migrates to a valid version 8 one: its bests and '
       'progression kept, no world best and no joker stats yet', () {
     // Given / When
     final migrated = ProfileDto.fromJson(
@@ -125,7 +126,7 @@ void main() {
     );
 
     // Then
-    expect(migrated.version, 7);
+    expect(migrated.version, 8);
     expect(migrated.bests.daily, {'20261016': 640});
     expect(migrated.bests.practice, 900);
     expect(migrated.bests.worlds, isEmpty);
@@ -133,7 +134,7 @@ void main() {
   });
 
   test(
-    'a version 3 profile migrates to a valid version 7 one: everything kept, '
+    'a version 3 profile migrates to a valid version 8 one: everything kept, '
     'its joker stats starting at nothing',
     () {
       // Given / When
@@ -142,7 +143,7 @@ void main() {
       );
 
       // Then
-      expect(migrated.version, 7);
+      expect(migrated.version, 8);
       expect(migrated.bests.worlds, {'rubble': 5400});
       expect(migrated.progression.jokerStats, isEmpty);
       expect(migrated.progression.toDomain(), _progressed);
@@ -325,7 +326,7 @@ void main() {
 
     // Then
     final worlds = migrated.progression.toDomain().worlds;
-    expect(migrated.version, 7);
+    expect(migrated.version, 8);
     expect(
       worlds.keys,
       unorderedEquals(const [WorldId.rubble, WorldId.gravity, WorldId.tide]),
@@ -353,8 +354,32 @@ void main() {
     );
 
     // Then
-    expect(migrated.version, 7);
+    expect(migrated.version, 8);
     expect(migrated.progression.toDomain().bossCardsSeen, {WorldId.rubble});
+  });
+
+  test('a version 7 profile counts every joker it had unlocked as seen by the '
+      'Spellbook, so none wears NEW', () {
+    // Given: version 3's progression, as version 7
+    final version7 = {
+      ..._version3Profile,
+      'progression': {
+        ..._version3Profile['progression'] as Map<String, dynamic>,
+        'bossCardsSeen': ['rubble'],
+        'jokerStats': <String, dynamic>{},
+        'unannouncedJokers': <String>[],
+      },
+      'version': 7,
+    };
+
+    // When
+    final migrated = ProfileDto.fromJson(
+      migrateProfile(version7, startingProgression: starting),
+    );
+
+    // Then
+    expect(migrated.version, 8);
+    expect(migrated.progression.toDomain(), _progressed);
   });
 
   test('a profile naming no version cannot be migrated', () {
@@ -379,7 +404,7 @@ void main() {
     });
 
     test(
-      'When the profile is first read, Then it is written as version 7 and the '
+      'When the profile is first read, Then it is written as version 8 and the '
       'legacy bests are gone',
       () async {
         // When
@@ -390,7 +415,7 @@ void main() {
         // Then
         final stored = await SharedPreferences.getInstance();
         final profile = await _storedProfile();
-        expect(profile['version'], 7);
+        expect(profile['version'], 8);
         expect(profile['bests'], {
           'daily': {'20261016': 640},
           'practice': 900,
@@ -430,7 +455,7 @@ void main() {
 
   test(
     'Given a device with nothing on it, When the profile is first read, Then '
-    'it is a version 7 profile with no bests at the starting progression',
+    'it is a version 8 profile with no bests at the starting progression',
     () async {
       // When
       final progression = await SharedPreferencesProgressionStore(
@@ -440,7 +465,7 @@ void main() {
       // Then
       final profile = await _storedProfile();
       expect(progression, starting);
-      expect(profile['version'], 7);
+      expect(profile['version'], 8);
       expect(profile['bests'], {
         'daily': <String, int>{},
         'practice': null,
@@ -487,7 +512,7 @@ void main() {
       // Then
       expect(progression, starting);
       expect(best, isNull);
-      expect((await _storedProfile())['version'], 7);
+      expect((await _storedProfile())['version'], 8);
       expect(await scores.best(const GameMode.practice()), 1200);
     });
   }

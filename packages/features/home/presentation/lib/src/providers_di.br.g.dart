@@ -318,6 +318,61 @@ final class MarkJokersAnnouncedProvider
 String _$markJokersAnnouncedHash() =>
     r'133e313d0b7fa007ed68932613a15566e4b2b77a';
 
+/// Counts every unlocked joker as seen by the Spellbook, so their NEW badges
+/// don't show again.
+
+@ProviderFor(markSpellbookSeen)
+final markSpellbookSeenProvider = MarkSpellbookSeenProvider._();
+
+/// Counts every unlocked joker as seen by the Spellbook, so their NEW badges
+/// don't show again.
+
+final class MarkSpellbookSeenProvider
+    extends
+        $FunctionalProvider<
+          MarkSpellbookSeenFun,
+          MarkSpellbookSeenFun,
+          MarkSpellbookSeenFun
+        >
+    with $Provider<MarkSpellbookSeenFun> {
+  /// Counts every unlocked joker as seen by the Spellbook, so their NEW badges
+  /// don't show again.
+  MarkSpellbookSeenProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markSpellbookSeenProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$markSpellbookSeenHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkSpellbookSeenFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MarkSpellbookSeenFun create(Ref ref) {
+    return markSpellbookSeen(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkSpellbookSeenFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MarkSpellbookSeenFun>(value),
+    );
+  }
+}
+
+String _$markSpellbookSeenHash() => r'193246ff69cc1a5d2af537617aa49c9363332305';
+
 /// The practice best on this device, or null before a first practice run.
 
 @ProviderFor(practiceBest)

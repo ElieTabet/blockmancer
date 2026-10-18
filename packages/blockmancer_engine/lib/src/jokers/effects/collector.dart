@@ -11,6 +11,9 @@ final class Collector extends JokerEffect {
   JokerId get id => .collector;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .combo;
 
   @override

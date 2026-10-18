@@ -11,6 +11,9 @@ final class Momentum extends JokerEffect {
   JokerId get id => .momentum;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .sprinter;
 
   @override

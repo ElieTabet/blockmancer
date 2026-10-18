@@ -10,6 +10,9 @@ abstract class JokerEffect {
 
   JokerId get id;
 
+  /// What it does to a score, as the Spellbook sorts it.
+  JokerKind get kind;
+
   /// The joker this one pairs with: offers favour it once this one is owned.
   JokerId get partner;
 

@@ -5,7 +5,7 @@ part 'profile_dto.br.g.dart';
 
 /// The profile's schema version. Bump it with each change to these DTOs, and
 /// teach `migrateProfile` to bring the previous version up to it.
-const profileVersion = 7;
+const profileVersion = 8;
 
 /// Brings a profile written by an earlier version up to [profileVersion], one
 /// version at a time; a version this build doesn't know is unreadable.
@@ -35,6 +35,10 @@ Map<String, dynamic> migrateProfile(
   ),
   6 => migrateProfile(
     _fromVersion6(json),
+    startingProgression: startingProgression,
+  ),
+  7 => migrateProfile(
+    _fromVersion7(json),
     startingProgression: startingProgression,
   ),
   profileVersion => json,
@@ -146,6 +150,21 @@ Map<String, dynamic> _fromVersion6(Map<String, dynamic> json) {
   };
 }
 
+/// Version 7 had no Spellbook badges: every joker it had unlocked counts as
+/// seen, so only what is unlocked from now on wears NEW.
+Map<String, dynamic> _fromVersion7(Map<String, dynamic> json) {
+  final progression = json['progression'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'progression': <String, dynamic>{
+      ...progression,
+      'spellbookSeen': progression['unlockedJokers'],
+    },
+    'version': 8,
+  };
+}
+
 const _version5StarUnlocks = [
   (4, ['fullhouse', 'brink']),
   (6, ['finisher', 'hattrick']),
@@ -200,6 +219,7 @@ final class ProgressionDto {
   const ProgressionDto({
     required this.bossCardsSeen,
     required this.jokerStats,
+    required this.spellbookSeen,
     required this.tutorialDone,
     required this.unannouncedJokers,
     required this.unlockedJokers,
@@ -213,6 +233,7 @@ final class ProgressionDto {
           in progression.jokerStats.entries)
         joker.name: .fromDomain(stats),
     },
+    spellbookSeen: [for (final joker in progression.spellbookSeen) joker.name],
     tutorialDone: progression.tutorialDone,
     unannouncedJokers: [
       for (final joker in progression.unannouncedJokers) joker.name,
@@ -235,6 +256,9 @@ final class ProgressionDto {
 
   /// Keyed by the joker's name.
   final Map<String, JokerStatsDto> jokerStats;
+
+  /// By the joker's name.
+  final List<String> spellbookSeen;
   final bool tutorialDone;
   final List<String> unannouncedJokers;
   final List<String> unlockedJokers;
@@ -249,6 +273,9 @@ final class ProgressionDto {
     jokerStats: {
       for (final MapEntry(key: joker, value: stats) in jokerStats.entries)
         JokerId.values.byName(joker): stats.toDomain(),
+    },
+    spellbookSeen: {
+      for (final joker in spellbookSeen) JokerId.values.byName(joker),
     },
     tutorialDone: tutorialDone,
     unannouncedJokers: {

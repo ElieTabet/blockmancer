@@ -26,7 +26,7 @@ void main() {
       // Then
       expect(rootStackNames(router), [TabShellRoute.name, SpellbookRoute.name]);
       expect(
-        find.text('12 of ${JokerId.values.length} jokers unlocked'),
+        find.text('12 / ${JokerId.values.length} collected'),
         findsOneWidget,
       );
 

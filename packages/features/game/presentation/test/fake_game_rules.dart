@@ -74,6 +74,7 @@ const testConfig = RunConfig(
     twinFactor: 3,
     twinMinLines: 2,
   ),
+  mastery: MasteryThresholds(bronze: 1, gold: 15, silver: 5),
   offerCount: 3,
   partnerBias: 0.75,
   revivePieces: 3,
@@ -162,6 +163,9 @@ final class FakeGameRules implements GameRules {
 
   @override
   JokerId partnerOf(JokerId id) => id == .twin ? .patience : .twin;
+
+  @override
+  JokerKind kindOf(JokerId id) => .additiveMult;
 
   @override
   Transition pickJoker(RunState state, {required JokerId id}) =>

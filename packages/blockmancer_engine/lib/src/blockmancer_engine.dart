@@ -60,6 +60,9 @@ final class BlockmancerEngine implements GameRules {
   JokerId partnerOf(JokerId id) => jokerEffect(id).partner;
 
   @override
+  JokerKind kindOf(JokerId id) => jokerEffect(id).kind;
+
+  @override
   Transition pickJoker(RunState state, {required JokerId id}) =>
       engine.pickJoker(state, id: id);
 

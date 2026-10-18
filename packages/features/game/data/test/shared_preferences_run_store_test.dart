@@ -92,6 +92,7 @@ const _config = RunConfig(
   chipsPerCell: 20,
   jokerPool: [.anchor, .patience, .twin, .stonemason],
   jokers: _tuning,
+  mastery: MasteryThresholds(bronze: 1, gold: 15, silver: 5),
   offerCount: 3,
   partnerBias: 0.75,
   revivePieces: 3,
@@ -501,7 +502,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 10);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 11);
   });
 
   for (final (name, raw) in [
@@ -770,6 +771,30 @@ void main() {
       );
     },
   );
+
+  test('a save from version 10 resumes with the mastery tiers version 11 first '
+      'shipped', () async {
+    // Given: today's save as version 10 wrote it, without mastery
+    final json = SavedRunDto.fromDomain(
+      SavedRun(mode: const .daily(day: 20261017), run: _midRound),
+    ).toJson()..['version'] = 10;
+    ((json['run'] as Map<String, dynamic>)['config'] as Map<String, dynamic>)
+        .remove('mastery');
+    SharedPreferences.setMockInitialValues({'run.saved': jsonEncode(json)});
+
+    // When
+    final loaded = await const SharedPreferencesRunStore().load();
+
+    // Then
+    expect(
+      loaded?.run.config.mastery,
+      const MasteryThresholds(bronze: 1, gold: 15, silver: 5),
+    );
+    expect(
+      loaded?.run.config.copyWith(mastery: _config.mastery),
+      _midRound.config,
+    );
+  });
 
   test("a save from version 9 resumes with Ember's old rule, no mult on every "
       'clear', () async {

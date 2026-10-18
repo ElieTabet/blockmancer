@@ -78,6 +78,9 @@ RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
       .map((e) => e as String)
       .toList(),
   jokers: JokerTuningDto.fromJson(json['jokers'] as Map<String, dynamic>),
+  mastery: MasteryThresholdsDto.fromJson(
+    json['mastery'] as Map<String, dynamic>,
+  ),
   offerCount: (json['offerCount'] as num).toInt(),
   partnerBias: (json['partnerBias'] as num).toDouble(),
   revivePieces: (json['revivePieces'] as num).toInt(),
@@ -99,6 +102,7 @@ Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
       'chipsPerCell': instance.chipsPerCell,
       'jokerPool': instance.jokerPool,
       'jokers': instance.jokers.toJson(),
+      'mastery': instance.mastery.toJson(),
       'offerCount': instance.offerCount,
       'partnerBias': instance.partnerBias,
       'revivePieces': instance.revivePieces,
@@ -110,6 +114,22 @@ Map<String, dynamic> _$RunConfigDtoToJson(RunConfigDto instance) =>
       'traySize': instance.traySize,
       'world': instance.world,
     };
+
+MasteryThresholdsDto _$MasteryThresholdsDtoFromJson(
+  Map<String, dynamic> json,
+) => MasteryThresholdsDto(
+  bronze: (json['bronze'] as num).toInt(),
+  gold: (json['gold'] as num).toInt(),
+  silver: (json['silver'] as num).toInt(),
+);
+
+Map<String, dynamic> _$MasteryThresholdsDtoToJson(
+  MasteryThresholdsDto instance,
+) => <String, dynamic>{
+  'bronze': instance.bronze,
+  'gold': instance.gold,
+  'silver': instance.silver,
+};
 
 StarUnlockDto _$StarUnlockDtoFromJson(Map<String, dynamic> json) =>
     StarUnlockDto(

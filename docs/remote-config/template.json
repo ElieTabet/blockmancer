@@ -168,6 +168,27 @@
       "description": "Chips per cleared cell",
       "valueType": "NUMBER"
     },
+    "mastery_bronze_wins": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Spellbook: runs won with a joker for its bronze tier",
+      "valueType": "NUMBER"
+    },
+    "mastery_gold_wins": {
+      "defaultValue": {
+        "value": "15"
+      },
+      "description": "Spellbook: runs won with a joker for its gold tier",
+      "valueType": "NUMBER"
+    },
+    "mastery_silver_wins": {
+      "defaultValue": {
+        "value": "5"
+      },
+      "description": "Spellbook: runs won with a joker for its silver tier",
+      "valueType": "NUMBER"
+    },
     "offer_count": {
       "defaultValue": {
         "value": "3"

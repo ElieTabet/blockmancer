@@ -28,6 +28,7 @@ void main() {
       progression,
       const Progression(
         jokerStats: {},
+        spellbookSeen: {.combo, .patience, .twin},
         tutorialDone: false,
         unannouncedJokers: {},
         unlockedJokers: {.combo, .patience, .twin},

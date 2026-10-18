@@ -10,6 +10,9 @@ final class BigBox extends JokerEffect {
   JokerId get id => .bigbox;
 
   @override
+  JokerKind get kind => .drawWeight;
+
+  @override
   JokerId get partner => .heavy;
 
   @override

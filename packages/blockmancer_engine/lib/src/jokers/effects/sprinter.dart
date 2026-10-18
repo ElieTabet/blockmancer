@@ -11,6 +11,9 @@ final class Sprinter extends JokerEffect {
   JokerId get id => .sprinter;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .momentum;
 
   @override

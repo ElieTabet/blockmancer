@@ -3,7 +3,8 @@ import 'package:shared_domain/shared_domain.dart';
 
 /// Every joker in pairs, from the rules alone: a new player's first, in the
 /// rules' order, then each world's boss's in the map's order, then the stars'
-/// from fewest to most, described with the numbers Remote Config tunes.
+/// from fewest to most, described with the numbers Remote Config tunes, each
+/// with its kind, and the wins its mastery tiers take.
 JokerCollection jokerCollectionOf(
   GameRules rules, {
   required RemoteValueFun valueOf,
@@ -37,6 +38,8 @@ JokerCollection jokerCollectionOf(
   final config = tuned(rules.defaultConfig, valueOf);
 
   return JokerCollection(
+    kinds: {for (final joker in JokerId.values) joker: rules.kindOf(joker)},
+    mastery: config.mastery,
     pairs: pairs,
     traySize: config.traySize,
     tuning: config.jokers,

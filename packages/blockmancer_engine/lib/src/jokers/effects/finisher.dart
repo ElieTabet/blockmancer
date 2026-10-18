@@ -11,6 +11,9 @@ final class Finisher extends JokerEffect {
   JokerId get id => .finisher;
 
   @override
+  JokerKind get kind => .multiplicativeMult;
+
+  @override
   JokerId get partner => .hattrick;
 
   @override

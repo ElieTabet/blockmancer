@@ -11,6 +11,9 @@ final class TwinLines extends JokerEffect {
   JokerId get id => .twin;
 
   @override
+  JokerKind get kind => .multiplicativeMult;
+
+  @override
   JokerId get partner => .patience;
 
   @override

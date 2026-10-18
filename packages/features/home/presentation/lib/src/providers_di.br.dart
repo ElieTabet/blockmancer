@@ -53,6 +53,15 @@ MarkJokersAnnouncedFun markJokersAnnounced(Ref ref) => throw UnimplementedError(
   'markJokersAnnouncedProvider must be overridden by the composition layer',
 );
 
+typedef MarkSpellbookSeenFun = Future<void> Function();
+
+/// Counts every unlocked joker as seen by the Spellbook, so their NEW badges
+/// don't show again.
+@riverpod
+MarkSpellbookSeenFun markSpellbookSeen(Ref ref) => throw UnimplementedError(
+  'markSpellbookSeenProvider must be overridden by the composition layer',
+);
+
 /// The practice best on this device, or null before a first practice run.
 @riverpod
 Future<int?> practiceBest(Ref ref) => throw UnimplementedError(

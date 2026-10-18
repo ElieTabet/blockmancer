@@ -11,6 +11,9 @@ final class Heavyweight extends JokerEffect {
   JokerId get id => .heavy;
 
   @override
+  JokerKind get kind => .multiplicativeMult;
+
+  @override
   JokerId get partner => .bigbox;
 
   @override

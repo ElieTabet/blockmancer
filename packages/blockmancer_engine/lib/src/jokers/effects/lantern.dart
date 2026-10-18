@@ -11,6 +11,9 @@ final class Lantern extends JokerEffect {
   JokerId get id => .lantern;
 
   @override
+  JokerKind get kind => .boardEffect;
+
+  @override
   JokerId get partner => .ember;
 
   @override

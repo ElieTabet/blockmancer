@@ -13,6 +13,9 @@ final class Prism extends JokerEffect {
   JokerId get id => .prism;
 
   @override
+  JokerKind get kind => .chips;
+
+  @override
   JokerId get partner => .symmetry;
 
   @override

@@ -11,6 +11,9 @@ final class Precision extends JokerEffect {
   JokerId get id => .precision;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .tiny;
 
   @override

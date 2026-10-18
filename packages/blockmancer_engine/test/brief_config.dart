@@ -42,6 +42,7 @@ const briefConfig = RunConfig(
     twinFactor: 3,
     twinMinLines: 2,
   ),
+  mastery: MasteryThresholds(bronze: 1, gold: 15, silver: 5),
   offerCount: 3,
   partnerBias: 0.75,
   revivePieces: 3,

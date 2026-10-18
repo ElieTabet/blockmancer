@@ -452,8 +452,6 @@ class _Translations$home$spellbook$fr extends Translations$home$spellbook$en {
 	@override String get title => 'Grimoire';
 	@override String get open => 'Grimoire';
 	@override String get close => 'Fermer';
-	@override String progress({required Object unlocked, required Object total}) => '${unlocked} jokers débloqués sur ${total}';
-	@override String partner({required Object name}) => 'Fait la paire avec ${name}';
 	@override String get picked => 'Choisi';
 	@override String get wins => 'Victoires';
 	@override String get best => 'Record';
@@ -463,6 +461,21 @@ class _Translations$home$spellbook$fr extends Translations$home$spellbook$en {
 		one: 'Récolte 1 étoile',
 		other: 'Récolte ${count} étoiles',
 	);
+	@override String collected({required Object count, required Object total}) => '${count} / ${total} collectionnés';
+	@override String pairsMastered({required Object count, required Object total}) => 'Paires maîtrisées ${count} / ${total}';
+	@override String get unknownName => '?';
+	@override String get newBadge => 'NOUVEAU';
+	@override String get partnerTitle => 'Partenaire';
+	@override String get statsTitle => 'Stats';
+	@override late final _Translations$home$spellbook$kinds$fr kinds = _Translations$home$spellbook$kinds$fr._(_root);
+	@override late final _Translations$home$spellbook$tiers$fr tiers = _Translations$home$spellbook$tiers$fr._(_root);
+	@override String toBronze({required Object wins, required Object target}) => '${wins} / ${target} victoires pour le bronze';
+	@override String toSilver({required Object wins, required Object target}) => '${wins} / ${target} victoires pour l\'argent';
+	@override String toGold({required Object wins, required Object target}) => '${wins} / ${target} victoires pour l\'or';
+	@override String get mastered => 'Or : maîtrise complète';
+	@override String cardLabel({required Object name, required Object kind, required Object tier}) => '${name}, ${kind}, ${tier}';
+	@override String lockedLabel({required Object unlock}) => 'Joker verrouillé. ${unlock}';
+	@override String get newLabel => 'Nouveau';
 }
 
 // Path: settings.sections
@@ -628,6 +641,7 @@ class _Translations$game$jokers$stonemason$fr extends Translations$game$jokers$s
 		one: '+${chips} jetons par pierre effacée. ${stones} pierre de plus à chaque manche.',
 		other: '+${chips} jetons par pierre effacée. ${stones} pierres de plus à chaque manche.',
 	);
+	@override String get short => 'Tailleur';
 }
 
 // Path: game.jokers.combo
@@ -639,6 +653,7 @@ class _Translations$game$jokers$combo$fr extends Translations$game$jokers$combo$
 	// Translations
 	@override String get name => 'Roi du combo';
 	@override String description({required Object mult}) => '+${mult} mult par coup d\'affilée qui efface une ligne.';
+	@override String get short => 'Combo';
 }
 
 // Path: game.jokers.patience
@@ -650,6 +665,7 @@ class _Translations$game$jokers$patience$fr extends Translations$game$jokers$pat
 	// Translations
 	@override String get name => 'Patience';
 	@override String description({required Object mult}) => 'Chaque coup qui n\'efface rien met +${mult} mult de côté pour ta prochaine ligne.';
+	@override String get short => 'Patience';
 }
 
 // Path: game.jokers.precision
@@ -661,6 +677,7 @@ class _Translations$game$jokers$precision$fr extends Translations$game$jokers$pr
 	// Translations
 	@override String get name => 'Précision';
 	@override String description({required Object mult, required Object size}) => '+${mult} mult quand une pièce de ${size} cases au plus complète une ligne.';
+	@override String get short => 'Précision';
 }
 
 // Path: game.jokers.collector
@@ -672,6 +689,7 @@ class _Translations$game$jokers$collector$fr extends Translations$game$jokers$co
 	// Translations
 	@override String get name => 'Collectionneur';
 	@override String description({required Object mult}) => 'À chaque ligne effacée, +${mult} mult pour chaque paire de jokers que tu as.';
+	@override String get short => 'Collection';
 }
 
 // Path: game.jokers.twin
@@ -683,6 +701,7 @@ class _Translations$game$jokers$twin$fr extends Translations$game$jokers$twin$en
 	// Translations
 	@override String get name => 'Lignes jumelles';
 	@override String description({required Object factor, required Object lines}) => '×${factor} mult quand tu effaces ${lines} lignes ou plus d\'un coup.';
+	@override String get short => 'Jumelles';
 }
 
 // Path: game.jokers.column
@@ -694,6 +713,7 @@ class _Translations$game$jokers$column$fr extends Translations$game$jokers$colum
 	// Translations
 	@override String get name => 'Chasseur de colonnes';
 	@override String description({required Object factor}) => '×${factor} mult quand ton coup efface une colonne.';
+	@override String get short => 'Colonnes';
 }
 
 // Path: game.jokers.heavy
@@ -705,6 +725,7 @@ class _Translations$game$jokers$heavy$fr extends Translations$game$jokers$heavy$
 	// Translations
 	@override String get name => 'Poids lourd';
 	@override String description({required Object factor, required Object size}) => '×${factor} mult quand une pièce de ${size} cases ou plus complète une ligne.';
+	@override String get short => 'Poids lourd';
 }
 
 // Path: game.jokers.sweep
@@ -716,6 +737,7 @@ class _Translations$game$jokers$sweep$fr extends Translations$game$jokers$sweep$
 	// Translations
 	@override String get name => 'Grand ménage';
 	@override String description({required Object points}) => '+${points} points quand tu vides entièrement le plateau.';
+	@override String get short => 'Ménage';
 }
 
 // Path: game.jokers.quarry
@@ -730,6 +752,7 @@ class _Translations$game$jokers$quarry$fr extends Translations$game$jokers$quarr
 		one: 'Chaque ligne effacée fait tomber une pierre sur une case vide au hasard.',
 		other: 'Chaque ligne effacée fait tomber ${stones} pierres sur des cases vides au hasard.',
 	);
+	@override String get short => 'Carrière';
 }
 
 // Path: game.jokers.bigbox
@@ -741,6 +764,7 @@ class _Translations$game$jokers$bigbox$fr extends Translations$game$jokers$bigbo
 	// Translations
 	@override String get name => 'Grand format';
 	@override String description({required Object size, required Object factor}) => 'Les pièces de ${size} cases ou plus arrivent ${factor}× plus souvent.';
+	@override String get short => 'Grand format';
 }
 
 // Path: game.jokers.tiny
@@ -752,6 +776,7 @@ class _Translations$game$jokers$tiny$fr extends Translations$game$jokers$tiny$en
 	// Translations
 	@override String get name => 'Petits outils';
 	@override String description({required Object size, required Object factor}) => 'Les pièces de ${size} cases au plus arrivent ${factor}× plus souvent.';
+	@override String get short => 'Petits outils';
 }
 
 // Path: game.jokers.pockets
@@ -766,6 +791,7 @@ class _Translations$game$jokers$pockets$fr extends Translations$game$jokers$pock
 		one: '+${pieces} pièce à chaque manche.',
 		other: '+${pieces} pièces à chaque manche.',
 	);
+	@override String get short => 'Poches';
 }
 
 // Path: game.jokers.saver
@@ -777,6 +803,7 @@ class _Translations$game$jokers$saver$fr extends Translations$game$jokers$saver$
 	// Translations
 	@override String get name => 'Épargnant';
 	@override String description({required Object points}) => 'Chaque pièce non jouée à la fin d\'une manche gagnée rapporte +${points} points de partie.';
+	@override String get short => 'Épargnant';
 }
 
 // Path: game.jokers.anchor
@@ -788,6 +815,7 @@ class _Translations$game$jokers$anchor$fr extends Translations$game$jokers$ancho
 	// Translations
 	@override String get name => 'Ancre';
 	@override String description({required Object mult}) => '+${mult} mult quand ton coup efface la ligne du bas.';
+	@override String get short => 'Ancre';
 }
 
 // Path: game.jokers.avalanche
@@ -802,6 +830,7 @@ class _Translations$game$jokers$avalanche$fr extends Translations$game$jokers$av
 		one: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans la ligne du bas.',
 		other: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les ${rows} lignes du bas.',
 	);
+	@override String get short => 'Avalanche';
 }
 
 // Path: game.jokers.fullhouse
@@ -813,6 +842,7 @@ class _Translations$game$jokers$fullhouse$fr extends Translations$game$jokers$fu
 	// Translations
 	@override String get name => 'Salle comble';
 	@override String description({required Object mult, required Object cells}) => '+${mult} mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.';
+	@override String get short => 'Salle comble';
 }
 
 // Path: game.jokers.brink
@@ -824,6 +854,7 @@ class _Translations$game$jokers$brink$fr extends Translations$game$jokers$brink$
 	// Translations
 	@override String get name => 'Sur le fil';
 	@override String description({required Object factor, required Object cells}) => '×${factor} mult si ${cells} cases ou plus sont occupées, pierres comprises, quand ta pièce se pose.';
+	@override String get short => 'Sur le fil';
 }
 
 // Path: game.jokers.finisher
@@ -835,6 +866,7 @@ class _Translations$game$jokers$finisher$fr extends Translations$game$jokers$fin
 	// Translations
 	@override String get name => 'Finisseur';
 	@override String description({required Object factor}) => '×${factor} mult quand tu joues la dernière pièce de ta main.';
+	@override String get short => 'Finisseur';
 }
 
 // Path: game.jokers.hattrick
@@ -846,6 +878,7 @@ class _Translations$game$jokers$hattrick$fr extends Translations$game$jokers$hat
 	// Translations
 	@override String get name => 'Coup du chapeau';
 	@override String description({required Object points, required Object pieces}) => '+${points} points quand chacune des ${pieces} pièces d\'une main complète efface une ligne.';
+	@override String get short => 'Chapeau';
 }
 
 // Path: game.jokers.lantern
@@ -857,6 +890,7 @@ class _Translations$game$jokers$lantern$fr extends Translations$game$jokers$lant
 	// Translations
 	@override String get name => 'Lanterne';
 	@override String get description => 'Les pierres et le brouillard à côté d\'une ligne effacée partent avec elle.';
+	@override String get short => 'Lanterne';
 }
 
 // Path: game.jokers.ember
@@ -868,6 +902,7 @@ class _Translations$game$jokers$ember$fr extends Translations$game$jokers$ember$
 	// Translations
 	@override String get name => 'Braise';
 	@override String description({required Object mult, required Object factor}) => '+${mult} mult à chaque ligne effacée ; ×${factor} mult à la place quand ton coup retire une pierre ou une case de brouillard.';
+	@override String get short => 'Braise';
 }
 
 // Path: game.jokers.sprinter
@@ -879,6 +914,7 @@ class _Translations$game$jokers$sprinter$fr extends Translations$game$jokers$spr
 	// Translations
 	@override String get name => 'Sprinteur';
 	@override String description({required Object mult}) => '+${mult} mult quand la première pièce d\'une nouvelle main efface une ligne.';
+	@override String get short => 'Sprinteur';
 }
 
 // Path: game.jokers.momentum
@@ -890,6 +926,7 @@ class _Translations$game$jokers$momentum$fr extends Translations$game$jokers$mom
 	// Translations
 	@override String get name => 'Élan';
 	@override String description({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par main d\'affilée dont la première pièce a effacé une ligne.';
+	@override String get short => 'Élan';
 }
 
 // Path: game.jokers.symmetry
@@ -901,6 +938,7 @@ class _Translations$game$jokers$symmetry$fr extends Translations$game$jokers$sym
 	// Translations
 	@override String get name => 'Symétrie';
 	@override String description({required Object mult}) => '+${mult} mult quand ta ligne laisse le plateau symétrique, et pas vide.';
+	@override String get short => 'Symétrie';
 }
 
 // Path: game.jokers.prism
@@ -912,6 +950,7 @@ class _Translations$game$jokers$prism$fr extends Translations$game$jokers$prism$
 	// Translations
 	@override String get name => 'Prisme';
 	@override String description({required Object chips}) => '+${chips} jetons par case pleine ou pierre dont la case miroir l\'est aussi, après une ligne effacée.';
+	@override String get short => 'Prisme';
 }
 
 // Path: home.sheet.bossRule
@@ -926,6 +965,34 @@ class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossR
 	@override String get tide => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.';
 	@override String get mirror => 'Tout ce que tu poses atterrit en miroir.';
 	@override String get gravity => 'Pendant la manche du boss, chaque pièce tombe tout en bas.';
+}
+
+// Path: home.spellbook.kinds
+class _Translations$home$spellbook$kinds$fr extends Translations$home$spellbook$kinds$en {
+	_Translations$home$spellbook$kinds$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get additiveMult => '+ Mult';
+	@override String get boardEffect => 'Plateau';
+	@override String get chips => 'Jetons';
+	@override String get drawWeight => 'Tirage';
+	@override String get flatBonus => 'Points bonus';
+	@override String get multiplicativeMult => '× Mult';
+}
+
+// Path: home.spellbook.tiers
+class _Translations$home$spellbook$tiers$fr extends Translations$home$spellbook$tiers$en {
+	_Translations$home$spellbook$tiers$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get none => 'Pas encore maîtrisé';
+	@override String get bronze => 'Bronze';
+	@override String get silver => 'Argent';
+	@override String get gold => 'Or';
 }
 
 /// The flat map containing all translations for locale <fr>.
@@ -1028,56 +1095,82 @@ extension on TranslationsFr {
 			'game.worlds.mirror' => 'Miroir',
 			'game.jokers.stonemason.name' => 'Tailleur de pierre',
 			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(stones, one: '+${chips} jetons par pierre effacée. ${stones} pierre de plus à chaque manche.', other: '+${chips} jetons par pierre effacée. ${stones} pierres de plus à chaque manche.', ), 
+			'game.jokers.stonemason.short' => 'Tailleur',
 			'game.jokers.combo.name' => 'Roi du combo',
 			'game.jokers.combo.description' => ({required Object mult}) => '+${mult} mult par coup d\'affilée qui efface une ligne.',
+			'game.jokers.combo.short' => 'Combo',
 			'game.jokers.patience.name' => 'Patience',
 			'game.jokers.patience.description' => ({required Object mult}) => 'Chaque coup qui n\'efface rien met +${mult} mult de côté pour ta prochaine ligne.',
+			'game.jokers.patience.short' => 'Patience',
 			'game.jokers.precision.name' => 'Précision',
 			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult quand une pièce de ${size} cases au plus complète une ligne.',
+			'game.jokers.precision.short' => 'Précision',
 			'game.jokers.collector.name' => 'Collectionneur',
 			'game.jokers.collector.description' => ({required Object mult}) => 'À chaque ligne effacée, +${mult} mult pour chaque paire de jokers que tu as.',
+			'game.jokers.collector.short' => 'Collection',
 			'game.jokers.twin.name' => 'Lignes jumelles',
 			'game.jokers.twin.description' => ({required Object factor, required Object lines}) => '×${factor} mult quand tu effaces ${lines} lignes ou plus d\'un coup.',
+			'game.jokers.twin.short' => 'Jumelles',
 			'game.jokers.column.name' => 'Chasseur de colonnes',
 			'game.jokers.column.description' => ({required Object factor}) => '×${factor} mult quand ton coup efface une colonne.',
+			'game.jokers.column.short' => 'Colonnes',
 			'game.jokers.heavy.name' => 'Poids lourd',
 			'game.jokers.heavy.description' => ({required Object factor, required Object size}) => '×${factor} mult quand une pièce de ${size} cases ou plus complète une ligne.',
+			'game.jokers.heavy.short' => 'Poids lourd',
 			'game.jokers.sweep.name' => 'Grand ménage',
 			'game.jokers.sweep.description' => ({required Object points}) => '+${points} points quand tu vides entièrement le plateau.',
+			'game.jokers.sweep.short' => 'Ménage',
 			'game.jokers.quarry.name' => 'Carrière',
 			'game.jokers.quarry.description' => ({required num stones}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(stones, one: 'Chaque ligne effacée fait tomber une pierre sur une case vide au hasard.', other: 'Chaque ligne effacée fait tomber ${stones} pierres sur des cases vides au hasard.', ), 
+			'game.jokers.quarry.short' => 'Carrière',
 			'game.jokers.bigbox.name' => 'Grand format',
 			'game.jokers.bigbox.description' => ({required Object size, required Object factor}) => 'Les pièces de ${size} cases ou plus arrivent ${factor}× plus souvent.',
+			'game.jokers.bigbox.short' => 'Grand format',
 			'game.jokers.tiny.name' => 'Petits outils',
 			'game.jokers.tiny.description' => ({required Object size, required Object factor}) => 'Les pièces de ${size} cases au plus arrivent ${factor}× plus souvent.',
+			'game.jokers.tiny.short' => 'Petits outils',
 			'game.jokers.pockets.name' => 'Poches pleines',
 			'game.jokers.pockets.description' => ({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(pieces, one: '+${pieces} pièce à chaque manche.', other: '+${pieces} pièces à chaque manche.', ), 
+			'game.jokers.pockets.short' => 'Poches',
 			'game.jokers.saver.name' => 'Épargnant',
 			'game.jokers.saver.description' => ({required Object points}) => 'Chaque pièce non jouée à la fin d\'une manche gagnée rapporte +${points} points de partie.',
+			'game.jokers.saver.short' => 'Épargnant',
 			'game.jokers.anchor.name' => 'Ancre',
 			'game.jokers.anchor.description' => ({required Object mult}) => '+${mult} mult quand ton coup efface la ligne du bas.',
+			'game.jokers.anchor.short' => 'Ancre',
 			'game.jokers.avalanche.name' => 'Avalanche',
 			'game.jokers.avalanche.description' => ({required num rows, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(rows, one: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans la ligne du bas.', other: 'Après chaque ligne effacée, +${chips} jetons par case pleine restée dans les ${rows} lignes du bas.', ), 
+			'game.jokers.avalanche.short' => 'Avalanche',
 			'game.jokers.fullhouse.name' => 'Salle comble',
 			'game.jokers.fullhouse.description' => ({required Object mult, required Object cells}) => '+${mult} mult toutes les ${cells} cases occupées, pierres comprises, quand ta pièce se pose.',
+			'game.jokers.fullhouse.short' => 'Salle comble',
 			'game.jokers.brink.name' => 'Sur le fil',
 			'game.jokers.brink.description' => ({required Object factor, required Object cells}) => '×${factor} mult si ${cells} cases ou plus sont occupées, pierres comprises, quand ta pièce se pose.',
+			'game.jokers.brink.short' => 'Sur le fil',
 			'game.jokers.finisher.name' => 'Finisseur',
 			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult quand tu joues la dernière pièce de ta main.',
+			'game.jokers.finisher.short' => 'Finisseur',
 			'game.jokers.hattrick.name' => 'Coup du chapeau',
 			'game.jokers.hattrick.description' => ({required Object points, required Object pieces}) => '+${points} points quand chacune des ${pieces} pièces d\'une main complète efface une ligne.',
+			'game.jokers.hattrick.short' => 'Chapeau',
 			'game.jokers.lantern.name' => 'Lanterne',
 			'game.jokers.lantern.description' => 'Les pierres et le brouillard à côté d\'une ligne effacée partent avec elle.',
+			'game.jokers.lantern.short' => 'Lanterne',
 			'game.jokers.ember.name' => 'Braise',
 			'game.jokers.ember.description' => ({required Object mult, required Object factor}) => '+${mult} mult à chaque ligne effacée ; ×${factor} mult à la place quand ton coup retire une pierre ou une case de brouillard.',
+			'game.jokers.ember.short' => 'Braise',
 			'game.jokers.sprinter.name' => 'Sprinteur',
 			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult quand la première pièce d\'une nouvelle main efface une ligne.',
+			'game.jokers.sprinter.short' => 'Sprinteur',
 			'game.jokers.momentum.name' => 'Élan',
 			'game.jokers.momentum.description' => ({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par main d\'affilée dont la première pièce a effacé une ligne.',
+			'game.jokers.momentum.short' => 'Élan',
 			'game.jokers.symmetry.name' => 'Symétrie',
 			'game.jokers.symmetry.description' => ({required Object mult}) => '+${mult} mult quand ta ligne laisse le plateau symétrique, et pas vide.',
+			'game.jokers.symmetry.short' => 'Symétrie',
 			'game.jokers.prism.name' => 'Prisme',
 			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} jetons par case pleine ou pierre dont la case miroir l\'est aussi, après une ligne effacée.',
+			'game.jokers.prism.short' => 'Prisme',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'push.reminder.title' => 'La partie du jour est prête',
@@ -1125,14 +1218,35 @@ extension on TranslationsFr {
 			'home.spellbook.title' => 'Grimoire',
 			'home.spellbook.open' => 'Grimoire',
 			'home.spellbook.close' => 'Fermer',
-			'home.spellbook.progress' => ({required Object unlocked, required Object total}) => '${unlocked} jokers débloqués sur ${total}',
-			'home.spellbook.partner' => ({required Object name}) => 'Fait la paire avec ${name}',
 			'home.spellbook.picked' => 'Choisi',
 			'home.spellbook.wins' => 'Victoires',
 			'home.spellbook.best' => 'Record',
 			'home.spellbook.locked' => 'Verrouillé',
 			'home.spellbook.unlockBoss' => ({required Object world}) => 'Bats le boss de ${world}',
 			'home.spellbook.unlockStars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(count, one: 'Récolte 1 étoile', other: 'Récolte ${count} étoiles', ), 
+			'home.spellbook.collected' => ({required Object count, required Object total}) => '${count} / ${total} collectionnés',
+			'home.spellbook.pairsMastered' => ({required Object count, required Object total}) => 'Paires maîtrisées ${count} / ${total}',
+			'home.spellbook.unknownName' => '?',
+			'home.spellbook.newBadge' => 'NOUVEAU',
+			'home.spellbook.partnerTitle' => 'Partenaire',
+			'home.spellbook.statsTitle' => 'Stats',
+			'home.spellbook.kinds.additiveMult' => '+ Mult',
+			'home.spellbook.kinds.boardEffect' => 'Plateau',
+			'home.spellbook.kinds.chips' => 'Jetons',
+			'home.spellbook.kinds.drawWeight' => 'Tirage',
+			'home.spellbook.kinds.flatBonus' => 'Points bonus',
+			'home.spellbook.kinds.multiplicativeMult' => '× Mult',
+			'home.spellbook.tiers.none' => 'Pas encore maîtrisé',
+			'home.spellbook.tiers.bronze' => 'Bronze',
+			'home.spellbook.tiers.silver' => 'Argent',
+			'home.spellbook.tiers.gold' => 'Or',
+			'home.spellbook.toBronze' => ({required Object wins, required Object target}) => '${wins} / ${target} victoires pour le bronze',
+			'home.spellbook.toSilver' => ({required Object wins, required Object target}) => '${wins} / ${target} victoires pour l\'argent',
+			'home.spellbook.toGold' => ({required Object wins, required Object target}) => '${wins} / ${target} victoires pour l\'or',
+			'home.spellbook.mastered' => 'Or : maîtrise complète',
+			'home.spellbook.cardLabel' => ({required Object name, required Object kind, required Object tier}) => '${name}, ${kind}, ${tier}',
+			'home.spellbook.lockedLabel' => ({required Object unlock}) => 'Joker verrouillé. ${unlock}',
+			'home.spellbook.newLabel' => 'Nouveau',
 			'settings.title' => 'Réglages',
 			'settings.close' => 'Fermer',
 			'settings.sections.game' => 'Jeu',

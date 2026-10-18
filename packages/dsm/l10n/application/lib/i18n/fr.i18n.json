@@ -124,116 +124,142 @@
         "description(param=stones)": {
           "one": "+$chips jetons par pierre effacée. $stones pierre de plus à chaque manche.",
           "other": "+$chips jetons par pierre effacée. $stones pierres de plus à chaque manche."
-        }
+        },
+        "short": "Tailleur"
       },
       "combo": {
         "name": "Roi du combo",
-        "description": "+$mult mult par coup d'affilée qui efface une ligne."
+        "description": "+$mult mult par coup d'affilée qui efface une ligne.",
+        "short": "Combo"
       },
       "patience": {
         "name": "Patience",
-        "description": "Chaque coup qui n'efface rien met +$mult mult de côté pour ta prochaine ligne."
+        "description": "Chaque coup qui n'efface rien met +$mult mult de côté pour ta prochaine ligne.",
+        "short": "Patience"
       },
       "precision": {
         "name": "Précision",
-        "description": "+$mult mult quand une pièce de $size cases au plus complète une ligne."
+        "description": "+$mult mult quand une pièce de $size cases au plus complète une ligne.",
+        "short": "Précision"
       },
       "collector": {
         "name": "Collectionneur",
-        "description": "À chaque ligne effacée, +$mult mult pour chaque paire de jokers que tu as."
+        "description": "À chaque ligne effacée, +$mult mult pour chaque paire de jokers que tu as.",
+        "short": "Collection"
       },
       "twin": {
         "name": "Lignes jumelles",
-        "description": "×$factor mult quand tu effaces $lines lignes ou plus d'un coup."
+        "description": "×$factor mult quand tu effaces $lines lignes ou plus d'un coup.",
+        "short": "Jumelles"
       },
       "column": {
         "name": "Chasseur de colonnes",
-        "description": "×$factor mult quand ton coup efface une colonne."
+        "description": "×$factor mult quand ton coup efface une colonne.",
+        "short": "Colonnes"
       },
       "heavy": {
         "name": "Poids lourd",
-        "description": "×$factor mult quand une pièce de $size cases ou plus complète une ligne."
+        "description": "×$factor mult quand une pièce de $size cases ou plus complète une ligne.",
+        "short": "Poids lourd"
       },
       "sweep": {
         "name": "Grand ménage",
-        "description": "+$points points quand tu vides entièrement le plateau."
+        "description": "+$points points quand tu vides entièrement le plateau.",
+        "short": "Ménage"
       },
       "quarry": {
         "name": "Carrière",
         "description(param=stones)": {
           "one": "Chaque ligne effacée fait tomber une pierre sur une case vide au hasard.",
           "other": "Chaque ligne effacée fait tomber $stones pierres sur des cases vides au hasard."
-        }
+        },
+        "short": "Carrière"
       },
       "bigbox": {
         "name": "Grand format",
-        "description": "Les pièces de $size cases ou plus arrivent $factor× plus souvent."
+        "description": "Les pièces de $size cases ou plus arrivent $factor× plus souvent.",
+        "short": "Grand format"
       },
       "tiny": {
         "name": "Petits outils",
-        "description": "Les pièces de $size cases au plus arrivent $factor× plus souvent."
+        "description": "Les pièces de $size cases au plus arrivent $factor× plus souvent.",
+        "short": "Petits outils"
       },
       "pockets": {
         "name": "Poches pleines",
         "description(param=pieces)": {
           "one": "+$pieces pièce à chaque manche.",
           "other": "+$pieces pièces à chaque manche."
-        }
+        },
+        "short": "Poches"
       },
       "saver": {
         "name": "Épargnant",
-        "description": "Chaque pièce non jouée à la fin d'une manche gagnée rapporte +$points points de partie."
+        "description": "Chaque pièce non jouée à la fin d'une manche gagnée rapporte +$points points de partie.",
+        "short": "Épargnant"
       },
       "anchor": {
         "name": "Ancre",
-        "description": "+$mult mult quand ton coup efface la ligne du bas."
+        "description": "+$mult mult quand ton coup efface la ligne du bas.",
+        "short": "Ancre"
       },
       "avalanche": {
         "name": "Avalanche",
         "description(param=rows)": {
           "one": "Après chaque ligne effacée, +$chips jetons par case pleine restée dans la ligne du bas.",
           "other": "Après chaque ligne effacée, +$chips jetons par case pleine restée dans les $rows lignes du bas."
-        }
+        },
+        "short": "Avalanche"
       },
       "fullhouse": {
         "name": "Salle comble",
-        "description": "+$mult mult toutes les $cells cases occupées, pierres comprises, quand ta pièce se pose."
+        "description": "+$mult mult toutes les $cells cases occupées, pierres comprises, quand ta pièce se pose.",
+        "short": "Salle comble"
       },
       "brink": {
         "name": "Sur le fil",
-        "description": "×$factor mult si $cells cases ou plus sont occupées, pierres comprises, quand ta pièce se pose."
+        "description": "×$factor mult si $cells cases ou plus sont occupées, pierres comprises, quand ta pièce se pose.",
+        "short": "Sur le fil"
       },
       "finisher": {
         "name": "Finisseur",
-        "description": "×$factor mult quand tu joues la dernière pièce de ta main."
+        "description": "×$factor mult quand tu joues la dernière pièce de ta main.",
+        "short": "Finisseur"
       },
       "hattrick": {
         "name": "Coup du chapeau",
-        "description": "+$points points quand chacune des $pieces pièces d'une main complète efface une ligne."
+        "description": "+$points points quand chacune des $pieces pièces d'une main complète efface une ligne.",
+        "short": "Chapeau"
       },
       "lantern": {
         "name": "Lanterne",
-        "description": "Les pierres et le brouillard à côté d'une ligne effacée partent avec elle."
+        "description": "Les pierres et le brouillard à côté d'une ligne effacée partent avec elle.",
+        "short": "Lanterne"
       },
       "ember": {
         "name": "Braise",
-        "description": "+$mult mult à chaque ligne effacée ; ×$factor mult à la place quand ton coup retire une pierre ou une case de brouillard."
+        "description": "+$mult mult à chaque ligne effacée ; ×$factor mult à la place quand ton coup retire une pierre ou une case de brouillard.",
+        "short": "Braise"
       },
       "sprinter": {
         "name": "Sprinteur",
-        "description": "+$mult mult quand la première pièce d'une nouvelle main efface une ligne."
+        "description": "+$mult mult quand la première pièce d'une nouvelle main efface une ligne.",
+        "short": "Sprinteur"
       },
       "momentum": {
         "name": "Élan",
-        "description": "À chaque ligne effacée, +$mult mult par main d'affilée dont la première pièce a effacé une ligne."
+        "description": "À chaque ligne effacée, +$mult mult par main d'affilée dont la première pièce a effacé une ligne.",
+        "short": "Élan"
       },
       "symmetry": {
         "name": "Symétrie",
-        "description": "+$mult mult quand ta ligne laisse le plateau symétrique, et pas vide."
+        "description": "+$mult mult quand ta ligne laisse le plateau symétrique, et pas vide.",
+        "short": "Symétrie"
       },
       "prism": {
         "name": "Prisme",
-        "description": "+$chips jetons par case pleine ou pierre dont la case miroir l'est aussi, après une ligne effacée."
+        "description": "+$chips jetons par case pleine ou pierre dont la case miroir l'est aussi, après une ligne effacée.",
+        "short": "Prisme"
       }
     }
   },
@@ -307,8 +333,6 @@
       "title": "Grimoire",
       "open": "Grimoire",
       "close": "Fermer",
-      "progress": "$unlocked jokers débloqués sur $total",
-      "partner": "Fait la paire avec $name",
       "picked": "Choisi",
       "wins": "Victoires",
       "best": "Record",
@@ -317,7 +341,34 @@
       "unlockStars(param=count)": {
         "one": "Récolte 1 étoile",
         "other": "Récolte $count étoiles"
-      }
+      },
+      "collected": "$count / $total collectionnés",
+      "pairsMastered": "Paires maîtrisées $count / $total",
+      "unknownName": "?",
+      "newBadge": "NOUVEAU",
+      "partnerTitle": "Partenaire",
+      "statsTitle": "Stats",
+      "kinds": {
+        "additiveMult": "+ Mult",
+        "boardEffect": "Plateau",
+        "chips": "Jetons",
+        "drawWeight": "Tirage",
+        "flatBonus": "Points bonus",
+        "multiplicativeMult": "× Mult"
+      },
+      "tiers": {
+        "none": "Pas encore maîtrisé",
+        "bronze": "Bronze",
+        "silver": "Argent",
+        "gold": "Or"
+      },
+      "toBronze": "$wins / $target victoires pour le bronze",
+      "toSilver": "$wins / $target victoires pour l'argent",
+      "toGold": "$wins / $target victoires pour l'or",
+      "mastered": "Or : maîtrise complète",
+      "cardLabel": "$name, $kind, $tier",
+      "lockedLabel": "Joker verrouillé. $unlock",
+      "newLabel": "Nouveau"
     }
   },
   "settings": {

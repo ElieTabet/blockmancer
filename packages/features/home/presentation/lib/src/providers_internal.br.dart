@@ -1,8 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_presentation/src/entities/world_node_status.dart';
 import 'package:home_presentation/src/providers_di.br.dart';
+import 'package:flutter/services.dart';
+import 'package:home_presentation/src/entities/joker_mastery.dart';
+import 'package:home_presentation/src/package_name.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
+import 'package:timber/timber.dart';
 
 part 'providers_internal.br.g.dart';
 
@@ -127,16 +131,108 @@ JokerUnlock jokerUnlock(Ref ref, JokerId joker) => ref
     .firstWhere((pair) => pair.first == joker || pair.second == joker)
     .unlock;
 
-/// How many of the collection's jokers the player has unlocked, and of how
-/// many.
+/// What [joker] does to a score, which colours its frame.
 @riverpod
-({int total, int unlocked}) spellbookProgress(Ref ref) {
-  final total = ref.watch(jokerCollectionProvider).pairs.length * 2;
-  final unlocked = ref.watch(
+JokerKind jokerKind(Ref ref, JokerId joker) => ref.watch(
+  jokerCollectionProvider.select((collection) => collection.kinds[joker]!),
+);
+
+/// [joker]'s mastery tier, from the runs won with it; none until read.
+@riverpod
+MasteryTier jokerTier(Ref ref, JokerId joker) => masteryTierOf(
+  ref.watch(jokerStatsProvider(joker)).runsWon,
+  ref.watch(masteryThresholdsProvider),
+);
+
+/// The runs won with a joker that earn each tier.
+@riverpod
+MasteryThresholds masteryThresholds(Ref ref) => ref.watch(
+  jokerCollectionProvider.select((collection) => collection.mastery),
+);
+
+/// Whether both of pair [index]'s jokers are gold.
+@riverpod
+bool pairMastered(Ref ref, int index) {
+  final pair = ref.watch(
+    jokerCollectionProvider.select((collection) => collection.pairs[index]),
+  );
+
+  return ref.watch(jokerTierProvider(pair.first)) == .gold &&
+      ref.watch(jokerTierProvider(pair.second)) == .gold;
+}
+
+/// How much of the collection the player holds: the jokers unlocked, the
+/// pairs mastered, and of how many.
+@riverpod
+({int collected, int jokers, int mastered, int pairs}) spellbookProgress(
+  Ref ref,
+) {
+  final pairs = ref.watch(
+    jokerCollectionProvider.select((collection) => collection.pairs.length),
+  );
+  final collected = ref.watch(
     progressionProvider.select(
       (progression) => progression.value?.unlockedJokers.length ?? 0,
     ),
   );
+  var mastered = 0;
 
-  return (total: total, unlocked: unlocked);
+  for (var index = 0; index < pairs; index++) {
+    if (ref.watch(pairMasteredProvider(index))) mastered++;
+  }
+
+  return (
+    collected: collected,
+    jokers: pairs * 2,
+    mastered: mastered,
+    pairs: pairs,
+  );
+}
+
+/// The jokers whose art is bundled (`assets/jokers/<id>.png`); the others
+/// show their drawn glyph. Read once from the asset manifest.
+@Riverpod(keepAlive: true)
+Future<Set<JokerId>> jokerArt(Ref ref) async {
+  final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+  final assets = manifest.listAssets().toSet();
+
+  return {
+    for (final joker in JokerId.values)
+      if (assets.contains(jokerArtPath(joker))) joker,
+  };
+}
+
+/// Where [joker]'s art would be bundled.
+String jokerArtPath(JokerId joker) =>
+    'packages/assets/assets/jokers/${joker.name}.png';
+
+/// The jokers unlocked since the Spellbook was last opened, as this visit
+/// found them: their NEW badges stay up until it is left, though the visit
+/// counts them as seen at once.
+@riverpod
+class SpellbookNew extends _$SpellbookNew {
+  @override
+  Future<Set<JokerId>> build() async {
+    // Read, not watched: marking them seen refreshes the progression, which
+    // must not take the badges down mid-visit.
+    final progression = await ref.read(progressionProvider.future);
+    final fresh = progression.unlockedJokers.difference(
+      progression.spellbookSeen,
+    );
+
+    if (fresh.isEmpty) return fresh;
+
+    try {
+      await ref.read(markSpellbookSeenProvider)();
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Marking the Spellbook seen failed; NEW shows again',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return fresh;
+  }
 }

@@ -10,6 +10,9 @@ final class Anchor extends JokerEffect {
   JokerId get id => .anchor;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .avalanche;
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:home_presentation/src/entities/joker_mastery.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -32,6 +33,65 @@ String jokerName(BuildContext context, JokerId id) {
     .symmetry => jokers.symmetry.name,
     .tiny => jokers.tiny.name,
     .twin => jokers.twin.name,
+  };
+}
+
+/// [id]'s name as a card fits it.
+String jokerShortName(BuildContext context, JokerId id) {
+  final jokers = context.t.game.jokers;
+
+  return switch (id) {
+    .anchor => jokers.anchor.short,
+    .avalanche => jokers.avalanche.short,
+    .bigbox => jokers.bigbox.short,
+    .brink => jokers.brink.short,
+    .collector => jokers.collector.short,
+    .column => jokers.column.short,
+    .combo => jokers.combo.short,
+    .ember => jokers.ember.short,
+    .finisher => jokers.finisher.short,
+    .fullhouse => jokers.fullhouse.short,
+    .hattrick => jokers.hattrick.short,
+    .heavy => jokers.heavy.short,
+    .lantern => jokers.lantern.short,
+    .momentum => jokers.momentum.short,
+    .patience => jokers.patience.short,
+    .pockets => jokers.pockets.short,
+    .precision => jokers.precision.short,
+    .prism => jokers.prism.short,
+    .quarry => jokers.quarry.short,
+    .saver => jokers.saver.short,
+    .sprinter => jokers.sprinter.short,
+    .stonemason => jokers.stonemason.short,
+    .sweep => jokers.sweep.short,
+    .symmetry => jokers.symmetry.short,
+    .tiny => jokers.tiny.short,
+    .twin => jokers.twin.short,
+  };
+}
+
+/// What a kind of joker does to a score, in a word or two.
+String jokerKindName(BuildContext context, JokerKind kind) {
+  final kinds = context.t.home.spellbook.kinds;
+
+  return switch (kind) {
+    .additiveMult => kinds.additiveMult,
+    .boardEffect => kinds.boardEffect,
+    .chips => kinds.chips,
+    .drawWeight => kinds.drawWeight,
+    .flatBonus => kinds.flatBonus,
+    .multiplicativeMult => kinds.multiplicativeMult,
+  };
+}
+
+String masteryTierName(BuildContext context, MasteryTier tier) {
+  final tiers = context.t.home.spellbook.tiers;
+
+  return switch (tier) {
+    .none => tiers.none,
+    .bronze => tiers.bronze,
+    .silver => tiers.silver,
+    .gold => tiers.gold,
   };
 }
 

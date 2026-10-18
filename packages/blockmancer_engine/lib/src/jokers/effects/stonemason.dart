@@ -11,6 +11,9 @@ final class Stonemason extends JokerEffect {
   JokerId get id => .stonemason;
 
   @override
+  JokerKind get kind => .chips;
+
+  @override
   JokerId get partner => .quarry;
 
   @override

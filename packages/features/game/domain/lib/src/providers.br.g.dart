@@ -8,6 +8,67 @@ part of 'providers.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// See [MarkSpellbookSeenBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+@ProviderFor(markSpellbookSeen)
+final markSpellbookSeenProvider = MarkSpellbookSeenProvider._();
+
+/// See [MarkSpellbookSeenBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+final class MarkSpellbookSeenProvider
+    extends
+        $FunctionalProvider<
+          MarkSpellbookSeenFun,
+          MarkSpellbookSeenFun,
+          MarkSpellbookSeenFun
+        >
+    with $Provider<MarkSpellbookSeenFun> {
+  /// See [MarkSpellbookSeenBehavior].
+  ///
+  /// Kept alive because it refreshes [progressionProvider] after an await, by
+  /// when an auto-disposed provider's ref may be gone.
+  MarkSpellbookSeenProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markSpellbookSeenProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$markSpellbookSeenHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkSpellbookSeenFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MarkSpellbookSeenFun create(Ref ref) {
+    return markSpellbookSeen(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkSpellbookSeenFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MarkSpellbookSeenFun>(value),
+    );
+  }
+}
+
+String _$markSpellbookSeenHash() => r'2f36f4874e7f1b26b08147156ceb22181fc56926';
+
 /// The best run total of [mode] on this device, or null before its first run.
 
 @ProviderFor(bestScore)

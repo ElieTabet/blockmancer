@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 10;
+const savedRunVersion = 11;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -21,6 +21,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
       7 => migrate(_fromVersion7(json)),
       8 => migrate(_fromVersion8(json)),
       9 => migrate(_fromVersion9(json)),
+      10 => migrate(_fromVersion10(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -208,6 +209,25 @@ Map<String, dynamic> _fromVersion8(Map<String, dynamic> json) {
 
 /// Version 10 gave Ember a mult on every clear; a run saved before it plays
 /// Ember as it did, with none.
+/// Version 10 had no Spellbook mastery: its runs take the tiers version 11
+/// first shipped, as literals. No rule reads them.
+Map<String, dynamic> _fromVersion10(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{
+        ...config,
+        'mastery': const {'bronze': 1, 'gold': 15, 'silver': 5},
+      },
+    },
+    'version': 11,
+  };
+}
+
 Map<String, dynamic> _fromVersion9(Map<String, dynamic> json) {
   final run = json['run'] as Map<String, dynamic>;
   final config = run['config'] as Map<String, dynamic>;
@@ -460,6 +480,7 @@ final class RunConfigDto {
     required this.chipsPerCell,
     required this.jokerPool,
     required this.jokers,
+    required this.mastery,
     required this.offerCount,
     required this.partnerBias,
     required this.revivePieces,
@@ -476,6 +497,7 @@ final class RunConfigDto {
     chipsPerCell: config.chipsPerCell,
     jokerPool: [for (final joker in config.jokerPool) joker.name],
     jokers: .fromDomain(config.jokers),
+    mastery: .fromDomain(config.mastery),
     offerCount: config.offerCount,
     partnerBias: config.partnerBias,
     revivePieces: config.revivePieces,
@@ -494,6 +516,7 @@ final class RunConfigDto {
   final int chipsPerCell;
   final List<String> jokerPool;
   final JokerTuningDto jokers;
+  final MasteryThresholdsDto mastery;
   final int offerCount;
   final double partnerBias;
   final int revivePieces;
@@ -511,6 +534,7 @@ final class RunConfigDto {
     chipsPerCell: chipsPerCell,
     jokerPool: [for (final joker in jokerPool) JokerId.values.byName(joker)],
     jokers: jokers.toDomain(),
+    mastery: mastery.toDomain(),
     offerCount: offerCount,
     partnerBias: partnerBias,
     revivePieces: revivePieces,
@@ -522,6 +546,34 @@ final class RunConfigDto {
     traySize: traySize,
     world: WorldId.values.byName(world),
   );
+}
+
+@JsonSerializable()
+final class MasteryThresholdsDto {
+  const MasteryThresholdsDto({
+    required this.bronze,
+    required this.gold,
+    required this.silver,
+  });
+
+  factory MasteryThresholdsDto.fromDomain(MasteryThresholds mastery) =>
+      MasteryThresholdsDto(
+        bronze: mastery.bronze,
+        gold: mastery.gold,
+        silver: mastery.silver,
+      );
+
+  factory MasteryThresholdsDto.fromJson(Map<String, dynamic> json) =>
+      _$MasteryThresholdsDtoFromJson(json);
+
+  final int bronze;
+  final int gold;
+  final int silver;
+
+  Map<String, dynamic> toJson() => _$MasteryThresholdsDtoToJson(this);
+
+  MasteryThresholds toDomain() =>
+      MasteryThresholds(bronze: bronze, gold: gold, silver: silver);
 }
 
 @JsonSerializable()

@@ -674,25 +674,334 @@ final class JokerUnlockFamily extends $Family
   String toString() => r'jokerUnlockProvider';
 }
 
-/// How many of the collection's jokers the player has unlocked, and of how
-/// many.
+/// What [joker] does to a score, which colours its frame.
+
+@ProviderFor(jokerKind)
+final jokerKindProvider = JokerKindFamily._();
+
+/// What [joker] does to a score, which colours its frame.
+
+final class JokerKindProvider
+    extends $FunctionalProvider<JokerKind, JokerKind, JokerKind>
+    with $Provider<JokerKind> {
+  /// What [joker] does to a score, which colours its frame.
+  JokerKindProvider._({
+    required JokerKindFamily super.from,
+    required JokerId super.argument,
+  }) : super(
+         retry: null,
+         name: r'jokerKindProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$jokerKindHash();
+
+  @override
+  String toString() {
+    return r'jokerKindProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<JokerKind> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  JokerKind create(Ref ref) {
+    final argument = this.argument as JokerId;
+    return jokerKind(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(JokerKind value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<JokerKind>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is JokerKindProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$jokerKindHash() => r'dea3ce53098e330d353564f75cfa289c94e49ccb';
+
+/// What [joker] does to a score, which colours its frame.
+
+final class JokerKindFamily extends $Family
+    with $FunctionalFamilyOverride<JokerKind, JokerId> {
+  JokerKindFamily._()
+    : super(
+        retry: null,
+        name: r'jokerKindProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// What [joker] does to a score, which colours its frame.
+
+  JokerKindProvider call(JokerId joker) =>
+      JokerKindProvider._(argument: joker, from: this);
+
+  @override
+  String toString() => r'jokerKindProvider';
+}
+
+/// [joker]'s mastery tier, from the runs won with it; none until read.
+
+@ProviderFor(jokerTier)
+final jokerTierProvider = JokerTierFamily._();
+
+/// [joker]'s mastery tier, from the runs won with it; none until read.
+
+final class JokerTierProvider
+    extends $FunctionalProvider<MasteryTier, MasteryTier, MasteryTier>
+    with $Provider<MasteryTier> {
+  /// [joker]'s mastery tier, from the runs won with it; none until read.
+  JokerTierProvider._({
+    required JokerTierFamily super.from,
+    required JokerId super.argument,
+  }) : super(
+         retry: null,
+         name: r'jokerTierProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$jokerTierHash();
+
+  @override
+  String toString() {
+    return r'jokerTierProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<MasteryTier> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  MasteryTier create(Ref ref) {
+    final argument = this.argument as JokerId;
+    return jokerTier(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MasteryTier value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MasteryTier>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is JokerTierProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$jokerTierHash() => r'ee97366bfaea34fb81178b821eb4d547ee53d4c5';
+
+/// [joker]'s mastery tier, from the runs won with it; none until read.
+
+final class JokerTierFamily extends $Family
+    with $FunctionalFamilyOverride<MasteryTier, JokerId> {
+  JokerTierFamily._()
+    : super(
+        retry: null,
+        name: r'jokerTierProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// [joker]'s mastery tier, from the runs won with it; none until read.
+
+  JokerTierProvider call(JokerId joker) =>
+      JokerTierProvider._(argument: joker, from: this);
+
+  @override
+  String toString() => r'jokerTierProvider';
+}
+
+/// The runs won with a joker that earn each tier.
+
+@ProviderFor(masteryThresholds)
+final masteryThresholdsProvider = MasteryThresholdsProvider._();
+
+/// The runs won with a joker that earn each tier.
+
+final class MasteryThresholdsProvider
+    extends
+        $FunctionalProvider<
+          MasteryThresholds,
+          MasteryThresholds,
+          MasteryThresholds
+        >
+    with $Provider<MasteryThresholds> {
+  /// The runs won with a joker that earn each tier.
+  MasteryThresholdsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'masteryThresholdsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$masteryThresholdsHash();
+
+  @$internal
+  @override
+  $ProviderElement<MasteryThresholds> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MasteryThresholds create(Ref ref) {
+    return masteryThresholds(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MasteryThresholds value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MasteryThresholds>(value),
+    );
+  }
+}
+
+String _$masteryThresholdsHash() => r'982f9c0671c2018a857c5311a1ac3f12d9320b27';
+
+/// Whether both of pair [index]'s jokers are gold.
+
+@ProviderFor(pairMastered)
+final pairMasteredProvider = PairMasteredFamily._();
+
+/// Whether both of pair [index]'s jokers are gold.
+
+final class PairMasteredProvider extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether both of pair [index]'s jokers are gold.
+  PairMasteredProvider._({
+    required PairMasteredFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'pairMasteredProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$pairMasteredHash();
+
+  @override
+  String toString() {
+    return r'pairMasteredProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    final argument = this.argument as int;
+    return pairMastered(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is PairMasteredProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$pairMasteredHash() => r'116c8e3596e05db805a310d0f15fff2fec8b6ff9';
+
+/// Whether both of pair [index]'s jokers are gold.
+
+final class PairMasteredFamily extends $Family
+    with $FunctionalFamilyOverride<bool, int> {
+  PairMasteredFamily._()
+    : super(
+        retry: null,
+        name: r'pairMasteredProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Whether both of pair [index]'s jokers are gold.
+
+  PairMasteredProvider call(int index) =>
+      PairMasteredProvider._(argument: index, from: this);
+
+  @override
+  String toString() => r'pairMasteredProvider';
+}
+
+/// How much of the collection the player holds: the jokers unlocked, the
+/// pairs mastered, and of how many.
 
 @ProviderFor(spellbookProgress)
 final spellbookProgressProvider = SpellbookProgressProvider._();
 
-/// How many of the collection's jokers the player has unlocked, and of how
-/// many.
+/// How much of the collection the player holds: the jokers unlocked, the
+/// pairs mastered, and of how many.
 
 final class SpellbookProgressProvider
     extends
         $FunctionalProvider<
-          ({int total, int unlocked}),
-          ({int total, int unlocked}),
-          ({int total, int unlocked})
+          ({int collected, int jokers, int mastered, int pairs}),
+          ({int collected, int jokers, int mastered, int pairs}),
+          ({int collected, int jokers, int mastered, int pairs})
         >
-    with $Provider<({int total, int unlocked})> {
-  /// How many of the collection's jokers the player has unlocked, and of how
-  /// many.
+    with $Provider<({int collected, int jokers, int mastered, int pairs})> {
+  /// How much of the collection the player holds: the jokers unlocked, the
+  /// pairs mastered, and of how many.
   SpellbookProgressProvider._()
     : super(
         from: null,
@@ -709,22 +1018,131 @@ final class SpellbookProgressProvider
 
   @$internal
   @override
-  $ProviderElement<({int total, int unlocked})> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  $ProviderElement<({int collected, int jokers, int mastered, int pairs})>
+  $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
-  ({int total, int unlocked}) create(Ref ref) {
+  ({int collected, int jokers, int mastered, int pairs}) create(Ref ref) {
     return spellbookProgress(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(({int total, int unlocked}) value) {
+  Override overrideWithValue(
+    ({int collected, int jokers, int mastered, int pairs}) value,
+  ) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<({int total, int unlocked})>(value),
+      providerOverride:
+          $SyncValueProvider<
+            ({int collected, int jokers, int mastered, int pairs})
+          >(value),
     );
   }
 }
 
-String _$spellbookProgressHash() => r'28b7ef4fa461cf06e7f422e7f14506fe3ec2c392';
+String _$spellbookProgressHash() => r'02f70a40987448fadd8ba50b82fd8adc8dd644c6';
+
+/// The jokers whose art is bundled (`assets/jokers/<id>.png`); the others
+/// show their drawn glyph. Read once from the asset manifest.
+
+@ProviderFor(jokerArt)
+final jokerArtProvider = JokerArtProvider._();
+
+/// The jokers whose art is bundled (`assets/jokers/<id>.png`); the others
+/// show their drawn glyph. Read once from the asset manifest.
+
+final class JokerArtProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Set<JokerId>>,
+          Set<JokerId>,
+          FutureOr<Set<JokerId>>
+        >
+    with $FutureModifier<Set<JokerId>>, $FutureProvider<Set<JokerId>> {
+  /// The jokers whose art is bundled (`assets/jokers/<id>.png`); the others
+  /// show their drawn glyph. Read once from the asset manifest.
+  JokerArtProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'jokerArtProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$jokerArtHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Set<JokerId>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Set<JokerId>> create(Ref ref) {
+    return jokerArt(ref);
+  }
+}
+
+String _$jokerArtHash() => r'd8691d337aaf5c0297d2deb81b31d3676b00c390';
+
+/// The jokers unlocked since the Spellbook was last opened, as this visit
+/// found them: their NEW badges stay up until it is left, though the visit
+/// counts them as seen at once.
+
+@ProviderFor(SpellbookNew)
+final spellbookNewProvider = SpellbookNewProvider._();
+
+/// The jokers unlocked since the Spellbook was last opened, as this visit
+/// found them: their NEW badges stay up until it is left, though the visit
+/// counts them as seen at once.
+final class SpellbookNewProvider
+    extends $AsyncNotifierProvider<SpellbookNew, Set<JokerId>> {
+  /// The jokers unlocked since the Spellbook was last opened, as this visit
+  /// found them: their NEW badges stay up until it is left, though the visit
+  /// counts them as seen at once.
+  SpellbookNewProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'spellbookNewProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$spellbookNewHash();
+
+  @$internal
+  @override
+  SpellbookNew create() => SpellbookNew();
+}
+
+String _$spellbookNewHash() => r'c702f457014654febf507f807c3de370694bb8b6';
+
+/// The jokers unlocked since the Spellbook was last opened, as this visit
+/// found them: their NEW badges stay up until it is left, though the visit
+/// counts them as seen at once.
+
+abstract class _$SpellbookNew extends $AsyncNotifier<Set<JokerId>> {
+  FutureOr<Set<JokerId>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<Set<JokerId>>, Set<JokerId>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<Set<JokerId>>, Set<JokerId>>,
+              AsyncValue<Set<JokerId>>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

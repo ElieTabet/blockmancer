@@ -11,6 +11,9 @@ final class Quarry extends JokerEffect {
   JokerId get id => .quarry;
 
   @override
+  JokerKind get kind => .boardEffect;
+
+  @override
   JokerId get partner => .stonemason;
 
   @override

@@ -8,6 +8,7 @@ import 'package:game_domain/src/behaviors/review_policy.dart';
 import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_boss_card_seen_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_jokers_announced_behavior.dart';
+import 'package:game_domain/src/behaviors/mark_spellbook_seen_behavior.dart';
 import 'package:game_domain/src/behaviors/record_pick_behavior.dart';
 import 'package:game_domain/src/behaviors/record_progression_behavior.dart';
 import 'package:game_domain/src/behaviors/record_run_end_behavior.dart';
@@ -47,6 +48,22 @@ typedef MarkBossCardSeenFun = Future<void> Function(WorldId world);
 
 /// See [MarkJokersAnnouncedBehavior].
 typedef MarkJokersAnnouncedFun = Future<void> Function();
+
+typedef MarkSpellbookSeenFun = Future<void> Function();
+
+/// See [MarkSpellbookSeenBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+@Riverpod(keepAlive: true)
+MarkSpellbookSeenFun markSpellbookSeen(Ref ref) {
+  final mark = MarkSpellbookSeenBehavior(store: _progressionStore(ref));
+
+  return () async {
+    await mark();
+    ref.invalidate(progressionProvider);
+  };
+}
 
 /// See [RecordPickBehavior].
 typedef RecordPickFun = Future<void> Function(JokerId joker);

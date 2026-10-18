@@ -10,6 +10,9 @@ final class DeepPockets extends JokerEffect {
   JokerId get id => .pockets;
 
   @override
+  JokerKind get kind => .boardEffect;
+
+  @override
   JokerId get partner => .saver;
 
   @override

@@ -12,6 +12,9 @@ final class Ember extends JokerEffect {
   JokerId get id => .ember;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .lantern;
 
   @override

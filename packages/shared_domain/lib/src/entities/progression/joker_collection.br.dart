@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_domain/src/entities/game/joker_kind.dart';
+import 'package:shared_domain/src/entities/game/mastery_thresholds.br.dart';
 import 'package:shared_domain/src/entities/game/joker_id.dart';
 import 'package:shared_domain/src/entities/game/joker_tuning.br.dart';
 import 'package:shared_domain/src/entities/game/world_id.dart';
@@ -10,6 +12,12 @@ part 'joker_collection.br.freezed.dart';
 @freezed
 abstract class JokerCollection with _$JokerCollection {
   const factory JokerCollection({
+    /// What each joker does to a score, for its frame.
+    required Map<JokerId, JokerKind> kinds,
+
+    /// The wins that earn each mastery tier.
+    required MasteryThresholds mastery,
+
     /// The new player's pairs first, then each world's, then the stars'.
     required List<JokerPair> pairs,
 

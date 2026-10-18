@@ -42,6 +42,9 @@ ProgressionDto _$ProgressionDtoFromJson(Map<String, dynamic> json) =>
         (k, e) =>
             MapEntry(k, JokerStatsDto.fromJson(e as Map<String, dynamic>)),
       ),
+      spellbookSeen: (json['spellbookSeen'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       tutorialDone: json['tutorialDone'] as bool,
       unannouncedJokers: (json['unannouncedJokers'] as List<dynamic>)
           .map((e) => e as String)
@@ -59,6 +62,7 @@ Map<String, dynamic> _$ProgressionDtoToJson(ProgressionDto instance) =>
     <String, dynamic>{
       'bossCardsSeen': instance.bossCardsSeen,
       'jokerStats': instance.jokerStats.map((k, e) => MapEntry(k, e.toJson())),
+      'spellbookSeen': instance.spellbookSeen,
       'tutorialDone': instance.tutorialDone,
       'unannouncedJokers': instance.unannouncedJokers,
       'unlockedJokers': instance.unlockedJokers,

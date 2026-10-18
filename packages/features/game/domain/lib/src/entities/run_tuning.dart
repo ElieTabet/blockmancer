@@ -235,6 +235,35 @@ final _keys = <_ConfigKey>[
     write: (config, value) => config.copyWith(chipsPerCell: value.toInt()),
   ),
   _ConfigKey(
+    'mastery_bronze_wins',
+    'Spellbook: runs won with a joker for its bronze tier',
+    max: 1000,
+    min: 1,
+    read: (config) => config.mastery.bronze,
+    write: (config, value) => config.copyWith(
+      mastery: config.mastery.copyWith(bronze: value.toInt()),
+    ),
+  ),
+  _ConfigKey(
+    'mastery_gold_wins',
+    'Spellbook: runs won with a joker for its gold tier',
+    max: 1000,
+    min: 1,
+    read: (config) => config.mastery.gold,
+    write: (config, value) =>
+        config.copyWith(mastery: config.mastery.copyWith(gold: value.toInt())),
+  ),
+  _ConfigKey(
+    'mastery_silver_wins',
+    'Spellbook: runs won with a joker for its silver tier',
+    max: 1000,
+    min: 1,
+    read: (config) => config.mastery.silver,
+    write: (config, value) => config.copyWith(
+      mastery: config.mastery.copyWith(silver: value.toInt()),
+    ),
+  ),
+  _ConfigKey(
     'offer_count',
     'Jokers offered at each pick',
     max: 3,

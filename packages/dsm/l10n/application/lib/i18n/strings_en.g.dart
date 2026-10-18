@@ -740,12 +740,6 @@ class Translations$home$spellbook$en {
 	/// en: 'Close'
 	String get close => 'Close';
 
-	/// en: '$unlocked of $total jokers unlocked'
-	String progress({required Object unlocked, required Object total}) => '${unlocked} of ${total} jokers unlocked';
-
-	/// en: 'Pairs with $name'
-	String partner({required Object name}) => 'Pairs with ${name}';
-
 	/// en: 'Picked'
 	String get picked => 'Picked';
 
@@ -766,6 +760,48 @@ class Translations$home$spellbook$en {
 		one: 'Collect 1 star',
 		other: 'Collect ${count} stars',
 	);
+
+	/// en: '$count / $total collected'
+	String collected({required Object count, required Object total}) => '${count} / ${total} collected';
+
+	/// en: 'Pairs mastered $count / $total'
+	String pairsMastered({required Object count, required Object total}) => 'Pairs mastered ${count} / ${total}';
+
+	/// en: '?'
+	String get unknownName => '?';
+
+	/// en: 'NEW'
+	String get newBadge => 'NEW';
+
+	/// en: 'Partner'
+	String get partnerTitle => 'Partner';
+
+	/// en: 'Stats'
+	String get statsTitle => 'Stats';
+
+	late final Translations$home$spellbook$kinds$en kinds = Translations$home$spellbook$kinds$en.internal(_root);
+	late final Translations$home$spellbook$tiers$en tiers = Translations$home$spellbook$tiers$en.internal(_root);
+
+	/// en: '$wins / $target wins to bronze'
+	String toBronze({required Object wins, required Object target}) => '${wins} / ${target} wins to bronze';
+
+	/// en: '$wins / $target wins to silver'
+	String toSilver({required Object wins, required Object target}) => '${wins} / ${target} wins to silver';
+
+	/// en: '$wins / $target wins to gold'
+	String toGold({required Object wins, required Object target}) => '${wins} / ${target} wins to gold';
+
+	/// en: 'Gold: fully mastered'
+	String get mastered => 'Gold: fully mastered';
+
+	/// en: '$name, $kind, $tier'
+	String cardLabel({required Object name, required Object kind, required Object tier}) => '${name}, ${kind}, ${tier}';
+
+	/// en: 'Locked joker. $unlock'
+	String lockedLabel({required Object unlock}) => 'Locked joker. ${unlock}';
+
+	/// en: 'New'
+	String get newLabel => 'New';
 }
 
 // Path: settings.sections
@@ -1039,6 +1075,9 @@ class Translations$game$jokers$stonemason$en {
 		one: '+${chips} chips for each stone cleared. ${stones} extra stone every round.',
 		other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.',
 	);
+
+	/// en: 'Stonemason'
+	String get short => 'Stonemason';
 }
 
 // Path: game.jokers.combo
@@ -1054,6 +1093,9 @@ class Translations$game$jokers$combo$en {
 
 	/// en: '+$mult mult for every clearing move in a row.'
 	String description({required Object mult}) => '+${mult} mult for every clearing move in a row.';
+
+	/// en: 'Combo'
+	String get short => 'Combo';
 }
 
 // Path: game.jokers.patience
@@ -1069,6 +1111,9 @@ class Translations$game$jokers$patience$en {
 
 	/// en: 'Each move without a clear stores +$mult mult for your next clear.'
 	String description({required Object mult}) => 'Each move without a clear stores +${mult} mult for your next clear.';
+
+	/// en: 'Patience'
+	String get short => 'Patience';
 }
 
 // Path: game.jokers.precision
@@ -1084,6 +1129,9 @@ class Translations$game$jokers$precision$en {
 
 	/// en: '+$mult mult when a piece of up to $size cells completes a line.'
 	String description({required Object mult, required Object size}) => '+${mult} mult when a piece of up to ${size} cells completes a line.';
+
+	/// en: 'Precision'
+	String get short => 'Precision';
 }
 
 // Path: game.jokers.collector
@@ -1099,6 +1147,9 @@ class Translations$game$jokers$collector$en {
 
 	/// en: '+$mult mult on every clear for every two jokers you own.'
 	String description({required Object mult}) => '+${mult} mult on every clear for every two jokers you own.';
+
+	/// en: 'Collector'
+	String get short => 'Collector';
 }
 
 // Path: game.jokers.twin
@@ -1114,6 +1165,9 @@ class Translations$game$jokers$twin$en {
 
 	/// en: '×$factor mult when you clear $lines or more lines at once.'
 	String description({required Object factor, required Object lines}) => '×${factor} mult when you clear ${lines} or more lines at once.';
+
+	/// en: 'Twin Lines'
+	String get short => 'Twin Lines';
 }
 
 // Path: game.jokers.column
@@ -1129,6 +1183,9 @@ class Translations$game$jokers$column$en {
 
 	/// en: '×$factor mult when your move clears a column.'
 	String description({required Object factor}) => '×${factor} mult when your move clears a column.';
+
+	/// en: 'Columns'
+	String get short => 'Columns';
 }
 
 // Path: game.jokers.heavy
@@ -1144,6 +1201,9 @@ class Translations$game$jokers$heavy$en {
 
 	/// en: '×$factor mult when a piece of $size+ cells completes a line.'
 	String description({required Object factor, required Object size}) => '×${factor} mult when a piece of ${size}+ cells completes a line.';
+
+	/// en: 'Heavyweight'
+	String get short => 'Heavyweight';
 }
 
 // Path: game.jokers.sweep
@@ -1159,6 +1219,9 @@ class Translations$game$jokers$sweep$en {
 
 	/// en: '+$points points when the board becomes completely empty.'
 	String description({required Object points}) => '+${points} points when the board becomes completely empty.';
+
+	/// en: 'Sweep'
+	String get short => 'Sweep';
 }
 
 // Path: game.jokers.quarry
@@ -1177,6 +1240,9 @@ class Translations$game$jokers$quarry$en {
 		one: 'Every clear drops a new stone on a random empty cell.',
 		other: 'Every clear drops ${stones} new stones on random empty cells.',
 	);
+
+	/// en: 'Quarry'
+	String get short => 'Quarry';
 }
 
 // Path: game.jokers.bigbox
@@ -1192,6 +1258,9 @@ class Translations$game$jokers$bigbox$en {
 
 	/// en: 'Pieces of $size+ cells show up $factor× more often.'
 	String description({required Object size, required Object factor}) => 'Pieces of ${size}+ cells show up ${factor}× more often.';
+
+	/// en: 'Big Box'
+	String get short => 'Big Box';
 }
 
 // Path: game.jokers.tiny
@@ -1207,6 +1276,9 @@ class Translations$game$jokers$tiny$en {
 
 	/// en: 'Pieces of up to $size cells show up $factor× more often.'
 	String description({required Object size, required Object factor}) => 'Pieces of up to ${size} cells show up ${factor}× more often.';
+
+	/// en: 'Tiny Tools'
+	String get short => 'Tiny Tools';
 }
 
 // Path: game.jokers.pockets
@@ -1225,6 +1297,9 @@ class Translations$game$jokers$pockets$en {
 		one: '+${pieces} piece every round.',
 		other: '+${pieces} pieces every round.',
 	);
+
+	/// en: 'Pockets'
+	String get short => 'Pockets';
 }
 
 // Path: game.jokers.saver
@@ -1240,6 +1315,9 @@ class Translations$game$jokers$saver$en {
 
 	/// en: 'Each unused piece when you beat a round gives +$points run points.'
 	String description({required Object points}) => 'Each unused piece when you beat a round gives +${points} run points.';
+
+	/// en: 'Saver'
+	String get short => 'Saver';
 }
 
 // Path: game.jokers.anchor
@@ -1255,6 +1333,9 @@ class Translations$game$jokers$anchor$en {
 
 	/// en: '+$mult mult when your move clears the bottom row.'
 	String description({required Object mult}) => '+${mult} mult when your move clears the bottom row.';
+
+	/// en: 'Anchor'
+	String get short => 'Anchor';
 }
 
 // Path: game.jokers.avalanche
@@ -1273,6 +1354,9 @@ class Translations$game$jokers$avalanche$en {
 		one: '+${chips} chips for each filled cell left in the bottom row after a clear.',
 		other: '+${chips} chips for each filled cell left in the bottom ${rows} rows after a clear.',
 	);
+
+	/// en: 'Avalanche'
+	String get short => 'Avalanche';
 }
 
 // Path: game.jokers.fullhouse
@@ -1288,6 +1372,9 @@ class Translations$game$jokers$fullhouse$en {
 
 	/// en: '+$mult mult for every $cells occupied cells, stones included, as your piece lands.'
 	String description({required Object mult, required Object cells}) => '+${mult} mult for every ${cells} occupied cells, stones included, as your piece lands.';
+
+	/// en: 'Full House'
+	String get short => 'Full House';
 }
 
 // Path: game.jokers.brink
@@ -1303,6 +1390,9 @@ class Translations$game$jokers$brink$en {
 
 	/// en: '×$factor mult when $cells or more cells are occupied, stones included, as your piece lands.'
 	String description({required Object factor, required Object cells}) => '×${factor} mult when ${cells} or more cells are occupied, stones included, as your piece lands.';
+
+	/// en: 'Brink'
+	String get short => 'Brink';
 }
 
 // Path: game.jokers.finisher
@@ -1318,6 +1408,9 @@ class Translations$game$jokers$finisher$en {
 
 	/// en: '×$factor mult when you play the last piece in your tray.'
 	String description({required Object factor}) => '×${factor} mult when you play the last piece in your tray.';
+
+	/// en: 'Finisher'
+	String get short => 'Finisher';
 }
 
 // Path: game.jokers.hattrick
@@ -1333,6 +1426,9 @@ class Translations$game$jokers$hattrick$en {
 
 	/// en: '+$points points when each of the $pieces pieces of a full tray clears a line.'
 	String description({required Object points, required Object pieces}) => '+${points} points when each of the ${pieces} pieces of a full tray clears a line.';
+
+	/// en: 'Hat Trick'
+	String get short => 'Hat Trick';
 }
 
 // Path: game.jokers.lantern
@@ -1348,6 +1444,9 @@ class Translations$game$jokers$lantern$en {
 
 	/// en: 'Stones and fog beside a cleared line are cleared with it.'
 	String get description => 'Stones and fog beside a cleared line are cleared with it.';
+
+	/// en: 'Lantern'
+	String get short => 'Lantern';
 }
 
 // Path: game.jokers.ember
@@ -1363,6 +1462,9 @@ class Translations$game$jokers$ember$en {
 
 	/// en: '+$mult mult on every clear; ×$factor mult instead when your move clears a stone or a fog cell.'
 	String description({required Object mult, required Object factor}) => '+${mult} mult on every clear; ×${factor} mult instead when your move clears a stone or a fog cell.';
+
+	/// en: 'Ember'
+	String get short => 'Ember';
 }
 
 // Path: game.jokers.sprinter
@@ -1378,6 +1480,9 @@ class Translations$game$jokers$sprinter$en {
 
 	/// en: '+$mult mult when the first piece of a fresh tray clears a line.'
 	String description({required Object mult}) => '+${mult} mult when the first piece of a fresh tray clears a line.';
+
+	/// en: 'Sprinter'
+	String get short => 'Sprinter';
 }
 
 // Path: game.jokers.momentum
@@ -1393,6 +1498,9 @@ class Translations$game$jokers$momentum$en {
 
 	/// en: '+$mult mult on every clear for each tray in a row whose first piece cleared a line.'
 	String description({required Object mult}) => '+${mult} mult on every clear for each tray in a row whose first piece cleared a line.';
+
+	/// en: 'Momentum'
+	String get short => 'Momentum';
 }
 
 // Path: game.jokers.symmetry
@@ -1408,6 +1516,9 @@ class Translations$game$jokers$symmetry$en {
 
 	/// en: '+$mult mult when your clear leaves the board mirror-symmetric, and not empty.'
 	String description({required Object mult}) => '+${mult} mult when your clear leaves the board mirror-symmetric, and not empty.';
+
+	/// en: 'Symmetry'
+	String get short => 'Symmetry';
 }
 
 // Path: game.jokers.prism
@@ -1423,6 +1534,9 @@ class Translations$game$jokers$prism$en {
 
 	/// en: '+$chips chips for each filled cell or stone whose mirror cell is one too, after a clear.'
 	String description({required Object chips}) => '+${chips} chips for each filled cell or stone whose mirror cell is one too, after a clear.';
+
+	/// en: 'Prism'
+	String get short => 'Prism';
 }
 
 // Path: home.sheet.bossRule
@@ -1447,6 +1561,54 @@ class Translations$home$sheet$bossRule$en {
 
 	/// en: 'In the boss round, every piece falls to the bottom.'
 	String get gravity => 'In the boss round, every piece falls to the bottom.';
+}
+
+// Path: home.spellbook.kinds
+class Translations$home$spellbook$kinds$en {
+	Translations$home$spellbook$kinds$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '+ Mult'
+	String get additiveMult => '+ Mult';
+
+	/// en: 'Board'
+	String get boardEffect => 'Board';
+
+	/// en: 'Chips'
+	String get chips => 'Chips';
+
+	/// en: 'Draws'
+	String get drawWeight => 'Draws';
+
+	/// en: 'Bonus points'
+	String get flatBonus => 'Bonus points';
+
+	/// en: '× Mult'
+	String get multiplicativeMult => '× Mult';
+}
+
+// Path: home.spellbook.tiers
+class Translations$home$spellbook$tiers$en {
+	Translations$home$spellbook$tiers$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'No mastery yet'
+	String get none => 'No mastery yet';
+
+	/// en: 'Bronze'
+	String get bronze => 'Bronze';
+
+	/// en: 'Silver'
+	String get silver => 'Silver';
+
+	/// en: 'Gold'
+	String get gold => 'Gold';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1549,56 +1711,82 @@ extension on Translations {
 			'game.worlds.mirror' => 'Mirror',
 			'game.jokers.stonemason.name' => 'Stonemason',
 			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones, one: '+${chips} chips for each stone cleared. ${stones} extra stone every round.', other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.', ), 
+			'game.jokers.stonemason.short' => 'Stonemason',
 			'game.jokers.combo.name' => 'Combo King',
 			'game.jokers.combo.description' => ({required Object mult}) => '+${mult} mult for every clearing move in a row.',
+			'game.jokers.combo.short' => 'Combo',
 			'game.jokers.patience.name' => 'Patience',
 			'game.jokers.patience.description' => ({required Object mult}) => 'Each move without a clear stores +${mult} mult for your next clear.',
+			'game.jokers.patience.short' => 'Patience',
 			'game.jokers.precision.name' => 'Precision',
 			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult when a piece of up to ${size} cells completes a line.',
+			'game.jokers.precision.short' => 'Precision',
 			'game.jokers.collector.name' => 'Collector',
 			'game.jokers.collector.description' => ({required Object mult}) => '+${mult} mult on every clear for every two jokers you own.',
+			'game.jokers.collector.short' => 'Collector',
 			'game.jokers.twin.name' => 'Twin Lines',
 			'game.jokers.twin.description' => ({required Object factor, required Object lines}) => '×${factor} mult when you clear ${lines} or more lines at once.',
+			'game.jokers.twin.short' => 'Twin Lines',
 			'game.jokers.column.name' => 'Column Hunter',
 			'game.jokers.column.description' => ({required Object factor}) => '×${factor} mult when your move clears a column.',
+			'game.jokers.column.short' => 'Columns',
 			'game.jokers.heavy.name' => 'Heavyweight',
 			'game.jokers.heavy.description' => ({required Object factor, required Object size}) => '×${factor} mult when a piece of ${size}+ cells completes a line.',
+			'game.jokers.heavy.short' => 'Heavyweight',
 			'game.jokers.sweep.name' => 'Clean Sweep',
 			'game.jokers.sweep.description' => ({required Object points}) => '+${points} points when the board becomes completely empty.',
+			'game.jokers.sweep.short' => 'Sweep',
 			'game.jokers.quarry.name' => 'Quarry',
 			'game.jokers.quarry.description' => ({required num stones}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones, one: 'Every clear drops a new stone on a random empty cell.', other: 'Every clear drops ${stones} new stones on random empty cells.', ), 
+			'game.jokers.quarry.short' => 'Quarry',
 			'game.jokers.bigbox.name' => 'Big Box',
 			'game.jokers.bigbox.description' => ({required Object size, required Object factor}) => 'Pieces of ${size}+ cells show up ${factor}× more often.',
+			'game.jokers.bigbox.short' => 'Big Box',
 			'game.jokers.tiny.name' => 'Tiny Tools',
 			'game.jokers.tiny.description' => ({required Object size, required Object factor}) => 'Pieces of up to ${size} cells show up ${factor}× more often.',
+			'game.jokers.tiny.short' => 'Tiny Tools',
 			'game.jokers.pockets.name' => 'Deep Pockets',
 			'game.jokers.pockets.description' => ({required num pieces}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(pieces, one: '+${pieces} piece every round.', other: '+${pieces} pieces every round.', ), 
+			'game.jokers.pockets.short' => 'Pockets',
 			'game.jokers.saver.name' => 'Saver',
 			'game.jokers.saver.description' => ({required Object points}) => 'Each unused piece when you beat a round gives +${points} run points.',
+			'game.jokers.saver.short' => 'Saver',
 			'game.jokers.anchor.name' => 'Anchor',
 			'game.jokers.anchor.description' => ({required Object mult}) => '+${mult} mult when your move clears the bottom row.',
+			'game.jokers.anchor.short' => 'Anchor',
 			'game.jokers.avalanche.name' => 'Avalanche',
 			'game.jokers.avalanche.description' => ({required num rows, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(rows, one: '+${chips} chips for each filled cell left in the bottom row after a clear.', other: '+${chips} chips for each filled cell left in the bottom ${rows} rows after a clear.', ), 
+			'game.jokers.avalanche.short' => 'Avalanche',
 			'game.jokers.fullhouse.name' => 'Full House',
 			'game.jokers.fullhouse.description' => ({required Object mult, required Object cells}) => '+${mult} mult for every ${cells} occupied cells, stones included, as your piece lands.',
+			'game.jokers.fullhouse.short' => 'Full House',
 			'game.jokers.brink.name' => 'On the Brink',
 			'game.jokers.brink.description' => ({required Object factor, required Object cells}) => '×${factor} mult when ${cells} or more cells are occupied, stones included, as your piece lands.',
+			'game.jokers.brink.short' => 'Brink',
 			'game.jokers.finisher.name' => 'Finisher',
 			'game.jokers.finisher.description' => ({required Object factor}) => '×${factor} mult when you play the last piece in your tray.',
+			'game.jokers.finisher.short' => 'Finisher',
 			'game.jokers.hattrick.name' => 'Hat Trick',
 			'game.jokers.hattrick.description' => ({required Object points, required Object pieces}) => '+${points} points when each of the ${pieces} pieces of a full tray clears a line.',
+			'game.jokers.hattrick.short' => 'Hat Trick',
 			'game.jokers.lantern.name' => 'Lantern',
 			'game.jokers.lantern.description' => 'Stones and fog beside a cleared line are cleared with it.',
+			'game.jokers.lantern.short' => 'Lantern',
 			'game.jokers.ember.name' => 'Ember',
 			'game.jokers.ember.description' => ({required Object mult, required Object factor}) => '+${mult} mult on every clear; ×${factor} mult instead when your move clears a stone or a fog cell.',
+			'game.jokers.ember.short' => 'Ember',
 			'game.jokers.sprinter.name' => 'Sprinter',
 			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult when the first piece of a fresh tray clears a line.',
+			'game.jokers.sprinter.short' => 'Sprinter',
 			'game.jokers.momentum.name' => 'Momentum',
 			'game.jokers.momentum.description' => ({required Object mult}) => '+${mult} mult on every clear for each tray in a row whose first piece cleared a line.',
+			'game.jokers.momentum.short' => 'Momentum',
 			'game.jokers.symmetry.name' => 'Symmetry',
 			'game.jokers.symmetry.description' => ({required Object mult}) => '+${mult} mult when your clear leaves the board mirror-symmetric, and not empty.',
+			'game.jokers.symmetry.short' => 'Symmetry',
 			'game.jokers.prism.name' => 'Prism',
 			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} chips for each filled cell or stone whose mirror cell is one too, after a clear.',
+			'game.jokers.prism.short' => 'Prism',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'push.reminder.title' => 'Today\'s daily run is ready',
@@ -1646,14 +1834,35 @@ extension on Translations {
 			'home.spellbook.title' => 'Spellbook',
 			'home.spellbook.open' => 'Spellbook',
 			'home.spellbook.close' => 'Close',
-			'home.spellbook.progress' => ({required Object unlocked, required Object total}) => '${unlocked} of ${total} jokers unlocked',
-			'home.spellbook.partner' => ({required Object name}) => 'Pairs with ${name}',
 			'home.spellbook.picked' => 'Picked',
 			'home.spellbook.wins' => 'Wins',
 			'home.spellbook.best' => 'Best',
 			'home.spellbook.locked' => 'Locked',
 			'home.spellbook.unlockBoss' => ({required Object world}) => 'Beat the ${world} boss',
 			'home.spellbook.unlockStars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(count, one: 'Collect 1 star', other: 'Collect ${count} stars', ), 
+			'home.spellbook.collected' => ({required Object count, required Object total}) => '${count} / ${total} collected',
+			'home.spellbook.pairsMastered' => ({required Object count, required Object total}) => 'Pairs mastered ${count} / ${total}',
+			'home.spellbook.unknownName' => '?',
+			'home.spellbook.newBadge' => 'NEW',
+			'home.spellbook.partnerTitle' => 'Partner',
+			'home.spellbook.statsTitle' => 'Stats',
+			'home.spellbook.kinds.additiveMult' => '+ Mult',
+			'home.spellbook.kinds.boardEffect' => 'Board',
+			'home.spellbook.kinds.chips' => 'Chips',
+			'home.spellbook.kinds.drawWeight' => 'Draws',
+			'home.spellbook.kinds.flatBonus' => 'Bonus points',
+			'home.spellbook.kinds.multiplicativeMult' => '× Mult',
+			'home.spellbook.tiers.none' => 'No mastery yet',
+			'home.spellbook.tiers.bronze' => 'Bronze',
+			'home.spellbook.tiers.silver' => 'Silver',
+			'home.spellbook.tiers.gold' => 'Gold',
+			'home.spellbook.toBronze' => ({required Object wins, required Object target}) => '${wins} / ${target} wins to bronze',
+			'home.spellbook.toSilver' => ({required Object wins, required Object target}) => '${wins} / ${target} wins to silver',
+			'home.spellbook.toGold' => ({required Object wins, required Object target}) => '${wins} / ${target} wins to gold',
+			'home.spellbook.mastered' => 'Gold: fully mastered',
+			'home.spellbook.cardLabel' => ({required Object name, required Object kind, required Object tier}) => '${name}, ${kind}, ${tier}',
+			'home.spellbook.lockedLabel' => ({required Object unlock}) => 'Locked joker. ${unlock}',
+			'home.spellbook.newLabel' => 'New',
 			'settings.title' => 'Settings',
 			'settings.close' => 'Close',
 			'settings.sections.game' => 'Game',

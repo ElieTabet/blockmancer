@@ -11,6 +11,9 @@ final class HatTrick extends JokerEffect {
   JokerId get id => .hattrick;
 
   @override
+  JokerKind get kind => .flatBonus;
+
+  @override
   JokerId get partner => .finisher;
 
   @override

@@ -12,6 +12,9 @@ final class Brink extends JokerEffect {
   JokerId get id => .brink;
 
   @override
+  JokerKind get kind => .multiplicativeMult;
+
+  @override
   JokerId get partner => .fullhouse;
 
   @override

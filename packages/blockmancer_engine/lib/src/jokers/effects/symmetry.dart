@@ -13,6 +13,9 @@ final class Symmetry extends JokerEffect {
   JokerId get id => .symmetry;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .prism;
 
   @override

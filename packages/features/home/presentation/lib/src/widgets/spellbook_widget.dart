@@ -8,8 +8,8 @@ import 'package:home_presentation/src/providers_internal.br.dart';
 import 'package:home_presentation/src/widgets/spellbook_card.dart';
 import 'package:l10n_application/l10n_application.dart';
 
-/// Every joker, pair by pair: what the unlocked ones do and how they played,
-/// and how to unlock the rest.
+/// Every joker as a collectible card, pair by pair: how much of the
+/// collection is held and mastered, and a card per joker.
 final class SpellbookWidget extends ConsumerWidget {
   const SpellbookWidget({super.key});
 
@@ -37,7 +37,7 @@ final class SpellbookWidget extends ConsumerWidget {
                       ? const SpellbookHeader()
                       : JokerPairRow(index: index - 1),
                   separatorBuilder: (context, index) =>
-                      const SizedBox(height: DSSpace.small),
+                      const SizedBox(height: DSSpace.medium),
                 ),
               ),
             ),
@@ -48,19 +48,19 @@ final class SpellbookWidget extends ConsumerWidget {
   }
 }
 
-/// The title, how many jokers are unlocked, and the way out.
+/// The title and the way out, then how much of the collection is held.
 final class SpellbookHeader extends StatelessWidget {
   const SpellbookHeader({super.key});
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: .stretch,
+    spacing: DSSpace.small,
     children: [
-      Expanded(
-        child: Column(
-          crossAxisAlignment: .start,
-          spacing: DSSpace.xxxsmall,
-          children: [
-            Text(
+      Row(
+        children: [
+          Expanded(
+            child: Text(
               context.t.home.spellbook.title,
               style: DSFont.display(
                 const TextStyle(
@@ -70,25 +70,63 @@ final class SpellbookHeader extends StatelessWidget {
                 ),
               ),
             ),
-            const SpellbookProgress(),
-          ],
-        ),
+          ),
+          const SpellbookCloseButton(),
+        ],
       ),
-      const SpellbookCloseButton(),
+      const SpellbookProgress(),
+      const SizedBox(height: DSSpace.xsmall),
     ],
   );
 }
 
+/// "26 / 26 collected" over a bar, and the pairs mastered.
 final class SpellbookProgress extends ConsumerWidget {
   const SpellbookProgress({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (:total, :unlocked) = ref.watch(spellbookProgressProvider);
+    final (:collected, :jokers, :mastered, :pairs) = ref.watch(
+      spellbookProgressProvider,
+    );
+    final spellbook = context.t.home.spellbook;
 
-    return Text(
-      context.t.home.spellbook.progress(total: total, unlocked: unlocked),
-      style: const TextStyle(color: DSColor.textMuted, fontSize: 14),
+    return Column(
+      crossAxisAlignment: .stretch,
+      spacing: DSSpace.xsmall,
+      children: [
+        Text(
+          spellbook.collected(count: collected, total: jokers),
+          style: const TextStyle(
+            color: DSColor.white,
+            fontSize: 15,
+            fontWeight: .w700,
+          ),
+        ),
+        ClipRRect(
+          borderRadius: .circular(DSCornerRadius.small),
+          child: LinearProgressIndicator(
+            backgroundColor: DSColor.card,
+            color: DSColor.accent,
+            minHeight: 8,
+            value: jokers == 0 ? 0 : collected / jokers,
+          ),
+        ),
+        Row(
+          spacing: DSSpace.xxsmall,
+          children: [
+            const Icon(
+              Icons.workspace_premium_rounded,
+              color: DSMasteryColor.gold,
+              size: 18,
+            ),
+            Text(
+              spellbook.pairsMastered(count: mastered, total: pairs),
+              style: const TextStyle(color: DSColor.textMuted, fontSize: 14),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -104,7 +142,7 @@ final class SpellbookCloseButton extends ConsumerWidget {
   );
 }
 
-/// Pair [index] side by side, linked by a star.
+/// Pair [index] side by side, linked by a star that glows once both are gold.
 final class JokerPairRow extends ConsumerWidget {
   const JokerPairRow({required this.index, super.key});
 
@@ -116,38 +154,59 @@ final class JokerPairRow extends ConsumerWidget {
       jokerCollectionProvider.select((collection) => collection.pairs[index]),
     );
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: .stretch,
-        children: [
-          Expanded(child: SpellbookCard(joker: pair.first)),
-          const PairLink(),
-          Expanded(child: SpellbookCard(joker: pair.second)),
-        ],
-      ),
+    return Row(
+      children: [
+        Expanded(child: SpellbookCard(joker: pair.first)),
+        PairLink(index: index),
+        Expanded(child: SpellbookCard(joker: pair.second)),
+      ],
     );
   }
 }
 
-/// The star line that joins two partners.
-final class PairLink extends StatelessWidget {
-  const PairLink({super.key});
+/// The star line between two partners.
+final class PairLink extends ConsumerWidget {
+  const PairLink({required this.index, super.key});
 
-  static const _width = 22.0;
+  static const _width = 40.0;
+
+  final int index;
 
   @override
-  Widget build(BuildContext context) => const SizedBox(
-    width: _width,
-    child: Stack(
-      alignment: .center,
-      children: [
-        SizedBox(
-          height: 2,
-          width: _width,
-          child: ColoredBox(color: DSColor.accent),
-        ),
-        Icon(Icons.star_rounded, color: DSColor.accent, size: 18),
-      ],
-    ),
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mastered = ref.watch(pairMasteredProvider(index));
+    final color = mastered ? DSMasteryColor.gold : DSColor.cardBorder;
+
+    return SizedBox(
+      width: _width,
+      child: Stack(
+        alignment: .center,
+        children: [
+          SizedBox(
+            height: 2,
+            width: _width,
+            child: ColoredBox(color: color),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                if (mastered)
+                  BoxShadow(
+                    color: DSMasteryColor.gold.withValues(alpha: 0.6),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+              ],
+            ),
+            child: Icon(
+              Icons.star_rounded,
+              color: mastered ? DSMasteryColor.gold : DSColor.textMuted,
+              size: 22,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -12,6 +12,9 @@ final class FullHouse extends JokerEffect {
   JokerId get id => .fullhouse;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .brink;
 
   @override

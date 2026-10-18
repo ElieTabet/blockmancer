@@ -26,5 +26,8 @@ abstract class Progression with _$Progression {
     /// The worlds whose boss card has been shown, so it shows only the first
     /// time the player reaches that boss.
     @Default(<WorldId>{}) Set<WorldId> bossCardsSeen,
+
+    /// The unlocked jokers the Spellbook has shown; the others wear NEW.
+    @Default(<JokerId>{}) Set<JokerId> spellbookSeen,
   }) = _Progression;
 }

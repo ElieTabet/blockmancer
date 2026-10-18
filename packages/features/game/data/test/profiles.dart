@@ -16,6 +16,20 @@ const noStars = WorldStars(
 /// Today's rules' starting progression, as game_domain builds it from them.
 const starting = Progression(
   jokerStats: {},
+  spellbookSeen: {
+    .bigbox,
+    .collector,
+    .column,
+    .combo,
+    .heavy,
+    .patience,
+    .pockets,
+    .precision,
+    .saver,
+    .sweep,
+    .tiny,
+    .twin,
+  },
   tutorialDone: false,
   unannouncedJokers: {},
   unlockedJokers: {

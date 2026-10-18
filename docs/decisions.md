@@ -537,3 +537,24 @@ Three changes from the review of this file, each its own commit.
   in English and French, and the review notes). In the app: the owned row's screen-reader label
   and the restore dialog's message now mention the revive without video. The row itself stays
   title-only ("Remove ads" with its price, "Ads removed" once owned).
+
+## Spellbook redesign
+
+- **The grid** is one pair per row, card ★ card (asked and chosen): partners always side by side.
+- **Kinds** are the rules' (`GameRules.kindOf`, each joker effect's `kind`): additive mult (10:
+  Anchor, Collector, Combo, Ember, Full House, Momentum, Patience, Precision, Sprinter,
+  Symmetry), multiplicative mult (5: Brink, Column, Finisher, Heavy, Twin), chips (3: Avalanche,
+  Prism, Stonemason), flat bonus (3: Hat Trick, Saver, Sweep), board effect (3: Lantern, Pockets,
+  Quarry), draw weight (2: Big Box, Tiny). Ember adds mult on most clears, so it sits with the
+  additive ones; Deep Pockets changes the round, not the score, so it is a board effect.
+- **Mastery thresholds** live in `RunConfig.mastery` as asked; no rule reads them. They are
+  saved with a run like the rest of its config (schema 10 → 11 fills 1/5/15), and tunable in
+  Remote Config (`mastery_bronze_wins`, `mastery_silver_wins`, `mastery_gold_wins`).
+- **"Seen"** is `Progression.spellbookSeen` (profile 7 → 8: every joker already unlocked counts
+  as seen). A new player's starting jokers are seen too: they were never unlocked, only had.
+  Badges stay for the visit that found them; the visit marks them seen as it opens.
+- **Short names** are new strings per joker (EN/FR), the full name staying in the sheet.
+- **Emblems** are Material vector glyphs, one map; bundled art (`assets/jokers/<id>.png` in the
+  assets package, folder already declared) replaces a joker's glyph with no code change.
+- **The gold shine** sweeps a soft band across the card every few seconds; under the phone's or
+  the app's reduce motion it is a still highlight.

@@ -75,6 +75,7 @@ List<Override> stubFeatures({
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     jokerCollection: (ref) => ref.watch(game.jokerCollectionProvider),
     markJokersAnnounced: (ref) => ref.watch(game.markJokersAnnouncedProvider),
+    markSpellbookSeen: (ref) => ref.watch(game.markSpellbookSeenProvider),
     openStoreListing: (ref) =>
         () async => true,
     practiceBest: (ref) async => null,

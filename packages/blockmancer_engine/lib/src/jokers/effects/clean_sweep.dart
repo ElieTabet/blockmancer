@@ -11,6 +11,9 @@ final class CleanSweep extends JokerEffect {
   JokerId get id => .sweep;
 
   @override
+  JokerKind get kind => .flatBonus;
+
+  @override
   JokerId get partner => .column;
 
   @override

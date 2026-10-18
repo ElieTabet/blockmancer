@@ -11,6 +11,9 @@ final class Patience extends JokerEffect {
   JokerId get id => .patience;
 
   @override
+  JokerKind get kind => .additiveMult;
+
+  @override
   JokerId get partner => .twin;
 
   @override

@@ -10,6 +10,9 @@ final class TinyTools extends JokerEffect {
   JokerId get id => .tiny;
 
   @override
+  JokerKind get kind => .drawWeight;
+
+  @override
   JokerId get partner => .precision;
 
   @override

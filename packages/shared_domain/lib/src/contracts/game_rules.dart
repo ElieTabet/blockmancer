@@ -1,6 +1,7 @@
 import 'package:shared_domain/src/entities/game/cell.br.dart';
 import 'package:shared_domain/src/entities/game/game_event.br.dart';
 import 'package:shared_domain/src/entities/game/joker_id.dart';
+import 'package:shared_domain/src/entities/game/joker_kind.dart';
 import 'package:shared_domain/src/entities/game/placement_preview.br.dart';
 import 'package:shared_domain/src/entities/game/run_config.br.dart';
 import 'package:shared_domain/src/entities/game/run_move.br.dart';
@@ -55,6 +56,9 @@ abstract interface class GameRules {
 
   /// The joker [id] pairs with.
   JokerId partnerOf(JokerId id);
+
+  /// What [id] does to a score: the Spellbook frames it by this.
+  JokerKind kindOf(JokerId id);
 
   /// Takes an offered joker and starts the next round.
   Transition pickJoker(RunState state, {required JokerId id});

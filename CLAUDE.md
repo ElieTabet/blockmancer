@@ -300,6 +300,7 @@ engine's events and never recomputes a rule.
   pool's list order, and the pair bias only proposes a partner in the pool; `defaultConfig`'s pool
   is every joker, as the daily run's is. The map is rule data behind the contract too:
   `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (every world today),
+  `kindOf(id)` (what a joker does to a score, which the Spellbook frames it by),
   `unlocksOf(world)` and `startingJokers` (every joker neither a world nor the stars unlock: 12).
 - **What a joker reads.** Each hook gets a `MoveContext`: the clear, the piece's size, the streak,
   Patience's bank, `occupiedAfterPlacing` (filled cells and stones once the piece has landed, before
@@ -408,9 +409,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 10`; `migrate(json)` brings an older version up to date one
+  wire format. The schema has `version: 11`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick, 7 → 8 Avalanche's two rows and Full House's +1 mult, constants until then, 8 → 9 fog cells (codes -2, and -3 hiding a stone), the Fog and Tide bosses' counts (`RoundSpec.fog`, `fogStones`, `tideGaps`, 0 for an older save), the tray's `trayDealt` and `momentumStreak`, and the first numbers of Fog's, Tide's and Mirror's jokers; the saved pool is kept, so an old run never offers a new joker, 9 → 10 Ember's mult on every clear, 0 for an older save), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick, 7 → 8 Avalanche's two rows and Full House's +1 mult, constants until then, 8 → 9 fog cells (codes -2, and -3 hiding a stone), the Fog and Tide bosses' counts (`RoundSpec.fog`, `fogStones`, `tideGaps`, 0 for an older save), the tray's `trayDealt` and `momentumStreak`, and the first numbers of Fog's, Tide's and Mirror's jokers; the saved pool is kept, so an old run never offers a new joker, 9 → 10 Ember's mult on every clear, 0 for an older save, 10 → 11 the Spellbook's mastery tiers, 1/5/15 as literals), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes
@@ -430,7 +431,7 @@ for the map to announce them) and `tutorialDone`.
   bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
   both read and write it, each update a read and a write with no await between, so neither wipes
   the other.
-- **Version 7.** A device without a profile is version 1: the `best.*` keys and
+- **Version 8.** A device without a profile is version 1: the `best.*` keys and
   `settings.tutorialSeen`. `migrateProfile` turns that into version 2 on first read (bests kept,
   `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys; version 3
   adds a best per world (`bests.worlds`), empty for older profiles; version 4 adds the joker stats,
@@ -438,8 +439,9 @@ for the map to announce them) and `tutorialDone`.
   for (thresholds as literals: 4★ and 6★), into both `unlockedJokers` and `unannouncedJokers`; version 6
   renames the fourth world's entry from `speed`, dropped for Tide before it had rules, to `tide`
   (read as it was, the unknown name would throw the profile away); version 7 adds the boss cards
-  seen (`bossCardsSeen`), counting as seen every world whose boss the profile has beaten. An
-  unreadable profile starts fresh and is replaced by the next write.
+  seen (`bossCardsSeen`), counting as seen every world whose boss the profile has beaten;
+  version 8 adds the jokers the Spellbook has shown (`spellbookSeen`), counting every joker
+  already unlocked as seen. An unreadable profile starts fresh and is replaced by the next write.
 - **Announced once.** Home's `UnlockAnnouncer` reads `unannouncedJokers` through the
   `progression` slot; when it holds jokers, it calls the `markJokersAnnounced` slot (bound to
   `game_domain`'s, which empties the set and refreshes the progression) before showing
@@ -565,19 +567,37 @@ header, beside the gear.
 
 ### Spellbook
 
-The joker collection, opened from the book in Home's header: `SpellbookRoute`
-(`home_presentation`, absolute `/spellbook`) slides up over the shell like Settings, and its close
-button pops it (`HomeRouting.onSpellbookRequested` / `onSpellbookCloseRequested`).
+The joker collection as collectible cards, opened from the book in Home's header:
+`SpellbookRoute` (`home_presentation`, absolute `/spellbook`) slides up over the shell like
+Settings, and its close button pops it (`HomeRouting.onSpellbookRequested` /
+`onSpellbookCloseRequested`).
 
 - **What it reads.** `game_domain`'s `jokerCollectionOf(rules)` fills home's `jokerCollection`
-  slot: a `JokerCollection` (`shared_domain`) of the 13 `JokerPair`s, each with its
-  `JokerUnlock` (`starting`, `boss(world)`, `stars(count)`) and the rules' `JokerTuning` — a new
-  player's pairs first, then each world's boss's, then the stars'. Whether a joker is unlocked
-  and its `JokerStats` come from the `progression` slot.
-- **The cards.** One `JokerPairRow` per pair in a lazy `SliverList`, the partners side by side
-  and joined by a star. A card watches only its own joker: unlocked, its name, effect, partner and
-  three stats; locked, a silhouette and how to unlock it ("Beat the Gravity boss", "Collect 4
-  stars"), with no stats even when a daily run has counted some. A tap opens `JokerSheet`.
+  slot: a `JokerCollection` (`shared_domain`) of the 13 `JokerPair`s with their `JokerUnlock`
+  (`starting`, `boss(world)`, `stars(count)`), each joker's `JokerKind` (the rules' `kindOf`:
+  additive mult, multiplicative mult, chips, flat bonus, board effect, draw weight), the mastery
+  tiers (`RunConfig.mastery`: bronze 1, silver 5, gold 15 runs won with it, tunable in Remote
+  Config) and the rules' `JokerTuning`. Unlocked jokers, `JokerStats` and `spellbookSeen` come
+  from the `progression` slot.
+- **The screen.** A header ("12 / 26 collected" over a bar, "Pairs mastered x / 13"), then one
+  `JokerPairRow` per pair in a lazy `SliverList`: card, ★ link, card. The link glows once both
+  partners are gold (`pairMastered`).
+- **A card** (`SpellbookCard`) shows only its emblem, short name (`game.jokers.<id>.short`) and
+  three `MasteryDots` (`masteryTierOf`, home's `joker_mastery.dart`), framed in its kind's
+  colours from the design system's `DSJokerFrame` (tiers in `DSMasteryColor`). Gold cards shine
+  (`GoldShine`; held still under reduce motion). Locked: a dark silhouette, "?" and a lock. A
+  screen reader hears "name, kind, tier" (or "Locked joker. how to unlock").
+- **Emblems** (`JokerEmblem`): `jokerGlyphs`, one map of a vector glyph per joker in its kind's
+  colour, unless `assets/jokers/<id>.png` is bundled in the assets package (read from the asset
+  manifest, `jokerArt`): dropping a file swaps it in, with no code change.
+- **NEW.** `SpellbookNew` takes the jokers unlocked but not in `spellbookSeen` as the visit opens,
+  keeps their badges for the visit, and calls the `markSpellbookSeen` slot (game_domain's
+  `MarkSpellbookSeenBehavior`) at once, so the next visit shows none. A new player's starting
+  jokers count as seen.
+- **The sheet** (`JokerSheet`, tap a card): the large card, full name, kind chip, the effect with
+  its numbers picked out (`HighlightedNumbers`, from the collection's `JokerTuning`), the tier and
+  the wins to the next ("3 / 5 wins to silver"), the three stats, and the partner as a mini card
+  that opens in the sheet's place. Locked: how to unlock it.
 
 ## Tutorial
 

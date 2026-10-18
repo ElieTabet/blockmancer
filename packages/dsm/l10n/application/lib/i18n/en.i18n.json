@@ -124,116 +124,142 @@
         "description(param=stones)": {
           "one": "+$chips chips for each stone cleared. $stones extra stone every round.",
           "other": "+$chips chips for each stone cleared. $stones extra stones every round."
-        }
+        },
+        "short": "Stonemason"
       },
       "combo": {
         "name": "Combo King",
-        "description": "+$mult mult for every clearing move in a row."
+        "description": "+$mult mult for every clearing move in a row.",
+        "short": "Combo"
       },
       "patience": {
         "name": "Patience",
-        "description": "Each move without a clear stores +$mult mult for your next clear."
+        "description": "Each move without a clear stores +$mult mult for your next clear.",
+        "short": "Patience"
       },
       "precision": {
         "name": "Precision",
-        "description": "+$mult mult when a piece of up to $size cells completes a line."
+        "description": "+$mult mult when a piece of up to $size cells completes a line.",
+        "short": "Precision"
       },
       "collector": {
         "name": "Collector",
-        "description": "+$mult mult on every clear for every two jokers you own."
+        "description": "+$mult mult on every clear for every two jokers you own.",
+        "short": "Collector"
       },
       "twin": {
         "name": "Twin Lines",
-        "description": "×$factor mult when you clear $lines or more lines at once."
+        "description": "×$factor mult when you clear $lines or more lines at once.",
+        "short": "Twin Lines"
       },
       "column": {
         "name": "Column Hunter",
-        "description": "×$factor mult when your move clears a column."
+        "description": "×$factor mult when your move clears a column.",
+        "short": "Columns"
       },
       "heavy": {
         "name": "Heavyweight",
-        "description": "×$factor mult when a piece of $size+ cells completes a line."
+        "description": "×$factor mult when a piece of $size+ cells completes a line.",
+        "short": "Heavyweight"
       },
       "sweep": {
         "name": "Clean Sweep",
-        "description": "+$points points when the board becomes completely empty."
+        "description": "+$points points when the board becomes completely empty.",
+        "short": "Sweep"
       },
       "quarry": {
         "name": "Quarry",
         "description(param=stones)": {
           "one": "Every clear drops a new stone on a random empty cell.",
           "other": "Every clear drops $stones new stones on random empty cells."
-        }
+        },
+        "short": "Quarry"
       },
       "bigbox": {
         "name": "Big Box",
-        "description": "Pieces of $size+ cells show up $factor× more often."
+        "description": "Pieces of $size+ cells show up $factor× more often.",
+        "short": "Big Box"
       },
       "tiny": {
         "name": "Tiny Tools",
-        "description": "Pieces of up to $size cells show up $factor× more often."
+        "description": "Pieces of up to $size cells show up $factor× more often.",
+        "short": "Tiny Tools"
       },
       "pockets": {
         "name": "Deep Pockets",
         "description(param=pieces)": {
           "one": "+$pieces piece every round.",
           "other": "+$pieces pieces every round."
-        }
+        },
+        "short": "Pockets"
       },
       "saver": {
         "name": "Saver",
-        "description": "Each unused piece when you beat a round gives +$points run points."
+        "description": "Each unused piece when you beat a round gives +$points run points.",
+        "short": "Saver"
       },
       "anchor": {
         "name": "Anchor",
-        "description": "+$mult mult when your move clears the bottom row."
+        "description": "+$mult mult when your move clears the bottom row.",
+        "short": "Anchor"
       },
       "avalanche": {
         "name": "Avalanche",
         "description(param=rows)": {
           "one": "+$chips chips for each filled cell left in the bottom row after a clear.",
           "other": "+$chips chips for each filled cell left in the bottom $rows rows after a clear."
-        }
+        },
+        "short": "Avalanche"
       },
       "fullhouse": {
         "name": "Full House",
-        "description": "+$mult mult for every $cells occupied cells, stones included, as your piece lands."
+        "description": "+$mult mult for every $cells occupied cells, stones included, as your piece lands.",
+        "short": "Full House"
       },
       "brink": {
         "name": "On the Brink",
-        "description": "×$factor mult when $cells or more cells are occupied, stones included, as your piece lands."
+        "description": "×$factor mult when $cells or more cells are occupied, stones included, as your piece lands.",
+        "short": "Brink"
       },
       "finisher": {
         "name": "Finisher",
-        "description": "×$factor mult when you play the last piece in your tray."
+        "description": "×$factor mult when you play the last piece in your tray.",
+        "short": "Finisher"
       },
       "hattrick": {
         "name": "Hat Trick",
-        "description": "+$points points when each of the $pieces pieces of a full tray clears a line."
+        "description": "+$points points when each of the $pieces pieces of a full tray clears a line.",
+        "short": "Hat Trick"
       },
       "lantern": {
         "name": "Lantern",
-        "description": "Stones and fog beside a cleared line are cleared with it."
+        "description": "Stones and fog beside a cleared line are cleared with it.",
+        "short": "Lantern"
       },
       "ember": {
         "name": "Ember",
-        "description": "+$mult mult on every clear; ×$factor mult instead when your move clears a stone or a fog cell."
+        "description": "+$mult mult on every clear; ×$factor mult instead when your move clears a stone or a fog cell.",
+        "short": "Ember"
       },
       "sprinter": {
         "name": "Sprinter",
-        "description": "+$mult mult when the first piece of a fresh tray clears a line."
+        "description": "+$mult mult when the first piece of a fresh tray clears a line.",
+        "short": "Sprinter"
       },
       "momentum": {
         "name": "Momentum",
-        "description": "+$mult mult on every clear for each tray in a row whose first piece cleared a line."
+        "description": "+$mult mult on every clear for each tray in a row whose first piece cleared a line.",
+        "short": "Momentum"
       },
       "symmetry": {
         "name": "Symmetry",
-        "description": "+$mult mult when your clear leaves the board mirror-symmetric, and not empty."
+        "description": "+$mult mult when your clear leaves the board mirror-symmetric, and not empty.",
+        "short": "Symmetry"
       },
       "prism": {
         "name": "Prism",
-        "description": "+$chips chips for each filled cell or stone whose mirror cell is one too, after a clear."
+        "description": "+$chips chips for each filled cell or stone whose mirror cell is one too, after a clear.",
+        "short": "Prism"
       }
     }
   },
@@ -307,8 +333,6 @@
       "title": "Spellbook",
       "open": "Spellbook",
       "close": "Close",
-      "progress": "$unlocked of $total jokers unlocked",
-      "partner": "Pairs with $name",
       "picked": "Picked",
       "wins": "Wins",
       "best": "Best",
@@ -317,7 +341,34 @@
       "unlockStars(param=count)": {
         "one": "Collect 1 star",
         "other": "Collect $count stars"
-      }
+      },
+      "collected": "$count / $total collected",
+      "pairsMastered": "Pairs mastered $count / $total",
+      "unknownName": "?",
+      "newBadge": "NEW",
+      "partnerTitle": "Partner",
+      "statsTitle": "Stats",
+      "kinds": {
+        "additiveMult": "+ Mult",
+        "boardEffect": "Board",
+        "chips": "Chips",
+        "drawWeight": "Draws",
+        "flatBonus": "Bonus points",
+        "multiplicativeMult": "× Mult"
+      },
+      "tiers": {
+        "none": "No mastery yet",
+        "bronze": "Bronze",
+        "silver": "Silver",
+        "gold": "Gold"
+      },
+      "toBronze": "$wins / $target wins to bronze",
+      "toSilver": "$wins / $target wins to silver",
+      "toGold": "$wins / $target wins to gold",
+      "mastered": "Gold: fully mastered",
+      "cardLabel": "$name, $kind, $tier",
+      "lockedLabel": "Locked joker. $unlock",
+      "newLabel": "New"
     }
   },
   "settings": {

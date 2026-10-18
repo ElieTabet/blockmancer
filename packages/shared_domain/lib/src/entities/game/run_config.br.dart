@@ -3,6 +3,7 @@ import 'package:shared_domain/src/entities/game/joker_tuning.br.dart';
 import 'package:shared_domain/src/entities/game/star_unlock.br.dart';
 import 'package:shared_domain/src/entities/game/world_id.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_domain/src/entities/game/mastery_thresholds.br.dart';
 
 part 'run_config.br.freezed.dart';
 
@@ -44,6 +45,10 @@ abstract class RunConfig with _$RunConfig {
     /// never changes a seeded run.
     required List<JokerId> jokerPool,
     required JokerTuning jokers,
+
+    /// The wins with a joker that earn its Spellbook tiers. No rule reads it;
+    /// the Spellbook does.
+    required MasteryThresholds mastery,
     required int offerCount,
 
     /// The chance that one offer is the partner of a joker already owned.

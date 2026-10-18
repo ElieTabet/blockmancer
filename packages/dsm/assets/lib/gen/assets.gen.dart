@@ -21,10 +21,21 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [logo];
 }
 
+class $AssetsJokersGen {
+  const $AssetsJokersGen();
+
+  /// File path: assets/jokers/README.md
+  String get readme => 'packages/assets/assets/jokers/README.md';
+
+  /// List of all assets
+  List<String> get values => [readme];
+}
+
 abstract final class Assets {
   static const String package = 'assets';
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsJokersGen jokers = $AssetsJokersGen();
 }
 
 class AssetGenImage {

@@ -11,6 +11,9 @@ final class Saver extends JokerEffect {
   JokerId get id => .saver;
 
   @override
+  JokerKind get kind => .flatBonus;
+
+  @override
   JokerId get partner => .pockets;
 
   @override

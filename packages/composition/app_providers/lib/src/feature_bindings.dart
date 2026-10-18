@@ -188,6 +188,7 @@ List<Override> featureBindingOverrides({
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     jokerCollection: (ref) => ref.watch(game.jokerCollectionProvider),
     markJokersAnnounced: (ref) => ref.watch(game.markJokersAnnouncedProvider),
+    markSpellbookSeen: (ref) => ref.watch(game.markSpellbookSeenProvider),
     openStoreListing: (ref) =>
         ref.watch(app_update_ui.openStoreListingProvider),
     practiceBest: (ref) =>

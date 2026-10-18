@@ -21,6 +21,8 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    # Joker art, by JokerId name; optional, file by file (see README.md there).
+    - assets/jokers/
 
 flutter_gen:
   output: lib/gen/

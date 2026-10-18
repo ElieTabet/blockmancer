@@ -10,6 +10,9 @@ final class ColumnHunter extends JokerEffect {
   JokerId get id => .column;
 
   @override
+  JokerKind get kind => .multiplicativeMult;
+
+  @override
   JokerId get partner => .sweep;
 
   @override

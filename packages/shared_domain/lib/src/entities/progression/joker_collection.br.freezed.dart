@@ -14,7 +14,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$JokerCollection {
 
-/// The new player's pairs first, then each world's, then the stars'.
+/// What each joker does to a score, for its frame.
+ Map<JokerId, JokerKind> get kinds;/// The wins that earn each mastery tier.
+ MasteryThresholds get mastery;/// The new player's pairs first, then each world's, then the stars'.
  List<JokerPair> get pairs;/// The tray the jokers play with, for describing Hat Trick.
  int get traySize;/// The numbers the jokers play with, for describing them.
  JokerTuning get tuning;
@@ -28,16 +30,16 @@ $JokerCollectionCopyWith<JokerCollection> get copyWith => _$JokerCollectionCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is JokerCollection&&const DeepCollectionEquality().equals(other.pairs, pairs)&&(identical(other.traySize, traySize) || other.traySize == traySize)&&(identical(other.tuning, tuning) || other.tuning == tuning));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is JokerCollection&&const DeepCollectionEquality().equals(other.kinds, kinds)&&(identical(other.mastery, mastery) || other.mastery == mastery)&&const DeepCollectionEquality().equals(other.pairs, pairs)&&(identical(other.traySize, traySize) || other.traySize == traySize)&&(identical(other.tuning, tuning) || other.tuning == tuning));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(pairs),traySize,tuning);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(kinds),mastery,const DeepCollectionEquality().hash(pairs),traySize,tuning);
 
 @override
 String toString() {
-  return 'JokerCollection(pairs: $pairs, traySize: $traySize, tuning: $tuning)';
+  return 'JokerCollection(kinds: $kinds, mastery: $mastery, pairs: $pairs, traySize: $traySize, tuning: $tuning)';
 }
 
 
@@ -48,11 +50,11 @@ abstract mixin class $JokerCollectionCopyWith<$Res>  {
   factory $JokerCollectionCopyWith(JokerCollection value, $Res Function(JokerCollection) _then) = _$JokerCollectionCopyWithImpl;
 @useResult
 $Res call({
- List<JokerPair> pairs, int traySize, JokerTuning tuning
+ Map<JokerId, JokerKind> kinds, MasteryThresholds mastery, List<JokerPair> pairs, int traySize, JokerTuning tuning
 });
 
 
-$JokerTuningCopyWith<$Res> get tuning;
+$MasteryThresholdsCopyWith<$Res> get mastery;$JokerTuningCopyWith<$Res> get tuning;
 
 }
 /// @nodoc
@@ -65,15 +67,26 @@ class _$JokerCollectionCopyWithImpl<$Res>
 
 /// Create a copy of JokerCollection
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pairs = null,Object? traySize = null,Object? tuning = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? kinds = null,Object? mastery = null,Object? pairs = null,Object? traySize = null,Object? tuning = null,}) {
   return _then(_self.copyWith(
-pairs: null == pairs ? _self.pairs : pairs // ignore: cast_nullable_to_non_nullable
+kinds: null == kinds ? _self.kinds : kinds // ignore: cast_nullable_to_non_nullable
+as Map<JokerId, JokerKind>,mastery: null == mastery ? _self.mastery : mastery // ignore: cast_nullable_to_non_nullable
+as MasteryThresholds,pairs: null == pairs ? _self.pairs : pairs // ignore: cast_nullable_to_non_nullable
 as List<JokerPair>,traySize: null == traySize ? _self.traySize : traySize // ignore: cast_nullable_to_non_nullable
 as int,tuning: null == tuning ? _self.tuning : tuning // ignore: cast_nullable_to_non_nullable
 as JokerTuning,
   ));
 }
 /// Create a copy of JokerCollection
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MasteryThresholdsCopyWith<$Res> get mastery {
+  
+  return $MasteryThresholdsCopyWith<$Res>(_self.mastery, (value) {
+    return _then(_self.copyWith(mastery: value));
+  });
+}/// Create a copy of JokerCollection
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -164,10 +177,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<JokerPair> pairs,  int traySize,  JokerTuning tuning)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<JokerId, JokerKind> kinds,  MasteryThresholds mastery,  List<JokerPair> pairs,  int traySize,  JokerTuning tuning)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _JokerCollection() when $default != null:
-return $default(_that.pairs,_that.traySize,_that.tuning);case _:
+return $default(_that.kinds,_that.mastery,_that.pairs,_that.traySize,_that.tuning);case _:
   return orElse();
 
 }
@@ -185,10 +198,10 @@ return $default(_that.pairs,_that.traySize,_that.tuning);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<JokerPair> pairs,  int traySize,  JokerTuning tuning)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<JokerId, JokerKind> kinds,  MasteryThresholds mastery,  List<JokerPair> pairs,  int traySize,  JokerTuning tuning)  $default,) {final _that = this;
 switch (_that) {
 case _JokerCollection():
-return $default(_that.pairs,_that.traySize,_that.tuning);case _:
+return $default(_that.kinds,_that.mastery,_that.pairs,_that.traySize,_that.tuning);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +218,10 @@ return $default(_that.pairs,_that.traySize,_that.tuning);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<JokerPair> pairs,  int traySize,  JokerTuning tuning)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<JokerId, JokerKind> kinds,  MasteryThresholds mastery,  List<JokerPair> pairs,  int traySize,  JokerTuning tuning)?  $default,) {final _that = this;
 switch (_that) {
 case _JokerCollection() when $default != null:
-return $default(_that.pairs,_that.traySize,_that.tuning);case _:
+return $default(_that.kinds,_that.mastery,_that.pairs,_that.traySize,_that.tuning);case _:
   return null;
 
 }
@@ -220,9 +233,20 @@ return $default(_that.pairs,_that.traySize,_that.tuning);case _:
 
 
 class _JokerCollection implements JokerCollection {
-  const _JokerCollection({required final  List<JokerPair> pairs, required this.traySize, required this.tuning}): _pairs = pairs;
+  const _JokerCollection({required final  Map<JokerId, JokerKind> kinds, required this.mastery, required final  List<JokerPair> pairs, required this.traySize, required this.tuning}): _kinds = kinds,_pairs = pairs;
   
 
+/// What each joker does to a score, for its frame.
+ final  Map<JokerId, JokerKind> _kinds;
+/// What each joker does to a score, for its frame.
+@override Map<JokerId, JokerKind> get kinds {
+  if (_kinds is EqualUnmodifiableMapView) return _kinds;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_kinds);
+}
+
+/// The wins that earn each mastery tier.
+@override final  MasteryThresholds mastery;
 /// The new player's pairs first, then each world's, then the stars'.
  final  List<JokerPair> _pairs;
 /// The new player's pairs first, then each world's, then the stars'.
@@ -247,16 +271,16 @@ _$JokerCollectionCopyWith<_JokerCollection> get copyWith => __$JokerCollectionCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JokerCollection&&const DeepCollectionEquality().equals(other._pairs, _pairs)&&(identical(other.traySize, traySize) || other.traySize == traySize)&&(identical(other.tuning, tuning) || other.tuning == tuning));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JokerCollection&&const DeepCollectionEquality().equals(other._kinds, _kinds)&&(identical(other.mastery, mastery) || other.mastery == mastery)&&const DeepCollectionEquality().equals(other._pairs, _pairs)&&(identical(other.traySize, traySize) || other.traySize == traySize)&&(identical(other.tuning, tuning) || other.tuning == tuning));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_pairs),traySize,tuning);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_kinds),mastery,const DeepCollectionEquality().hash(_pairs),traySize,tuning);
 
 @override
 String toString() {
-  return 'JokerCollection(pairs: $pairs, traySize: $traySize, tuning: $tuning)';
+  return 'JokerCollection(kinds: $kinds, mastery: $mastery, pairs: $pairs, traySize: $traySize, tuning: $tuning)';
 }
 
 
@@ -267,11 +291,11 @@ abstract mixin class _$JokerCollectionCopyWith<$Res> implements $JokerCollection
   factory _$JokerCollectionCopyWith(_JokerCollection value, $Res Function(_JokerCollection) _then) = __$JokerCollectionCopyWithImpl;
 @override @useResult
 $Res call({
- List<JokerPair> pairs, int traySize, JokerTuning tuning
+ Map<JokerId, JokerKind> kinds, MasteryThresholds mastery, List<JokerPair> pairs, int traySize, JokerTuning tuning
 });
 
 
-@override $JokerTuningCopyWith<$Res> get tuning;
+@override $MasteryThresholdsCopyWith<$Res> get mastery;@override $JokerTuningCopyWith<$Res> get tuning;
 
 }
 /// @nodoc
@@ -284,9 +308,11 @@ class __$JokerCollectionCopyWithImpl<$Res>
 
 /// Create a copy of JokerCollection
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pairs = null,Object? traySize = null,Object? tuning = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? kinds = null,Object? mastery = null,Object? pairs = null,Object? traySize = null,Object? tuning = null,}) {
   return _then(_JokerCollection(
-pairs: null == pairs ? _self._pairs : pairs // ignore: cast_nullable_to_non_nullable
+kinds: null == kinds ? _self._kinds : kinds // ignore: cast_nullable_to_non_nullable
+as Map<JokerId, JokerKind>,mastery: null == mastery ? _self.mastery : mastery // ignore: cast_nullable_to_non_nullable
+as MasteryThresholds,pairs: null == pairs ? _self._pairs : pairs // ignore: cast_nullable_to_non_nullable
 as List<JokerPair>,traySize: null == traySize ? _self.traySize : traySize // ignore: cast_nullable_to_non_nullable
 as int,tuning: null == tuning ? _self.tuning : tuning // ignore: cast_nullable_to_non_nullable
 as JokerTuning,
@@ -294,6 +320,15 @@ as JokerTuning,
 }
 
 /// Create a copy of JokerCollection
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MasteryThresholdsCopyWith<$Res> get mastery {
+  
+  return $MasteryThresholdsCopyWith<$Res>(_self.mastery, (value) {
+    return _then(_self.copyWith(mastery: value));
+  });
+}/// Create a copy of JokerCollection
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

@@ -13,6 +13,9 @@ final class Avalanche extends JokerEffect {
   JokerId get id => .avalanche;
 
   @override
+  JokerKind get kind => .chips;
+
+  @override
   JokerId get partner => .anchor;
 
   @override
