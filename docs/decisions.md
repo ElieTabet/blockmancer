@@ -463,3 +463,11 @@ Three changes from the review of this file, each its own commit.
   device-test list.
 - **The Leaderboard button** sits inside the daily card under Play, as its own pressable. A
   nested tap goes to the innermost target, so it opens the board and not the run.
+
+## Sprint 8: the last ids
+
+- **Every id is in** `app/env/prod.json`: the App Store id (6823742423), Play Games' project id and
+  both Play leaderboards. The release builds' check finds no placeholder left.
+- **Play Games with a placeholder** was also run on an emulator (Android 16, Play Store image):
+  the app launched, the SDK's own start crashed nothing. Moot now that Gradle writes the real
+  project id into every build's manifest.

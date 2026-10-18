@@ -35,14 +35,14 @@ refuse to build while one is left (`scripts/check_release_ids.sh`); the test bui
 | `IAP_REMOVE_ADS` | ✅ done | `blockmancer.remove_ads`, both stores |
 | `GAME_CENTER_LEADERBOARD_DAILY` | ✅ done | `blockmancer.daily_run` |
 | `GAME_CENTER_LEADERBOARD_BEST` | ✅ done | `blockmancer.best_run` |
-| `APP_STORE_ID` | ❌ placeholder | App Store Connect → the app → App Information → **Apple ID** (a number): the update screen's store link and Rate Blockmancer |
-| `PLAY_GAMES_APP_ID` | ❌ placeholder | Play Console → Play Games Services → Configuration → **project id** (digits); Gradle → the manifest's `com.google.android.gms.games.APP_ID` |
-| `PLAY_LEADERBOARD_DAILY` | ❌ placeholder | Play Games Services → Leaderboards → the daily run's **ID** (`CgkI…`) |
-| `PLAY_LEADERBOARD_BEST` | ❌ placeholder | Play Games Services → Leaderboards → the best run's **ID** |
+| `APP_STORE_ID` | ✅ done | `6823742423`, the app's **Apple ID**: the update screen's store link and Rate Blockmancer |
+| `PLAY_GAMES_APP_ID` | ✅ done | `363871737582`, the Play Games Services project id; Gradle → the manifest's `com.google.android.gms.games.APP_ID` |
+| `PLAY_LEADERBOARD_DAILY` | ✅ done | `CgkI7q3Iw8sKEAIQAw`, the Daily run leaderboard |
+| `PLAY_LEADERBOARD_BEST` | ✅ done | `CgkI7q3Iw8sKEAIQBA`, the Best run leaderboard |
 
 Debug and test builds always play Google's test ad units, never these.
 
-**Still missing:** `APP_STORE_ID`, the three Play Games ids, and (optional) your test devices.
+**Every id is in.** Still optional: your test devices.
 
 ### Your phones as AdMob test devices
 
@@ -196,7 +196,7 @@ pass the threshold.
 
 ## App Store Connect
 
-Send back the **Apple ID** of the app (`APP_STORE_ID`, above) once the app record exists.
+The app's **Apple ID** is in (`APP_STORE_ID`, 6823742423).
 
 ### App Privacy
 
@@ -322,13 +322,13 @@ weekly and all-time views, its day ending at midnight Pacific time. So the daily
 of its own, opened on its **daily** view, and the best run another, opened on all time. The day
 boundary differs from the run's (00:00 UTC) by 7–8 hours: logged in `docs/decisions.md`.
 
-Until the three Play ids below are in `prod.json`, Android plays without leaderboards (the code
-switches them off) and the manifest carries the placeholder, which the SDK ignores.
+The project id and both leaderboard ids are in `prod.json` ✅. (Had one been a placeholder, Android
+would play without leaderboards: the code switches them off.)
 
 1. Play Console → the app → **Grow users → Play Games Services → Setup and management →
    Configuration** → **Create new Play Games Services project** → **Use an existing Google
    Cloud project: blockmancer-a153f** (the Firebase project's).
-2. Copy the **project id** (digits, under the game's name) → `PLAY_GAMES_APP_ID`.
+2. The **project id** is in: `PLAY_GAMES_APP_ID` = 363871737582 ✅.
 3. **Credentials → Add credential → Android**:
    - Configure the **OAuth consent screen** if asked (Google Cloud → APIs & Services → OAuth
      consent screen: External, app name Blockmancer, support email, publish it).
@@ -347,7 +347,7 @@ switches them off) and the manifest carries the placeholder, which the SDK ignor
    | Ordering | **Larger is better** | **Larger is better** |
    | Limits | (none) | (none) |
 
-   Save each, then copy its **ID** (`CgkI…`) → `PLAY_LEADERBOARD_DAILY` / `PLAY_LEADERBOARD_BEST`.
+   Done: `PLAY_LEADERBOARD_DAILY` = `CgkI7q3Iw8sKEAIQAw`, `PLAY_LEADERBOARD_BEST` = `CgkI7q3Iw8sKEAIQBA` ✅.
 5. **Testers** → add your Google accounts (needed while the Games project is unpublished), then
    **Review and publish** the Games project once the app goes live.
 
