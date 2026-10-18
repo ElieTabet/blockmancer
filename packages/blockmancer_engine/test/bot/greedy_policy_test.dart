@@ -283,7 +283,7 @@ void main() {
 
   test('a bot run in Gravity reaches its boss', () {
     // Given / When
-    final run = playBotRun(2, build: _patienceTwin, config: gravityConfig);
+    final run = playBotRun(4, build: _patienceTwin, config: gravityConfig);
 
     // Then
     expect(

@@ -54,8 +54,8 @@ List<String> _log(List<_Placement> placements) => [
 ];
 
 void main() {
-  // Seed 2 reaches the boss in both worlds.
-  const seed = 2;
+  // Seed 4 reaches the boss in every world.
+  const seed = 4;
 
   test('the same seed plays the same rounds before the boss in Rubble and '
       'Gravity, then a different boss', () {

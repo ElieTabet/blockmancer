@@ -218,9 +218,9 @@ void main() {
   });
 
   test('a Gravity run that reached its boss replays to the same end', () {
-    // Given: the bot's run of seed 2, which falls in its boss
+    // Given: the bot's run of seed 4, which falls in its boss
     const build = [JokerId.patience, JokerId.twin];
-    var state = startRun(config: gravityConfig, seed: 2);
+    var state = startRun(config: gravityConfig, seed: 4);
     final moves = <RunMove>[];
     var fell = false;
 
@@ -241,7 +241,7 @@ void main() {
     }
 
     // When
-    final replayed = replay(config: gravityConfig, moves: moves, seed: 2);
+    final replayed = replay(config: gravityConfig, moves: moves, seed: 4);
 
     // Then
     expect(fell, isTrue);

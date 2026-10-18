@@ -253,3 +253,28 @@ Three changes from the review of this file, each its own commit.
   tables are unchanged.
 - **Why:** the sprint expects the bot to do worse than players in Tide, not to lose every run; at
   0% no target can be set from it.
+
+### Setting the bosses
+
+- **Rule:** "boss win | r4 cleared" 50–65% and each world's boss slightly harder than the last for
+  `random`, with separate boss targets.
+- **Reading:** "harder" is read on `random`'s overall boss win (23 / 22 / 21 / 20 / 19%), with the
+  rate once round 4 is cleared falling too (59 / 55 / 55 / 52 / 50%). A harder rule needs a lower
+  target to stay in range, so the targets don't rise along the map (4,250 / 4,000 / 4,250 / 3,000 /
+  4,250); the boss does.
+- **How:** the bot never reads the boss's target, so a pass with the target out of reach gives
+  every candidate target's win rate at once (a temporary tool, not committed); the full tables
+  then checked the picks.
+
+### Where the pass stopped
+
+- **Rule:** iterate at 2,000 runs (at most 12), confirm at 10,000.
+- **Decision (user):** stop after iteration 5, without the 10,000-run confirmation. The values are
+  iteration 4's; iteration 5 (Precision +5) overcorrected and was reverted. The report gives the
+  2,000-run margin with every figure.
+- **★3:** the P80 of each world's best pair over its pair-done runs, rounded down to 250, from
+  those 2,000-run tables; Patience/Twin is the best pair in every world.
+- **Outliers kept:** the planning pairs and Lantern/Ember (the bot can't use them, and Lantern and
+  Ember have nothing to act on before the boss), Pockets/Saver in Tide, and Patience/Twin and
+  Precision/Tiny a point or three over 40% (inside the margin). Each is explained in
+  docs/balance/2026-10-18-sprint7.md.

@@ -309,9 +309,10 @@ engine's events and never recomputes a rule.
 - **Tunable.** Every number a designer would tune lives in the immutable `RunConfig`, whose values
   are `defaultConfig`: the rounds' targets, pieces and stones, chips per cleared cell, revives, offers,
   each joker's numbers (`JokerTuning`, which every joker hook is handed), `starThreshold`, the
-  run total that earns a world's third star (Rubble 11,000 and Gravity 11,500, the bot's P80 with
-  its best pair over the runs that completed it, in docs/balance/2026-10-18-sprint5.md, which also
-  holds each world's boss target and why every number moved), and `starUnlocks`, the jokers the
+  run total that earns a world's third star (10,500 in every world but Tide's 9,500: the bot's P80
+  with its best pair over the runs that completed it, rounded down to 250, in
+  docs/balance/2026-10-18-sprint7.md, which also holds each world's boss target, lower along the
+  map's harder rules, and why every number moved), and `starUnlocks`, the jokers the
   stars held across worlds unlock (4★ Full House and On the Brink, 6★ Finisher and Hat Trick).
   No rule reads either of the last two; the run's end does. No
   rule hard-codes one, so editing `defaultConfig` changes the bot's table with no other edit: the
@@ -334,8 +335,7 @@ engine's events and never recomputes a rule.
   clear, the jokers' removals beside the lines (Lantern, through `JokerEffect.extendClear`, which
   adds no chips), then every fog cell sharing a side with a cell of the placed piece lifts, to
   empty or to the stone it hid (`FogRevealed`). Ember reads `ClearResult.obstaclesCleared`: the
-  stones and fog the move took off, in its lines or beside them. Fog's boss target and ★3 are
-  provisional (a step above Gravity's) until Sprint 7's balance pass. The bot's tie-break counts a
+  stones and fog the move took off, in its lines or beside them. The bot's tie-break counts a
   fog cell that turned to stone as empty, so what fog hides never steers it.
 - **Tide.** `TideRule.onTrayDealt`: before every tray a move empties in the boss, every cell moves
   up a row and a stone row enters at the bottom, empty in `RoundSpec.tideGaps` (2) columns drawn
@@ -349,15 +349,15 @@ engine's events and never recomputes a rule.
   and at every round's start). The game shows "Tide in N" (pieces left in the tray) during the
   boss, tints the top row while the next rise would flood it, and slides the board up a row as
   the tide rises (its other beats play with the cells where they stood before the rise, and a line
-  the rise completed bursts once it has risen; under reduce motion it is simply there). Tide's boss target and ★3 are provisional, a step above
-  Fog's.
+  the rise completed bursts once it has risen; under reduce motion it is simply there). A flood ends the boss early, so Tide's
+  boss target is the map's lowest.
 - **Mirror.** `MirrorRule.transformPlacement` lands each cell `(row, col)` of the piece on
   `(row, 7 - col)`, place and shape mirrored; `canPlace`, `preview` and `place` work on those
   landing cells. Symmetry (+mult) and Prism (+chips per cell whose mirror cell matches) read the
   board after the clear, filled cells and stones alike, never fog (any fog makes the board not
   symmetric). The game draws a line down the board's middle during the boss and, while dragging,
   outlines the cells under the finger (`DragPreview.held`) beside the shadow on the landing
-  cells. Mirror's boss target and ★3 are provisional, a step above Tide's.
+  cells.
   Tests swap in a fake rule through `worldRuleLookup`.
 - **Fog cells.** `CellState.fog(hidesStone:)` blocks a piece and counts as occupied, for lines
   and for Full House and On the Brink, like a stone. A cleared line takes its fog with it, and

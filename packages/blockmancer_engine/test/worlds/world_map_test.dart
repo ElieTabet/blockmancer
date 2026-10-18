@@ -26,8 +26,11 @@ void main() {
   });
 
   test('each world names the run total that earns its third star', () {
-    expect(rules.configFor(.rubble, jokerPool: pool).starThreshold, 11000);
-    expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 11500);
+    expect(rules.configFor(.rubble, jokerPool: pool).starThreshold, 10500);
+    expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 10500);
+    expect(rules.configFor(.fog, jokerPool: pool).starThreshold, 10500);
+    expect(rules.configFor(.tide, jokerPool: pool).starThreshold, 9500);
+    expect(rules.configFor(.mirror, jokerPool: pool).starThreshold, 10500);
   });
 
   test('every world is playable, each with a run of its own', () {
