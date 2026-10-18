@@ -137,24 +137,29 @@ void main() {
       expect(next.board.isEmpty, isTrue);
     });
 
-    test('rises again for the tray a revive deals', () {
-      // Given: out of pieces, with the revive still to spend
-      final lost = _bossStart(tideConfig).$1.copyWith(
-        phase: const .roundLost(reason: .outOfPieces),
-        piecesLeft: 0,
-        tray: [null, null, null],
-      );
+    test('deals the tray a revive gives without rising, so it can\'t flood '
+        'again at once', () {
+      // Given: the last single of a tray, the top row occupied
+      final board = boardFrom([
+        '#.......',
+        '........',
+        '........',
+        '........',
+        '........',
+        '........',
+        '........',
+        'SS.SSS.S',
+      ]);
+      final (flooded, _) = _playLast(board, at: const Cell(col: 4, row: 4));
 
       // When
-      final (next, events) = revive(lost);
+      final (next, events) = revive(flooded);
 
       // Then
-      expect(events.whereType<TideRose>(), hasLength(1));
+      expect(flooded.phase, const RunPhase.roundLost(reason: .flooded));
+      expect(events.whereType<TideRose>(), isEmpty);
+      expect(events.whereType<TrayRefilled>(), hasLength(1));
       expect(next.phase, const RunPhase.playing());
-      expect(
-        next.board.at(const Cell(col: 0, row: 7)),
-        isNot(isA<FilledCell>()),
-      );
     });
 
     test('clears a column the rise completes at once: it scores nothing and '

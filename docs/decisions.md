@@ -125,7 +125,7 @@ reading chosen and why. Newest task last.
 
 - **The order of a rise.** The tide rises, then the flood is judged, then the tray is dealt. A
   flood still shows the risen board (what left the top is gone), loses the round and deals no
-  tray; a revive deals one, so the tide rises again before it.
+  tray. A revive deals one without a rise (review fix 2).
 - **Gap columns.** Two distinct columns drawn one after the other from the stones stream (the
   first among 8, the second among the 7 left). A rise never completes a row; it can complete a
   column (7 cells under a stone), which clears at once for nothing (review fix 1).
@@ -138,7 +138,7 @@ reading chosen and why. Newest task last.
   of the tray, the first included.
 - **The slide.** The board already shows a move's result when its playback starts; with a rise, it
   draws its cells a row lower until the rising beat (the move's last) lifts them, so the piece and
-  the burst land where they stood before the rise. A revive that rises plays only the lift.
+  the burst land where they stood before the rise.
 - **Seeded tests and new jokers.** The replay tests now play the 20 jokers before Fog
   (`briefConfigBeforeFog`), so appending jokers doesn't take their builds off offer.
 - **Provisional numbers.** Tide's boss target (5,750) and ★3 threshold (12,500) are a step above
@@ -206,3 +206,15 @@ Three changes from the review of this file, each its own commit.
 - **The game:** the move's own clear is the one with the move's source; the tide's bursts after
   the board has risen, its cells drawn standing until then (`PlaybackState.tideAhead`), each as it
   stood (the piece's colour where it landed, the stone row at the bottom).
+
+### 2. The tray a revive deals
+
+- **Rule:** the tray dealt by a revive never triggers a rise (like the boss's first tray), so a
+  revive can't flood again at once.
+- **Reading:** this replaces the sprint's "a tray dealt after a revive also triggers a rise". The
+  world rule's hook is now told `afterMove` (a move played the last tray out) instead of
+  `firstOfRound`; only those trays rise. A revive from "no room" with pieces still in the tray
+  deals nothing, as before.
+- **Why:** a flood means the board reached the top, and the revive empties only the fullest
+  rows, which needn't include the top one; rising again before the first piece could flood the
+  revived round at once, and the revive would buy nothing.

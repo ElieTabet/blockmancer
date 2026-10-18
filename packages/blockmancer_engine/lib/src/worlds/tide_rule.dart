@@ -3,8 +3,8 @@ import 'package:blockmancer_engine/src/random/mulberry32.dart';
 import 'package:blockmancer_engine/src/worlds/world_rule.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-/// In the boss, every tray but the first is dealt after the tide rises: each
-/// cell moves up a row and a row of stones enters at the bottom, empty in
+/// In the boss, every tray a move empties is refilled after the tide rises:
+/// each cell moves up a row and a row of stones enters at the bottom, empty in
 /// [RoundSpec.tideGaps] columns drawn from the stones stream. A line the rise
 /// completes clears at once, for nothing. Anything pushed off the top floods
 /// the round.
@@ -15,8 +15,8 @@ final class TideRule extends WorldRule {
   bool get bossOnly => true;
 
   @override
-  Transition onTrayDealt(Transition transition, {required bool firstOfRound}) {
-    if (firstOfRound) return transition;
+  Transition onTrayDealt(Transition transition, {required bool afterMove}) {
+    if (!afterMove) return transition;
 
     final (state, events) = transition;
     final board = state.board;

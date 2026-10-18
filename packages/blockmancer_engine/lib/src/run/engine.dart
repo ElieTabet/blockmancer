@@ -200,7 +200,7 @@ Transition place(
 
   if (next.score >= next.round.target) return _winRound(jokers, (next, events));
 
-  return _settle(_refillIfEmpty(jokers, (next, events)));
+  return _settle(_refillIfEmpty(jokers, (next, events), afterMove: true));
 }
 
 /// Empties the fullest rows and adds pieces to a lost round, once per
@@ -271,13 +271,13 @@ int? _playableShape(RunState state, int trayIndex) {
 }
 
 /// Draws the next tray when the current one is played out and pieces remain,
-/// once the round's world rule has had its say ([firstOfRound] for the
-/// round's first tray). Only a tray dealt in full can earn Hat Trick: a short
+/// once the round's world rule has had its say ([afterMove] when a move
+/// played the last one out). Only a tray dealt in full can earn Hat Trick: a short
 /// one starts with no clear mask.
 Transition _refillIfEmpty(
   List<JokerEffect> jokers,
   Transition transition, {
-  bool firstOfRound = false,
+  bool afterMove = false,
 }) {
   if (transition.$1.tray.any((slot) => slot != null) ||
       transition.$1.piecesLeft == 0) {
@@ -287,7 +287,7 @@ Transition _refillIfEmpty(
   final (state, events) = ruleOfRound(
     transition.$1.config,
     transition.$1.round,
-  ).onTrayDealt(transition, firstOfRound: firstOfRound);
+  ).onTrayDealt(transition, afterMove: afterMove);
 
   if (state.phase is RoundLostPhase) return (state, events);
 
@@ -407,7 +407,7 @@ Transition _startRound(Transition transition) {
     tray: List.filled(state.config.traySize, null),
   );
 
-  return _settle(_refillIfEmpty(jokers, (round, started), firstOfRound: true));
+  return _settle(_refillIfEmpty(jokers, (round, started)));
 }
 
 /// Banks the round and its bonus, then offers jokers — or, after the last

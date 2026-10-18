@@ -31,9 +31,10 @@ abstract class WorldRule {
     required List<Cell> placed,
   }) => (board, const []);
 
-  /// The run a new tray is about to be dealt into; [firstOfRound] for the
-  /// round's first tray. A run it leaves lost is dealt nothing.
-  Transition onTrayDealt(Transition transition, {required bool firstOfRound}) =>
+  /// The run a new tray is about to be dealt into; [afterMove] when a move
+  /// played the last one out, not for a round's first tray or a revive's. A
+  /// run it leaves lost is dealt nothing.
+  Transition onTrayDealt(Transition transition, {required bool afterMove}) =>
       transition;
 
   /// Where a piece the player dropped on [cells] really lands, or null when it

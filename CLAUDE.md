@@ -320,8 +320,8 @@ engine's events and never recomputes a rule.
 - **Worlds.** `RunConfig.world` (`WorldId`) picks a `WorldRule` (`lib/src/worlds/`) that holds in the
   boss only. Its hooks: `onRoundSetup` (Rubble's stones, from `RoundSpec.stones`),
   `transformPlacement`, the cells a piece dropped on really fills (Gravity's fall; `transformAnchor`
-  is its top-left), and `onTrayDealt`, run before each tray is dealt, told whether it is the
-  round's first, which may lose the round (no tray is dealt then, and the round stays lost).
+  is its top-left), and `onTrayDealt`, run before each tray is dealt, told whether a move played
+  the last one out (not for a round's first tray or a revive's), which may lose the round (no tray is dealt then, and the round stays lost).
   `canPlace`, `preview`, `place`, `fitsSomewhere` and the round's "no room" all go through
   `transformPlacement`, and `PiecePlaced` carries the landing cells; a `RunMove.place` keeps the
   drop point, so replay re-applies the rule. Two more hooks serve Fog: `onBoardSetup`, the board
@@ -337,12 +337,13 @@ engine's events and never recomputes a rule.
   stones and fog the move took off, in its lines or beside them. Fog's boss target and ★3 are
   provisional (a step above Gravity's) until Sprint 7's balance pass. The bot's tie-break counts a
   fog cell that turned to stone as empty, so what fog hides never steers it.
-- **Tide.** `TideRule.onTrayDealt`: before every tray of the boss but its first, every cell moves
+- **Tide.** `TideRule.onTrayDealt`: before every tray a move empties in the boss, every cell moves
   up a row and a stone row enters at the bottom, empty in `RoundSpec.tideGaps` (2) columns drawn
   from the stones stream (`TideRose`); a line the rise completes clears at once, scoring nothing
   and leaving the streak as it was (`LinesCleared` with `source: .tide`); a filled cell, stone or
-  fog pushed off the top loses the round (`LossReason.flooded`), and no tray is dealt. A revive deals a tray, so the tide rises
-  then too. Sprinter reads `MoveContext.firstOfTray` (the move played a tray's first piece, from
+  fog pushed off the top loses the round (`LossReason.flooded`), and no tray is dealt. The tray a
+  revive deals never rises, as the boss's first doesn't, so a revive can't flood again at once.
+  Sprinter reads `MoveContext.firstOfTray` (the move played a tray's first piece, from
   `RunState.trayDealt`); Momentum reads `momentumStreak`, the trays in a row whose first piece
   cleared, set as each tray's first piece is played (0 for the rest of a tray whose first missed,
   and at every round's start). The game shows "Tide in N" (pieces left in the tray) during the

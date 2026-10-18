@@ -19,8 +19,8 @@ final class _FakeRule extends WorldRule {
   bool get bossOnly => false;
 
   @override
-  Transition onTrayDealt(Transition transition, {required bool firstOfRound}) {
-    trays.add(firstOfRound);
+  Transition onTrayDealt(Transition transition, {required bool afterMove}) {
+    trays.add(afterMove);
 
     if (!losesOnTray) return transition;
 
@@ -105,7 +105,7 @@ void main() {
   });
 
   group('a world rule told about every tray', () {
-    test('hears of the round\'s first tray, then of each later one', () {
+    test('hears of the round\'s first tray, then of each a move empties', () {
       // Given
       final rule = _FakeRule();
       worldRuleLookup = (_) => rule;
@@ -121,8 +121,26 @@ void main() {
       }
 
       // Then
-      expect(rule.trays, [true, false]);
+      expect(rule.trays, [false, true]);
       expect(state.trayDealt, 3);
+    });
+
+    test('hears of the tray a revive deals as not following a move', () {
+      // Given: out of pieces, with the revive still to spend
+      final rule = _FakeRule();
+      worldRuleLookup = (_) => rule;
+      final lost = _playing().copyWith(
+        phase: const .roundLost(reason: .outOfPieces),
+        piecesLeft: 0,
+        tray: [null, null, null],
+      );
+      rule.trays.clear();
+
+      // When
+      revive(lost);
+
+      // Then
+      expect(rule.trays, [false]);
     });
 
     test('can lose the round before the tray is dealt, and it stays lost', () {
