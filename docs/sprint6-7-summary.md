@@ -67,8 +67,6 @@ done beat the boss 25–40% of the time, except the planning pairs, Pockets/Save
   Android build would be signed with the debug key, which Play refuses.
 - **On a device:** a full run from Rubble to Mirror, and the map at 60 fps in profile mode on a
   mid-range Android phone.
-- **Stray files:** the 26 `*.txt` test logs at the repo root are still committed; removing them
-  was blocked for me (`git rm` of the root `*.txt` files).
 - **Task 7:** the tester week.
 - **Worth a design look:** Lantern/Ember can't act before the boss (nothing to clear), so it is
   the weakest pair in every world; Prism alone is strong in Mirror (44% with it owned).
