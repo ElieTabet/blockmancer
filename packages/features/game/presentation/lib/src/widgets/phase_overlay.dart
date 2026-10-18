@@ -12,9 +12,10 @@ import 'package:shared_domain/shared_domain.dart';
 
 enum _Sheet { bossCard, end, lost, offers, unlocks }
 
-/// The sheet the run is waiting on, over a dimmed board — or nothing while
-/// playing. Declarative rather than a modal route: the run's phase alone says
-/// which sheet is up, so there is no route to keep in step with it.
+/// The sheet the run is waiting on — or nothing while playing. Declarative
+/// rather than a modal route: the run's phase alone says which sheet is up, so
+/// there is no route to keep in step with it. It rises from the bottom of the
+/// space it is given; [PhaseScrim] dims the whole board behind it.
 ///
 /// A sheet waits for the move that led to it to play back, so the score lands
 /// before the joker pick covers it. A finished run shows nothing until what it
@@ -25,59 +26,67 @@ final class PhaseOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sheet = ref.watch(
-      gameProvider.select(
-        (state) => switch (state.run.phase) {
-          PickingJokerPhase() => _Sheet.offers,
-          RoundLostPhase() => _Sheet.lost,
-          WonPhase() || OverPhase() when state.progressPending => null,
-          WonPhase() || OverPhase()
-              when (state.progress?.unlocksAnything ?? false) &&
-                  !state.unlocksSeen =>
-            _Sheet.unlocks,
-          WonPhase() || OverPhase() => _Sheet.end,
-          PlayingPhase() when state.bossCard != null => _Sheet.bossCard,
-          PlayingPhase() => null,
-        },
-      ),
-    );
+    final sheet = _sheetShown(ref);
 
-    final playing = ref.watch(
-      playbackProvider.select((playback) => playback.isPlaying),
-    );
-
-    if (sheet == null || playing) return const SizedBox.shrink();
+    if (sheet == null) return const SizedBox.shrink();
 
     return _SheetEntrance(
       key: ValueKey(sheet),
-      child: ColoredBox(
-        color: DSColor.scrim,
-        // The leave button stays over the sheets, so a tall sheet stops below
-        // its row and scrolls rather than slide under it.
-        child: Padding(
-          padding: .only(
-            top:
-                MediaQuery.paddingOf(context).top +
-                DSSpace.small +
-                kMinInteractiveDimension +
-                DSSpace.small,
-          ),
-          child: Align(
-            alignment: .bottomCenter,
-            child: _SheetFrame(
-              child: switch (sheet) {
-                .bossCard => const BossCardSheet(),
-                .end => const RunEndSheet(),
-                .lost => const RoundLostSheet(),
-                .offers => const JokerOfferSheet(),
-                .unlocks => const UnlockSheet(),
-              },
-            ),
-          ),
+      child: Align(
+        alignment: .bottomCenter,
+        child: _SheetFrame(
+          child: switch (sheet) {
+            .bossCard => const BossCardSheet(),
+            .end => const RunEndSheet(),
+            .lost => const RoundLostSheet(),
+            .offers => const JokerOfferSheet(),
+            .unlocks => const UnlockSheet(),
+          },
         ),
       ),
     );
   }
+}
+
+/// The board dimmed, and deaf to touches, while a [PhaseOverlay] sheet is up.
+final class PhaseScrim extends ConsumerWidget {
+  const PhaseScrim({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sheet = _sheetShown(ref);
+
+    if (sheet == null) return const SizedBox.shrink();
+
+    return _SheetEntrance(
+      key: ValueKey(sheet),
+      child: const ColoredBox(color: DSColor.scrim),
+    );
+  }
+}
+
+_Sheet? _sheetShown(WidgetRef ref) {
+  final sheet = ref.watch(
+    gameProvider.select(
+      (state) => switch (state.run.phase) {
+        PickingJokerPhase() => _Sheet.offers,
+        RoundLostPhase() => _Sheet.lost,
+        WonPhase() || OverPhase() when state.progressPending => null,
+        WonPhase() || OverPhase()
+            when (state.progress?.unlocksAnything ?? false) &&
+                !state.unlocksSeen =>
+          _Sheet.unlocks,
+        WonPhase() || OverPhase() => _Sheet.end,
+        PlayingPhase() when state.bossCard != null => _Sheet.bossCard,
+        PlayingPhase() => null,
+      },
+    ),
+  );
+  final playing = ref.watch(
+    playbackProvider.select((playback) => playback.isPlaying),
+  );
+
+  return playing ? null : sheet;
 }
 
 /// Fades a sheet in, deaf to touches until it is in: a tap meant for the board

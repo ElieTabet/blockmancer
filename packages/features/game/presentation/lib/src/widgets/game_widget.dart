@@ -101,22 +101,29 @@ class _GameWidgetState extends ConsumerState<GameWidget> {
               ),
             ),
             const FeedbackPlayer(),
-            const Positioned.fill(child: PhaseOverlay()),
-            // Below the header, over the round card: the hints sit low on the
-            // board, and the sheets rise from the bottom.
-            const Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
+            const Positioned.fill(child: PhaseScrim()),
+            // Below the header: the tutorial's line, over the round card so
+            // the hints low on the board stay clear, then the space a sheet
+            // rises into, so neither the line nor the leave button covers one.
+            const Positioned.fill(
               child: SafeArea(
-                child: Padding(
-                  padding: .fromLTRB(
-                    DSSpace.medium,
-                    DSSpace.small + kMinInteractiveDimension + DSSpace.small,
-                    DSSpace.medium,
-                    0,
-                  ),
-                  child: TutorialCoach(),
+                bottom: false,
+                child: Column(
+                  spacing: DSSpace.small,
+                  children: [
+                    Padding(
+                      padding: .fromLTRB(
+                        DSSpace.medium,
+                        DSSpace.small +
+                            kMinInteractiveDimension +
+                            DSSpace.small,
+                        DSSpace.medium,
+                        0,
+                      ),
+                      child: TutorialCoach(),
+                    ),
+                    Expanded(child: PhaseOverlay()),
+                  ],
                 ),
               ),
             ),

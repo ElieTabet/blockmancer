@@ -5,6 +5,7 @@ import 'package:game_presentation/src/widgets/game_header.dart';
 import 'package:game_presentation/src/widgets/joker_chips.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:game_presentation/src/widgets/tray_view.dart';
+import 'package:game_presentation/src/widgets/tutorial_coach.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 import '../fake_game_rules.dart';
@@ -95,6 +96,34 @@ void main() {
     expect(
       sheet.top,
       greaterThanOrEqualTo(tester.getRect(find.byType(LeaveButton)).bottom),
+    );
+  });
+
+  testWidgets('on a small phone, the tutorial\'s line sits above the joker '
+      'pick, never over it', (tester) async {
+    // Given: a tutorial skipped to its starting pick, the line still up
+    await pumpGame(
+      tester,
+      runIn(const .pickingJoker(offers: [.twin, .combo, .saver]), pickIndex: 0),
+      launch: .tutorial,
+      size: const Size(320, 568),
+    );
+
+    // When
+    await tester.tap(find.text('Skip'));
+    await tester.pump(const Duration(seconds: 1));
+
+    // Then
+    final sheet = tester.getRect(
+      find.descendant(
+        of: find.byType(PhaseOverlay),
+        matching: find.byType(SingleChildScrollView),
+      ),
+    );
+    expect(find.text('Pick your starting joker'), findsOneWidget);
+    expect(
+      sheet.top,
+      greaterThanOrEqualTo(tester.getRect(find.byType(TutorialCoach)).bottom),
     );
   });
 
