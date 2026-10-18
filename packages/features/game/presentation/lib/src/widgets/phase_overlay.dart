@@ -52,16 +52,27 @@ final class PhaseOverlay extends ConsumerWidget {
       key: ValueKey(sheet),
       child: ColoredBox(
         color: DSColor.scrim,
-        child: Align(
-          alignment: .bottomCenter,
-          child: _SheetFrame(
-            child: switch (sheet) {
-              .bossCard => const BossCardSheet(),
-              .end => const RunEndSheet(),
-              .lost => const RoundLostSheet(),
-              .offers => const JokerOfferSheet(),
-              .unlocks => const UnlockSheet(),
-            },
+        // The leave button stays over the sheets, so a tall sheet stops below
+        // its row and scrolls rather than slide under it.
+        child: Padding(
+          padding: .only(
+            top:
+                MediaQuery.paddingOf(context).top +
+                DSSpace.small +
+                kMinInteractiveDimension +
+                DSSpace.small,
+          ),
+          child: Align(
+            alignment: .bottomCenter,
+            child: _SheetFrame(
+              child: switch (sheet) {
+                .bossCard => const BossCardSheet(),
+                .end => const RunEndSheet(),
+                .lost => const RoundLostSheet(),
+                .offers => const JokerOfferSheet(),
+                .unlocks => const UnlockSheet(),
+              },
+            ),
           ),
         ),
       ),

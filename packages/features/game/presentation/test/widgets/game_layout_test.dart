@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_presentation/src/widgets/board_view.dart';
+import 'package:game_presentation/src/widgets/game_header.dart';
 import 'package:game_presentation/src/widgets/joker_chips.dart';
+import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:game_presentation/src/widgets/tray_view.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -70,6 +72,31 @@ void main() {
       );
     });
   }
+
+  testWidgets('on a small phone, a sheet taller than the screen stops below '
+      'the back button and scrolls', (tester) async {
+    // Given / When: three offers, owned jokers to pair them with
+    await pumpGame(
+      tester,
+      runIn(
+        const .pickingJoker(offers: [.twin, .combo, .heavy]),
+        jokers: const [.patience, .collector, .bigbox],
+      ),
+      size: const Size(320, 568),
+    );
+
+    // Then
+    final sheet = tester.getRect(
+      find.descendant(
+        of: find.byType(PhaseOverlay),
+        matching: find.byType(SingleChildScrollView),
+      ),
+    );
+    expect(
+      sheet.top,
+      greaterThanOrEqualTo(tester.getRect(find.byType(LeaveButton)).bottom),
+    );
+  });
 
   testWidgets(
     'on an Android phone with gesture navigation, a piece is grabbed above the swipe home zone',
