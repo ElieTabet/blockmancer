@@ -834,8 +834,8 @@ class Translations$game$jokers$collector$en {
 	/// en: 'Collector'
 	String get name => 'Collector';
 
-	/// en: '+$mult mult on every clear for each joker you own.'
-	String description({required Object mult}) => '+${mult} mult on every clear for each joker you own.';
+	/// en: '+$mult mult on every clear for every two jokers you own.'
+	String description({required Object mult}) => '+${mult} mult on every clear for every two jokers you own.';
 }
 
 // Path: game.jokers.twin
@@ -1174,7 +1174,7 @@ extension on Translations {
 			'game.jokers.precision.name' => 'Precision',
 			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult when a 1–${size} cell piece completes a line.',
 			'game.jokers.collector.name' => 'Collector',
-			'game.jokers.collector.description' => ({required Object mult}) => '+${mult} mult on every clear for each joker you own.',
+			'game.jokers.collector.description' => ({required Object mult}) => '+${mult} mult on every clear for every two jokers you own.',
 			'game.jokers.twin.name' => 'Twin Lines',
 			'game.jokers.twin.description' => ({required Object factor, required Object lines}) => '×${factor} mult when you clear ${lines} or more lines at once.',
 			'game.jokers.column.name' => 'Column Hunter',

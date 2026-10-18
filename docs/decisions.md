@@ -24,3 +24,18 @@ reading chosen and why. Newest task last.
 - **Why:** the same file says "use the bot exactly as fixed in Sprint 5"; the first slot is the
   partner of an owned joker three times in four, so "first offer" would chase pairs and inflate
   `random`, which is the bug Sprint 5 fixed.
+
+### 0b. Collector
+
+- **Rule:** Collector becomes "+1 mult per other joker owned"; if combo,collector's "boss win |
+  pair done" is still above 45%, "+1 mult per 2 jokers owned" instead.
+- **Result:** per other joker gave 59% in Rubble and 48% in Gravity (2,000 runs), above 45% in
+  both, so Collector now adds `collectorMultPerJoker` for every two jokers owned, itself included
+  (`jokerCount ~/ 2`): 28% in Rubble and 21% in Gravity. Owned alone it adds nothing and doesn't
+  fire.
+- **Reading:** "above 45%" was checked per world, and one world above was enough.
+- **Side effect:** `random` beats the boss less (Rubble 24% to 16%, 56% to 41% once round 4 is
+  cleared), since its picks include Collector; Task 0d measures it at 10,000 runs.
+- **Saved runs:** a run saved before this build plays the new rule once resumed. Rules aren't
+  versioned in the save (only their numbers are), and a mid-run save is rare enough not to warrant
+  it.

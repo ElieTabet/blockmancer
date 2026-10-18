@@ -524,7 +524,7 @@ class _Translations$game$jokers$collector$fr extends Translations$game$jokers$co
 
 	// Translations
 	@override String get name => 'Collectionneur';
-	@override String description({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par joker que tu as.';
+	@override String description({required Object mult}) => 'À chaque ligne effacée, +${mult} mult pour chaque paire de jokers que tu as.';
 }
 
 // Path: game.jokers.twin
@@ -799,7 +799,7 @@ extension on TranslationsFr {
 			'game.jokers.precision.name' => 'Précision',
 			'game.jokers.precision.description' => ({required Object mult, required Object size}) => '+${mult} mult quand une pièce de 1 à ${size} cases complète une ligne.',
 			'game.jokers.collector.name' => 'Collectionneur',
-			'game.jokers.collector.description' => ({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par joker que tu as.',
+			'game.jokers.collector.description' => ({required Object mult}) => 'À chaque ligne effacée, +${mult} mult pour chaque paire de jokers que tu as.',
 			'game.jokers.twin.name' => 'Lignes jumelles',
 			'game.jokers.twin.description' => ({required Object factor, required Object lines}) => '×${factor} mult quand tu effaces ${lines} lignes ou plus d\'un coup.',
 			'game.jokers.column.name' => 'Chasseur de colonnes',

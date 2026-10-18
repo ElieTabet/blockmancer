@@ -116,7 +116,7 @@
       },
       "collector": {
         "name": "Collector",
-        "description": "+$mult mult on every clear for each joker you own."
+        "description": "+$mult mult on every clear for every two jokers you own."
       },
       "twin": {
         "name": "Twin Lines",

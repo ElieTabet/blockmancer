@@ -79,14 +79,14 @@ void main() {
     expect(state.jokers, const [JokerId.anchor, JokerId.avalanche]);
   });
 
-  test('the run of 20261016 with the jokers before Gravity\'s '
-      'is won the same way as ever', () {
+  test('the run of 20261016 with the jokers before Gravity\'s is won the '
+      'same way as ever, Collector counting jokers in twos', () {
     // Given / When
     final (:events, moves: _, :state) = autoplay(20261016, config: _before);
 
     // Then
     expect(state.phase, const RunPhase.won());
-    expect(state.runTotal, 6850);
+    expect(state.runTotal, 6361);
     expect(state.jokers, const [
       JokerId.pockets,
       JokerId.saver,

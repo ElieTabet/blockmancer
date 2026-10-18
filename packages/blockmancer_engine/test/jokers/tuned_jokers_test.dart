@@ -127,7 +127,7 @@ void main() {
     });
   });
 
-  test('Collector adds its configured mult per joker owned', () {
+  test('Collector adds its configured mult for every two jokers owned', () {
     // Given / When
     final score = playMove(
       rowAlmostFull,
@@ -138,7 +138,7 @@ void main() {
     );
 
     // Then: Column Hunter owned but quiet, no column cleared
-    expect(score.mult, 1 + 2 * 8);
+    expect(score.mult, 1 + 1 * 8);
   });
 
   group('Twin Lines', () {

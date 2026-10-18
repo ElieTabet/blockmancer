@@ -72,7 +72,7 @@ After placing, every full row and every full column clears at once (stones in a 
 | `combo` | Combo King | +(streak − 1) mult | additive | `collector` |
 | `patience` | Patience | each non-clearing move stores +2 mult; the next clear adds the stored mult, then resets it | additive | `twin` |
 | `precision` | Precision | +6 mult when a 1–2 cell piece completes a line | additive | `tiny` |
-| `collector` | Collector | +1 mult per joker owned | additive | `combo` |
+| `collector` | Collector | +1 mult for every two jokers owned, itself included (was per joker owned until Sprint 7's Task 0) | additive | `combo` |
 | `twin` | Twin Lines | ×3 mult when 2+ lines clear at once | multiplicative | `patience` |
 | `column` | Column Hunter | ×2 mult when the move clears a column | multiplicative | `sweep` |
 | `heavy` | Heavyweight | ×2 mult when a 4+ cell piece completes a line | multiplicative | `bigbox` |

@@ -124,9 +124,9 @@ void main() {
         shape: 0,
       );
 
-      // Then: 1 line + 2 streak + 2 jokers owned
-      expect(score.mult, 5);
-      expect(score.points, 1 + 400);
+      // Then: 1 line + 2 streak + 1 for the two jokers owned
+      expect(score.mult, 4);
+      expect(score.points, 1 + 320);
     });
   });
 
@@ -255,7 +255,7 @@ void main() {
   });
 
   group('Collector', () {
-    test('adds 1 mult per joker owned, itself included', () {
+    test('adds nothing on its own: it counts jokers in twos', () {
       // Given / When
       final score = playMove(
         rowAlmostFull,
@@ -265,11 +265,32 @@ void main() {
       );
 
       // Then
-      expect(score.mult, 2);
-      expect(score.points, 1 + 160);
+      expect(score.mult, 1);
+      expect(score.points, 1 + 80);
+      expect(score.fired, isEmpty);
     });
 
-    test('with Combo King, counts both jokers', () {
+    test('adds 1 mult for every two jokers owned, itself included', () {
+      // Given / When
+      final three = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.collector, .saver, .tiny],
+        shape: 0,
+      );
+      final four = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.collector, .saver, .tiny, .bigbox],
+        shape: 0,
+      );
+
+      // Then: three jokers make one pair, four make two
+      expect(three.mult, 2);
+      expect(four.mult, 3);
+    });
+
+    test('with Combo King, counts both jokers as one pair', () {
       // Given / When
       final score = playMove(
         rowAlmostFull,
@@ -278,8 +299,8 @@ void main() {
         shape: 0,
       );
 
-      // Then: no streak yet, so only Collector's +2
-      expect(score.mult, 3);
+      // Then: no streak yet, so only Collector's +1
+      expect(score.mult, 2);
     });
   });
 

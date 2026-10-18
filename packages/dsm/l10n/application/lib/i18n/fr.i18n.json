@@ -116,7 +116,7 @@
       },
       "collector": {
         "name": "Collectionneur",
-        "description": "À chaque ligne effacée, +$mult mult par joker que tu as."
+        "description": "À chaque ligne effacée, +$mult mult pour chaque paire de jokers que tu as."
       },
       "twin": {
         "name": "Lignes jumelles",
