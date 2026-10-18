@@ -218,3 +218,10 @@ Three changes from the review of this file, each its own commit.
 - **Why:** a flood means the board reached the top, and the revive empties only the fullest
   rows, which needn't include the top one; rising again before the first piece could flood the
   revived round at once, and the revive would buy nothing.
+
+### 3. `onRoundSetup` and `onBoardSetup`
+
+- **Kept apart:** `onRoundSetup` sets the round's counts (pieces, Rubble's stones) before the
+  jokers add theirs (Deep Pockets' pieces, Stonemason's stones) and the engine lays every stone in
+  one draw, while `onBoardSetup` edits the board once those stones are down (Fog's fog, which must
+  avoid them); merging them would take Rubble's stones out of that shared count and draw.
