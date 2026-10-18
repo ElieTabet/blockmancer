@@ -79,6 +79,7 @@ final class FakeGameRouting implements GameRouting {
 /// [progression], a new player's unless given, which [progressionStore] keeps.
 List<Override> gameOverrides(
   FakeGameRules rules, {
+  bool adsRemoved = false,
   AnalyticsSink? analytics,
   game.BestScores? bestScores,
   game.Engagement engagement = const game.Engagement(),
@@ -99,6 +100,7 @@ List<Override> gameOverrides(
   WorldId? world,
 }) => [
   ...game.bindProviders(
+    adsRemoved: (ref) async => adsRemoved,
     analyticsSink: (ref) => analytics ?? FakeAnalyticsSink(),
     bestScores: (ref) => bestScores ?? FakeBestScores(),
     clock: (ref) => const FakeClock(),

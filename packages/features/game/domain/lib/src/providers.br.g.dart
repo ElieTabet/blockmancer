@@ -1198,7 +1198,8 @@ final class CountRunEndProvider
 String _$countRunEndHash() => r'8d6470db36957f7f77e0791f0d2803264bc04c6f';
 
 /// The pause between a run's end and what the player does next: an
-/// interstitial, when the caps Remote Config publishes allow one.
+/// interstitial, when the caps Remote Config publishes allow one and the
+/// player hasn't bought Remove ads.
 ///
 /// Kept alive because it awaits the ad, by when an auto-disposed provider's
 /// ref may be gone.
@@ -1207,7 +1208,8 @@ String _$countRunEndHash() => r'8d6470db36957f7f77e0791f0d2803264bc04c6f';
 final betweenRunsProvider = BetweenRunsProvider._();
 
 /// The pause between a run's end and what the player does next: an
-/// interstitial, when the caps Remote Config publishes allow one.
+/// interstitial, when the caps Remote Config publishes allow one and the
+/// player hasn't bought Remove ads.
 ///
 /// Kept alive because it awaits the ad, by when an auto-disposed provider's
 /// ref may be gone.
@@ -1216,7 +1218,8 @@ final class BetweenRunsProvider
     extends $FunctionalProvider<BetweenRunsFun, BetweenRunsFun, BetweenRunsFun>
     with $Provider<BetweenRunsFun> {
   /// The pause between a run's end and what the player does next: an
-  /// interstitial, when the caps Remote Config publishes allow one.
+  /// interstitial, when the caps Remote Config publishes allow one and the
+  /// player hasn't bought Remove ads.
   ///
   /// Kept alive because it awaits the ad, by when an auto-disposed provider's
   /// ref may be gone.
@@ -1253,7 +1256,7 @@ final class BetweenRunsProvider
   }
 }
 
-String _$betweenRunsHash() => r'96de91346b0b7cb624421c73737532cb3766d0bf';
+String _$betweenRunsHash() => r'dfc39d26dd37bc03234baf449b391e906d4e22b4';
 
 /// Counts what an ad came to: shown, its reward earned, or why it failed.
 

@@ -308,6 +308,98 @@ void main() {
     );
   });
 
+  group('purchases', () {
+    testWidgets(
+      'Given the store, When Remove ads is tapped, Then its sheet opens, the '
+      'price shown on the row',
+      (tester) async {
+        // Given
+        final purchases = <String>[];
+        await pumpSettings(tester, purchases: purchases);
+        await tester.ensureVisible(find.text('Remove ads'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Remove ads'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(
+          find.text(r'No more ads between runs, for good · $3.99'),
+          findsOneWidget,
+        );
+        expect(purchases, ['buy']);
+      },
+    );
+
+    testWidgets(
+      "Given a store that can't be reached, When Remove ads is tapped, Then "
+      'the player is told',
+      (tester) async {
+        // Given
+        await pumpSettings(tester, removeAdsPrice: null, storeOpens: false);
+        await tester.ensureVisible(find.text('Remove ads'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Remove ads'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(find.text('Store unavailable'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Given Remove ads owned, When Settings opens, Then it thanks the player '
+      'and offers nothing to buy',
+      (tester) async {
+        // Given / When
+        await pumpSettings(tester, ownsRemoveAds: true);
+
+        // Then
+        expect(find.text('Ads removed. Thank you!'), findsOneWidget);
+        expect(find.text('Remove ads'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Given a purchase made before, When Restore purchases is tapped, Then '
+      'it is restored and the player told',
+      (tester) async {
+        // Given
+        await pumpSettings(tester, restoreFinds: true);
+        await tester.ensureVisible(find.text('Restore purchases'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Restore purchases'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(find.text('Purchases restored'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Given nothing bought, When Restore purchases is tapped, Then the player '
+      'is told there was nothing to restore',
+      (tester) async {
+        // Given
+        await pumpSettings(tester);
+        await tester.ensureVisible(find.text('Restore purchases'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Restore purchases'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(find.text('Nothing to restore'), findsOneWidget);
+      },
+    );
+  });
+
   group('privacy', () {
     testWidgets(
       'Given a player outside the EEA, When Settings opens, Then there are no '

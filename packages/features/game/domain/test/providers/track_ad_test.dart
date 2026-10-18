@@ -14,6 +14,7 @@ void main() {
     final analytics = FakeAnalyticsSink();
     final container = ProviderContainer(
       overrides: bindProviders(
+        adsRemoved: (ref) async => false,
         analyticsSink: (ref) => analytics,
         bestScores: (ref) => FakeBestScores(),
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 18)),

@@ -364,6 +364,25 @@
     "support": {
       "title": "Assistance",
       "subtitle": "De l'aide, et comment nous joindre"
+    },
+    "removeAds": {
+      "title": "Supprimer les pubs",
+      "subtitle": "Plus de pubs entre les parties, pour de bon · $price",
+      "subtitleNoPrice": "Plus de pubs entre les parties, pour de bon",
+      "owned": "Pubs supprimées. Merci !",
+      "ownedSubtitle": "La pub facultative pour revivre reste",
+      "unavailableTitle": "Boutique indisponible",
+      "unavailableMessage": "Impossible de joindre la boutique. Réessaie dans un instant.",
+      "ok": "OK"
+    },
+    "restore": {
+      "title": "Restaurer les achats",
+      "subtitle": "Déjà acheté Supprimer les pubs ? Récupère-le ici",
+      "restoredTitle": "Achats restaurés",
+      "restoredMessage": "Les pubs sont supprimées sur cet appareil.",
+      "noneTitle": "Rien à restaurer",
+      "noneMessage": "Aucun achat trouvé pour ce compte de la boutique.",
+      "ok": "OK"
     }
   },
   "update": {

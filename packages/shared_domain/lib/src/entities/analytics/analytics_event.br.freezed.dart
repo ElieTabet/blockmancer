@@ -55,14 +55,18 @@ extension AnalyticsEventPatterns on AnalyticsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AdFailedEvent value)?  adFailed,TResult Function( AdRewardEarnedEvent value)?  adRewardEarned,TResult Function( AdShownEvent value)?  adShown,TResult Function( JokerPickEvent value)?  jokerPick,TResult Function( ReviveEvent value)?  revive,TResult Function( RoundEndEvent value)?  roundEnd,TResult Function( RunEndEvent value)?  runEnd,TResult Function( RunStartEvent value)?  runStart,TResult Function( WorldUnlockEvent value)?  worldUnlock,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AdFailedEvent value)?  adFailed,TResult Function( AdRewardEarnedEvent value)?  adRewardEarned,TResult Function( AdShownEvent value)?  adShown,TResult Function( JokerPickEvent value)?  jokerPick,TResult Function( PurchaseCompletedEvent value)?  purchaseCompleted,TResult Function( PurchaseFailedEvent value)?  purchaseFailed,TResult Function( PurchaseRestoredEvent value)?  purchaseRestored,TResult Function( PurchaseStartedEvent value)?  purchaseStarted,TResult Function( ReviveEvent value)?  revive,TResult Function( RoundEndEvent value)?  roundEnd,TResult Function( RunEndEvent value)?  runEnd,TResult Function( RunStartEvent value)?  runStart,TResult Function( WorldUnlockEvent value)?  worldUnlock,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case AdFailedEvent() when adFailed != null:
 return adFailed(_that);case AdRewardEarnedEvent() when adRewardEarned != null:
 return adRewardEarned(_that);case AdShownEvent() when adShown != null:
 return adShown(_that);case JokerPickEvent() when jokerPick != null:
-return jokerPick(_that);case ReviveEvent() when revive != null:
+return jokerPick(_that);case PurchaseCompletedEvent() when purchaseCompleted != null:
+return purchaseCompleted(_that);case PurchaseFailedEvent() when purchaseFailed != null:
+return purchaseFailed(_that);case PurchaseRestoredEvent() when purchaseRestored != null:
+return purchaseRestored(_that);case PurchaseStartedEvent() when purchaseStarted != null:
+return purchaseStarted(_that);case ReviveEvent() when revive != null:
 return revive(_that);case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that);case RunEndEvent() when runEnd != null:
 return runEnd(_that);case RunStartEvent() when runStart != null:
@@ -85,14 +89,18 @@ return worldUnlock(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AdFailedEvent value)  adFailed,required TResult Function( AdRewardEarnedEvent value)  adRewardEarned,required TResult Function( AdShownEvent value)  adShown,required TResult Function( JokerPickEvent value)  jokerPick,required TResult Function( ReviveEvent value)  revive,required TResult Function( RoundEndEvent value)  roundEnd,required TResult Function( RunEndEvent value)  runEnd,required TResult Function( RunStartEvent value)  runStart,required TResult Function( WorldUnlockEvent value)  worldUnlock,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AdFailedEvent value)  adFailed,required TResult Function( AdRewardEarnedEvent value)  adRewardEarned,required TResult Function( AdShownEvent value)  adShown,required TResult Function( JokerPickEvent value)  jokerPick,required TResult Function( PurchaseCompletedEvent value)  purchaseCompleted,required TResult Function( PurchaseFailedEvent value)  purchaseFailed,required TResult Function( PurchaseRestoredEvent value)  purchaseRestored,required TResult Function( PurchaseStartedEvent value)  purchaseStarted,required TResult Function( ReviveEvent value)  revive,required TResult Function( RoundEndEvent value)  roundEnd,required TResult Function( RunEndEvent value)  runEnd,required TResult Function( RunStartEvent value)  runStart,required TResult Function( WorldUnlockEvent value)  worldUnlock,}){
 final _that = this;
 switch (_that) {
 case AdFailedEvent():
 return adFailed(_that);case AdRewardEarnedEvent():
 return adRewardEarned(_that);case AdShownEvent():
 return adShown(_that);case JokerPickEvent():
-return jokerPick(_that);case ReviveEvent():
+return jokerPick(_that);case PurchaseCompletedEvent():
+return purchaseCompleted(_that);case PurchaseFailedEvent():
+return purchaseFailed(_that);case PurchaseRestoredEvent():
+return purchaseRestored(_that);case PurchaseStartedEvent():
+return purchaseStarted(_that);case ReviveEvent():
 return revive(_that);case RoundEndEvent():
 return roundEnd(_that);case RunEndEvent():
 return runEnd(_that);case RunStartEvent():
@@ -111,14 +119,18 @@ return worldUnlock(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AdFailedEvent value)?  adFailed,TResult? Function( AdRewardEarnedEvent value)?  adRewardEarned,TResult? Function( AdShownEvent value)?  adShown,TResult? Function( JokerPickEvent value)?  jokerPick,TResult? Function( ReviveEvent value)?  revive,TResult? Function( RoundEndEvent value)?  roundEnd,TResult? Function( RunEndEvent value)?  runEnd,TResult? Function( RunStartEvent value)?  runStart,TResult? Function( WorldUnlockEvent value)?  worldUnlock,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AdFailedEvent value)?  adFailed,TResult? Function( AdRewardEarnedEvent value)?  adRewardEarned,TResult? Function( AdShownEvent value)?  adShown,TResult? Function( JokerPickEvent value)?  jokerPick,TResult? Function( PurchaseCompletedEvent value)?  purchaseCompleted,TResult? Function( PurchaseFailedEvent value)?  purchaseFailed,TResult? Function( PurchaseRestoredEvent value)?  purchaseRestored,TResult? Function( PurchaseStartedEvent value)?  purchaseStarted,TResult? Function( ReviveEvent value)?  revive,TResult? Function( RoundEndEvent value)?  roundEnd,TResult? Function( RunEndEvent value)?  runEnd,TResult? Function( RunStartEvent value)?  runStart,TResult? Function( WorldUnlockEvent value)?  worldUnlock,}){
 final _that = this;
 switch (_that) {
 case AdFailedEvent() when adFailed != null:
 return adFailed(_that);case AdRewardEarnedEvent() when adRewardEarned != null:
 return adRewardEarned(_that);case AdShownEvent() when adShown != null:
 return adShown(_that);case JokerPickEvent() when jokerPick != null:
-return jokerPick(_that);case ReviveEvent() when revive != null:
+return jokerPick(_that);case PurchaseCompletedEvent() when purchaseCompleted != null:
+return purchaseCompleted(_that);case PurchaseFailedEvent() when purchaseFailed != null:
+return purchaseFailed(_that);case PurchaseRestoredEvent() when purchaseRestored != null:
+return purchaseRestored(_that);case PurchaseStartedEvent() when purchaseStarted != null:
+return purchaseStarted(_that);case ReviveEvent() when revive != null:
 return revive(_that);case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that);case RunEndEvent() when runEnd != null:
 return runEnd(_that);case RunStartEvent() when runStart != null:
@@ -140,13 +152,17 @@ return worldUnlock(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String code,  AdKind kind)?  adFailed,TResult Function()?  adRewardEarned,TResult Function( AdKind kind)?  adShown,TResult Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult Function()?  revive,TResult Function( int round,  int score,  bool won)?  roundEnd,TResult Function( int starsEarned,  int total,  bool won)?  runEnd,TResult Function( RunKind mode,  WorldId world)?  runStart,TResult Function( WorldId world)?  worldUnlock,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String code,  AdKind kind)?  adFailed,TResult Function()?  adRewardEarned,TResult Function( AdKind kind)?  adShown,TResult Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult Function( String product)?  purchaseCompleted,TResult Function( String code,  String product)?  purchaseFailed,TResult Function( String product)?  purchaseRestored,TResult Function( String product)?  purchaseStarted,TResult Function()?  revive,TResult Function( int round,  int score,  bool won)?  roundEnd,TResult Function( int starsEarned,  int total,  bool won)?  runEnd,TResult Function( RunKind mode,  WorldId world)?  runStart,TResult Function( WorldId world)?  worldUnlock,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case AdFailedEvent() when adFailed != null:
 return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent() when adRewardEarned != null:
 return adRewardEarned();case AdShownEvent() when adShown != null:
 return adShown(_that.kind);case JokerPickEvent() when jokerPick != null:
-return jokerPick(_that.id,_that.offered);case ReviveEvent() when revive != null:
+return jokerPick(_that.id,_that.offered);case PurchaseCompletedEvent() when purchaseCompleted != null:
+return purchaseCompleted(_that.product);case PurchaseFailedEvent() when purchaseFailed != null:
+return purchaseFailed(_that.code,_that.product);case PurchaseRestoredEvent() when purchaseRestored != null:
+return purchaseRestored(_that.product);case PurchaseStartedEvent() when purchaseStarted != null:
+return purchaseStarted(_that.product);case ReviveEvent() when revive != null:
 return revive();case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent() when runEnd != null:
 return runEnd(_that.starsEarned,_that.total,_that.won);case RunStartEvent() when runStart != null:
@@ -169,13 +185,17 @@ return worldUnlock(_that.world);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String code,  AdKind kind)  adFailed,required TResult Function()  adRewardEarned,required TResult Function( AdKind kind)  adShown,required TResult Function( JokerId id,  List<JokerId> offered)  jokerPick,required TResult Function()  revive,required TResult Function( int round,  int score,  bool won)  roundEnd,required TResult Function( int starsEarned,  int total,  bool won)  runEnd,required TResult Function( RunKind mode,  WorldId world)  runStart,required TResult Function( WorldId world)  worldUnlock,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String code,  AdKind kind)  adFailed,required TResult Function()  adRewardEarned,required TResult Function( AdKind kind)  adShown,required TResult Function( JokerId id,  List<JokerId> offered)  jokerPick,required TResult Function( String product)  purchaseCompleted,required TResult Function( String code,  String product)  purchaseFailed,required TResult Function( String product)  purchaseRestored,required TResult Function( String product)  purchaseStarted,required TResult Function()  revive,required TResult Function( int round,  int score,  bool won)  roundEnd,required TResult Function( int starsEarned,  int total,  bool won)  runEnd,required TResult Function( RunKind mode,  WorldId world)  runStart,required TResult Function( WorldId world)  worldUnlock,}) {final _that = this;
 switch (_that) {
 case AdFailedEvent():
 return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent():
 return adRewardEarned();case AdShownEvent():
 return adShown(_that.kind);case JokerPickEvent():
-return jokerPick(_that.id,_that.offered);case ReviveEvent():
+return jokerPick(_that.id,_that.offered);case PurchaseCompletedEvent():
+return purchaseCompleted(_that.product);case PurchaseFailedEvent():
+return purchaseFailed(_that.code,_that.product);case PurchaseRestoredEvent():
+return purchaseRestored(_that.product);case PurchaseStartedEvent():
+return purchaseStarted(_that.product);case ReviveEvent():
 return revive();case RoundEndEvent():
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent():
 return runEnd(_that.starsEarned,_that.total,_that.won);case RunStartEvent():
@@ -194,13 +214,17 @@ return worldUnlock(_that.world);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String code,  AdKind kind)?  adFailed,TResult? Function()?  adRewardEarned,TResult? Function( AdKind kind)?  adShown,TResult? Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult? Function()?  revive,TResult? Function( int round,  int score,  bool won)?  roundEnd,TResult? Function( int starsEarned,  int total,  bool won)?  runEnd,TResult? Function( RunKind mode,  WorldId world)?  runStart,TResult? Function( WorldId world)?  worldUnlock,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String code,  AdKind kind)?  adFailed,TResult? Function()?  adRewardEarned,TResult? Function( AdKind kind)?  adShown,TResult? Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult? Function( String product)?  purchaseCompleted,TResult? Function( String code,  String product)?  purchaseFailed,TResult? Function( String product)?  purchaseRestored,TResult? Function( String product)?  purchaseStarted,TResult? Function()?  revive,TResult? Function( int round,  int score,  bool won)?  roundEnd,TResult? Function( int starsEarned,  int total,  bool won)?  runEnd,TResult? Function( RunKind mode,  WorldId world)?  runStart,TResult? Function( WorldId world)?  worldUnlock,}) {final _that = this;
 switch (_that) {
 case AdFailedEvent() when adFailed != null:
 return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent() when adRewardEarned != null:
 return adRewardEarned();case AdShownEvent() when adShown != null:
 return adShown(_that.kind);case JokerPickEvent() when jokerPick != null:
-return jokerPick(_that.id,_that.offered);case ReviveEvent() when revive != null:
+return jokerPick(_that.id,_that.offered);case PurchaseCompletedEvent() when purchaseCompleted != null:
+return purchaseCompleted(_that.product);case PurchaseFailedEvent() when purchaseFailed != null:
+return purchaseFailed(_that.code,_that.product);case PurchaseRestoredEvent() when purchaseRestored != null:
+return purchaseRestored(_that.product);case PurchaseStartedEvent() when purchaseStarted != null:
+return purchaseStarted(_that.product);case ReviveEvent() when revive != null:
 return revive();case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent() when runEnd != null:
 return runEnd(_that.starsEarned,_that.total,_that.won);case RunStartEvent() when runStart != null:
@@ -447,6 +471,272 @@ class _$JokerPickEventCopyWithImpl<$Res>
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as JokerId,offered: null == offered ? _self._offered : offered // ignore: cast_nullable_to_non_nullable
 as List<JokerId>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PurchaseCompletedEvent implements AnalyticsEvent {
+  const PurchaseCompletedEvent({required this.product});
+  
+
+ final  String product;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PurchaseCompletedEventCopyWith<PurchaseCompletedEvent> get copyWith => _$PurchaseCompletedEventCopyWithImpl<PurchaseCompletedEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PurchaseCompletedEvent&&(identical(other.product, product) || other.product == product));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,product);
+
+@override
+String toString() {
+  return 'AnalyticsEvent.purchaseCompleted(product: $product)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PurchaseCompletedEventCopyWith<$Res> implements $AnalyticsEventCopyWith<$Res> {
+  factory $PurchaseCompletedEventCopyWith(PurchaseCompletedEvent value, $Res Function(PurchaseCompletedEvent) _then) = _$PurchaseCompletedEventCopyWithImpl;
+@useResult
+$Res call({
+ String product
+});
+
+
+
+
+}
+/// @nodoc
+class _$PurchaseCompletedEventCopyWithImpl<$Res>
+    implements $PurchaseCompletedEventCopyWith<$Res> {
+  _$PurchaseCompletedEventCopyWithImpl(this._self, this._then);
+
+  final PurchaseCompletedEvent _self;
+  final $Res Function(PurchaseCompletedEvent) _then;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? product = null,}) {
+  return _then(PurchaseCompletedEvent(
+product: null == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PurchaseFailedEvent implements AnalyticsEvent {
+  const PurchaseFailedEvent({required this.code, required this.product});
+  
+
+ final  String code;
+ final  String product;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PurchaseFailedEventCopyWith<PurchaseFailedEvent> get copyWith => _$PurchaseFailedEventCopyWithImpl<PurchaseFailedEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PurchaseFailedEvent&&(identical(other.code, code) || other.code == code)&&(identical(other.product, product) || other.product == product));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,code,product);
+
+@override
+String toString() {
+  return 'AnalyticsEvent.purchaseFailed(code: $code, product: $product)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PurchaseFailedEventCopyWith<$Res> implements $AnalyticsEventCopyWith<$Res> {
+  factory $PurchaseFailedEventCopyWith(PurchaseFailedEvent value, $Res Function(PurchaseFailedEvent) _then) = _$PurchaseFailedEventCopyWithImpl;
+@useResult
+$Res call({
+ String code, String product
+});
+
+
+
+
+}
+/// @nodoc
+class _$PurchaseFailedEventCopyWithImpl<$Res>
+    implements $PurchaseFailedEventCopyWith<$Res> {
+  _$PurchaseFailedEventCopyWithImpl(this._self, this._then);
+
+  final PurchaseFailedEvent _self;
+  final $Res Function(PurchaseFailedEvent) _then;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? code = null,Object? product = null,}) {
+  return _then(PurchaseFailedEvent(
+code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
+as String,product: null == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PurchaseRestoredEvent implements AnalyticsEvent {
+  const PurchaseRestoredEvent({required this.product});
+  
+
+ final  String product;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PurchaseRestoredEventCopyWith<PurchaseRestoredEvent> get copyWith => _$PurchaseRestoredEventCopyWithImpl<PurchaseRestoredEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PurchaseRestoredEvent&&(identical(other.product, product) || other.product == product));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,product);
+
+@override
+String toString() {
+  return 'AnalyticsEvent.purchaseRestored(product: $product)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PurchaseRestoredEventCopyWith<$Res> implements $AnalyticsEventCopyWith<$Res> {
+  factory $PurchaseRestoredEventCopyWith(PurchaseRestoredEvent value, $Res Function(PurchaseRestoredEvent) _then) = _$PurchaseRestoredEventCopyWithImpl;
+@useResult
+$Res call({
+ String product
+});
+
+
+
+
+}
+/// @nodoc
+class _$PurchaseRestoredEventCopyWithImpl<$Res>
+    implements $PurchaseRestoredEventCopyWith<$Res> {
+  _$PurchaseRestoredEventCopyWithImpl(this._self, this._then);
+
+  final PurchaseRestoredEvent _self;
+  final $Res Function(PurchaseRestoredEvent) _then;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? product = null,}) {
+  return _then(PurchaseRestoredEvent(
+product: null == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PurchaseStartedEvent implements AnalyticsEvent {
+  const PurchaseStartedEvent({required this.product});
+  
+
+ final  String product;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PurchaseStartedEventCopyWith<PurchaseStartedEvent> get copyWith => _$PurchaseStartedEventCopyWithImpl<PurchaseStartedEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PurchaseStartedEvent&&(identical(other.product, product) || other.product == product));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,product);
+
+@override
+String toString() {
+  return 'AnalyticsEvent.purchaseStarted(product: $product)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PurchaseStartedEventCopyWith<$Res> implements $AnalyticsEventCopyWith<$Res> {
+  factory $PurchaseStartedEventCopyWith(PurchaseStartedEvent value, $Res Function(PurchaseStartedEvent) _then) = _$PurchaseStartedEventCopyWithImpl;
+@useResult
+$Res call({
+ String product
+});
+
+
+
+
+}
+/// @nodoc
+class _$PurchaseStartedEventCopyWithImpl<$Res>
+    implements $PurchaseStartedEventCopyWith<$Res> {
+  _$PurchaseStartedEventCopyWithImpl(this._self, this._then);
+
+  final PurchaseStartedEvent _self;
+  final $Res Function(PurchaseStartedEvent) _then;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? product = null,}) {
+  return _then(PurchaseStartedEvent(
+product: null == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

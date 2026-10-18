@@ -35,6 +35,7 @@ List<Override> stubFeatures({
   bool tutorialSeen = true,
 }) => [
   ...game.bindProviders(
+    adsRemoved: (ref) async => false,
     analyticsSink: (ref) => const _NoAnalytics(),
     bestScores: (ref) => const _NoBestScores(),
     clock: (ref) => const _NoonClock(),
@@ -96,7 +97,13 @@ List<Override> stubFeatures({
     showPrivacyOptions: (ref) => () async {},
   ),
   ...settings_ui.bindProviders(
+    buyRemoveAds: (ref) =>
+        () async => false,
     crashForTest: (ref) => () {},
+    removeAdsOwned: (ref) => false,
+    removeAdsPrice: (ref) async => null,
+    restorePurchases: (ref) =>
+        () async => false,
     shareText: (ref) =>
         (text, {origin, subject}) async => false,
     showsTestTools: (ref) => false,

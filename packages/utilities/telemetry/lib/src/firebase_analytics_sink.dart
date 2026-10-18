@@ -52,6 +52,22 @@ final class FirebaseAnalyticsSink implements AnalyticsSink {
           'offered': offered.map((joker) => joker.name).join(','),
         },
       ),
+      PurchaseCompletedEvent(:final product) => (
+        'purchase_completed',
+        {'product': product},
+      ),
+      PurchaseFailedEvent(:final code, :final product) => (
+        'purchase_failed',
+        {'code': code, 'product': product},
+      ),
+      PurchaseRestoredEvent(:final product) => (
+        'purchase_restored',
+        {'product': product},
+      ),
+      PurchaseStartedEvent(:final product) => (
+        'purchase_started',
+        {'product': product},
+      ),
       ReviveEvent() => ('revive', const {}),
       RoundEndEvent(:final round, :final score, :final won) => (
         'round_end',

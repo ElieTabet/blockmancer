@@ -24,6 +24,7 @@ void main() {
       ).copyWith(unlockedJokers: JokerId.values.toSet());
     container = ProviderContainer(
       overrides: bindProviders(
+        adsRemoved: (ref) async => false,
         analyticsSink: (ref) => FakeAnalyticsSink(),
         bestScores: (ref) => scores,
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),

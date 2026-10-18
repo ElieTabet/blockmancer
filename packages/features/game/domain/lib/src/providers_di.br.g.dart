@@ -10,18 +10,54 @@ part of 'providers_di.br.dart';
 // ignore_for_file: type=lint, type=warning
 /// Where what players do is counted: the testers' log today, Firebase
 /// Analytics later.
+/// Whether the player bought Remove ads: no interstitial, ever.
+
+@ProviderFor(adsRemoved)
+final adsRemovedProvider = AdsRemovedProvider._();
+
+/// Where what players do is counted: the testers' log today, Firebase
+/// Analytics later.
+/// Whether the player bought Remove ads: no interstitial, ever.
+
+final class AdsRemovedProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Where what players do is counted: the testers' log today, Firebase
+  /// Analytics later.
+  /// Whether the player bought Remove ads: no interstitial, ever.
+  AdsRemovedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'adsRemovedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$adsRemovedHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return adsRemoved(ref);
+  }
+}
+
+String _$adsRemovedHash() => r'2d95911321547276c5ca592eca3b0ae66b9bcd5a';
 
 @ProviderFor(analyticsSink)
 final analyticsSinkProvider = AnalyticsSinkProvider._();
 
-/// Where what players do is counted: the testers' log today, Firebase
-/// Analytics later.
-
 final class AnalyticsSinkProvider
     extends $FunctionalProvider<AnalyticsSink, AnalyticsSink, AnalyticsSink>
     with $Provider<AnalyticsSink> {
-  /// Where what players do is counted: the testers' log today, Firebase
-  /// Analytics later.
   AnalyticsSinkProvider._()
     : super(
         from: null,

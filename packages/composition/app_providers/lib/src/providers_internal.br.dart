@@ -5,9 +5,12 @@ import 'package:app_providers/src/release_ids.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:play_stats/play_stats.dart';
+import 'package:purchases/purchases.dart';
 import 'package:remote_config/remote_config.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:sounds/sounds.dart';
+import 'package:telemetry/telemetry.dart' as telemetry;
 
 part 'providers_internal.br.g.dart';
 
@@ -54,6 +57,21 @@ RewardedAds rewardedAds(Ref ref) => AdMobRewardedAds(
       ? (_onIos ? admobUnits.rewardedIos : admobUnits.rewardedAndroid)
       : (_onIos ? TestAdUnits.rewardedIos : TestAdUnits.rewardedAndroid),
 );
+
+/// Where every feature's events go: Firebase, and in a test build the
+/// testers' on-device log too.
+@Riverpod(keepAlive: true)
+AnalyticsSink analyticsSink(Ref ref) => ref.watch(testToolsProvider)
+    ? telemetry.CompositeAnalyticsSink([
+        telemetry.FirebaseAnalyticsSink(),
+        ref.watch(playStatsProvider),
+      ])
+    : telemetry.FirebaseAnalyticsSink();
+
+/// One for the app's life, listening to the stores from launch so no
+/// purchase is missed.
+@Riverpod(keepAlive: true)
+Purchases purchases(Ref ref) => StorePurchases();
 
 /// One for the app's life: its sounds are loaded once, at launch.
 @Riverpod(keepAlive: true)

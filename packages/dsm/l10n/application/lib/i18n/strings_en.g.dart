@@ -168,6 +168,8 @@ class Translations$settings$en {
 	late final Translations$settings$privacyChoices$en privacyChoices = Translations$settings$privacyChoices$en.internal(_root);
 	late final Translations$settings$privacyPolicy$en privacyPolicy = Translations$settings$privacyPolicy$en.internal(_root);
 	late final Translations$settings$support$en support = Translations$settings$support$en.internal(_root);
+	late final Translations$settings$removeAds$en removeAds = Translations$settings$removeAds$en.internal(_root);
+	late final Translations$settings$restore$en restore = Translations$settings$restore$en.internal(_root);
 }
 
 // Path: update
@@ -883,6 +885,69 @@ class Translations$settings$support$en {
 
 	/// en: 'Help, and how to reach us'
 	String get subtitle => 'Help, and how to reach us';
+}
+
+// Path: settings.removeAds
+class Translations$settings$removeAds$en {
+	Translations$settings$removeAds$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Remove ads'
+	String get title => 'Remove ads';
+
+	/// en: 'No more ads between runs, for good · $price'
+	String subtitle({required Object price}) => 'No more ads between runs, for good · ${price}';
+
+	/// en: 'No more ads between runs, for good'
+	String get subtitleNoPrice => 'No more ads between runs, for good';
+
+	/// en: 'Ads removed. Thank you!'
+	String get owned => 'Ads removed. Thank you!';
+
+	/// en: 'The revive's optional ad stays'
+	String get ownedSubtitle => 'The revive\'s optional ad stays';
+
+	/// en: 'Store unavailable'
+	String get unavailableTitle => 'Store unavailable';
+
+	/// en: 'The store couldn't be reached. Try again in a moment.'
+	String get unavailableMessage => 'The store couldn\'t be reached. Try again in a moment.';
+
+	/// en: 'OK'
+	String get ok => 'OK';
+}
+
+// Path: settings.restore
+class Translations$settings$restore$en {
+	Translations$settings$restore$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Restore purchases'
+	String get title => 'Restore purchases';
+
+	/// en: 'Bought Remove ads before? Get it back here'
+	String get subtitle => 'Bought Remove ads before? Get it back here';
+
+	/// en: 'Purchases restored'
+	String get restoredTitle => 'Purchases restored';
+
+	/// en: 'Ads are removed on this device.'
+	String get restoredMessage => 'Ads are removed on this device.';
+
+	/// en: 'Nothing to restore'
+	String get noneTitle => 'Nothing to restore';
+
+	/// en: 'No purchase was found for this store account.'
+	String get noneMessage => 'No purchase was found for this store account.';
+
+	/// en: 'OK'
+	String get ok => 'OK';
 }
 
 // Path: update.required
@@ -1632,6 +1697,21 @@ extension on Translations {
 			'settings.privacyPolicy.subtitle' => 'How Blockmancer handles your data',
 			'settings.support.title' => 'Support',
 			'settings.support.subtitle' => 'Help, and how to reach us',
+			'settings.removeAds.title' => 'Remove ads',
+			'settings.removeAds.subtitle' => ({required Object price}) => 'No more ads between runs, for good · ${price}',
+			'settings.removeAds.subtitleNoPrice' => 'No more ads between runs, for good',
+			'settings.removeAds.owned' => 'Ads removed. Thank you!',
+			'settings.removeAds.ownedSubtitle' => 'The revive\'s optional ad stays',
+			'settings.removeAds.unavailableTitle' => 'Store unavailable',
+			'settings.removeAds.unavailableMessage' => 'The store couldn\'t be reached. Try again in a moment.',
+			'settings.removeAds.ok' => 'OK',
+			'settings.restore.title' => 'Restore purchases',
+			'settings.restore.subtitle' => 'Bought Remove ads before? Get it back here',
+			'settings.restore.restoredTitle' => 'Purchases restored',
+			'settings.restore.restoredMessage' => 'Ads are removed on this device.',
+			'settings.restore.noneTitle' => 'Nothing to restore',
+			'settings.restore.noneMessage' => 'No purchase was found for this store account.',
+			'settings.restore.ok' => 'OK',
 			'update.required.title' => 'Update required',
 			'update.required.body' => 'This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.',
 			'update.required.button' => 'Update',

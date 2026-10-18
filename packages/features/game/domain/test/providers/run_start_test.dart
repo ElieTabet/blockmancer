@@ -14,6 +14,7 @@ ProviderContainer _containerAt(
 }) {
   final container = ProviderContainer(
     overrides: bindProviders(
+      adsRemoved: (ref) async => false,
       analyticsSink: (ref) => FakeAnalyticsSink(),
       bestScores: (ref) => scores ?? FakeBestScores(),
       clock: (ref) => clock,

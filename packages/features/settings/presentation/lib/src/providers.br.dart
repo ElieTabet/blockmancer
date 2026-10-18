@@ -19,11 +19,19 @@ ApplyStoredLanguageFun applyStoredLanguage(Ref ref) =>
     () async => (await ref.read(settingsProvider.future)).language.apply();
 
 List<Override> bindProviders({
+  required di.BuyRemoveAdsFun Function(Ref ref) buyRemoveAds,
   required VoidCallback Function(Ref ref) crashForTest,
+  required bool Function(Ref ref) removeAdsOwned,
+  required Future<String?> Function(Ref ref) removeAdsPrice,
+  required di.RestorePurchasesFun Function(Ref ref) restorePurchases,
   required di.ShareTextFun Function(Ref ref) shareText,
   required bool Function(Ref ref) showsTestTools,
 }) => [
+  di.buyRemoveAdsProvider.overrideWith(buyRemoveAds),
   di.crashForTestProvider.overrideWith(crashForTest),
+  di.removeAdsOwnedProvider.overrideWith(removeAdsOwned),
+  di.removeAdsPriceProvider.overrideWith(removeAdsPrice),
+  di.restorePurchasesProvider.overrideWith(restorePurchases),
   di.shareTextProvider.overrideWith(shareText),
   di.showsTestToolsProvider.overrideWith(showsTestTools),
 ];

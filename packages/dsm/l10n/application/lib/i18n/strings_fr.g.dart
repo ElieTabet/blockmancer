@@ -125,6 +125,8 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override late final _Translations$settings$privacyChoices$fr privacyChoices = _Translations$settings$privacyChoices$fr._(_root);
 	@override late final _Translations$settings$privacyPolicy$fr privacyPolicy = _Translations$settings$privacyPolicy$fr._(_root);
 	@override late final _Translations$settings$support$fr support = _Translations$settings$support$fr._(_root);
+	@override late final _Translations$settings$removeAds$fr removeAds = _Translations$settings$removeAds$fr._(_root);
+	@override late final _Translations$settings$restore$fr restore = _Translations$settings$restore$fr._(_root);
 }
 
 // Path: update
@@ -557,6 +559,39 @@ class _Translations$settings$support$fr extends Translations$settings$support$en
 	// Translations
 	@override String get title => 'Assistance';
 	@override String get subtitle => 'De l\'aide, et comment nous joindre';
+}
+
+// Path: settings.removeAds
+class _Translations$settings$removeAds$fr extends Translations$settings$removeAds$en {
+	_Translations$settings$removeAds$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Supprimer les pubs';
+	@override String subtitle({required Object price}) => 'Plus de pubs entre les parties, pour de bon · ${price}';
+	@override String get subtitleNoPrice => 'Plus de pubs entre les parties, pour de bon';
+	@override String get owned => 'Pubs supprimées. Merci !';
+	@override String get ownedSubtitle => 'La pub facultative pour revivre reste';
+	@override String get unavailableTitle => 'Boutique indisponible';
+	@override String get unavailableMessage => 'Impossible de joindre la boutique. Réessaie dans un instant.';
+	@override String get ok => 'OK';
+}
+
+// Path: settings.restore
+class _Translations$settings$restore$fr extends Translations$settings$restore$en {
+	_Translations$settings$restore$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Restaurer les achats';
+	@override String get subtitle => 'Déjà acheté Supprimer les pubs ? Récupère-le ici';
+	@override String get restoredTitle => 'Achats restaurés';
+	@override String get restoredMessage => 'Les pubs sont supprimées sur cet appareil.';
+	@override String get noneTitle => 'Rien à restaurer';
+	@override String get noneMessage => 'Aucun achat trouvé pour ce compte de la boutique.';
+	@override String get ok => 'OK';
 }
 
 // Path: update.required
@@ -1158,6 +1193,21 @@ extension on TranslationsFr {
 			'settings.privacyPolicy.subtitle' => 'Comment Blockmancer traite tes données',
 			'settings.support.title' => 'Assistance',
 			'settings.support.subtitle' => 'De l\'aide, et comment nous joindre',
+			'settings.removeAds.title' => 'Supprimer les pubs',
+			'settings.removeAds.subtitle' => ({required Object price}) => 'Plus de pubs entre les parties, pour de bon · ${price}',
+			'settings.removeAds.subtitleNoPrice' => 'Plus de pubs entre les parties, pour de bon',
+			'settings.removeAds.owned' => 'Pubs supprimées. Merci !',
+			'settings.removeAds.ownedSubtitle' => 'La pub facultative pour revivre reste',
+			'settings.removeAds.unavailableTitle' => 'Boutique indisponible',
+			'settings.removeAds.unavailableMessage' => 'Impossible de joindre la boutique. Réessaie dans un instant.',
+			'settings.removeAds.ok' => 'OK',
+			'settings.restore.title' => 'Restaurer les achats',
+			'settings.restore.subtitle' => 'Déjà acheté Supprimer les pubs ? Récupère-le ici',
+			'settings.restore.restoredTitle' => 'Achats restaurés',
+			'settings.restore.restoredMessage' => 'Les pubs sont supprimées sur cet appareil.',
+			'settings.restore.noneTitle' => 'Rien à restaurer',
+			'settings.restore.noneMessage' => 'Aucun achat trouvé pour ce compte de la boutique.',
+			'settings.restore.ok' => 'OK',
 			'update.required.title' => 'Mise à jour requise',
 			'update.required.body' => 'Cette version de Blockmancer n\'est plus prise en charge. Mets à jour pour continuer à jouer ; ta progression est conservée.',
 			'update.required.button' => 'Mettre à jour',

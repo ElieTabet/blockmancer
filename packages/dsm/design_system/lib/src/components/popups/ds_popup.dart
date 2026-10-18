@@ -42,6 +42,29 @@ abstract final class DSPopup {
     ),
   );
 
+  /// Something done, said with one button: a success, or nothing to do.
+  static Future<void> showInfo(
+    BuildContext context, {
+    required String title,
+    required String message,
+    required String buttonLabel,
+  }) => _show<void>(
+    context,
+    (context) => _DSPopupBody(
+      icon: Icons.check_circle_outline,
+      iconColor: DSColor.accent,
+      title: title,
+      message: message,
+      actions: [
+        _DSPopupButton(
+          label: buttonLabel,
+          onTap: () => Navigator.of(context).pop(),
+          style: .primary,
+        ),
+      ],
+    ),
+  );
+
   static Future<bool> showConfirm(
     BuildContext context, {
     required String title,

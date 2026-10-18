@@ -193,7 +193,26 @@ App Store Connect → the app → **App Privacy** → Get Started, answering wha
 No contact info, no location, no user content: the app has no account. "Used to track" answers
 must match the IDFA: the app asks the tracking question (ATT) through the IDFA explainer.
 
-*(Purchase and Game Center: Tasks 4 and 6.)*
+### In-app purchase: Remove ads
+
+App Store Connect → the app → **Monetization → In-App Purchases** → **+**:
+
+- Type: **Non-Consumable**
+- Reference name: `Remove ads`
+- Product ID: **`remove_ads`** (exactly; the app asks for this id)
+- Price: **$3.99** (Price Schedule → United States, $3.99; other countries follow Apple's tiers)
+- Localizations: English "Remove ads" / "No more ads between runs, for good. The revive's
+  optional ad stays."; French "Supprimer les pubs" / "Plus de pubs entre les parties, pour de bon.
+  La pub facultative pour revivre reste."
+- Review screenshot: Settings with the **Remove ads** row (any test build)
+- Review notes: "Settings → Remove ads buys it; Settings → Restore purchases restores it. It
+  removes the interstitial between runs; the rewarded ad offered to revive stays, opt-in."
+- Then add it to the app version's **In-App Purchases** section before submitting the build.
+
+To test: App Store Connect → **Users and Access → Sandbox → Testers** → add a tester; on the
+iPhone, Settings → App Store → Sandbox Account → sign in; buy and restore from a TestFlight build.
+
+*(Game Center: Task 6.)*
 
 ## Play Console
 
@@ -215,4 +234,19 @@ Play Console → the app → **Policy and programs → App content → Data safe
 App content → **Ads** → "Does your app contain ads?" **Yes**. Advertising ID: declare its use for
 **Advertising or marketing** and **Analytics** (the manifest declares `AD_ID`).
 
-*(In-app product and Play Games: Tasks 4 and 6.)*
+### In-app product: Remove ads
+
+Play Console → the app → **Monetize with Play → Products → In-app products** → **Create
+product**:
+
+- Product ID: **`remove_ads`** (exactly)
+- Name / description: as in App Store Connect, in English and French
+- Default price: **USD 3.99** → **Update exchange rates** for the other countries
+- **Activate** it. (Play only lists products once the app has a build with the BILLING permission
+  uploaded to a track: upload a test build to internal testing first; `in_app_purchase` adds the
+  permission.)
+
+To test: Play Console → **Settings → License testing** → add the testers' Google accounts; install
+the build from the internal testing track (not a sideloaded APK) and buy: test cards are offered.
+
+*(Play Games: Task 6.)*

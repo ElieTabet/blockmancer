@@ -37,6 +37,26 @@ void main() {
       'type': 'interstitial',
     });
     expectMapped(const .adRewardEarned(), 'ad_reward_earned', {});
+    expectMapped(
+      const .purchaseStarted(product: 'remove_ads'),
+      'purchase_started',
+      {'product': 'remove_ads'},
+    );
+    expectMapped(
+      const .purchaseCompleted(product: 'remove_ads'),
+      'purchase_completed',
+      {'product': 'remove_ads'},
+    );
+    expectMapped(
+      const .purchaseRestored(product: 'remove_ads'),
+      'purchase_restored',
+      {'product': 'remove_ads'},
+    );
+    expectMapped(
+      const .purchaseFailed(code: 'canceled', product: 'remove_ads'),
+      'purchase_failed',
+      {'code': 'canceled', 'product': 'remove_ads'},
+    );
     expectMapped(const .adFailed(code: '3', kind: .rewarded), 'ad_failed', {
       'code': '3',
       'type': 'rewarded',

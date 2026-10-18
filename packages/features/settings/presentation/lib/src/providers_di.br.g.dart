@@ -187,3 +187,175 @@ final class ShowsTestToolsProvider extends $FunctionalProvider<bool, bool, bool>
 }
 
 String _$showsTestToolsHash() => r'ff21a4d8b92d038da39d366526232f105e1f77df';
+
+@ProviderFor(buyRemoveAds)
+final buyRemoveAdsProvider = BuyRemoveAdsProvider._();
+
+final class BuyRemoveAdsProvider
+    extends
+        $FunctionalProvider<BuyRemoveAdsFun, BuyRemoveAdsFun, BuyRemoveAdsFun>
+    with $Provider<BuyRemoveAdsFun> {
+  BuyRemoveAdsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'buyRemoveAdsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$buyRemoveAdsHash();
+
+  @$internal
+  @override
+  $ProviderElement<BuyRemoveAdsFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  BuyRemoveAdsFun create(Ref ref) {
+    return buyRemoveAds(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(BuyRemoveAdsFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<BuyRemoveAdsFun>(value),
+    );
+  }
+}
+
+String _$buyRemoveAdsHash() => r'adb0650f3d504e4cea87273140a0444beaa4cbf3';
+
+/// Whether the player owns Remove ads.
+
+@ProviderFor(removeAdsOwned)
+final removeAdsOwnedProvider = RemoveAdsOwnedProvider._();
+
+/// Whether the player owns Remove ads.
+
+final class RemoveAdsOwnedProvider extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether the player owns Remove ads.
+  RemoveAdsOwnedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'removeAdsOwnedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$removeAdsOwnedHash();
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    return removeAdsOwned(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$removeAdsOwnedHash() => r'a19e83d08cb92c0cdd8ead3001e2a15492ca2337';
+
+/// Remove ads' price for this player, or null while the store can't say.
+
+@ProviderFor(removeAdsPrice)
+final removeAdsPriceProvider = RemoveAdsPriceProvider._();
+
+/// Remove ads' price for this player, or null while the store can't say.
+
+final class RemoveAdsPriceProvider
+    extends $FunctionalProvider<AsyncValue<String?>, String?, FutureOr<String?>>
+    with $FutureModifier<String?>, $FutureProvider<String?> {
+  /// Remove ads' price for this player, or null while the store can't say.
+  RemoveAdsPriceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'removeAdsPriceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$removeAdsPriceHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<String?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<String?> create(Ref ref) {
+    return removeAdsPrice(ref);
+  }
+}
+
+String _$removeAdsPriceHash() => r'16f4107a6b365bc26286ed57db4300451b39af11';
+
+@ProviderFor(restorePurchases)
+final restorePurchasesProvider = RestorePurchasesProvider._();
+
+final class RestorePurchasesProvider
+    extends
+        $FunctionalProvider<
+          RestorePurchasesFun,
+          RestorePurchasesFun,
+          RestorePurchasesFun
+        >
+    with $Provider<RestorePurchasesFun> {
+  RestorePurchasesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'restorePurchasesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$restorePurchasesHash();
+
+  @$internal
+  @override
+  $ProviderElement<RestorePurchasesFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  RestorePurchasesFun create(Ref ref) {
+    return restorePurchases(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RestorePurchasesFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RestorePurchasesFun>(value),
+    );
+  }
+}
+
+String _$restorePurchasesHash() => r'9dbce94027508b89984c20b7e81c3c1c687cf49e';

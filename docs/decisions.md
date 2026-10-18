@@ -391,3 +391,20 @@ Three changes from the review of this file, each its own commit.
 - **Preloading:** both ads load at launch (after consent), again after each show, and each run's
   start asks again in case a load failed: the run's end never waits on the network.
 - **Ad events** go to Firebase only; the testers' on-device log counts play, not ads.
+
+## Sprint 8, Task 4: Remove ads
+
+- **Where it lives:** a small `shop` feature (domain and data, no screens) owns the entitlement;
+  the game reads it through a slot and Settings shows its rows through slots, so neither knows the
+  other or the plugin.
+- **Product id:** `remove_ads` on both stores (a store-specific id would only add a mapping).
+- **"Re-checked from the store on launch":** a restore at launch, quiet (not counted as the
+  player's restore). It only ever adds the entitlement: a store that reports nothing (offline, a
+  slow restore) never takes it away; refunds are the stores' to handle.
+- **A restore the player asks for** waits up to 3 seconds for the store's report, then says
+  "Purchases restored" or "Nothing to restore".
+- **purchase_failed's code:** `canceled` when the player backs out of the store's sheet,
+  `unavailable` when the store couldn't open it, otherwise the store's own error code.
+- **A pending purchase** (parental approval) changes nothing until the store completes it.
+- **The info popup:** the design system had only error and confirm popups; `DSPopup.showInfo`
+  (a check) says a restore worked.

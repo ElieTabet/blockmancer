@@ -23,6 +23,8 @@ import 'package:settings_data/settings_data.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:settings_presentation/settings_presentation.dart'
     as settings_ui;
+import 'package:shop_data/shop_data.dart';
+import 'package:shop_domain/shop_domain.dart' as shop;
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 import 'package:telemetry/telemetry.dart' as telemetry;
 
@@ -88,12 +90,8 @@ List<Override> featureBindingOverrides({
   // The game reaches the rules, its storage and the ad network only through
   // these slots.
   ...game.bindProviders(
-    analyticsSink: (ref) => testTools
-        ? telemetry.CompositeAnalyticsSink([
-            telemetry.FirebaseAnalyticsSink(),
-            ref.watch(playStatsProvider),
-          ])
-        : telemetry.FirebaseAnalyticsSink(),
+    adsRemoved: (ref) => ref.watch(shop.removeAdsProvider.future),
+    analyticsSink: (ref) => ref.watch(analyticsSinkProvider),
     bestScores: (ref) => SharedPreferencesBestScores(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
@@ -202,8 +200,26 @@ List<Override> featureBindingOverrides({
     settingsStore: (ref) => const SharedPreferencesSettingsStore(),
     showPrivacyOptions: (ref) => ref.watch(consentProvider).showPrivacyOptions,
   ),
+  // Remove ads: the shop decides, the stores' plugin stays in `purchases`.
+  ...shop.bindProviders(
+    analyticsSink: (ref) => ref.watch(analyticsSinkProvider),
+    buyProduct: (ref) => ref.watch(purchasesProvider).buy,
+    entitlementStore: (ref) => const SharedPreferencesEntitlementStore(),
+    priceOf: (ref) => ref.watch(purchasesProvider).priceOf,
+    purchaseUpdates: (ref) {
+      final purchases = ref.watch(purchasesProvider);
+
+      return () => purchases.updates;
+    },
+    restorePurchases: (ref) => ref.watch(purchasesProvider).restore,
+  ),
   ...settings_ui.bindProviders(
+    buyRemoveAds: (ref) => ref.watch(shop.removeAdsProvider.notifier).buy,
     crashForTest: (ref) => ref.watch(telemetry.telemetryProvider).crash,
+    removeAdsOwned: (ref) => ref.watch(shop.removeAdsProvider).value ?? false,
+    removeAdsPrice: (ref) => ref.watch(shop.removeAdsPriceProvider.future),
+    restorePurchases: (ref) =>
+        ref.watch(shop.removeAdsProvider.notifier).restore,
     shareText: (ref) => external_links.shareText,
     showsTestTools: (ref) => testTools,
   ),

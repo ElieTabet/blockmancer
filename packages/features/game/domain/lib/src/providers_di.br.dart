@@ -14,6 +14,12 @@ part 'providers_di.br.g.dart';
 
 /// Where what players do is counted: the testers' log today, Firebase
 /// Analytics later.
+/// Whether the player bought Remove ads: no interstitial, ever.
+@riverpod
+Future<bool> adsRemoved(Ref ref) => throw UnimplementedError(
+  'adsRemovedProvider must be overridden by the composition layer',
+);
+
 @riverpod
 AnalyticsSink analyticsSink(Ref ref) => throw UnimplementedError(
   'analyticsSinkProvider must be overridden by the composition layer',

@@ -325,7 +325,8 @@ CountRunEndFun countRunEnd(Ref ref) =>
     ref.watch(engagementProvider).countRunEnd;
 
 /// The pause between a run's end and what the player does next: an
-/// interstitial, when the caps Remote Config publishes allow one.
+/// interstitial, when the caps Remote Config publishes allow one and the
+/// player hasn't bought Remove ads.
 ///
 /// Kept alive because it awaits the ad, by when an auto-disposed provider's
 /// ref may be gone.
@@ -336,8 +337,11 @@ BetweenRunsFun betweenRuns(Ref ref) => () async {
   final showInterstitial = ref.read(di.showInterstitialProvider);
   final trackAd = ref.read(trackAdProvider);
   final caps = interstitialCapsOf(ref.read(di.remoteValueProvider));
+  final adsRemoved = ref.read(di.adsRemovedProvider.future);
   final firstSession = await ref.read(firstSessionProvider.future);
   final now = clock.now();
+
+  if (await adsRemoved) return;
 
   if (!interstitialDue(
     caps: caps,
@@ -374,6 +378,7 @@ TrackAdFun trackAd(Ref ref) {
 }
 
 List<Override> bindProviders({
+  required Future<bool> Function(Ref ref) adsRemoved,
   required AnalyticsSink Function(Ref ref) analyticsSink,
   required BestScores Function(Ref ref) bestScores,
   required Clock Function(Ref ref) clock,
@@ -384,6 +389,7 @@ List<Override> bindProviders({
   required RunStore Function(Ref ref) runStore,
   required di.ShowAdFun Function(Ref ref) showInterstitial,
 }) => [
+  di.adsRemovedProvider.overrideWith(adsRemoved),
   di.analyticsSinkProvider.overrideWith(analyticsSink),
   di.bestScoresProvider.overrideWith(bestScores),
   di.clockProvider.overrideWith(clock),

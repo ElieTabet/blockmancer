@@ -153,6 +153,104 @@ final class RewardedAdsProvider
 
 String _$rewardedAdsHash() => r'3af76dc0440fd755afacce8b75942caabf42f0db';
 
+/// Where every feature's events go: Firebase, and in a test build the
+/// testers' on-device log too.
+
+@ProviderFor(analyticsSink)
+final analyticsSinkProvider = AnalyticsSinkProvider._();
+
+/// Where every feature's events go: Firebase, and in a test build the
+/// testers' on-device log too.
+
+final class AnalyticsSinkProvider
+    extends $FunctionalProvider<AnalyticsSink, AnalyticsSink, AnalyticsSink>
+    with $Provider<AnalyticsSink> {
+  /// Where every feature's events go: Firebase, and in a test build the
+  /// testers' on-device log too.
+  AnalyticsSinkProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'analyticsSinkProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$analyticsSinkHash();
+
+  @$internal
+  @override
+  $ProviderElement<AnalyticsSink> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AnalyticsSink create(Ref ref) {
+    return analyticsSink(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AnalyticsSink value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AnalyticsSink>(value),
+    );
+  }
+}
+
+String _$analyticsSinkHash() => r'f4e94f8c43c83654c1d53023156f5eace57335aa';
+
+/// One for the app's life, listening to the stores from launch so no
+/// purchase is missed.
+
+@ProviderFor(purchases)
+final purchasesProvider = PurchasesProvider._();
+
+/// One for the app's life, listening to the stores from launch so no
+/// purchase is missed.
+
+final class PurchasesProvider
+    extends $FunctionalProvider<Purchases, Purchases, Purchases>
+    with $Provider<Purchases> {
+  /// One for the app's life, listening to the stores from launch so no
+  /// purchase is missed.
+  PurchasesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'purchasesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$purchasesHash();
+
+  @$internal
+  @override
+  $ProviderElement<Purchases> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Purchases create(Ref ref) {
+    return purchases(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Purchases value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Purchases>(value),
+    );
+  }
+}
+
+String _$purchasesHash() => r'582bc6336c51c6cddfda440516e6be020389cf27';
+
 /// One for the app's life: its sounds are loaded once, at launch.
 
 @ProviderFor(gameSounds)

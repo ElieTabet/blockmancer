@@ -119,6 +119,32 @@ void main() {
     });
   });
 
+  group('DSPopup.showInfo', () {
+    testWidgets('renders the title/message with a check, and dismisses on the '
+        'button', (tester) async {
+      await _pumpOpener(
+        tester,
+        (context) => DSPopup.showInfo(
+          context,
+          title: 'Purchases restored',
+          message: 'Ads are removed on this device.',
+          buttonLabel: 'OK',
+        ),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Purchases restored'), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle_outline), findsOneWidget);
+
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Purchases restored'), findsNothing);
+    });
+  });
+
   // The game is dark by design, so the popup keeps the game's palette even
   // under a light theme rather than coming up as a white system dialog.
   testWidgets('a confirmation looks like the game, whatever the theme', (

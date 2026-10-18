@@ -17,6 +17,7 @@ ProviderContainer engineGame({
 }) {
   final container = ProviderContainer(
     overrides: game.bindProviders(
+      adsRemoved: (ref) async => false,
       analyticsSink: (ref) => const _NoAnalytics(),
       bestScores: (ref) => SharedPreferencesBestScores(
         startingProgression: ref.watch(game.initialProgressionProvider),

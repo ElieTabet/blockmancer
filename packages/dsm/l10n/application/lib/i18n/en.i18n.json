@@ -364,6 +364,25 @@
     "support": {
       "title": "Support",
       "subtitle": "Help, and how to reach us"
+    },
+    "removeAds": {
+      "title": "Remove ads",
+      "subtitle": "No more ads between runs, for good · $price",
+      "subtitleNoPrice": "No more ads between runs, for good",
+      "owned": "Ads removed. Thank you!",
+      "ownedSubtitle": "The revive's optional ad stays",
+      "unavailableTitle": "Store unavailable",
+      "unavailableMessage": "The store couldn't be reached. Try again in a moment.",
+      "ok": "OK"
+    },
+    "restore": {
+      "title": "Restore purchases",
+      "subtitle": "Bought Remove ads before? Get it back here",
+      "restoredTitle": "Purchases restored",
+      "restoredMessage": "Ads are removed on this device.",
+      "noneTitle": "Nothing to restore",
+      "noneMessage": "No purchase was found for this store account.",
+      "ok": "OK"
     }
   },
   "update": {

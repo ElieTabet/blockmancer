@@ -44,6 +44,7 @@ void main() {
     // Given
     final container = ProviderContainer(
       overrides: bindProviders(
+        adsRemoved: (ref) async => false,
         analyticsSink: (ref) => FakeAnalyticsSink(),
         bestScores: (ref) => FakeBestScores(),
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),

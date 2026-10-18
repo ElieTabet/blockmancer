@@ -29,6 +29,25 @@ sealed class AnalyticsEvent with _$AnalyticsEvent {
     required List<JokerId> offered,
   }) = JokerPickEvent;
 
+  /// Buying [product] reached the player's purchase: owned from now on.
+  const factory AnalyticsEvent.purchaseCompleted({required String product}) =
+      PurchaseCompletedEvent;
+
+  /// Buying [product] didn't go through, for the reason [code] (`canceled`
+  /// when the player backed out).
+  const factory AnalyticsEvent.purchaseFailed({
+    required String code,
+    required String product,
+  }) = PurchaseFailedEvent;
+
+  /// [product] found again by a restore the player asked for.
+  const factory AnalyticsEvent.purchaseRestored({required String product}) =
+      PurchaseRestoredEvent;
+
+  /// The player asked to buy [product].
+  const factory AnalyticsEvent.purchaseStarted({required String product}) =
+      PurchaseStartedEvent;
+
   const factory AnalyticsEvent.revive() = ReviveEvent;
 
   /// Round [round], from 1, ended: won, or lost and given up.

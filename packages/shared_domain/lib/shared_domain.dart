@@ -26,6 +26,7 @@ export 'src/entities/game/run_state.br.dart';
 export 'src/entities/game/shape.dart';
 export 'src/entities/game/star_unlock.br.dart';
 export 'src/entities/game/world_id.dart';
+export 'src/entities/purchases/purchase_update.dart';
 export 'src/entities/remote/remote_key.br.dart';
 export 'src/entities/progression/joker_collection.br.dart';
 export 'src/entities/progression/joker_stats.br.dart';

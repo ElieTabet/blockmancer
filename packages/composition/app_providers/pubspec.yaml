@@ -21,6 +21,7 @@ dependencies:
   play_stats: any
   push: any
   push_notifications_domain: any
+  purchases: any
   push_notifications_presentation: any
   remote_config: any
   telemetry: any
@@ -33,6 +34,8 @@ dependencies:
   settings_domain: any
   settings_presentation: any
   shared_domain: any
+  shop_data: any
+  shop_domain: any
   sounds: any
   splash_presentation: any
 

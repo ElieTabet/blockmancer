@@ -36,3 +36,32 @@ ShareTextFun shareText(Ref ref) => throw UnimplementedError(
 bool showsTestTools(Ref ref) => throw UnimplementedError(
   'showsTestToolsProvider must be overridden by the composition layer',
 );
+
+/// Opens the store's sheet for Remove ads; false when it couldn't open.
+typedef BuyRemoveAdsFun = Future<bool> Function();
+
+@riverpod
+BuyRemoveAdsFun buyRemoveAds(Ref ref) => throw UnimplementedError(
+  'buyRemoveAdsProvider must be overridden by the composition layer',
+);
+
+/// Whether the player owns Remove ads.
+@riverpod
+bool removeAdsOwned(Ref ref) => throw UnimplementedError(
+  'removeAdsOwnedProvider must be overridden by the composition layer',
+);
+
+/// Remove ads' price for this player, or null while the store can't say.
+@riverpod
+Future<String?> removeAdsPrice(Ref ref) => throw UnimplementedError(
+  'removeAdsPriceProvider must be overridden by the composition layer',
+);
+
+/// Asks the store for what the player owns: whether Remove ads is owned once
+/// it has answered.
+typedef RestorePurchasesFun = Future<bool> Function();
+
+@riverpod
+RestorePurchasesFun restorePurchases(Ref ref) => throw UnimplementedError(
+  'restorePurchasesProvider must be overridden by the composition layer',
+);

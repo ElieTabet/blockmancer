@@ -6,6 +6,7 @@ import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_presentation/src/notifiers/settings_state_notifier.br.dart';
 import 'package:settings_presentation/src/widgets/language_row.dart';
 import 'package:settings_presentation/src/widgets/privacy_rows.dart';
+import 'package:settings_presentation/src/widgets/purchase_rows.dart';
 import 'package:settings_presentation/src/widgets/replay_tutorial_row.dart';
 import 'package:settings_presentation/src/widgets/reset_progress_row.dart';
 import 'package:settings_presentation/src/widgets/send_feedback_row.dart';
@@ -40,6 +41,8 @@ final class SettingsWidget extends StatelessWidget {
                 ToggleRow(toggle: .reduceMotion),
                 LanguageRow(),
                 ReplayTutorialRow(),
+                RemoveAdsRow(),
+                RestorePurchasesRow(),
                 SendFeedbackRow(),
                 PrivacyRows(),
                 ResetProgressRow(),

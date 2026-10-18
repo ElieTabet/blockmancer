@@ -24,6 +24,11 @@ Future<FakeSettingsRouting> pumpSettings(
   ),
   List<String>? crashes,
   List<String>? links,
+  bool ownsRemoveAds = false,
+  List<String>? purchases,
+  String? removeAdsPrice = r'$3.99',
+  bool restoreFinds = false,
+  bool storeOpens = true,
   FakeMailApp? mailApp,
   FakeShareSheet? shareSheet,
   FakeSettingsStore? store,
@@ -61,8 +66,20 @@ Future<FakeSettingsRouting> pumpSettings(
               () async => links?.add('privacy options'),
         ),
         ...bindProviders(
+          buyRemoveAds: (ref) => () async {
+            purchases?.add('buy');
+
+            return storeOpens;
+          },
           crashForTest: (ref) =>
               () => crashes?.add('crash'),
+          removeAdsOwned: (ref) => ownsRemoveAds,
+          removeAdsPrice: (ref) async => removeAdsPrice,
+          restorePurchases: (ref) => () async {
+            purchases?.add('restore');
+
+            return restoreFinds;
+          },
           shareText: (ref) => (shareSheet ?? FakeShareSheet()).share,
           showsTestTools: (ref) => testBuild,
         ),

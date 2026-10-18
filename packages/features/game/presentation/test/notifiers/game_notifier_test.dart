@@ -15,6 +15,7 @@ void main() {
   late FakeGameRules rules;
 
   ProviderContainer container({
+    bool adsRemoved = false,
     FakeAnalyticsSink? analytics,
     FakeBestScores? bestScores,
     Engagement engagement = const Engagement(),
@@ -30,6 +31,7 @@ void main() {
     final container = ProviderContainer(
       overrides: gameOverrides(
         rules,
+        adsRemoved: adsRemoved,
         analytics: analytics,
         bestScores: bestScores,
         engagement: engagement,
@@ -1022,6 +1024,30 @@ void main() {
         expect(shown, 0);
       },
     );
+
+    test('with Remove ads bought, no interstitial shows, even when one is '
+        'due', () async {
+      // Given
+      var shown = 0;
+      final game = container(
+        adsRemoved: true,
+        engagement: playedBefore,
+        showInterstitial: () async {
+          shown++;
+
+          return const .closed();
+        },
+      );
+      rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 0)]);
+      game.read(gameProvider.notifier).endRun();
+      await Future<void>.delayed(Duration.zero);
+
+      // When
+      await game.read(gameProvider.notifier).retry();
+
+      // Then
+      expect(shown, 0);
+    });
 
     test('mid-run, Play again never asks for an ad', () async {
       // Given

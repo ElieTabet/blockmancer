@@ -25,6 +25,7 @@ blockmancer/
 │   │   ├── app_info/         # The app's version and the device it runs on (`readAppInfo()`, never throws) — the only place package_info_plus and device_info_plus are known
 │   │   ├── external_links/   # Hands a link or text to the OS (browser, mail draft, share sheet) — the only place url_launcher and share_plus are known; Settings uses `composeEmail` and `shareText`
 │   │   ├── play_stats/       # The testers' numbers: `LocalPlayStats` implements shared_domain's `AnalyticsSink`, counting per day on the device, and exports a JSON summary
+│   │   ├── purchases/        # The stores' in-app purchases behind `Purchases` (buy, restore, price, updates) — the only place in_app_purchase is known, so RevenueCat could replace it
 │   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
 │   │   ├── remote_config/    # Values published from Firebase Remote Config, read as text behind `RemoteValues` — the only place firebase_remote_config is known
 │   │   ├── sounds/           # The game's sound effects, decoded into memory up front behind GameSounds — the only place flutter_soloud is known
@@ -46,6 +47,7 @@ blockmancer/
 │       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
 │       ├── home/presentation/                    # home_presentation — the first tab: the world map under today's Daily run, Practice and the Spellbook in the header (worlds, jokers, progression and bests read through slots)
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
+│       ├── shop/{domain,data}/                  # shop_* — the Remove ads purchase: bought, restored, kept on the device and re-checked with the store at launch (no screens: Settings shows its rows through slots)
 │       ├── settings/{domain,data,presentation}/  # settings_* — sound, haptics, reduce motion, language and the tutorial flag (domain), on the device (data), and the Settings screen, pushed over the shell from Home's gear (presentation); resetting progress goes through a slot
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
 ├── app/flutter_native_splash.yaml  # Native launch-screen config (brand colour) — `cd app && dart run flutter_native_splash:create`
@@ -656,7 +658,8 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
-`firebase_remote_config`, `google_mobile_ads`, `flutter_inappwebview`, `flutter_soloud`, `push`,
+`firebase_remote_config`, `google_mobile_ads`, `in_app_purchase`, `purchases`,
+`flutter_inappwebview`, `flutter_soloud`, `push`,
 `sounds`, `telemetry`,
 `remote_config`, `url_launcher`, `ads`, `app_info`, `package_info_plus`, `device_info_plus`,
 `external_links`, `share_plus`, `play_stats` or `blockmancer_engine` directly** — a
@@ -708,6 +711,24 @@ a run's start preloads again (`preloadAds`).
   (`EngagementBehavior`).
 - **Analytics:** `trackAd` turns each result into `ad_shown(type)` (plus `ad_reward_earned` when
   earned) or `ad_failed(type, code)`. The testers' on-device log doesn't count ads.
+
+## Remove ads
+
+One non-consumable, `remove_ads` ($3.99, priced in the stores): interstitials gone for good; the
+rewarded revive stays.
+
+- **`shop_domain`'s `RemoveAdsNotifier`** (keepAlive) owns it: kept on the device
+  (`shop_data`'s `SharedPreferencesEntitlementStore`, `purchases.removeAds`), so it holds offline,
+  and confirmed by every purchase or restore the store reports, listened to from launch.
+  `startPurchases` (boot) re-checks with the store (a restore that counts as none), so a reinstall
+  gets it back. Nothing takes it back. Events: `purchase_started`, `purchase_completed`,
+  `purchase_restored` (only a restore the player asked for), `purchase_failed(code)` (`canceled`,
+  `unavailable`, or the store's code).
+- **`purchases`** (`StorePurchases`) wraps `in_app_purchase` (StoreKit 2 on iOS) and acknowledges
+  every purchase it hands over.
+- **The game** reads it through `game_domain`'s `adsRemoved` slot: `betweenRuns` shows nothing.
+- **Settings:** `RemoveAdsRow` (the store's price for this player; "Ads removed. Thank you!" once
+  owned) and `RestorePurchasesRow` (says whether anything was found), through slots.
 
 ## Consent
 
