@@ -164,4 +164,4 @@ Out of scope for Sprint 1: world map, ads, purchases, leaderboards, notification
 
 ## 6. Reference material
 - The playable HTML prototypes (Block Run, world map) are the behavioural reference for rules and feel.
-- The full plan (phases, architecture, platform services, launch gates) lives in the "Blockmancer — Implementation Plan" doc.
+- The full plan (phases, architecture, platform services, launch gates) lives in `IMPLEMENTATION_PLAN.md`, next to this file.

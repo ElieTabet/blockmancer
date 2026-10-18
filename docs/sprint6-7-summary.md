@@ -70,7 +70,9 @@ and what +1 and +2 would do.
   Android build would be signed with the debug key, which Play refuses.
 - **On a device:** a full run from Rubble to Mirror, and the map at 60 fps in profile mode on a
   mid-range Android phone.
-- **Task 7:** the tester week.
+- **Task 7:** dropped. The plan's launch decision (18 Oct) replaces the tester week: no soft
+  launch, iOS and Android launch together after Sprint 8 (phase 3), and D1/D7 after launch give
+  the same signals.
 - **Ember's numbers:** +3 on every clear with ×4 on stones and fog is the strongest joker now;
-  pick its mult (and maybe the factor back to ×2) before the tester week. Prism alone is also
+  pick its mult (and maybe the factor back to ×2) before launch. Prism alone is also
   strong in Mirror (44% with it owned).
