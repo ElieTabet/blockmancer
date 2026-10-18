@@ -334,8 +334,8 @@ engine's events and never recomputes a rule.
   stream, the first `fogStones` (3) hiding a stone (`FogPlaced`). A move is: place, score and
   clear, the jokers' removals beside the lines (Lantern, through `JokerEffect.extendClear`, which
   adds no chips), then every fog cell sharing a side with a cell of the placed piece lifts, to
-  empty or to the stone it hid (`FogRevealed`). Ember adds `emberMult` on every clear, then
-  multiplies by `emberFactor` when `ClearResult.obstaclesCleared` counts any: the stones and fog
+  empty or to the stone it hid (`FogRevealed`). Ember adds `emberMult` (3) on a clear, or multiplies
+  by `emberFactor` (2) instead when `ClearResult.obstaclesCleared` counts any: the stones and fog
   the move took off, in its lines or beside them. The bot's tie-break counts a
   fog cell that turned to stone as empty, so what fog hides never steers it.
 - **Tide.** `TideRule.onTrayDealt`: before every tray a move empties in the boss, every cell moves

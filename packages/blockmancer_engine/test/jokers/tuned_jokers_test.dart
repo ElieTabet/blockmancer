@@ -386,11 +386,10 @@ void main() {
     expect(score.mult, 1 + 2 * 24);
   });
 
-  test('Ember adds its configured mult, then multiplies by its configured '
-      'factor', () {
+  test('Ember adds its configured mult on a plain clear', () {
     // Given / When
     final score = playMove(
-      ['###S###.'],
+      rowAlmostFull,
       at: topRight,
       config: tunedConfig,
       jokers: const [.ember],
@@ -398,8 +397,25 @@ void main() {
     );
 
     // Then
-    expect(score.mult, (1 + 25) * 26);
+    expect(score.mult, 1 + 25);
   });
+
+  test(
+    'Ember multiplies by its configured factor instead when a stone goes',
+    () {
+      // Given / When
+      final score = playMove(
+        ['###S###.'],
+        at: topRight,
+        config: tunedConfig,
+        jokers: const [.ember],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 26);
+    },
+  );
 
   test('Sprinter adds its configured mult', () {
     // Given / When

@@ -2,9 +2,9 @@ import 'package:shared_domain/shared_domain.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
 import 'package:blockmancer_engine/src/jokers/joker_hooks.dart';
 
-/// +[JokerTuning.emberMult] mult on every clear, then ×[JokerTuning.emberFactor]
-/// when the move takes a stone or a fog cell off the board, in its lines or
-/// beside them (Lantern).
+/// +[JokerTuning.emberMult] mult on a clear, or ×[JokerTuning.emberFactor]
+/// instead when the move takes a stone or a fog cell off the board, in its
+/// lines or beside them (Lantern).
 final class Ember extends JokerEffect {
   const Ember();
 
@@ -16,7 +16,7 @@ final class Ember extends JokerEffect {
 
   @override
   ScoreStep onAdditive(MoveContext move, ScoreStep step) =>
-      move.tuning.emberMult > 0
+      move.clear.obstaclesCleared == 0 && move.tuning.emberMult > 0
       ? step.addMult(move.tuning.emberMult, id)
       : step;
 

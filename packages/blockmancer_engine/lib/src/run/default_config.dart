@@ -15,7 +15,7 @@ const defaultConfig = RunConfig(
     collectorMultPerJoker: 1,
     columnFactor: 2,
     comboMultPerStreak: 1,
-    emberFactor: 4,
+    emberFactor: 2,
     emberMult: 3,
     finisherFactor: 3,
     fullHouseCellsPerMult: 12,

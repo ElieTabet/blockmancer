@@ -778,7 +778,7 @@ class _Translations$game$jokers$ember$fr extends Translations$game$jokers$ember$
 
 	// Translations
 	@override String get name => 'Braise';
-	@override String description({required Object mult, required Object factor}) => '+${mult} mult à chaque ligne effacée, et ×${factor} quand ton coup retire une pierre ou une case de brouillard.';
+	@override String description({required Object mult, required Object factor}) => '+${mult} mult à chaque ligne effacée ; ×${factor} mult à la place quand ton coup retire une pierre ou une case de brouillard.';
 }
 
 // Path: game.jokers.sprinter
@@ -977,7 +977,7 @@ extension on TranslationsFr {
 			'game.jokers.lantern.name' => 'Lanterne',
 			'game.jokers.lantern.description' => 'Les pierres et le brouillard à côté d\'une ligne effacée partent avec elle.',
 			'game.jokers.ember.name' => 'Braise',
-			'game.jokers.ember.description' => ({required Object mult, required Object factor}) => '+${mult} mult à chaque ligne effacée, et ×${factor} quand ton coup retire une pierre ou une case de brouillard.',
+			'game.jokers.ember.description' => ({required Object mult, required Object factor}) => '+${mult} mult à chaque ligne effacée ; ×${factor} mult à la place quand ton coup retire une pierre ou une case de brouillard.',
 			'game.jokers.sprinter.name' => 'Sprinteur',
 			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult quand la première pièce d\'une nouvelle main efface une ligne.',
 			'game.jokers.momentum.name' => 'Élan',

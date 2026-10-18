@@ -293,3 +293,15 @@ Three changes from the review of this file, each its own commit.
   picks Ember, clears round 3 in 71% and beats the boss in 28–32% (targets ≈ 65% and 15–25%).
   At +1: `random` 70% / 27% in Rubble, Lantern/Ember 48% in Rubble and 23% in Gravity. Left at +3
   as asked; the figures are in docs/balance/2026-10-18-sprint7.md for the next tuning.
+
+## Sprint 8, Task 0
+
+### a. Ember adds or multiplies, never both
+
+- **Rule (SPRINT_8 prompt):** "+3 mult on every clearing move; ×2 mult instead when the move
+  removes at least one stone or fog cell".
+- **Reading:** a clearing move that takes no stone and no fog adds `emberMult` (3); one that takes
+  any, in its lines or beside them through Lantern, multiplies by `emberFactor` (2) and adds
+  nothing. "Instead" rules out both on one move, which Ember did for a day (+3 and ×4).
+  `emberFactor` goes back from 4 to 2; both numbers stay in `JokerTuning`, so the save (version
+  10) doesn't change.

@@ -214,7 +214,7 @@
       },
       "ember": {
         "name": "Ember",
-        "description": "+$mult mult on every clear, and ×$factor when your move clears a stone or a fog cell."
+        "description": "+$mult mult on every clear; ×$factor mult instead when your move clears a stone or a fog cell."
       },
       "sprinter": {
         "name": "Sprinter",

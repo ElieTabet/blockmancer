@@ -1164,9 +1164,9 @@ void main() {
         shape: 0,
       );
 
-      // Then: Ember's 3 on the clear, then doubled
-      expect(score.mult, (1 + 3) * 2);
-      expect(score.points, 1 + 80 * 8);
+      // Then: doubled, instead of Ember's 3
+      expect(score.mult, 2);
+      expect(score.points, 1 + 80 * 2);
     });
   });
 
@@ -1187,25 +1187,21 @@ void main() {
       ]);
     });
 
-    test(
-      'adds 3, then doubles the mult when the cleared line holds a stone',
-      () {
-        // Given / When
-        final score = playMove(
-          ['###S###.'],
-          at: topRight,
-          jokers: const [.ember],
-          shape: 0,
-        );
+    test('doubles the mult instead when the cleared line holds a stone', () {
+      // Given / When
+      final score = playMove(
+        ['###S###.'],
+        at: topRight,
+        jokers: const [.ember],
+        shape: 0,
+      );
 
-        // Then
-        expect(score.mult, (1 + 3) * 2);
-        expect(score.fired, const [
-          JokerFired(delta: .multAdded(amount: 3), joker: .ember),
-          JokerFired(delta: .multMultiplied(factor: 2), joker: .ember),
-        ]);
-      },
-    );
+      // Then
+      expect(score.mult, 2);
+      expect(score.fired, const [
+        JokerFired(delta: .multMultiplied(factor: 2), joker: .ember),
+      ]);
+    });
 
     test('doubles it for fog in the line too, whatever the fog hid', () {
       for (final picture in const ['###F###.', '###H###.']) {
@@ -1218,7 +1214,7 @@ void main() {
         );
 
         // Then
-        expect(score.mult, (1 + 3) * 2, reason: picture);
+        expect(score.mult, 2, reason: picture);
       }
     });
 
@@ -1259,7 +1255,20 @@ void main() {
       );
 
       // Then
-      expect(score.mult, (1 + 3) * 2);
+      expect(score.mult, 2);
+    });
+
+    test('with Lantern, adds 3 on a clear with nothing beside it to take', () {
+      // Given / When
+      final score = playMove(
+        rowAlmostFull,
+        at: topRight,
+        jokers: const [.lantern, .ember],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 3);
     });
   });
 
