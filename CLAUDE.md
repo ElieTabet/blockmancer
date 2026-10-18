@@ -370,7 +370,9 @@ engine's events and never recomputes a rule.
   `BotBuild`: a pair, or a solo joker, takes its jokers whenever offered, else any offer, each as
   likely, drawn from the run's seed (never the first: the partner bias puts an owned joker's
   partner there three times in four); `random` always takes any offer; `empty` skips every pick, playing from an empty pool,
-  which `startRun` starts straight into round 1. It depends only on
+  which `startRun` starts straight into round 1. In Tide's boss its tie-break scans from the bottom
+  row up and ranks a flooding move last, so it doesn't stack pieces where the rise floods them (it
+  still never looks ahead to the rise). It depends only on
   the engine, and `lib/src/bot/` uses no `dart:io` or isolates, so it stays web-safe.
 - **Tests** use `package:test` rather than `flutter_test`, and run on the VM (`melos run test`) and
   in Chrome (`melos run test-engine-web`).

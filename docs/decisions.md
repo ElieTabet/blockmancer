@@ -237,3 +237,19 @@ Three changes from the review of this file, each its own commit.
   data layer, which doesn't know the rules, stays out of it. The map opens it without a
   celebration (a cold start settles on what it reads); its jokers still come from beating its
   own boss.
+
+## Task 6: balance pass
+
+### The bot in Tide's boss
+
+- **Problem:** every bot build lost Tide's boss to a flood, even with 12 pieces or 4 gaps. Two
+  details of its tie-break, not the boss, did it. It takes the first placement scanned, from the
+  top row, so a piece that scores no more anywhere was stacked in the rows the next rise pushes
+  off. And "fewest occupied cells after the move" preferred a flood, which leaves fewer cells (the
+  ones it pushed off).
+- **Reading:** in Tide's boss the scan runs from the bottom row up, and a flooding move ranks last
+  among moves that score as much. The bot still never looks ahead to the rise, as the sprint
+  says; it stops walking into it. Every other world and round plays exactly as before, so their
+  tables are unchanged.
+- **Why:** the sprint expects the bot to do worse than players in Tide, not to lose every run; at
+  0% no target can be set from it.

@@ -5,8 +5,9 @@ import 'package:shared_domain/shared_domain.dart';
 /// The balance bot's move from [state]: the first joker of [build] on offer
 /// (else any offer, see [_anyOffer]), the placement that scores the most right away
 /// (fewest occupied cells after it on a tie, then the first in tray and
-/// row-major order), a revive when allowed, otherwise ending the run. Null
-/// once the run is over.
+/// row-major order, bottom row first in Tide's boss, and never a flood while
+/// a move that scores as much doesn't flood), a revive when allowed,
+/// otherwise ending the run. Null once the run is over.
 RunMove? greedyMove(
   RunState state, {
   required List<JokerId> build,
@@ -36,13 +37,18 @@ JokerId _anyOffer(RunState state, List<JokerId> offers) {
 RunMove _bestPlacement(RunState state) {
   RunMove? best;
   var bestGain = -1;
-  var bestOccupied = Board.cellCount + 1;
+  var bestOccupied = Board.cellCount + 2;
   final before = liveRunTotal(state);
+  // Ties go to the first placement scanned; from the top row, under a rising
+  // board, that stacks every piece where the next rise floods.
+  final bottomUp = state.config.world == .tide && state.round.isBoss;
 
   for (var trayIndex = 0; trayIndex < state.tray.length; trayIndex++) {
     if (state.tray[trayIndex] == null) continue;
 
-    for (var row = 0; row < Board.size; row++) {
+    for (var scan = 0; scan < Board.size; scan++) {
+      final row = bottomUp ? Board.size - 1 - scan : scan;
+
       for (var col = 0; col < Board.size; col++) {
         final anchor = Cell(col: col, row: row);
 
@@ -51,7 +57,11 @@ RunMove _bestPlacement(RunState state) {
         final (next, _) = place(state, anchor: anchor, trayIndex: trayIndex);
         // The run total, so a winning move's bonuses count too.
         final gain = liveRunTotal(next) - before;
-        final occupied = _occupiedAsSeen(state.board, next.board);
+        // A flood leaves fewer cells, those it pushed off the top, but loses.
+        final occupied =
+            next.phase == const RunPhase.roundLost(reason: .flooded)
+            ? Board.cellCount + 1
+            : _occupiedAsSeen(state.board, next.board);
 
         if (gain > bestGain || (gain == bestGain && occupied < bestOccupied)) {
           best = .place(anchor: anchor, trayIndex: trayIndex);

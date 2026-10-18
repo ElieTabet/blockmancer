@@ -4,6 +4,8 @@ import 'package:blockmancer_engine/src/bot/greedy_policy.dart';
 import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/run/engine.dart';
 import 'package:blockmancer_engine/src/run/offers.dart';
+import 'package:blockmancer_engine/src/run/replay.dart';
+import 'package:blockmancer_engine/src/worlds/world_map.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:test/test.dart';
 
@@ -19,6 +21,19 @@ RunState _playing() {
     start.copyWith(phase: const .pickingJoker(offers: [.twin])),
     id: .twin,
   ).$1;
+}
+
+/// Tide's boss on an empty board, with [tray] in hand from a tray of 3.
+RunState _tideBoss(List<int?> tray) {
+  final beforeBoss = startRun(
+    config: configFor(.tide, jokerPool: JokerId.values),
+    seed: 20261016,
+  ).copyWith(phase: const .pickingJoker(offers: [.combo]), pickIndex: 4);
+
+  return pickJoker(
+    beforeBoss,
+    id: .combo,
+  ).$1.copyWith(board: Board.empty(), tray: tray, trayDealt: 3);
 }
 
 void main() {
@@ -112,6 +127,36 @@ void main() {
       greedyMove(state, build: const []),
       const RunMove.place(anchor: topRight, trayIndex: 0),
     );
+  });
+
+  group('in Tide\'s boss', () {
+    test('a piece that scores no more anywhere goes to the bottom row, away '
+        'from the rise', () {
+      // Given: two singles left, so no rise follows this one
+      final state = _tideBoss([0, 0, null]);
+
+      // When / Then
+      expect(
+        greedyMove(state, build: const []),
+        const RunMove.place(anchor: Cell(col: 0, row: 7), trayIndex: 0),
+      );
+    });
+
+    test('the tray\'s last piece never floods while it can land elsewhere '
+        'for as much, though the flood would leave fewer cells', () {
+      // Given: the last single, whose rise pushes the top row off
+      final state = _tideBoss([0, null, null]);
+
+      // When
+      final move = greedyMove(state, build: const [])! as PlaceMove;
+
+      // Then
+      expect(move.anchor.row, isNot(0));
+      expect(
+        applyMove(state, move).$1.phase,
+        isNot(const RunPhase.roundLost(reason: .flooded)),
+      );
+    });
   });
 
   test('revives a lost round while it may, then ends the run', () {
