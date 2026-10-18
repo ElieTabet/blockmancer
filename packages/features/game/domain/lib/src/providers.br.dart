@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
+import 'package:game_domain/src/behaviors/earned_worlds_store.dart';
 import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_boss_card_seen_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_jokers_announced_behavior.dart';
@@ -117,9 +118,7 @@ JokerCollection jokerCollection(Ref ref) =>
 /// when an auto-disposed provider's ref may be gone.
 @Riverpod(keepAlive: true)
 MarkBossCardSeenFun markBossCardSeen(Ref ref) {
-  final mark = MarkBossCardSeenBehavior(
-    store: ref.watch(di.progressionStoreProvider),
-  );
+  final mark = MarkBossCardSeenBehavior(store: _progressionStore(ref));
 
   return (world) async {
     await mark(world);
@@ -133,9 +132,7 @@ MarkBossCardSeenFun markBossCardSeen(Ref ref) {
 /// when an auto-disposed provider's ref may be gone.
 @Riverpod(keepAlive: true)
 MarkJokersAnnouncedFun markJokersAnnounced(Ref ref) {
-  final mark = MarkJokersAnnouncedBehavior(
-    store: ref.watch(di.progressionStoreProvider),
-  );
+  final mark = MarkJokersAnnouncedBehavior(store: _progressionStore(ref));
 
   return () async {
     await mark();
@@ -149,9 +146,7 @@ MarkJokersAnnouncedFun markJokersAnnounced(Ref ref) {
 /// when an auto-disposed provider's ref may be gone.
 @Riverpod(keepAlive: true)
 RecordPickFun recordPick(Ref ref) {
-  final record = RecordPickBehavior(
-    store: ref.watch(di.progressionStoreProvider),
-  );
+  final record = RecordPickBehavior(store: _progressionStore(ref));
 
   return (joker) async {
     await record(joker);
@@ -167,7 +162,7 @@ RecordPickFun recordPick(Ref ref) {
 RecordProgressionFun recordProgression(Ref ref) {
   final record = RecordProgressionBehavior(
     rules: ref.watch(di.gameRulesProvider),
-    store: ref.watch(di.progressionStoreProvider),
+    store: _progressionStore(ref),
   );
 
   return (mode, run) async {
@@ -211,8 +206,7 @@ Future<bool> hasSavedRun(Ref ref) async =>
 /// What the player has earned across runs. Throws when the device's storage
 /// can't be reached at all.
 @riverpod
-LoadProgressionFun loadProgression(Ref ref) =>
-    ref.watch(di.progressionStoreProvider).load;
+LoadProgressionFun loadProgression(Ref ref) => _progressionStore(ref).load;
 
 /// The run saved on this device, or null when there is none to resume.
 /// Throws when the device's storage can't be reached at all.
@@ -310,3 +304,10 @@ List<Override> bindProviders({
   di.progressionStoreProvider.overrideWith(progressionStore),
   di.runStoreProvider.overrideWith(runStore),
 ];
+
+/// The device's progression with the worlds it has earned open, for every
+/// read and write but a reset's.
+ProgressionStore _progressionStore(Ref ref) => EarnedWorldsStore(
+  rules: ref.watch(di.gameRulesProvider),
+  store: ref.watch(di.progressionStoreProvider),
+);

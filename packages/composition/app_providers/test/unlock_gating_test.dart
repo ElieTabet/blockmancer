@@ -171,6 +171,37 @@ void main() {
   });
 
   test(
+    'Given a player who beat Gravity while Fog was coming soon, When the map '
+    'reads their progression, Then Fog is open',
+    () async {
+      // Given
+      const rules = BlockmancerEngine();
+      final fresh = game.startingProgression(rules);
+      final store = FakeProgressionStore(
+        fresh.copyWith(
+          worlds: {
+            ...fresh.worlds,
+            .gravity: fresh.worlds[WorldId.gravity]!.copyWith(
+              bossBeaten: true,
+              unlocked: true,
+            ),
+          },
+        ),
+      );
+      final gameContainer = engineGame(progressionStore: store);
+
+      // When
+      final progression = await gameContainer.read(
+        game.progressionProvider.future,
+      );
+
+      // Then
+      expect(progression.worlds[WorldId.fog]?.unlocked, isTrue);
+      expect(progression.worlds[WorldId.tide]?.unlocked, isFalse);
+    },
+  );
+
+  test(
     'Given Fog open, When its boss falls for the first time, Then Lantern and '
     'Ember unlock, and Tide opens',
     () async {

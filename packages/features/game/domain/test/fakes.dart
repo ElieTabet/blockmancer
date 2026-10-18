@@ -23,11 +23,14 @@ final class FakeClock implements Clock {
 }
 
 /// Rules on the engine's map, cut short: Rubble, then Gravity, then Fog, which
-/// has no rules yet. The daily seed is the date as `yyyymmdd` plus one, so a
+/// has no rules yet unless [fogPlayable]. The daily seed is the date as `yyyymmdd` plus one, so a
 /// test can tell a seed from a day. Beating Rubble's boss unlocks Stonemason
 /// and Quarry, Gravity's Anchor and Avalanche. Nothing else is called.
 final class TwoWorldRules implements GameRules {
-  const TwoWorldRules();
+  const TwoWorldRules({this.fogPlayable = false});
+
+  /// A release that has given Fog its rules.
+  final bool fogPlayable;
 
   @override
   List<JokerId> get startingJokers => const [.patience, .twin];
@@ -49,7 +52,8 @@ final class TwoWorldRules implements GameRules {
       year * 10000 + month * 100 + day + 1;
 
   @override
-  bool isPlayable(WorldId world) => world == .rubble || world == .gravity;
+  bool isPlayable(WorldId world) =>
+      world == .rubble || world == .gravity || (fogPlayable && world == .fog);
 
   @override
   WorldId? nextWorld(WorldId world) => switch (world) {

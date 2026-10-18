@@ -296,7 +296,7 @@ final class MarkBossCardSeenProvider
   }
 }
 
-String _$markBossCardSeenHash() => r'99e1b55b8f6597ebe01d1f96d624bb49ee54da3b';
+String _$markBossCardSeenHash() => r'dc13ee2322433f93e235bc0e15d5326b17f4130a';
 
 /// See [MarkJokersAnnouncedBehavior].
 ///
@@ -358,7 +358,7 @@ final class MarkJokersAnnouncedProvider
 }
 
 String _$markJokersAnnouncedHash() =>
-    r'acd282018e82e26323dcf961f01831bdc5b2aa19';
+    r'bb8cf1d3e4bdfeb0a81cf5f8cb86fdfcc4eb87e8';
 
 /// See [RecordPickBehavior].
 ///
@@ -413,7 +413,7 @@ final class RecordPickProvider
   }
 }
 
-String _$recordPickHash() => r'54babf5158a8dc309bea017d94cb1112e79b1252';
+String _$recordPickHash() => r'35cacbafc5161bd2fa6f4f96bcb2970fcdab27a3';
 
 /// See [RecordProgressionBehavior].
 ///
@@ -474,7 +474,7 @@ final class RecordProgressionProvider
   }
 }
 
-String _$recordProgressionHash() => r'5ae48de7c28887c22d1243721097fef0fd7c1209';
+String _$recordProgressionHash() => r'e27e77d005e66cf2509ba08a92391c9c6571e21e';
 
 /// Keeps a finished run's total if it beats its mode's best, and says so.
 ///
@@ -664,7 +664,7 @@ final class LoadProgressionProvider
   }
 }
 
-String _$loadProgressionHash() => r'785dd3946efa5f7c9e8f9d05fdb159f862ae5d3e';
+String _$loadProgressionHash() => r'5b64dde1a9ada3163f7f8588b7c1fbd7ca002991';
 
 /// The run saved on this device, or null when there is none to resume.
 /// Throws when the device's storage can't be reached at all.

@@ -225,3 +225,15 @@ Three changes from the review of this file, each its own commit.
   jokers add theirs (Deep Pockets' pieces, Stonemason's stones) and the engine lays every stone in
   one draw, while `onBoardSetup` edits the board once those stones are down (Fog's fog, which must
   avoid them); merging them would take Rubble's stones out of that shared count and draw.
+
+### 4. Worlds earned before they had rules (found on device)
+
+- **Problem:** a player who beat Gravity's boss before Fog was playable found Fog locked ("beat
+  the previous boss to unlock"): the win opened no world then, and Task 2 made Fog playable
+  without opening it for them, which CLAUDE.md had said the release must do.
+- **Reading:** rather than a one-off profile migration, `game_domain` reads every progression
+  through `EarnedWorldsStore`, which opens each playable world after a beaten boss; the next write
+  keeps it. It is worked out from the rules, so it covers any world made playable later, and the
+  data layer, which doesn't know the rules, stays out of it. The map opens it without a
+  celebration (a cold start settles on what it reads); its jokers still come from beating its
+  own boss.

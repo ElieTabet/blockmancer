@@ -451,9 +451,10 @@ for the map to announce them) and `tutorialDone`.
   run's picks count. The rest is a world run's alone. The first win
   over the world's boss marks it beaten, adds `rules.unlocksOf(world)` to `unlockedJokers` and
   unlocks the next world **if the rules can play it** (`isPlayable`): a coming-soon world stays
-  locked, so beating Gravity announces Anchor and Avalanche and no world. The release that gives
-  Fog its rules must therefore open it for players who beat Gravity before (a profile migration
-  keyed on Gravity's `bossBeaten`). A second win unlocks nothing. Stars: ★1 the boss beaten, ★2
+  locked. When a later release gives that world rules, `game_domain` reads (and so writes) every
+  progression through `EarnedWorldsStore`, which opens each playable world after a beaten boss:
+  a player who beat Gravity while Fog was coming soon finds Fog open, with no celebration. A
+  second win unlocks nothing. Stars: ★1 the boss beaten, ★2
   beaten with `revivesUsed == 0`, ★3 a run total of at least `config.starThreshold` — independent
   of the boss. Nothing is ever taken back (each star ORed into what was earned). Stars held
   across every world unlock `config.starUnlocks` (4★ Full House and On the Brink, 6★ Finisher and
