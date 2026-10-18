@@ -157,6 +157,46 @@ void main() {
       );
     });
 
+    test('clears a column the rise completes at once: it scores nothing and '
+        'leaves the clear streak as it was', () {
+      // Given: columns 0 to 2 filled from row 1 down, more than the tide's 2
+      // gaps can spare, column 7 a cell short, and a streak of 2
+      final board = boardFrom([
+        '.......#',
+        for (var row = 1; row < Board.size - 1; row++) '###....#',
+        '###.....',
+      ]);
+      final last = _lastOfTray(board).copyWith(streak: 2);
+
+      // When: the last single completes column 7
+      final (next, events) = place(
+        last,
+        anchor: const Cell(col: 7, row: 7),
+        trayIndex: 0,
+      );
+
+      // Then
+      final rose = events.whereType<TideRose>().single;
+      final completed = [
+        for (final col in const [0, 1, 2])
+          if (!rose.gapColumns.contains(col)) col,
+      ];
+      final [byMove, cleared] = events.whereType<LinesCleared>().toList();
+      final scored = events.whereType<ScoreAdded>().single;
+      expect(byMove.cols, [7]);
+      expect(cleared.source, ClearSource.tide);
+      expect(cleared.cols, completed);
+      expect(cleared.rows, isEmpty);
+      expect(events.indexOf(cleared), events.indexOf(rose) + 1);
+      for (final col in completed) {
+        for (var row = 0; row < Board.size; row++) {
+          expect(next.board.at(Cell(col: col, row: row)), isA<EmptyCell>());
+        }
+      }
+      expect(next.score, last.score + scored.total);
+      expect(next.streak, 3);
+    });
+
     test('a run whose boss rose replays from its seed and moves to the same '
         'end', () {
       // Given: the bot's run of the first seed whose boss rose

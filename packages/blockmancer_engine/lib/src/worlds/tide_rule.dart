@@ -1,11 +1,13 @@
+import 'package:blockmancer_engine/src/board/placement.br.dart';
 import 'package:blockmancer_engine/src/random/mulberry32.dart';
 import 'package:blockmancer_engine/src/worlds/world_rule.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// In the boss, every tray but the first is dealt after the tide rises: each
 /// cell moves up a row and a row of stones enters at the bottom, empty in
-/// [RoundSpec.tideGaps] columns drawn from the stones stream. Anything pushed
-/// off the top floods the round.
+/// [RoundSpec.tideGaps] columns drawn from the stones stream. A line the rise
+/// completes clears at once, for nothing. Anything pushed off the top floods
+/// the round.
 final class TideRule extends WorldRule {
   const TideRule();
 
@@ -42,8 +44,21 @@ final class TideRule extends WorldRule {
               : const CellState.stone(),
       ],
     );
-    final rose = state.copyWith(board: risen, stonesRngState: rng.state);
-    final roseEvents = [...events, GameEvent.tideRose(gapColumns: gaps)];
+    // No move completed these lines, so none scores them or counts them in
+    // its streak.
+    final clear = resolveClears(risen);
+    final rose = state.copyWith(board: clear.board, stonesRngState: rng.state);
+    final roseEvents = [
+      ...events,
+      GameEvent.tideRose(gapColumns: gaps),
+      if (clear.clearedAny)
+        GameEvent.linesCleared(
+          cells: clear.cells,
+          cols: clear.cols,
+          rows: clear.rows,
+          source: .tide,
+        ),
+    ];
 
     if (!flooded) return (rose, roseEvents);
 

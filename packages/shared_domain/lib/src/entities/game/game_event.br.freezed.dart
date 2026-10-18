@@ -161,13 +161,13 @@ return tideRose(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<Cell> cells)?  fogPlaced,TResult Function( bool becameStone,  Cell cell)?  fogRevealed,TResult Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult Function( List<JokerId> offers)?  offersPresented,TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult Function( List<int> rows)?  revived,TResult Function( LossReason reason)?  roundLost,TResult Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult Function( int total)?  runOver,TResult Function( int total)?  runWon,TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult Function( Cell cell)?  stonePlaced,TResult Function( List<int?> tray)?  trayRefilled,TResult Function( List<int> gapColumns)?  tideRose,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<Cell> cells)?  fogPlaced,TResult Function( bool becameStone,  Cell cell)?  fogRevealed,TResult Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows,  ClearSource source)?  linesCleared,TResult Function( List<JokerId> offers)?  offersPresented,TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult Function( List<int> rows)?  revived,TResult Function( LossReason reason)?  roundLost,TResult Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult Function( int total)?  runOver,TResult Function( int total)?  runWon,TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult Function( Cell cell)?  stonePlaced,TResult Function( List<int?> tray)?  trayRefilled,TResult Function( List<int> gapColumns)?  tideRose,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FogPlaced() when fogPlaced != null:
 return fogPlaced(_that.cells);case FogRevealed() when fogRevealed != null:
 return fogRevealed(_that.becameStone,_that.cell);case JokerFired() when jokerFired != null:
 return jokerFired(_that.delta,_that.joker);case LinesCleared() when linesCleared != null:
-return linesCleared(_that.cells,_that.cols,_that.rows);case OffersPresented() when offersPresented != null:
+return linesCleared(_that.cells,_that.cols,_that.rows,_that.source);case OffersPresented() when offersPresented != null:
 return offersPresented(_that.offers);case PiecePlaced() when piecePlaced != null:
 return piecePlaced(_that.anchor,_that.cells,_that.shapeId,_that.trayIndex);case Revived() when revived != null:
 return revived(_that.rows);case RoundLost() when roundLost != null:
@@ -197,13 +197,13 @@ return tideRose(_that.gapColumns);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<Cell> cells)  fogPlaced,required TResult Function( bool becameStone,  Cell cell)  fogRevealed,required TResult Function( JokerDelta delta,  JokerId joker)  jokerFired,required TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows)  linesCleared,required TResult Function( List<JokerId> offers)  offersPresented,required TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)  piecePlaced,required TResult Function( List<int> rows)  revived,required TResult Function( LossReason reason)  roundLost,required TResult Function( int pieces,  int roundIndex,  int target)  roundStarted,required TResult Function( int bonus,  int roundIndex,  int score)  roundWon,required TResult Function( int total)  runOver,required TResult Function( int total)  runWon,required TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)  scoreAdded,required TResult Function( Cell cell)  stonePlaced,required TResult Function( List<int?> tray)  trayRefilled,required TResult Function( List<int> gapColumns)  tideRose,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<Cell> cells)  fogPlaced,required TResult Function( bool becameStone,  Cell cell)  fogRevealed,required TResult Function( JokerDelta delta,  JokerId joker)  jokerFired,required TResult Function( List<Cell> cells,  List<int> cols,  List<int> rows,  ClearSource source)  linesCleared,required TResult Function( List<JokerId> offers)  offersPresented,required TResult Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)  piecePlaced,required TResult Function( List<int> rows)  revived,required TResult Function( LossReason reason)  roundLost,required TResult Function( int pieces,  int roundIndex,  int target)  roundStarted,required TResult Function( int bonus,  int roundIndex,  int score)  roundWon,required TResult Function( int total)  runOver,required TResult Function( int total)  runWon,required TResult Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)  scoreAdded,required TResult Function( Cell cell)  stonePlaced,required TResult Function( List<int?> tray)  trayRefilled,required TResult Function( List<int> gapColumns)  tideRose,}) {final _that = this;
 switch (_that) {
 case FogPlaced():
 return fogPlaced(_that.cells);case FogRevealed():
 return fogRevealed(_that.becameStone,_that.cell);case JokerFired():
 return jokerFired(_that.delta,_that.joker);case LinesCleared():
-return linesCleared(_that.cells,_that.cols,_that.rows);case OffersPresented():
+return linesCleared(_that.cells,_that.cols,_that.rows,_that.source);case OffersPresented():
 return offersPresented(_that.offers);case PiecePlaced():
 return piecePlaced(_that.anchor,_that.cells,_that.shapeId,_that.trayIndex);case Revived():
 return revived(_that.rows);case RoundLost():
@@ -229,13 +229,13 @@ return tideRose(_that.gapColumns);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<Cell> cells)?  fogPlaced,TResult? Function( bool becameStone,  Cell cell)?  fogRevealed,TResult? Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult? Function( List<Cell> cells,  List<int> cols,  List<int> rows)?  linesCleared,TResult? Function( List<JokerId> offers)?  offersPresented,TResult? Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult? Function( List<int> rows)?  revived,TResult? Function( LossReason reason)?  roundLost,TResult? Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult? Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult? Function( int total)?  runOver,TResult? Function( int total)?  runWon,TResult? Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult? Function( Cell cell)?  stonePlaced,TResult? Function( List<int?> tray)?  trayRefilled,TResult? Function( List<int> gapColumns)?  tideRose,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<Cell> cells)?  fogPlaced,TResult? Function( bool becameStone,  Cell cell)?  fogRevealed,TResult? Function( JokerDelta delta,  JokerId joker)?  jokerFired,TResult? Function( List<Cell> cells,  List<int> cols,  List<int> rows,  ClearSource source)?  linesCleared,TResult? Function( List<JokerId> offers)?  offersPresented,TResult? Function( Cell anchor,  List<Cell> cells,  int shapeId,  int trayIndex)?  piecePlaced,TResult? Function( List<int> rows)?  revived,TResult? Function( LossReason reason)?  roundLost,TResult? Function( int pieces,  int roundIndex,  int target)?  roundStarted,TResult? Function( int bonus,  int roundIndex,  int score)?  roundWon,TResult? Function( int total)?  runOver,TResult? Function( int total)?  runWon,TResult? Function( int bonusPoints,  int chips,  int lineScore,  int mult,  int piecePoints,  int total)?  scoreAdded,TResult? Function( Cell cell)?  stonePlaced,TResult? Function( List<int?> tray)?  trayRefilled,TResult? Function( List<int> gapColumns)?  tideRose,}) {final _that = this;
 switch (_that) {
 case FogPlaced() when fogPlaced != null:
 return fogPlaced(_that.cells);case FogRevealed() when fogRevealed != null:
 return fogRevealed(_that.becameStone,_that.cell);case JokerFired() when jokerFired != null:
 return jokerFired(_that.delta,_that.joker);case LinesCleared() when linesCleared != null:
-return linesCleared(_that.cells,_that.cols,_that.rows);case OffersPresented() when offersPresented != null:
+return linesCleared(_that.cells,_that.cols,_that.rows,_that.source);case OffersPresented() when offersPresented != null:
 return offersPresented(_that.offers);case PiecePlaced() when piecePlaced != null:
 return piecePlaced(_that.anchor,_that.cells,_that.shapeId,_that.trayIndex);case Revived() when revived != null:
 return revived(_that.rows);case RoundLost() when roundLost != null:
@@ -485,7 +485,7 @@ $JokerDeltaCopyWith<$Res> get delta {
 
 
 class LinesCleared implements GameEvent {
-  const LinesCleared({required final  List<Cell> cells, required final  List<int> cols, required final  List<int> rows}): _cells = cells,_cols = cols,_rows = rows;
+  const LinesCleared({required final  List<Cell> cells, required final  List<int> cols, required final  List<int> rows, this.source = ClearSource.move}): _cells = cells,_cols = cols,_rows = rows;
   
 
 /// Distinct cells, row-major.
@@ -511,6 +511,7 @@ class LinesCleared implements GameEvent {
   return EqualUnmodifiableListView(_rows);
 }
 
+@JsonKey() final  ClearSource source;
 
 /// Create a copy of GameEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -522,16 +523,16 @@ $LinesClearedCopyWith<LinesCleared> get copyWith => _$LinesClearedCopyWithImpl<L
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LinesCleared&&const DeepCollectionEquality().equals(other._cells, _cells)&&const DeepCollectionEquality().equals(other._cols, _cols)&&const DeepCollectionEquality().equals(other._rows, _rows));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LinesCleared&&const DeepCollectionEquality().equals(other._cells, _cells)&&const DeepCollectionEquality().equals(other._cols, _cols)&&const DeepCollectionEquality().equals(other._rows, _rows)&&(identical(other.source, source) || other.source == source));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_cells),const DeepCollectionEquality().hash(_cols),const DeepCollectionEquality().hash(_rows));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_cells),const DeepCollectionEquality().hash(_cols),const DeepCollectionEquality().hash(_rows),source);
 
 @override
 String toString() {
-  return 'GameEvent.linesCleared(cells: $cells, cols: $cols, rows: $rows)';
+  return 'GameEvent.linesCleared(cells: $cells, cols: $cols, rows: $rows, source: $source)';
 }
 
 
@@ -542,7 +543,7 @@ abstract mixin class $LinesClearedCopyWith<$Res> implements $GameEventCopyWith<$
   factory $LinesClearedCopyWith(LinesCleared value, $Res Function(LinesCleared) _then) = _$LinesClearedCopyWithImpl;
 @useResult
 $Res call({
- List<Cell> cells, List<int> cols, List<int> rows
+ List<Cell> cells, List<int> cols, List<int> rows, ClearSource source
 });
 
 
@@ -559,12 +560,13 @@ class _$LinesClearedCopyWithImpl<$Res>
 
 /// Create a copy of GameEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? cells = null,Object? cols = null,Object? rows = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? cells = null,Object? cols = null,Object? rows = null,Object? source = null,}) {
   return _then(LinesCleared(
 cells: null == cells ? _self._cells : cells // ignore: cast_nullable_to_non_nullable
 as List<Cell>,cols: null == cols ? _self._cols : cols // ignore: cast_nullable_to_non_nullable
 as List<int>,rows: null == rows ? _self._rows : rows // ignore: cast_nullable_to_non_nullable
-as List<int>,
+as List<int>,source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
+as ClearSource,
   ));
 }
 

@@ -27,7 +27,8 @@ const _still = Duration(milliseconds: 100);
 /// away, then the score counted up — chips, mult, each joker that fired
 /// on the way, the product — and landing in the round score. Jokers that fire
 /// once the score is in, such as a won round's bonus, pulse after it lands,
-/// and a tide that rose for the next tray lifts the board last.
+/// and a tide that rose for the next tray lifts the board last, bursting any
+/// line it completed.
 ///
 /// Every value is read from [events] and the runs either side of the move.
 /// With [reduceMotion] the squash, the burst, the puff, the rise and the
@@ -52,7 +53,14 @@ List<Beat> beatsFor({
   ];
 
   final placed = events.whereType<PiecePlaced>().firstOrNull;
-  final cleared = events.whereType<LinesCleared>().firstOrNull;
+  final cleared = events
+      .whereType<LinesCleared>()
+      .where((event) => event.source == .move)
+      .firstOrNull;
+  final tideCleared = events
+      .whereType<LinesCleared>()
+      .where((event) => event.source == .tide)
+      .firstOrNull;
   final scoredAt = events.indexWhere((event) => event is ScoreAdded);
   final score = scoredAt < 0 ? null : events[scoredAt] as ScoreAdded;
   final won = events.whereType<RoundWon>().firstOrNull;
@@ -67,8 +75,26 @@ List<Beat> beatsFor({
     for (final event in events.whereType<FogRevealed>()) event.cell,
   ];
   final rising = [
-    if (events.any((event) => event is TideRose) && !reduceMotion)
+    if (events.any((event) => event is TideRose) && !reduceMotion) ...[
       const Beat.rising(duration: _rise),
+      if (tideCleared != null)
+        Beat.clearing(
+          cells: [
+            for (final cell in tideCleared.cells)
+              (
+                cell: cell,
+                state: _beforeTheRise(
+                  before.board,
+                  cell,
+                  colorIndex: colorIndex,
+                  placed: placed?.cells ?? const [],
+                ),
+              ),
+          ],
+          duration: _clear,
+          shake: .none,
+        ),
+    ],
   ];
   final revealing = [
     if (revealed.isNotEmpty && !reduceMotion)
@@ -145,4 +171,27 @@ List<Beat> beatsFor({
     ...afterwards,
     ...rising,
   ];
+}
+
+/// What stood on [cell] of the risen board before its line cleared: the stone
+/// row that entered at the bottom, else what the cell below held after the
+/// move, the piece's colour where it landed. The move cleared nothing in a
+/// line the rise completed, so anything still empty in [board] got a stone
+/// after the move was scored (Quarry's).
+CellState _beforeTheRise(
+  Board board,
+  Cell cell, {
+  required int colorIndex,
+  required List<Cell> placed,
+}) {
+  if (cell.row == Board.size - 1) return const .stone();
+
+  final below = Cell(col: cell.col, row: cell.row + 1);
+
+  if (placed.contains(below)) return CellState.filled(colorIndex: colorIndex);
+
+  return switch (board.at(below)) {
+    EmptyCell() => const .stone(),
+    final state => state,
+  };
 }

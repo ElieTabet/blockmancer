@@ -31,6 +31,10 @@ abstract class PlaybackState with _$PlaybackState {
     /// Counts the beats played, so the same beat twice running still starts
     /// its animation again.
     @Default(0) int step,
+
+    /// The cells the move's tide clears, which the board still shows standing
+    /// until they burst.
+    @Default(<ClearedCell>[]) List<ClearedCell> tideAhead,
   }) = _PlaybackState;
 
   const PlaybackState._();

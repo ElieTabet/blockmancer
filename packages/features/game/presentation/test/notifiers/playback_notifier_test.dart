@@ -77,6 +77,45 @@ void main() {
     expect(game.read(playbackProvider).riseAhead, isFalse);
   });
 
+  testWidgets('a line the tide completed stands on the board until it bursts, '
+      'after the rise', (tester) async {
+    // Given
+    const tideCell = Cell(col: 3, row: 7);
+    rules.next = (
+      runIn(const .playing(), score: 241),
+      [
+        ...clear,
+        const GameEvent.tideRose(gapColumns: [1, 6]),
+        const GameEvent.linesCleared(
+          cells: [tideCell],
+          cols: [3],
+          rows: [],
+          source: .tide,
+        ),
+      ],
+    );
+    final game = container();
+    final seen = <(bool, Beat?)>[];
+    game.listen(
+      playbackProvider.select(
+        (playback) => (playback.tideAhead.isNotEmpty, playback.beat),
+      ),
+      (_, next) => seen.add(next),
+    );
+
+    // When
+    place(game);
+    await tester.pump(const Duration(seconds: 3));
+
+    // Then
+    final burstAt = seen.lastIndexWhere((step) => step.$2 is ClearingBeat);
+    expect(seen.first.$1, isTrue);
+    expect(seen.where((step) => step.$2 is RisingBeat).single.$1, isTrue);
+    expect(seen[burstAt].$1, isFalse);
+    expect((seen[burstAt].$2! as ClearingBeat).cells.single.cell, tideCell);
+    expect(game.read(playbackProvider).tideAhead, isEmpty);
+  });
+
   testWidgets('a clear plays its beats in order, each joker as it fired', (
     tester,
   ) async {

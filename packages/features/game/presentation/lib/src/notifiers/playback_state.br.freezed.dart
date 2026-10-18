@@ -25,7 +25,9 @@ mixin _$PlaybackState {
 /// row lower until the rising beat lifts them.
  bool get riseAhead;/// Counts the beats played, so the same beat twice running still starts
 /// its animation again.
- int get step;
+ int get step;/// The cells the move's tide clears, which the board still shows standing
+/// until they burst.
+ List<ClearedCell> get tideAhead;
 /// Create a copy of PlaybackState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -36,16 +38,16 @@ $PlaybackStateCopyWith<PlaybackState> get copyWith => _$PlaybackStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.held, held) || other.held == held)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.riseAhead, riseAhead) || other.riseAhead == riseAhead)&&(identical(other.step, step) || other.step == step));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.held, held) || other.held == held)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.riseAhead, riseAhead) || other.riseAhead == riseAhead)&&(identical(other.step, step) || other.step == step)&&const DeepCollectionEquality().equals(other.tideAhead, tideAhead));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,beat,canSkip,held,heldRun,heldScore,riseAhead,step);
+int get hashCode => Object.hash(runtimeType,beat,canSkip,held,heldRun,heldScore,riseAhead,step,const DeepCollectionEquality().hash(tideAhead));
 
 @override
 String toString() {
-  return 'PlaybackState(beat: $beat, canSkip: $canSkip, held: $held, heldRun: $heldRun, heldScore: $heldScore, riseAhead: $riseAhead, step: $step)';
+  return 'PlaybackState(beat: $beat, canSkip: $canSkip, held: $held, heldRun: $heldRun, heldScore: $heldScore, riseAhead: $riseAhead, step: $step, tideAhead: $tideAhead)';
 }
 
 
@@ -56,7 +58,7 @@ abstract mixin class $PlaybackStateCopyWith<$Res>  {
   factory $PlaybackStateCopyWith(PlaybackState value, $Res Function(PlaybackState) _then) = _$PlaybackStateCopyWithImpl;
 @useResult
 $Res call({
- Beat? beat, bool canSkip, bool held, RunState? heldRun, int? heldScore, bool riseAhead, int step
+ Beat? beat, bool canSkip, bool held, RunState? heldRun, int? heldScore, bool riseAhead, int step, List<ClearedCell> tideAhead
 });
 
 
@@ -73,7 +75,7 @@ class _$PlaybackStateCopyWithImpl<$Res>
 
 /// Create a copy of PlaybackState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? beat = freezed,Object? canSkip = null,Object? held = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? riseAhead = null,Object? step = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? beat = freezed,Object? canSkip = null,Object? held = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? riseAhead = null,Object? step = null,Object? tideAhead = null,}) {
   return _then(_self.copyWith(
 beat: freezed == beat ? _self.beat : beat // ignore: cast_nullable_to_non_nullable
 as Beat?,canSkip: null == canSkip ? _self.canSkip : canSkip // ignore: cast_nullable_to_non_nullable
@@ -82,7 +84,8 @@ as bool,heldRun: freezed == heldRun ? _self.heldRun : heldRun // ignore: cast_nu
 as RunState?,heldScore: freezed == heldScore ? _self.heldScore : heldScore // ignore: cast_nullable_to_non_nullable
 as int?,riseAhead: null == riseAhead ? _self.riseAhead : riseAhead // ignore: cast_nullable_to_non_nullable
 as bool,step: null == step ? _self.step : step // ignore: cast_nullable_to_non_nullable
-as int,
+as int,tideAhead: null == tideAhead ? _self.tideAhead : tideAhead // ignore: cast_nullable_to_non_nullable
+as List<ClearedCell>,
   ));
 }
 /// Create a copy of PlaybackState
@@ -191,10 +194,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  bool riseAhead,  int step)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  bool riseAhead,  int step,  List<ClearedCell> tideAhead)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PlaybackState() when $default != null:
-return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.riseAhead,_that.step);case _:
+return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.riseAhead,_that.step,_that.tideAhead);case _:
   return orElse();
 
 }
@@ -212,10 +215,10 @@ return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScor
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  bool riseAhead,  int step)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  bool riseAhead,  int step,  List<ClearedCell> tideAhead)  $default,) {final _that = this;
 switch (_that) {
 case _PlaybackState():
-return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.riseAhead,_that.step);case _:
+return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.riseAhead,_that.step,_that.tideAhead);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -232,10 +235,10 @@ return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScor
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  bool riseAhead,  int step)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Beat? beat,  bool canSkip,  bool held,  RunState? heldRun,  int? heldScore,  bool riseAhead,  int step,  List<ClearedCell> tideAhead)?  $default,) {final _that = this;
 switch (_that) {
 case _PlaybackState() when $default != null:
-return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.riseAhead,_that.step);case _:
+return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScore,_that.riseAhead,_that.step,_that.tideAhead);case _:
   return null;
 
 }
@@ -247,7 +250,7 @@ return $default(_that.beat,_that.canSkip,_that.held,_that.heldRun,_that.heldScor
 
 
 class _PlaybackState extends PlaybackState {
-  const _PlaybackState({this.beat, this.canSkip = false, this.held = false, this.heldRun, this.heldScore, this.riseAhead = false, this.step = 0}): super._();
+  const _PlaybackState({this.beat, this.canSkip = false, this.held = false, this.heldRun, this.heldScore, this.riseAhead = false, this.step = 0, final  List<ClearedCell> tideAhead = const <ClearedCell>[]}): _tideAhead = tideAhead,super._();
   
 
 /// The beat playing; null once the move has played out.
@@ -268,6 +271,17 @@ class _PlaybackState extends PlaybackState {
 /// Counts the beats played, so the same beat twice running still starts
 /// its animation again.
 @override@JsonKey() final  int step;
+/// The cells the move's tide clears, which the board still shows standing
+/// until they burst.
+ final  List<ClearedCell> _tideAhead;
+/// The cells the move's tide clears, which the board still shows standing
+/// until they burst.
+@override@JsonKey() List<ClearedCell> get tideAhead {
+  if (_tideAhead is EqualUnmodifiableListView) return _tideAhead;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_tideAhead);
+}
+
 
 /// Create a copy of PlaybackState
 /// with the given fields replaced by the non-null parameter values.
@@ -279,16 +293,16 @@ _$PlaybackStateCopyWith<_PlaybackState> get copyWith => __$PlaybackStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.held, held) || other.held == held)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.riseAhead, riseAhead) || other.riseAhead == riseAhead)&&(identical(other.step, step) || other.step == step));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaybackState&&(identical(other.beat, beat) || other.beat == beat)&&(identical(other.canSkip, canSkip) || other.canSkip == canSkip)&&(identical(other.held, held) || other.held == held)&&(identical(other.heldRun, heldRun) || other.heldRun == heldRun)&&(identical(other.heldScore, heldScore) || other.heldScore == heldScore)&&(identical(other.riseAhead, riseAhead) || other.riseAhead == riseAhead)&&(identical(other.step, step) || other.step == step)&&const DeepCollectionEquality().equals(other._tideAhead, _tideAhead));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,beat,canSkip,held,heldRun,heldScore,riseAhead,step);
+int get hashCode => Object.hash(runtimeType,beat,canSkip,held,heldRun,heldScore,riseAhead,step,const DeepCollectionEquality().hash(_tideAhead));
 
 @override
 String toString() {
-  return 'PlaybackState(beat: $beat, canSkip: $canSkip, held: $held, heldRun: $heldRun, heldScore: $heldScore, riseAhead: $riseAhead, step: $step)';
+  return 'PlaybackState(beat: $beat, canSkip: $canSkip, held: $held, heldRun: $heldRun, heldScore: $heldScore, riseAhead: $riseAhead, step: $step, tideAhead: $tideAhead)';
 }
 
 
@@ -299,7 +313,7 @@ abstract mixin class _$PlaybackStateCopyWith<$Res> implements $PlaybackStateCopy
   factory _$PlaybackStateCopyWith(_PlaybackState value, $Res Function(_PlaybackState) _then) = __$PlaybackStateCopyWithImpl;
 @override @useResult
 $Res call({
- Beat? beat, bool canSkip, bool held, RunState? heldRun, int? heldScore, bool riseAhead, int step
+ Beat? beat, bool canSkip, bool held, RunState? heldRun, int? heldScore, bool riseAhead, int step, List<ClearedCell> tideAhead
 });
 
 
@@ -316,7 +330,7 @@ class __$PlaybackStateCopyWithImpl<$Res>
 
 /// Create a copy of PlaybackState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? beat = freezed,Object? canSkip = null,Object? held = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? riseAhead = null,Object? step = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? beat = freezed,Object? canSkip = null,Object? held = null,Object? heldRun = freezed,Object? heldScore = freezed,Object? riseAhead = null,Object? step = null,Object? tideAhead = null,}) {
   return _then(_PlaybackState(
 beat: freezed == beat ? _self.beat : beat // ignore: cast_nullable_to_non_nullable
 as Beat?,canSkip: null == canSkip ? _self.canSkip : canSkip // ignore: cast_nullable_to_non_nullable
@@ -325,7 +339,8 @@ as bool,heldRun: freezed == heldRun ? _self.heldRun : heldRun // ignore: cast_nu
 as RunState?,heldScore: freezed == heldScore ? _self.heldScore : heldScore // ignore: cast_nullable_to_non_nullable
 as int?,riseAhead: null == riseAhead ? _self.riseAhead : riseAhead // ignore: cast_nullable_to_non_nullable
 as bool,step: null == step ? _self.step : step // ignore: cast_nullable_to_non_nullable
-as int,
+as int,tideAhead: null == tideAhead ? _self._tideAhead : tideAhead // ignore: cast_nullable_to_non_nullable
+as List<ClearedCell>,
   ));
 }
 

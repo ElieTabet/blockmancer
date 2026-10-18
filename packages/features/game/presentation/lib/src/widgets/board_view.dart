@@ -40,7 +40,8 @@ final class _BoardLayer extends ConsumerStatefulWidget {
 
 /// Draws the board a row low while a move's tide is still to rise, and lifts
 /// it as the rising beat plays: the move's other beats point at cells where
-/// they stood before the rise.
+/// they stood before the rise. A line the rise completes stands until it
+/// bursts.
 class _BoardLayerState extends ConsumerState<_BoardLayer>
     with SingleTickerProviderStateMixin {
   late final _rise = AnimationController(vsync: this);
@@ -62,6 +63,9 @@ class _BoardLayerState extends ConsumerState<_BoardLayer>
     });
 
     final board = ref.watch(gameProvider.select((state) => state.run.board));
+    final tideAhead = ref.watch(
+      playbackProvider.select((playback) => playback.tideAhead),
+    );
     final warnTopRow = ref.watch(
       gameProvider.select(
         (state) =>
@@ -88,7 +92,11 @@ class _BoardLayerState extends ConsumerState<_BoardLayer>
         animation: _rise,
         builder: (context, _) => CustomPaint(
           painter: BoardPainter(
-            board,
+            tideAhead.isEmpty
+                ? board
+                : board.withCells({
+                    for (final (:cell, :state) in tideAhead) cell: state,
+                  }),
             centreLine: centreLine,
             rowShift: rising
                 ? 1 - Curves.easeOut.transform(_rise.value)

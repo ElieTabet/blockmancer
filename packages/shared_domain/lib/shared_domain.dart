@@ -11,6 +11,7 @@ export 'src/entities/analytics/analytics_event.br.dart';
 export 'src/entities/game/board.br.dart';
 export 'src/entities/game/cell.br.dart';
 export 'src/entities/game/cell_state.br.dart';
+export 'src/entities/game/clear_source.dart';
 export 'src/entities/game/game_event.br.dart';
 export 'src/entities/game/joker_delta.br.dart';
 export 'src/entities/game/joker_id.dart';

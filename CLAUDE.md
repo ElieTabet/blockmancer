@@ -339,15 +339,16 @@ engine's events and never recomputes a rule.
   fog cell that turned to stone as empty, so what fog hides never steers it.
 - **Tide.** `TideRule.onTrayDealt`: before every tray of the boss but its first, every cell moves
   up a row and a stone row enters at the bottom, empty in `RoundSpec.tideGaps` (2) columns drawn
-  from the stones stream (`TideRose`); a filled cell, stone or fog pushed off the top loses the
-  round (`LossReason.flooded`), and no tray is dealt. A revive deals a tray, so the tide rises
+  from the stones stream (`TideRose`); a line the rise completes clears at once, scoring nothing
+  and leaving the streak as it was (`LinesCleared` with `source: .tide`); a filled cell, stone or
+  fog pushed off the top loses the round (`LossReason.flooded`), and no tray is dealt. A revive deals a tray, so the tide rises
   then too. Sprinter reads `MoveContext.firstOfTray` (the move played a tray's first piece, from
   `RunState.trayDealt`); Momentum reads `momentumStreak`, the trays in a row whose first piece
   cleared, set as each tray's first piece is played (0 for the rest of a tray whose first missed,
   and at every round's start). The game shows "Tide in N" (pieces left in the tray) during the
   boss, tints the top row while the next rise would flood it, and slides the board up a row as
-  the tide rises (its other beats play with the cells where they stood before the rise; under
-  reduce motion it is simply there). Tide's boss target and ★3 are provisional, a step above
+  the tide rises (its other beats play with the cells where they stood before the rise, and a line
+  the rise completed bursts once it has risen; under reduce motion it is simply there). Tide's boss target and ★3 are provisional, a step above
   Fog's.
 - **Mirror.** `MirrorRule.transformPlacement` lands each cell `(row, col)` of the piece on
   `(row, 7 - col)`, place and shape mirrored; `canPlace`, `preview` and `place` work on those

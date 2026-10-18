@@ -423,6 +423,61 @@ void main() {
     );
   });
 
+  test('a line the tide completed bursts once the board has risen, as it '
+      'stood, and never counts as the move\'s clear', () {
+    // Given: column 3 held a stone in row 2 and filled cells below it; the
+    // piece landed in row 1, and the tide's stone row completed it
+    final before = runIn(
+      const .playing(),
+      board: Board.empty().withCells({
+        const Cell(col: 3, row: 2): const .stone(),
+        for (var row = 3; row < 8; row++)
+          Cell(col: 3, row: row): const .filled(colorIndex: 2),
+      }),
+    );
+    const landed = GameEvent.piecePlaced(
+      anchor: Cell(col: 3, row: 1),
+      cells: [Cell(col: 3, row: 1)],
+      shapeId: 4,
+      trayIndex: 0,
+    );
+    final tideLine = GameEvent.linesCleared(
+      cells: [for (var row = 0; row < 8; row++) Cell(col: 3, row: row)],
+      cols: const [3],
+      rows: const [],
+      source: .tide,
+    );
+
+    // When
+    final played = beats([
+      landed,
+      score(chips: 0, mult: 0),
+      const GameEvent.tideRose(gapColumns: [0, 5]),
+      tideLine,
+    ], before: before);
+
+    // Then
+    expect(played.whereType<CountingChipsBeat>(), isEmpty);
+    expect(played[played.length - 2], isA<RisingBeat>());
+    expect(
+      played.last,
+      Beat.clearing(
+        cells: [
+          (
+            cell: const Cell(col: 3, row: 0),
+            state: const .filled(colorIndex: 4),
+          ),
+          (cell: const Cell(col: 3, row: 1), state: const .stone()),
+          for (var row = 2; row < 7; row++)
+            (cell: Cell(col: 3, row: row), state: const .filled(colorIndex: 2)),
+          (cell: const Cell(col: 3, row: 7), state: const .stone()),
+        ],
+        duration: const Duration(milliseconds: 350),
+        shake: .none,
+      ),
+    );
+  });
+
   test('with reduce motion on, the risen board is simply there', () {
     // Given / When
     final played = beats([

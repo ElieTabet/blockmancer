@@ -128,7 +128,7 @@ reading chosen and why. Newest task last.
   tray; a revive deals one, so the tide rises again before it.
 - **Gap columns.** Two distinct columns drawn one after the other from the stones stream (the
   first among 8, the second among the 7 left). A rise never completes a row; it can complete a
-  column (7 cells under a stone), which clears on the next placement like any line already full.
+  column (7 cells under a stone), which clears at once for nothing (review fix 1).
 - **"Tide in N".** N is the pieces left in the tray in hand, shown only during Tide's boss.
 - **A fresh tray's first piece** (Sprinter, Momentum) is the move made while every piece the tray
   was dealt is still in it; `RunState.trayDealt` records how many that was, so a short final tray
@@ -188,3 +188,21 @@ reading chosen and why. Newest task last.
 - **Star unlocks** stay at 4★ and 6★, out of 15 now.
 - **Device checks left to the user:** a full run from Rubble to Mirror on a phone, and the map at
   60 fps in profile mode on a mid-range Android phone with every node open.
+
+## Review fixes (after Task 5)
+
+Three changes from the review of this file, each its own commit.
+
+### 1. A line the tide completes
+
+- **Rule:** any line completed by a rise clears immediately, scoring nothing and leaving the clear
+  streak unchanged (`LinesCleared` with a tide source).
+- **Reading:** `TideRule` resolves clears on the risen board straight after `TideRose`, before the
+  flood is judged (what left the top is gone either way) and before the tray is dealt.
+  `LinesCleared` gains `source` (`ClearSource.move` by default, `.tide` here). No chips, no mult,
+  no joker hook, no streak, Momentum's included; Ember and Stonemason never see it.
+- **Why:** as for fog at the boss's start (Task 2), no move gets credit for a line it didn't
+  complete. Until now such a column waited for the next placement, which scored it.
+- **The game:** the move's own clear is the one with the move's source; the tide's bursts after
+  the board has risen, its cells drawn standing until then (`PlaybackState.tideAhead`), each as it
+  stood (the piece's colour where it landed, the stone row at the bottom).

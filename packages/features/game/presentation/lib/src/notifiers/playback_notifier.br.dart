@@ -83,12 +83,17 @@ class PlaybackNotifier extends _$PlaybackNotifier {
     if (_beats.isEmpty) return _finish();
 
     final lands = _beats.any((beat) => beat is LandingBeat);
+    final risesAt = _beats.indexWhere((beat) => beat is RisingBeat);
+    final tideClear = risesAt < 0
+        ? null
+        : _beats.skip(risesAt).whereType<ClearingBeat>().firstOrNull;
 
     state = PlaybackState(
       heldRun: lands ? previous.run : null,
       heldScore: lands ? previous.run.score : null,
-      riseAhead: _beats.any((beat) => beat is RisingBeat),
+      riseAhead: risesAt >= 0,
       step: state.step,
+      tideAhead: tideClear?.cells ?? const [],
     );
     _skippable = Timer(skipAfter, () => state = state.copyWith(canSkip: true));
     _play(0);
@@ -107,6 +112,10 @@ class PlaybackNotifier extends _$PlaybackNotifier {
       heldScore: beat is LandingBeat ? beat.score : state.heldScore,
       riseAhead: beat is! RisingBeat && state.riseAhead,
       step: state.step + 1,
+      // Only the tide's own clear comes once the board has risen.
+      tideAhead: beat is ClearingBeat && !state.riseAhead
+          ? const []
+          : state.tideAhead,
     );
 
     if (holds) {

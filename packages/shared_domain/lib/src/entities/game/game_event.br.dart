@@ -1,4 +1,5 @@
 import 'package:shared_domain/src/entities/game/cell.br.dart';
+import 'package:shared_domain/src/entities/game/clear_source.dart';
 import 'package:shared_domain/src/entities/game/joker_delta.br.dart';
 import 'package:shared_domain/src/entities/game/joker_id.dart';
 import 'package:shared_domain/src/entities/game/loss_reason.dart';
@@ -24,11 +25,13 @@ sealed class GameEvent with _$GameEvent {
     required JokerId joker,
   }) = JokerFired;
 
+  /// Full lines emptied; a [source] other than the move scores nothing.
   const factory GameEvent.linesCleared({
     /// Distinct cells, row-major.
     required List<Cell> cells,
     required List<int> cols,
     required List<int> rows,
+    @Default(ClearSource.move) ClearSource source,
   }) = LinesCleared;
 
   const factory GameEvent.offersPresented({required List<JokerId> offers}) =
