@@ -42,10 +42,18 @@ abstract class RunState with _$RunState {
     /// Shape ids; `null` is a slot already played.
     required List<int?> tray,
 
+    /// Trays in a row, this one included, whose first piece cleared a line:
+    /// 0 for the rest of a tray whose first piece didn't (Momentum).
+    @Default(0) int momentumStreak,
+
     /// The tray slots whose piece cleared a line, one bit per slot, since the
     /// tray was dealt. `null` when the tray can't earn Hat Trick: dealt short,
     /// in play when a revive came, or not dealt at all.
     int? trayClearMask,
+
+    /// Pieces the tray in hand was dealt, so its first piece is known
+    /// (Sprinter, Momentum).
+    @Default(0) int trayDealt,
   }) = _RunState;
 
   const RunState._();

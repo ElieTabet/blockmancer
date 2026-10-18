@@ -7,6 +7,7 @@ Color cellColor(CellState state) => switch (state) {
   EmptyCell() => DSGameColor.emptyCell,
   FilledCell(:final colorIndex) => DSGameColor.pieces[colorIndex],
   StoneCell() => DSGameColor.stone,
+  FogCell() => DSGameColor.fog,
 };
 
 /// The board and what is on it.

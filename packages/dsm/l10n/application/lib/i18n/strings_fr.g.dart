@@ -253,7 +253,7 @@ class _Translations$game$worlds$fr extends Translations$game$worlds$en {
 	@override String get rubble => 'Gravats';
 	@override String get gravity => 'Gravité';
 	@override String get fog => 'Brouillard';
-	@override String get speed => 'Vitesse';
+	@override String get tide => 'Marée';
 	@override String get mirror => 'Miroir';
 }
 
@@ -791,7 +791,7 @@ extension on TranslationsFr {
 			'game.worlds.rubble' => 'Gravats',
 			'game.worlds.gravity' => 'Gravité',
 			'game.worlds.fog' => 'Brouillard',
-			'game.worlds.speed' => 'Vitesse',
+			'game.worlds.tide' => 'Marée',
 			'game.worlds.mirror' => 'Miroir',
 			'game.jokers.stonemason.name' => 'Tailleur de pierre',
 			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(stones, one: '+${chips} jetons par pierre effacée. ${stones} pierre de plus à chaque manche.', other: '+${chips} jetons par pierre effacée. ${stones} pierres de plus à chaque manche.', ), 

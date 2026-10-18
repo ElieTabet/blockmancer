@@ -55,14 +55,14 @@ final class TwoWorldRules implements GameRules {
   WorldId? nextWorld(WorldId world) => switch (world) {
     .rubble => .gravity,
     .gravity => .fog,
-    .fog || .mirror || .speed => null,
+    .fog || .mirror || .tide => null,
   };
 
   @override
   List<JokerId> unlocksOf(WorldId world) => switch (world) {
     .rubble => const [.stonemason, .quarry],
     .gravity => const [.anchor, .avalanche],
-    .fog || .mirror || .speed => const [],
+    .fog || .mirror || .tide => const [],
   };
 
   @override
@@ -98,21 +98,26 @@ const _config = RunConfig(
     collectorMultPerJoker: 1,
     columnFactor: 2,
     comboMultPerStreak: 1,
+    emberFactor: 2,
     finisherFactor: 2,
     fullHouseCellsPerMult: 6,
     fullHouseMultPerBlock: 1,
     hatTrickBonus: 300,
     heavyFactor: 2,
     heavyMinPieceSize: 4,
+    momentumMultPerTray: 2,
     patienceStoredPerMove: 2,
     pocketsExtraPieces: 4,
     precisionBonusMult: 6,
     precisionMaxPieceSize: 2,
+    prismChipsPerPair: 15,
     quarryStonesPerClear: 1,
     saverPointsPerPiece: 40,
+    sprinterMult: 5,
     stonemasonChipsPerStone: 50,
     stonemasonExtraStones: 2,
     sweepBonus: 500,
+    symmetryMult: 4,
     tinyFactor: 3,
     tinyMaxPieceSize: 2,
     twinFactor: 3,

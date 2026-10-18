@@ -21,21 +21,26 @@ const _version1Tuning = JokerTuning(
   collectorMultPerJoker: 1,
   columnFactor: 2,
   comboMultPerStreak: 1,
+  emberFactor: 2,
   finisherFactor: 2,
   fullHouseCellsPerMult: 6,
   fullHouseMultPerBlock: 1,
   hatTrickBonus: 300,
   heavyFactor: 2,
   heavyMinPieceSize: 4,
+  momentumMultPerTray: 2,
   patienceStoredPerMove: 2,
   pocketsExtraPieces: 4,
   precisionBonusMult: 6,
   precisionMaxPieceSize: 2,
+  prismChipsPerPair: 15,
   quarryStonesPerClear: 1,
   saverPointsPerPiece: 40,
+  sprinterMult: 5,
   stonemasonChipsPerStone: 50,
   stonemasonExtraStones: 2,
   sweepBonus: 500,
+  symmetryMult: 4,
   tinyFactor: 3,
   tinyMaxPieceSize: 2,
   twinFactor: 3,
@@ -55,21 +60,26 @@ const _tuning = JokerTuning(
   collectorMultPerJoker: 8,
   columnFactor: 11,
   comboMultPerStreak: 10,
+  emberFactor: 33,
   finisherFactor: 25,
   fullHouseCellsPerMult: 22,
   fullHouseMultPerBlock: 23,
   hatTrickBonus: 950,
   heavyFactor: 12,
   heavyMinPieceSize: 5,
+  momentumMultPerTray: 34,
   patienceStoredPerMove: 16,
   pocketsExtraPieces: 17,
   precisionBonusMult: 18,
   precisionMaxPieceSize: 4,
+  prismChipsPerPair: 35,
   quarryStonesPerClear: 2,
   saverPointsPerPiece: 70,
+  sprinterMult: 36,
   stonemasonChipsPerStone: 80,
   stonemasonExtraStones: 7,
   sweepBonus: 900,
+  symmetryMult: 37,
   tinyFactor: 14,
   tinyMaxPieceSize: 1,
   twinFactor: 13,
@@ -87,7 +97,15 @@ const _config = RunConfig(
   revivesPerRun: 1,
   rounds: [
     RoundSpec(isBoss: false, pieces: 14, stones: 0, target: 250),
-    RoundSpec(isBoss: true, pieces: 22, stones: 6, target: 2000),
+    RoundSpec(
+      fog: 8,
+      fogStones: 3,
+      isBoss: true,
+      pieces: 22,
+      stones: 6,
+      target: 2000,
+      tideGaps: 2,
+    ),
   ],
   starThreshold: 9500,
   starUnlocks: [
@@ -122,7 +140,9 @@ final _midRound = RunState(
   storedMult: 6,
   streak: 3,
   tray: const [4, null, 16],
+  momentumStreak: 1,
   trayClearMask: 0x2,
+  trayDealt: 3,
 );
 
 /// [_midRound] as the version 1 build wrote it, before the config carried chips
@@ -324,13 +344,33 @@ RunState _beforeVersion7(RunState run) => _beforeVersion8(run).copyWith(
 /// What version 8 fills in for a save from before it: the two bottom rows
 /// Avalanche counted and the +1 mult Full House added when they were
 /// constants.
-RunState _beforeVersion8(RunState run) => run.copyWith(
+RunState _beforeVersion8(RunState run) => _beforeVersion9(run).copyWith(
+  config: _beforeVersion9(run).config.copyWith(
+    jokers: _beforeVersion9(
+      run,
+    ).config.jokers.copyWith(avalancheRows: 2, fullHouseMultPerBlock: 1),
+  ),
+);
+
+/// What version 9 fills in for a save from before it: the first numbers of
+/// Fog, Tide and Mirror's jokers, no fog or tide in any round, no tray streak,
+/// and the tray in hand read as dealt as it stands.
+RunState _beforeVersion9(RunState run) => run.copyWith(
   config: run.config.copyWith(
     jokers: run.config.jokers.copyWith(
-      avalancheRows: 2,
-      fullHouseMultPerBlock: 1,
+      emberFactor: 2,
+      momentumMultPerTray: 2,
+      prismChipsPerPair: 15,
+      sprinterMult: 5,
+      symmetryMult: 4,
     ),
+    rounds: [
+      for (final round in run.config.rounds)
+        round.copyWith(fog: 0, fogStones: 0, tideGaps: 0),
+    ],
   ),
+  momentumStreak: 0,
+  trayDealt: run.tray.whereType<int>().length,
 );
 
 /// The 14 jokers before version 4 added Anchor and Avalanche.
@@ -368,6 +408,25 @@ void main() {
   test('a run mid-round comes back exactly as it was saved', () async {
     // Given
     final saved = SavedRun(mode: const .daily(day: 20261017), run: _midRound);
+
+    // When
+    final loaded = await _relaunchedWith(saved);
+
+    // Then
+    expect(loaded, saved);
+  });
+
+  test('a board with fog comes back with what each fog cell hides', () async {
+    // Given
+    final saved = SavedRun(
+      mode: const .world(world: .fog),
+      run: _midRound.copyWith(
+        board: _midRound.board.withCells({
+          const Cell(col: 5, row: 5): const .fog(hidesStone: false),
+          const Cell(col: 6, row: 5): const .fog(hidesStone: true),
+        }),
+      ),
+    );
 
     // When
     final loaded = await _relaunchedWith(saved);
@@ -434,7 +493,7 @@ void main() {
 
     // Then
     final raw = (await SharedPreferences.getInstance()).getString('run.saved');
-    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 8);
+    expect((jsonDecode(raw!) as Map<String, dynamic>)['version'], 9);
   });
 
   for (final (name, raw) in [
@@ -699,6 +758,46 @@ void main() {
         SavedRun(
           mode: const .daily(day: 20261017),
           run: _beforeVersion8(_midRound),
+        ),
+      );
+    },
+  );
+
+  test(
+    "a save from version 8 resumes with no fog, no tide and no tray streak",
+    () async {
+      // Given: today's save as version 8 wrote it, without version 9's fields
+      final json = SavedRunDto.fromDomain(
+        SavedRun(mode: const .daily(day: 20261017), run: _midRound),
+      ).toJson()..['version'] = 8;
+      final run = json['run'] as Map<String, dynamic>;
+      final config = run['config'] as Map<String, dynamic>;
+      run
+        ..remove('momentumStreak')
+        ..remove('trayDealt');
+      (config['jokers'] as Map<String, dynamic>)
+        ..remove('emberFactor')
+        ..remove('momentumMultPerTray')
+        ..remove('prismChipsPerPair')
+        ..remove('sprinterMult')
+        ..remove('symmetryMult');
+      for (final round in config['rounds'] as List<dynamic>) {
+        (round as Map<String, dynamic>)
+          ..remove('fog')
+          ..remove('fogStones')
+          ..remove('tideGaps');
+      }
+      SharedPreferences.setMockInitialValues({'run.saved': jsonEncode(json)});
+
+      // When
+      final loaded = await const SharedPreferencesRunStore().load();
+
+      // Then
+      expect(
+        loaded,
+        SavedRun(
+          mode: const .daily(day: 20261017),
+          run: _beforeVersion9(_midRound),
         ),
       );
     },

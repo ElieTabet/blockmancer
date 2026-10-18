@@ -5,7 +5,7 @@ part 'profile_dto.br.g.dart';
 
 /// The profile's schema version. Bump it with each change to these DTOs, and
 /// teach `migrateProfile` to bring the previous version up to it.
-const profileVersion = 5;
+const profileVersion = 6;
 
 /// Brings a profile written by an earlier version up to [profileVersion], one
 /// version at a time; a version this build doesn't know is unreadable.
@@ -27,6 +27,10 @@ Map<String, dynamic> migrateProfile(
   ),
   4 => migrateProfile(
     _fromVersion4(json),
+    startingProgression: startingProgression,
+  ),
+  5 => migrateProfile(
+    _fromVersion5(json),
     startingProgression: startingProgression,
   ),
   profileVersion => json,
@@ -94,6 +98,27 @@ Map<String, dynamic> _fromVersion4(Map<String, dynamic> json) {
       'unlockedJokers': [...unlocked, ...granted],
     },
     'version': 5,
+  };
+}
+
+/// Version 5 named the fourth world Speed, a world that was dropped for Tide
+/// before it had rules: its entry, locked like every world the map didn't
+/// open yet, becomes Tide's. Read as it was, the unknown name would throw the
+/// whole profile away.
+Map<String, dynamic> _fromVersion5(Map<String, dynamic> json) {
+  final progression = json['progression'] as Map<String, dynamic>;
+  final worlds = progression['worlds'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'progression': <String, dynamic>{
+      ...progression,
+      'worlds': <String, dynamic>{
+        for (final MapEntry(:key, :value) in worlds.entries)
+          key == 'speed' ? 'tide' : key: value,
+      },
+    },
+    'version': 6,
   };
 }
 

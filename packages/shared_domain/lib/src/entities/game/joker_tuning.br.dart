@@ -21,6 +21,7 @@ abstract class JokerTuning with _$JokerTuning {
     required int collectorMultPerJoker,
     required int columnFactor,
     required int comboMultPerStreak,
+    required int emberFactor,
     required int finisherFactor,
 
     /// Occupied cells, filled and stone, per +1 mult from Full House.
@@ -31,15 +32,21 @@ abstract class JokerTuning with _$JokerTuning {
     required int hatTrickBonus,
     required int heavyFactor,
     required int heavyMinPieceSize,
+    required int momentumMultPerTray,
     required int patienceStoredPerMove,
     required int pocketsExtraPieces,
     required int precisionBonusMult,
     required int precisionMaxPieceSize,
+
+    /// Chips per occupied cell whose mirror cell is occupied too (Prism).
+    required int prismChipsPerPair,
     required int quarryStonesPerClear,
     required int saverPointsPerPiece,
+    required int sprinterMult,
     required int stonemasonChipsPerStone,
     required int stonemasonExtraStones,
     required int sweepBonus,
+    required int symmetryMult,
     required int tinyFactor,
     required int tinyMaxPieceSize,
     required int twinFactor,

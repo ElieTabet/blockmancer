@@ -97,7 +97,7 @@ final class WorldSheet extends ConsumerWidget {
     return switch (world) {
       .gravity => rules.gravity,
       .rubble => rules.rubble,
-      .fog || .mirror || .speed => null,
+      .fog || .mirror || .tide => null,
     };
   }
 }

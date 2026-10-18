@@ -2,7 +2,7 @@ import 'package:blockmancer_engine/src/jokers/joker_catalog.dart';
 import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-const worldOrder = <WorldId>[.rubble, .gravity, .fog, .speed, .mirror];
+const worldOrder = <WorldId>[.rubble, .gravity, .fog, .tide, .mirror];
 
 /// Every joker neither a world nor the stars unlock, in [jokerCatalog] order.
 final List<JokerId> startingJokers = [
@@ -20,12 +20,12 @@ RunConfig configFor(WorldId world, {required List<JokerId> jokerPool}) =>
       .rubble => defaultConfig.copyWith(jokerPool: jokerPool),
       .fog ||
       .mirror ||
-      .speed => throw ArgumentError.value(world, 'world', 'is not playable'),
+      .tide => throw ArgumentError.value(world, 'world', 'is not playable'),
     };
 
 bool isPlayable(WorldId world) => switch (world) {
   .gravity || .rubble => true,
-  .fog || .mirror || .speed => false,
+  .fog || .mirror || .tide => false,
 };
 
 WorldId? nextWorld(WorldId world) {
@@ -37,5 +37,5 @@ WorldId? nextWorld(WorldId world) {
 List<JokerId> unlocksOf(WorldId world) => switch (world) {
   .gravity => const [.anchor, .avalanche],
   .rubble => const [.stonemason, .quarry],
-  .fog || .mirror || .speed => const [],
+  .fog || .mirror || .tide => const [],
 };

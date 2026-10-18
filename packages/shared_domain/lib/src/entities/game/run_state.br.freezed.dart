@@ -21,10 +21,14 @@ mixin _$RunState {
  int get piecesRngState; int get revivesUsed; int get roundIndex;/// Banked from won rounds, Saver included; the round in play isn't in it.
  int get runTotal; int get score; int get seed;/// The stones stream's generator state; only the rules read it.
  int get stonesRngState; int get storedMult; int get streak;/// Shape ids; `null` is a slot already played.
- List<int?> get tray;/// The tray slots whose piece cleared a line, one bit per slot, since the
+ List<int?> get tray;/// Trays in a row, this one included, whose first piece cleared a line:
+/// 0 for the rest of a tray whose first piece didn't (Momentum).
+ int get momentumStreak;/// The tray slots whose piece cleared a line, one bit per slot, since the
 /// tray was dealt. `null` when the tray can't earn Hat Trick: dealt short,
 /// in play when a revive came, or not dealt at all.
- int? get trayClearMask;
+ int? get trayClearMask;/// Pieces the tray in hand was dealt, so its first piece is known
+/// (Sprinter, Momentum).
+ int get trayDealt;
 /// Create a copy of RunState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -35,16 +39,16 @@ $RunStateCopyWith<RunState> get copyWith => _$RunStateCopyWithImpl<RunState>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RunState&&(identical(other.board, board) || other.board == board)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.jokers, jokers)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.pickIndex, pickIndex) || other.pickIndex == pickIndex)&&(identical(other.piecesLeft, piecesLeft) || other.piecesLeft == piecesLeft)&&(identical(other.piecesRngState, piecesRngState) || other.piecesRngState == piecesRngState)&&(identical(other.revivesUsed, revivesUsed) || other.revivesUsed == revivesUsed)&&(identical(other.roundIndex, roundIndex) || other.roundIndex == roundIndex)&&(identical(other.runTotal, runTotal) || other.runTotal == runTotal)&&(identical(other.score, score) || other.score == score)&&(identical(other.seed, seed) || other.seed == seed)&&(identical(other.stonesRngState, stonesRngState) || other.stonesRngState == stonesRngState)&&(identical(other.storedMult, storedMult) || other.storedMult == storedMult)&&(identical(other.streak, streak) || other.streak == streak)&&const DeepCollectionEquality().equals(other.tray, tray)&&(identical(other.trayClearMask, trayClearMask) || other.trayClearMask == trayClearMask));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RunState&&(identical(other.board, board) || other.board == board)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.jokers, jokers)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.pickIndex, pickIndex) || other.pickIndex == pickIndex)&&(identical(other.piecesLeft, piecesLeft) || other.piecesLeft == piecesLeft)&&(identical(other.piecesRngState, piecesRngState) || other.piecesRngState == piecesRngState)&&(identical(other.revivesUsed, revivesUsed) || other.revivesUsed == revivesUsed)&&(identical(other.roundIndex, roundIndex) || other.roundIndex == roundIndex)&&(identical(other.runTotal, runTotal) || other.runTotal == runTotal)&&(identical(other.score, score) || other.score == score)&&(identical(other.seed, seed) || other.seed == seed)&&(identical(other.stonesRngState, stonesRngState) || other.stonesRngState == stonesRngState)&&(identical(other.storedMult, storedMult) || other.storedMult == storedMult)&&(identical(other.streak, streak) || other.streak == streak)&&const DeepCollectionEquality().equals(other.tray, tray)&&(identical(other.momentumStreak, momentumStreak) || other.momentumStreak == momentumStreak)&&(identical(other.trayClearMask, trayClearMask) || other.trayClearMask == trayClearMask)&&(identical(other.trayDealt, trayDealt) || other.trayDealt == trayDealt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,board,config,const DeepCollectionEquality().hash(jokers),phase,pickIndex,piecesLeft,piecesRngState,revivesUsed,roundIndex,runTotal,score,seed,stonesRngState,storedMult,streak,const DeepCollectionEquality().hash(tray),trayClearMask);
+int get hashCode => Object.hashAll([runtimeType,board,config,const DeepCollectionEquality().hash(jokers),phase,pickIndex,piecesLeft,piecesRngState,revivesUsed,roundIndex,runTotal,score,seed,stonesRngState,storedMult,streak,const DeepCollectionEquality().hash(tray),momentumStreak,trayClearMask,trayDealt]);
 
 @override
 String toString() {
-  return 'RunState(board: $board, config: $config, jokers: $jokers, phase: $phase, pickIndex: $pickIndex, piecesLeft: $piecesLeft, piecesRngState: $piecesRngState, revivesUsed: $revivesUsed, roundIndex: $roundIndex, runTotal: $runTotal, score: $score, seed: $seed, stonesRngState: $stonesRngState, storedMult: $storedMult, streak: $streak, tray: $tray, trayClearMask: $trayClearMask)';
+  return 'RunState(board: $board, config: $config, jokers: $jokers, phase: $phase, pickIndex: $pickIndex, piecesLeft: $piecesLeft, piecesRngState: $piecesRngState, revivesUsed: $revivesUsed, roundIndex: $roundIndex, runTotal: $runTotal, score: $score, seed: $seed, stonesRngState: $stonesRngState, storedMult: $storedMult, streak: $streak, tray: $tray, momentumStreak: $momentumStreak, trayClearMask: $trayClearMask, trayDealt: $trayDealt)';
 }
 
 
@@ -55,7 +59,7 @@ abstract mixin class $RunStateCopyWith<$Res>  {
   factory $RunStateCopyWith(RunState value, $Res Function(RunState) _then) = _$RunStateCopyWithImpl;
 @useResult
 $Res call({
- Board board, RunConfig config, List<JokerId> jokers, RunPhase phase, int pickIndex, int piecesLeft, int piecesRngState, int revivesUsed, int roundIndex, int runTotal, int score, int seed, int stonesRngState, int storedMult, int streak, List<int?> tray, int? trayClearMask
+ Board board, RunConfig config, List<JokerId> jokers, RunPhase phase, int pickIndex, int piecesLeft, int piecesRngState, int revivesUsed, int roundIndex, int runTotal, int score, int seed, int stonesRngState, int storedMult, int streak, List<int?> tray, int momentumStreak, int? trayClearMask, int trayDealt
 });
 
 
@@ -72,7 +76,7 @@ class _$RunStateCopyWithImpl<$Res>
 
 /// Create a copy of RunState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? board = null,Object? config = null,Object? jokers = null,Object? phase = null,Object? pickIndex = null,Object? piecesLeft = null,Object? piecesRngState = null,Object? revivesUsed = null,Object? roundIndex = null,Object? runTotal = null,Object? score = null,Object? seed = null,Object? stonesRngState = null,Object? storedMult = null,Object? streak = null,Object? tray = null,Object? trayClearMask = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? board = null,Object? config = null,Object? jokers = null,Object? phase = null,Object? pickIndex = null,Object? piecesLeft = null,Object? piecesRngState = null,Object? revivesUsed = null,Object? roundIndex = null,Object? runTotal = null,Object? score = null,Object? seed = null,Object? stonesRngState = null,Object? storedMult = null,Object? streak = null,Object? tray = null,Object? momentumStreak = null,Object? trayClearMask = freezed,Object? trayDealt = null,}) {
   return _then(_self.copyWith(
 board: null == board ? _self.board : board // ignore: cast_nullable_to_non_nullable
 as Board,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
@@ -90,8 +94,10 @@ as int,stonesRngState: null == stonesRngState ? _self.stonesRngState : stonesRng
 as int,storedMult: null == storedMult ? _self.storedMult : storedMult // ignore: cast_nullable_to_non_nullable
 as int,streak: null == streak ? _self.streak : streak // ignore: cast_nullable_to_non_nullable
 as int,tray: null == tray ? _self.tray : tray // ignore: cast_nullable_to_non_nullable
-as List<int?>,trayClearMask: freezed == trayClearMask ? _self.trayClearMask : trayClearMask // ignore: cast_nullable_to_non_nullable
-as int?,
+as List<int?>,momentumStreak: null == momentumStreak ? _self.momentumStreak : momentumStreak // ignore: cast_nullable_to_non_nullable
+as int,trayClearMask: freezed == trayClearMask ? _self.trayClearMask : trayClearMask // ignore: cast_nullable_to_non_nullable
+as int?,trayDealt: null == trayDealt ? _self.trayDealt : trayDealt // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 /// Create a copy of RunState
@@ -203,10 +209,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Board board,  RunConfig config,  List<JokerId> jokers,  RunPhase phase,  int pickIndex,  int piecesLeft,  int piecesRngState,  int revivesUsed,  int roundIndex,  int runTotal,  int score,  int seed,  int stonesRngState,  int storedMult,  int streak,  List<int?> tray,  int? trayClearMask)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Board board,  RunConfig config,  List<JokerId> jokers,  RunPhase phase,  int pickIndex,  int piecesLeft,  int piecesRngState,  int revivesUsed,  int roundIndex,  int runTotal,  int score,  int seed,  int stonesRngState,  int storedMult,  int streak,  List<int?> tray,  int momentumStreak,  int? trayClearMask,  int trayDealt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RunState() when $default != null:
-return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickIndex,_that.piecesLeft,_that.piecesRngState,_that.revivesUsed,_that.roundIndex,_that.runTotal,_that.score,_that.seed,_that.stonesRngState,_that.storedMult,_that.streak,_that.tray,_that.trayClearMask);case _:
+return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickIndex,_that.piecesLeft,_that.piecesRngState,_that.revivesUsed,_that.roundIndex,_that.runTotal,_that.score,_that.seed,_that.stonesRngState,_that.storedMult,_that.streak,_that.tray,_that.momentumStreak,_that.trayClearMask,_that.trayDealt);case _:
   return orElse();
 
 }
@@ -224,10 +230,10 @@ return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickInde
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Board board,  RunConfig config,  List<JokerId> jokers,  RunPhase phase,  int pickIndex,  int piecesLeft,  int piecesRngState,  int revivesUsed,  int roundIndex,  int runTotal,  int score,  int seed,  int stonesRngState,  int storedMult,  int streak,  List<int?> tray,  int? trayClearMask)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Board board,  RunConfig config,  List<JokerId> jokers,  RunPhase phase,  int pickIndex,  int piecesLeft,  int piecesRngState,  int revivesUsed,  int roundIndex,  int runTotal,  int score,  int seed,  int stonesRngState,  int storedMult,  int streak,  List<int?> tray,  int momentumStreak,  int? trayClearMask,  int trayDealt)  $default,) {final _that = this;
 switch (_that) {
 case _RunState():
-return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickIndex,_that.piecesLeft,_that.piecesRngState,_that.revivesUsed,_that.roundIndex,_that.runTotal,_that.score,_that.seed,_that.stonesRngState,_that.storedMult,_that.streak,_that.tray,_that.trayClearMask);case _:
+return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickIndex,_that.piecesLeft,_that.piecesRngState,_that.revivesUsed,_that.roundIndex,_that.runTotal,_that.score,_that.seed,_that.stonesRngState,_that.storedMult,_that.streak,_that.tray,_that.momentumStreak,_that.trayClearMask,_that.trayDealt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -244,10 +250,10 @@ return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickInde
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Board board,  RunConfig config,  List<JokerId> jokers,  RunPhase phase,  int pickIndex,  int piecesLeft,  int piecesRngState,  int revivesUsed,  int roundIndex,  int runTotal,  int score,  int seed,  int stonesRngState,  int storedMult,  int streak,  List<int?> tray,  int? trayClearMask)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Board board,  RunConfig config,  List<JokerId> jokers,  RunPhase phase,  int pickIndex,  int piecesLeft,  int piecesRngState,  int revivesUsed,  int roundIndex,  int runTotal,  int score,  int seed,  int stonesRngState,  int storedMult,  int streak,  List<int?> tray,  int momentumStreak,  int? trayClearMask,  int trayDealt)?  $default,) {final _that = this;
 switch (_that) {
 case _RunState() when $default != null:
-return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickIndex,_that.piecesLeft,_that.piecesRngState,_that.revivesUsed,_that.roundIndex,_that.runTotal,_that.score,_that.seed,_that.stonesRngState,_that.storedMult,_that.streak,_that.tray,_that.trayClearMask);case _:
+return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickIndex,_that.piecesLeft,_that.piecesRngState,_that.revivesUsed,_that.roundIndex,_that.runTotal,_that.score,_that.seed,_that.stonesRngState,_that.storedMult,_that.streak,_that.tray,_that.momentumStreak,_that.trayClearMask,_that.trayDealt);case _:
   return null;
 
 }
@@ -259,7 +265,7 @@ return $default(_that.board,_that.config,_that.jokers,_that.phase,_that.pickInde
 
 
 class _RunState extends RunState {
-  const _RunState({required this.board, required this.config, required final  List<JokerId> jokers, required this.phase, required this.pickIndex, required this.piecesLeft, required this.piecesRngState, required this.revivesUsed, required this.roundIndex, required this.runTotal, required this.score, required this.seed, required this.stonesRngState, required this.storedMult, required this.streak, required final  List<int?> tray, this.trayClearMask}): _jokers = jokers,_tray = tray,super._();
+  const _RunState({required this.board, required this.config, required final  List<JokerId> jokers, required this.phase, required this.pickIndex, required this.piecesLeft, required this.piecesRngState, required this.revivesUsed, required this.roundIndex, required this.runTotal, required this.score, required this.seed, required this.stonesRngState, required this.storedMult, required this.streak, required final  List<int?> tray, this.momentumStreak = 0, this.trayClearMask, this.trayDealt = 0}): _jokers = jokers,_tray = tray,super._();
   
 
 @override final  Board board;
@@ -299,10 +305,16 @@ class _RunState extends RunState {
   return EqualUnmodifiableListView(_tray);
 }
 
+/// Trays in a row, this one included, whose first piece cleared a line:
+/// 0 for the rest of a tray whose first piece didn't (Momentum).
+@override@JsonKey() final  int momentumStreak;
 /// The tray slots whose piece cleared a line, one bit per slot, since the
 /// tray was dealt. `null` when the tray can't earn Hat Trick: dealt short,
 /// in play when a revive came, or not dealt at all.
 @override final  int? trayClearMask;
+/// Pieces the tray in hand was dealt, so its first piece is known
+/// (Sprinter, Momentum).
+@override@JsonKey() final  int trayDealt;
 
 /// Create a copy of RunState
 /// with the given fields replaced by the non-null parameter values.
@@ -314,16 +326,16 @@ _$RunStateCopyWith<_RunState> get copyWith => __$RunStateCopyWithImpl<_RunState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RunState&&(identical(other.board, board) || other.board == board)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other._jokers, _jokers)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.pickIndex, pickIndex) || other.pickIndex == pickIndex)&&(identical(other.piecesLeft, piecesLeft) || other.piecesLeft == piecesLeft)&&(identical(other.piecesRngState, piecesRngState) || other.piecesRngState == piecesRngState)&&(identical(other.revivesUsed, revivesUsed) || other.revivesUsed == revivesUsed)&&(identical(other.roundIndex, roundIndex) || other.roundIndex == roundIndex)&&(identical(other.runTotal, runTotal) || other.runTotal == runTotal)&&(identical(other.score, score) || other.score == score)&&(identical(other.seed, seed) || other.seed == seed)&&(identical(other.stonesRngState, stonesRngState) || other.stonesRngState == stonesRngState)&&(identical(other.storedMult, storedMult) || other.storedMult == storedMult)&&(identical(other.streak, streak) || other.streak == streak)&&const DeepCollectionEquality().equals(other._tray, _tray)&&(identical(other.trayClearMask, trayClearMask) || other.trayClearMask == trayClearMask));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RunState&&(identical(other.board, board) || other.board == board)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other._jokers, _jokers)&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.pickIndex, pickIndex) || other.pickIndex == pickIndex)&&(identical(other.piecesLeft, piecesLeft) || other.piecesLeft == piecesLeft)&&(identical(other.piecesRngState, piecesRngState) || other.piecesRngState == piecesRngState)&&(identical(other.revivesUsed, revivesUsed) || other.revivesUsed == revivesUsed)&&(identical(other.roundIndex, roundIndex) || other.roundIndex == roundIndex)&&(identical(other.runTotal, runTotal) || other.runTotal == runTotal)&&(identical(other.score, score) || other.score == score)&&(identical(other.seed, seed) || other.seed == seed)&&(identical(other.stonesRngState, stonesRngState) || other.stonesRngState == stonesRngState)&&(identical(other.storedMult, storedMult) || other.storedMult == storedMult)&&(identical(other.streak, streak) || other.streak == streak)&&const DeepCollectionEquality().equals(other._tray, _tray)&&(identical(other.momentumStreak, momentumStreak) || other.momentumStreak == momentumStreak)&&(identical(other.trayClearMask, trayClearMask) || other.trayClearMask == trayClearMask)&&(identical(other.trayDealt, trayDealt) || other.trayDealt == trayDealt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,board,config,const DeepCollectionEquality().hash(_jokers),phase,pickIndex,piecesLeft,piecesRngState,revivesUsed,roundIndex,runTotal,score,seed,stonesRngState,storedMult,streak,const DeepCollectionEquality().hash(_tray),trayClearMask);
+int get hashCode => Object.hashAll([runtimeType,board,config,const DeepCollectionEquality().hash(_jokers),phase,pickIndex,piecesLeft,piecesRngState,revivesUsed,roundIndex,runTotal,score,seed,stonesRngState,storedMult,streak,const DeepCollectionEquality().hash(_tray),momentumStreak,trayClearMask,trayDealt]);
 
 @override
 String toString() {
-  return 'RunState(board: $board, config: $config, jokers: $jokers, phase: $phase, pickIndex: $pickIndex, piecesLeft: $piecesLeft, piecesRngState: $piecesRngState, revivesUsed: $revivesUsed, roundIndex: $roundIndex, runTotal: $runTotal, score: $score, seed: $seed, stonesRngState: $stonesRngState, storedMult: $storedMult, streak: $streak, tray: $tray, trayClearMask: $trayClearMask)';
+  return 'RunState(board: $board, config: $config, jokers: $jokers, phase: $phase, pickIndex: $pickIndex, piecesLeft: $piecesLeft, piecesRngState: $piecesRngState, revivesUsed: $revivesUsed, roundIndex: $roundIndex, runTotal: $runTotal, score: $score, seed: $seed, stonesRngState: $stonesRngState, storedMult: $storedMult, streak: $streak, tray: $tray, momentumStreak: $momentumStreak, trayClearMask: $trayClearMask, trayDealt: $trayDealt)';
 }
 
 
@@ -334,7 +346,7 @@ abstract mixin class _$RunStateCopyWith<$Res> implements $RunStateCopyWith<$Res>
   factory _$RunStateCopyWith(_RunState value, $Res Function(_RunState) _then) = __$RunStateCopyWithImpl;
 @override @useResult
 $Res call({
- Board board, RunConfig config, List<JokerId> jokers, RunPhase phase, int pickIndex, int piecesLeft, int piecesRngState, int revivesUsed, int roundIndex, int runTotal, int score, int seed, int stonesRngState, int storedMult, int streak, List<int?> tray, int? trayClearMask
+ Board board, RunConfig config, List<JokerId> jokers, RunPhase phase, int pickIndex, int piecesLeft, int piecesRngState, int revivesUsed, int roundIndex, int runTotal, int score, int seed, int stonesRngState, int storedMult, int streak, List<int?> tray, int momentumStreak, int? trayClearMask, int trayDealt
 });
 
 
@@ -351,7 +363,7 @@ class __$RunStateCopyWithImpl<$Res>
 
 /// Create a copy of RunState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? board = null,Object? config = null,Object? jokers = null,Object? phase = null,Object? pickIndex = null,Object? piecesLeft = null,Object? piecesRngState = null,Object? revivesUsed = null,Object? roundIndex = null,Object? runTotal = null,Object? score = null,Object? seed = null,Object? stonesRngState = null,Object? storedMult = null,Object? streak = null,Object? tray = null,Object? trayClearMask = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? board = null,Object? config = null,Object? jokers = null,Object? phase = null,Object? pickIndex = null,Object? piecesLeft = null,Object? piecesRngState = null,Object? revivesUsed = null,Object? roundIndex = null,Object? runTotal = null,Object? score = null,Object? seed = null,Object? stonesRngState = null,Object? storedMult = null,Object? streak = null,Object? tray = null,Object? momentumStreak = null,Object? trayClearMask = freezed,Object? trayDealt = null,}) {
   return _then(_RunState(
 board: null == board ? _self.board : board // ignore: cast_nullable_to_non_nullable
 as Board,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
@@ -369,8 +381,10 @@ as int,stonesRngState: null == stonesRngState ? _self.stonesRngState : stonesRng
 as int,storedMult: null == storedMult ? _self.storedMult : storedMult // ignore: cast_nullable_to_non_nullable
 as int,streak: null == streak ? _self.streak : streak // ignore: cast_nullable_to_non_nullable
 as int,tray: null == tray ? _self._tray : tray // ignore: cast_nullable_to_non_nullable
-as List<int?>,trayClearMask: freezed == trayClearMask ? _self.trayClearMask : trayClearMask // ignore: cast_nullable_to_non_nullable
-as int?,
+as List<int?>,momentumStreak: null == momentumStreak ? _self.momentumStreak : momentumStreak // ignore: cast_nullable_to_non_nullable
+as int,trayClearMask: freezed == trayClearMask ? _self.trayClearMask : trayClearMask // ignore: cast_nullable_to_non_nullable
+as int?,trayDealt: null == trayDealt ? _self.trayDealt : trayDealt // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

@@ -18,6 +18,16 @@ abstract class RoundSpec with _$RoundSpec {
     /// drops them (Rubble's boss).
     required int stones,
     required int target,
+
+    /// Fog cells on the board when the round starts, in a round whose world
+    /// rule lays them (Fog's boss).
+    @Default(0) int fog,
+
+    /// How many of [fog] hide a stone.
+    @Default(0) int fogStones,
+
+    /// Empty columns in the stone row the tide pushes in (Tide's boss).
+    @Default(0) int tideGaps,
   }) = _RoundSpec;
 }
 

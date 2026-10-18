@@ -10,6 +10,6 @@ String worldName(BuildContext context, WorldId id) {
     .gravity => worlds.gravity,
     .mirror => worlds.mirror,
     .rubble => worlds.rubble,
-    .speed => worlds.speed,
+    .tide => worlds.tide,
   };
 }

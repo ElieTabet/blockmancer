@@ -30,7 +30,7 @@ void main() {
     expect(_in(.rubble, find.byIcon(Icons.lock_rounded)), findsNothing);
     expect(_in(.gravity, find.byIcon(Icons.lock_rounded)), findsOneWidget);
     expect(_marker(.gravity), findsNothing);
-    for (final world in const [WorldId.fog, WorldId.speed, WorldId.mirror]) {
+    for (final world in const [WorldId.fog, WorldId.tide, WorldId.mirror]) {
       expect(_in(world, find.text('Coming soon')), findsOneWidget);
     }
     expect(find.byIcon(Icons.location_on_rounded), findsOneWidget);
@@ -46,7 +46,7 @@ void main() {
       'Rubble',
       'Gravity',
       'Fog',
-      'Speed',
+      'Tide',
       'Mirror',
     ].indexed) {
       final world = mapWorlds[index].id;

@@ -6,7 +6,7 @@ part 'saved_run_dto.br.g.dart';
 
 /// The saved run's schema version. Bump it with each change to these DTOs,
 /// and teach `migrate` to bring the previous version up to it.
-const savedRunVersion = 8;
+const savedRunVersion = 9;
 
 /// Brings a saved run written by an earlier version up to [savedRunVersion],
 /// one version at a time; a version this build doesn't know is unreadable.
@@ -19,6 +19,7 @@ Map<String, dynamic> migrate(Map<String, dynamic> json) =>
       5 => migrate(_fromVersion5(json)),
       6 => migrate(_fromVersion6(json)),
       7 => migrate(_fromVersion7(json)),
+      8 => migrate(_fromVersion8(json)),
       savedRunVersion => json,
       final version => throw FormatException('Saved run version $version'),
     };
@@ -165,6 +166,45 @@ Map<String, dynamic> _fromVersion7(Map<String, dynamic> json) {
   };
 }
 
+/// Version 9 added fog cells, the Fog and Tide bosses' counts, the tray
+/// streak Momentum reads and the six jokers of Fog, Tide and Mirror. No save
+/// from before it holds fog or one of those jokers, so the new numbers only
+/// complete the schema; its tray in hand reads as dealt as it stands.
+Map<String, dynamic> _fromVersion8(Map<String, dynamic> json) {
+  final run = json['run'] as Map<String, dynamic>;
+  final config = run['config'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'run': <String, dynamic>{
+      ...run,
+      'config': <String, dynamic>{
+        ...config,
+        'jokers': <String, dynamic>{
+          ...config['jokers'] as Map<String, dynamic>,
+          'emberFactor': 2,
+          'momentumMultPerTray': 2,
+          'prismChipsPerPair': 15,
+          'sprinterMult': 5,
+          'symmetryMult': 4,
+        },
+        'rounds': [
+          for (final round in config['rounds'] as List<dynamic>)
+            <String, dynamic>{
+              ...round as Map<String, dynamic>,
+              'fog': 0,
+              'fogStones': 0,
+              'tideGaps': 0,
+            },
+        ],
+      },
+      'momentumStreak': 0,
+      'trayDealt': (run['tray'] as List<dynamic>).whereType<int>().length,
+    },
+    'version': 9,
+  };
+}
+
 const _version7StarUnlocks = [
   {
     'jokers': ['fullhouse', 'brink'],
@@ -279,6 +319,7 @@ final class RunStateDto {
     required this.board,
     required this.config,
     required this.jokers,
+    required this.momentumStreak,
     required this.phase,
     required this.pickIndex,
     required this.piecesLeft,
@@ -292,6 +333,7 @@ final class RunStateDto {
     required this.storedMult,
     required this.streak,
     required this.tray,
+    required this.trayDealt,
     this.trayClearMask,
   });
 
@@ -299,6 +341,7 @@ final class RunStateDto {
     board: [for (final cell in run.board.cells) _cellCode(cell)],
     config: .fromDomain(run.config),
     jokers: [for (final joker in run.jokers) joker.name],
+    momentumStreak: run.momentumStreak,
     phase: .fromDomain(run.phase),
     pickIndex: run.pickIndex,
     piecesLeft: run.piecesLeft,
@@ -313,16 +356,18 @@ final class RunStateDto {
     streak: run.streak,
     tray: run.tray,
     trayClearMask: run.trayClearMask,
+    trayDealt: run.trayDealt,
   );
 
   factory RunStateDto.fromJson(Map<String, dynamic> json) =>
       _$RunStateDtoFromJson(json);
 
-  /// One code per cell, row-major: 0 empty, -1 stone, a filled cell's colour
-  /// index plus one.
+  /// One code per cell, row-major: 0 empty, -1 stone, -2 fog, -3 fog hiding
+  /// a stone, a filled cell's colour index plus one.
   final List<int> board;
   final RunConfigDto config;
   final List<String> jokers;
+  final int momentumStreak;
   final RunPhaseDto phase;
   final int pickIndex;
   final int piecesLeft;
@@ -337,6 +382,7 @@ final class RunStateDto {
   final int streak;
   final List<int?> tray;
   final int? trayClearMask;
+  final int trayDealt;
 
   Map<String, dynamic> toJson() => _$RunStateDtoToJson(this);
 
@@ -349,6 +395,7 @@ final class RunStateDto {
       board: Board(cells: [for (final code in board) _cellOf(code)]),
       config: config.toDomain(),
       jokers: [for (final joker in jokers) JokerId.values.byName(joker)],
+      momentumStreak: momentumStreak,
       phase: phase.toDomain(),
       pickIndex: pickIndex,
       piecesLeft: piecesLeft,
@@ -363,6 +410,7 @@ final class RunStateDto {
       streak: streak,
       tray: tray,
       trayClearMask: trayClearMask,
+      trayDealt: trayDealt,
     );
   }
 
@@ -370,11 +418,14 @@ final class RunStateDto {
     EmptyCell() => 0,
     FilledCell(:final colorIndex) => colorIndex + 1,
     StoneCell() => -1,
+    FogCell(:final hidesStone) => hidesStone ? -3 : -2,
   };
 
   static CellState _cellOf(int code) => switch (code) {
     0 => const .empty(),
     -1 => const .stone(),
+    -2 => const .fog(hidesStone: false),
+    -3 => const .fog(hidesStone: true),
     _ when code > 0 => .filled(colorIndex: code - 1),
     _ => throw FormatException('Unknown cell $code'),
   };
@@ -486,21 +537,26 @@ final class JokerTuningDto {
     required this.collectorMultPerJoker,
     required this.columnFactor,
     required this.comboMultPerStreak,
+    required this.emberFactor,
     required this.finisherFactor,
     required this.fullHouseCellsPerMult,
     required this.fullHouseMultPerBlock,
     required this.hatTrickBonus,
     required this.heavyFactor,
     required this.heavyMinPieceSize,
+    required this.momentumMultPerTray,
     required this.patienceStoredPerMove,
     required this.pocketsExtraPieces,
     required this.precisionBonusMult,
     required this.precisionMaxPieceSize,
+    required this.prismChipsPerPair,
     required this.quarryStonesPerClear,
     required this.saverPointsPerPiece,
+    required this.sprinterMult,
     required this.stonemasonChipsPerStone,
     required this.stonemasonExtraStones,
     required this.sweepBonus,
+    required this.symmetryMult,
     required this.tinyFactor,
     required this.tinyMaxPieceSize,
     required this.twinFactor,
@@ -518,21 +574,26 @@ final class JokerTuningDto {
     collectorMultPerJoker: tuning.collectorMultPerJoker,
     columnFactor: tuning.columnFactor,
     comboMultPerStreak: tuning.comboMultPerStreak,
+    emberFactor: tuning.emberFactor,
     finisherFactor: tuning.finisherFactor,
     fullHouseCellsPerMult: tuning.fullHouseCellsPerMult,
     fullHouseMultPerBlock: tuning.fullHouseMultPerBlock,
     hatTrickBonus: tuning.hatTrickBonus,
     heavyFactor: tuning.heavyFactor,
     heavyMinPieceSize: tuning.heavyMinPieceSize,
+    momentumMultPerTray: tuning.momentumMultPerTray,
     patienceStoredPerMove: tuning.patienceStoredPerMove,
     pocketsExtraPieces: tuning.pocketsExtraPieces,
     precisionBonusMult: tuning.precisionBonusMult,
     precisionMaxPieceSize: tuning.precisionMaxPieceSize,
+    prismChipsPerPair: tuning.prismChipsPerPair,
     quarryStonesPerClear: tuning.quarryStonesPerClear,
     saverPointsPerPiece: tuning.saverPointsPerPiece,
+    sprinterMult: tuning.sprinterMult,
     stonemasonChipsPerStone: tuning.stonemasonChipsPerStone,
     stonemasonExtraStones: tuning.stonemasonExtraStones,
     sweepBonus: tuning.sweepBonus,
+    symmetryMult: tuning.symmetryMult,
     tinyFactor: tuning.tinyFactor,
     tinyMaxPieceSize: tuning.tinyMaxPieceSize,
     twinFactor: tuning.twinFactor,
@@ -552,21 +613,26 @@ final class JokerTuningDto {
   final int collectorMultPerJoker;
   final int columnFactor;
   final int comboMultPerStreak;
+  final int emberFactor;
   final int finisherFactor;
   final int fullHouseCellsPerMult;
   final int fullHouseMultPerBlock;
   final int hatTrickBonus;
   final int heavyFactor;
   final int heavyMinPieceSize;
+  final int momentumMultPerTray;
   final int patienceStoredPerMove;
   final int pocketsExtraPieces;
   final int precisionBonusMult;
   final int precisionMaxPieceSize;
+  final int prismChipsPerPair;
   final int quarryStonesPerClear;
   final int saverPointsPerPiece;
+  final int sprinterMult;
   final int stonemasonChipsPerStone;
   final int stonemasonExtraStones;
   final int sweepBonus;
+  final int symmetryMult;
   final int tinyFactor;
   final int tinyMaxPieceSize;
   final int twinFactor;
@@ -585,21 +651,26 @@ final class JokerTuningDto {
     collectorMultPerJoker: collectorMultPerJoker,
     columnFactor: columnFactor,
     comboMultPerStreak: comboMultPerStreak,
+    emberFactor: emberFactor,
     finisherFactor: finisherFactor,
     fullHouseCellsPerMult: fullHouseCellsPerMult,
     fullHouseMultPerBlock: fullHouseMultPerBlock,
     hatTrickBonus: hatTrickBonus,
     heavyFactor: heavyFactor,
     heavyMinPieceSize: heavyMinPieceSize,
+    momentumMultPerTray: momentumMultPerTray,
     patienceStoredPerMove: patienceStoredPerMove,
     pocketsExtraPieces: pocketsExtraPieces,
     precisionBonusMult: precisionBonusMult,
     precisionMaxPieceSize: precisionMaxPieceSize,
+    prismChipsPerPair: prismChipsPerPair,
     quarryStonesPerClear: quarryStonesPerClear,
     saverPointsPerPiece: saverPointsPerPiece,
+    sprinterMult: sprinterMult,
     stonemasonChipsPerStone: stonemasonChipsPerStone,
     stonemasonExtraStones: stonemasonExtraStones,
     sweepBonus: sweepBonus,
+    symmetryMult: symmetryMult,
     tinyFactor: tinyFactor,
     tinyMaxPieceSize: tinyMaxPieceSize,
     twinFactor: twinFactor,
@@ -610,31 +681,47 @@ final class JokerTuningDto {
 @JsonSerializable()
 final class RoundSpecDto {
   const RoundSpecDto({
+    required this.fog,
+    required this.fogStones,
     required this.isBoss,
     required this.pieces,
     required this.stones,
     required this.target,
+    required this.tideGaps,
   });
 
   factory RoundSpecDto.fromDomain(RoundSpec round) => RoundSpecDto(
+    fog: round.fog,
+    fogStones: round.fogStones,
     isBoss: round.isBoss,
     pieces: round.pieces,
     stones: round.stones,
     target: round.target,
+    tideGaps: round.tideGaps,
   );
 
   factory RoundSpecDto.fromJson(Map<String, dynamic> json) =>
       _$RoundSpecDtoFromJson(json);
 
+  final int fog;
+  final int fogStones;
   final bool isBoss;
   final int pieces;
   final int stones;
   final int target;
+  final int tideGaps;
 
   Map<String, dynamic> toJson() => _$RoundSpecDtoToJson(this);
 
-  RoundSpec toDomain() =>
-      RoundSpec(isBoss: isBoss, pieces: pieces, stones: stones, target: target);
+  RoundSpec toDomain() => RoundSpec(
+    fog: fog,
+    fogStones: fogStones,
+    isBoss: isBoss,
+    pieces: pieces,
+    stones: stones,
+    target: target,
+    tideGaps: tideGaps,
+  );
 }
 
 /// [RunPhase] as a tag, with the offers or the loss reason it carries.

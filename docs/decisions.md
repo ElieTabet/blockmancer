@@ -65,3 +65,30 @@ reading chosen and why. Newest task last.
 - **Result:** the boss metrics moved by 4 to 17 points for every build, all from Collector's
   change in 0b (the 2,000-run check with the new Collector already showed them). Values unchanged;
   stopped to ask.
+- **Decision (user):** fold the boss re-tuning into Sprint 7's Task 6, which re-tunes every
+  world's boss against the same targets; Rubble and Gravity play harder bosses until then.
+
+## Task 1: shared engine changes
+
+- **Save versions.** The sprint's "save v4" is our saved run's version 9 (it was 7 after Sprint 5,
+  8 after Task 0c). Every field Sprints 6–7 add to a saved run goes in at once here, so Tasks 2–4
+  bump nothing: fog cells (codes -2, and -3 hiding a stone), `RoundSpec.fog` / `fogStones` /
+  `tideGaps`, `RunState.momentumStreak` and `trayDealt`, and the numbers of Ember, Sprinter,
+  Momentum, Symmetry and Prism (2, 5, 2, 4, 15). A save from before reads them as 0 and its tray as
+  dealt as it stands; it can't hold fog or those jokers, which it never offers.
+- **Speed becomes Tide.** `WorldId.speed` is renamed `tide` (the implementation plan dropped Speed
+  for Tide). Every profile stored a locked `speed` entry, since the starting progression lists
+  every world, and reading the unknown name would throw the profile away: profile version 6
+  renames the entry.
+- **A stone under fog in a cleared line.** It goes with the line, as "whatever it hid is gone too"
+  says, and isn't counted in `stonesCleared` (Stonemason's chips): the player never saw it.
+- **`transformPlacement`.** It maps the piece's cells to the landing cells, or null when it can't
+  land; `PiecePlaced.anchor` is the landing cells' top-left. `transformAnchor` stays as that
+  top-left, derived from `transformPlacement`, so the Gravity tests run unchanged.
+- **`onTrayDealt`.** It receives and returns the run with its events (a `Transition`), runs before
+  the tray is dealt, and may lose the round: then no tray is dealt and the round stays lost
+  (`_settle` no longer overrides a loss, so a revive now sets the round back to playing before it
+  deals).
+- **Testing a hook no world uses.** The engine looks rules up through `worldRuleLookup`, which only
+  tests replace with a fake rule; the game never does.
+- **Momentum's streak** starts each round at 0, as the clear streak does.

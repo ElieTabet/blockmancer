@@ -416,8 +416,8 @@ class Translations$game$worlds$en {
 	/// en: 'Fog'
 	String get fog => 'Fog';
 
-	/// en: 'Speed'
-	String get speed => 'Speed';
+	/// en: 'Tide'
+	String get tide => 'Tide';
 
 	/// en: 'Mirror'
 	String get mirror => 'Mirror';
@@ -1166,7 +1166,7 @@ extension on Translations {
 			'game.worlds.rubble' => 'Rubble',
 			'game.worlds.gravity' => 'Gravity',
 			'game.worlds.fog' => 'Fog',
-			'game.worlds.speed' => 'Speed',
+			'game.worlds.tide' => 'Tide',
 			'game.worlds.mirror' => 'Mirror',
 			'game.jokers.stonemason.name' => 'Stonemason',
 			'game.jokers.stonemason.description' => ({required num stones, required Object chips}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(stones, one: '+${chips} chips for each stone cleared. ${stones} extra stone every round.', other: '+${chips} chips for each stone cleared. ${stones} extra stones every round.', ), 

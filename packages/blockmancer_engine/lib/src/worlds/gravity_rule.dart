@@ -8,25 +8,26 @@ import 'package:shared_domain/shared_domain.dart';
 final class GravityRule extends WorldRule {
   const GravityRule();
 
-  static const _oneRowDown = Cell(col: 0, row: 1);
-
   @override
   bool get bossOnly => true;
 
   @override
-  Cell? transformAnchor({
-    required Cell anchor,
+  List<Cell>? transformPlacement({
     required Board board,
-    required Shape shape,
+    required List<Cell> cells,
   }) {
-    if (!fits(board, shape, anchor: anchor)) return null;
+    if (!cellsFit(board, cells)) return null;
 
-    var landing = anchor;
+    var landing = cells;
 
-    while (fits(board, shape, anchor: landing + _oneRowDown)) {
-      landing += _oneRowDown;
+    while (true) {
+      final lower = [
+        for (final cell in landing) Cell(col: cell.col, row: cell.row + 1),
+      ];
+
+      if (!cellsFit(board, lower)) return landing;
+
+      landing = lower;
     }
-
-    return landing;
   }
 }

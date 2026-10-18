@@ -18,7 +18,11 @@ mixin _$RoundSpec {
 /// in. The run ends after the last round, whichever it is.
  bool get isBoss; int get pieces;/// Stones on the board when the round starts, in a round whose world rule
 /// drops them (Rubble's boss).
- int get stones; int get target;
+ int get stones; int get target;/// Fog cells on the board when the round starts, in a round whose world
+/// rule lays them (Fog's boss).
+ int get fog;/// How many of [fog] hide a stone.
+ int get fogStones;/// Empty columns in the stone row the tide pushes in (Tide's boss).
+ int get tideGaps;
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +33,16 @@ $RoundSpecCopyWith<RoundSpec> get copyWith => _$RoundSpecCopyWithImpl<RoundSpec>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoundSpec&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.stones, stones) || other.stones == stones)&&(identical(other.target, target) || other.target == target));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoundSpec&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.stones, stones) || other.stones == stones)&&(identical(other.target, target) || other.target == target)&&(identical(other.fog, fog) || other.fog == fog)&&(identical(other.fogStones, fogStones) || other.fogStones == fogStones)&&(identical(other.tideGaps, tideGaps) || other.tideGaps == tideGaps));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isBoss,pieces,stones,target);
+int get hashCode => Object.hash(runtimeType,isBoss,pieces,stones,target,fog,fogStones,tideGaps);
 
 @override
 String toString() {
-  return 'RoundSpec(isBoss: $isBoss, pieces: $pieces, stones: $stones, target: $target)';
+  return 'RoundSpec(isBoss: $isBoss, pieces: $pieces, stones: $stones, target: $target, fog: $fog, fogStones: $fogStones, tideGaps: $tideGaps)';
 }
 
 
@@ -49,7 +53,7 @@ abstract mixin class $RoundSpecCopyWith<$Res>  {
   factory $RoundSpecCopyWith(RoundSpec value, $Res Function(RoundSpec) _then) = _$RoundSpecCopyWithImpl;
 @useResult
 $Res call({
- bool isBoss, int pieces, int stones, int target
+ bool isBoss, int pieces, int stones, int target, int fog, int fogStones, int tideGaps
 });
 
 
@@ -66,12 +70,15 @@ class _$RoundSpecCopyWithImpl<$Res>
 
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isBoss = null,Object? pieces = null,Object? stones = null,Object? target = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isBoss = null,Object? pieces = null,Object? stones = null,Object? target = null,Object? fog = null,Object? fogStones = null,Object? tideGaps = null,}) {
   return _then(_self.copyWith(
 isBoss: null == isBoss ? _self.isBoss : isBoss // ignore: cast_nullable_to_non_nullable
 as bool,pieces: null == pieces ? _self.pieces : pieces // ignore: cast_nullable_to_non_nullable
 as int,stones: null == stones ? _self.stones : stones // ignore: cast_nullable_to_non_nullable
 as int,target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
+as int,fog: null == fog ? _self.fog : fog // ignore: cast_nullable_to_non_nullable
+as int,fogStones: null == fogStones ? _self.fogStones : fogStones // ignore: cast_nullable_to_non_nullable
+as int,tideGaps: null == tideGaps ? _self.tideGaps : tideGaps // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -157,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isBoss,  int pieces,  int stones,  int target)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isBoss,  int pieces,  int stones,  int target,  int fog,  int fogStones,  int tideGaps)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RoundSpec() when $default != null:
-return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
+return $default(_that.isBoss,_that.pieces,_that.stones,_that.target,_that.fog,_that.fogStones,_that.tideGaps);case _:
   return orElse();
 
 }
@@ -178,10 +185,10 @@ return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isBoss,  int pieces,  int stones,  int target)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isBoss,  int pieces,  int stones,  int target,  int fog,  int fogStones,  int tideGaps)  $default,) {final _that = this;
 switch (_that) {
 case _RoundSpec():
-return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
+return $default(_that.isBoss,_that.pieces,_that.stones,_that.target,_that.fog,_that.fogStones,_that.tideGaps);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +205,10 @@ return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isBoss,  int pieces,  int stones,  int target)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isBoss,  int pieces,  int stones,  int target,  int fog,  int fogStones,  int tideGaps)?  $default,) {final _that = this;
 switch (_that) {
 case _RoundSpec() when $default != null:
-return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
+return $default(_that.isBoss,_that.pieces,_that.stones,_that.target,_that.fog,_that.fogStones,_that.tideGaps);case _:
   return null;
 
 }
@@ -213,7 +220,7 @@ return $default(_that.isBoss,_that.pieces,_that.stones,_that.target);case _:
 
 
 class _RoundSpec implements RoundSpec {
-  const _RoundSpec({required this.isBoss, required this.pieces, required this.stones, required this.target});
+  const _RoundSpec({required this.isBoss, required this.pieces, required this.stones, required this.target, this.fog = 0, this.fogStones = 0, this.tideGaps = 0});
   
 
 /// How the round is presented, and the round a world's boss rule holds
@@ -224,6 +231,13 @@ class _RoundSpec implements RoundSpec {
 /// drops them (Rubble's boss).
 @override final  int stones;
 @override final  int target;
+/// Fog cells on the board when the round starts, in a round whose world
+/// rule lays them (Fog's boss).
+@override@JsonKey() final  int fog;
+/// How many of [fog] hide a stone.
+@override@JsonKey() final  int fogStones;
+/// Empty columns in the stone row the tide pushes in (Tide's boss).
+@override@JsonKey() final  int tideGaps;
 
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +249,16 @@ _$RoundSpecCopyWith<_RoundSpec> get copyWith => __$RoundSpecCopyWithImpl<_RoundS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoundSpec&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.stones, stones) || other.stones == stones)&&(identical(other.target, target) || other.target == target));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoundSpec&&(identical(other.isBoss, isBoss) || other.isBoss == isBoss)&&(identical(other.pieces, pieces) || other.pieces == pieces)&&(identical(other.stones, stones) || other.stones == stones)&&(identical(other.target, target) || other.target == target)&&(identical(other.fog, fog) || other.fog == fog)&&(identical(other.fogStones, fogStones) || other.fogStones == fogStones)&&(identical(other.tideGaps, tideGaps) || other.tideGaps == tideGaps));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isBoss,pieces,stones,target);
+int get hashCode => Object.hash(runtimeType,isBoss,pieces,stones,target,fog,fogStones,tideGaps);
 
 @override
 String toString() {
-  return 'RoundSpec(isBoss: $isBoss, pieces: $pieces, stones: $stones, target: $target)';
+  return 'RoundSpec(isBoss: $isBoss, pieces: $pieces, stones: $stones, target: $target, fog: $fog, fogStones: $fogStones, tideGaps: $tideGaps)';
 }
 
 
@@ -255,7 +269,7 @@ abstract mixin class _$RoundSpecCopyWith<$Res> implements $RoundSpecCopyWith<$Re
   factory _$RoundSpecCopyWith(_RoundSpec value, $Res Function(_RoundSpec) _then) = __$RoundSpecCopyWithImpl;
 @override @useResult
 $Res call({
- bool isBoss, int pieces, int stones, int target
+ bool isBoss, int pieces, int stones, int target, int fog, int fogStones, int tideGaps
 });
 
 
@@ -272,12 +286,15 @@ class __$RoundSpecCopyWithImpl<$Res>
 
 /// Create a copy of RoundSpec
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isBoss = null,Object? pieces = null,Object? stones = null,Object? target = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isBoss = null,Object? pieces = null,Object? stones = null,Object? target = null,Object? fog = null,Object? fogStones = null,Object? tideGaps = null,}) {
   return _then(_RoundSpec(
 isBoss: null == isBoss ? _self.isBoss : isBoss // ignore: cast_nullable_to_non_nullable
 as bool,pieces: null == pieces ? _self.pieces : pieces // ignore: cast_nullable_to_non_nullable
 as int,stones: null == stones ? _self.stones : stones // ignore: cast_nullable_to_non_nullable
 as int,target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
+as int,fog: null == fog ? _self.fog : fog // ignore: cast_nullable_to_non_nullable
+as int,fogStones: null == fogStones ? _self.fogStones : fogStones // ignore: cast_nullable_to_non_nullable
+as int,tideGaps: null == tideGaps ? _self.tideGaps : tideGaps // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

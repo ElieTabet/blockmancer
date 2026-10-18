@@ -94,14 +94,15 @@ PlacementPreview preview(
 
   final shape = shapeCatalog[shapeId];
   final landing = _landing(state, shape, anchor: anchor);
-  final shown = landing ?? anchor;
-  final cells = [
-    for (final offset in shape.cells)
-      if (state.board.contains(shown + offset)) shown + offset,
-  ];
+  final cells =
+      landing ??
+      [
+        for (final offset in shape.cells)
+          if (state.board.contains(anchor + offset)) anchor + offset,
+      ];
   final placed = landing == null
       ? null
-      : placeShape(state.board, shape, anchor: landing);
+      : placeCells(state.board, landing, colorIndex: shape.colorIndex);
 
   return PlacementPreview(
     cells: cells,
@@ -132,7 +133,9 @@ Transition place(
   final shape = shapeCatalog[shapeId];
   final landing = _landing(state, shape, anchor: anchor)!;
   final jokers = effectsOf(state.jokers);
-  final clear = resolveClears(placeShape(state.board, shape, anchor: landing));
+  final clear = resolveClears(
+    placeCells(state.board, landing, colorIndex: shape.colorIndex),
+  );
   final mask = state.trayClearMask;
   final trayClearMask = mask != null && clear.clearedAny
       ? mask | 1 << trayIndex
@@ -152,8 +155,8 @@ Transition place(
 
   final events = <GameEvent>[
     .piecePlaced(
-      anchor: landing,
-      cells: [for (final offset in shape.cells) landing + offset],
+      anchor: topLeftOf(landing),
+      cells: landing,
       shapeId: shapeId,
       trayIndex: trayIndex,
     ),
@@ -208,6 +211,7 @@ Transition revive(RunState state) {
         for (var col = 0; col < Board.size; col++)
           Cell(col: col, row: row): const .empty(),
     }),
+    phase: const .playing(),
     piecesLeft: state.piecesLeft + state.config.revivePieces,
     revivesUsed: state.revivesUsed + 1,
     trayClearMask: null,
@@ -237,13 +241,13 @@ bool _fitsAnywhere(RunState state, Shape shape) => [
     for (var col = 0; col < Board.size; col++) Cell(col: col, row: row),
 ].any((anchor) => _landing(state, shape, anchor: anchor) != null);
 
-/// Where [shape] dropped at [anchor] lands under the round's world rule, or
-/// `null` when it can't be placed from there.
-Cell? _landing(RunState state, Shape shape, {required Cell anchor}) =>
-    ruleOfRound(
-      state.config,
-      state.round,
-    ).transformAnchor(anchor: anchor, board: state.board, shape: shape);
+/// The cells [shape] dropped at [anchor] fills under the round's world rule,
+/// or `null` when it can't be placed from there.
+List<Cell>? _landing(RunState state, Shape shape, {required Cell anchor}) =>
+    ruleOfRound(state.config, state.round).transformPlacement(
+      board: state.board,
+      cells: [for (final offset in shape.cells) anchor + offset],
+    );
 
 /// The tray piece at [trayIndex] while the round is being played, else `null`.
 int? _playableShape(RunState state, int trayIndex) {
@@ -252,15 +256,26 @@ int? _playableShape(RunState state, int trayIndex) {
   return state.phase is PlayingPhase && inTray ? state.tray[trayIndex] : null;
 }
 
-/// Draws the next tray when the current one is played out and pieces remain.
-/// Only a tray dealt in full can earn Hat Trick: a short one starts with no
-/// clear mask.
-Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
-  final (state, events) = transition;
-
-  if (state.tray.any((slot) => slot != null) || state.piecesLeft == 0) {
+/// Draws the next tray when the current one is played out and pieces remain,
+/// once the round's world rule has had its say ([firstOfRound] for the
+/// round's first tray). Only a tray dealt in full can earn Hat Trick: a short
+/// one starts with no clear mask.
+Transition _refillIfEmpty(
+  List<JokerEffect> jokers,
+  Transition transition, {
+  bool firstOfRound = false,
+}) {
+  if (transition.$1.tray.any((slot) => slot != null) ||
+      transition.$1.piecesLeft == 0) {
     return transition;
   }
+
+  final (state, events) = ruleOfRound(
+    transition.$1.config,
+    transition.$1.round,
+  ).onTrayDealt(transition, firstOfRound: firstOfRound);
+
+  if (state.phase is RoundLostPhase) return (state, events);
 
   final traySize = state.config.traySize;
   final count = state.piecesLeft < traySize ? state.piecesLeft : traySize;
@@ -284,14 +299,18 @@ Transition _refillIfEmpty(List<JokerEffect> jokers, Transition transition) {
       piecesRngState: rng.state,
       tray: tray,
       trayClearMask: count == traySize ? 0 : null,
+      trayDealt: count,
     ),
     [...events, .trayRefilled(tray: tray)],
   );
 }
 
-/// Playing on, or lost: out of pieces, or none of the tray fits.
+/// Playing on, or lost: out of pieces, or none of the tray fits. A round its
+/// world rule already lost stays lost.
 Transition _settle(Transition transition) {
   final (state, events) = transition;
+
+  if (state.phase is RoundLostPhase) return transition;
   final pieces = state.tray.whereType<int>();
 
   LossReason? reason;
@@ -353,6 +372,7 @@ Transition _startRound(Transition transition) {
 
   final round = state.copyWith(
     board: board,
+    momentumStreak: 0,
     pickIndex: roundIndex + 1,
     piecesLeft: setup.pieces,
     piecesRngState: deriveSeed(
@@ -368,7 +388,7 @@ Transition _startRound(Transition transition) {
     tray: List.filled(state.config.traySize, null),
   );
 
-  return _settle(_refillIfEmpty(jokers, (round, started)));
+  return _settle(_refillIfEmpty(jokers, (round, started), firstOfRound: true));
 }
 
 /// Banks the round and its bonus, then offers jokers — or, after the last

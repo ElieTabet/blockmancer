@@ -36,7 +36,7 @@ const starting = Progression(
     .rubble: WorldProgress(bossBeaten: false, stars: noStars, unlocked: true),
     .gravity: _locked,
     .fog: _locked,
-    .speed: _locked,
+    .tide: _locked,
     .mirror: _locked,
   },
 );

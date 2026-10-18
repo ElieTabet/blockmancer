@@ -29,6 +29,7 @@ RunStateDto _$RunStateDtoFromJson(Map<String, dynamic> json) => RunStateDto(
       .toList(),
   config: RunConfigDto.fromJson(json['config'] as Map<String, dynamic>),
   jokers: (json['jokers'] as List<dynamic>).map((e) => e as String).toList(),
+  momentumStreak: (json['momentumStreak'] as num).toInt(),
   phase: RunPhaseDto.fromJson(json['phase'] as Map<String, dynamic>),
   pickIndex: (json['pickIndex'] as num).toInt(),
   piecesLeft: (json['piecesLeft'] as num).toInt(),
@@ -44,6 +45,7 @@ RunStateDto _$RunStateDtoFromJson(Map<String, dynamic> json) => RunStateDto(
   tray: (json['tray'] as List<dynamic>)
       .map((e) => (e as num?)?.toInt())
       .toList(),
+  trayDealt: (json['trayDealt'] as num).toInt(),
   trayClearMask: (json['trayClearMask'] as num?)?.toInt(),
 );
 
@@ -52,6 +54,7 @@ Map<String, dynamic> _$RunStateDtoToJson(RunStateDto instance) =>
       'board': instance.board,
       'config': instance.config.toJson(),
       'jokers': instance.jokers,
+      'momentumStreak': instance.momentumStreak,
       'phase': instance.phase.toJson(),
       'pickIndex': instance.pickIndex,
       'piecesLeft': instance.piecesLeft,
@@ -66,6 +69,7 @@ Map<String, dynamic> _$RunStateDtoToJson(RunStateDto instance) =>
       'streak': instance.streak,
       'tray': instance.tray,
       'trayClearMask': instance.trayClearMask,
+      'trayDealt': instance.trayDealt,
     };
 
 RunConfigDto _$RunConfigDtoFromJson(Map<String, dynamic> json) => RunConfigDto(
@@ -130,21 +134,26 @@ JokerTuningDto _$JokerTuningDtoFromJson(Map<String, dynamic> json) =>
       collectorMultPerJoker: (json['collectorMultPerJoker'] as num).toInt(),
       columnFactor: (json['columnFactor'] as num).toInt(),
       comboMultPerStreak: (json['comboMultPerStreak'] as num).toInt(),
+      emberFactor: (json['emberFactor'] as num).toInt(),
       finisherFactor: (json['finisherFactor'] as num).toInt(),
       fullHouseCellsPerMult: (json['fullHouseCellsPerMult'] as num).toInt(),
       fullHouseMultPerBlock: (json['fullHouseMultPerBlock'] as num).toInt(),
       hatTrickBonus: (json['hatTrickBonus'] as num).toInt(),
       heavyFactor: (json['heavyFactor'] as num).toInt(),
       heavyMinPieceSize: (json['heavyMinPieceSize'] as num).toInt(),
+      momentumMultPerTray: (json['momentumMultPerTray'] as num).toInt(),
       patienceStoredPerMove: (json['patienceStoredPerMove'] as num).toInt(),
       pocketsExtraPieces: (json['pocketsExtraPieces'] as num).toInt(),
       precisionBonusMult: (json['precisionBonusMult'] as num).toInt(),
       precisionMaxPieceSize: (json['precisionMaxPieceSize'] as num).toInt(),
+      prismChipsPerPair: (json['prismChipsPerPair'] as num).toInt(),
       quarryStonesPerClear: (json['quarryStonesPerClear'] as num).toInt(),
       saverPointsPerPiece: (json['saverPointsPerPiece'] as num).toInt(),
+      sprinterMult: (json['sprinterMult'] as num).toInt(),
       stonemasonChipsPerStone: (json['stonemasonChipsPerStone'] as num).toInt(),
       stonemasonExtraStones: (json['stonemasonExtraStones'] as num).toInt(),
       sweepBonus: (json['sweepBonus'] as num).toInt(),
+      symmetryMult: (json['symmetryMult'] as num).toInt(),
       tinyFactor: (json['tinyFactor'] as num).toInt(),
       tinyMaxPieceSize: (json['tinyMaxPieceSize'] as num).toInt(),
       twinFactor: (json['twinFactor'] as num).toInt(),
@@ -163,21 +172,26 @@ Map<String, dynamic> _$JokerTuningDtoToJson(JokerTuningDto instance) =>
       'collectorMultPerJoker': instance.collectorMultPerJoker,
       'columnFactor': instance.columnFactor,
       'comboMultPerStreak': instance.comboMultPerStreak,
+      'emberFactor': instance.emberFactor,
       'finisherFactor': instance.finisherFactor,
       'fullHouseCellsPerMult': instance.fullHouseCellsPerMult,
       'fullHouseMultPerBlock': instance.fullHouseMultPerBlock,
       'hatTrickBonus': instance.hatTrickBonus,
       'heavyFactor': instance.heavyFactor,
       'heavyMinPieceSize': instance.heavyMinPieceSize,
+      'momentumMultPerTray': instance.momentumMultPerTray,
       'patienceStoredPerMove': instance.patienceStoredPerMove,
       'pocketsExtraPieces': instance.pocketsExtraPieces,
       'precisionBonusMult': instance.precisionBonusMult,
       'precisionMaxPieceSize': instance.precisionMaxPieceSize,
+      'prismChipsPerPair': instance.prismChipsPerPair,
       'quarryStonesPerClear': instance.quarryStonesPerClear,
       'saverPointsPerPiece': instance.saverPointsPerPiece,
+      'sprinterMult': instance.sprinterMult,
       'stonemasonChipsPerStone': instance.stonemasonChipsPerStone,
       'stonemasonExtraStones': instance.stonemasonExtraStones,
       'sweepBonus': instance.sweepBonus,
+      'symmetryMult': instance.symmetryMult,
       'tinyFactor': instance.tinyFactor,
       'tinyMaxPieceSize': instance.tinyMaxPieceSize,
       'twinFactor': instance.twinFactor,
@@ -185,18 +199,24 @@ Map<String, dynamic> _$JokerTuningDtoToJson(JokerTuningDto instance) =>
     };
 
 RoundSpecDto _$RoundSpecDtoFromJson(Map<String, dynamic> json) => RoundSpecDto(
+  fog: (json['fog'] as num).toInt(),
+  fogStones: (json['fogStones'] as num).toInt(),
   isBoss: json['isBoss'] as bool,
   pieces: (json['pieces'] as num).toInt(),
   stones: (json['stones'] as num).toInt(),
   target: (json['target'] as num).toInt(),
+  tideGaps: (json['tideGaps'] as num).toInt(),
 );
 
 Map<String, dynamic> _$RoundSpecDtoToJson(RoundSpecDto instance) =>
     <String, dynamic>{
+      'fog': instance.fog,
+      'fogStones': instance.fogStones,
       'isBoss': instance.isBoss,
       'pieces': instance.pieces,
       'stones': instance.stones,
       'target': instance.target,
+      'tideGaps': instance.tideGaps,
     };
 
 RunPhaseDto _$RunPhaseDtoFromJson(Map<String, dynamic> json) => RunPhaseDto(

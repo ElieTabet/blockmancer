@@ -40,10 +40,25 @@ bool fitsAnywhere(Board board, Shape shape) => [
 
 /// Fills the cells under [shape]; the caller has checked [fits].
 Board placeShape(Board board, Shape shape, {required Cell anchor}) =>
+    placeCells(board, [
+      for (final offset in shape.cells) anchor + offset,
+    ], colorIndex: shape.colorIndex);
+
+/// Fills [cells] in [colorIndex]; the caller has checked they are empty.
+Board placeCells(Board board, List<Cell> cells, {required int colorIndex}) =>
     board.withCells({
-      for (final offset in shape.cells)
-        anchor + offset: .filled(colorIndex: shape.colorIndex),
+      for (final cell in cells) cell: .filled(colorIndex: colorIndex),
     });
+
+/// Whether every one of [cells] is on the board and empty.
+bool cellsFit(Board board, List<Cell> cells) =>
+    cells.every((cell) => board.contains(cell) && board.at(cell) is EmptyCell);
+
+/// The top-left corner of [cells]' bounding box.
+Cell topLeftOf(List<Cell> cells) => Cell(
+  col: cells.map((cell) => cell.col).reduce((a, b) => a < b ? a : b),
+  row: cells.map((cell) => cell.row).reduce((a, b) => a < b ? a : b),
+);
 
 /// Where a stone may land: empty cells that wouldn't complete a line, so a
 /// stone never fills a line that the next, unrelated move would then be
@@ -60,7 +75,8 @@ List<Cell> stoneCells(Board board) {
   return safe.isEmpty ? empties : safe;
 }
 
-/// Clears every full row and column at once, stones included.
+/// Clears every full row and column at once, stones and fog included; a fog
+/// cell's hidden stone goes with it, uncounted, since it was never seen.
 ClearResult resolveClears(Board board) {
   final rows = board.fullRows;
   final cols = board.fullCols;

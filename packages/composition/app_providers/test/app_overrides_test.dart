@@ -220,7 +220,7 @@ void main() {
       WorldId.rubble,
       WorldId.gravity,
       WorldId.fog,
-      WorldId.speed,
+      WorldId.tide,
       WorldId.mirror,
     ]);
     expect(worlds.where((world) => world.playable).map((world) => world.id), [

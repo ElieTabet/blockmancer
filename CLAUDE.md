@@ -317,10 +317,18 @@ engine's events and never recomputes a rule.
   rule tests read the test-only `briefConfig`, the brief's numbers, and the seeded goldens too. This
   is what Remote Config will feed.
 - **Worlds.** `RunConfig.world` (`WorldId`) picks a `WorldRule` (`lib/src/worlds/`) that holds in the
-  boss only: its round setup (Rubble's stones, from `RoundSpec.stones`) and `transformAnchor`, where
-  a dropped piece really lands (Gravity's fall). `canPlace`, `preview`, `place`, `fitsSomewhere`
-  and the round's "no room" all go through it; a `RunMove.place` keeps the drop point, so replay
-  re-applies the rule. Fog, Mirror and Speed have no rule yet and throw.
+  boss only. Its hooks: `onRoundSetup` (Rubble's stones, from `RoundSpec.stones`),
+  `transformPlacement`, the cells a piece dropped on really fills (Gravity's fall; `transformAnchor`
+  is its top-left), and `onTrayDealt`, run before each tray is dealt, told whether it is the
+  round's first, which may lose the round (no tray is dealt then, and the round stays lost).
+  `canPlace`, `preview`, `place`, `fitsSomewhere` and the round's "no room" all go through
+  `transformPlacement`, and `PiecePlaced` carries the landing cells; a `RunMove.place` keeps the
+  drop point, so replay re-applies the rule. Fog, Mirror and Tide have no rule yet and throw.
+  Tests swap in a fake rule through `worldRuleLookup`.
+- **Fog cells.** `CellState.fog(hidesStone:)` blocks a piece and counts as occupied, for lines
+  and for Full House and On the Brink, like a stone. A cleared line takes its fog with it, and
+  whatever it hid; a hidden stone isn't counted as cleared. What fog hides is the engine's alone:
+  `preview`, the UI and the bot never read `hidesStone`.
 - **Tutorial.** `GameRules.tutorialRun` is a fixed run already in play: no joker, a bottom row one
   cell short, a single in the tray, and a round that can't be won.
 - **Balance bot.** `tool/balance_bot.dart` plays seeded runs with `lib/src/bot/`'s greedy policy
@@ -344,9 +352,9 @@ One run is saved on the device, so a killed app picks it up where it stood.
   the order they were made, so a slow save can't land after the clear that followed it.
 - **Where:** `game_data`'s `SharedPreferencesRunStore`, one JSON string under `run.saved`, written
   through json_serializable DTOs (`saved_run_dto.br.dart`) so `shared_domain`'s entities carry no
-  wire format. The schema has `version: 8`; `migrate(json)` brings an older version up to date one
+  wire format. The schema has `version: 9`; `migrate(json)` brings an older version up to date one
   step at a time, each step filling what that build played with (1 → 2 the chips per cell and
-  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick, 7 → 8 Avalanche's two rows and Full House's +1 mult, constants until then; the saved pool is kept, so an old run never offers a new joker), and a
+  joker numbers, 2 → 3 the Rubble world, 3 → 4 the 14-joker pool and the two new jokers' numbers, 4 → 5 the world's ★3 threshold, 5 → 6 nothing: world runs name their world, and no older save is one, 6 → 7 the stars' jokers' numbers and unlocks, and a tray that can't earn Hat Trick, 7 → 8 Avalanche's two rows and Full House's +1 mult, constants until then, 8 → 9 fog cells (codes -2, and -3 hiding a stone), the Fog and Tide bosses' counts (`RoundSpec.fog`, `fogStones`, `tideGaps`, 0 for an older save), the tray's `trayDealt` and `momentumStreak`, and the first numbers of Fog's, Tide's and Mirror's jokers; the saved pool is kept, so an old run never offers a new joker), and a
   save that can't be read (corrupt, unknown version, a joker this build lacks) is treated as no
   save.
 - **Resume:** Home shows Continue run while `hasSavedRun` is true, and it pushes
@@ -366,13 +374,15 @@ for the map to announce them) and `tutorialDone`.
   bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
   both read and write it, each update a read and a write with no await between, so neither wipes
   the other.
-- **Version 5.** A device without a profile is version 1: the `best.*` keys and
+- **Version 6.** A device without a profile is version 1: the `best.*` keys and
   `settings.tutorialSeen`. `migrateProfile` turns that into version 2 on first read (bests kept,
   `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys; version 3
   adds a best per world (`bests.worlds`), empty for older profiles; version 4 adds the joker stats,
   empty for older profiles; version 5 grants the star unlocks a profile already holds the stars
-  for (thresholds as literals: 4★ and 6★), into both `unlockedJokers` and `unannouncedJokers`. An
-  unreadable profile starts fresh and is replaced by the next write.
+  for (thresholds as literals: 4★ and 6★), into both `unlockedJokers` and `unannouncedJokers`; version 6
+  renames the fourth world's entry from `speed`, dropped for Tide before it had rules, to `tide`
+  (read as it was, the unknown name would throw the profile away). An unreadable profile starts
+  fresh and is replaced by the next write.
 - **Announced once.** Home's `UnlockAnnouncer` reads `unannouncedJokers` through the
   `progression` slot; when it holds jokers, it calls the `markJokersAnnounced` slot (bound to
   `game_domain`'s, which empties the set and refreshes the progression) before showing

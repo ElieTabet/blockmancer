@@ -27,7 +27,7 @@ void main() {
     expect(ruleOfRound(gravityConfig, round), isA<PlainRule>());
   });
 
-  for (final world in const [WorldId.fog, WorldId.mirror, WorldId.speed]) {
+  for (final world in const [WorldId.fog, WorldId.mirror, WorldId.tide]) {
     test('a run in ${world.name}, coming soon, is refused', () {
       expect(
         () => ruleOfRound(defaultConfig.copyWith(world: world), boss),

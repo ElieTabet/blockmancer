@@ -30,7 +30,7 @@ void main() {
     expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 11500);
   });
 
-  for (final world in const [WorldId.fog, WorldId.mirror, WorldId.speed]) {
+  for (final world in const [WorldId.fog, WorldId.mirror, WorldId.tide]) {
     test('${world.name}, coming soon, is not playable and has no run', () {
       expect(rules.isPlayable(world), isFalse);
       expect(
@@ -45,7 +45,7 @@ void main() {
     expect(rules.isPlayable(.gravity), isTrue);
   });
 
-  test('the map runs Rubble, Gravity, Fog, Speed, then Mirror', () {
+  test('the map runs Rubble, Gravity, Fog, Tide, then Mirror', () {
     // Given / When
     final order = rules.worldOrder;
 
@@ -54,7 +54,7 @@ void main() {
       WorldId.rubble,
       WorldId.gravity,
       WorldId.fog,
-      WorldId.speed,
+      WorldId.tide,
       WorldId.mirror,
     ]);
     expect(order.toSet(), WorldId.values.toSet());
@@ -63,8 +63,8 @@ void main() {
   test('each world leads to the next on the map, and the last to none', () {
     expect(rules.nextWorld(.rubble), WorldId.gravity);
     expect(rules.nextWorld(.gravity), WorldId.fog);
-    expect(rules.nextWorld(.fog), WorldId.speed);
-    expect(rules.nextWorld(.speed), WorldId.mirror);
+    expect(rules.nextWorld(.fog), WorldId.tide);
+    expect(rules.nextWorld(.tide), WorldId.mirror);
     expect(rules.nextWorld(.mirror), isNull);
   });
 
@@ -79,7 +79,7 @@ void main() {
       JokerId.avalanche,
     ]);
     expect(rules.unlocksOf(.fog), isEmpty);
-    expect(rules.unlocksOf(.speed), isEmpty);
+    expect(rules.unlocksOf(.tide), isEmpty);
     expect(rules.unlocksOf(.mirror), isEmpty);
   });
 

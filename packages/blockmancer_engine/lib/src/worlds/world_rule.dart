@@ -14,12 +14,31 @@ abstract class WorldRule {
   /// How a round the rule holds in starts, before the jokers add to it.
   RoundSetup onRoundSetup(RoundSetup setup, RoundSpec round) => setup;
 
-  /// Where a piece dropped at [anchor] lands, or null when it can't be placed
-  /// from there. Fits, previews and the round's "no room" all ask this, so
-  /// they agree with where [anchor] really puts the piece.
+  /// The run a new tray is about to be dealt into; [firstOfRound] for the
+  /// round's first tray. A run it leaves lost is dealt nothing.
+  Transition onTrayDealt(Transition transition, {required bool firstOfRound}) =>
+      transition;
+
+  /// Where a piece the player dropped on [cells] really lands, or null when it
+  /// can't be placed from there. Fits, previews and the round's "no room" all
+  /// ask this, so they agree with where the piece goes.
+  List<Cell>? transformPlacement({
+    required Board board,
+    required List<Cell> cells,
+  }) => cellsFit(board, cells) ? cells : null;
+
+  /// Where [shape] dropped at [anchor] lands, as the top-left of what it
+  /// fills, or null when it can't be placed from there.
   Cell? transformAnchor({
     required Cell anchor,
     required Board board,
     required Shape shape,
-  }) => fits(board, shape, anchor: anchor) ? anchor : null;
+  }) {
+    final landing = transformPlacement(
+      board: board,
+      cells: [for (final offset in shape.cells) anchor + offset],
+    );
+
+    return landing == null ? null : topLeftOf(landing);
+  }
 }

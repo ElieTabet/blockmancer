@@ -13,6 +13,10 @@ class DSGameColor {
   static const collisionOutline = Color(0xFFFF8A96);
   static const emptyCell = Color(0xFF262B4D);
 
+  /// A fog cell: a pale cloud, lighter than the board and softer than a
+  /// stone, so the two never read alike.
+  static const fog = Color(0xFF9AA3C7);
+
   /// One per shape colour index (`Shape.colorCount`): a shape always wears
   /// the same one.
   static const pieces = [
