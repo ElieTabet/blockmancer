@@ -394,6 +394,9 @@ class Translations$game$lost$en {
 
 	/// en: 'End run'
 	String get endRun => 'End run';
+
+	/// en: 'No ad to revive with right now'
+	String get reviveUnavailable => 'No ad to revive with right now';
 }
 
 // Path: game.end
@@ -1465,6 +1468,7 @@ extension on Translations {
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} of ${target} points this round.',
 			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Revive · clear ${rows} rows + ${pieces} pieces',
 			'game.lost.endRun' => 'End run',
+			'game.lost.reviveUnavailable' => 'No ad to revive with right now',
 			'game.end.won' => 'Boss beaten · run complete',
 			'game.end.overRound' => ({required Object index}) => 'Run over · reached round ${index}',
 			'game.end.overBoss' => 'Run over · reached the boss',

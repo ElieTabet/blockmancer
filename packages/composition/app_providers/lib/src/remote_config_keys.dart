@@ -4,13 +4,16 @@ import 'dart:convert';
 
 import 'package:app_update_domain/app_update_domain.dart' show updateKeys;
 import 'package:blockmancer_engine/blockmancer_engine.dart';
-import 'package:game_domain/game_domain.dart' show runTuningKeys;
+import 'package:game_domain/game_domain.dart'
+    show interstitialKeys, runTuningKeys;
 import 'package:shared_domain/shared_domain.dart';
 
 /// Every key the app reads from Remote Config, with the default it plays
-/// with: the run's numbers, then the update versions.
+/// with: the run's numbers, the interstitial's caps, then the update
+/// versions.
 List<RemoteKey> remoteConfigKeys() => [
   ...runTuningKeys(const BlockmancerEngine()),
+  ...interstitialKeys,
   ...updateKeys,
 ];
 

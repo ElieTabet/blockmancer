@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:shared_domain/shared_domain.dart'
-    show AnalyticsEvent, AnalyticsSink, Progression, WorldId;
+    show AdResult, AnalyticsEvent, AnalyticsSink, Progression, WorldId;
 import 'package:game_presentation/game_presentation.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
@@ -68,7 +68,9 @@ final class FakeGameRouting implements GameRouting {
 }
 
 /// The game's slots, filled with fakes, for a game opened for [launch]. The
-/// rewarded revive is granted unless [rewardedAction] says otherwise, the
+/// rewarded revive is earned unless [rewardedAction] says otherwise, a
+/// rewarded ad is ready unless [rewardedAdReady] says not, the interstitial
+/// fails to show unless [showInterstitial] shows it, the
 /// settings leave reduce motion off unless [reduceMotion] turns it on and
 /// sound and haptics on unless [soundOn] or [hapticsOn] turn them off, sounds
 /// go nowhere unless [playSound] takes them, and the tutorial is kept as seen
@@ -79,6 +81,7 @@ List<Override> gameOverrides(
   FakeGameRules rules, {
   AnalyticsSink? analytics,
   game.BestScores? bestScores,
+  game.Engagement engagement = const game.Engagement(),
   bool hapticsOn = true,
   game.GameLaunch launch = .daily,
   MarkTutorialSeenFun? markTutorialSeen,
@@ -87,9 +90,11 @@ List<Override> gameOverrides(
   game.ProgressionStore? progressionStore,
   bool reduceMotion = false,
   RewardedActionFun? rewardedAction,
+  bool rewardedAdReady = true,
   game.SavedRun? resumed,
   GameRouting? routing,
   game.RunStore? runStore,
+  game.ShowAdFun? showInterstitial,
   bool soundOn = true,
   WorldId? world,
 }) => [
@@ -97,6 +102,7 @@ List<Override> gameOverrides(
     analyticsSink: (ref) => analytics ?? FakeAnalyticsSink(),
     bestScores: (ref) => bestScores ?? FakeBestScores(),
     clock: (ref) => const FakeClock(),
+    engagementStore: (ref) => FakeEngagementStore(engagement),
     gameRules: (ref) => rules,
     progressionStore: (ref) =>
         progressionStore ??
@@ -104,13 +110,18 @@ List<Override> gameOverrides(
     remoteValue: (ref) =>
         (_) => null,
     runStore: (ref) => runStore ?? FakeRunStore(),
+    showInterstitial: (ref) =>
+        showInterstitial ?? () async => const AdResult.failed(code: 'no_ads'),
   ),
   ...bindProviders(
     hapticsOnSetting: (ref) => hapticsOn,
     markTutorialSeen: (ref) => markTutorialSeen ?? () async {},
     playSound: (ref) => playSound ?? (sound, {semitones = 0, variance = 0}) {},
+    preloadAds: (ref) => () {},
     reduceMotionSetting: (ref) => reduceMotion,
-    rewardedAction: (ref) => rewardedAction ?? () async => true,
+    rewardedAction: (ref) =>
+        rewardedAction ?? () async => const AdResult.earned(),
+    rewardedAdReady: (ref) => Stream.value(rewardedAdReady),
     soundOnSetting: (ref) => soundOn,
   ),
   ...bindRoutingProviders(gameRouting: (ref) => routing ?? FakeGameRouting()),
@@ -150,4 +161,17 @@ final class FakeProgressionStore implements game.ProgressionStore {
 
     saved = progression;
   }
+}
+
+/// The engagement kept in memory, starting from nothing played.
+final class FakeEngagementStore implements game.EngagementStore {
+  FakeEngagementStore([this.saved = const game.Engagement()]);
+
+  game.Engagement saved;
+
+  @override
+  Future<game.Engagement> load() async => saved;
+
+  @override
+  Future<void> save(game.Engagement engagement) async => saved = engagement;
 }

@@ -13,9 +13,13 @@ final class GoogleConsent implements Consent {
     : _debugEea = debugEea,
       _testDeviceIds = testDeviceIds;
 
+  final _allowed = Completer<bool>();
   final bool _debugEea;
   var _started = false;
   final List<String> _testDeviceIds;
+
+  @override
+  Future<bool> adsAllowed() => _allowed.future;
 
   @override
   Future<ConsentOutcome> gather() async {
@@ -29,6 +33,8 @@ final class GoogleConsent implements Consent {
         _started = true;
         await MobileAds.instance.initialize();
       }
+
+      if (!_allowed.isCompleted) _allowed.complete(canRequestAds);
 
       return (
         canRequestAds: canRequestAds,
@@ -44,6 +50,8 @@ final class GoogleConsent implements Consent {
         exception: error,
         stackTrace: stackTrace,
       );
+
+      if (!_allowed.isCompleted) _allowed.complete(false);
 
       return (canRequestAds: false, privacyOptionsRequired: false);
     }
@@ -117,6 +125,9 @@ final class GoogleConsent implements Consent {
 /// No form and no ads: tests, and builds that never ask.
 final class NoConsent implements Consent {
   const NoConsent();
+
+  @override
+  Future<bool> adsAllowed() async => false;
 
   @override
   Future<ConsentOutcome> gather() async =>

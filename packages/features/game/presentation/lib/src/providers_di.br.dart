@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:game_presentation/src/entities/game_sound.dart';
 import 'package:game_presentation/src/routing/game_routing.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_domain/shared_domain.dart';
 
 part 'providers_di.br.g.dart';
 
@@ -17,9 +20,9 @@ typedef MarkTutorialSeenFun = Future<void> Function();
 typedef PlaySoundFun =
     void Function(GameSound sound, {double semitones, double variance});
 
-/// Shows the reward a revive costs; true once it has been earned. A reward
-/// that couldn't be shown is false, never an error.
-typedef RewardedActionFun = Future<bool> Function();
+/// Shows the rewarded ad a revive costs, and says what came of it: earned,
+/// closed before its reward, or not shown. Never throws.
+typedef RewardedActionFun = Future<AdResult> Function();
 
 @riverpod
 GameRouting gameRouting(Ref ref) => throw UnimplementedError(
@@ -49,9 +52,23 @@ bool reduceMotionSetting(Ref ref) => throw UnimplementedError(
   'reduceMotionSettingProvider must be overridden by the composition layer',
 );
 
+/// Loads the run's ads ahead, so neither a revive nor a run's end waits on
+/// the network. Idempotent.
+@riverpod
+VoidCallback preloadAds(Ref ref) => throw UnimplementedError(
+  'preloadAdsProvider must be overridden by the composition layer',
+);
+
 @riverpod
 RewardedActionFun rewardedAction(Ref ref) => throw UnimplementedError(
   'rewardedActionProvider must be overridden by the composition layer',
+);
+
+/// Whether a rewarded ad is loaded, as it changes: a revive with none says
+/// so rather than wait.
+@riverpod
+Stream<bool> rewardedAdReady(Ref ref) => throw UnimplementedError(
+  'rewardedAdReadyProvider must be overridden by the composition layer',
 );
 
 /// Whether the player left sound on in the app's settings.

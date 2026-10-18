@@ -80,7 +80,8 @@
       "flooded": "Flooded",
       "progress": "$score of $target points this round.",
       "revive": "Revive · clear $rows rows + $pieces pieces",
-      "endRun": "End run"
+      "endRun": "End run",
+      "reviveUnavailable": "No ad to revive with right now"
     },
     "end": {
       "won": "Boss beaten · run complete",

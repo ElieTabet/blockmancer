@@ -115,11 +115,18 @@ Both apps exist (iOS and Android, publisher `pub-9236909266129177`), each with t
 
 | Ad unit name | Format | Used for |
 |---|---|---|
-| `revive` | Rewarded | The revive after a lost round (Task 3) |
-| `run_end` | Interstitial | Between runs, capped by Remote Config (Task 3) |
+| `revive` | Rewarded | The revive after a lost round |
+| `run_end` | Interstitial | Between runs: on Play again or leaving a finished run |
 
 Their IDs are in the tables above. Debug and test builds use Google's public test units, never
-these.
+these; only a release build (not a test build) plays them.
+
+The interstitial's pacing is Remote Config's (`interstitial_min_completed_runs` 3,
+`interstitial_every_n_run_ends` 2, `interstitial_min_seconds` 90; keys.md): never in the tutorial
+or a player's first session, never mid-run. Leave AdMob's own frequency capping off: the app caps
+itself. Analytics receives `ad_shown(type)`, `ad_reward_earned` and `ad_failed(type, code)`; linking
+AdMob to the Firebase project (AdMob → Apps → the app → App settings → **Link to Firebase**) adds
+AdMob's own revenue events.
 
 ### 2. Privacy & messaging (consent)
 

@@ -234,6 +234,55 @@ final class ReduceMotionSettingProvider
 String _$reduceMotionSettingHash() =>
     r'288b31179f7651dc7a5cf694da8d5fe3420ec312';
 
+/// Loads the run's ads ahead, so neither a revive nor a run's end waits on
+/// the network. Idempotent.
+
+@ProviderFor(preloadAds)
+final preloadAdsProvider = PreloadAdsProvider._();
+
+/// Loads the run's ads ahead, so neither a revive nor a run's end waits on
+/// the network. Idempotent.
+
+final class PreloadAdsProvider
+    extends $FunctionalProvider<VoidCallback, VoidCallback, VoidCallback>
+    with $Provider<VoidCallback> {
+  /// Loads the run's ads ahead, so neither a revive nor a run's end waits on
+  /// the network. Idempotent.
+  PreloadAdsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'preloadAdsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$preloadAdsHash();
+
+  @$internal
+  @override
+  $ProviderElement<VoidCallback> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  VoidCallback create(Ref ref) {
+    return preloadAds(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(VoidCallback value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<VoidCallback>(value),
+    );
+  }
+}
+
+String _$preloadAdsHash() => r'c8baae13507d385698c84eb7b096242a1214502d';
+
 @ProviderFor(rewardedAction)
 final rewardedActionProvider = RewardedActionProvider._();
 
@@ -280,6 +329,47 @@ final class RewardedActionProvider
 }
 
 String _$rewardedActionHash() => r'c4f7bf56c8fa99168fcfbdc5ef1d77d0373e28c1';
+
+/// Whether a rewarded ad is loaded, as it changes: a revive with none says
+/// so rather than wait.
+
+@ProviderFor(rewardedAdReady)
+final rewardedAdReadyProvider = RewardedAdReadyProvider._();
+
+/// Whether a rewarded ad is loaded, as it changes: a revive with none says
+/// so rather than wait.
+
+final class RewardedAdReadyProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, Stream<bool>>
+    with $FutureModifier<bool>, $StreamProvider<bool> {
+  /// Whether a rewarded ad is loaded, as it changes: a revive with none says
+  /// so rather than wait.
+  RewardedAdReadyProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'rewardedAdReadyProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$rewardedAdReadyHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<bool> create(Ref ref) {
+    return rewardedAdReady(ref);
+  }
+}
+
+String _$rewardedAdReadyHash() => r'6de78c2b8ee2be51fe89c6488613fef2ad8902d6';
 
 /// Whether the player left sound on in the app's settings.
 

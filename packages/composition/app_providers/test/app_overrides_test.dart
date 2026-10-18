@@ -7,6 +7,7 @@
 
 import 'dart:math';
 
+import 'package:ads/ads.dart';
 import 'package:app_providers/app_providers.dart';
 import 'package:app_providers/src/providers_internal.br.dart';
 import 'package:app_router/app_router.dart';
@@ -42,6 +43,9 @@ import 'engine_game.dart';
 import 'fake_clock.dart';
 import 'fake_random.dart';
 import 'fake_sound_engine.dart';
+
+/// Google's own publisher, whose units serve test ads.
+const _googleTestUnits = 'ca-app-pub-3940256099942544/';
 
 void main() {
   ProviderContainer buildContainer({bool testTools = false}) {
@@ -472,10 +476,17 @@ void main() {
     expect(container.read(settings.exportTestStatsProvider), isNotNull);
   });
 
-  test('a revive costs nothing until there is an ad network', () async {
+  test("the revive and the run's end play AdMob's test units outside a "
+      'release build', () {
+    final container = buildContainer();
+    final rewarded = container.read(rewardedAdsProvider);
+    final interstitials = container.read(interstitialAdsProvider);
+
+    expect(rewarded, isA<AdMobRewardedAds>());
+    expect((rewarded as AdMobRewardedAds).unitId, startsWith(_googleTestUnits));
     expect(
-      await buildContainer().read(game_ui_di.rewardedActionProvider)(),
-      isTrue,
+      (interstitials as AdMobInterstitialAds).unitId,
+      startsWith(_googleTestUnits),
     );
   });
 

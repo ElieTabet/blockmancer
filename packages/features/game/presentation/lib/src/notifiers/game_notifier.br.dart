@@ -30,6 +30,10 @@ class GameNotifier extends _$GameNotifier {
   Progression? _progression;
   var _reviving = false;
 
+  /// Set while a finished run waits on its between-runs ad, so a second tap
+  /// on Play again or leave doesn't ask twice.
+  var _movingOn = false;
+
   @override
   GameUiState build() {
     ref.watch(gameRulesProvider);
@@ -37,6 +41,8 @@ class GameNotifier extends _$GameNotifier {
     final resumed = launch == .resume ? ref.watch(resumedRunProvider) : null;
 
     if (resumed != null) {
+      ref.read(preloadAdsProvider)();
+
       return GameUiState(
         lastEvents: const [],
         mode: resumed.mode,
@@ -57,6 +63,8 @@ class GameNotifier extends _$GameNotifier {
         run: _rules.tutorialRun(config: _rules.defaultConfig),
       );
     }
+
+    ref.read(preloadAdsProvider)();
 
     return _fresh(start);
   }
@@ -92,8 +100,15 @@ class GameNotifier extends _$GameNotifier {
     _apply(_rules.place(state.run, anchor: anchor, trayIndex: trayIndex));
   }
 
-  void leave(BuildContext context) =>
-      ref.read(gameRoutingProvider).onLeaveRequested(context);
+  /// Leaves the screen; from a finished run, after its between-runs ad when
+  /// one is due.
+  Future<void> leave(BuildContext context) async {
+    if (!await _afterBetweenRuns()) return;
+
+    if (!context.mounted) return;
+
+    ref.read(gameRoutingProvider).onLeaveRequested(context);
+  }
 
   /// Saves the run as it stands, for when the app is about to be put away.
   void persist() {
@@ -107,16 +122,21 @@ class GameNotifier extends _$GameNotifier {
 
   /// Plays the same mode again from its first pick: the same daily run, even
   /// past midnight, or a new practice or world run, offering what the runs
-  /// played here unlocked.
-  void retry() => state = _fresh(switch (state.mode) {
-    DailyMode() => (
-      config: state.run.config,
-      mode: state.mode,
-      seed: state.run.seed,
-    ),
-    PracticeMode() => _startFor(.practice),
-    WorldMode(:final world) => _startFor(.world, world: world),
-  });
+  /// played here unlocked. From a finished run, after its between-runs ad
+  /// when one is due.
+  Future<void> retry() async {
+    if (!await _afterBetweenRuns() || !ref.mounted) return;
+
+    state = _fresh(switch (state.mode) {
+      DailyMode() => (
+        config: state.run.config,
+        mode: state.mode,
+        seed: state.run.seed,
+      ),
+      PracticeMode() => _startFor(.practice),
+      WorldMode(:final world) => _startFor(.world, world: world),
+    });
+  }
 
   /// Revives once the reward it costs has been earned. A second tap while the
   /// reward is showing is ignored.
@@ -127,10 +147,14 @@ class GameNotifier extends _$GameNotifier {
     final rewardedAction = ref.read(rewardedActionProvider);
 
     try {
-      final granted = await rewardedAction();
+      final result = await rewardedAction();
+
+      if (!ref.mounted) return;
+
+      ref.read(trackAdProvider)(.rewarded, result);
 
       // The run may have been ended while the reward showed.
-      if (!ref.mounted || !granted || !_rules.canRevive(state.run)) return;
+      if (result is! AdEarned || !_rules.canRevive(state.run)) return;
 
       _apply(_rules.revive(state.run));
     } on Object catch (error, stackTrace) {
@@ -146,6 +170,31 @@ class GameNotifier extends _$GameNotifier {
   }
 
   GameRules get _rules => ref.read(gameRulesProvider);
+
+  /// Waits out the between-runs ad of a run that has ended (never in the
+  /// tutorial, nor mid-run); false while one is already being waited on.
+  Future<bool> _afterBetweenRuns() async {
+    if (state.isTutorial || !hasEnded(state.run)) return true;
+
+    if (_movingOn) return false;
+
+    _movingOn = true;
+
+    try {
+      await ref.read(betweenRunsProvider)();
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'The between-runs ad failed; moving on',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    } finally {
+      _movingOn = false;
+    }
+
+    return true;
+  }
 
   void _apply(Transition transition) {
     final (run, events) = transition;
@@ -166,6 +215,7 @@ class GameNotifier extends _$GameNotifier {
 
     if (ended) {
       unawaited(_recordEnd(run));
+      unawaited(_countRunEnd());
       unawaited(_recordProgress(run));
     }
 
@@ -202,6 +252,21 @@ class GameNotifier extends _$GameNotifier {
       Timber.e(
         tag: packageName,
         logMessage: 'Remembering a boss card failed; it may show again',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  Future<void> _countRunEnd() async {
+    final countRunEnd = ref.read(countRunEndProvider);
+
+    try {
+      await countRunEnd();
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Counting the run end failed',
         exception: error,
         stackTrace: stackTrace,
       );

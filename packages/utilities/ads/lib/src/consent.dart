@@ -8,6 +8,10 @@ abstract interface class Consent {
   /// ad SDK once ads may be requested. Never throws: a failure allows no ads.
   Future<ConsentOutcome> gather();
 
+  /// Whether ads may be requested, once consent has first been gathered this
+  /// launch: an ad waits for it before its first request.
+  Future<bool> adsAllowed();
+
   /// Reopens the form, so the player can change their answer. Never throws.
   Future<void> showPrivacyOptions();
 }

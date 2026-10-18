@@ -22,6 +22,7 @@ ProviderContainer engineGame({
         startingProgression: ref.watch(game.initialProgressionProvider),
       ),
       clock: (ref) => clock ?? FakeClock(DateTime.utc(2026, 10, 17, 12)),
+      engagementStore: (ref) => _MemoryEngagementStore(),
       gameRules: (ref) => const BlockmancerEngine(),
       progressionStore: (ref) =>
           progressionStore ??
@@ -29,6 +30,8 @@ ProviderContainer engineGame({
       remoteValue: (ref) =>
           (_) => null,
       runStore: (ref) => const SharedPreferencesRunStore(),
+      showInterstitial: (ref) =>
+          () async => const AdResult.failed(code: 'no_ads'),
     ),
   );
   addTearDown(container.dispose);
@@ -42,4 +45,15 @@ final class _NoAnalytics implements AnalyticsSink {
 
   @override
   void log(AnalyticsEvent event) {}
+}
+
+/// The engagement kept in memory, starting from nothing played.
+final class _MemoryEngagementStore implements game.EngagementStore {
+  game.Engagement saved = const game.Engagement();
+
+  @override
+  Future<game.Engagement> load() async => saved;
+
+  @override
+  Future<void> save(game.Engagement engagement) async => saved = engagement;
 }

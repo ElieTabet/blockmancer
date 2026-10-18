@@ -4,6 +4,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 import '../fake_progression_store.dart';
+import '../fake_engagement_store.dart';
 import '../fakes.dart';
 
 /// [TwoWorldRules]' map with Fog after it, which has no rules yet.
@@ -46,11 +47,14 @@ void main() {
         analyticsSink: (ref) => FakeAnalyticsSink(),
         bestScores: (ref) => FakeBestScores(),
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),
+        engagementStore: (ref) => FakeEngagementStore(),
         gameRules: (ref) => const _FogComingRules(),
         progressionStore: (ref) => FakeProgressionStore(),
         remoteValue: (ref) =>
             (_) => null,
         runStore: (ref) => FakeRunStore(),
+        showInterstitial: (ref) =>
+            () async => const AdResult.failed(code: 'no_ads'),
       ),
     );
     addTearDown(container.dispose);

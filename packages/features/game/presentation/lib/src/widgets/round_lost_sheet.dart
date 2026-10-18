@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
+import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/widgets/game_button.dart';
 import 'package:game_presentation/src/widgets/phase_overlay.dart';
 import 'package:game_presentation/src/widgets/points_text.dart';
@@ -16,7 +17,7 @@ final class RoundLostSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rules = ref.watch(gameRulesProvider);
-    final (reason, score, target, canRevive, rows, pieces) = ref.watch(
+    final (reason, score, target, canRevive) = ref.watch(
       gameProvider.select(
         (state) => (
           switch (state.run.phase) {
@@ -26,8 +27,6 @@ final class RoundLostSheet extends ConsumerWidget {
           state.run.score,
           state.run.round.target,
           rules.canRevive(state.run),
-          state.run.config.reviveRows,
-          state.run.config.revivePieces,
         ),
       ),
     );
@@ -49,11 +48,7 @@ final class RoundLostSheet extends ConsumerWidget {
           ),
           style: const TextStyle(color: DSColor.textMuted, fontSize: 14),
         ),
-        if (canRevive)
-          GameButton(
-            label: lost.revive(pieces: pieces, rows: rows),
-            onPressed: notifier.revive,
-          ),
+        if (canRevive) const ReviveButton(),
         TextButton(
           onPressed: notifier.endRun,
           child: Text(
@@ -66,6 +61,32 @@ final class RoundLostSheet extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The revive, for the rewarded ad it costs: while none is loaded, it says so
+/// and can't be tapped, rather than tapped for nothing.
+final class ReviveButton extends ConsumerWidget {
+  const ReviveButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final (rows, pieces) = ref.watch(
+      gameProvider.select(
+        (state) => (state.run.config.reviveRows, state.run.config.revivePieces),
+      ),
+    );
+    final adReady = ref.watch(
+      rewardedAdReadyProvider.select((ready) => ready.value ?? false),
+    );
+    final lost = context.t.game.lost;
+
+    return GameButton(
+      label: adReady
+          ? lost.revive(pieces: pieces, rows: rows)
+          : lost.reviveUnavailable,
+      onPressed: adReady ? ref.read(gameProvider.notifier).revive : null,
     );
   }
 }

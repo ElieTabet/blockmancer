@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:ads/ads.dart';
+import 'package:app_providers/src/release_ids.dart';
+import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:play_stats/play_stats.dart';
 import 'package:remote_config/remote_config.dart';
@@ -25,6 +27,32 @@ Consent consent(Ref ref) => GoogleConsent(
         when id.isNotEmpty)
       id,
   ],
+);
+
+/// Whether this build plays the real ad units: a release build that isn't a
+/// test build. Every other build plays Google's test units.
+bool _playsRealAds(Ref ref) => kReleaseMode && !ref.watch(testToolsProvider);
+
+bool get _onIos => defaultTargetPlatform == .iOS;
+
+/// One for the app's life, kept loaded between runs.
+@Riverpod(keepAlive: true)
+InterstitialAds interstitialAds(Ref ref) => AdMobInterstitialAds(
+  adsAllowed: ref.watch(consentProvider).adsAllowed,
+  unitId: _playsRealAds(ref)
+      ? (_onIos ? admobUnits.interstitialIos : admobUnits.interstitialAndroid)
+      : (_onIos
+            ? TestAdUnits.interstitialIos
+            : TestAdUnits.interstitialAndroid),
+);
+
+/// One for the app's life, kept loaded for the next revive.
+@Riverpod(keepAlive: true)
+RewardedAds rewardedAds(Ref ref) => AdMobRewardedAds(
+  adsAllowed: ref.watch(consentProvider).adsAllowed,
+  unitId: _playsRealAds(ref)
+      ? (_onIos ? admobUnits.rewardedIos : admobUnits.rewardedAndroid)
+      : (_onIos ? TestAdUnits.rewardedIos : TestAdUnits.rewardedAndroid),
 );
 
 /// One for the app's life: its sounds are loaded once, at launch.

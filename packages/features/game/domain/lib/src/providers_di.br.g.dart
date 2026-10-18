@@ -190,6 +190,48 @@ final class GameRulesProvider
 
 String _$gameRulesHash() => r'aedb42ba0debe7407ed8cfe4af33bf6cc721b26f';
 
+@ProviderFor(engagementStore)
+final engagementStoreProvider = EngagementStoreProvider._();
+
+final class EngagementStoreProvider
+    extends
+        $FunctionalProvider<EngagementStore, EngagementStore, EngagementStore>
+    with $Provider<EngagementStore> {
+  EngagementStoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'engagementStoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$engagementStoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<EngagementStore> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  EngagementStore create(Ref ref) {
+    return engagementStore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(EngagementStore value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<EngagementStore>(value),
+    );
+  }
+}
+
+String _$engagementStoreHash() => r'14885e05621a62df35ee05d9bc86de0964904e2d';
+
 @ProviderFor(progressionStore)
 final progressionStoreProvider = ProgressionStoreProvider._();
 
@@ -325,3 +367,44 @@ final class RunStoreProvider
 }
 
 String _$runStoreHash() => r'812affa06697708f46f9b20eec5dc0fedf0be838';
+
+@ProviderFor(showInterstitial)
+final showInterstitialProvider = ShowInterstitialProvider._();
+
+final class ShowInterstitialProvider
+    extends $FunctionalProvider<ShowAdFun, ShowAdFun, ShowAdFun>
+    with $Provider<ShowAdFun> {
+  ShowInterstitialProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'showInterstitialProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$showInterstitialHash();
+
+  @$internal
+  @override
+  $ProviderElement<ShowAdFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ShowAdFun create(Ref ref) {
+    return showInterstitial(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ShowAdFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ShowAdFun>(value),
+    );
+  }
+}
+
+String _$showInterstitialHash() => r'e8ce7656a04ce27dc2a8c548656b1ce3a90b9ef5';

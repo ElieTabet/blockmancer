@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:shared_domain/shared_domain.dart';
 
+import '../fake_engagement_store.dart';
 import '../fakes.dart';
 import '../fake_progression_store.dart';
 
@@ -16,11 +17,14 @@ ProviderContainer _containerAt(
       analyticsSink: (ref) => FakeAnalyticsSink(),
       bestScores: (ref) => scores ?? FakeBestScores(),
       clock: (ref) => clock,
+      engagementStore: (ref) => FakeEngagementStore(),
       gameRules: (ref) => const TwoWorldRules(),
       progressionStore: (ref) => FakeProgressionStore(),
       remoteValue: (ref) =>
           (key) => published[key],
       runStore: (ref) => FakeRunStore(),
+      showInterstitial: (ref) =>
+          () async => const AdResult.failed(code: 'no_ads'),
     ),
   );
   addTearDown(container.dispose);

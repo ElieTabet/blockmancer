@@ -4,10 +4,13 @@
 // each comes in through a slot.
 export 'src/contracts/best_scores.dart';
 export 'src/contracts/clock.dart';
+export 'src/contracts/engagement_store.dart';
 export 'src/contracts/progression_store.dart';
 export 'src/contracts/run_store.dart';
 export 'src/entities/game_launch.dart';
+export 'src/entities/engagement.br.dart';
 export 'src/entities/game_mode.br.dart';
+export 'src/entities/interstitial_caps.dart' show interstitialKeys;
 export 'src/entities/progression_change.br.dart';
 export 'src/entities/run_end.dart';
 export 'src/entities/run_end_record.br.dart';

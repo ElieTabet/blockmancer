@@ -7,6 +7,7 @@
 // what a move does — that is a rule, and rules live behind GameRules.
 export 'src/contracts/analytics_sink.dart';
 export 'src/contracts/game_rules.dart';
+export 'src/entities/ads/ad_result.br.dart';
 export 'src/entities/analytics/analytics_event.br.dart';
 export 'src/entities/game/board.br.dart';
 export 'src/entities/game/cell.br.dart';

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_domain/src/entities/ads/ad_result.br.dart';
 import 'package:shared_domain/src/entities/game/joker_id.dart';
 import 'package:shared_domain/src/entities/game/world_id.dart';
 
@@ -11,6 +12,17 @@ enum RunKind { daily, practice, world }
 /// Analytics, count. Each sink maps the cases to its own wire format.
 @freezed
 sealed class AnalyticsEvent with _$AnalyticsEvent {
+  /// An ad of [kind] didn't show, for the reason [code].
+  const factory AnalyticsEvent.adFailed({
+    required String code,
+    required AdKind kind,
+  }) = AdFailedEvent;
+
+  /// A rewarded ad watched to its reward.
+  const factory AnalyticsEvent.adRewardEarned() = AdRewardEarnedEvent;
+
+  const factory AnalyticsEvent.adShown({required AdKind kind}) = AdShownEvent;
+
   /// A joker taken, from the [offered] three.
   const factory AnalyticsEvent.jokerPick({
     required JokerId id,

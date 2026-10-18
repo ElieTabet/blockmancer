@@ -684,6 +684,31 @@ melos scripts). With no flag — including every `flutter test` run — it is a 
 package: the app is the only thing that reads it, and `boot()` turns it into the
 `collectsTelemetry` value it passes to `appOverrides`.
 
+## Ads
+
+AdMob, behind `ads`' `RewardedAds` and `InterstitialAds` (`AdMobRewardedAds`,
+`AdMobInterstitialAds`), each kept loaded: the first request waits for consent
+(`Consent.adsAllowed`), the next one loads as soon as one is shown, and a failed load is retried
+later and later (30 s doubling to 5 min). Only a release build that isn't a test build plays the
+real units (`app/env/prod.json`, read in `app_providers`' `release_ids.dart`); every other build
+plays Google's test units (`TestAdUnits`). `startAds` (boot) preloads both and counts the launch;
+a run's start preloads again (`preloadAds`).
+
+- **Rewarded revive.** `RewardedActionFun` answers an `AdResult` (`earned`, `closed`, `failed`);
+  only `earned` revives. `ReviveButton` watches `rewardedAdReady`: with none loaded it reads "No ad
+  to revive with right now" and can't be tapped.
+- **Interstitial between runs** (`game_domain`'s `betweenRuns`): `GameNotifier.retry` and `leave`
+  wait for it when the run on screen has ended (never mid-run, never in the tutorial). It shows when
+  `interstitialDue` allows it: not in the device's first session (`firstSession`, counted at boot),
+  not before `interstitial_min_completed_runs` completed runs, at most every
+  `interstitial_every_n_run_ends` run ends and `interstitial_min_seconds` apart (Remote Config,
+  `interstitialCapsOf`). What it needs is `Engagement` (completed runs, days opened, run ends
+  since the last interstitial and when it showed), kept by `game_data`'s
+  `SharedPreferencesEngagementStore` under `engagement`, every change in order
+  (`EngagementBehavior`).
+- **Analytics:** `trackAd` turns each result into `ad_shown(type)` (plus `ad_reward_earned` when
+  earned) or `ad_failed(type, code)`. The testers' on-device log doesn't count ads.
+
 ## Consent
 
 Ads in the EEA and the UK need the player's consent first: Google's UMP form, behind `ads`'

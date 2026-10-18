@@ -1,14 +1,16 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-/// The amber call to action of the game's sheets.
+/// The amber call to action of the game's sheets; dimmed, and deaf to taps,
+/// when [onPressed] is null.
 final class GameButton extends StatelessWidget {
   const GameButton({required this.label, required this.onPressed, super.key});
 
+  static const _disabledOpacity = 0.4;
   static const _height = 54.0;
 
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) => DSPressable(
@@ -18,7 +20,9 @@ final class GameButton extends StatelessWidget {
       width: double.infinity,
       alignment: .center,
       decoration: BoxDecoration(
-        color: DSColor.accent,
+        color: onPressed == null
+            ? DSColor.accent.withValues(alpha: _disabledOpacity)
+            : DSColor.accent,
         borderRadius: .circular(DSCornerRadius.large),
       ),
       child: Text(

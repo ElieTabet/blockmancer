@@ -33,6 +33,14 @@ void main() {
       {'id': 'twin', 'offered': 'twin,combo'},
     );
     expectMapped(const .revive(), 'revive', {});
+    expectMapped(const .adShown(kind: .interstitial), 'ad_shown', {
+      'type': 'interstitial',
+    });
+    expectMapped(const .adRewardEarned(), 'ad_reward_earned', {});
+    expectMapped(const .adFailed(code: '3', kind: .rewarded), 'ad_failed', {
+      'code': '3',
+      'type': 'rewarded',
+    });
     expectMapped(
       const .roundEnd(round: 3, score: 900, won: true),
       'round_end',

@@ -60,6 +60,99 @@ final class ConsentProvider
 
 String _$consentHash() => r'8251bd3dddf8f78627f94e133f2bde504d8c9585';
 
+/// One for the app's life, kept loaded between runs.
+
+@ProviderFor(interstitialAds)
+final interstitialAdsProvider = InterstitialAdsProvider._();
+
+/// One for the app's life, kept loaded between runs.
+
+final class InterstitialAdsProvider
+    extends
+        $FunctionalProvider<InterstitialAds, InterstitialAds, InterstitialAds>
+    with $Provider<InterstitialAds> {
+  /// One for the app's life, kept loaded between runs.
+  InterstitialAdsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'interstitialAdsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$interstitialAdsHash();
+
+  @$internal
+  @override
+  $ProviderElement<InterstitialAds> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  InterstitialAds create(Ref ref) {
+    return interstitialAds(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(InterstitialAds value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<InterstitialAds>(value),
+    );
+  }
+}
+
+String _$interstitialAdsHash() => r'7c3a2d0dd019e47faf78a77d45736aa7063498a7';
+
+/// One for the app's life, kept loaded for the next revive.
+
+@ProviderFor(rewardedAds)
+final rewardedAdsProvider = RewardedAdsProvider._();
+
+/// One for the app's life, kept loaded for the next revive.
+
+final class RewardedAdsProvider
+    extends $FunctionalProvider<RewardedAds, RewardedAds, RewardedAds>
+    with $Provider<RewardedAds> {
+  /// One for the app's life, kept loaded for the next revive.
+  RewardedAdsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'rewardedAdsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$rewardedAdsHash();
+
+  @$internal
+  @override
+  $ProviderElement<RewardedAds> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RewardedAds create(Ref ref) {
+    return rewardedAds(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RewardedAds value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RewardedAds>(value),
+    );
+  }
+}
+
+String _$rewardedAdsHash() => r'3af76dc0440fd755afacce8b75942caabf42f0db';
+
 /// One for the app's life: its sounds are loaded once, at launch.
 
 @ProviderFor(gameSounds)

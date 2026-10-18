@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_mobile_ads: ^9.1.0
+  shared_domain: any
   timber: any
 
 dev_dependencies:

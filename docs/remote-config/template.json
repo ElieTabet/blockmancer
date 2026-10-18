@@ -448,6 +448,27 @@
       "description": "Twin Lines: lines that must clear together",
       "valueType": "NUMBER"
     },
+    "interstitial_every_n_run_ends": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "An interstitial shows at most every this many run ends",
+      "valueType": "NUMBER"
+    },
+    "interstitial_min_completed_runs": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "No interstitial before this many completed runs",
+      "valueType": "NUMBER"
+    },
+    "interstitial_min_seconds": {
+      "defaultValue": {
+        "value": "90"
+      },
+      "description": "Seconds at least between two interstitials",
+      "valueType": "NUMBER"
+    },
     "min_version_android": {
       "defaultValue": {
         "value": "0.0.0"

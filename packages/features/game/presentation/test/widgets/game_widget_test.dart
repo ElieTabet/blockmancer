@@ -335,7 +335,7 @@ void main() {
     final rules = await pumpGame(
       tester,
       runIn(const .roundLost(reason: .outOfPieces)),
-      rewardedAction: () async => false,
+      rewardedAction: () async => const .closed(),
     );
 
     // When
@@ -343,6 +343,31 @@ void main() {
     await tester.pump();
 
     // Then
+    expect(rules.calls, isNot(contains('revive')));
+    expect(find.text('Out of pieces'), findsOneWidget);
+  });
+
+  testWidgets('with no rewarded ad loaded, the revive says so and does nothing '
+      'when tapped', (tester) async {
+    // Given
+    var asked = 0;
+    final rules = await pumpGame(
+      tester,
+      runIn(const .roundLost(reason: .outOfPieces)),
+      rewardedAction: () async {
+        asked++;
+
+        return const .earned();
+      },
+      rewardedAdReady: false,
+    );
+
+    // When
+    await tester.tap(find.text('No ad to revive with right now'));
+    await tester.pump();
+
+    // Then
+    expect(asked, 0);
     expect(rules.calls, isNot(contains('revive')));
     expect(find.text('Out of pieces'), findsOneWidget);
   });

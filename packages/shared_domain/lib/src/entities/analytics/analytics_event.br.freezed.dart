@@ -55,10 +55,13 @@ extension AnalyticsEventPatterns on AnalyticsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( JokerPickEvent value)?  jokerPick,TResult Function( ReviveEvent value)?  revive,TResult Function( RoundEndEvent value)?  roundEnd,TResult Function( RunEndEvent value)?  runEnd,TResult Function( RunStartEvent value)?  runStart,TResult Function( WorldUnlockEvent value)?  worldUnlock,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AdFailedEvent value)?  adFailed,TResult Function( AdRewardEarnedEvent value)?  adRewardEarned,TResult Function( AdShownEvent value)?  adShown,TResult Function( JokerPickEvent value)?  jokerPick,TResult Function( ReviveEvent value)?  revive,TResult Function( RoundEndEvent value)?  roundEnd,TResult Function( RunEndEvent value)?  runEnd,TResult Function( RunStartEvent value)?  runStart,TResult Function( WorldUnlockEvent value)?  worldUnlock,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case JokerPickEvent() when jokerPick != null:
+case AdFailedEvent() when adFailed != null:
+return adFailed(_that);case AdRewardEarnedEvent() when adRewardEarned != null:
+return adRewardEarned(_that);case AdShownEvent() when adShown != null:
+return adShown(_that);case JokerPickEvent() when jokerPick != null:
 return jokerPick(_that);case ReviveEvent() when revive != null:
 return revive(_that);case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that);case RunEndEvent() when runEnd != null:
@@ -82,10 +85,13 @@ return worldUnlock(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( JokerPickEvent value)  jokerPick,required TResult Function( ReviveEvent value)  revive,required TResult Function( RoundEndEvent value)  roundEnd,required TResult Function( RunEndEvent value)  runEnd,required TResult Function( RunStartEvent value)  runStart,required TResult Function( WorldUnlockEvent value)  worldUnlock,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AdFailedEvent value)  adFailed,required TResult Function( AdRewardEarnedEvent value)  adRewardEarned,required TResult Function( AdShownEvent value)  adShown,required TResult Function( JokerPickEvent value)  jokerPick,required TResult Function( ReviveEvent value)  revive,required TResult Function( RoundEndEvent value)  roundEnd,required TResult Function( RunEndEvent value)  runEnd,required TResult Function( RunStartEvent value)  runStart,required TResult Function( WorldUnlockEvent value)  worldUnlock,}){
 final _that = this;
 switch (_that) {
-case JokerPickEvent():
+case AdFailedEvent():
+return adFailed(_that);case AdRewardEarnedEvent():
+return adRewardEarned(_that);case AdShownEvent():
+return adShown(_that);case JokerPickEvent():
 return jokerPick(_that);case ReviveEvent():
 return revive(_that);case RoundEndEvent():
 return roundEnd(_that);case RunEndEvent():
@@ -105,10 +111,13 @@ return worldUnlock(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( JokerPickEvent value)?  jokerPick,TResult? Function( ReviveEvent value)?  revive,TResult? Function( RoundEndEvent value)?  roundEnd,TResult? Function( RunEndEvent value)?  runEnd,TResult? Function( RunStartEvent value)?  runStart,TResult? Function( WorldUnlockEvent value)?  worldUnlock,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AdFailedEvent value)?  adFailed,TResult? Function( AdRewardEarnedEvent value)?  adRewardEarned,TResult? Function( AdShownEvent value)?  adShown,TResult? Function( JokerPickEvent value)?  jokerPick,TResult? Function( ReviveEvent value)?  revive,TResult? Function( RoundEndEvent value)?  roundEnd,TResult? Function( RunEndEvent value)?  runEnd,TResult? Function( RunStartEvent value)?  runStart,TResult? Function( WorldUnlockEvent value)?  worldUnlock,}){
 final _that = this;
 switch (_that) {
-case JokerPickEvent() when jokerPick != null:
+case AdFailedEvent() when adFailed != null:
+return adFailed(_that);case AdRewardEarnedEvent() when adRewardEarned != null:
+return adRewardEarned(_that);case AdShownEvent() when adShown != null:
+return adShown(_that);case JokerPickEvent() when jokerPick != null:
 return jokerPick(_that);case ReviveEvent() when revive != null:
 return revive(_that);case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that);case RunEndEvent() when runEnd != null:
@@ -131,9 +140,12 @@ return worldUnlock(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult Function()?  revive,TResult Function( int round,  int score,  bool won)?  roundEnd,TResult Function( int starsEarned,  int total,  bool won)?  runEnd,TResult Function( RunKind mode,  WorldId world)?  runStart,TResult Function( WorldId world)?  worldUnlock,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String code,  AdKind kind)?  adFailed,TResult Function()?  adRewardEarned,TResult Function( AdKind kind)?  adShown,TResult Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult Function()?  revive,TResult Function( int round,  int score,  bool won)?  roundEnd,TResult Function( int starsEarned,  int total,  bool won)?  runEnd,TResult Function( RunKind mode,  WorldId world)?  runStart,TResult Function( WorldId world)?  worldUnlock,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case JokerPickEvent() when jokerPick != null:
+case AdFailedEvent() when adFailed != null:
+return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent() when adRewardEarned != null:
+return adRewardEarned();case AdShownEvent() when adShown != null:
+return adShown(_that.kind);case JokerPickEvent() when jokerPick != null:
 return jokerPick(_that.id,_that.offered);case ReviveEvent() when revive != null:
 return revive();case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent() when runEnd != null:
@@ -157,9 +169,12 @@ return worldUnlock(_that.world);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( JokerId id,  List<JokerId> offered)  jokerPick,required TResult Function()  revive,required TResult Function( int round,  int score,  bool won)  roundEnd,required TResult Function( int starsEarned,  int total,  bool won)  runEnd,required TResult Function( RunKind mode,  WorldId world)  runStart,required TResult Function( WorldId world)  worldUnlock,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String code,  AdKind kind)  adFailed,required TResult Function()  adRewardEarned,required TResult Function( AdKind kind)  adShown,required TResult Function( JokerId id,  List<JokerId> offered)  jokerPick,required TResult Function()  revive,required TResult Function( int round,  int score,  bool won)  roundEnd,required TResult Function( int starsEarned,  int total,  bool won)  runEnd,required TResult Function( RunKind mode,  WorldId world)  runStart,required TResult Function( WorldId world)  worldUnlock,}) {final _that = this;
 switch (_that) {
-case JokerPickEvent():
+case AdFailedEvent():
+return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent():
+return adRewardEarned();case AdShownEvent():
+return adShown(_that.kind);case JokerPickEvent():
 return jokerPick(_that.id,_that.offered);case ReviveEvent():
 return revive();case RoundEndEvent():
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent():
@@ -179,9 +194,12 @@ return worldUnlock(_that.world);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult? Function()?  revive,TResult? Function( int round,  int score,  bool won)?  roundEnd,TResult? Function( int starsEarned,  int total,  bool won)?  runEnd,TResult? Function( RunKind mode,  WorldId world)?  runStart,TResult? Function( WorldId world)?  worldUnlock,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String code,  AdKind kind)?  adFailed,TResult? Function()?  adRewardEarned,TResult? Function( AdKind kind)?  adShown,TResult? Function( JokerId id,  List<JokerId> offered)?  jokerPick,TResult? Function()?  revive,TResult? Function( int round,  int score,  bool won)?  roundEnd,TResult? Function( int starsEarned,  int total,  bool won)?  runEnd,TResult? Function( RunKind mode,  WorldId world)?  runStart,TResult? Function( WorldId world)?  worldUnlock,}) {final _that = this;
 switch (_that) {
-case JokerPickEvent() when jokerPick != null:
+case AdFailedEvent() when adFailed != null:
+return adFailed(_that.code,_that.kind);case AdRewardEarnedEvent() when adRewardEarned != null:
+return adRewardEarned();case AdShownEvent() when adShown != null:
+return adShown(_that.kind);case JokerPickEvent() when jokerPick != null:
 return jokerPick(_that.id,_that.offered);case ReviveEvent() when revive != null:
 return revive();case RoundEndEvent() when roundEnd != null:
 return roundEnd(_that.round,_that.score,_that.won);case RunEndEvent() when runEnd != null:
@@ -192,6 +210,172 @@ return worldUnlock(_that.world);case _:
 
 }
 }
+
+}
+
+/// @nodoc
+
+
+class AdFailedEvent implements AnalyticsEvent {
+  const AdFailedEvent({required this.code, required this.kind});
+  
+
+ final  String code;
+ final  AdKind kind;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AdFailedEventCopyWith<AdFailedEvent> get copyWith => _$AdFailedEventCopyWithImpl<AdFailedEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AdFailedEvent&&(identical(other.code, code) || other.code == code)&&(identical(other.kind, kind) || other.kind == kind));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,code,kind);
+
+@override
+String toString() {
+  return 'AnalyticsEvent.adFailed(code: $code, kind: $kind)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AdFailedEventCopyWith<$Res> implements $AnalyticsEventCopyWith<$Res> {
+  factory $AdFailedEventCopyWith(AdFailedEvent value, $Res Function(AdFailedEvent) _then) = _$AdFailedEventCopyWithImpl;
+@useResult
+$Res call({
+ String code, AdKind kind
+});
+
+
+
+
+}
+/// @nodoc
+class _$AdFailedEventCopyWithImpl<$Res>
+    implements $AdFailedEventCopyWith<$Res> {
+  _$AdFailedEventCopyWithImpl(this._self, this._then);
+
+  final AdFailedEvent _self;
+  final $Res Function(AdFailedEvent) _then;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? code = null,Object? kind = null,}) {
+  return _then(AdFailedEvent(
+code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
+as String,kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non_nullable
+as AdKind,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class AdRewardEarnedEvent implements AnalyticsEvent {
+  const AdRewardEarnedEvent();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AdRewardEarnedEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AnalyticsEvent.adRewardEarned()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class AdShownEvent implements AnalyticsEvent {
+  const AdShownEvent({required this.kind});
+  
+
+ final  AdKind kind;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AdShownEventCopyWith<AdShownEvent> get copyWith => _$AdShownEventCopyWithImpl<AdShownEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AdShownEvent&&(identical(other.kind, kind) || other.kind == kind));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,kind);
+
+@override
+String toString() {
+  return 'AnalyticsEvent.adShown(kind: $kind)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AdShownEventCopyWith<$Res> implements $AnalyticsEventCopyWith<$Res> {
+  factory $AdShownEventCopyWith(AdShownEvent value, $Res Function(AdShownEvent) _then) = _$AdShownEventCopyWithImpl;
+@useResult
+$Res call({
+ AdKind kind
+});
+
+
+
+
+}
+/// @nodoc
+class _$AdShownEventCopyWithImpl<$Res>
+    implements $AdShownEventCopyWith<$Res> {
+  _$AdShownEventCopyWithImpl(this._self, this._then);
+
+  final AdShownEvent _self;
+  final $Res Function(AdShownEvent) _then;
+
+/// Create a copy of AnalyticsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? kind = null,}) {
+  return _then(AdShownEvent(
+kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non_nullable
+as AdKind,
+  ));
+}
+
 
 }
 

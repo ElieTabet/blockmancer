@@ -2,7 +2,7 @@ import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:shared_domain/shared_domain.dart'
-    show AnalyticsEvent, AnalyticsSink, Progression;
+    show AdResult, AnalyticsEvent, AnalyticsSink, Progression;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:home_presentation/home_presentation.dart' as home_ui;
 import 'package:settings_domain/settings_domain.dart' as settings;
@@ -38,20 +38,25 @@ List<Override> stubFeatures({
     analyticsSink: (ref) => const _NoAnalytics(),
     bestScores: (ref) => const _NoBestScores(),
     clock: (ref) => const _NoonClock(),
+    engagementStore: (ref) => _MemoryEngagementStore(),
     gameRules: (ref) => const BlockmancerEngine(),
     progressionStore: (ref) =>
         _MemoryProgressionStore(ref.watch(game.initialProgressionProvider)),
     remoteValue: (ref) =>
         (_) => null,
     runStore: (ref) => runStore ?? _NoRunStore(),
+    showInterstitial: (ref) =>
+        () async => const AdResult.failed(code: 'no_ads'),
   ),
   ...game_ui.bindProviders(
     hapticsOnSetting: (ref) => false,
     markTutorialSeen: (ref) => () async {},
     playSound: (ref) => (sound, {semitones = 0, variance = 0}) {},
+    preloadAds: (ref) => () {},
     reduceMotionSetting: (ref) => false,
     rewardedAction: (ref) =>
-        () async => true,
+        () async => const AdResult.earned(),
+    rewardedAdReady: (ref) => Stream.value(true),
     soundOnSetting: (ref) => false,
   ),
   ...home_ui.bindProviders(
@@ -178,4 +183,15 @@ final class _NoAnalytics implements AnalyticsSink {
 
   @override
   void log(AnalyticsEvent event) {}
+}
+
+/// The engagement kept in memory, starting from nothing played.
+final class _MemoryEngagementStore implements game.EngagementStore {
+  game.Engagement saved = const game.Engagement();
+
+  @override
+  Future<game.Engagement> load() async => saved;
+
+  @override
+  Future<void> save(game.Engagement engagement) async => saved = engagement;
 }

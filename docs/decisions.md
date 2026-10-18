@@ -372,3 +372,22 @@ Three changes from the review of this file, each its own commit.
 - **The privacy links** are the studio's site: `/privacy` and `/support`, as the sprint says.
 - **French for the tracking alert:** the alert's text is English only for now; a French
   `InfoPlist.strings` needs the Xcode project's localizations, left for the store pass (Task 8).
+
+## Sprint 8, Task 3: ads
+
+- **"Between runs only"** is read as: when the player moves on from a finished run — Play again, or
+  leaving its screen — never as the run ends (its end screen and celebration come first), never
+  mid-run, never in the tutorial.
+- **"The player's first session"** is the device's first launch, counted at boot from the
+  engagement record: nothing interrupts it, however many runs it holds.
+- **The caps.** "Not before the 3rd completed run": the run that just ended counts, so the third run
+  end can show one. "At most every 2nd run end": a count of run ends since the last interstitial,
+  reset when one shows. "At least 90 s apart": from the last one shown. A completed run is any run
+  played to its end (daily, practice or world), never the tutorial.
+- **An interstitial that fails to show** counts as nothing: the next run end may try again.
+- **"Never a dead tap":** the revive button reads "No ad to revive with right now" and is disabled
+  while no rewarded ad is loaded; it comes back by itself once one loads.
+- **A rewarded ad closed early** revives nothing: only a reward earned does.
+- **Preloading:** both ads load at launch (after consent), again after each show, and each run's
+  start asks again in case a load failed: the run's end never waits on the network.
+- **Ad events** go to Firebase only; the testers' on-device log counts play, not ads.

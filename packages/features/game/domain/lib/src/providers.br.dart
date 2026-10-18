@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
 import 'package:game_domain/src/behaviors/earned_worlds_store.dart';
+import 'package:game_domain/src/behaviors/engagement_behavior.dart';
+import 'package:game_domain/src/behaviors/interstitial_policy.dart';
 import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_boss_card_seen_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_jokers_announced_behavior.dart';
@@ -12,10 +14,12 @@ import 'package:game_domain/src/behaviors/run_start_for_behavior.dart';
 import 'package:game_domain/src/behaviors/save_run_behavior.dart';
 import 'package:game_domain/src/contracts/best_scores.dart';
 import 'package:game_domain/src/contracts/clock.dart';
+import 'package:game_domain/src/contracts/engagement_store.dart';
 import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/contracts/run_store.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
 import 'package:game_domain/src/entities/game_mode.br.dart';
+import 'package:game_domain/src/entities/interstitial_caps.dart';
 import 'package:game_domain/src/entities/joker_collection_of.dart';
 import 'package:game_domain/src/entities/progression_change.br.dart';
 import 'package:game_domain/src/entities/run_end.dart';
@@ -296,22 +300,99 @@ TrackRunEndFun trackRunEnd(Ref ref) {
   return (run, change) => runEndEventsOf(run, change).forEach(sink.log);
 }
 
+typedef BetweenRunsFun = Future<void> Function();
+
+typedef CountRunEndFun = Future<void> Function();
+
+typedef TrackAdFun = void Function(AdKind kind, AdResult result);
+
+/// One for the app's life, so its writes stay in order.
+@Riverpod(keepAlive: true)
+EngagementBehavior engagement(Ref ref) => EngagementBehavior(
+  clock: ref.watch(di.clockProvider),
+  store: ref.watch(di.engagementStoreProvider),
+);
+
+/// Whether this launch is the device's first, counted once per launch: the
+/// session in which no interstitial interrupts.
+@Riverpod(keepAlive: true)
+Future<bool> firstSession(Ref ref) =>
+    ref.watch(engagementProvider).recordLaunch();
+
+/// Counts a run played to its end, the tutorial never.
+@riverpod
+CountRunEndFun countRunEnd(Ref ref) =>
+    ref.watch(engagementProvider).countRunEnd;
+
+/// The pause between a run's end and what the player does next: an
+/// interstitial, when the caps Remote Config publishes allow one.
+///
+/// Kept alive because it awaits the ad, by when an auto-disposed provider's
+/// ref may be gone.
+@Riverpod(keepAlive: true)
+BetweenRunsFun betweenRuns(Ref ref) => () async {
+  final engagement = ref.read(engagementProvider);
+  final clock = ref.read(di.clockProvider);
+  final showInterstitial = ref.read(di.showInterstitialProvider);
+  final trackAd = ref.read(trackAdProvider);
+  final caps = interstitialCapsOf(ref.read(di.remoteValueProvider));
+  final firstSession = await ref.read(firstSessionProvider.future);
+  final now = clock.now();
+
+  if (!interstitialDue(
+    caps: caps,
+    engagement: await engagement.read(),
+    firstSession: firstSession,
+    now: now,
+  )) {
+    return;
+  }
+
+  final result = await showInterstitial();
+  trackAd(.interstitial, result);
+
+  if (result is! AdFailed) await engagement.recordInterstitial(now);
+};
+
+/// Counts what an ad came to: shown, its reward earned, or why it failed.
+@riverpod
+TrackAdFun trackAd(Ref ref) {
+  final sink = ref.watch(di.analyticsSinkProvider);
+
+  return (kind, result) {
+    switch (result) {
+      case AdClosed():
+        sink.log(.adShown(kind: kind));
+      case AdEarned():
+        sink
+          ..log(.adShown(kind: kind))
+          ..log(const .adRewardEarned());
+      case AdFailed(:final code):
+        sink.log(.adFailed(code: code, kind: kind));
+    }
+  };
+}
+
 List<Override> bindProviders({
   required AnalyticsSink Function(Ref ref) analyticsSink,
   required BestScores Function(Ref ref) bestScores,
   required Clock Function(Ref ref) clock,
+  required EngagementStore Function(Ref ref) engagementStore,
   required GameRules Function(Ref ref) gameRules,
   required ProgressionStore Function(Ref ref) progressionStore,
   required RemoteValueFun Function(Ref ref) remoteValue,
   required RunStore Function(Ref ref) runStore,
+  required di.ShowAdFun Function(Ref ref) showInterstitial,
 }) => [
   di.analyticsSinkProvider.overrideWith(analyticsSink),
   di.bestScoresProvider.overrideWith(bestScores),
   di.clockProvider.overrideWith(clock),
+  di.engagementStoreProvider.overrideWith(engagementStore),
   di.gameRulesProvider.overrideWith(gameRules),
   di.progressionStoreProvider.overrideWith(progressionStore),
   di.remoteValueProvider.overrideWith(remoteValue),
   di.runStoreProvider.overrideWith(runStore),
+  di.showInterstitialProvider.overrideWith(showInterstitial),
 ];
 
 /// The device's progression with the worlds it has earned open, for every

@@ -1057,3 +1057,246 @@ final class TrackRunEndProvider
 }
 
 String _$trackRunEndHash() => r'0f39080590e9fd371f0c5a52f75dae4a0b5fccae';
+
+/// One for the app's life, so its writes stay in order.
+
+@ProviderFor(engagement)
+final engagementProvider = EngagementProvider._();
+
+/// One for the app's life, so its writes stay in order.
+
+final class EngagementProvider
+    extends
+        $FunctionalProvider<
+          EngagementBehavior,
+          EngagementBehavior,
+          EngagementBehavior
+        >
+    with $Provider<EngagementBehavior> {
+  /// One for the app's life, so its writes stay in order.
+  EngagementProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'engagementProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$engagementHash();
+
+  @$internal
+  @override
+  $ProviderElement<EngagementBehavior> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  EngagementBehavior create(Ref ref) {
+    return engagement(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(EngagementBehavior value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<EngagementBehavior>(value),
+    );
+  }
+}
+
+String _$engagementHash() => r'e16bdf8a2f904f6b03da41cb4ae075d9388533a8';
+
+/// Whether this launch is the device's first, counted once per launch: the
+/// session in which no interstitial interrupts.
+
+@ProviderFor(firstSession)
+final firstSessionProvider = FirstSessionProvider._();
+
+/// Whether this launch is the device's first, counted once per launch: the
+/// session in which no interstitial interrupts.
+
+final class FirstSessionProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether this launch is the device's first, counted once per launch: the
+  /// session in which no interstitial interrupts.
+  FirstSessionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'firstSessionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$firstSessionHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return firstSession(ref);
+  }
+}
+
+String _$firstSessionHash() => r'0c90160efc1b18c40bdd5d24838fb6a499cfaa58';
+
+/// Counts a run played to its end, the tutorial never.
+
+@ProviderFor(countRunEnd)
+final countRunEndProvider = CountRunEndProvider._();
+
+/// Counts a run played to its end, the tutorial never.
+
+final class CountRunEndProvider
+    extends $FunctionalProvider<CountRunEndFun, CountRunEndFun, CountRunEndFun>
+    with $Provider<CountRunEndFun> {
+  /// Counts a run played to its end, the tutorial never.
+  CountRunEndProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'countRunEndProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$countRunEndHash();
+
+  @$internal
+  @override
+  $ProviderElement<CountRunEndFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  CountRunEndFun create(Ref ref) {
+    return countRunEnd(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CountRunEndFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CountRunEndFun>(value),
+    );
+  }
+}
+
+String _$countRunEndHash() => r'8d6470db36957f7f77e0791f0d2803264bc04c6f';
+
+/// The pause between a run's end and what the player does next: an
+/// interstitial, when the caps Remote Config publishes allow one.
+///
+/// Kept alive because it awaits the ad, by when an auto-disposed provider's
+/// ref may be gone.
+
+@ProviderFor(betweenRuns)
+final betweenRunsProvider = BetweenRunsProvider._();
+
+/// The pause between a run's end and what the player does next: an
+/// interstitial, when the caps Remote Config publishes allow one.
+///
+/// Kept alive because it awaits the ad, by when an auto-disposed provider's
+/// ref may be gone.
+
+final class BetweenRunsProvider
+    extends $FunctionalProvider<BetweenRunsFun, BetweenRunsFun, BetweenRunsFun>
+    with $Provider<BetweenRunsFun> {
+  /// The pause between a run's end and what the player does next: an
+  /// interstitial, when the caps Remote Config publishes allow one.
+  ///
+  /// Kept alive because it awaits the ad, by when an auto-disposed provider's
+  /// ref may be gone.
+  BetweenRunsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'betweenRunsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$betweenRunsHash();
+
+  @$internal
+  @override
+  $ProviderElement<BetweenRunsFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  BetweenRunsFun create(Ref ref) {
+    return betweenRuns(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(BetweenRunsFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<BetweenRunsFun>(value),
+    );
+  }
+}
+
+String _$betweenRunsHash() => r'96de91346b0b7cb624421c73737532cb3766d0bf';
+
+/// Counts what an ad came to: shown, its reward earned, or why it failed.
+
+@ProviderFor(trackAd)
+final trackAdProvider = TrackAdProvider._();
+
+/// Counts what an ad came to: shown, its reward earned, or why it failed.
+
+final class TrackAdProvider
+    extends $FunctionalProvider<TrackAdFun, TrackAdFun, TrackAdFun>
+    with $Provider<TrackAdFun> {
+  /// Counts what an ad came to: shown, its reward earned, or why it failed.
+  TrackAdProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trackAdProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$trackAdHash();
+
+  @$internal
+  @override
+  $ProviderElement<TrackAdFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TrackAdFun create(Ref ref) {
+    return trackAd(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TrackAdFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TrackAdFun>(value),
+    );
+  }
+}
+
+String _$trackAdHash() => r'04cbabf1506d7a281faa28344fad9392de21aca3';

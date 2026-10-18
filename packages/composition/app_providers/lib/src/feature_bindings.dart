@@ -1,4 +1,3 @@
-import 'package:ads/ads.dart';
 import 'package:app_info/app_info.dart';
 import 'package:app_providers/src/providers_internal.br.dart';
 import 'package:app_providers/src/release_ids.dart';
@@ -99,12 +98,14 @@ List<Override> featureBindingOverrides({
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
     clock: (ref) => const SystemClock(),
+    engagementStore: (ref) => const SharedPreferencesEngagementStore(),
     gameRules: (ref) => const BlockmancerEngine(),
     progressionStore: (ref) => SharedPreferencesProgressionStore(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
     remoteValue: (ref) => ref.watch(remoteValuesProvider).valueOf,
     runStore: (ref) => const SharedPreferencesRunStore(),
+    showInterstitial: (ref) => ref.watch(interstitialAdsProvider).show,
   ),
   ...game_ui.bindProviders(
     hapticsOnSetting: (ref) => ref.watch(settings.hapticsOnProvider),
@@ -131,8 +132,18 @@ List<Override> featureBindingOverrides({
         variance: variance,
       );
     },
+    preloadAds: (ref) {
+      final interstitials = ref.watch(interstitialAdsProvider);
+      final rewarded = ref.watch(rewardedAdsProvider);
+
+      return () {
+        interstitials.preload();
+        rewarded.preload();
+      };
+    },
     reduceMotionSetting: (ref) => ref.watch(settings.reduceMotionOnProvider),
-    rewardedAction: (ref) => const RewardedAds().show,
+    rewardedAction: (ref) => ref.watch(rewardedAdsProvider).show,
+    rewardedAdReady: (ref) => ref.watch(rewardedAdsProvider).readiness,
     soundOnSetting: (ref) => ref.watch(settings.soundOnProvider),
   ),
   // Home shows the game's map, bests and saved run without knowing the game,

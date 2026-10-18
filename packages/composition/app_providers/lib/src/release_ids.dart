@@ -15,3 +15,24 @@ const storeUrls = (
       'https://play.google.com/store/apps/details?id=com.elietabet.blockmancer',
   ios: 'https://apps.apple.com/app/id$appStoreId',
 );
+
+/// The AdMob units a release build plays; every other build plays Google's
+/// test units (`TestAdUnits`).
+const admobUnits = (
+  interstitialAndroid: String.fromEnvironment(
+    'ADMOB_INTERSTITIAL_ANDROID',
+    defaultValue: 'PLACEHOLDER_ADMOB_INTERSTITIAL_ANDROID',
+  ),
+  interstitialIos: String.fromEnvironment(
+    'ADMOB_INTERSTITIAL_IOS',
+    defaultValue: 'PLACEHOLDER_ADMOB_INTERSTITIAL_IOS',
+  ),
+  rewardedAndroid: String.fromEnvironment(
+    'ADMOB_REWARDED_ANDROID',
+    defaultValue: 'PLACEHOLDER_ADMOB_REWARDED_ANDROID',
+  ),
+  rewardedIos: String.fromEnvironment(
+    'ADMOB_REWARDED_IOS',
+    defaultValue: 'PLACEHOLDER_ADMOB_REWARDED_IOS',
+  ),
+);

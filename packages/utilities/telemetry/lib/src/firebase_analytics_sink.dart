@@ -39,6 +39,12 @@ final class FirebaseAnalyticsSink implements AnalyticsSink {
 /// [event] as Firebase's name and parameters.
 (String, Map<String, Object>) firebaseEventOf(AnalyticsEvent event) =>
     switch (event) {
+      AdFailedEvent(:final code, :final kind) => (
+        'ad_failed',
+        {'code': code, 'type': kind.name},
+      ),
+      AdRewardEarnedEvent() => ('ad_reward_earned', const {}),
+      AdShownEvent(:final kind) => ('ad_shown', {'type': kind.name}),
       JokerPickEvent(:final id, :final offered) => (
         'joker_pick',
         {

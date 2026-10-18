@@ -248,6 +248,7 @@ class _Translations$game$lost$fr extends Translations$game$lost$en {
 	@override String progress({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.';
 	@override String revive({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces';
 	@override String get endRun => 'Terminer la partie';
+	@override String get reviveUnavailable => 'Pas de pub pour revivre pour l\'instant';
 }
 
 // Path: game.end
@@ -993,6 +994,7 @@ extension on TranslationsFr {
 			'game.lost.progress' => ({required Object score, required Object target}) => '${score} points sur ${target} pour cette manche.',
 			'game.lost.revive' => ({required Object rows, required Object pieces}) => 'Continuer · ${rows} lignes effacées + ${pieces} pièces',
 			'game.lost.endRun' => 'Terminer la partie',
+			'game.lost.reviveUnavailable' => 'Pas de pub pour revivre pour l\'instant',
 			'game.end.won' => 'Boss vaincu · partie réussie',
 			'game.end.overRound' => ({required Object index}) => 'Fin de partie · manche ${index} atteinte',
 			'game.end.overBoss' => 'Fin de partie · boss atteint',

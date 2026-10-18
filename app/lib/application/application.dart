@@ -51,6 +51,7 @@ class Application {
     // before it is ready is skipped rather than late.
     unawaited(initializeSounds(_container));
     fetchRemoteConfig(_container);
+    unawaited(startAds(_container));
     unawaited(discardTestStatsOutsideTestBuilds(_container));
 
     // Before push, whose channel is named in the language the app shows.

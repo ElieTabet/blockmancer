@@ -17,12 +17,14 @@ void main() {
   ProviderContainer container({
     FakeAnalyticsSink? analytics,
     FakeBestScores? bestScores,
+    Engagement engagement = const Engagement(),
     GameLaunch launch = .daily,
     Progression? progression,
     ProgressionStore? progressionStore,
     RewardedActionFun? rewardedAction,
     SavedRun? resumed,
     FakeRunStore? runStore,
+    ShowAdFun? showInterstitial,
     WorldId? world,
   }) {
     final container = ProviderContainer(
@@ -30,12 +32,14 @@ void main() {
         rules,
         analytics: analytics,
         bestScores: bestScores,
+        engagement: engagement,
         launch: launch,
         progression: progression,
         progressionStore: progressionStore,
         rewardedAction: rewardedAction,
         resumed: resumed,
         runStore: runStore,
+        showInterstitial: showInterstitial,
         world: world,
       ),
     );
@@ -65,14 +69,14 @@ void main() {
     expect(rules.calls.single, isNot('startRun 1'));
   });
 
-  test('playing practice again draws a new practice run', () {
+  test('playing practice again draws a new practice run', () async {
     // Given
     final game = container(launch: .practice);
     rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 1)]);
     game.read(gameProvider.notifier).endRun();
 
     // When
-    game.read(gameProvider.notifier).retry();
+    await game.read(gameProvider.notifier).retry();
 
     // Then
     expect(game.read(gameProvider).mode, const GameMode.practice());
@@ -136,14 +140,14 @@ void main() {
     expect(rules.configured.single.world, WorldId.rubble);
   });
 
-  test('playing a world again plays the same world on a new seed', () {
+  test('playing a world again plays the same world on a new seed', () async {
     // Given
     final game = container(launch: .world, world: .gravity);
     rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 1)]);
     game.read(gameProvider.notifier).endRun();
 
     // When
-    game.read(gameProvider.notifier).retry();
+    await game.read(gameProvider.notifier).retry();
 
     // Then
     expect(game.read(gameProvider).mode, const GameMode.world(world: .gravity));
@@ -253,14 +257,14 @@ void main() {
       expect(rules.calls.skip(1), ['pickJoker JokerId.twin', 'endRun']);
     });
 
-    test('retrying starts today’s run again from scratch', () {
+    test('retrying starts today’s run again from scratch', () async {
       // Given
       final game = container();
       rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 1)]);
       game.read(gameProvider.notifier).endRun();
 
       // When
-      game.read(gameProvider.notifier).retry();
+      await game.read(gameProvider.notifier).retry();
 
       // Then
       final state = game.read(gameProvider);
@@ -351,7 +355,7 @@ void main() {
 
     test('a second tap while the reward shows asks for it once', () async {
       // Given
-      final reward = Completer<bool>();
+      final reward = Completer<AdResult>();
       var shown = 0;
       final game = container(
         rewardedAction: () {
@@ -366,7 +370,7 @@ void main() {
       // When
       final first = notifier.revive();
       final second = notifier.revive();
-      reward.complete(true);
+      reward.complete(const .earned());
       await Future.wait([first, second]);
 
       // Then
@@ -376,7 +380,7 @@ void main() {
 
     test('a run ended while the reward shows is not revived', () async {
       // Given
-      final reward = Completer<bool>();
+      final reward = Completer<AdResult>();
       final game = container(rewardedAction: () => reward.future);
       final notifier = game.read(gameProvider.notifier);
       final reviving = notifier.revive();
@@ -384,7 +388,7 @@ void main() {
       // When
       rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 0)]);
       notifier.endRun();
-      reward.complete(true);
+      reward.complete(const .earned());
       await reviving;
 
       // Then
@@ -419,7 +423,7 @@ void main() {
         rewardedAction: () async {
           shown++;
 
-          return true;
+          return const .earned();
         },
       );
 
@@ -430,20 +434,23 @@ void main() {
       expect(shown, 0);
     });
 
-    test('a reward not earned leaves the round lost', () async {
-      // Given
-      final game = container(rewardedAction: () async => false);
+    test(
+      'a rewarded ad closed before its reward leaves the round lost',
+      () async {
+        // Given
+        final game = container(rewardedAction: () async => const .closed());
 
-      // When
-      await game.read(gameProvider.notifier).revive();
+        // When
+        await game.read(gameProvider.notifier).revive();
 
-      // Then
-      expect(rules.calls, isNot(contains('revive')));
-      expect(
-        game.read(gameProvider).run.phase,
-        const RunPhase.roundLost(reason: .outOfPieces),
-      );
-    });
+        // Then
+        expect(rules.calls, isNot(contains('revive')));
+        expect(
+          game.read(gameProvider).run.phase,
+          const RunPhase.roundLost(reason: .outOfPieces),
+        );
+      },
+    );
   });
 
   group('when the run ends', () {
@@ -501,7 +508,7 @@ void main() {
         game.read(gameProvider.notifier).endRun();
 
         // When
-        game.read(gameProvider.notifier).retry();
+        await game.read(gameProvider.notifier).retry();
         scores.gate!.complete();
         await pumpEventQueue();
 
@@ -614,7 +621,7 @@ void main() {
       await pumpEventQueue();
 
       // When
-      game.read(gameProvider.notifier).retry();
+      await game.read(gameProvider.notifier).retry();
 
       // Then
       expect(rules.configured.last.jokerPool, [
@@ -938,6 +945,101 @@ void main() {
       // Then
       expect(state.mode, testDay);
       expect(rules.calls, ['startRun 1']);
+    });
+  });
+
+  group('between runs', () {
+    /// A device past its first session that has played two runs, the second
+    /// since its last interstitial: the run about to end is the third.
+    const playedBefore = Engagement(
+      completedRuns: 2,
+      daysOpened: 1,
+      firstOpenedOn: 20261016,
+      lastOpenedOn: 20261016,
+      runEndsSinceInterstitial: 1,
+    );
+
+    test('a finished run that brings the third run end shows an interstitial '
+        'before Play again, and the next one waits for its turn', () async {
+      // Given
+      final analytics = FakeAnalyticsSink();
+      var shown = 0;
+      final game = container(
+        analytics: analytics,
+        engagement: playedBefore,
+        showInterstitial: () async {
+          shown++;
+
+          return const .closed();
+        },
+      );
+      rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 0)]);
+      game.read(gameProvider.notifier).endRun();
+      await Future<void>.delayed(Duration.zero);
+
+      // When
+      await game.read(gameProvider.notifier).retry();
+      rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 0)]);
+      game.read(gameProvider.notifier).endRun();
+      await Future<void>.delayed(Duration.zero);
+      await game.read(gameProvider.notifier).retry();
+
+      // Then
+      expect(shown, 1);
+      expect(
+        analytics.logged,
+        contains(const AnalyticsEvent.adShown(kind: .interstitial)),
+      );
+    });
+
+    test(
+      'on a first launch, no interstitial interrupts, whatever the runs',
+      () async {
+        // Given
+        var shown = 0;
+        final game = container(
+          engagement: const Engagement(
+            completedRuns: 9,
+            runEndsSinceInterstitial: 9,
+          ),
+          showInterstitial: () async {
+            shown++;
+
+            return const .closed();
+          },
+        );
+        rules.next = (
+          runIn(const .over()),
+          const [GameEvent.runOver(total: 0)],
+        );
+        game.read(gameProvider.notifier).endRun();
+        await Future<void>.delayed(Duration.zero);
+
+        // When
+        await game.read(gameProvider.notifier).retry();
+
+        // Then
+        expect(shown, 0);
+      },
+    );
+
+    test('mid-run, Play again never asks for an ad', () async {
+      // Given
+      var shown = 0;
+      final game = container(
+        engagement: playedBefore.copyWith(runEndsSinceInterstitial: 5),
+        showInterstitial: () async {
+          shown++;
+
+          return const .closed();
+        },
+      );
+
+      // When
+      await game.read(gameProvider.notifier).retry();
+
+      // Then
+      expect(shown, 0);
     });
   });
 }

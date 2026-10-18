@@ -1,5 +1,6 @@
 import 'package:game_domain/src/contracts/best_scores.dart';
 import 'package:game_domain/src/contracts/clock.dart';
+import 'package:game_domain/src/contracts/engagement_store.dart';
 import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/contracts/run_store.dart';
 import 'package:game_domain/src/entities/run_tuning.dart';
@@ -37,6 +38,11 @@ GameRules gameRules(Ref ref) => throw UnimplementedError(
 );
 
 @riverpod
+EngagementStore engagementStore(Ref ref) => throw UnimplementedError(
+  'engagementStoreProvider must be overridden by the composition layer',
+);
+
+@riverpod
 ProgressionStore progressionStore(Ref ref) => throw UnimplementedError(
   'progressionStoreProvider must be overridden by the composition layer',
 );
@@ -51,4 +57,12 @@ RemoteValueFun remoteValue(Ref ref) => throw UnimplementedError(
 @riverpod
 RunStore runStore(Ref ref) => throw UnimplementedError(
   'runStoreProvider must be overridden by the composition layer',
+);
+
+/// Shows the interstitial kept loaded, and says what came of it. Never throws.
+typedef ShowAdFun = Future<AdResult> Function();
+
+@riverpod
+ShowAdFun showInterstitial(Ref ref) => throw UnimplementedError(
+  'showInterstitialProvider must be overridden by the composition layer',
 );

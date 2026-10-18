@@ -80,7 +80,8 @@
       "flooded": "Submergé",
       "progress": "$score points sur $target pour cette manche.",
       "revive": "Continuer · $rows lignes effacées + $pieces pièces",
-      "endRun": "Terminer la partie"
+      "endRun": "Terminer la partie",
+      "reviveUnavailable": "Pas de pub pour revivre pour l'instant"
     },
     "end": {
       "won": "Boss vaincu · partie réussie",
