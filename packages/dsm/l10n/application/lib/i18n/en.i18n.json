@@ -355,7 +355,7 @@
       "unavailableMessage": "The share sheet didn't open. Try again in a moment.",
       "ok": "OK"
     },
-    "footer": "Blockmancer $version ($build)",
+    "footer": "Blockmancer $version",
     "reset": {
       "title": "Reset progress",
       "confirmTitle": "Reset progress?",

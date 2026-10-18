@@ -124,7 +124,7 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override late final _Translations$settings$feedback$fr feedback = _Translations$settings$feedback$fr._(_root);
 	@override String get testCrash => 'Plantage de test';
 	@override late final _Translations$settings$testStats$fr testStats = _Translations$settings$testStats$fr._(_root);
-	@override String footer({required Object version, required Object build}) => 'Blockmancer ${version} (${build})';
+	@override String footer({required Object version}) => 'Blockmancer ${version}';
 	@override late final _Translations$settings$reset$fr reset = _Translations$settings$reset$fr._(_root);
 	@override String get privacyChoices => 'Choix de confidentialité';
 	@override String get privacyPolicy => 'Politique de confidentialité';
@@ -1159,7 +1159,7 @@ extension on TranslationsFr {
 			'settings.testStats.unavailableTitle' => 'Partage impossible',
 			'settings.testStats.unavailableMessage' => 'La feuille de partage ne s\'est pas ouverte. Réessaie dans un instant.',
 			'settings.testStats.ok' => 'OK',
-			'settings.footer' => ({required Object version, required Object build}) => 'Blockmancer ${version} (${build})',
+			'settings.footer' => ({required Object version}) => 'Blockmancer ${version}',
 			'settings.reset.title' => 'Réinitialiser la progression',
 			'settings.reset.confirmTitle' => 'Réinitialiser la progression ?',
 			'settings.reset.confirmMessage' => 'Cela efface tes étoiles, les mondes et jokers débloqués, tes records et ta série quotidienne, les stats du Grimoire et la partie en cours. Tes réglages et tes achats restent. Impossible de revenir en arrière.',

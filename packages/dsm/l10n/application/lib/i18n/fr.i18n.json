@@ -355,7 +355,7 @@
       "unavailableMessage": "La feuille de partage ne s'est pas ouverte. Réessaie dans un instant.",
       "ok": "OK"
     },
-    "footer": "Blockmancer $version ($build)",
+    "footer": "Blockmancer $version",
     "reset": {
       "title": "Réinitialiser la progression",
       "confirmTitle": "Réinitialiser la progression ?",

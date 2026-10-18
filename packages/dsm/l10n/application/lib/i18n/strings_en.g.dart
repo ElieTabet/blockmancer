@@ -179,8 +179,8 @@ class Translations$settings$en {
 
 	late final Translations$settings$testStats$en testStats = Translations$settings$testStats$en.internal(_root);
 
-	/// en: 'Blockmancer $version ($build)'
-	String footer({required Object version, required Object build}) => 'Blockmancer ${version} (${build})';
+	/// en: 'Blockmancer $version'
+	String footer({required Object version}) => 'Blockmancer ${version}';
 
 	late final Translations$settings$reset$en reset = Translations$settings$reset$en.internal(_root);
 
@@ -1680,7 +1680,7 @@ extension on Translations {
 			'settings.testStats.unavailableTitle' => 'Couldn\'t share',
 			'settings.testStats.unavailableMessage' => 'The share sheet didn\'t open. Try again in a moment.',
 			'settings.testStats.ok' => 'OK',
-			'settings.footer' => ({required Object version, required Object build}) => 'Blockmancer ${version} (${build})',
+			'settings.footer' => ({required Object version}) => 'Blockmancer ${version}',
 			'settings.reset.title' => 'Reset progress',
 			'settings.reset.confirmTitle' => 'Reset progress?',
 			'settings.reset.confirmMessage' => 'This erases your stars, the worlds and jokers you unlocked, your best scores and daily streak, the Spellbook\'s stats and the run in progress. Your settings and purchases stay. This can\'t be undone.',

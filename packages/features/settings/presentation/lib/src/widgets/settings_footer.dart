@@ -4,26 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_domain/settings_domain.dart';
 
-/// "Blockmancer 1.0.0 (2)": the build the player runs, to quote in a report.
-/// Empty until read.
+/// "Blockmancer 1.0.0": the version the player runs, without the build (the
+/// feedback email carries that). Empty until read.
 final class SettingsFooter extends ConsumerWidget {
   const SettingsFooter({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final details = ref.watch(
-      appDetailsProvider.select(
-        (details) => switch (details.value) {
-          final details? => (build: details.build, version: details.version),
-          null => null,
-        },
-      ),
+    final version = ref.watch(
+      appDetailsProvider.select((details) => details.value?.version),
     );
 
-    if (details == null) return const SizedBox.shrink();
+    if (version == null) return const SizedBox.shrink();
 
     return Text(
-      context.t.settings.footer(build: details.build, version: details.version),
+      context.t.settings.footer(version: version),
       textAlign: .center,
       style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
     );

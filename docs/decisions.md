@@ -501,8 +501,8 @@ Three changes from the review of this file, each its own commit.
 
 ## Settings redesign
 
-- **The footer carries the build again** ("Blockmancer 1.0.0 (2)"), as asked, replacing the Version
-  row that showed the version alone.
+- **The footer shows the version alone** ("Blockmancer 1.0.0"): the redesign's spec put the build
+  in it, then the build was asked out again. The build stays in the feedback email.
 - **Legal notice** opens `https://studio.elietabet.com/legal`, beside the privacy policy and
   support pages; the page has to exist there before release (docs/console-setup.md).
 - **TESTERS** keeps Test crash under Share test stats: Task 1's way to check Crashlytics. The

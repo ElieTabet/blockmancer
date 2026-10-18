@@ -214,12 +214,13 @@ void main() {
   });
 
   testWidgets('Given a release build, When Settings opens, Then its footer '
-      'names the app, its version and its build', (tester) async {
+      'names the app and its version, without the build', (tester) async {
     // Given / When
     await pumpSettings(tester, testBuild: false);
 
     // Then
-    expect(find.text('Blockmancer 1.0.0 (2)'), findsOneWidget);
+    expect(find.text('Blockmancer 1.0.0'), findsOneWidget);
+    expect(find.textContaining('(2)'), findsNothing);
   });
 
   group('sending feedback', () {
@@ -576,7 +577,7 @@ void main() {
           greaterThan(tester.getTopLeft(find.text('Reset progress')).dy),
         );
         expect(
-          tester.getTopLeft(find.text('Blockmancer 1.0.0 (2)')).dy,
+          tester.getTopLeft(find.text('Blockmancer 1.0.0')).dy,
           greaterThan(tester.getTopLeft(find.text('Test crash')).dy),
         );
       },
@@ -611,10 +612,7 @@ void main() {
 
         // When: a layout overflow fails the test
         await pumpSettings(tester, textScale: 2);
-        await tester.scrollUntilVisible(
-          find.text('Blockmancer 1.0.0 (2)'),
-          200,
-        );
+        await tester.scrollUntilVisible(find.text('Blockmancer 1.0.0'), 200);
 
         // Then
         expect(tester.takeException(), isNull);
