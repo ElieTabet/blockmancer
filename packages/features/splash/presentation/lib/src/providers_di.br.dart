@@ -17,3 +17,10 @@ SplashRouting splashRouting(Ref ref) => throw UnimplementedError(
 Future<bool> tutorialSeen(Ref ref) => throw UnimplementedError(
   'tutorialSeenProvider must be overridden by the composition layer',
 );
+
+/// Whether this version is too old to play: the launch goes no further than
+/// the update screen. A future, for the launch's Remote Config fetch.
+@riverpod
+Future<bool> updateRequired(Ref ref) => throw UnimplementedError(
+  'updateRequiredProvider must be overridden by the composition layer',
+);

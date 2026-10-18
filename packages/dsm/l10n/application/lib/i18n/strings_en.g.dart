@@ -44,6 +44,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$push$en push = Translations$push$en.internal(_root);
 	late final Translations$home$en home = Translations$home$en.internal(_root);
 	late final Translations$settings$en settings = Translations$settings$en.internal(_root);
+	late final Translations$update$en update = Translations$update$en.internal(_root);
 }
 
 // Path: game
@@ -157,12 +158,24 @@ class Translations$settings$en {
 	late final Translations$settings$language$en language = Translations$settings$language$en.internal(_root);
 	late final Translations$settings$tutorial$en tutorial = Translations$settings$tutorial$en.internal(_root);
 	late final Translations$settings$feedback$en feedback = Translations$settings$feedback$en.internal(_root);
+	late final Translations$settings$testCrash$en testCrash = Translations$settings$testCrash$en.internal(_root);
 	late final Translations$settings$testStats$en testStats = Translations$settings$testStats$en.internal(_root);
 
 	/// en: 'Version'
 	String get version => 'Version';
 
 	late final Translations$settings$reset$en reset = Translations$settings$reset$en.internal(_root);
+}
+
+// Path: update
+class Translations$update$en {
+	Translations$update$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final Translations$update$required$en required = Translations$update$required$en.internal(_root);
+	late final Translations$update$banner$en banner = Translations$update$banner$en.internal(_root);
 }
 
 // Path: game.tutorial
@@ -755,6 +768,21 @@ class Translations$settings$feedback$en {
 	String get ok => 'OK';
 }
 
+// Path: settings.testCrash
+class Translations$settings$testCrash$en {
+	Translations$settings$testCrash$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Test crash'
+	String get title => 'Test crash';
+
+	/// en: 'Crash the app to check crash reports arrive'
+	String get subtitle => 'Crash the app to check crash reports arrive';
+}
+
 // Path: settings.testStats
 class Translations$settings$testStats$en {
 	Translations$settings$testStats$en.internal(this._root);
@@ -804,6 +832,42 @@ class Translations$settings$reset$en {
 
 	/// en: 'Cancel'
 	String get cancel => 'Cancel';
+}
+
+// Path: update.required
+class Translations$update$required$en {
+	Translations$update$required$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Update required'
+	String get title => 'Update required';
+
+	/// en: 'This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.'
+	String get body => 'This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.';
+
+	/// en: 'Update'
+	String get button => 'Update';
+}
+
+// Path: update.banner
+class Translations$update$banner$en {
+	Translations$update$banner$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'A new version is out'
+	String get title => 'A new version is out';
+
+	/// en: 'Update'
+	String get button => 'Update';
+
+	/// en: 'Not now'
+	String get close => 'Not now';
 }
 
 // Path: game.offers.nextBoss
@@ -1496,6 +1560,8 @@ extension on Translations {
 			'settings.feedback.unavailableTitle' => 'No mail app',
 			'settings.feedback.unavailableMessage' => ({required Object address}) => 'We couldn\'t open a mail app. Write to us at ${address}.',
 			'settings.feedback.ok' => 'OK',
+			'settings.testCrash.title' => 'Test crash',
+			'settings.testCrash.subtitle' => 'Crash the app to check crash reports arrive',
 			'settings.testStats.title' => 'Share test stats',
 			'settings.testStats.subtitle' => 'Send the team how you\'ve been playing',
 			'settings.testStats.unavailableTitle' => 'Couldn\'t share',
@@ -1508,6 +1574,12 @@ extension on Translations {
 			'settings.reset.confirmMessage' => 'Your best scores and the run in progress will be deleted. This can\'t be undone.',
 			'settings.reset.confirm' => 'Reset',
 			'settings.reset.cancel' => 'Cancel',
+			'update.required.title' => 'Update required',
+			'update.required.body' => 'This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.',
+			'update.required.button' => 'Update',
+			'update.banner.title' => 'A new version is out',
+			'update.banner.button' => 'Update',
+			'update.banner.close' => 'Not now',
 			_ => null,
 		};
 	}

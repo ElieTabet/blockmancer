@@ -463,3 +463,139 @@ final class WorldsProvider
 }
 
 String _$worldsHash() => r'867b7d3a700ba4081ea00269b23e37edf6c3b48f';
+
+@ProviderFor(dismissUpdateOffer)
+final dismissUpdateOfferProvider = DismissUpdateOfferProvider._();
+
+final class DismissUpdateOfferProvider
+    extends
+        $FunctionalProvider<
+          DismissUpdateOfferFun,
+          DismissUpdateOfferFun,
+          DismissUpdateOfferFun
+        >
+    with $Provider<DismissUpdateOfferFun> {
+  DismissUpdateOfferProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dismissUpdateOfferProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dismissUpdateOfferHash();
+
+  @$internal
+  @override
+  $ProviderElement<DismissUpdateOfferFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  DismissUpdateOfferFun create(Ref ref) {
+    return dismissUpdateOffer(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DismissUpdateOfferFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DismissUpdateOfferFun>(value),
+    );
+  }
+}
+
+String _$dismissUpdateOfferHash() =>
+    r'fbd946361b5e47633da35e78ca27e2bba550b45e';
+
+@ProviderFor(openStoreListing)
+final openStoreListingProvider = OpenStoreListingProvider._();
+
+final class OpenStoreListingProvider
+    extends
+        $FunctionalProvider<
+          OpenStoreListingFun,
+          OpenStoreListingFun,
+          OpenStoreListingFun
+        >
+    with $Provider<OpenStoreListingFun> {
+  OpenStoreListingProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'openStoreListingProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$openStoreListingHash();
+
+  @$internal
+  @override
+  $ProviderElement<OpenStoreListingFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  OpenStoreListingFun create(Ref ref) {
+    return openStoreListing(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OpenStoreListingFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OpenStoreListingFun>(value),
+    );
+  }
+}
+
+String _$openStoreListingHash() => r'c7986f521fe5cd2aa6d28c1ee4059d91efa7cfb4';
+
+/// The newer version to offer, or null when there is none or its banner was
+/// closed.
+
+@ProviderFor(updateOffer)
+final updateOfferProvider = UpdateOfferProvider._();
+
+/// The newer version to offer, or null when there is none or its banner was
+/// closed.
+
+final class UpdateOfferProvider
+    extends $FunctionalProvider<AsyncValue<String?>, String?, FutureOr<String?>>
+    with $FutureModifier<String?>, $FutureProvider<String?> {
+  /// The newer version to offer, or null when there is none or its banner was
+  /// closed.
+  UpdateOfferProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'updateOfferProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$updateOfferHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<String?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<String?> create(Ref ref) {
+    return updateOffer(ref);
+  }
+}
+
+String _$updateOfferHash() => r'aeb14ab584076b2ff99fc489bf69b1ee01f3211e';

@@ -71,3 +71,26 @@ bool reduceMotionSetting(Ref ref) => throw UnimplementedError(
 List<WorldSummary> worlds(Ref ref) => throw UnimplementedError(
   'worldsProvider must be overridden by the composition layer',
 );
+
+/// Closes the update banner for the version it offers, for good.
+typedef DismissUpdateOfferFun = Future<void> Function();
+
+@riverpod
+DismissUpdateOfferFun dismissUpdateOffer(Ref ref) => throw UnimplementedError(
+  'dismissUpdateOfferProvider must be overridden by the composition layer',
+);
+
+/// Opens the app's page in its store, and answers whether it opened.
+typedef OpenStoreListingFun = Future<bool> Function();
+
+@riverpod
+OpenStoreListingFun openStoreListing(Ref ref) => throw UnimplementedError(
+  'openStoreListingProvider must be overridden by the composition layer',
+);
+
+/// The newer version to offer, or null when there is none or its banner was
+/// closed.
+@riverpod
+Future<String?> updateOffer(Ref ref) => throw UnimplementedError(
+  'updateOfferProvider must be overridden by the composition layer',
+);

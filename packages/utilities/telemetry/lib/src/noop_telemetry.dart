@@ -6,6 +6,9 @@ final class NoopTelemetry implements Telemetry {
   const NoopTelemetry();
 
   @override
+  void crash() {}
+
+  @override
   void installCrashHandlers() {}
 
   @override

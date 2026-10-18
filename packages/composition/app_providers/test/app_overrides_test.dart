@@ -23,6 +23,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:play_stats/play_stats.dart';
 import 'package:push/push.dart';
 import 'package:push/src/providers_di.br.dart' as push_di;
+import 'package:remote_config/remote_config.dart';
 import 'package:push_notifications_domain/push_notifications_domain.dart'
     as push_notifications;
 import 'package:push_notifications_presentation/src/providers_di.br.dart'
@@ -32,6 +33,7 @@ import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:settings_presentation/src/providers_di.br.dart'
     as settings_ui_di;
 import 'package:shared_domain/shared_domain.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sounds/sounds.dart';
 import 'package:splash_presentation/splash_presentation.dart' as splash_ui;
 import 'package:telemetry/telemetry.dart';
@@ -42,9 +44,13 @@ import 'fake_random.dart';
 import 'fake_sound_engine.dart';
 
 void main() {
-  ProviderContainer buildContainer() {
+  ProviderContainer buildContainer({bool testTools = false}) {
     final container = ProviderContainer(
-      overrides: appOverrides(collectsTelemetry: false, router: AppRouter()),
+      overrides: appOverrides(
+        collectsTelemetry: false,
+        router: AppRouter(),
+        testTools: testTools,
+      ),
     );
     addTearDown(container.dispose);
 
@@ -67,6 +73,49 @@ void main() {
     expect(
       container.read(game.runStoreProvider),
       isA<SharedPreferencesRunStore>(),
+    );
+  });
+
+  test('a release build counts in Firebase only, hides the testers\' rows and '
+      'fetches Remote Config twice a day', () {
+    final container = buildContainer();
+
+    expect(
+      container.read(game.analyticsSinkProvider),
+      isA<FirebaseAnalyticsSink>(),
+    );
+    expect(container.read(settings_ui_di.showsTestToolsProvider), isFalse);
+    expect(container.read(remoteValuesProvider), isA<FirebaseRemoteValues>());
+  });
+
+  test('a test build counts in Firebase and on the device, and shows the '
+      'testers\' rows', () {
+    final container = buildContainer(testTools: true);
+
+    expect(
+      container.read(game.analyticsSinkProvider),
+      isA<CompositeAnalyticsSink>(),
+    );
+    expect(container.read(settings_ui_di.showsTestToolsProvider), isTrue);
+  });
+
+  test('a release build deletes the stats a test build counted on the phone, '
+      'a test build keeps them', () async {
+    // Given
+    SharedPreferences.setMockInitialValues({'playStats': '{"version":1}'});
+
+    // When
+    await discardTestStatsOutsideTestBuilds(buildContainer(testTools: true));
+    final keptByTestBuild = (await SharedPreferences.getInstance()).getString(
+      'playStats',
+    );
+    await discardTestStatsOutsideTestBuilds(buildContainer());
+
+    // Then
+    expect(keptByTestBuild, isNotNull);
+    expect(
+      (await SharedPreferences.getInstance()).getString('playStats'),
+      isNull,
     );
   });
 
@@ -185,7 +234,11 @@ void main() {
     // Given
     final container = ProviderContainer(
       overrides: [
-        ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+        ...appOverrides(
+          collectsTelemetry: false,
+          router: AppRouter(),
+          testTools: false,
+        ),
         settings.reduceMotionOnProvider.overrideWithValue(true),
       ],
     );
@@ -203,7 +256,11 @@ void main() {
     final progression = game.startingProgression(const BlockmancerEngine());
     final container = ProviderContainer(
       overrides: [
-        ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+        ...appOverrides(
+          collectsTelemetry: false,
+          router: AppRouter(),
+          testTools: false,
+        ),
         game.progressionProvider.overrideWith((ref) async => progression),
         settings.reduceMotionOnProvider.overrideWithValue(true),
       ],
@@ -287,7 +344,11 @@ void main() {
       // Given
       final container = ProviderContainer(
         overrides: [
-          ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+          ...appOverrides(
+            collectsTelemetry: false,
+            router: AppRouter(),
+            testTools: false,
+          ),
           settings.hapticsOnProvider.overrideWithValue(false),
           settings.soundOnProvider.overrideWithValue(false),
         ],
@@ -309,7 +370,11 @@ void main() {
     }) async {
       final container = ProviderContainer(
         overrides: [
-          ...appOverrides(collectsTelemetry: false, router: AppRouter()),
+          ...appOverrides(
+            collectsTelemetry: false,
+            router: AppRouter(),
+            testTools: false,
+          ),
           gameSoundsProvider.overrideWithValue(
             GameSounds(engine: engine, random: random),
           ),
@@ -392,16 +457,13 @@ void main() {
     });
   });
 
-  // The testers' numbers: the game counts into play_stats without knowing
-  // it, and Settings shares them through external_links without knowing it.
-  test("the game counts into the device's play stats, and Settings shares "
-      'them', () {
-    final container = buildContainer();
+  // The testers' numbers: a test build counts into play_stats without the
+  // game knowing it, and Settings shares them through external_links without
+  // knowing it.
+  test("a test build counts into the device's play stats too, and Settings "
+      'shares them', () {
+    final container = buildContainer(testTools: true);
 
-    expect(
-      container.read(game.analyticsSinkProvider),
-      same(container.read(playStatsProvider)),
-    );
     expect(container.read(playStatsProvider), isA<LocalPlayStats>());
     expect(
       container.read(settings_ui_di.shareTextProvider),

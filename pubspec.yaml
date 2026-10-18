@@ -53,6 +53,7 @@ melos:
         firebase_core: ^4.15.0 # Firebase app initialization — the app starts it at boot; packages/utilities/push uses it in tests
         firebase_crashlytics: ^5.4.0 # crash reports, production release builds only (packages/utilities/telemetry)
         firebase_messaging: ^16.7.0 # FCM token + message streams (packages/utilities/push)
+        firebase_remote_config: ^6.7.0 # live tuning: RunConfig, ad caps, the review cooldown and the update versions (packages/utilities/remote_config); 7.x needs firebase_core 5
         flutter_inappwebview: ^6.1.5 # The only webview engine; no feature depends on it directly (packages/utilities/webviews)
         flutter_local_notifications: ^22.3.1 # Android has no foreground display of its own — this is what draws it (packages/utilities/push)
         flutter_riverpod: ^3.3.1
@@ -62,6 +63,7 @@ melos:
         intl: ^0.20.2
         json_annotation: ^4.9.0
         package_info_plus: ^10.2.2 # the app's version and build number shown in Settings; known only to the app_info package
+        pub_semver: ^2.2.1 # compares the app's version with Remote Config's minimum and latest (packages/features/app_update/domain)
         riverpod_annotation: ^4.0.2
         share_plus: ^13.3.1 # the OS share sheet, for Settings' Share test stats; known only to the external_links package
         shared_preferences: ^2.5.3 # the best scores, the saved run, the settings and the testers' play stats, on the device (packages/features/{game,settings}/data, packages/utilities/play_stats)
@@ -80,6 +82,7 @@ melos:
         mocktail: ^1.0.4
         package_info_plus: ^10.2.2 # also under dependencies: Melos stamps dev deps only from here, and composition's tests fake the version through it
         riverpod_generator: 4.0.3 # pinned: 4.0.4+ calls FormalParameter.type, absent in the pinned analyzer 10.2.0
+        shared_preferences: ^2.5.3 # also under dependencies: composition's tests check what a release build deletes from the phone
         test: ^1.31.1 # runs the pure-Dart packages' suites (blockmancer_engine on the VM and in Chrome, ads), where flutter_test can't
         url_launcher_platform_interface: ^2.3.2 # fakes the launcher platform so external_links' catches are testable off-device
 
@@ -170,3 +173,14 @@ melos:
         Crashlytics (delegates to scripts/build_android_release.sh). Cleans
         first, like build-ios. Needs app/android/key.properties.
       run: bash scripts/build_android_release.sh
+    build-ios-test:
+      description: |
+        The iOS release build as a test build for TestFlight: TEST_TOOLS on
+        (Share test stats, Test crash, Google's test ad units), placeholders
+        in app/env/prod.json only warn.
+      run: bash scripts/build_ios_release.sh --test-tools
+    build-android-test:
+      description: |
+        The Android release build as a test build for Play internal testing:
+        TEST_TOOLS on, like build-ios-test.
+      run: bash scripts/build_android_release.sh --test-tools

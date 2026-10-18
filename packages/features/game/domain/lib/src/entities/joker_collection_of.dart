@@ -1,9 +1,13 @@
+import 'package:game_domain/src/entities/run_tuning.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// Every joker in pairs, from the rules alone: a new player's first, in the
 /// rules' order, then each world's boss's in the map's order, then the stars'
-/// from fewest to most.
-JokerCollection jokerCollectionOf(GameRules rules) {
+/// from fewest to most, described with the numbers Remote Config tunes.
+JokerCollection jokerCollectionOf(
+  GameRules rules, {
+  required RemoteValueFun valueOf,
+}) {
   final placed = <JokerId>{};
   final pairs = <JokerPair>[];
 
@@ -30,9 +34,11 @@ JokerCollection jokerCollectionOf(GameRules rules) {
     pairUp(unlock.jokers, .stars(count: unlock.stars));
   }
 
+  final config = tuned(rules.defaultConfig, valueOf);
+
   return JokerCollection(
     pairs: pairs,
-    traySize: rules.defaultConfig.traySize,
-    tuning: rules.defaultConfig.jokers,
+    traySize: config.traySize,
+    tuning: config.jokers,
   );
 }

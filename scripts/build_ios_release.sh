@@ -5,7 +5,9 @@ set -euo pipefail
 # an .ipa ready to upload to TestFlight, with its Dart symbols sent to
 # Crashlytics.
 #
-# Usage: bash scripts/build_ios_release.sh
+# Usage: bash scripts/build_ios_release.sh [--test-tools]
+#   --test-tools  a test build (TestFlight): TEST_TOOLS on, the testers'
+#                 tools and Google's test ad units; placeholders only warn.
 # Also runnable via `melos run build-ios` (which just calls this script).
 #
 # `build ipa` rather than `build ios`: the latter stops at a .app, which nothing
@@ -30,6 +32,17 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 ENV_FILE="env/prod.json"
+TEST_TOOLS=false
+
+if [ "${1:-}" = "--test-tools" ]; then
+  TEST_TOOLS=true
+fi
+
+if [ "$TEST_TOOLS" = true ]; then
+  bash "$ROOT_DIR/scripts/check_release_ids.sh" --warn
+else
+  bash "$ROOT_DIR/scripts/check_release_ids.sh"
+fi
 GOOGLE_SERVICE_INFO="app/ios/Runner/GoogleService-Info.plist"
 
 if [ "$(uname -s)" != "Darwin" ]; then
@@ -98,7 +111,8 @@ flutter build ipa --release \
   --export-method app-store \
   --obfuscate \
   --split-debug-info="$SYMBOLS_DIR" \
-  --dart-define-from-file="$ENV_FILE"
+  --dart-define-from-file="$ENV_FILE" \
+  --dart-define=TEST_TOOLS="$TEST_TOOLS"
 cd "$ROOT_DIR"
 
 UPLOAD_COMMAND="firebase crashlytics:symbols:upload --app=$FIREBASE_APP_ID \"$SYMBOLS_DIR\""

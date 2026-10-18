@@ -7,4 +7,7 @@ abstract interface class SplashRouting {
   void onFirstLaunch(BuildContext context);
 
   void onInitialized(BuildContext context);
+
+  /// This version no longer plays: the update screen replaces everything.
+  void onUpdateRequired(BuildContext context);
 }

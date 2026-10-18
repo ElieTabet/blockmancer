@@ -1,3 +1,4 @@
+import 'package:game_domain/src/entities/run_tuning.dart';
 import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
 import 'package:game_domain/src/contracts/clock.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
@@ -14,14 +15,20 @@ import 'package:shared_domain/shared_domain.dart';
 /// (the first when it names none, or names one the rules can't play yet: the
 /// map never offers one, so a launch naming it plays on rather than failing).
 /// Both offer only the jokers [Progression] has unlocked; the daily offers
-/// them all.
+/// them all. Every run starts with what Remote Config publishes at that
+/// moment ([tuned]); a run already started keeps the config it began with.
 class RunStartForBehavior {
   final Clock _clock;
   final GameRules _rules;
+  final RemoteValueFun _valueOf;
 
-  const RunStartForBehavior({required Clock clock, required GameRules rules})
-    : _clock = clock,
-      _rules = rules;
+  const RunStartForBehavior({
+    required Clock clock,
+    required GameRules rules,
+    required RemoteValueFun valueOf,
+  }) : _clock = clock,
+       _rules = rules,
+       _valueOf = valueOf;
 
   RunStart call(
     GameLaunch launch, {
@@ -33,7 +40,9 @@ class RunStartForBehavior {
         : _rules.worldOrder.first;
 
     return switch (launch) {
-      .daily || .resume => DailyRunBehavior(rules: _rules)(_clock.now()),
+      .daily || .resume => DailyRunBehavior(rules: _rules, valueOf: _valueOf)(
+        _clock.now(),
+      ),
       .practice || .tutorial => (
         config: _unlockedConfig(_rules.worldOrder.first, progression),
         mode: const .practice(),
@@ -50,12 +59,14 @@ class RunStartForBehavior {
   // Any 32 bits will do: practice and world runs are not meant to be replayed.
   int _freshSeed() => _clock.now().microsecondsSinceEpoch & 0xFFFFFFFF;
 
-  RunConfig _unlockedConfig(WorldId world, Progression progression) =>
-      _rules.configFor(
-        world,
-        jokerPool: [
-          for (final joker in JokerId.values)
-            if (progression.unlockedJokers.contains(joker)) joker,
-        ],
-      );
+  RunConfig _unlockedConfig(WorldId world, Progression progression) => tuned(
+    _rules.configFor(
+      world,
+      jokerPool: [
+        for (final joker in JokerId.values)
+          if (progression.unlockedJokers.contains(joker)) joker,
+      ],
+    ),
+    _valueOf,
+  );
 }

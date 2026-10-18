@@ -43,6 +43,7 @@ class TranslationsFr extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$push$fr push = _Translations$push$fr._(_root);
 	@override late final _Translations$home$fr home = _Translations$home$fr._(_root);
 	@override late final _Translations$settings$fr settings = _Translations$settings$fr._(_root);
+	@override late final _Translations$update$fr update = _Translations$update$fr._(_root);
 }
 
 // Path: game
@@ -117,9 +118,21 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override late final _Translations$settings$language$fr language = _Translations$settings$language$fr._(_root);
 	@override late final _Translations$settings$tutorial$fr tutorial = _Translations$settings$tutorial$fr._(_root);
 	@override late final _Translations$settings$feedback$fr feedback = _Translations$settings$feedback$fr._(_root);
+	@override late final _Translations$settings$testCrash$fr testCrash = _Translations$settings$testCrash$fr._(_root);
 	@override late final _Translations$settings$testStats$fr testStats = _Translations$settings$testStats$fr._(_root);
 	@override String get version => 'Version';
 	@override late final _Translations$settings$reset$fr reset = _Translations$settings$reset$fr._(_root);
+}
+
+// Path: update
+class _Translations$update$fr extends Translations$update$en {
+	_Translations$update$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override late final _Translations$update$required$fr required = _Translations$update$required$fr._(_root);
+	@override late final _Translations$update$banner$fr banner = _Translations$update$banner$fr._(_root);
 }
 
 // Path: game.tutorial
@@ -469,6 +482,17 @@ class _Translations$settings$feedback$fr extends Translations$settings$feedback$
 	@override String get ok => 'OK';
 }
 
+// Path: settings.testCrash
+class _Translations$settings$testCrash$fr extends Translations$settings$testCrash$en {
+	_Translations$settings$testCrash$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Plantage de test';
+	@override String get subtitle => 'Fais planter l\'app pour vérifier que les rapports arrivent';
+}
+
 // Path: settings.testStats
 class _Translations$settings$testStats$fr extends Translations$settings$testStats$en {
 	_Translations$settings$testStats$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -496,6 +520,30 @@ class _Translations$settings$reset$fr extends Translations$settings$reset$en {
 	@override String get confirmMessage => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.';
 	@override String get confirm => 'Réinitialiser';
 	@override String get cancel => 'Annuler';
+}
+
+// Path: update.required
+class _Translations$update$required$fr extends Translations$update$required$en {
+	_Translations$update$required$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mise à jour requise';
+	@override String get body => 'Cette version de Blockmancer n\'est plus prise en charge. Mets à jour pour continuer à jouer ; ta progression est conservée.';
+	@override String get button => 'Mettre à jour';
+}
+
+// Path: update.banner
+class _Translations$update$banner$fr extends Translations$update$banner$en {
+	_Translations$update$banner$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Une nouvelle version est sortie';
+	@override String get button => 'Mettre à jour';
+	@override String get close => 'Plus tard';
 }
 
 // Path: game.offers.nextBoss
@@ -1052,6 +1100,8 @@ extension on TranslationsFr {
 			'settings.feedback.unavailableTitle' => 'Pas d\'app de mail',
 			'settings.feedback.unavailableMessage' => ({required Object address}) => 'Impossible d\'ouvrir une app de mail. Écris-nous à ${address}.',
 			'settings.feedback.ok' => 'OK',
+			'settings.testCrash.title' => 'Plantage de test',
+			'settings.testCrash.subtitle' => 'Fais planter l\'app pour vérifier que les rapports arrivent',
 			'settings.testStats.title' => 'Partager les stats de test',
 			'settings.testStats.subtitle' => 'Envoie à l\'équipe comment tu joues',
 			'settings.testStats.unavailableTitle' => 'Partage impossible',
@@ -1064,6 +1114,12 @@ extension on TranslationsFr {
 			'settings.reset.confirmMessage' => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.',
 			'settings.reset.confirm' => 'Réinitialiser',
 			'settings.reset.cancel' => 'Annuler',
+			'update.required.title' => 'Mise à jour requise',
+			'update.required.body' => 'Cette version de Blockmancer n\'est plus prise en charge. Mets à jour pour continuer à jouer ; ta progression est conservée.',
+			'update.required.button' => 'Mettre à jour',
+			'update.banner.title' => 'Une nouvelle version est sortie',
+			'update.banner.button' => 'Mettre à jour',
+			'update.banner.close' => 'Plus tard',
 			_ => null,
 		};
 	}

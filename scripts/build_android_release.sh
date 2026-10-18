@@ -9,7 +9,10 @@ set -euo pipefail
 # Release build of the Android app against production, as an App Bundle ready
 # to upload to the Play Console, with its Dart symbols sent to Crashlytics.
 #
-# Usage: bash scripts/build_android_release.sh
+# Usage: bash scripts/build_android_release.sh [--test-tools]
+#   --test-tools  a test build (Play internal testing): TEST_TOOLS on, the
+#                 testers' tools and Google's test ad units; placeholders
+#                 only warn.
 # Also runnable via `melos run build-android` (which just calls this script).
 #
 # Steps:
@@ -32,6 +35,17 @@ cd "$ROOT_DIR"
 # Why:  compiled into the app; without it the build is a dev build and
 #       telemetry stays off.
 ENV_FILE="env/prod.json"
+TEST_TOOLS=false
+
+if [ "${1:-}" = "--test-tools" ]; then
+  TEST_TOOLS=true
+fi
+
+if [ "$TEST_TOOLS" = true ]; then
+  bash "$ROOT_DIR/scripts/check_release_ids.sh" --warn
+else
+  bash "$ROOT_DIR/scripts/check_release_ids.sh"
+fi
 
 # What: the upload key's location and passwords (kept out of git).
 # Why:  Gradle reads it to sign the release; see app/android/app/build.gradle.kts.
@@ -154,7 +168,8 @@ cd app
 flutter build appbundle --release \
   --obfuscate \
   --split-debug-info="$SYMBOLS_DIR" \
-  --dart-define-from-file="$ENV_FILE"
+  --dart-define-from-file="$ENV_FILE" \
+  --dart-define=TEST_TOOLS="$TEST_TOOLS"
 cd "$ROOT_DIR"
 
 # ---------------------------------------------------------------------------

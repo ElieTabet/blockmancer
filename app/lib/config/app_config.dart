@@ -7,7 +7,11 @@ import 'package:flutter/foundation.dart';
 final class AppConfig {
   final Env env;
 
-  const AppConfig({required this.env});
+  /// A test build (TestFlight, Play internal testing): the testers' tools
+  /// show, and test ad units play. Set only by the test build scripts.
+  final bool testTools;
+
+  const AppConfig({required this.env, this.testTools = false});
 
   /// `String.fromEnvironment` is a compile-time constant, so this needs no
   /// wiring to work in a built app — pass values with
@@ -17,6 +21,7 @@ final class AppConfig {
     env: Env.fromValue(
       const String.fromEnvironment('ENV', defaultValue: 'dev'),
     ),
+    testTools: const bool.fromEnvironment('TEST_TOOLS'),
   );
 
   bool get isProduction => env == Env.prod;

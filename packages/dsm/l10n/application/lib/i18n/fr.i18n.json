@@ -332,6 +332,10 @@
       "unavailableMessage": "Impossible d'ouvrir une app de mail. Écris-nous à $address.",
       "ok": "OK"
     },
+    "testCrash": {
+      "title": "Plantage de test",
+      "subtitle": "Fais planter l'app pour vérifier que les rapports arrivent"
+    },
     "testStats": {
       "title": "Partager les stats de test",
       "subtitle": "Envoie à l'équipe comment tu joues",
@@ -347,6 +351,18 @@
       "confirmMessage": "Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.",
       "confirm": "Réinitialiser",
       "cancel": "Annuler"
+    }
+  },
+  "update": {
+    "required": {
+      "title": "Mise à jour requise",
+      "body": "Cette version de Blockmancer n'est plus prise en charge. Mets à jour pour continuer à jouer ; ta progression est conservée.",
+      "button": "Mettre à jour"
+    },
+    "banner": {
+      "title": "Une nouvelle version est sortie",
+      "button": "Mettre à jour",
+      "close": "Plus tard"
     }
   }
 }

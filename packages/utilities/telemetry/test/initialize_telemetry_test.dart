@@ -6,6 +6,9 @@ final class _RecordingTelemetry implements Telemetry {
   final List<String> calls = [];
 
   @override
+  void crash() => calls.add('crash');
+
+  @override
   void installCrashHandlers() => calls.add('handlers');
 
   @override

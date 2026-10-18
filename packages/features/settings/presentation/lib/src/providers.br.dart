@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:settings_domain/settings_domain.dart';
 import 'package:settings_presentation/src/entities/app_language_locale.dart';
@@ -17,8 +19,14 @@ ApplyStoredLanguageFun applyStoredLanguage(Ref ref) =>
     () async => (await ref.read(settingsProvider.future)).language.apply();
 
 List<Override> bindProviders({
+  required VoidCallback Function(Ref ref) crashForTest,
   required di.ShareTextFun Function(Ref ref) shareText,
-}) => [di.shareTextProvider.overrideWith(shareText)];
+  required bool Function(Ref ref) showsTestTools,
+}) => [
+  di.crashForTestProvider.overrideWith(crashForTest),
+  di.shareTextProvider.overrideWith(shareText),
+  di.showsTestToolsProvider.overrideWith(showsTestTools),
+];
 
 List<Override> bindRoutingProviders({
   required SettingsRouting Function(Ref ref) settingsRouting,

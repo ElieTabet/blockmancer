@@ -2,6 +2,7 @@ import 'package:game_domain/src/contracts/best_scores.dart';
 import 'package:game_domain/src/contracts/clock.dart';
 import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/contracts/run_store.dart';
+import 'package:game_domain/src/entities/run_tuning.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -38,6 +39,13 @@ GameRules gameRules(Ref ref) => throw UnimplementedError(
 @riverpod
 ProgressionStore progressionStore(Ref ref) => throw UnimplementedError(
   'progressionStoreProvider must be overridden by the composition layer',
+);
+
+/// What Remote Config publishes, read by key: the numbers a new run is
+/// tuned with (see `tuned`).
+@riverpod
+RemoteValueFun remoteValue(Ref ref) => throw UnimplementedError(
+  'remoteValueProvider must be overridden by the composition layer',
 );
 
 @riverpod

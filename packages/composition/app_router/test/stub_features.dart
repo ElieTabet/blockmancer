@@ -41,6 +41,8 @@ List<Override> stubFeatures({
     gameRules: (ref) => const BlockmancerEngine(),
     progressionStore: (ref) =>
         _MemoryProgressionStore(ref.watch(game.initialProgressionProvider)),
+    remoteValue: (ref) =>
+        (_) => null,
     runStore: (ref) => runStore ?? _NoRunStore(),
   ),
   ...game_ui.bindProviders(
@@ -55,13 +57,17 @@ List<Override> stubFeatures({
   ...home_ui.bindProviders(
     dailyBest: (ref) async => null,
     dailyDate: (ref) => DateTime.utc(2026, 10, 17),
+    dismissUpdateOffer: (ref) => () async {},
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     jokerCollection: (ref) => ref.watch(game.jokerCollectionProvider),
     markJokersAnnounced: (ref) => ref.watch(game.markJokersAnnouncedProvider),
+    openStoreListing: (ref) =>
+        () async => true,
     practiceBest: (ref) async => null,
     progression: (ref) => ref.watch(game.progressionProvider.future),
     // Still, so the map's "you are here" pin lets pumpAndSettle settle.
     reduceMotionSetting: (ref) => true,
+    updateOffer: (ref) async => null,
     worlds: (ref) => ref.watch(game.worldSummariesProvider),
   ),
   ...settings.bindProviders(
@@ -79,10 +85,15 @@ List<Override> stubFeatures({
     settingsStore: (ref) => const _FirstLaunchSettingsStore(),
   ),
   ...settings_ui.bindProviders(
+    crashForTest: (ref) => () {},
     shareText: (ref) =>
         (text, {origin, subject}) async => false,
+    showsTestTools: (ref) => false,
   ),
-  ...splash_ui.bindProviders(tutorialSeen: (ref) async => tutorialSeen),
+  ...splash_ui.bindProviders(
+    tutorialSeen: (ref) async => tutorialSeen,
+    updateRequired: (ref) async => false,
+  ),
 ];
 
 /// A first launch's settings, and nothing kept.

@@ -42,7 +42,7 @@ final class SplashStateNotifierProvider
 }
 
 String _$splashStateNotifierHash() =>
-    r'f7a4453b4e93ad23e85a2f957dbbf8f9657cc707';
+    r'84d65821eb249f1d86de60f2673f064ab18235dc';
 
 abstract class _$SplashStateNotifier extends $Notifier<void> {
   void build();

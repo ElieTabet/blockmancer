@@ -1,9 +1,15 @@
 import 'package:ads/ads.dart';
 import 'package:app_info/app_info.dart';
 import 'package:app_providers/src/providers_internal.br.dart';
+import 'package:app_providers/src/release_ids.dart';
 import 'package:app_router/app_router.dart';
+import 'package:app_update_data/app_update_data.dart';
+import 'package:app_update_domain/app_update_domain.dart' as app_update;
+import 'package:app_update_presentation/app_update_presentation.dart'
+    as app_update_ui;
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:external_links/external_links.dart' as external_links;
+import 'package:flutter/foundation.dart';
 import 'package:game_data/game_data.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
@@ -34,11 +40,14 @@ import 'package:telemetry/telemetry.dart' as telemetry;
 /// `BuildContext`: the trigger is the OS handing over a tap, not a widget.
 ///
 /// [collectsTelemetry] is the app's to say, like the rest of its configuration:
-/// whether this build sends usage statistics and crash reports.
+/// whether this build sends usage statistics and crash reports. So is
+/// [testTools]: whether it is a test build, with the testers' tools.
 List<Override> featureBindingOverrides({
   required bool collectsTelemetry,
   required AppRouter router,
+  required bool testTools,
 }) => [
+  testToolsProvider.overrideWithValue(testTools),
   // Constructed with no arguments on purpose: the two messaging plugins stay
   // inside `push`.
   ...push.bindProviders(pushMessaging: (ref) => push.FirebasePushMessaging()),
@@ -80,7 +89,12 @@ List<Override> featureBindingOverrides({
   // The game reaches the rules, its storage and the ad network only through
   // these slots.
   ...game.bindProviders(
-    analyticsSink: (ref) => ref.watch(playStatsProvider),
+    analyticsSink: (ref) => testTools
+        ? telemetry.CompositeAnalyticsSink([
+            telemetry.FirebaseAnalyticsSink(),
+            ref.watch(playStatsProvider),
+          ])
+        : telemetry.FirebaseAnalyticsSink(),
     bestScores: (ref) => SharedPreferencesBestScores(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
@@ -89,6 +103,7 @@ List<Override> featureBindingOverrides({
     progressionStore: (ref) => SharedPreferencesProgressionStore(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
+    remoteValue: (ref) => ref.watch(remoteValuesProvider).valueOf,
     runStore: (ref) => const SharedPreferencesRunStore(),
   ),
   ...game_ui.bindProviders(
@@ -125,15 +140,33 @@ List<Override> featureBindingOverrides({
   ...home_ui.bindProviders(
     dailyBest: (ref) => ref.watch(game.todaysDailyBestProvider.future),
     dailyDate: (ref) => ref.watch(game.todaysDailyDateProvider),
+    dismissUpdateOffer: (ref) =>
+        ref.watch(app_update.dismissUpdateOfferProvider),
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     jokerCollection: (ref) => ref.watch(game.jokerCollectionProvider),
     markJokersAnnounced: (ref) => ref.watch(game.markJokersAnnouncedProvider),
+    openStoreListing: (ref) =>
+        ref.watch(app_update_ui.openStoreListingProvider),
     practiceBest: (ref) =>
         ref.watch(game.bestScoreProvider(const .practice()).future),
     // Watched, so a run's end refreshing the progression refreshes the map.
     progression: (ref) => ref.watch(game.progressionProvider.future),
     reduceMotionSetting: (ref) => ref.watch(settings.reduceMotionOnProvider),
+    updateOffer: (ref) => ref.watch(app_update.updateOfferProvider.future),
     worlds: (ref) => ref.watch(game.worldSummariesProvider),
+  ),
+  // The update check compares this build's version with Remote Config's,
+  // knowing neither the plugin behind the version nor Remote Config.
+  ...app_update.bindProviders(
+    appVersion: (ref) async => (await readAppInfo()).version,
+    remoteValue: (ref) => ref.watch(remoteValuesProvider).valueOf,
+    remoteValuesFetched: (ref) => ref.watch(remoteValuesFetchedProvider.future),
+    storePlatform: (ref) => defaultTargetPlatform == .iOS ? .ios : .android,
+    storeUrls: (ref) => storeUrls,
+    updateDismissals: (ref) => const SharedPreferencesUpdateDismissals(),
+  ),
+  ...app_update_ui.bindProviders(
+    openUrl: (ref) => external_links.openExternalUrl,
   ),
   // Settings resets the game's progress without knowing the game, and shows
   // the build and opens the mail app without knowing either plugin.
@@ -153,9 +186,15 @@ List<Override> featureBindingOverrides({
     exportTestStats: (ref) => ref.watch(playStatsProvider).exportJson,
     settingsStore: (ref) => const SharedPreferencesSettingsStore(),
   ),
-  ...settings_ui.bindProviders(shareText: (ref) => external_links.shareText),
+  ...settings_ui.bindProviders(
+    crashForTest: (ref) => ref.watch(telemetry.telemetryProvider).crash,
+    shareText: (ref) => external_links.shareText,
+    showsTestTools: (ref) => testTools,
+  ),
   // The splash opens the tutorial on a first launch without knowing Settings.
   ...splash_ui.bindProviders(
     tutorialSeen: (ref) => ref.watch(settings.tutorialSeenProvider.future),
+    updateRequired: (ref) =>
+        ref.watch(app_update.updateRequiredProvider.future),
   ),
 ];

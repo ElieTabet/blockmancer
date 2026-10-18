@@ -332,6 +332,10 @@
       "unavailableMessage": "We couldn't open a mail app. Write to us at $address.",
       "ok": "OK"
     },
+    "testCrash": {
+      "title": "Test crash",
+      "subtitle": "Crash the app to check crash reports arrive"
+    },
     "testStats": {
       "title": "Share test stats",
       "subtitle": "Send the team how you've been playing",
@@ -347,6 +351,18 @@
       "confirmMessage": "Your best scores and the run in progress will be deleted. This can't be undone.",
       "confirm": "Reset",
       "cancel": "Cancel"
+    }
+  },
+  "update": {
+    "required": {
+      "title": "Update required",
+      "body": "This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.",
+      "button": "Update"
+    },
+    "banner": {
+      "title": "A new version is out",
+      "button": "Update",
+      "close": "Not now"
     }
   }
 }

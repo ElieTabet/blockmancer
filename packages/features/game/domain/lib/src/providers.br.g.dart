@@ -235,7 +235,7 @@ final class JokerCollectionProvider
   }
 }
 
-String _$jokerCollectionHash() => r'cdb3f224090b309308bfbb824751888c26cbaca2';
+String _$jokerCollectionHash() => r'a147ff18f59135efb13732339cd627286ae4e120';
 
 /// See [MarkBossCardSeenBehavior].
 ///
@@ -571,7 +571,7 @@ final class RunStartForProvider
   }
 }
 
-String _$runStartForHash() => r'ef3a184b7b3dd7886cb0f42afb542b7eb5048bfe';
+String _$runStartForHash() => r'a41c87b4789b68bd20f38454686b4deb6190d7c9';
 
 /// Whether a run is saved to resume.
 
@@ -810,7 +810,7 @@ final class TodaysDailyBestProvider
   }
 }
 
-String _$todaysDailyBestHash() => r'88ec2f5293f2fad945ce7d3e68958c099288c256';
+String _$todaysDailyBestHash() => r'e0eba168040d3ad87948caa6946d5d094b1d960f';
 
 /// The UTC day today's daily run is played on, at its midnight, renewed at the
 /// next UTC midnight when that day is over.
@@ -914,7 +914,7 @@ final class WorldSummariesProvider
   }
 }
 
-String _$worldSummariesHash() => r'219571ace5dddb107aa95b813d0527e62f195834';
+String _$worldSummariesHash() => r'f27743f69e3d5983a03cb4d5187c38c8346554a0';
 
 /// What a new profile starts from, worked out from the rules so the storage
 /// never needs to know them.

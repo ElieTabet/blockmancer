@@ -1,6 +1,10 @@
 /// Usage statistics and crash reports, behind a contract that mentions no
 /// vendor.
 abstract interface class Telemetry {
+  /// Crashes the app on purpose, so a test build can check that crash reports
+  /// arrive. Never offered in a release build.
+  void crash();
+
   /// Routes uncaught Flutter and async errors to the crash reporter. Reports
   /// are still sent only while collection is enabled.
   void installCrashHandlers();

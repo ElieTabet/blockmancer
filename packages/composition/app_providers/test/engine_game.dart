@@ -26,6 +26,8 @@ ProviderContainer engineGame({
       progressionStore: (ref) =>
           progressionStore ??
           FakeProgressionStore(ref.watch(game.initialProgressionProvider)),
+      remoteValue: (ref) =>
+          (_) => null,
       runStore: (ref) => const SharedPreferencesRunStore(),
     ),
   );

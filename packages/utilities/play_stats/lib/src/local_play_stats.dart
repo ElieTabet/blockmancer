@@ -42,6 +42,27 @@ final class LocalPlayStats implements AnalyticsSink {
     });
   }
 
+  /// Forgets everything counted on this device, in its turn among the writes:
+  /// a release build keeps no testers' stats. Never throws.
+  Future<void> discard() {
+    final discarded = _writes.then((_) async {
+      try {
+        await (await SharedPreferences.getInstance()).remove(_key);
+      } on Object catch (error, stackTrace) {
+        Timber.e(
+          tag: packageName,
+          logMessage: 'Discarding the play stats failed',
+          exception: error,
+          stackTrace: stackTrace,
+        );
+      }
+    });
+
+    _writes = discarded;
+
+    return discarded;
+  }
+
   /// The summary to share, once every event logged so far is counted. It
   /// takes its turn among the writes, so an event logged meanwhile is counted
   /// after it rather than lost to its write.

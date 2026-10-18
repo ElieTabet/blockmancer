@@ -8,22 +8,28 @@ import 'package:shared_domain/shared_domain.dart';
 List<Override> bindProviders({
   required Future<int?> Function(Ref ref) dailyBest,
   required DateTime Function(Ref ref) dailyDate,
+  required di.DismissUpdateOfferFun Function(Ref ref) dismissUpdateOffer,
   required Future<bool> Function(Ref ref) hasSavedRun,
   required JokerCollection Function(Ref ref) jokerCollection,
   required di.MarkJokersAnnouncedFun Function(Ref ref) markJokersAnnounced,
+  required di.OpenStoreListingFun Function(Ref ref) openStoreListing,
   required Future<int?> Function(Ref ref) practiceBest,
   required Future<Progression> Function(Ref ref) progression,
   required bool Function(Ref ref) reduceMotionSetting,
+  required Future<String?> Function(Ref ref) updateOffer,
   required List<WorldSummary> Function(Ref ref) worlds,
 }) => [
   di.dailyBestProvider.overrideWith(dailyBest),
   di.dailyDateProvider.overrideWith(dailyDate),
+  di.dismissUpdateOfferProvider.overrideWith(dismissUpdateOffer),
   di.hasSavedRunProvider.overrideWith(hasSavedRun),
   di.jokerCollectionProvider.overrideWith(jokerCollection),
   di.markJokersAnnouncedProvider.overrideWith(markJokersAnnounced),
+  di.openStoreListingProvider.overrideWith(openStoreListing),
   di.practiceBestProvider.overrideWith(practiceBest),
   di.progressionProvider.overrideWith(progression),
   di.reduceMotionSettingProvider.overrideWith(reduceMotionSetting),
+  di.updateOfferProvider.overrideWith(updateOffer),
   di.worldsProvider.overrideWith(worlds),
 ];
 

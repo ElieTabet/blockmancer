@@ -14,6 +14,9 @@ final class _RecordingRouting implements SplashRouting {
 
   @override
   void onInitialized(BuildContext context) => handOffs.add('home');
+
+  @override
+  void onUpdateRequired(BuildContext context) => handOffs.add('update');
 }
 
 void main() {
@@ -36,11 +39,16 @@ void main() {
     return context;
   }
 
-  ProviderContainer container({Future<bool> Function()? tutorialSeen}) {
+  ProviderContainer container({
+    Future<bool> Function()? tutorialSeen,
+    Future<bool> Function()? updateRequired,
+  }) {
     final container = ProviderContainer(
       overrides: [
         ...bindProviders(
           tutorialSeen: (ref) => tutorialSeen?.call() ?? Future.value(true),
+          updateRequired: (ref) =>
+              updateRequired?.call() ?? Future.value(false),
         ),
         ...bindRoutingProviders(splashRouting: (ref) => routing),
       ],
@@ -155,5 +163,39 @@ void main() {
 
     // Then
     expect(routing.handOffs, isEmpty);
+  });
+
+  testWidgets('a version too old to play hands off to the update screen, '
+      'even on a first launch', (tester) async {
+    // Given
+    final context = await pumpContext(tester);
+    final splash = container(
+      tutorialSeen: () async => false,
+      updateRequired: () async => true,
+    ).read(splashStateProvider.notifier);
+
+    // When
+    final ready = splash.onReady(context);
+    await tester.pump(const Duration(milliseconds: 1800));
+    await ready;
+
+    // Then
+    expect(routing.handOffs, ['update']);
+  });
+
+  testWidgets('an update check that fails lets the player in', (tester) async {
+    // Given
+    final context = await pumpContext(tester);
+    final splash = container(
+      updateRequired: () async => throw StateError('no version'),
+    ).read(splashStateProvider.notifier);
+
+    // When
+    final ready = splash.onReady(context);
+    await tester.pump(const Duration(milliseconds: 1800));
+    await ready;
+
+    // Then
+    expect(routing.handOffs, ['home']);
   });
 }

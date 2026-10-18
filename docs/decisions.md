@@ -321,3 +321,33 @@ Three changes from the review of this file, each its own commit.
 
 - Already 1.0.0 (build 3) since the version fix; nothing changed. The build number goes up at
   release.
+
+## Sprint 8, Task 1: Firebase core
+
+- **Remote Config reaches the next run, not the screen's.** The tuned config is applied where a
+  run starts, and where the map and Spellbook read their numbers, through a `remoteValue` slot;
+  the rules binding never changes, because `GameNotifier` watches it and a new instance would
+  restart the run in play. A run saved mid-way resumes with the config it began with.
+- **What counts as a bad value.** Anything that isn't a number (an int for int keys), or falls
+  outside its key's range, is ignored and that key keeps the default; the other keys still apply.
+  The ranges keep a run playable (a factor never below 1, at most 3 offers, 1 to 7 tide gaps).
+- **One key per number, not a JSON blob:** the sprint asks for a table of every key; 68 keys, each
+  editable on its own in the console.
+- **The daily run** is tuned like any other: Remote Config is the same for everyone, so everyone
+  still plays the same run, except a player whose fetch is older by up to 12 hours.
+- **Minimum fetch interval:** 12 hours in release builds (two fetches a day, well inside Remote
+  Config's limits), 5 minutes in test builds so a published value reaches a tester quickly.
+- **Force and optional updates.** "Malformed" covers the published versions and the app's own:
+  either asks nothing, so a typo can't lock players out. The splash waits at most 2 seconds for
+  the launch's fetch, so raising `min_version_*` stops a broken version from its next launch
+  without holding a slow network's splash. The update screen has no way out (back included); the
+  banner sits at the top of the map and closes per version.
+- **`TEST_TOOLS` in a debug run** is off unless passed: a debug run is a developer's, not a
+  tester's. "Local stats data deleted once": a release build deletes the key at every launch;
+  nothing writes it there, so that deletes it once.
+- **The test crash** is a Settings row in test builds only ("Crashlytics receives a test crash from
+  a test build"), calling Crashlytics' own `crash()`.
+- **Placeholders in one file.** `app/env/prod.json` holds every store and AdMob ID, read by the
+  Dart code with `String.fromEnvironment` and by the release scripts, which fail while a
+  `PLACEHOLDER_` is left (a test build only warns). The AdMob IDs are already the real ones; the
+  App Store id is the one placeholder so far.

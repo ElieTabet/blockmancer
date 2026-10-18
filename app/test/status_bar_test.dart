@@ -24,7 +24,11 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          ...appOverrides(collectsTelemetry: false, router: appRouter),
+          ...appOverrides(
+            collectsTelemetry: false,
+            router: appRouter,
+            testTools: false,
+          ),
         ],
         child: TranslationProvider(
           child: AnnotatedRegion<SystemUiOverlayStyle>(

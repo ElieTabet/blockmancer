@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   ads: any
+  app_update_data: any
+  app_update_domain: any
+  app_update_presentation: any
   app_info: any
   app_router: any
   blockmancer_engine: any
@@ -19,6 +22,7 @@ dependencies:
   push: any
   push_notifications_domain: any
   push_notifications_presentation: any
+  remote_config: any
   telemetry: any
   game_data: any
   game_domain: any
@@ -28,6 +32,7 @@ dependencies:
   settings_data: any
   settings_domain: any
   settings_presentation: any
+  shared_domain: any
   sounds: any
   splash_presentation: any
 
@@ -38,4 +43,4 @@ dev_dependencies:
   riverpod_generator: 4.0.3
   flutter_riverpod: ^3.3.1     # ProviderContainer, for the composition wiring test
   package_info_plus: ^10.2.2       # a release's version and build, for the Settings wiring test
-  shared_domain: any           # the engine's RunState, for the daily-seed test
+  shared_preferences: ^2.5.3   # what a release build deletes from the phone, for the test-tools test

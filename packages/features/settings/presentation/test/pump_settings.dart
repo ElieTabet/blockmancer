@@ -13,13 +13,16 @@ import 'fake_settings_store.dart';
 
 /// Mounts Settings over [store], on a phone. Each clearing of the progress is
 /// recorded in [clearedProgress], mail drafts open in [mailApp], and the test
-/// stats are shared into [shareSheet].
+/// stats are shared into [shareSheet]. A [testBuild] shows the testers' rows;
+/// a test crash is recorded in [crashes].
 Future<FakeSettingsRouting> pumpSettings(
   WidgetTester tester, {
   List<String>? clearedProgress,
+  List<String>? crashes,
   FakeMailApp? mailApp,
   FakeShareSheet? shareSheet,
   FakeSettingsStore? store,
+  bool testBuild = true,
 }) async {
   final routing = FakeSettingsRouting();
 
@@ -43,7 +46,10 @@ Future<FakeSettingsRouting> pumpSettings(
           settingsStore: (ref) => store ?? FakeSettingsStore(),
         ),
         ...bindProviders(
+          crashForTest: (ref) =>
+              () => crashes?.add('crash'),
           shareText: (ref) => (shareSheet ?? FakeShareSheet()).share,
+          showsTestTools: (ref) => testBuild,
         ),
         ...bindRoutingProviders(settingsRouting: (ref) => routing),
       ],

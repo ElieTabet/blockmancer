@@ -19,6 +19,8 @@ void main() {
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),
         gameRules: (ref) => const TwoWorldRules(),
         progressionStore: (ref) => FakeProgressionStore(),
+        remoteValue: (ref) =>
+            (_) => null,
         runStore: (ref) => FakeRunStore(),
       ),
     );

@@ -302,6 +302,39 @@ void main() {
     );
   });
 
+  group('test tools', () {
+    testWidgets(
+      "Given a release build, When Settings opens, Then neither tester's row "
+      'is there',
+      (tester) async {
+        // Given / When
+        await pumpSettings(tester, testBuild: false);
+
+        // Then
+        expect(find.text('Share test stats'), findsNothing);
+        expect(find.text('Test crash'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Given a test build, When Test crash is tapped, Then the app crashes on '
+      'purpose',
+      (tester) async {
+        // Given
+        final crashes = <String>[];
+        await pumpSettings(tester, crashes: crashes);
+        await tester.ensureVisible(find.text('Test crash'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Test crash'));
+
+        // Then
+        expect(crashes, ['crash']);
+      },
+    );
+  });
+
   testWidgets('the close button closes Settings', (tester) async {
     // Given
     final routing = await pumpSettings(tester);

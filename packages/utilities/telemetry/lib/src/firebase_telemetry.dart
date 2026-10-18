@@ -31,6 +31,9 @@ final class FirebaseTelemetry implements Telemetry {
       _injectedCrashlytics ?? FirebaseCrashlytics.instance;
 
   @override
+  void crash() => _crashlytics.crash();
+
+  @override
   void installCrashHandlers() {
     final crashlytics = _crashlytics;
 

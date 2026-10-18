@@ -236,6 +236,55 @@ final class ProgressionStoreProvider
 
 String _$progressionStoreHash() => r'7559444db90e56c507ff5f951b02998f0e0ddb45';
 
+/// What Remote Config publishes, read by key: the numbers a new run is
+/// tuned with (see `tuned`).
+
+@ProviderFor(remoteValue)
+final remoteValueProvider = RemoteValueProvider._();
+
+/// What Remote Config publishes, read by key: the numbers a new run is
+/// tuned with (see `tuned`).
+
+final class RemoteValueProvider
+    extends $FunctionalProvider<RemoteValueFun, RemoteValueFun, RemoteValueFun>
+    with $Provider<RemoteValueFun> {
+  /// What Remote Config publishes, read by key: the numbers a new run is
+  /// tuned with (see `tuned`).
+  RemoteValueProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'remoteValueProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$remoteValueHash();
+
+  @$internal
+  @override
+  $ProviderElement<RemoteValueFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RemoteValueFun create(Ref ref) {
+    return remoteValue(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RemoteValueFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RemoteValueFun>(value),
+    );
+  }
+}
+
+String _$remoteValueHash() => r'fbb114e2b7619ca4e1415339f8708000819c098a';
+
 @ProviderFor(runStore)
 final runStoreProvider = RunStoreProvider._();
 

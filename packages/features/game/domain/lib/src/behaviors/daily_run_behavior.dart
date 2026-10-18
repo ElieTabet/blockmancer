@@ -1,3 +1,4 @@
+import 'package:game_domain/src/entities/run_tuning.dart';
 import 'package:game_domain/src/entities/run_start.dart';
 import 'package:shared_domain/shared_domain.dart';
 
@@ -10,16 +11,21 @@ import 'package:shared_domain/shared_domain.dart';
 /// package can start another day's run.
 class DailyRunBehavior {
   final GameRules _rules;
+  final RemoteValueFun _valueOf;
 
-  const DailyRunBehavior({required GameRules rules}) : _rules = rules;
+  const DailyRunBehavior({
+    required GameRules rules,
+    required RemoteValueFun valueOf,
+  }) : _rules = rules,
+       _valueOf = valueOf;
 
   RunStart call(DateTime now) {
     final day = now.toUtc();
 
     return (
-      config: _rules.configFor(
-        _rules.worldOrder.first,
-        jokerPool: JokerId.values,
+      config: tuned(
+        _rules.configFor(_rules.worldOrder.first, jokerPool: JokerId.values),
+        _valueOf,
       ),
       mode: .daily(day: day.year * 10000 + day.month * 100 + day.day),
       seed: _rules.dailySeed(day: day.day, month: day.month, year: day.year),

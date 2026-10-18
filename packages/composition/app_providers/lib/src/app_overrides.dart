@@ -7,10 +7,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 List<Override> appOverrides({
   required bool collectsTelemetry,
   required AppRouter router,
+  required bool testTools,
 }) => [
   ...routingOverrides(),
   ...featureBindingOverrides(
     collectsTelemetry: collectsTelemetry,
     router: router,
+    testTools: testTools,
   ),
 ];

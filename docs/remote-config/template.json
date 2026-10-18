@@ -1,0 +1,480 @@
+{
+  "parameters": {
+    "round_1_target": {
+      "defaultValue": {
+        "value": "250"
+      },
+      "description": "Points to clear round 1",
+      "valueType": "NUMBER"
+    },
+    "round_1_pieces": {
+      "defaultValue": {
+        "value": "14"
+      },
+      "description": "Pieces dealt in round 1",
+      "valueType": "NUMBER"
+    },
+    "round_2_target": {
+      "defaultValue": {
+        "value": "500"
+      },
+      "description": "Points to clear round 2",
+      "valueType": "NUMBER"
+    },
+    "round_2_pieces": {
+      "defaultValue": {
+        "value": "16"
+      },
+      "description": "Pieces dealt in round 2",
+      "valueType": "NUMBER"
+    },
+    "round_3_target": {
+      "defaultValue": {
+        "value": "875"
+      },
+      "description": "Points to clear round 3",
+      "valueType": "NUMBER"
+    },
+    "round_3_pieces": {
+      "defaultValue": {
+        "value": "18"
+      },
+      "description": "Pieces dealt in round 3",
+      "valueType": "NUMBER"
+    },
+    "round_4_target": {
+      "defaultValue": {
+        "value": "2200"
+      },
+      "description": "Points to clear round 4",
+      "valueType": "NUMBER"
+    },
+    "round_4_pieces": {
+      "defaultValue": {
+        "value": "20"
+      },
+      "description": "Pieces dealt in round 4",
+      "valueType": "NUMBER"
+    },
+    "boss_pieces": {
+      "defaultValue": {
+        "value": "22"
+      },
+      "description": "Pieces dealt in every boss round",
+      "valueType": "NUMBER"
+    },
+    "boss_target_fog": {
+      "defaultValue": {
+        "value": "4375"
+      },
+      "description": "Points to beat fog's boss",
+      "valueType": "NUMBER"
+    },
+    "star3_fog": {
+      "defaultValue": {
+        "value": "10500"
+      },
+      "description": "Run total that earns fog's third star",
+      "valueType": "NUMBER"
+    },
+    "boss_target_gravity": {
+      "defaultValue": {
+        "value": "4125"
+      },
+      "description": "Points to beat gravity's boss",
+      "valueType": "NUMBER"
+    },
+    "star3_gravity": {
+      "defaultValue": {
+        "value": "10500"
+      },
+      "description": "Run total that earns gravity's third star",
+      "valueType": "NUMBER"
+    },
+    "boss_target_mirror": {
+      "defaultValue": {
+        "value": "4750"
+      },
+      "description": "Points to beat mirror's boss",
+      "valueType": "NUMBER"
+    },
+    "star3_mirror": {
+      "defaultValue": {
+        "value": "10500"
+      },
+      "description": "Run total that earns mirror's third star",
+      "valueType": "NUMBER"
+    },
+    "boss_target_rubble": {
+      "defaultValue": {
+        "value": "4250"
+      },
+      "description": "Points to beat rubble's boss",
+      "valueType": "NUMBER"
+    },
+    "star3_rubble": {
+      "defaultValue": {
+        "value": "10500"
+      },
+      "description": "Run total that earns rubble's third star",
+      "valueType": "NUMBER"
+    },
+    "boss_target_tide": {
+      "defaultValue": {
+        "value": "3000"
+      },
+      "description": "Points to beat tide's boss",
+      "valueType": "NUMBER"
+    },
+    "star3_tide": {
+      "defaultValue": {
+        "value": "9500"
+      },
+      "description": "Run total that earns tide's third star",
+      "valueType": "NUMBER"
+    },
+    "rubble_boss_stones": {
+      "defaultValue": {
+        "value": "6"
+      },
+      "description": "Stones on the board as Rubble's boss starts",
+      "valueType": "NUMBER"
+    },
+    "fog_boss_cells": {
+      "defaultValue": {
+        "value": "8"
+      },
+      "description": "Fog cells on the board as Fog's boss starts",
+      "valueType": "NUMBER"
+    },
+    "fog_boss_hidden_stones": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "How many of Fog's cells hide a stone",
+      "valueType": "NUMBER"
+    },
+    "tide_boss_gaps": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Empty columns in each stone row Tide's boss raises",
+      "valueType": "NUMBER"
+    },
+    "chips_per_cell": {
+      "defaultValue": {
+        "value": "10"
+      },
+      "description": "Chips per cleared cell",
+      "valueType": "NUMBER"
+    },
+    "offer_count": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Jokers offered at each pick",
+      "valueType": "NUMBER"
+    },
+    "partner_bias": {
+      "defaultValue": {
+        "value": "0.75"
+      },
+      "description": "Chance an offer slot holds an owned joker's partner",
+      "valueType": "NUMBER"
+    },
+    "revive_pieces": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Pieces a revive adds",
+      "valueType": "NUMBER"
+    },
+    "revive_rows": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Fullest rows a revive empties",
+      "valueType": "NUMBER"
+    },
+    "revives_per_run": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Revives a run may use",
+      "valueType": "NUMBER"
+    },
+    "joker_anchor_mult": {
+      "defaultValue": {
+        "value": "6"
+      },
+      "description": "Anchor: mult when the bottom row clears",
+      "valueType": "NUMBER"
+    },
+    "joker_avalanche_chips_per_cell": {
+      "defaultValue": {
+        "value": "40"
+      },
+      "description": "Avalanche: chips per filled cell left in the bottom rows",
+      "valueType": "NUMBER"
+    },
+    "joker_avalanche_rows": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Avalanche: bottom rows counted",
+      "valueType": "NUMBER"
+    },
+    "joker_big_box_factor": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Big Box: draw weight of big pieces",
+      "valueType": "NUMBER"
+    },
+    "joker_big_box_min_piece_size": {
+      "defaultValue": {
+        "value": "5"
+      },
+      "description": "Big Box: cells from which a piece is big",
+      "valueType": "NUMBER"
+    },
+    "joker_brink_factor": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "On the Brink: mult factor on a crowded board",
+      "valueType": "NUMBER"
+    },
+    "joker_brink_min_occupied": {
+      "defaultValue": {
+        "value": "40"
+      },
+      "description": "On the Brink: occupied cells for a crowded board",
+      "valueType": "NUMBER"
+    },
+    "joker_collector_mult_per_joker": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Collector: mult for every two jokers owned",
+      "valueType": "NUMBER"
+    },
+    "joker_column_factor": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Column Hunter: mult factor on a column clear",
+      "valueType": "NUMBER"
+    },
+    "joker_combo_mult_per_streak": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Combo King: mult per level of the streak",
+      "valueType": "NUMBER"
+    },
+    "joker_ember_factor": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Ember: mult factor when a stone or fog goes",
+      "valueType": "NUMBER"
+    },
+    "joker_ember_mult": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Ember: mult on a clear that takes no stone or fog",
+      "valueType": "NUMBER"
+    },
+    "joker_finisher_factor": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Finisher: mult factor on the tray's last piece",
+      "valueType": "NUMBER"
+    },
+    "joker_full_house_cells_per_mult": {
+      "defaultValue": {
+        "value": "12"
+      },
+      "description": "Full House: occupied cells per step of mult",
+      "valueType": "NUMBER"
+    },
+    "joker_full_house_mult_per_block": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Full House: mult per step",
+      "valueType": "NUMBER"
+    },
+    "joker_hat_trick_bonus": {
+      "defaultValue": {
+        "value": "300"
+      },
+      "description": "Hat Trick: points when every piece of a tray clears",
+      "valueType": "NUMBER"
+    },
+    "joker_heavy_factor": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Heavyweight: mult factor for a big piece",
+      "valueType": "NUMBER"
+    },
+    "joker_heavy_min_piece_size": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Heavyweight: cells from which a piece is big",
+      "valueType": "NUMBER"
+    },
+    "joker_momentum_mult_per_tray": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Momentum: mult per tray in the streak",
+      "valueType": "NUMBER"
+    },
+    "joker_patience_stored_per_move": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Patience: mult stored per move that clears nothing",
+      "valueType": "NUMBER"
+    },
+    "joker_pockets_extra_pieces": {
+      "defaultValue": {
+        "value": "11"
+      },
+      "description": "Deep Pockets: extra pieces every round",
+      "valueType": "NUMBER"
+    },
+    "joker_precision_bonus_mult": {
+      "defaultValue": {
+        "value": "6"
+      },
+      "description": "Precision: mult when a small piece clears",
+      "valueType": "NUMBER"
+    },
+    "joker_precision_max_piece_size": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Precision: cells up to which a piece is small",
+      "valueType": "NUMBER"
+    },
+    "joker_prism_chips_per_pair": {
+      "defaultValue": {
+        "value": "15"
+      },
+      "description": "Prism: chips per cell matched across the centre",
+      "valueType": "NUMBER"
+    },
+    "joker_quarry_stones_per_clear": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "Quarry: stones dropped after each clear",
+      "valueType": "NUMBER"
+    },
+    "joker_saver_points_per_piece": {
+      "defaultValue": {
+        "value": "60"
+      },
+      "description": "Saver: run points per piece left when a round is won",
+      "valueType": "NUMBER"
+    },
+    "joker_sprinter_mult": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Sprinter: mult when a tray's first piece clears",
+      "valueType": "NUMBER"
+    },
+    "joker_stonemason_chips_per_stone": {
+      "defaultValue": {
+        "value": "150"
+      },
+      "description": "Stonemason: chips per stone cleared",
+      "valueType": "NUMBER"
+    },
+    "joker_stonemason_extra_stones": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Stonemason: stones added at every round start",
+      "valueType": "NUMBER"
+    },
+    "joker_sweep_bonus": {
+      "defaultValue": {
+        "value": "750"
+      },
+      "description": "Clean Sweep: points when the board empties",
+      "valueType": "NUMBER"
+    },
+    "joker_symmetry_mult": {
+      "defaultValue": {
+        "value": "4"
+      },
+      "description": "Symmetry: mult when the board is mirror-symmetric",
+      "valueType": "NUMBER"
+    },
+    "joker_tiny_factor": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Tiny Tools: draw weight of small pieces",
+      "valueType": "NUMBER"
+    },
+    "joker_tiny_max_piece_size": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Tiny Tools: cells up to which a piece is small",
+      "valueType": "NUMBER"
+    },
+    "joker_twin_factor": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "Twin Lines: mult factor when lines clear together",
+      "valueType": "NUMBER"
+    },
+    "joker_twin_min_lines": {
+      "defaultValue": {
+        "value": "2"
+      },
+      "description": "Twin Lines: lines that must clear together",
+      "valueType": "NUMBER"
+    },
+    "min_version_android": {
+      "defaultValue": {
+        "value": "0.0.0"
+      },
+      "description": "Oldest android version that still plays; older ones show the blocking update screen (the kill switch)",
+      "valueType": "STRING"
+    },
+    "latest_version_android": {
+      "defaultValue": {
+        "value": "0.0.0"
+      },
+      "description": "Newest android version; older ones see a dismissible banner on the map, once per version",
+      "valueType": "STRING"
+    },
+    "min_version_ios": {
+      "defaultValue": {
+        "value": "0.0.0"
+      },
+      "description": "Oldest ios version that still plays; older ones show the blocking update screen (the kill switch)",
+      "valueType": "STRING"
+    },
+    "latest_version_ios": {
+      "defaultValue": {
+        "value": "0.0.0"
+      },
+      "description": "Newest ios version; older ones see a dismissible banner on the map, once per version",
+      "valueType": "STRING"
+    }
+  }
+}

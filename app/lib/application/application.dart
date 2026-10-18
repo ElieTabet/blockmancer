@@ -40,6 +40,7 @@ class Application {
         // data, so the dashboards show real use and nothing else.
         collectsTelemetry: kReleaseMode && config.env == .prod,
         router: _appRouter,
+        testTools: config.testTools,
       ),
     );
 
@@ -49,6 +50,8 @@ class Application {
     // Not waited for: the splash outlasts the load, and a sound asked for
     // before it is ready is skipped rather than late.
     unawaited(initializeSounds(_container));
+    fetchRemoteConfig(_container);
+    unawaited(discardTestStatsOutsideTestBuilds(_container));
 
     // Before push, whose channel is named in the language the app shows.
     await applyStoredLanguage(_container);

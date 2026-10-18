@@ -172,6 +172,26 @@ final rubbleBeaten = freshProgression().copyWith(
 /// [screen] is Home unless another of its screens is given, on a [viewSize]
 /// view, with the game's [collection] of jokers unless [jokerCollection] says
 /// otherwise.
+/// A newer version on offer, recording the store opened and the banner
+/// closed.
+final class UpdateOffer {
+  UpdateOffer(this.latest);
+
+  final calls = <String>[];
+  String? latest;
+
+  Future<void> dismiss() async {
+    calls.add('dismiss');
+    latest = null;
+  }
+
+  Future<bool> openStore() async {
+    calls.add('store');
+
+    return true;
+  }
+}
+
 Future<FakeHomeRouting> pumpHome(
   WidgetTester tester, {
   int? dailyBest,
@@ -182,6 +202,7 @@ Future<FakeHomeRouting> pumpHome(
   Future<Progression> Function()? progression,
   bool reduceMotion = true,
   Widget screen = const HomeWidget(),
+  UpdateOffer? updateOffer,
   Size viewSize = const Size(390, 1300),
 }) async {
   tester.view.physicalSize = viewSize * 3;
@@ -196,12 +217,15 @@ Future<FakeHomeRouting> pumpHome(
         ...bindProviders(
           dailyBest: (ref) async => dailyBest,
           dailyDate: (ref) => DateTime.utc(2026, 10, 17),
+          dismissUpdateOffer: (ref) => updateOffer?.dismiss ?? () async {},
           hasSavedRun: (ref) async => hasSavedRun,
           jokerCollection: (ref) => jokerCollection,
           markJokersAnnounced: (ref) => markJokersAnnounced ?? () async {},
+          openStoreListing: (ref) => updateOffer?.openStore ?? () async => true,
           practiceBest: (ref) async => practiceBest,
           progression: (ref) => progression?.call() ?? _fresh(),
           reduceMotionSetting: (ref) => reduceMotion,
+          updateOffer: (ref) async => updateOffer?.latest,
           worlds: (ref) => mapWorlds,
         ),
         ...bindRoutingProviders(homeRouting: (ref) => routing),

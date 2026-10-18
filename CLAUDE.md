@@ -26,8 +26,9 @@ blockmancer/
 │   │   ├── external_links/   # Hands a link or text to the OS (browser, mail draft, share sheet) — the only place url_launcher and share_plus are known; Settings uses `composeEmail` and `shareText`
 │   │   ├── play_stats/       # The testers' numbers: `LocalPlayStats` implements shared_domain's `AnalyticsSink`, counting per day on the device, and exports a JSON summary
 │   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
+│   │   ├── remote_config/    # Values published from Firebase Remote Config, read as text behind `RemoteValues` — the only place firebase_remote_config is known
 │   │   ├── sounds/           # The game's sound effects, decoded into memory up front behind GameSounds — the only place flutter_soloud is known
-│   │   ├── telemetry/        # Firebase Analytics + Crashlytics behind one switch — the only place either is known
+│   │   ├── telemetry/        # Firebase Analytics + Crashlytics behind one switch, and the game's events as Analytics events (`FirebaseAnalyticsSink`) — the only place either is known
 │   │   ├── timber/           # Logging facade — static Timber over pluggable Tree sinks
 │   │   └── webviews/{domain,presentation}/  # webviews_domain / webviews_presentation — the only place flutter_inappwebview is known; unused yet
 │   ├── dsm/              # Design-system module
@@ -41,6 +42,7 @@ blockmancer/
 │   ├── plugins/          # Dev tooling packages
 │   │   └── custom_lints/     # Native analyzer-plugin — alphabetical-ordering lints + quick-fixes (IDE-only)
 │   └── features/         # Feature packages, split by layer
+│       ├── app_update/{domain,data,presentation}/ # app_update_* — whether this version must or may be updated (Remote Config's minimum and latest versions, pub_semver), the banner closed per version on the device, and the blocking update screen
 │       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
 │       ├── home/presentation/                    # home_presentation — the first tab: the world map under today's Daily run, Practice and the Spellbook in the header (worlds, jokers, progression and bests read through slots)
 │       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
@@ -119,6 +121,18 @@ melos run build-ios
 # Needs app/android/key.properties (the upload key; without it Gradle signs
 # with the debug key, which Play refuses).
 melos run build-android
+
+# Test builds of the same two (TestFlight, Play internal testing): TEST_TOOLS on
+# (Settings' Share test stats and Test crash, Google's test ad units, Remote
+# Config fetched every 5 minutes). The release scripts refuse to build while
+# app/env/prod.json, the one file of store and AdMob IDs, still holds a
+# PLACEHOLDER_ (scripts/check_release_ids.sh); a test build only warns.
+melos run build-ios-test
+melos run build-android-test
+
+# Regenerate the Remote Config template and its key table from the code's
+# defaults (docs/remote-config/; a test fails until this is re-run)
+cd packages/composition/app_providers && dart run tool/remote_config_template.dart
 
 # Build
 flutter build apk    # Android APK
@@ -642,9 +656,9 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
-`flutter_inappwebview`, `flutter_soloud`, `push`, `sounds`, `telemetry`, `url_launcher`, `ads`,
-`app_info`, `package_info_plus`, `device_info_plus`, `external_links`, `share_plus`, `play_stats`
-or `blockmancer_engine` directly** — a
+`firebase_remote_config`, `flutter_inappwebview`, `flutter_soloud`, `push`, `sounds`, `telemetry`,
+`remote_config`, `url_launcher`, `ads`, `app_info`, `package_info_plus`, `device_info_plus`,
+`external_links`, `share_plus`, `play_stats` or `blockmancer_engine` directly** — a
 feature declares a contract and the composition layer injects the implementation, exactly as it does
 for routing.
 
@@ -712,10 +726,13 @@ The player's settings, kept on the device; there is no account to sync them to. 
 
 ## Local stats
 
-The testers' numbers, until Firebase Analytics arrives in phase 3. The game reports what players do
-to `shared_domain`'s `AnalyticsSink` (`log(AnalyticsEvent)`, never throwing or waiting); each
-sink maps the sealed `AnalyticsEvent` cases to its own wire format, so phase 3's Firebase sink plugs
-in behind the same interface without touching `shared_domain`.
+What players do, counted. The game reports it to `shared_domain`'s `AnalyticsSink`
+(`log(AnalyticsEvent)`, never throwing or waiting); each sink maps the sealed `AnalyticsEvent`
+cases to its own wire format. A release build binds telemetry's `FirebaseAnalyticsSink` (the same
+snake_case names and parameters as below, a bool as 0 or 1); a **test build** (`TEST_TOOLS`) binds
+`CompositeAnalyticsSink([FirebaseAnalyticsSink, LocalPlayStats])`, so the testers' on-device log
+below keeps counting, and Settings shows Share test stats and Test crash. A release build deletes
+whatever a test build counted on the phone at launch (`discardTestStatsOutsideTestBuilds`).
 
 - **What is counted** (`game_domain`, through its `analyticsSink` slot): `runEventsOf` maps a move —
   `run_start(mode, world)` at a fresh run's starting pick (so a run opened by mistake counts
@@ -774,9 +791,39 @@ no-op). Three packages share the client side, and only one knows Firebase:
   and package name in Google Cloud instead. The token is a push credential and is never logged;
   neither is a push's `data`, only its keys.
 
+## Remote Config, updates and test builds
+
+- **`TEST_TOOLS`** (`const bool.fromEnvironment`, `AppConfig.testTools`, default false) is set only
+  by `build-ios-test` / `build-android-test`, and passed to `appOverrides(testTools:)`. It picks the
+  analytics sink (see Local stats), shows Settings' testers' rows (`showsTestTools`, last on the
+  screen so a release loses nothing but them) and fetches Remote Config every 5 minutes instead of
+  12 hours. A debug run is not a test build unless run with `--dart-define=TEST_TOOLS=true`.
+- **Remote Config** (`packages/utilities/remote_config`): `RemoteValues.valueOf(key)` is the text
+  published for a key, or null; the package that reads a key parses it and ignores a bad value.
+  `fetchRemoteConfig` starts the launch's fetch (kept as `remoteValuesFetched`) right after the
+  container, not waited for.
+- **What a run plays with:** `game_domain`'s `tuned(config, valueOf)` applies every published key
+  (`runTuningKeys`: rounds, per-world bosses and ★3, revives, offers, every `JokerTuning` field)
+  to the rules' config, a value outside its key's range or not a number keeping the default. It is
+  applied where a run starts (`RunStartForBehavior`, `DailyRunBehavior`) and where the map and
+  Spellbook read the numbers (`worldSummariesOf`, `jokerCollectionOf`), never by swapping the
+  rules (`GameNotifier` watches them, and a swap would restart the run on screen); a run keeps
+  the config it started with, so a fetch reaches the next one. The tutorial plays the rules' own.
+- **The template:** `app_providers`' `remoteConfigKeys()` lists every key with its default (the
+  run's, then `app_update`'s versions); `tool/remote_config_template.dart` writes
+  `docs/remote-config/template.json` (to publish) and `keys.md` (the table), and a test fails when
+  they drift from the code.
+- **Updates** (`app_update`): `min_version_{ios,android}` and `latest_version_{ios,android}`,
+  default `0.0.0`, against the app's version with pub_semver (anything malformed asks nothing).
+  The splash waits for `updateRequired` (which waits up to 2 s for the launch's fetch) beside the
+  tutorial flag; below the minimum, `SplashRouting.onUpdateRequired` replaces everything with
+  `UpdateRequiredRoute` (no back, a store button). Below the latest, Home's `UpdateBanner` offers
+  it until "Not now", kept per version on the device (`update.dismissedVersion`). The store links
+  come from `app_providers`' `release_ids.dart`, the App Store id from `app/env/prod.json`.
+
 ## Telemetry
 
-Firebase Analytics (automatic events only — no screen views, no custom events) and Crashlytics
+Firebase Analytics (the automatic events, and the game's own through `FirebaseAnalyticsSink`) and Crashlytics
 (fatal Flutter and uncaught async errors only; Timber stays a no-op in release). Only a **release
 build against production** sends; every other build sends nothing. There is no in-app consent
 question yet — the privacy policy and App Store privacy details are what disclose it.

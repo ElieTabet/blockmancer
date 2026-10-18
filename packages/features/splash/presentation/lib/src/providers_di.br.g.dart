@@ -90,3 +90,44 @@ final class TutorialSeenProvider
 }
 
 String _$tutorialSeenHash() => r'ada51d30091de4d3aab440ea6f8f12d5a3bf3fa1';
+
+/// Whether this version is too old to play: the launch goes no further than
+/// the update screen. A future, for the launch's Remote Config fetch.
+
+@ProviderFor(updateRequired)
+final updateRequiredProvider = UpdateRequiredProvider._();
+
+/// Whether this version is too old to play: the launch goes no further than
+/// the update screen. A future, for the launch's Remote Config fetch.
+
+final class UpdateRequiredProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether this version is too old to play: the launch goes no further than
+  /// the update screen. A future, for the launch's Remote Config fetch.
+  UpdateRequiredProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'updateRequiredProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$updateRequiredHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return updateRequired(ref);
+  }
+}
+
+String _$updateRequiredHash() => r'dbc5e4aecfb9682f9db8a61e49a225fc7fc78ff9';

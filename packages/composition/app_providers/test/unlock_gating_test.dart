@@ -20,7 +20,11 @@ void main() {
 
   setUp(() {
     container = ProviderContainer(
-      overrides: appOverrides(collectsTelemetry: false, router: AppRouter()),
+      overrides: appOverrides(
+        collectsTelemetry: false,
+        router: AppRouter(),
+        testTools: false,
+      ),
     );
     addTearDown(container.dispose);
   });

@@ -6,7 +6,11 @@ import 'package:shared_domain/shared_domain.dart';
 import '../fakes.dart';
 import '../fake_progression_store.dart';
 
-ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
+ProviderContainer _containerAt(
+  FakeClock clock, {
+  Map<String, String> published = const {},
+  BestScores? scores,
+}) {
   final container = ProviderContainer(
     overrides: bindProviders(
       analyticsSink: (ref) => FakeAnalyticsSink(),
@@ -14,6 +18,8 @@ ProviderContainer _containerAt(FakeClock clock, {BestScores? scores}) {
       clock: (ref) => clock,
       gameRules: (ref) => const TwoWorldRules(),
       progressionStore: (ref) => FakeProgressionStore(),
+      remoteValue: (ref) =>
+          (key) => published[key],
       runStore: (ref) => FakeRunStore(),
     ),
   );
@@ -220,5 +226,22 @@ void main() {
 
     // Then
     expect(await container.read(todaysDailyBestProvider.future), 1800);
+  });
+
+  test('Given a boss target published, When the next daily and practice runs '
+      'start, Then both play it', () {
+    // Given
+    final startFor = _containerAt(
+      FakeClock(DateTime.utc(2026, 10, 17, 12)),
+      published: {'boss_target_rubble': '4100'},
+    ).read(runStartForProvider);
+
+    // When
+    final daily = startFor(.daily, progression: _profile);
+    final practice = startFor(.practice, progression: _profile);
+
+    // Then
+    expect(daily.config.rounds.last.target, 4100);
+    expect(practice.config.rounds.last.target, 4100);
   });
 }

@@ -22,6 +22,7 @@ import 'package:game_domain/src/entities/run_end.dart';
 import 'package:game_domain/src/entities/run_end_record.br.dart';
 import 'package:game_domain/src/entities/run_events.dart';
 import 'package:game_domain/src/entities/run_start.dart';
+import 'package:game_domain/src/entities/run_tuning.dart';
 import 'package:game_domain/src/entities/saved_run.br.dart';
 import 'package:game_domain/src/entities/starting_progression.dart';
 import 'package:game_domain/src/entities/world_summaries.dart';
@@ -109,8 +110,10 @@ Future<Progression> progression(Ref ref) =>
 
 /// Every joker in pairs, with how each pair is unlocked.
 @riverpod
-JokerCollection jokerCollection(Ref ref) =>
-    jokerCollectionOf(ref.watch(di.gameRulesProvider));
+JokerCollection jokerCollection(Ref ref) => jokerCollectionOf(
+  ref.watch(di.gameRulesProvider),
+  valueOf: ref.watch(di.remoteValueProvider),
+);
 
 /// See [MarkBossCardSeenBehavior].
 ///
@@ -196,6 +199,7 @@ RecordRunEndFun recordRunEnd(Ref ref) {
 RunStartForFun runStartFor(Ref ref) => RunStartForBehavior(
   clock: ref.watch(di.clockProvider),
   rules: ref.watch(di.gameRulesProvider),
+  valueOf: ref.watch(di.remoteValueProvider),
 ).call;
 
 /// Whether a run is saved to resume.
@@ -240,6 +244,7 @@ SaveRunFun saveRun(Ref ref) {
 Future<int?> todaysDailyBest(Ref ref) {
   final (config: _, :mode, seed: _) = DailyRunBehavior(
     rules: ref.watch(di.gameRulesProvider),
+    valueOf: ref.watch(di.remoteValueProvider),
   )(ref.watch(todaysDailyDateProvider));
 
   return ref.watch(bestScoreProvider(mode).future);
@@ -263,8 +268,10 @@ DateTime todaysDailyDate(Ref ref) {
 /// Every world of the map in the map's order: whether it can be played yet,
 /// its boss's target, its third star's threshold and what beating it unlocks.
 @riverpod
-List<WorldSummary> worldSummaries(Ref ref) =>
-    worldSummariesOf(ref.watch(di.gameRulesProvider));
+List<WorldSummary> worldSummaries(Ref ref) => worldSummariesOf(
+  ref.watch(di.gameRulesProvider),
+  valueOf: ref.watch(di.remoteValueProvider),
+);
 
 /// What a new profile starts from, worked out from the rules so the storage
 /// never needs to know them.
@@ -295,6 +302,7 @@ List<Override> bindProviders({
   required Clock Function(Ref ref) clock,
   required GameRules Function(Ref ref) gameRules,
   required ProgressionStore Function(Ref ref) progressionStore,
+  required RemoteValueFun Function(Ref ref) remoteValue,
   required RunStore Function(Ref ref) runStore,
 }) => [
   di.analyticsSinkProvider.overrideWith(analyticsSink),
@@ -302,6 +310,7 @@ List<Override> bindProviders({
   di.clockProvider.overrideWith(clock),
   di.gameRulesProvider.overrideWith(gameRules),
   di.progressionStoreProvider.overrideWith(progressionStore),
+  di.remoteValueProvider.overrideWith(remoteValue),
   di.runStoreProvider.overrideWith(runStore),
 ];
 

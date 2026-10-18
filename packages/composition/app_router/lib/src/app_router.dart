@@ -1,4 +1,6 @@
 import 'package:app_router/src/shells/tab_shell.br.dart';
+import 'package:app_update_presentation/app_update_presentation.dart'
+    show AppUpdateRoutePath, UpdateRequiredRoute;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:game_presentation/game_presentation.dart'
@@ -41,6 +43,13 @@ final class AppRouter extends RootStackRouter implements AutoRouteGuard {
       page: SpellbookRoute.page,
       fullscreenDialog: true,
       transitionsBuilder: TransitionsBuilders.slideBottom,
+    ),
+    // Faded in over the splash, and the only route left: a version too old to
+    // play goes nowhere else.
+    CustomRoute(
+      path: AppUpdateRoutePath.updateRequired.path,
+      page: UpdateRequiredRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     // Faded in, not pushed: the launch shows it with no transition at all, but
     // lifting a block brings it back over the blocking screen.

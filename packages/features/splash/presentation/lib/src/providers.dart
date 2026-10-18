@@ -6,7 +6,11 @@ import 'package:splash_presentation/src/routing/splash_routing.dart';
 
 List<Override> bindProviders({
   required Future<bool> Function(Ref ref) tutorialSeen,
-}) => [di.tutorialSeenProvider.overrideWith(tutorialSeen)];
+  required Future<bool> Function(Ref ref) updateRequired,
+}) => [
+  di.tutorialSeenProvider.overrideWith(tutorialSeen),
+  di.updateRequiredProvider.overrideWith(updateRequired),
+];
 
 /// Binds the splash routing slot to a concrete [SplashRouting] supplied by the
 /// composition layer.

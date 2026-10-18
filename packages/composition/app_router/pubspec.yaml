@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  app_update_presentation: any
   design_system: any
   game_presentation: any
   home_presentation: any

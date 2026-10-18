@@ -188,4 +188,17 @@ void main() {
       'worldUnlocks': <String>[],
     });
   });
+
+  test('Given stats counted, When they are discarded, Then nothing is kept on '
+      'the device, the events logged before included', () async {
+    // Given
+    final played = stats()..log(const .revive());
+
+    // When
+    await played.discard();
+
+    // Then
+    final preferences = await SharedPreferences.getInstance();
+    expect(preferences.getString('playStats'), isNull);
+  });
 }

@@ -101,6 +101,8 @@ List<Override> gameOverrides(
     progressionStore: (ref) =>
         progressionStore ??
         FakeProgressionStore(game.startingProgression(rules)),
+    remoteValue: (ref) =>
+        (_) => null,
     runStore: (ref) => runStore ?? FakeRunStore(),
   ),
   ...bindProviders(
