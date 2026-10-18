@@ -561,6 +561,43 @@ void main() {
     );
   });
 
+  test("a first daily run's end sets the reminder in the app's language and "
+      'starts the streak', () async {
+    // Given
+    SharedPreferences.setMockInitialValues({});
+    final reminder = _FakeDailyReminder();
+    final container = ProviderContainer(
+      overrides: [
+        ...appOverrides(
+          collectsTelemetry: false,
+          router: AppRouter(),
+          testTools: false,
+        ),
+        dailyReminderProvider.overrideWithValue(reminder),
+      ],
+    );
+    addTearDown(container.dispose);
+    startDailyReminder(container);
+    await container.read(push_notifications.dailyReminderProvider.future);
+    final today = container.read(game.todaysDailyDateProvider);
+
+    // When
+    await container.read(game.recordRunEndProvider)(
+      .daily(day: today.year * 10000 + today.month * 100 + today.day),
+      3000,
+    );
+    await pumpEventQueue();
+    await container.read(push_notifications.dailyReminderProvider.future);
+
+    // Then: Firebase isn't started here, so the permission ask fails, and
+    // the reminder is set all the same
+    expect(reminder.calls, [
+      'cancel',
+      "schedule 18:0 Today's daily run is ready",
+    ]);
+    expect(await container.read(home_di.dailyStreakProvider.future), 1);
+  });
+
   // Only `telemetry` names the analytics and crash plugins, and the app alone
   // says whether this build collects.
   test('the telemetry slots are bound', () {
@@ -592,4 +629,25 @@ final class _FakeLeaderboards implements Leaderboards {
   @override
   Future<void> submit(LeaderboardIds board, int score) async =>
       calls.add('submit ${_name(board)} $score');
+}
+
+/// Records what was asked of the daily reminder.
+final class _FakeDailyReminder implements DailyReminder {
+  final calls = <String>[];
+
+  @override
+  Future<void> cancel() async => calls.add('cancel');
+
+  @override
+  Future<void> schedule({
+    required String body,
+    required String channelDescription,
+    required String channelName,
+    required int hour,
+    required int minute,
+    required String title,
+  }) async => calls.add('schedule $hour:$minute $title');
+
+  @override
+  Future<String> timeZone() async => 'Europe/Paris';
 }

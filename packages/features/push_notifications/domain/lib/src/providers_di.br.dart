@@ -6,6 +6,20 @@ part 'providers_di.br.g.dart';
 // comes from `push`, the report from `device`; each throws until the
 // composition layer overrides it.
 
+/// Cancels the daily reminder. Never throws.
+typedef CancelDailyReminderFun = Future<void> Function();
+
+/// The phone's time zone name. Never throws.
+typedef CurrentTimeZoneFun = Future<String> Function();
+
+/// Whether a daily run was ever played to its end on this device.
+typedef HasPlayedDailyFun = Future<bool> Function();
+
+/// The daily reminder, every day at [hour]:[minute] local time, replacing any
+/// scheduled before. Never throws.
+typedef ScheduleDailyReminderFun =
+    Future<void> Function({required int hour, required int minute});
+
 /// The data of the notification that launched the app, or null.
 typedef LaunchMessageFun = Future<Map<String, String>?> Function();
 
@@ -24,6 +38,27 @@ typedef ReportPushTokenFun = Future<void> Function(String token);
 
 /// The OS prompt, or its standing answer once there is one.
 typedef RequestPushPermissionFun = Future<bool> Function();
+
+@riverpod
+CancelDailyReminderFun cancelDailyReminder(Ref ref) => throw UnimplementedError(
+  'cancelDailyReminderProvider must be overridden by the composition layer',
+);
+
+@riverpod
+CurrentTimeZoneFun currentTimeZone(Ref ref) => throw UnimplementedError(
+  'currentTimeZoneProvider must be overridden by the composition layer',
+);
+
+/// Whether the player wants the daily reminder (Settings).
+@riverpod
+Future<bool> dailyReminderEnabled(Ref ref) => throw UnimplementedError(
+  'dailyReminderEnabledProvider must be overridden by the composition layer',
+);
+
+@riverpod
+HasPlayedDailyFun hasPlayedDaily(Ref ref) => throw UnimplementedError(
+  'hasPlayedDailyProvider must be overridden by the composition layer',
+);
 
 @riverpod
 LaunchMessageFun launchMessage(Ref ref) => throw UnimplementedError(
@@ -55,4 +90,11 @@ RequestPushPermissionFun requestPushPermission(
   Ref ref,
 ) => throw UnimplementedError(
   'requestPushPermissionProvider must be overridden by the composition layer',
+);
+
+@riverpod
+ScheduleDailyReminderFun scheduleDailyReminder(
+  Ref ref,
+) => throw UnimplementedError(
+  'scheduleDailyReminderProvider must be overridden by the composition layer',
 );

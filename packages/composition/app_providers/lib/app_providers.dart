@@ -2,6 +2,7 @@
 export 'src/ads_startup.dart';
 export 'src/app_overrides.dart';
 export 'src/consent_startup.dart';
+export 'src/daily_reminder_startup.dart';
 export 'src/feature_bindings.dart';
 export 'src/language_startup.dart';
 export 'src/leaderboards_startup.dart';

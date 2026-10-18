@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  l10n_application: any
   push_notifications_domain: any
   riverpod_annotation: ^4.0.2
   timber: any

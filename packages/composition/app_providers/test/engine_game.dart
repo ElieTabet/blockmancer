@@ -25,6 +25,7 @@ ProviderContainer engineGame({
       clock: (ref) => clock ?? FakeClock(DateTime.utc(2026, 10, 17, 12)),
       engagementStore: (ref) => _MemoryEngagementStore(),
       gameRules: (ref) => const BlockmancerEngine(),
+      onDailyRunFinished: (ref) => () async {},
       progressionStore: (ref) =>
           progressionStore ??
           FakeProgressionStore(ref.watch(game.initialProgressionProvider)),

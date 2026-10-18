@@ -6,7 +6,7 @@ import 'package:settings_domain/settings_domain.dart';
 import 'package:settings_presentation/src/notifiers/settings_state_notifier.br.dart';
 import 'package:settings_presentation/src/widgets/settings_card.dart';
 
-enum SettingsToggle { haptics, reduceMotion, sound }
+enum SettingsToggle { dailyReminder, haptics, reduceMotion, sound }
 
 /// A setting that is on or off. Tapping anywhere on the row flips it.
 final class ToggleRow extends ConsumerWidget {
@@ -18,6 +18,10 @@ final class ToggleRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = context.t.settings;
     final (title, subtitle) = switch (toggle) {
+      .dailyReminder => (
+        settings.dailyReminder.title,
+        settings.dailyReminder.subtitle,
+      ),
       .haptics => (settings.haptics, null),
       .reduceMotion => (
         settings.reduceMotion.title,
@@ -26,6 +30,7 @@ final class ToggleRow extends ConsumerWidget {
       .sound => (settings.sound, null),
     };
     final on = ref.watch(switch (toggle) {
+      .dailyReminder => dailyReminderOnProvider,
       .haptics => hapticsOnProvider,
       .reduceMotion => reduceMotionOnProvider,
       .sound => soundOnProvider,
@@ -37,6 +42,8 @@ final class ToggleRow extends ConsumerWidget {
       final notifier = ref.read(settingsStateProvider.notifier);
 
       switch (toggle) {
+        case .dailyReminder:
+          notifier.setDailyReminder(value);
         case .haptics:
           notifier.setHaptics(value);
         case .reduceMotion:

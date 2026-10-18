@@ -471,3 +471,30 @@ Three changes from the review of this file, each its own commit.
 - **Play Games with a placeholder** was also run on an emulator (Android 16, Play Store image):
   the app launched, the SDK's own start crashed nothing. Moot now that Gradle writes the real
   project id into every build's manifest.
+
+## Sprint 8, Task 7: daily reminder and streak
+
+- **The fixed local time is 18:00** (`reminderTime`, push_notifications_domain): early evening,
+  when the day's run is likely still to play, and after work or school. Every day, repeating on
+  the time of day; inexact on Android (`inexactAllowWhileIdle`), since minutes late don't matter
+  and exact alarms need a permission Play audits.
+- **"Only after the player has played at least once":** once a daily run has been played to its
+  end on this device (a daily best is kept for that day). A practice or world run doesn't count:
+  the reminder is about the daily.
+- **"Permission asked after the first daily run":** asked when a daily run ends with the switch
+  on, never at launch. The OS prompts once and answers silently afterwards (iOS; Android asks at
+  most twice), so nothing records having asked, as `askForNotifications` already did. If asking
+  fails (push couldn't start), the reminder is scheduled all the same.
+- **The switch** (Settings → Daily reminder) is on by default and takes effect at once: off
+  cancels, on schedules again (when a daily run was played). A progress reset cancels it at the
+  next launch, since no daily run is on record any more.
+- **Time-zone change:** the reminder remembers the zone it was scheduled in; on every return to
+  the app, a different zone reschedules it at 18:00 there. Every launch schedules it afresh,
+  which also puts it in the language the app shows.
+- **The streak:** consecutive UTC days, today back, with a daily run played to its end, from the
+  daily bests the profile already keeps, so no migration. Today not played yet doesn't break it;
+  a whole UTC day without one does. Shown on the daily card from one day ("1-day streak"),
+  nothing before a first daily run.
+- **Ask on iOS while the app is open at 18:00:** iOS shows a local notification in the foreground
+  only through the notification-centre delegate, which Firebase Messaging owns; the reminder may
+  not show while the player is in the app, which is when it's least needed.

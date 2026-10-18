@@ -25,6 +25,12 @@ final class SharedPreferencesBestScores implements BestScores {
   }
 
   @override
+  Future<Set<int>> dailyDays() async => {
+    for (final day in (await _profile.read()).bests.daily.keys)
+      ?int.tryParse(day),
+  };
+
+  @override
   Future<void> clearAll() => _profile.update(
     (profile) => ProfileDto(
       bests: const BestsDto(daily: {}, worlds: {}),

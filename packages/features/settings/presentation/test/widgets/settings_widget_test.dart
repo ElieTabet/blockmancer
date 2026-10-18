@@ -37,6 +37,7 @@ void main() {
     ('Sound', (AppSettings settings) => settings.sound),
     ('Haptics', (AppSettings settings) => settings.haptics),
     ('Reduce motion', (AppSettings settings) => settings.reduceMotion),
+    ('Daily reminder', (AppSettings settings) => settings.dailyReminder),
   ]) {
     testWidgets('tapping $title flips it, and it is kept', (tester) async {
       // Given

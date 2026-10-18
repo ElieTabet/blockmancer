@@ -39,6 +39,9 @@ class SettingsNotifier extends _$SettingsNotifier {
   Future<void> resetTutorial() =>
       _update((settings) => settings.copyWith(tutorialSeen: false));
 
+  Future<void> setDailyReminder(bool on) =>
+      _update((settings) => settings.copyWith(dailyReminder: on));
+
   Future<void> setHaptics(bool on) =>
       _update((settings) => settings.copyWith(haptics: on));
 

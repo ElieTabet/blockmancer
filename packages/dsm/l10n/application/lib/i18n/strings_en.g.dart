@@ -99,6 +99,8 @@ class Translations$push$en {
 
 	/// en: 'News and messages from the app.'
 	String get channelDescription => 'News and messages from the app.';
+
+	late final Translations$push$reminder$en reminder = Translations$push$reminder$en.internal(_root);
 }
 
 // Path: home
@@ -155,6 +157,7 @@ class Translations$settings$en {
 	String get haptics => 'Haptics';
 
 	late final Translations$settings$reduceMotion$en reduceMotion = Translations$settings$reduceMotion$en.internal(_root);
+	late final Translations$settings$dailyReminder$en dailyReminder = Translations$settings$dailyReminder$en.internal(_root);
 	late final Translations$settings$language$en language = Translations$settings$language$en.internal(_root);
 	late final Translations$settings$tutorial$en tutorial = Translations$settings$tutorial$en.internal(_root);
 	late final Translations$settings$feedback$en feedback = Translations$settings$feedback$en.internal(_root);
@@ -523,6 +526,27 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$prism$en prism = Translations$game$jokers$prism$en.internal(_root);
 }
 
+// Path: push.reminder
+class Translations$push$reminder$en {
+	Translations$push$reminder$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Today's daily run is ready'
+	String get title => 'Today\'s daily run is ready';
+
+	/// en: 'Same pieces for everyone. Keep your streak going!'
+	String get body => 'Same pieces for everyone. Keep your streak going!';
+
+	/// en: 'Daily run reminder'
+	String get channelName => 'Daily run reminder';
+
+	/// en: 'A reminder when today's daily run is ready.'
+	String get channelDescription => 'A reminder when today\'s daily run is ready.';
+}
+
 // Path: home.complete
 class Translations$home$complete$en {
 	Translations$home$complete$en.internal(this._root);
@@ -563,6 +587,12 @@ class Translations$home$daily$en {
 
 	/// en: 'Leaderboard'
 	String get leaderboard => 'Leaderboard';
+
+	/// en: '(one) {$n-day streak} (other) {$n-day streak}'
+	String streak({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '${n}-day streak',
+		other: '${n}-day streak',
+	);
 }
 
 // Path: home.resume
@@ -718,6 +748,21 @@ class Translations$settings$reduceMotion$en {
 
 	/// en: 'Calmer animations, no screen shake'
 	String get subtitle => 'Calmer animations, no screen shake';
+}
+
+// Path: settings.dailyReminder
+class Translations$settings$dailyReminder$en {
+	Translations$settings$dailyReminder$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Daily reminder'
+	String get title => 'Daily reminder';
+
+	/// en: 'Today's daily run, at 6 pm'
+	String get subtitle => 'Today\'s daily run, at 6 pm';
 }
 
 // Path: settings.language
@@ -1632,6 +1677,10 @@ extension on Translations {
 			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} chips for each filled cell or stone whose mirror cell is one too, after a clear.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
+			'push.reminder.title' => 'Today\'s daily run is ready',
+			'push.reminder.body' => 'Same pieces for everyone. Keep your streak going!',
+			'push.reminder.channelName' => 'Daily run reminder',
+			'push.reminder.channelDescription' => 'A reminder when today\'s daily run is ready.',
 			'home.complete.title' => 'Every world complete',
 			'home.complete.body' => ({required Object count}) => 'Every boss is beaten: all ${count} worlds are yours.',
 			'home.complete.stars' => ({required Object stars, required Object max}) => '${stars} of ${max} stars',
@@ -1642,6 +1691,7 @@ extension on Translations {
 			'home.daily.subtitle' => 'Same pieces for everyone today',
 			'home.daily.play' => 'Play',
 			'home.daily.leaderboard' => 'Leaderboard',
+			'home.daily.streak' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: '${n}-day streak', other: '${n}-day streak', ), 
 			'home.resume.title' => 'Continue run',
 			'home.resume.subtitle' => 'Pick up where you left off',
 			'home.practice.title' => 'Practice',
@@ -1686,6 +1736,8 @@ extension on Translations {
 			'settings.haptics' => 'Haptics',
 			'settings.reduceMotion.title' => 'Reduce motion',
 			'settings.reduceMotion.subtitle' => 'Calmer animations, no screen shake',
+			'settings.dailyReminder.title' => 'Daily reminder',
+			'settings.dailyReminder.subtitle' => 'Today\'s daily run, at 6 pm',
 			'settings.language.title' => 'Language',
 			'settings.language.system' => 'System',
 			'settings.language.en' => 'English',

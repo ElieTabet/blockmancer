@@ -9,6 +9,187 @@ part of 'providers_di.br.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(cancelDailyReminder)
+final cancelDailyReminderProvider = CancelDailyReminderProvider._();
+
+final class CancelDailyReminderProvider
+    extends
+        $FunctionalProvider<
+          CancelDailyReminderFun,
+          CancelDailyReminderFun,
+          CancelDailyReminderFun
+        >
+    with $Provider<CancelDailyReminderFun> {
+  CancelDailyReminderProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cancelDailyReminderProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cancelDailyReminderHash();
+
+  @$internal
+  @override
+  $ProviderElement<CancelDailyReminderFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  CancelDailyReminderFun create(Ref ref) {
+    return cancelDailyReminder(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CancelDailyReminderFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CancelDailyReminderFun>(value),
+    );
+  }
+}
+
+String _$cancelDailyReminderHash() =>
+    r'65cb43c43fe116df90b3c763096738624d61ecbf';
+
+@ProviderFor(currentTimeZone)
+final currentTimeZoneProvider = CurrentTimeZoneProvider._();
+
+final class CurrentTimeZoneProvider
+    extends
+        $FunctionalProvider<
+          CurrentTimeZoneFun,
+          CurrentTimeZoneFun,
+          CurrentTimeZoneFun
+        >
+    with $Provider<CurrentTimeZoneFun> {
+  CurrentTimeZoneProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'currentTimeZoneProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$currentTimeZoneHash();
+
+  @$internal
+  @override
+  $ProviderElement<CurrentTimeZoneFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  CurrentTimeZoneFun create(Ref ref) {
+    return currentTimeZone(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CurrentTimeZoneFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CurrentTimeZoneFun>(value),
+    );
+  }
+}
+
+String _$currentTimeZoneHash() => r'c009d56ac97451ae75b0ea56fb2ab59251d8ecd8';
+
+/// Whether the player wants the daily reminder (Settings).
+
+@ProviderFor(dailyReminderEnabled)
+final dailyReminderEnabledProvider = DailyReminderEnabledProvider._();
+
+/// Whether the player wants the daily reminder (Settings).
+
+final class DailyReminderEnabledProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether the player wants the daily reminder (Settings).
+  DailyReminderEnabledProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyReminderEnabledProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyReminderEnabledHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return dailyReminderEnabled(ref);
+  }
+}
+
+String _$dailyReminderEnabledHash() =>
+    r'86cddef77da9a317984a57f9805f0e0f49f324d6';
+
+@ProviderFor(hasPlayedDaily)
+final hasPlayedDailyProvider = HasPlayedDailyProvider._();
+
+final class HasPlayedDailyProvider
+    extends
+        $FunctionalProvider<
+          HasPlayedDailyFun,
+          HasPlayedDailyFun,
+          HasPlayedDailyFun
+        >
+    with $Provider<HasPlayedDailyFun> {
+  HasPlayedDailyProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hasPlayedDailyProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$hasPlayedDailyHash();
+
+  @$internal
+  @override
+  $ProviderElement<HasPlayedDailyFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  HasPlayedDailyFun create(Ref ref) {
+    return hasPlayedDaily(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(HasPlayedDailyFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HasPlayedDailyFun>(value),
+    );
+  }
+}
+
+String _$hasPlayedDailyHash() => r'ef79a453739c43eee37d88a13fd4107d665d6a9e';
+
 @ProviderFor(launchMessage)
 final launchMessageProvider = LaunchMessageProvider._();
 
@@ -289,3 +470,51 @@ final class RequestPushPermissionProvider
 
 String _$requestPushPermissionHash() =>
     r'45fb9ca1691ba5084944215ffb70367b3a1a62c8';
+
+@ProviderFor(scheduleDailyReminder)
+final scheduleDailyReminderProvider = ScheduleDailyReminderProvider._();
+
+final class ScheduleDailyReminderProvider
+    extends
+        $FunctionalProvider<
+          ScheduleDailyReminderFun,
+          ScheduleDailyReminderFun,
+          ScheduleDailyReminderFun
+        >
+    with $Provider<ScheduleDailyReminderFun> {
+  ScheduleDailyReminderProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'scheduleDailyReminderProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$scheduleDailyReminderHash();
+
+  @$internal
+  @override
+  $ProviderElement<ScheduleDailyReminderFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ScheduleDailyReminderFun create(Ref ref) {
+    return scheduleDailyReminder(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ScheduleDailyReminderFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ScheduleDailyReminderFun>(value),
+    );
+  }
+}
+
+String _$scheduleDailyReminderHash() =>
+    r'54b18f1dfbefb23f434cdaaba148110d02ba5448';

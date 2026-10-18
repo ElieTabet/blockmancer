@@ -144,7 +144,7 @@ final class ClearProgressProvider
   }
 }
 
-String _$clearProgressHash() => r'00fef86e532af07696c82f61b88d971b991e797b';
+String _$clearProgressHash() => r'b69253dece990f1f0222aff7956d0326cfc0308f';
 
 /// What the player has earned across runs, as this device keeps it.
 
@@ -530,7 +530,139 @@ final class RecordRunEndProvider
   }
 }
 
-String _$recordRunEndHash() => r'461d567f66da1a419a5c3513924fe0ee55a50cfb';
+String _$recordRunEndHash() => r'9f216a8df1f079481d44f2a6ae24c18a893b572f';
+
+/// The UTC days on which a daily run was played to its end.
+
+@ProviderFor(dailyDays)
+final dailyDaysProvider = DailyDaysProvider._();
+
+/// The UTC days on which a daily run was played to its end.
+
+final class DailyDaysProvider
+    extends
+        $FunctionalProvider<AsyncValue<Set<int>>, Set<int>, FutureOr<Set<int>>>
+    with $FutureModifier<Set<int>>, $FutureProvider<Set<int>> {
+  /// The UTC days on which a daily run was played to its end.
+  DailyDaysProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyDaysProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyDaysHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Set<int>> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Set<int>> create(Ref ref) {
+    return dailyDays(ref);
+  }
+}
+
+String _$dailyDaysHash() => r'de5fa5d1800f7dbf79409f38b84f5a9487c8452d';
+
+/// Today's streak: see [dailyStreakOf].
+
+@ProviderFor(dailyStreak)
+final dailyStreakProvider = DailyStreakProvider._();
+
+/// Today's streak: see [dailyStreakOf].
+
+final class DailyStreakProvider
+    extends $FunctionalProvider<AsyncValue<int>, int, FutureOr<int>>
+    with $FutureModifier<int>, $FutureProvider<int> {
+  /// Today's streak: see [dailyStreakOf].
+  DailyStreakProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyStreakProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyStreakHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<int> create(Ref ref) {
+    return dailyStreak(ref);
+  }
+}
+
+String _$dailyStreakHash() => r'6d51bb362b918ad06353d51e42b35ac773010dac';
+
+/// Whether a daily run was ever played to its end on this device, read fresh
+/// each time.
+
+@ProviderFor(hasPlayedDaily)
+final hasPlayedDailyProvider = HasPlayedDailyProvider._();
+
+/// Whether a daily run was ever played to its end on this device, read fresh
+/// each time.
+
+final class HasPlayedDailyProvider
+    extends
+        $FunctionalProvider<
+          HasPlayedDailyFun,
+          HasPlayedDailyFun,
+          HasPlayedDailyFun
+        >
+    with $Provider<HasPlayedDailyFun> {
+  /// Whether a daily run was ever played to its end on this device, read fresh
+  /// each time.
+  HasPlayedDailyProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hasPlayedDailyProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$hasPlayedDailyHash();
+
+  @$internal
+  @override
+  $ProviderElement<HasPlayedDailyFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  HasPlayedDailyFun create(Ref ref) {
+    return hasPlayedDaily(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(HasPlayedDailyFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HasPlayedDailyFun>(value),
+    );
+  }
+}
+
+String _$hasPlayedDailyHash() => r'158108821e825ce18b61aa7542ae0b6c69ff1325';
 
 @ProviderFor(runStartFor)
 final runStartForProvider = RunStartForProvider._();

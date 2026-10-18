@@ -58,6 +58,11 @@ List<Override> featureBindingOverrides({
     telemetry: (ref) => telemetry.FirebaseTelemetry(),
   ),
   ...push_notifications_domain.bindProviders(
+    cancelDailyReminder: (ref) => ref.watch(dailyReminderProvider).cancel,
+    currentTimeZone: (ref) => ref.watch(dailyReminderProvider).timeZone,
+    dailyReminderEnabled: (ref) =>
+        ref.watch(settings.dailyReminderEnabledProvider.future),
+    hasPlayedDaily: (ref) => ref.watch(game.hasPlayedDailyProvider),
     launchMessage: (ref) => ref.watch(push.pushMessagingProvider).launchMessage,
     // The instance is captured, not the ref: these are called after an
     // await, by when an auto-disposed slot's ref may be gone.
@@ -76,6 +81,22 @@ List<Override> featureBindingOverrides({
     reportPushToken: (ref) => (token) async {},
     requestPushPermission: (ref) =>
         ref.watch(push.pushMessagingProvider).requestPermission,
+    scheduleDailyReminder: (ref) {
+      final reminder = ref.watch(dailyReminderProvider);
+
+      return ({required hour, required minute}) {
+        final texts = push_notifications_ui.dailyReminderTexts();
+
+        return reminder.schedule(
+          body: texts.body,
+          channelDescription: texts.channelDescription,
+          channelName: texts.channelName,
+          hour: hour,
+          minute: minute,
+          title: texts.title,
+        );
+      };
+    },
   ),
   ...push_notifications_ui.bindProviders(
     initializeMessaging: (ref) =>
@@ -99,6 +120,9 @@ List<Override> featureBindingOverrides({
     clock: (ref) => const SystemClock(),
     engagementStore: (ref) => const SharedPreferencesEngagementStore(),
     gameRules: (ref) => const BlockmancerEngine(),
+    onDailyRunFinished: (ref) => ref
+        .watch(push_notifications_domain.dailyReminderProvider.notifier)
+        .dailyRunFinished,
     progressionStore: (ref) => SharedPreferencesProgressionStore(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
@@ -158,6 +182,7 @@ List<Override> featureBindingOverrides({
   ...home_ui.bindProviders(
     dailyBest: (ref) => ref.watch(game.todaysDailyBestProvider.future),
     dailyDate: (ref) => ref.watch(game.todaysDailyDateProvider),
+    dailyStreak: (ref) => ref.watch(game.dailyStreakProvider.future),
     dismissUpdateOffer: (ref) =>
         ref.watch(app_update.dismissUpdateOfferProvider),
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),

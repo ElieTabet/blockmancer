@@ -48,6 +48,22 @@ void main() {
     expect(await scores.best(const GameMode.practice()), 3100);
   });
 
+  test('the days a daily run was played are read back by the next launch, '
+      'and no other run counts', () async {
+    // Given
+    final scores = _scores();
+    await scores.save(const GameMode.daily(day: 20261016), 1800);
+    await scores.save(_today, 2400);
+    await scores.save(const GameMode.practice(), 3100);
+
+    // When
+    await relaunch();
+    final days = await _scores().dailyDays();
+
+    // Then
+    expect(days, {20261016, 20261017});
+  });
+
   test('each world keeps its own best, apart from practice', () async {
     // Given
     final scores = _scores();

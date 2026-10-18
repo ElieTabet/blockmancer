@@ -66,6 +66,27 @@ void main() {
     });
   }
 
+  testWidgets('Given daily runs on 3 days in a row, When Home opens, Then the '
+      'daily card shows the streak', (tester) async {
+    // Given / When
+    await pumpHome(tester, dailyStreak: 3);
+    await tester.pump();
+
+    // Then
+    expect(find.text('3-day streak'), findsOneWidget);
+  });
+
+  testWidgets('Given no daily run yet, When Home opens, Then no streak shows', (
+    tester,
+  ) async {
+    // Given / When
+    await pumpHome(tester);
+    await tester.pump();
+
+    // Then
+    expect(find.textContaining('streak'), findsNothing);
+  });
+
   testWidgets("Given Home, When the daily card's Leaderboard is tapped, Then "
       "today's board opens and no run does", (tester) async {
     // Given

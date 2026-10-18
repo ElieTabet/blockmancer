@@ -31,6 +31,12 @@ final class FakeBestScores implements game.BestScores {
   }
 
   @override
+  Future<Set<int>> dailyDays() async => {
+    for (final mode in saved.keys)
+      if (mode case game.DailyMode(:final day)) day,
+  };
+
+  @override
   Future<void> clearAll() async => saved.clear();
 
   @override
@@ -111,6 +117,7 @@ List<Override> gameOverrides(
     clock: (ref) => const FakeClock(),
     engagementStore: (ref) => FakeEngagementStore(engagement),
     gameRules: (ref) => rules,
+    onDailyRunFinished: (ref) => () async {},
     progressionStore: (ref) =>
         progressionStore ??
         FakeProgressionStore(game.startingProgression(rules)),

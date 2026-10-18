@@ -21,6 +21,7 @@ final class _SlowStore extends FakeSettingsStore {
 }
 
 const _quiet = AppSettings(
+  dailyReminder: false,
   haptics: false,
   language: .en,
   reduceMotion: true,
@@ -37,6 +38,7 @@ void main() {
     expect(container.read(soundOnProvider), isTrue);
     expect(container.read(hapticsOnProvider), isTrue);
     expect(container.read(reduceMotionOnProvider), isFalse);
+    expect(container.read(dailyReminderOnProvider), isTrue);
   });
 
   test('once loaded, each reads what the player chose', () async {
@@ -46,7 +48,8 @@ void main() {
     container
       ..listen(soundOnProvider, (_, _) {})
       ..listen(hapticsOnProvider, (_, _) {})
-      ..listen(reduceMotionOnProvider, (_, _) {});
+      ..listen(reduceMotionOnProvider, (_, _) {})
+      ..listen(dailyReminderOnProvider, (_, _) {});
 
     // When
     store.loaded.complete();
@@ -56,6 +59,8 @@ void main() {
     expect(container.read(soundOnProvider), isFalse);
     expect(container.read(hapticsOnProvider), isFalse);
     expect(container.read(reduceMotionOnProvider), isTrue);
+    expect(container.read(dailyReminderOnProvider), isFalse);
+    expect(await container.read(dailyReminderEnabledProvider.future), isFalse);
   });
 
   test('the tutorial and the language wait for what is stored', () async {

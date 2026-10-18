@@ -8,6 +8,7 @@ import 'package:shared_domain/shared_domain.dart';
 List<Override> bindProviders({
   required Future<int?> Function(Ref ref) dailyBest,
   required DateTime Function(Ref ref) dailyDate,
+  required Future<int> Function(Ref ref) dailyStreak,
   required di.DismissUpdateOfferFun Function(Ref ref) dismissUpdateOffer,
   required Future<bool> Function(Ref ref) hasSavedRun,
   required JokerCollection Function(Ref ref) jokerCollection,
@@ -22,6 +23,7 @@ List<Override> bindProviders({
 }) => [
   di.dailyBestProvider.overrideWith(dailyBest),
   di.dailyDateProvider.overrideWith(dailyDate),
+  di.dailyStreakProvider.overrideWith(dailyStreak),
   di.dismissUpdateOfferProvider.overrideWith(dismissUpdateOffer),
   di.hasSavedRunProvider.overrideWith(hasSavedRun),
   di.jokerCollectionProvider.overrideWith(jokerCollection),

@@ -6,6 +6,9 @@
     <!-- Android 13+. The messaging plugin normally merges this in; declared
          here so the manifest says what the app asks for. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- The daily reminder, scheduled again after a restart (flutter_local_notifications'
+         boot receiver). Inexact alarms only: no SCHEDULE_EXACT_ALARM. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <!-- AdMob reads the advertising id, as the consent the player gave
          allows; the Data safety form declares it. -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
@@ -67,6 +70,17 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="${admobAppId}"/>
+        <!-- Show the daily reminder when due, and schedule it again after a
+             restart or an update (flutter_local_notifications). -->
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
         <!-- Play Games' project id, from app/env/prod.json through Gradle.
              The leaderboards stay off on Android while it is a placeholder
              (app_providers' leaderboards). -->

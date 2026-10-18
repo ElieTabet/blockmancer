@@ -55,6 +55,89 @@ final class AppLanguageProvider
 
 String _$appLanguageHash() => r'1d56107601c693f4a605d19040dbce932f6823a3';
 
+@ProviderFor(dailyReminderOn)
+final dailyReminderOnProvider = DailyReminderOnProvider._();
+
+final class DailyReminderOnProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  DailyReminderOnProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyReminderOnProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyReminderOnHash();
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    return dailyReminderOn(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$dailyReminderOnHash() => r'92ab722ed11584eb5908c09f24417e79144705ee';
+
+/// Whether the player wants the daily reminder. A future, so the reminder is
+/// never scheduled, or cancelled, on a default before the stored answer.
+
+@ProviderFor(dailyReminderEnabled)
+final dailyReminderEnabledProvider = DailyReminderEnabledProvider._();
+
+/// Whether the player wants the daily reminder. A future, so the reminder is
+/// never scheduled, or cancelled, on a default before the stored answer.
+
+final class DailyReminderEnabledProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether the player wants the daily reminder. A future, so the reminder is
+  /// never scheduled, or cancelled, on a default before the stored answer.
+  DailyReminderEnabledProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyReminderEnabledProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyReminderEnabledHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return dailyReminderEnabled(ref);
+  }
+}
+
+String _$dailyReminderEnabledHash() =>
+    r'e45cbdeeb23b2579bfe02456d5e8806d0ce30e21';
+
 @ProviderFor(hapticsOn)
 final hapticsOnProvider = HapticsOnProvider._();
 

@@ -63,6 +63,9 @@ class Application {
       channelDescription: t.push.channelDescription,
       channelName: t.push.channelName,
     );
+
+    // After push, which readies the notifications plugin it schedules with.
+    startDailyReminder(_container);
   }
 
   void launch() {

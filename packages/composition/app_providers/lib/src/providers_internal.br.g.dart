@@ -349,6 +349,52 @@ final class StoreReviewProvider
 
 String _$storeReviewHash() => r'982c4fc268f8fca7bb0e2e904bf72349f3b2d03f';
 
+/// One for the app's life: the daily reminder, a local notification.
+
+@ProviderFor(dailyReminder)
+final dailyReminderProvider = DailyReminderProvider._();
+
+/// One for the app's life: the daily reminder, a local notification.
+
+final class DailyReminderProvider
+    extends $FunctionalProvider<DailyReminder, DailyReminder, DailyReminder>
+    with $Provider<DailyReminder> {
+  /// One for the app's life: the daily reminder, a local notification.
+  DailyReminderProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyReminderProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyReminderHash();
+
+  @$internal
+  @override
+  $ProviderElement<DailyReminder> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DailyReminder create(Ref ref) {
+    return dailyReminder(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DailyReminder value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DailyReminder>(value),
+    );
+  }
+}
+
+String _$dailyReminderHash() => r'a729c44ea227a3fb3e9689c0986fda5ffa10125a';
+
 /// One for the app's life: its sounds are loaded once, at launch.
 
 @ProviderFor(gameSounds)

@@ -128,6 +128,12 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         ...push_notifications_domain.bindProviders(
+          cancelDailyReminder: (ref) => () async {},
+          currentTimeZone: (ref) =>
+              () async => 'UTC',
+          dailyReminderEnabled: (ref) async => false,
+          hasPlayedDaily: (ref) =>
+              () async => false,
           launchMessage: (ref) =>
               () =>
                   Future.delayed(const Duration(milliseconds: 50), () => null),
@@ -140,6 +146,8 @@ void main() {
           reportPushToken: (ref) => (token) async {},
           requestPushPermission: (ref) =>
               () async => true,
+          scheduleDailyReminder: (ref) =>
+              ({required hour, required minute}) async {},
         ),
         ...bindProviders(
           initializeMessaging: (ref) =>

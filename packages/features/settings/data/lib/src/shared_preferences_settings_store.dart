@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final class SharedPreferencesSettingsStore implements SettingsStore {
   const SharedPreferencesSettingsStore();
 
+  static const _dailyReminder = 'settings.dailyReminder';
   static const _defaults = AppSettings();
   static const _haptics = 'settings.haptics';
   static const _language = 'settings.language';
@@ -23,6 +24,7 @@ final class SharedPreferencesSettingsStore implements SettingsStore {
     };
 
     return AppSettings(
+      dailyReminder: flag(_dailyReminder, _defaults.dailyReminder),
       haptics: flag(_haptics, _defaults.haptics),
       language:
           AppLanguage.values.asNameMap()[preferences.get(_language)] ??
@@ -38,6 +40,7 @@ final class SharedPreferencesSettingsStore implements SettingsStore {
     final preferences = await SharedPreferences.getInstance();
 
     await Future.wait([
+      preferences.setBool(_dailyReminder, settings.dailyReminder),
       preferences.setBool(_haptics, settings.haptics),
       preferences.setString(_language, settings.language.name),
       preferences.setBool(_reduceMotion, settings.reduceMotion),

@@ -8,6 +8,12 @@ final class FakeBestScores implements BestScores {
   Future<int?> best(GameMode mode) async => saved[mode];
 
   @override
+  Future<Set<int>> dailyDays() async => {
+    for (final mode in saved.keys)
+      if (mode case DailyMode(:final day)) day,
+  };
+
+  @override
   Future<void> clearAll() async => saved.clear();
 
   @override

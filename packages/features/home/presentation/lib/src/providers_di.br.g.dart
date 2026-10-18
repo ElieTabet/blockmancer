@@ -46,6 +46,47 @@ final class DailyBestProvider
 
 String _$dailyBestHash() => r'99f6b064bcfa6424ae4bba7dd926d2515c872a39';
 
+/// The UTC days in a row, up to today, with a daily run played to its end;
+/// today not played yet doesn't break it.
+
+@ProviderFor(dailyStreak)
+final dailyStreakProvider = DailyStreakProvider._();
+
+/// The UTC days in a row, up to today, with a daily run played to its end;
+/// today not played yet doesn't break it.
+
+final class DailyStreakProvider
+    extends $FunctionalProvider<AsyncValue<int>, int, FutureOr<int>>
+    with $FutureModifier<int>, $FutureProvider<int> {
+  /// The UTC days in a row, up to today, with a daily run played to its end;
+  /// today not played yet doesn't break it.
+  DailyStreakProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyStreakProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyStreakHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<int> create(Ref ref) {
+    return dailyStreak(ref);
+  }
+}
+
+String _$dailyStreakHash() => r'de34433571d85db883805a413c5c9201981c92e6';
+
 /// The UTC day today's daily run is played on, at its midnight.
 
 @ProviderFor(dailyDate)

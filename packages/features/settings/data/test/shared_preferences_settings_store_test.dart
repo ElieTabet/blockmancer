@@ -28,6 +28,7 @@ void main() {
   test('saved settings are read back by the next launch', () async {
     // Given
     const chosen = AppSettings(
+      dailyReminder: false,
       haptics: false,
       language: .fr,
       reduceMotion: true,
@@ -51,6 +52,7 @@ void main() {
     // Then
     final stored = await SharedPreferences.getInstance();
     expect(stored.getKeys(), {
+      'settings.dailyReminder',
       'settings.haptics',
       'settings.language',
       'settings.reduceMotion',

@@ -72,17 +72,27 @@ StartPushTokenSyncFun startPushTokenSync(Ref ref) =>
 /// Binds this layer's inbound slots: the messaging (composition, pointing at
 /// `push`) and the report (composition, pointing at `device`).
 List<Override> bindProviders({
+  required di.CancelDailyReminderFun Function(Ref ref) cancelDailyReminder,
+  required di.CurrentTimeZoneFun Function(Ref ref) currentTimeZone,
+  required Future<bool> Function(Ref ref) dailyReminderEnabled,
+  required di.HasPlayedDailyFun Function(Ref ref) hasPlayedDaily,
   required di.LaunchMessageFun Function(Ref ref) launchMessage,
   required di.OpenedMessagesFun Function(Ref ref) openedMessages,
   required di.PushTokenChangesFun Function(Ref ref) pushTokenChanges,
   required di.ReadPushTokenFun Function(Ref ref) readPushToken,
   required di.ReportPushTokenFun Function(Ref ref) reportPushToken,
   required di.RequestPushPermissionFun Function(Ref ref) requestPushPermission,
+  required di.ScheduleDailyReminderFun Function(Ref ref) scheduleDailyReminder,
 }) => [
+  di.cancelDailyReminderProvider.overrideWith(cancelDailyReminder),
+  di.currentTimeZoneProvider.overrideWith(currentTimeZone),
+  di.dailyReminderEnabledProvider.overrideWith(dailyReminderEnabled),
+  di.hasPlayedDailyProvider.overrideWith(hasPlayedDaily),
   di.launchMessageProvider.overrideWith(launchMessage),
   di.openedMessagesProvider.overrideWith(openedMessages),
   di.pushTokenChangesProvider.overrideWith(pushTokenChanges),
   di.readPushTokenProvider.overrideWith(readPushToken),
   di.reportPushTokenProvider.overrideWith(reportPushToken),
   di.requestPushPermissionProvider.overrideWith(requestPushPermission),
+  di.scheduleDailyReminderProvider.overrideWith(scheduleDailyReminder),
 ];

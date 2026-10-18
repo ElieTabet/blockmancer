@@ -667,3 +667,51 @@ final class SubmitDailyScoreProvider
 }
 
 String _$submitDailyScoreHash() => r'2da033c7846a194441d0230df0858a6e9a0b21e9';
+
+@ProviderFor(onDailyRunFinished)
+final onDailyRunFinishedProvider = OnDailyRunFinishedProvider._();
+
+final class OnDailyRunFinishedProvider
+    extends
+        $FunctionalProvider<
+          DailyRunFinishedFun,
+          DailyRunFinishedFun,
+          DailyRunFinishedFun
+        >
+    with $Provider<DailyRunFinishedFun> {
+  OnDailyRunFinishedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'onDailyRunFinishedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$onDailyRunFinishedHash();
+
+  @$internal
+  @override
+  $ProviderElement<DailyRunFinishedFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  DailyRunFinishedFun create(Ref ref) {
+    return onDailyRunFinished(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DailyRunFinishedFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DailyRunFinishedFun>(value),
+    );
+  }
+}
+
+String _$onDailyRunFinishedHash() =>
+    r'832292294114755f6ea9755446574ebdba42869d';

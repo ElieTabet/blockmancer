@@ -7,6 +7,7 @@ part 'app_settings.br.freezed.dart';
 @freezed
 abstract class AppSettings with _$AppSettings {
   const factory AppSettings({
+    @Default(true) bool dailyReminder,
     @Default(true) bool haptics,
     @Default(AppLanguage.system) AppLanguage language,
     @Default(false) bool reduceMotion,

@@ -41,6 +41,7 @@ List<Override> stubFeatures({
     clock: (ref) => const _NoonClock(),
     engagementStore: (ref) => _MemoryEngagementStore(),
     gameRules: (ref) => const BlockmancerEngine(),
+    onDailyRunFinished: (ref) => () async {},
     progressionStore: (ref) =>
         _MemoryProgressionStore(ref.watch(game.initialProgressionProvider)),
     remoteValue: (ref) =>
@@ -69,6 +70,7 @@ List<Override> stubFeatures({
   ...home_ui.bindProviders(
     dailyBest: (ref) async => null,
     dailyDate: (ref) => DateTime.utc(2026, 10, 17),
+    dailyStreak: (ref) async => 0,
     dismissUpdateOffer: (ref) => () async {},
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     jokerCollection: (ref) => ref.watch(game.jokerCollectionProvider),
@@ -138,6 +140,9 @@ final class _NoBestScores implements game.BestScores {
 
   @override
   Future<int?> best(game.GameMode mode) async => null;
+
+  @override
+  Future<Set<int>> dailyDays() async => {};
 
   @override
   Future<void> clearAll() async {}

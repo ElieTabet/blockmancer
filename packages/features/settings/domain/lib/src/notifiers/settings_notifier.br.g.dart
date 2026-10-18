@@ -48,7 +48,7 @@ final class SettingsNotifierProvider
   SettingsNotifier create() => SettingsNotifier();
 }
 
-String _$settingsNotifierHash() => r'8abdc8f8cb18a2f75cc4b90d757ecfb3959ac719';
+String _$settingsNotifierHash() => r'bad60c5cc205bcc21be6d5dba40eb9e489903021';
 
 /// The player's settings, read once and kept for as long as the app runs.
 ///

@@ -27,7 +27,7 @@ blockmancer/
 │   │   ├── leaderboards/     # Game Center and Play Games behind `Leaderboards` (`signIn`, `submit`, `show`) — the only place games_services is known; `NoLeaderboards` while a platform's ids are placeholders
 │   │   ├── play_stats/       # The testers' numbers: `LocalPlayStats` implements shared_domain's `AnalyticsSink`, counting per day on the device, and exports a JSON summary
 │   │   ├── purchases/        # The stores' in-app purchases behind `Purchases` (buy, restore, price, updates) — the only place in_app_purchase is known, so RevenueCat could replace it
-│   │   ├── push/             # FCM + local notifications behind PushMessaging — the only place firebase_messaging is known
+│   │   ├── push/             # FCM + local notifications behind PushMessaging, and the daily reminder behind DailyReminder — the only place firebase_messaging, flutter_local_notifications, timezone and flutter_timezone are known
 │   │   ├── remote_config/    # Values published from Firebase Remote Config, read as text behind `RemoteValues` — the only place firebase_remote_config is known
 │   │   ├── sounds/           # The game's sound effects, decoded into memory up front behind GameSounds — the only place flutter_soloud is known
 │   │   ├── telemetry/        # Firebase Analytics + Crashlytics behind one switch, and the game's events as Analytics events (`FirebaseAnalyticsSink`) — the only place either is known
@@ -47,7 +47,7 @@ blockmancer/
 │       ├── app_update/{domain,data,presentation}/ # app_update_* — whether this version must or may be updated (Remote Config's minimum and latest versions, pub_semver), the banner closed per version on the device, and the blocking update screen
 │       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
 │       ├── home/presentation/                    # home_presentation — the first tab: the world map under today's Daily run, Practice and the Spellbook in the header (worlds, jokers, progression and bests read through slots)
-│       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, and where a tapped push leads (no screens)
+│       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, where a tapped push leads, and when the daily reminder is set (no screens)
 │       ├── shop/{domain,data}/                  # shop_* — the Remove ads purchase: bought, restored, kept on the device and re-checked with the store at launch (no screens: Settings shows its rows through slots)
 │       ├── settings/{domain,data,presentation}/  # settings_* — sound, haptics, reduce motion, language and the tutorial flag (domain), on the device (data), and the Settings screen, pushed over the shell from Home's gear (presentation); resetting progress goes through a slot
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
@@ -501,7 +501,8 @@ for the map to announce them) and `tutorialDone`.
 
 ### World map
 
-Home is the map: today's Daily card on top (its UTC day, today's best, Play), Continue when a run
+Home is the map: today's Daily card on top (its UTC day, today's best, the streak, Play, and
+Leaderboard), Continue when a run
 is saved, then the worlds down a winding trail, the first at the top. Practice is the pill in the
 header, beside the gear.
 
@@ -663,7 +664,8 @@ There is no backend: the app makes no HTTP calls and has no account; the only si
 platform's game service, for the leaderboards. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
 `firebase_remote_config`, `google_mobile_ads`, `in_app_purchase`, `purchases`,
-`flutter_inappwebview`, `flutter_soloud`, `push`,
+`flutter_inappwebview`, `flutter_local_notifications`, `flutter_soloud`, `flutter_timezone`,
+`timezone`, `push`,
 `sounds`, `telemetry`,
 `remote_config`, `url_launcher`, `ads`, `app_info`, `package_info_plus`, `device_info_plus`,
 `external_links`, `share_plus`, `play_stats`, `games_services`, `leaderboards` or
@@ -803,9 +805,10 @@ The player's settings, kept on the device; there is no account to sync them to. 
 `SettingsRoute` over the shell (absolute `/settings`, like the game), and its back arrow pops.
 
 - **What is kept:** `settings_domain`'s freezed `AppSettings` — `sound`, `haptics` (on by default),
-  `reduceMotion` (off), `language` (`AppLanguage.system` / `.en` / `.fr`) and `tutorialSeen`.
-  `settings_data`'s `SharedPreferencesSettingsStore` writes one key per setting (`settings.sound`,
-  `settings.haptics`, `settings.reduceMotion`, `settings.language`, `settings.tutorialSeen`), so a
+  `reduceMotion` (off), `dailyReminder` (on), `language` (`AppLanguage.system` / `.en` / `.fr`)
+  and `tutorialSeen`. `settings_data`'s `SharedPreferencesSettingsStore` writes one key per
+  setting (`settings.sound`, `settings.haptics`, `settings.reduceMotion`, `settings.dailyReminder`,
+  `settings.language`, `settings.tutorialSeen`), so a
   value missing or of the wrong type reads as its default rather than losing the rest.
 - **One notifier:** `SettingsNotifier` (keepAlive, `settingsProvider`) loads once and is the only
   writer: each setter shows the change at once, then writes, in order; a failed write is logged and
@@ -886,9 +889,8 @@ no-op). Three packages share the client side, and only one knows Firebase:
   server sends, resolve it there, and route it in `PushOpeningsNotifier` — anything unrecognised
   still opens the app. `push`'s `receivedMessages` (pushes arriving while the app is open) is
   available for a screen that should catch up on one; nothing listens to it yet.
-- **Who calls what.** Nothing asks for permission yet: the old Home owned that moment and was
-  replaced by the game, and the ask returns with the daily-run notifications (`askForNotifications` is ready for
-  it). `PushNotificationsRoutingImpl` (context-free: a tap arrives from the OS, not a widget)
+- **Who calls what.** The permission is asked when a daily run ends (see Daily reminder), never
+  at launch. `PushNotificationsRoutingImpl` (context-free: a tap arrives from the OS, not a widget)
   waits out the splash, then dismisses
   whatever is open and selects the push's tab — so back always lands on that tab. A push about one
   item pushes its page over the tab.
@@ -904,6 +906,29 @@ no-op). Three packages share the client side, and only one knows Firebase:
   They identify the project rather than authorize anything; restrict the API keys to the bundle id
   and package name in Google Cloud instead. The token is a push credential and is never logged;
   neither is a push's `data`, only its keys.
+
+## Daily reminder and streak
+
+- **The reminder:** "Today's daily run is ready", every day at 18:00 local time (`reminderTime`),
+  a local notification: `push`'s `DailyReminder` (`LocalDailyReminder`, `zonedSchedule` repeating
+  on the time of day, inexact on Android, its own `daily_reminder` channel), never a push.
+- **Who decides:** push_notifications_domain's `DailyReminderNotifier` (keepAlive; its state is the
+  time zone it scheduled in). It schedules only with Settings' **Daily reminder** on
+  (`dailyReminderEnabled`) and a daily run played to its end (`hasPlayedDaily`, game_domain's,
+  from the daily bests); otherwise it cancels. When a daily run ends, game_domain's
+  `recordRunEnd` calls its `onDailyRunFinished` slot, bound to `dailyRunFinished`: it asks for
+  notifications (the OS prompts once) and schedules, the ask failing or not. `resumed` reschedules
+  when the time zone changed.
+- **Started** by `startDailyReminder` (app_providers) after push's start: it listens to the notifier
+  for the app's life (so the switch takes effect at once) and calls `resumed` on every return to
+  the app. The texts come from push_notifications_presentation's `dailyReminderTexts`, read in
+  the app's language when it schedules.
+- **Android:** `RECEIVE_BOOT_COMPLETED` and flutter_local_notifications' two receivers in the
+  manifest, so it fires and survives a restart; no exact-alarm permission.
+- **The streak:** game_domain's `dailyStreak` (`dailyStreakOf`): the UTC days in a row, today
+  back, with a daily run played to its end (`BestScores.dailyDays`, the profile's daily bests, so
+  no migration); today not played yet doesn't break it. The daily card's `DailyStreak` shows it
+  from 1, through home's `dailyStreak` slot.
 
 ## Remote Config, updates and test builds
 

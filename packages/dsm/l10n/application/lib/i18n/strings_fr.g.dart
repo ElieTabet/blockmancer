@@ -80,6 +80,7 @@ class _Translations$push$fr extends Translations$push$en {
 	// Translations
 	@override String get channelName => 'Annonces';
 	@override String get channelDescription => 'Les nouveautés et messages de l\'application.';
+	@override late final _Translations$push$reminder$fr reminder = _Translations$push$reminder$fr._(_root);
 }
 
 // Path: home
@@ -115,6 +116,7 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override String get sound => 'Son';
 	@override String get haptics => 'Vibrations';
 	@override late final _Translations$settings$reduceMotion$fr reduceMotion = _Translations$settings$reduceMotion$fr._(_root);
+	@override late final _Translations$settings$dailyReminder$fr dailyReminder = _Translations$settings$dailyReminder$fr._(_root);
 	@override late final _Translations$settings$language$fr language = _Translations$settings$language$fr._(_root);
 	@override late final _Translations$settings$tutorial$fr tutorial = _Translations$settings$tutorial$fr._(_root);
 	@override late final _Translations$settings$feedback$fr feedback = _Translations$settings$feedback$fr._(_root);
@@ -336,6 +338,19 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$prism$fr prism = _Translations$game$jokers$prism$fr._(_root);
 }
 
+// Path: push.reminder
+class _Translations$push$reminder$fr extends Translations$push$reminder$en {
+	_Translations$push$reminder$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'La partie du jour est prête';
+	@override String get body => 'Les mêmes pièces pour tout le monde. Garde ta série !';
+	@override String get channelName => 'Rappel de la partie du jour';
+	@override String get channelDescription => 'Un rappel quand la partie du jour est prête.';
+}
+
 // Path: home.complete
 class _Translations$home$complete$fr extends Translations$home$complete$en {
 	_Translations$home$complete$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -360,6 +375,10 @@ class _Translations$home$daily$fr extends Translations$home$daily$en {
 	@override String get subtitle => 'Aujourd\'hui, les mêmes pièces pour tout le monde';
 	@override String get play => 'Jouer';
 	@override String get leaderboard => 'Classement';
+	@override String streak({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(n,
+		one: 'Série de ${n} jour',
+		other: 'Série de ${n} jours',
+	);
 }
 
 // Path: home.resume
@@ -450,6 +469,17 @@ class _Translations$settings$reduceMotion$fr extends Translations$settings$reduc
 	// Translations
 	@override String get title => 'Réduire les animations';
 	@override String get subtitle => 'Des animations plus douces, sans tremblement de l\'écran';
+}
+
+// Path: settings.dailyReminder
+class _Translations$settings$dailyReminder$fr extends Translations$settings$dailyReminder$en {
+	_Translations$settings$dailyReminder$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Rappel quotidien';
+	@override String get subtitle => 'La partie du jour, à 18 h';
 }
 
 // Path: settings.language
@@ -1122,6 +1152,10 @@ extension on TranslationsFr {
 			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} jetons par case pleine ou pierre dont la case miroir l\'est aussi, après une ligne effacée.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
+			'push.reminder.title' => 'La partie du jour est prête',
+			'push.reminder.body' => 'Les mêmes pièces pour tout le monde. Garde ta série !',
+			'push.reminder.channelName' => 'Rappel de la partie du jour',
+			'push.reminder.channelDescription' => 'Un rappel quand la partie du jour est prête.',
 			'home.complete.title' => 'Tous les mondes terminés',
 			'home.complete.body' => ({required Object count}) => 'Tous les boss sont battus : les ${count} mondes sont à toi.',
 			'home.complete.stars' => ({required Object stars, required Object max}) => '${stars} étoiles sur ${max}',
@@ -1132,6 +1166,7 @@ extension on TranslationsFr {
 			'home.daily.subtitle' => 'Aujourd\'hui, les mêmes pièces pour tout le monde',
 			'home.daily.play' => 'Jouer',
 			'home.daily.leaderboard' => 'Classement',
+			'home.daily.streak' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(n, one: 'Série de ${n} jour', other: 'Série de ${n} jours', ), 
 			'home.resume.title' => 'Reprendre la partie',
 			'home.resume.subtitle' => 'Reprends là où tu en étais',
 			'home.practice.title' => 'Entraînement',
@@ -1176,6 +1211,8 @@ extension on TranslationsFr {
 			'settings.haptics' => 'Vibrations',
 			'settings.reduceMotion.title' => 'Réduire les animations',
 			'settings.reduceMotion.subtitle' => 'Des animations plus douces, sans tremblement de l\'écran',
+			'settings.dailyReminder.title' => 'Rappel quotidien',
+			'settings.dailyReminder.subtitle' => 'La partie du jour, à 18 h',
 			'settings.language.title' => 'Langue',
 			'settings.language.system' => 'Système',
 			'settings.language.en' => 'English',

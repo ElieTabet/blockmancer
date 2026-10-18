@@ -18,6 +18,7 @@ import 'package:game_domain/src/contracts/clock.dart';
 import 'package:game_domain/src/contracts/engagement_store.dart';
 import 'package:game_domain/src/contracts/progression_store.dart';
 import 'package:game_domain/src/contracts/run_store.dart';
+import 'package:game_domain/src/entities/daily_streak.dart';
 import 'package:game_domain/src/entities/game_launch.dart';
 import 'package:game_domain/src/entities/game_mode.br.dart';
 import 'package:game_domain/src/entities/interstitial_caps.dart';
@@ -103,6 +104,7 @@ ClearProgressFun clearProgress(Ref ref) {
     await clear();
 
     ref.invalidate(bestScoreProvider);
+    ref.invalidate(dailyDaysProvider);
     ref.invalidate(hasSavedRunProvider);
     ref.invalidate(progressionProvider);
   };
@@ -191,13 +193,45 @@ RecordProgressionFun recordProgression(Ref ref) {
 RecordRunEndFun recordRunEnd(Ref ref) {
   final record = RecordRunEndBehavior(scores: ref.watch(di.bestScoresProvider));
 
+  final dailyRunFinished = ref.watch(di.onDailyRunFinishedProvider);
+
   return (mode, total) async {
     final result = await record(mode, total);
 
     if (result.isNewBest) ref.invalidate(bestScoreProvider(mode));
 
+    if (mode is DailyMode) {
+      // A day's first best is a new day played.
+      if (result.isNewBest) ref.invalidate(dailyDaysProvider);
+
+      unawaited(dailyRunFinished());
+    }
+
     return result;
   };
+}
+
+/// The UTC days on which a daily run was played to its end.
+@riverpod
+Future<Set<int>> dailyDays(Ref ref) =>
+    ref.watch(di.bestScoresProvider).dailyDays();
+
+/// Today's streak: see [dailyStreakOf].
+@riverpod
+Future<int> dailyStreak(Ref ref) async => dailyStreakOf(
+  days: await ref.watch(dailyDaysProvider.future),
+  today: ref.watch(todaysDailyDateProvider),
+);
+
+typedef HasPlayedDailyFun = Future<bool> Function();
+
+/// Whether a daily run was ever played to its end on this device, read fresh
+/// each time.
+@riverpod
+HasPlayedDailyFun hasPlayedDaily(Ref ref) {
+  final scores = ref.watch(di.bestScoresProvider);
+
+  return () async => (await scores.dailyDays()).isNotEmpty;
 }
 
 @riverpod
@@ -445,6 +479,7 @@ List<Override> bindProviders({
   required Clock Function(Ref ref) clock,
   required EngagementStore Function(Ref ref) engagementStore,
   required GameRules Function(Ref ref) gameRules,
+  required di.DailyRunFinishedFun Function(Ref ref) onDailyRunFinished,
   required ProgressionStore Function(Ref ref) progressionStore,
   required RemoteValueFun Function(Ref ref) remoteValue,
   required di.RequestReviewFun Function(Ref ref) requestReview,
@@ -461,6 +496,7 @@ List<Override> bindProviders({
   di.clockProvider.overrideWith(clock),
   di.engagementStoreProvider.overrideWith(engagementStore),
   di.gameRulesProvider.overrideWith(gameRules),
+  di.onDailyRunFinishedProvider.overrideWith(onDailyRunFinished),
   di.progressionStoreProvider.overrideWith(progressionStore),
   di.remoteValueProvider.overrideWith(remoteValue),
   di.requestReviewProvider.overrideWith(requestReview),

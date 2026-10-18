@@ -74,6 +74,8 @@ class SettingsStateNotifier extends _$SettingsStateNotifier {
     language.apply();
   }
 
+  Future<void> setDailyReminder(bool on) => _settings.setDailyReminder(on);
+
   Future<void> setReduceMotion(bool on) => _settings.setReduceMotion(on);
 
   Future<void> setSound(bool on) => _settings.setSound(on);

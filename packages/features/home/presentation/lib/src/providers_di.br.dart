@@ -13,6 +13,13 @@ Future<int?> dailyBest(Ref ref) => throw UnimplementedError(
   'dailyBestProvider must be overridden by the composition layer',
 );
 
+/// The UTC days in a row, up to today, with a daily run played to its end;
+/// today not played yet doesn't break it.
+@riverpod
+Future<int> dailyStreak(Ref ref) => throw UnimplementedError(
+  'dailyStreakProvider must be overridden by the composition layer',
+);
+
 /// The UTC day today's daily run is played on, at its midnight.
 @riverpod
 DateTime dailyDate(Ref ref) => throw UnimplementedError(

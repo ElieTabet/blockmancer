@@ -32,6 +32,17 @@ Future<AppLanguage> appLanguage(Ref ref) =>
     ref.watch(settingsProvider.selectAsync((settings) => settings.language));
 
 @riverpod
+bool dailyReminderOn(Ref ref) =>
+    ref.watch(settingsProvider).value?.dailyReminder ?? _defaults.dailyReminder;
+
+/// Whether the player wants the daily reminder. A future, so the reminder is
+/// never scheduled, or cancelled, on a default before the stored answer.
+@riverpod
+Future<bool> dailyReminderEnabled(Ref ref) => ref.watch(
+  settingsProvider.selectAsync((settings) => settings.dailyReminder),
+);
+
+@riverpod
 bool hapticsOn(Ref ref) =>
     ref.watch(settingsProvider).value?.haptics ?? _defaults.haptics;
 

@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:leaderboards/leaderboards.dart';
 import 'package:play_stats/play_stats.dart';
+import 'package:push/push.dart';
 import 'package:purchases/purchases.dart';
 import 'package:remote_config/remote_config.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -96,6 +97,10 @@ Leaderboards leaderboards(Ref ref) {
 /// One for the app's life: the OS's rating prompt and the store page.
 @Riverpod(keepAlive: true)
 StoreReview storeReview(Ref ref) => InAppStoreReview(appStoreId: appStoreId);
+
+/// One for the app's life: the daily reminder, a local notification.
+@Riverpod(keepAlive: true)
+DailyReminder dailyReminder(Ref ref) => LocalDailyReminder();
 
 /// One for the app's life: its sounds are loaded once, at launch.
 @Riverpod(keepAlive: true)

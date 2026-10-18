@@ -196,6 +196,7 @@ final class UpdateOffer {
 Future<FakeHomeRouting> pumpHome(
   WidgetTester tester, {
   int? dailyBest,
+  int dailyStreak = 0,
   bool hasSavedRun = false,
   JokerCollection jokerCollection = collection,
   MarkJokersAnnouncedFun? markJokersAnnounced,
@@ -219,6 +220,7 @@ Future<FakeHomeRouting> pumpHome(
         ...bindProviders(
           dailyBest: (ref) async => dailyBest,
           dailyDate: (ref) => DateTime.utc(2026, 10, 17),
+          dailyStreak: (ref) async => dailyStreak,
           dismissUpdateOffer: (ref) => updateOffer?.dismiss ?? () async {},
           hasSavedRun: (ref) async => hasSavedRun,
           jokerCollection: (ref) => jokerCollection,

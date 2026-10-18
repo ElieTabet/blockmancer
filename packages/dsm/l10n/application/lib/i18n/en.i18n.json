@@ -237,7 +237,13 @@
   },
   "push": {
     "channelName": "Announcements",
-    "channelDescription": "News and messages from the app."
+    "channelDescription": "News and messages from the app.",
+    "reminder": {
+      "title": "Today's daily run is ready",
+      "body": "Same pieces for everyone. Keep your streak going!",
+      "channelName": "Daily run reminder",
+      "channelDescription": "A reminder when today's daily run is ready."
+    }
   },
   "home": {
     "complete": {
@@ -252,7 +258,11 @@
       "title": "Daily run",
       "subtitle": "Same pieces for everyone today",
       "play": "Play",
-      "leaderboard": "Leaderboard"
+      "leaderboard": "Leaderboard",
+      "streak": {
+        "one": "$n-day streak",
+        "other": "$n-day streak"
+      }
     },
     "resume": {
       "title": "Continue run",
@@ -316,6 +326,10 @@
     "reduceMotion": {
       "title": "Reduce motion",
       "subtitle": "Calmer animations, no screen shake"
+    },
+    "dailyReminder": {
+      "title": "Daily reminder",
+      "subtitle": "Today's daily run, at 6 pm"
     },
     "language": {
       "title": "Language",

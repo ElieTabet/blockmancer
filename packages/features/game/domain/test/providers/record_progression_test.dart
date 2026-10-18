@@ -20,6 +20,7 @@ void main() {
         clock: (ref) => FakeClock(DateTime.utc(2026, 10, 17, 12)),
         engagementStore: (ref) => FakeEngagementStore(),
         gameRules: (ref) => const TwoWorldRules(),
+        onDailyRunFinished: (ref) => () async {},
         progressionStore: (ref) => store,
         remoteValue: (ref) =>
             (_) => null,

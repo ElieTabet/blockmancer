@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppSettings {
 
- bool get haptics; AppLanguage get language; bool get reduceMotion; bool get sound; bool get tutorialSeen;
+ bool get dailyReminder; bool get haptics; AppLanguage get language; bool get reduceMotion; bool get sound; bool get tutorialSeen;
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AppSettingsCopyWith<AppSettings> get copyWith => _$AppSettingsCopyWithImpl<AppS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.haptics, haptics) || other.haptics == haptics)&&(identical(other.language, language) || other.language == language)&&(identical(other.reduceMotion, reduceMotion) || other.reduceMotion == reduceMotion)&&(identical(other.sound, sound) || other.sound == sound)&&(identical(other.tutorialSeen, tutorialSeen) || other.tutorialSeen == tutorialSeen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.dailyReminder, dailyReminder) || other.dailyReminder == dailyReminder)&&(identical(other.haptics, haptics) || other.haptics == haptics)&&(identical(other.language, language) || other.language == language)&&(identical(other.reduceMotion, reduceMotion) || other.reduceMotion == reduceMotion)&&(identical(other.sound, sound) || other.sound == sound)&&(identical(other.tutorialSeen, tutorialSeen) || other.tutorialSeen == tutorialSeen));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,haptics,language,reduceMotion,sound,tutorialSeen);
+int get hashCode => Object.hash(runtimeType,dailyReminder,haptics,language,reduceMotion,sound,tutorialSeen);
 
 @override
 String toString() {
-  return 'AppSettings(haptics: $haptics, language: $language, reduceMotion: $reduceMotion, sound: $sound, tutorialSeen: $tutorialSeen)';
+  return 'AppSettings(dailyReminder: $dailyReminder, haptics: $haptics, language: $language, reduceMotion: $reduceMotion, sound: $sound, tutorialSeen: $tutorialSeen)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AppSettingsCopyWith<$Res>  {
   factory $AppSettingsCopyWith(AppSettings value, $Res Function(AppSettings) _then) = _$AppSettingsCopyWithImpl;
 @useResult
 $Res call({
- bool haptics, AppLanguage language, bool reduceMotion, bool sound, bool tutorialSeen
+ bool dailyReminder, bool haptics, AppLanguage language, bool reduceMotion, bool sound, bool tutorialSeen
 });
 
 
@@ -62,9 +62,10 @@ class _$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? haptics = null,Object? language = null,Object? reduceMotion = null,Object? sound = null,Object? tutorialSeen = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? dailyReminder = null,Object? haptics = null,Object? language = null,Object? reduceMotion = null,Object? sound = null,Object? tutorialSeen = null,}) {
   return _then(_self.copyWith(
-haptics: null == haptics ? _self.haptics : haptics // ignore: cast_nullable_to_non_nullable
+dailyReminder: null == dailyReminder ? _self.dailyReminder : dailyReminder // ignore: cast_nullable_to_non_nullable
+as bool,haptics: null == haptics ? _self.haptics : haptics // ignore: cast_nullable_to_non_nullable
 as bool,language: null == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
 as AppLanguage,reduceMotion: null == reduceMotion ? _self.reduceMotion : reduceMotion // ignore: cast_nullable_to_non_nullable
 as bool,sound: null == sound ? _self.sound : sound // ignore: cast_nullable_to_non_nullable
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool haptics,  AppLanguage language,  bool reduceMotion,  bool sound,  bool tutorialSeen)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool dailyReminder,  bool haptics,  AppLanguage language,  bool reduceMotion,  bool sound,  bool tutorialSeen)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.haptics,_that.language,_that.reduceMotion,_that.sound,_that.tutorialSeen);case _:
+return $default(_that.dailyReminder,_that.haptics,_that.language,_that.reduceMotion,_that.sound,_that.tutorialSeen);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.haptics,_that.language,_that.reduceMotion,_that.sound,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool haptics,  AppLanguage language,  bool reduceMotion,  bool sound,  bool tutorialSeen)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool dailyReminder,  bool haptics,  AppLanguage language,  bool reduceMotion,  bool sound,  bool tutorialSeen)  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings():
-return $default(_that.haptics,_that.language,_that.reduceMotion,_that.sound,_that.tutorialSeen);case _:
+return $default(_that.dailyReminder,_that.haptics,_that.language,_that.reduceMotion,_that.sound,_that.tutorialSeen);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.haptics,_that.language,_that.reduceMotion,_that.sound,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool haptics,  AppLanguage language,  bool reduceMotion,  bool sound,  bool tutorialSeen)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool dailyReminder,  bool haptics,  AppLanguage language,  bool reduceMotion,  bool sound,  bool tutorialSeen)?  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.haptics,_that.language,_that.reduceMotion,_that.sound,_that.tutorialSeen);case _:
+return $default(_that.dailyReminder,_that.haptics,_that.language,_that.reduceMotion,_that.sound,_that.tutorialSeen);case _:
   return null;
 
 }
@@ -210,9 +211,10 @@ return $default(_that.haptics,_that.language,_that.reduceMotion,_that.sound,_tha
 
 
 class _AppSettings implements AppSettings {
-  const _AppSettings({this.haptics = true, this.language = AppLanguage.system, this.reduceMotion = false, this.sound = true, this.tutorialSeen = false});
+  const _AppSettings({this.dailyReminder = true, this.haptics = true, this.language = AppLanguage.system, this.reduceMotion = false, this.sound = true, this.tutorialSeen = false});
   
 
+@override@JsonKey() final  bool dailyReminder;
 @override@JsonKey() final  bool haptics;
 @override@JsonKey() final  AppLanguage language;
 @override@JsonKey() final  bool reduceMotion;
@@ -229,16 +231,16 @@ _$AppSettingsCopyWith<_AppSettings> get copyWith => __$AppSettingsCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.haptics, haptics) || other.haptics == haptics)&&(identical(other.language, language) || other.language == language)&&(identical(other.reduceMotion, reduceMotion) || other.reduceMotion == reduceMotion)&&(identical(other.sound, sound) || other.sound == sound)&&(identical(other.tutorialSeen, tutorialSeen) || other.tutorialSeen == tutorialSeen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.dailyReminder, dailyReminder) || other.dailyReminder == dailyReminder)&&(identical(other.haptics, haptics) || other.haptics == haptics)&&(identical(other.language, language) || other.language == language)&&(identical(other.reduceMotion, reduceMotion) || other.reduceMotion == reduceMotion)&&(identical(other.sound, sound) || other.sound == sound)&&(identical(other.tutorialSeen, tutorialSeen) || other.tutorialSeen == tutorialSeen));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,haptics,language,reduceMotion,sound,tutorialSeen);
+int get hashCode => Object.hash(runtimeType,dailyReminder,haptics,language,reduceMotion,sound,tutorialSeen);
 
 @override
 String toString() {
-  return 'AppSettings(haptics: $haptics, language: $language, reduceMotion: $reduceMotion, sound: $sound, tutorialSeen: $tutorialSeen)';
+  return 'AppSettings(dailyReminder: $dailyReminder, haptics: $haptics, language: $language, reduceMotion: $reduceMotion, sound: $sound, tutorialSeen: $tutorialSeen)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$AppSettingsCopyWith<$Res> implements $AppSettingsCopyWith
   factory _$AppSettingsCopyWith(_AppSettings value, $Res Function(_AppSettings) _then) = __$AppSettingsCopyWithImpl;
 @override @useResult
 $Res call({
- bool haptics, AppLanguage language, bool reduceMotion, bool sound, bool tutorialSeen
+ bool dailyReminder, bool haptics, AppLanguage language, bool reduceMotion, bool sound, bool tutorialSeen
 });
 
 
@@ -266,9 +268,10 @@ class __$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? haptics = null,Object? language = null,Object? reduceMotion = null,Object? sound = null,Object? tutorialSeen = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? dailyReminder = null,Object? haptics = null,Object? language = null,Object? reduceMotion = null,Object? sound = null,Object? tutorialSeen = null,}) {
   return _then(_AppSettings(
-haptics: null == haptics ? _self.haptics : haptics // ignore: cast_nullable_to_non_nullable
+dailyReminder: null == dailyReminder ? _self.dailyReminder : dailyReminder // ignore: cast_nullable_to_non_nullable
+as bool,haptics: null == haptics ? _self.haptics : haptics // ignore: cast_nullable_to_non_nullable
 as bool,language: null == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
 as AppLanguage,reduceMotion: null == reduceMotion ? _self.reduceMotion : reduceMotion // ignore: cast_nullable_to_non_nullable
 as bool,sound: null == sound ? _self.sound : sound // ignore: cast_nullable_to_non_nullable

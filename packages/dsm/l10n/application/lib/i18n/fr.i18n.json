@@ -237,7 +237,13 @@
   },
   "push": {
     "channelName": "Annonces",
-    "channelDescription": "Les nouveautés et messages de l'application."
+    "channelDescription": "Les nouveautés et messages de l'application.",
+    "reminder": {
+      "title": "La partie du jour est prête",
+      "body": "Les mêmes pièces pour tout le monde. Garde ta série !",
+      "channelName": "Rappel de la partie du jour",
+      "channelDescription": "Un rappel quand la partie du jour est prête."
+    }
   },
   "home": {
     "complete": {
@@ -252,7 +258,11 @@
       "title": "Partie du jour",
       "subtitle": "Aujourd'hui, les mêmes pièces pour tout le monde",
       "play": "Jouer",
-      "leaderboard": "Classement"
+      "leaderboard": "Classement",
+      "streak": {
+        "one": "Série de $n jour",
+        "other": "Série de $n jours"
+      }
     },
     "resume": {
       "title": "Reprendre la partie",
@@ -316,6 +326,10 @@
     "reduceMotion": {
       "title": "Réduire les animations",
       "subtitle": "Des animations plus douces, sans tremblement de l'écran"
+    },
+    "dailyReminder": {
+      "title": "Rappel quotidien",
+      "subtitle": "La partie du jour, à 18 h"
     },
     "language": {
       "title": "Langue",

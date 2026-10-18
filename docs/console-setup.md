@@ -274,6 +274,13 @@ player is signed in once the consent form has gone; a refusal only leaves the bo
 → sign in, then play a daily run to its end; the Leaderboard button shows the score (scores can
 take a minute to appear). Leaderboards don't need review to show in the sandbox.
 
+### Daily reminder
+
+Nothing to set up: it is a local notification, scheduled on the phone, with no server and no
+capability (the push entitlement already covers asking for notifications). To see it: play a
+daily run to its end, allow notifications, then set the phone's clock to 17:59 (Settings →
+General → Date & Time) and lock it.
+
 ## Play Console
 
 ### Data safety
@@ -353,3 +360,11 @@ would play without leaderboards: the code switches them off.)
 
 **To test:** an internal-testing build (or `flutter run` with the debug SHA-1 registered), signed
 in to Play Games with a tester account; play a daily run to its end, then tap **Leaderboard**.
+
+### Daily reminder
+
+Nothing to set up in the console: a local notification, scheduled on the phone. The app asks for
+`RECEIVE_BOOT_COMPLETED` (to schedule it again after a restart) and no exact-alarm permission, so
+the Data safety form and the permissions declaration don't change. To see it: play a daily run to
+its end, allow notifications, set the clock to 17:59 and lock the phone; Android may deliver it a
+few minutes late (battery saving).

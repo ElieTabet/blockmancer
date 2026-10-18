@@ -40,6 +40,7 @@ final class SettingsWidget extends StatelessWidget {
                 ToggleRow(toggle: .sound),
                 ToggleRow(toggle: .haptics),
                 ToggleRow(toggle: .reduceMotion),
+                ToggleRow(toggle: .dailyReminder),
                 LanguageRow(),
                 ReplayTutorialRow(),
                 RemoveAdsRow(),

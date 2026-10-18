@@ -8,7 +8,8 @@ import 'package:home_presentation/src/widgets/home_card.dart';
 import 'package:intl/intl.dart';
 import 'package:l10n_application/l10n_application.dart';
 
-/// Today's daily run: its day, today's best, a way in, and its leaderboard.
+/// Today's daily run: its day, today's best, the streak, a way in, and its
+/// leaderboard.
 final class DailyCard extends ConsumerWidget {
   const DailyCard({super.key});
 
@@ -48,6 +49,7 @@ final class DailyCard extends ConsumerWidget {
                   ),
                 ),
                 const BestLine(mode: .daily),
+                const DailyStreak(),
               ],
             ),
           ),
@@ -151,4 +153,38 @@ final class LeaderboardButton extends ConsumerWidget {
       ),
     ),
   );
+}
+
+/// The days in a row with a daily run, once there is one. Nothing while it is
+/// read, or before a first daily run.
+final class DailyStreak extends ConsumerWidget {
+  const DailyStreak({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final days = ref.watch(
+      dailyStreakProvider.select((streak) => streak.value ?? 0),
+    );
+
+    if (days == 0) return const SizedBox.shrink();
+
+    return Row(
+      spacing: DSSpace.xxsmall,
+      children: [
+        const Icon(
+          Icons.local_fire_department_rounded,
+          color: DSColor.accent,
+          size: 16,
+        ),
+        Text(
+          context.t.home.daily.streak(n: days),
+          style: const TextStyle(
+            color: DSColor.white,
+            fontSize: 13,
+            fontWeight: .w700,
+          ),
+        ),
+      ],
+    );
+  }
 }
