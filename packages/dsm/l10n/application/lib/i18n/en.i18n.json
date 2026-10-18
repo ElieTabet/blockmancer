@@ -351,6 +351,18 @@
       "confirmMessage": "Your best scores and the run in progress will be deleted. This can't be undone.",
       "confirm": "Reset",
       "cancel": "Cancel"
+    },
+    "privacyChoices": {
+      "title": "Privacy choices",
+      "subtitle": "Change what you agreed to for ads"
+    },
+    "privacyPolicy": {
+      "title": "Privacy policy",
+      "subtitle": "How Blockmancer handles your data"
+    },
+    "support": {
+      "title": "Support",
+      "subtitle": "Help, and how to reach us"
     }
   },
   "update": {

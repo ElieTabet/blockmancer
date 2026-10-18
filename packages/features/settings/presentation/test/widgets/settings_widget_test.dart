@@ -123,6 +123,8 @@ void main() {
       await pumpSettings(tester, clearedProgress: cleared);
 
       // When
+      await tester.ensureVisible(find.text('Reset progress'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Reset progress'));
       await tester.pumpAndSettle();
 
@@ -136,6 +138,8 @@ void main() {
       final cleared = <String>[];
       final store = FakeSettingsStore(const AppSettings(tutorialSeen: true));
       await pumpSettings(tester, clearedProgress: cleared, store: store);
+      await tester.ensureVisible(find.text('Reset progress'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Reset progress'));
       await tester.pumpAndSettle();
 
@@ -156,6 +160,8 @@ void main() {
       final cleared = <String>[];
       final store = FakeSettingsStore(const AppSettings(tutorialSeen: true));
       await pumpSettings(tester, clearedProgress: cleared, store: store);
+      await tester.ensureVisible(find.text('Reset progress'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Reset progress'));
       await tester.pumpAndSettle();
 
@@ -298,6 +304,68 @@ void main() {
 
         // Then
         expect(find.text("Couldn't share"), findsOneWidget);
+      },
+    );
+  });
+
+  group('privacy', () {
+    testWidgets(
+      'Given a player outside the EEA, When Settings opens, Then there are no '
+      'privacy choices to change',
+      (tester) async {
+        // Given / When
+        await pumpSettings(tester);
+
+        // Then
+        expect(find.text('Privacy choices'), findsNothing);
+        expect(find.text('Privacy policy'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Given a player in the EEA, When Privacy choices is tapped, Then the '
+      'consent form opens again',
+      (tester) async {
+        // Given
+        final links = <String>[];
+        await pumpSettings(
+          tester,
+          consent: (canRequestAds: false, privacyOptionsRequired: true),
+          links: links,
+        );
+        await tester.ensureVisible(find.text('Privacy choices'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Privacy choices'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(links, ['privacy options']);
+      },
+    );
+
+    testWidgets(
+      'Given Settings, When the privacy policy and support are tapped, Then '
+      "each opens on the studio's site",
+      (tester) async {
+        // Given
+        final links = <String>[];
+        await pumpSettings(tester, links: links);
+
+        // When
+        for (final row in ['Privacy policy', 'Support']) {
+          await tester.ensureVisible(find.text(row));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text(row));
+          await tester.pumpAndSettle();
+        }
+
+        // Then
+        expect(links, [
+          'https://studio.elietabet.com/privacy',
+          'https://studio.elietabet.com/support',
+        ]);
       },
     );
   });

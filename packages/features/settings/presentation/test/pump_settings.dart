@@ -18,7 +18,12 @@ import 'fake_settings_store.dart';
 Future<FakeSettingsRouting> pumpSettings(
   WidgetTester tester, {
   List<String>? clearedProgress,
+  settings.ConsentAnswer consent = (
+    canRequestAds: true,
+    privacyOptionsRequired: false,
+  ),
   List<String>? crashes,
+  List<String>? links,
   FakeMailApp? mailApp,
   FakeShareSheet? shareSheet,
   FakeSettingsStore? store,
@@ -43,7 +48,17 @@ Future<FakeSettingsRouting> pumpSettings(
           composeEmail: (ref) => (mailApp ?? FakeMailApp()).compose,
           exportTestStats: (ref) =>
               () async => '{"installId":"ab12","schema":1}',
+          gatherConsent: (ref) =>
+              () async => consent,
+          openUrl: (ref) => (url) async {
+            links?.add(url);
+
+            return true;
+          },
+          setAnalyticsConsent: (ref) => ({required granted}) async {},
           settingsStore: (ref) => store ?? FakeSettingsStore(),
+          showPrivacyOptions: (ref) =>
+              () async => links?.add('privacy options'),
         ),
         ...bindProviders(
           crashForTest: (ref) =>
@@ -61,6 +76,12 @@ Future<FakeSettingsRouting> pumpSettings(
       ),
     ),
   );
+  await tester.pumpAndSettle();
+
+  // Asked at launch, as the app does.
+  await ProviderScope.containerOf(
+    tester.element(find.byType(SettingsWidget)),
+  ).read(settings.consentProvider.notifier).gather();
   await tester.pumpAndSettle();
 
   return routing;

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Refuses a release build while app/env/prod.json still holds a placeholder
-# ID: a store build with one would ship without its ads, store link or
+# Refuses a release build while app/env/prod.json (or a native file) still
+# holds a placeholder ID: a store build with one would ship without its ads, store link or
 # leaderboards. docs/console-setup.md says where each real ID comes from.
 #
 # Usage: bash scripts/check_release_ids.sh [--warn]
@@ -11,7 +11,18 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 IDS_FILE="$ROOT_DIR/app/env/prod.json"
-LEFT="$(grep -o '"[A-Z_]*": *"PLACEHOLDER_[A-Z_]*"' "$IDS_FILE" | sed 's/:.*//' | tr -d '"' || true)"
+# The few IDs native code reads at launch (AdMob's app id, Play Games') live
+# in the native files instead; any placeholder there counts too.
+NATIVE_FILES=(
+  "$ROOT_DIR/app/ios/Runner/Info.plist"
+  "$ROOT_DIR/app/android/app/src/main/AndroidManifest.xml"
+)
+LEFT="$(
+  {
+    grep -o '"[A-Z_]*": *"PLACEHOLDER_[A-Z_]*"' "$IDS_FILE" | sed 's/:.*//' | tr -d '"'
+    grep -ho 'PLACEHOLDER_[A-Z_]*' "${NATIVE_FILES[@]}"
+  } 2>/dev/null | sort -u || true
+)"
 
 if [ -z "$LEFT" ]; then
   exit 0

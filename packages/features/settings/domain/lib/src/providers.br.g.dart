@@ -360,3 +360,135 @@ final class TutorialSeenProvider
 }
 
 String _$tutorialSeenHash() => r'fa8912d515ce54cdff56c73f892d59023b901a66';
+
+/// Whether Settings offers "Privacy choices": only where the consent form
+/// says the player must be able to change their answer.
+
+@ProviderFor(privacyChoicesRequired)
+final privacyChoicesRequiredProvider = PrivacyChoicesRequiredProvider._();
+
+/// Whether Settings offers "Privacy choices": only where the consent form
+/// says the player must be able to change their answer.
+
+final class PrivacyChoicesRequiredProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether Settings offers "Privacy choices": only where the consent form
+  /// says the player must be able to change their answer.
+  PrivacyChoicesRequiredProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'privacyChoicesRequiredProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$privacyChoicesRequiredHash();
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    return privacyChoicesRequired(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$privacyChoicesRequiredHash() =>
+    r'1e35ce0834ff63c161e06ad84e2ddc021d98340a';
+
+@ProviderFor(openPrivacyPolicy)
+final openPrivacyPolicyProvider = OpenPrivacyPolicyProvider._();
+
+final class OpenPrivacyPolicyProvider
+    extends $FunctionalProvider<OpenLinkFun, OpenLinkFun, OpenLinkFun>
+    with $Provider<OpenLinkFun> {
+  OpenPrivacyPolicyProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'openPrivacyPolicyProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$openPrivacyPolicyHash();
+
+  @$internal
+  @override
+  $ProviderElement<OpenLinkFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  OpenLinkFun create(Ref ref) {
+    return openPrivacyPolicy(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OpenLinkFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OpenLinkFun>(value),
+    );
+  }
+}
+
+String _$openPrivacyPolicyHash() => r'ffcdd198e6a4288fa03cda46b79b2ce351993cd8';
+
+@ProviderFor(openSupport)
+final openSupportProvider = OpenSupportProvider._();
+
+final class OpenSupportProvider
+    extends $FunctionalProvider<OpenLinkFun, OpenLinkFun, OpenLinkFun>
+    with $Provider<OpenLinkFun> {
+  OpenSupportProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'openSupportProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$openSupportHash();
+
+  @$internal
+  @override
+  $ProviderElement<OpenLinkFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  OpenLinkFun create(Ref ref) {
+    return openSupport(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OpenLinkFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OpenLinkFun>(value),
+    );
+  }
+}
+
+String _$openSupportHash() => r'b2fa836479f5dea4821227a81b3ffd2b74f97cee';

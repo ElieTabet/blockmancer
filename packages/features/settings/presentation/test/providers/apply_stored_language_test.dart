@@ -15,8 +15,14 @@ Future<void> _launchWith(settings.AppLanguage language) async {
       composeEmail: (ref) => FakeMailApp().compose,
       exportTestStats: (ref) =>
           () async => '{}',
+      gatherConsent: (ref) =>
+          () async => (canRequestAds: true, privacyOptionsRequired: false),
+      openUrl: (ref) =>
+          (url) async => true,
+      setAnalyticsConsent: (ref) => ({required granted}) async {},
       settingsStore: (ref) =>
           FakeSettingsStore(settings.AppSettings(language: language)),
+      showPrivacyOptions: (ref) => () async {},
     ),
   );
   addTearDown(container.dispose);

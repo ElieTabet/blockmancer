@@ -184,7 +184,12 @@ List<Override> featureBindingOverrides({
     clearProgress: (ref) => ref.watch(game.clearProgressProvider),
     composeEmail: (ref) => external_links.composeEmail,
     exportTestStats: (ref) => ref.watch(playStatsProvider).exportJson,
+    gatherConsent: (ref) => ref.watch(consentProvider).gather,
+    openUrl: (ref) => external_links.openExternalUrl,
+    setAnalyticsConsent: (ref) =>
+        ref.watch(telemetry.telemetryProvider).setAnalyticsConsent,
     settingsStore: (ref) => const SharedPreferencesSettingsStore(),
+    showPrivacyOptions: (ref) => ref.watch(consentProvider).showPrivacyOptions,
   ),
   ...settings_ui.bindProviders(
     crashForTest: (ref) => ref.watch(telemetry.telemetryProvider).crash,

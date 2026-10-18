@@ -6,10 +6,9 @@
     <!-- Android 13+. The messaging plugin normally merges this in; declared
          here so the manifest says what the app asks for. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <!-- Analytics merges this in; the app reads no advertising id. -->
-    <uses-permission
-        android:name="com.google.android.gms.permission.AD_ID"
-        tools:node="remove"/>
+    <!-- AdMob reads the advertising id, as the consent the player gave
+         allows; the Data safety form declares it. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     <application
         android:label="Blockmancer"
         android:name="${applicationName}"
@@ -62,6 +61,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="announcements"/>
+        <!-- AdMob's app id (not a secret; the ad units, test or real, are
+             chosen in Dart). Without it the ad SDK stops the app at launch. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9236909266129177~7769371812"/>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

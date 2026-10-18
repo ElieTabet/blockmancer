@@ -8,6 +8,58 @@ part of 'providers_internal.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// One for the app's life, so the ad SDK starts once. A test build can show
+/// the form as in the EEA from anywhere: `--dart-define=UMP_DEBUG_EEA=true`
+/// with the device's id from the UMP log as `UMP_TEST_DEVICE_ID`.
+
+@ProviderFor(consent)
+final consentProvider = ConsentProvider._();
+
+/// One for the app's life, so the ad SDK starts once. A test build can show
+/// the form as in the EEA from anywhere: `--dart-define=UMP_DEBUG_EEA=true`
+/// with the device's id from the UMP log as `UMP_TEST_DEVICE_ID`.
+
+final class ConsentProvider
+    extends $FunctionalProvider<Consent, Consent, Consent>
+    with $Provider<Consent> {
+  /// One for the app's life, so the ad SDK starts once. A test build can show
+  /// the form as in the EEA from anywhere: `--dart-define=UMP_DEBUG_EEA=true`
+  /// with the device's id from the UMP log as `UMP_TEST_DEVICE_ID`.
+  ConsentProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'consentProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$consentHash();
+
+  @$internal
+  @override
+  $ProviderElement<Consent> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Consent create(Ref ref) {
+    return consent(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Consent value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Consent>(value),
+    );
+  }
+}
+
+String _$consentHash() => r'8251bd3dddf8f78627f94e133f2bde504d8c9585';
+
 /// One for the app's life: its sounds are loaded once, at launch.
 
 @ProviderFor(gameSounds)

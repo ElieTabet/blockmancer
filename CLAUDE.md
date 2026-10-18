@@ -21,7 +21,7 @@ blockmancer/
 │   ├── blockmancer_engine/ # The game rules (BlockmancerEngine implements GameRules) — pure Dart, deterministic; injected, never imported by a feature
 │   ├── shared_domain/    # Entities shared across features (the game's RunState/GameEvent/…) + contracts (GameRules) — pure Dart, no logic
 │   ├── utilities/        # Horizontal infrastructure — no feature knowledge
-│   │   ├── ads/              # Rewarded ads behind `RewardedAds.show()` — no network yet, so every reward is granted (phase 3 brings AdMob)
+│   │   ├── ads/              # AdMob and Google's consent form (UMP) behind `Consent` (gather, privacy options) and `RewardedAds` — the only place google_mobile_ads is known
 │   │   ├── app_info/         # The app's version and the device it runs on (`readAppInfo()`, never throws) — the only place package_info_plus and device_info_plus are known
 │   │   ├── external_links/   # Hands a link or text to the OS (browser, mail draft, share sheet) — the only place url_launcher and share_plus are known; Settings uses `composeEmail` and `shareText`
 │   │   ├── play_stats/       # The testers' numbers: `LocalPlayStats` implements shared_domain's `AnalyticsSink`, counting per day on the device, and exports a JSON summary
@@ -656,7 +656,8 @@ App startup is two screens in one colour — the brand colour (`DSColor.primary`
 
 There is no backend: the app makes no HTTP calls and nothing signs in. **No feature package may
 depend on `firebase_analytics`, `firebase_crashlytics`, `firebase_messaging`,
-`firebase_remote_config`, `flutter_inappwebview`, `flutter_soloud`, `push`, `sounds`, `telemetry`,
+`firebase_remote_config`, `google_mobile_ads`, `flutter_inappwebview`, `flutter_soloud`, `push`,
+`sounds`, `telemetry`,
 `remote_config`, `url_launcher`, `ads`, `app_info`, `package_info_plus`, `device_info_plus`,
 `external_links`, `share_plus`, `play_stats` or `blockmancer_engine` directly** — a
 feature declares a contract and the composition layer injects the implementation, exactly as it does
@@ -682,6 +683,28 @@ time with no wiring. Pass it with `--dart-define-from-file=env/<flavor>.json` (s
 melos scripts). With no flag — including every `flutter test` run — it is a dev build. It is not a
 package: the app is the only thing that reads it, and `boot()` turns it into the
 `collectsTelemetry` value it passes to `appOverrides`.
+
+## Consent
+
+Ads in the EEA and the UK need the player's consent first: Google's UMP form, behind `ads`'
+`Consent` (`GoogleConsent`).
+
+- **When:** every launch, once the first frame is up (the form is drawn over the app):
+  `gatherConsent` (app_providers) calls `settings_domain`'s `ConsentNotifier.gather`, which asks
+  UMP (form shown only when due), starts the ad SDK once ads may be requested, and sets Analytics'
+  consent mode from the answer (`Telemetry.setAnalyticsConsent`: granted only when ads may be
+  requested; the per-purpose detail is the TCF string UMP writes for the SDKs). The game never
+  waits for it; ads do.
+- **iOS tracking:** the IDFA explainer set up in AdMob shows Apple's ATT alert itself when the
+  player continues; declining leaves ads non-personalised. No ATT package.
+- **Settings:** `PrivacyRows` — **Privacy choices** (reopens the form, then takes the new answer)
+  only when UMP says the player must be able to change it (`privacyChoicesRequired`), then
+  **Privacy policy** and **Support** on `studio.elietabet.com` (`privacyPolicyUrl`, `supportUrl`,
+  opened through the `openUrl` slot).
+- **Testing the EEA form:** a test build with `UMP_DEBUG_EEA=true` and `UMP_TEST_DEVICE_ID`
+  (docs/console-setup.md, AdMob).
+- **Native:** the AdMob app ids are in `Info.plist` (`GADApplicationIdentifier`) and the manifest
+  (`com.google.android.gms.ads.APPLICATION_ID`); without them the ad SDK stops the app at launch.
 
 ## Settings
 
@@ -842,9 +865,10 @@ question yet — the privacy policy and App Store privacy details are what discl
   of boot. The package only obeys.
 - **Native defaults are off** — `FIREBASE_ANALYTICS_COLLECTION_ENABLED` /
   `FirebaseCrashlyticsCollectionEnabled` in `Info.plist`, the matching `meta-data` in the Android
-  manifest — so nothing goes out before Dart has set the switch. No advertising id until phase 3
-  (AdMob): Android removes the `AD_ID` permission; iOS links the full Analytics SDK but never asks
-  for tracking permission, so the OS hands it an all-zero IDFA. The `ACCESS_ADSERVICES_*`
+  manifest — so nothing goes out before Dart has set the switch. Analytics itself still collects no
+  advertising id (`google_analytics_adid_collection_enabled` false); AdMob does, as consent
+  allows: Android declares `AD_ID`, and iOS asks the tracking question through UMP's IDFA
+  explainer (`NSUserTrackingUsageDescription`). The `ACCESS_ADSERVICES_*`
   permissions Firebase Analytics merges into the Android manifest stay, since AdMob will use them. Don't retry `FIREBASE_ANALYTICS_WITHOUT_ADID`:
   firebase_analytics' `Package.swift` reads it, but Xcode doesn't pass environment variables to
   manifest evaluation (only the `swift` CLI does), so it never takes effect in a Flutter build.

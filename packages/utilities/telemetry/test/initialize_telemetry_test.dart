@@ -12,6 +12,10 @@ final class _RecordingTelemetry implements Telemetry {
   void installCrashHandlers() => calls.add('handlers');
 
   @override
+  Future<void> setAnalyticsConsent({required bool granted}) async =>
+      calls.add('consent: $granted');
+
+  @override
   Future<void> recordNonFatal(
     Object error,
     StackTrace stackTrace, {

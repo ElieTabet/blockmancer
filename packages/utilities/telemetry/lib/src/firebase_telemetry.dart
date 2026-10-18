@@ -64,6 +64,25 @@ final class FirebaseTelemetry implements Telemetry {
   }
 
   @override
+  Future<void> setAnalyticsConsent({required bool granted}) async {
+    try {
+      await _analytics.setConsent(
+        adPersonalizationSignalsConsentGranted: granted,
+        adStorageConsentGranted: granted,
+        adUserDataConsentGranted: granted,
+        analyticsStorageConsentGranted: granted,
+      );
+    } catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Setting the Analytics consent failed',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  @override
   Future<void> setCollectionEnabled(bool enabled) async {
     try {
       await _analytics.setAnalyticsCollectionEnabled(enabled);

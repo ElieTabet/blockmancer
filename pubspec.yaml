@@ -60,6 +60,7 @@ melos:
         flutter_soloud: ^5.2.1 # sound effects preloaded in memory and mixed natively over FFI: no per-play channel hop or decode, so a sound lands with the touch (packages/utilities/sounds)
         freezed_annotation: ^3.1.0
         google_fonts: ^6.3.1
+        google_mobile_ads: ^9.1.0 # AdMob ads and Google's UMP consent form (which also presents the iOS ATT alert after its IDFA explainer); known only to packages/utilities/ads
         intl: ^0.20.2
         json_annotation: ^4.9.0
         package_info_plus: ^10.2.2 # the app's version and build number shown in Settings; known only to the app_info package

@@ -351,3 +351,24 @@ Three changes from the review of this file, each its own commit.
   Dart code with `String.fromEnvironment` and by the release scripts, which fail while a
   `PLACEHOLDER_` is left (a test build only warns). The AdMob IDs are already the real ones; the
   App Store id is the one placeholder so far.
+
+## Sprint 8, Task 2: consent
+
+- **ATT through UMP.** AdMob's IDFA explainer shows Apple's tracking alert itself once the player
+  continues (AdMob's help: "If users click Continue, the iOS ATT alert screen is displayed"), so no
+  ATT package was added; the app supplies the alert's text.
+- **When the form shows:** every launch, once the first frame is up, never blocking the game; only
+  ads wait for it (the ad SDK starts once ads may be requested). The splash isn't held for it.
+- **Analytics consent mode from UMP:** granted when ads may be requested, denied otherwise, for
+  all four consent types at once. A player who declines in the EEA still gets "may request ads"
+  (limited ads), so the finer detail is the TCF string UMP writes, which the Google SDKs read;
+  to check on a device with the EEA debug geography.
+- **Who decides:** `settings_domain` owns consent (it owns the Privacy choices row); `ads` only
+  talks to UMP and `telemetry` only sets the mode. Composition wires the three.
+- **Native app ids in the native files.** AdMob's app id is read by native code at launch, so it
+  sits in `Info.plist` and the manifest (the real ids: Google's guidance is to test with test ad
+  units, not a test app id); `app/env/prod.json` keeps what Dart reads. The placeholder check
+  scans both.
+- **The privacy links** are the studio's site: `/privacy` and `/support`, as the sprint says.
+- **French for the tracking alert:** the alert's text is English only for now; a French
+  `InfoPlist.strings` needs the Xcode project's localizations, left for the store pass (Task 8).

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ads/ads.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:play_stats/play_stats.dart';
 import 'package:remote_config/remote_config.dart';
@@ -10,6 +11,21 @@ part 'providers_internal.br.g.dart';
 
 // app_providers — layer-internal providers: the instances composition builds
 // once and hands out.
+
+/// One for the app's life, so the ad SDK starts once. A test build can show
+/// the form as in the EEA from anywhere: `--dart-define=UMP_DEBUG_EEA=true`
+/// with the device's id from the UMP log as `UMP_TEST_DEVICE_ID`.
+@Riverpod(keepAlive: true)
+Consent consent(Ref ref) => GoogleConsent(
+  debugEea:
+      ref.watch(testToolsProvider) &&
+      const bool.fromEnvironment('UMP_DEBUG_EEA'),
+  testDeviceIds: [
+    if (const String.fromEnvironment('UMP_TEST_DEVICE_ID') case final id
+        when id.isNotEmpty)
+      id,
+  ],
+);
 
 /// One for the app's life: its sounds are loaded once, at launch.
 @Riverpod(keepAlive: true)

@@ -229,3 +229,186 @@ final class SettingsStoreProvider
 }
 
 String _$settingsStoreHash() => r'05647355ac49cccbf6759ec30f378b05c0dbcda7';
+
+@ProviderFor(gatherConsent)
+final gatherConsentProvider = GatherConsentProvider._();
+
+final class GatherConsentProvider
+    extends
+        $FunctionalProvider<
+          GatherConsentFun,
+          GatherConsentFun,
+          GatherConsentFun
+        >
+    with $Provider<GatherConsentFun> {
+  GatherConsentProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'gatherConsentProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$gatherConsentHash();
+
+  @$internal
+  @override
+  $ProviderElement<GatherConsentFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GatherConsentFun create(Ref ref) {
+    return gatherConsent(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GatherConsentFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GatherConsentFun>(value),
+    );
+  }
+}
+
+String _$gatherConsentHash() => r'33abd205ade0c335e21e3ce7a9d8739ae3856a5e';
+
+@ProviderFor(openUrl)
+final openUrlProvider = OpenUrlProvider._();
+
+final class OpenUrlProvider
+    extends $FunctionalProvider<OpenUrlFun, OpenUrlFun, OpenUrlFun>
+    with $Provider<OpenUrlFun> {
+  OpenUrlProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'openUrlProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$openUrlHash();
+
+  @$internal
+  @override
+  $ProviderElement<OpenUrlFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  OpenUrlFun create(Ref ref) {
+    return openUrl(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OpenUrlFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OpenUrlFun>(value),
+    );
+  }
+}
+
+String _$openUrlHash() => r'4cf4f97aa61ffdcfad2dcbfae0b77540875667d1';
+
+@ProviderFor(setAnalyticsConsent)
+final setAnalyticsConsentProvider = SetAnalyticsConsentProvider._();
+
+final class SetAnalyticsConsentProvider
+    extends
+        $FunctionalProvider<
+          SetAnalyticsConsentFun,
+          SetAnalyticsConsentFun,
+          SetAnalyticsConsentFun
+        >
+    with $Provider<SetAnalyticsConsentFun> {
+  SetAnalyticsConsentProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'setAnalyticsConsentProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$setAnalyticsConsentHash();
+
+  @$internal
+  @override
+  $ProviderElement<SetAnalyticsConsentFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SetAnalyticsConsentFun create(Ref ref) {
+    return setAnalyticsConsent(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SetAnalyticsConsentFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SetAnalyticsConsentFun>(value),
+    );
+  }
+}
+
+String _$setAnalyticsConsentHash() =>
+    r'01f7bf91c98c6e5176b20eb46b0915666862f075';
+
+@ProviderFor(showPrivacyOptions)
+final showPrivacyOptionsProvider = ShowPrivacyOptionsProvider._();
+
+final class ShowPrivacyOptionsProvider
+    extends
+        $FunctionalProvider<
+          ShowPrivacyOptionsFun,
+          ShowPrivacyOptionsFun,
+          ShowPrivacyOptionsFun
+        >
+    with $Provider<ShowPrivacyOptionsFun> {
+  ShowPrivacyOptionsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'showPrivacyOptionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$showPrivacyOptionsHash();
+
+  @$internal
+  @override
+  $ProviderElement<ShowPrivacyOptionsFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ShowPrivacyOptionsFun create(Ref ref) {
+    return showPrivacyOptions(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ShowPrivacyOptionsFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ShowPrivacyOptionsFun>(value),
+    );
+  }
+}
+
+String _$showPrivacyOptionsHash() =>
+    r'aabd89e7728517afce1a4d6f9e33bf32d9583504';

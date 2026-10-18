@@ -6,6 +6,7 @@ import 'package:settings_domain/src/contracts/settings_store.dart';
 import 'package:settings_domain/src/entities/app_details.br.dart';
 import 'package:settings_domain/src/entities/app_language.dart';
 import 'package:settings_domain/src/entities/app_settings.br.dart';
+import 'package:settings_domain/src/notifiers/consent_notifier.br.dart';
 import 'package:settings_domain/src/notifiers/settings_notifier.br.dart';
 import 'package:settings_domain/src/providers_di.br.dart' as di;
 
@@ -69,16 +70,52 @@ Future<bool> tutorialSeen(Ref ref) => ref.watch(
   settingsProvider.selectAsync((settings) => settings.tutorialSeen),
 );
 
+/// The studio site's privacy policy, which the stores and the consent form
+/// link to as well.
+const privacyPolicyUrl = 'https://studio.elietabet.com/privacy';
+
+const supportUrl = 'https://studio.elietabet.com/support';
+
+typedef OpenLinkFun = Future<bool> Function();
+
+/// Whether Settings offers "Privacy choices": only where the consent form
+/// says the player must be able to change their answer.
+@riverpod
+bool privacyChoicesRequired(Ref ref) =>
+    ref.watch(consentProvider)?.privacyOptionsRequired ?? false;
+
+@riverpod
+OpenLinkFun openPrivacyPolicy(Ref ref) {
+  final openUrl = ref.watch(di.openUrlProvider);
+
+  return () => openUrl(privacyPolicyUrl);
+}
+
+@riverpod
+OpenLinkFun openSupport(Ref ref) {
+  final openUrl = ref.watch(di.openUrlProvider);
+
+  return () => openUrl(supportUrl);
+}
+
 List<Override> bindProviders({
   required Future<AppDetails> Function(Ref ref) appDetails,
   required di.ClearProgressFun Function(Ref ref) clearProgress,
   required di.ComposeEmailFun Function(Ref ref) composeEmail,
   required di.ExportTestStatsFun Function(Ref ref) exportTestStats,
+  required di.GatherConsentFun Function(Ref ref) gatherConsent,
+  required di.OpenUrlFun Function(Ref ref) openUrl,
+  required di.SetAnalyticsConsentFun Function(Ref ref) setAnalyticsConsent,
   required SettingsStore Function(Ref ref) settingsStore,
+  required di.ShowPrivacyOptionsFun Function(Ref ref) showPrivacyOptions,
 }) => [
   di.appDetailsProvider.overrideWith(appDetails),
   di.clearProgressProvider.overrideWith(clearProgress),
   di.composeEmailProvider.overrideWith(composeEmail),
   di.exportTestStatsProvider.overrideWith(exportTestStats),
+  di.gatherConsentProvider.overrideWith(gatherConsent),
+  di.openUrlProvider.overrideWith(openUrl),
+  di.setAnalyticsConsentProvider.overrideWith(setAnalyticsConsent),
   di.settingsStoreProvider.overrideWith(settingsStore),
+  di.showPrivacyOptionsProvider.overrideWith(showPrivacyOptions),
 ];

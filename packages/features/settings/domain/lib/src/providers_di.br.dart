@@ -44,3 +44,37 @@ ExportTestStatsFun exportTestStats(Ref ref) => throw UnimplementedError(
 SettingsStore settingsStore(Ref ref) => throw UnimplementedError(
   'settingsStoreProvider must be overridden by the composition layer',
 );
+
+/// What the player's consent allows, once asked.
+typedef ConsentAnswer = ({bool canRequestAds, bool privacyOptionsRequired});
+
+/// Asks for consent where it is required and not yet answered. Never throws.
+typedef GatherConsentFun = Future<ConsentAnswer> Function();
+
+@riverpod
+GatherConsentFun gatherConsent(Ref ref) => throw UnimplementedError(
+  'gatherConsentProvider must be overridden by the composition layer',
+);
+
+/// Opens [url] outside the app, and answers whether it opened.
+typedef OpenUrlFun = Future<bool> Function(String url);
+
+@riverpod
+OpenUrlFun openUrl(Ref ref) => throw UnimplementedError(
+  'openUrlProvider must be overridden by the composition layer',
+);
+
+typedef SetAnalyticsConsentFun = Future<void> Function({required bool granted});
+
+@riverpod
+SetAnalyticsConsentFun setAnalyticsConsent(Ref ref) => throw UnimplementedError(
+  'setAnalyticsConsentProvider must be overridden by the composition layer',
+);
+
+/// Reopens the consent form. Never throws.
+typedef ShowPrivacyOptionsFun = Future<void> Function();
+
+@riverpod
+ShowPrivacyOptionsFun showPrivacyOptions(Ref ref) => throw UnimplementedError(
+  'showPrivacyOptionsProvider must be overridden by the composition layer',
+);

@@ -351,6 +351,18 @@
       "confirmMessage": "Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.",
       "confirm": "Réinitialiser",
       "cancel": "Annuler"
+    },
+    "privacyChoices": {
+      "title": "Choix de confidentialité",
+      "subtitle": "Change ce que tu as accepté pour les pubs"
+    },
+    "privacyPolicy": {
+      "title": "Politique de confidentialité",
+      "subtitle": "Comment Blockmancer traite tes données"
+    },
+    "support": {
+      "title": "Assistance",
+      "subtitle": "De l'aide, et comment nous joindre"
     }
   },
   "update": {

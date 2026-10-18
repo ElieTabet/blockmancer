@@ -28,6 +28,17 @@
 	<false/>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
 	<false/>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-9236909266129177~1356926571</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This lets Blockmancer show ads that suit you better. Ads appear either way, and your choice never changes the game.</string>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>cstr6suwn9.skadnetwork</string>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

@@ -19,12 +19,18 @@ warn, since they play Google's test ad units.
 | Key in `app/env/prod.json` | Status | Where the real value comes from |
 |---|---|---|
 | `APP_STORE_ID` | `PLACEHOLDER_APP_STORE_ID` | App Store Connect → the app → App Information → **Apple ID** (a number, e.g. `6740000000`). Used for the store link of the update screen and banner. |
-| `ADMOB_APP_ID_IOS` | received | AdMob → Apps → Blockmancer (iOS) → App settings → **App ID** (`ca-app-pub-…~…`) |
-| `ADMOB_APP_ID_ANDROID` | received | AdMob → Apps → Blockmancer (Android) → App settings → **App ID** |
 | `ADMOB_REWARDED_IOS` | received | AdMob → iOS app → Ad units → **revive** → Ad unit ID (`ca-app-pub-…/…`) |
 | `ADMOB_REWARDED_ANDROID` | received | AdMob → Android app → Ad units → **revive** |
 | `ADMOB_INTERSTITIAL_IOS` | received | AdMob → iOS app → Ad units → **run_end** |
 | `ADMOB_INTERSTITIAL_ANDROID` | received | AdMob → Android app → Ad units → **run_end** |
+
+Two IDs are read by native code at launch, so they live in the native files instead (and a
+placeholder there blocks a release build too):
+
+| Native file | ID | Status |
+|---|---|---|
+| `app/ios/Runner/Info.plist` → `GADApplicationIdentifier` | AdMob iOS **App ID** (`ca-app-pub-…~…`) | received |
+| `app/android/app/src/main/AndroidManifest.xml` → `com.google.android.gms.ads.APPLICATION_ID` | AdMob Android **App ID** | received |
 
 The product and leaderboard IDs are ours to choose, not placeholders: enter them in the consoles
 exactly as written in their sections below.
@@ -103,14 +109,103 @@ version. All four default to `0.0.0`, which asks nothing.
 
 ## AdMob
 
-*(Consent and ads: Tasks 2 and 3.)* The app IDs and the two ad units per platform are received
-(table above).
+### 1. Apps and ad units (done)
+
+Both apps exist (iOS and Android, publisher `pub-9236909266129177`), each with two ad units:
+
+| Ad unit name | Format | Used for |
+|---|---|---|
+| `revive` | Rewarded | The revive after a lost round (Task 3) |
+| `run_end` | Interstitial | Between runs, capped by Remote Config (Task 3) |
+
+Their IDs are in the tables above. Debug and test builds use Google's public test units, never
+these.
+
+### 2. Privacy & messaging (consent)
+
+AdMob → **Privacy & messaging**:
+
+1. **European regulations (GDPR)** → **Create message** → apps: both Blockmancer apps;
+   languages: English and French; consent options: **Consent** and **Do not consent** (the "Do not
+   consent" button keeps the form fair; the app plays the same either way); privacy policy URL:
+   `https://studio.elietabet.com/privacy`; targeting: **EEA, UK and Switzerland** → **Publish**.
+2. **IDFA explainer** (iOS only) → **Create message** → app: Blockmancer (iOS); languages: English
+   and French → **Publish**. When the player taps Continue, iOS shows its tracking alert with the
+   app's own text (`NSUserTrackingUsageDescription` in `Info.plist`: "This lets Blockmancer show
+   ads that suit you better. Ads appear either way, and your choice never changes the game.").
+3. Optional: **US state regulations** message, if you want it (the app doesn't need it to run).
+
+How the app uses it: at every launch, once the first frame is up, it asks Google's UMP whether a
+message is due, shows it if so, and only then may request ads; Analytics' consent mode follows
+the answer. Settings shows **Privacy choices** (reopens the message) only where UMP says the
+player must be able to change their answer, plus **Privacy policy** and **Support** links.
+
+To test the EEA form from anywhere: install a test build run with
+`flutter run --release --dart-define-from-file=env/prod.json --dart-define=TEST_TOOLS=true
+--dart-define=UMP_DEBUG_EEA=true` (from `app/`), copy the device id the UMP SDK logs ("Use new
+ConsentDebugSettings.Builder().addTestDeviceHashedId(…)"), and run again with
+`--dart-define=UMP_TEST_DEVICE_ID=<that id>` added: the form shows as in the EEA. Decline: the
+game plays as usual.
+
+### 3. app-ads.txt
+
+Host a file at **`https://studio.elietabet.com/app-ads.txt`** containing exactly:
+
+```
+google.com, pub-9236909266129177, DIRECT, f08c47fec0942fa0
+```
+
+and set the developer website of both store listings to `https://studio.elietabet.com` (AdMob
+looks for app-ads.txt at the root of the developer website's domain). AdMob → Apps → View all
+apps → **app-ads.txt** tab shows when it has been found (it can take a day).
+
+### 4. Payments
+
+AdMob → **Payments** → payment info: address, tax information (W-8BEN or your country's
+equivalent for a French micro-entreprise), and the bank account; payments start once earnings
+pass the threshold.
 
 ## App Store Connect
 
-*(Purchase, Game Center and privacy answers: Tasks 2, 4 and 6.)* Send back the **Apple ID** of
-the app (`APP_STORE_ID`, above) once the app record exists.
+Send back the **Apple ID** of the app (`APP_STORE_ID`, above) once the app record exists.
+
+### App Privacy
+
+App Store Connect → the app → **App Privacy** → Get Started, answering what the SDKs collect
+(Firebase Analytics, Crashlytics, AdMob):
+
+| Data type | Collected | Linked to the player | Used to track | Purposes |
+|---|---|---|---|---|
+| Identifiers → Device ID | Yes (AdMob, only with tracking allowed) | No | **Yes** | Third-party advertising |
+| Usage Data → Product Interaction | Yes (Analytics events) | No | No | Analytics |
+| Usage Data → Advertising Data | Yes (AdMob) | No | Yes | Third-party advertising |
+| Diagnostics → Crash Data | Yes (Crashlytics) | No | No | App functionality |
+| Diagnostics → Performance Data | Yes (Crashlytics) | No | No | App functionality |
+| Purchases → Purchase History | Yes (Task 4, Remove ads) | No | No | App functionality |
+
+No contact info, no location, no user content: the app has no account. "Used to track" answers
+must match the IDFA: the app asks the tracking question (ATT) through the IDFA explainer.
+
+*(Purchase and Game Center: Tasks 4 and 6.)*
 
 ## Play Console
 
-*(In-app product, Play Games and Data safety: Tasks 2, 4 and 6.)*
+### Data safety
+
+Play Console → the app → **Policy and programs → App content → Data safety**:
+
+- Does the app collect or share user data? **Yes.** Encrypted in transit: **Yes.** Can users ask
+  for deletion: **No** (no account; nothing is tied to a person — say so in the form's note).
+- **Device or other IDs** — collected and shared (AdMob: advertising id) — purposes: Advertising
+  or marketing, Analytics; optional: **No**.
+- **App activity → App interactions** — collected (Analytics events) — Analytics.
+- **App info and performance → Crash logs, Diagnostics** — collected (Crashlytics) — App
+  functionality, Analytics.
+- **Financial info → Purchase history** — collected (Task 4) — App functionality.
+
+### Ads
+
+App content → **Ads** → "Does your app contain ads?" **Yes**. Advertising ID: declare its use for
+**Advertising or marketing** and **Analytics** (the manifest declares `AD_ID`).
+
+*(In-app product and Play Games: Tasks 4 and 6.)*

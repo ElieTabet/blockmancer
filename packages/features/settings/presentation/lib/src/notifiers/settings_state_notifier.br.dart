@@ -55,7 +55,17 @@ class SettingsStateNotifier extends _$SettingsStateNotifier {
     }
   }
 
+  /// Whether the privacy policy opened in the browser.
+  Future<bool> openPrivacyPolicy() => ref.read(openPrivacyPolicyProvider)();
+
+  /// Whether the support page opened in the browser.
+  Future<bool> openSupport() => ref.read(openSupportProvider)();
+
   Future<void> setHaptics(bool on) => _settings.setHaptics(on);
+
+  /// Reopens the consent form, and takes the new answer.
+  Future<void> showPrivacyChoices() =>
+      ref.read(consentProvider.notifier).showPrivacyChoices();
 
   /// Shows the app in [language] once it is kept.
   Future<void> setLanguage(AppLanguage language) async {

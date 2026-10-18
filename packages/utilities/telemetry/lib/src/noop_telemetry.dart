@@ -12,6 +12,9 @@ final class NoopTelemetry implements Telemetry {
   void installCrashHandlers() {}
 
   @override
+  Future<void> setAnalyticsConsent({required bool granted}) async {}
+
+  @override
   Future<void> recordNonFatal(
     Object error,
     StackTrace stackTrace, {

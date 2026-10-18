@@ -82,7 +82,13 @@ List<Override> stubFeatures({
         (mailto) async => false,
     exportTestStats: (ref) =>
         () async => '{}',
+    gatherConsent: (ref) =>
+        () async => (canRequestAds: false, privacyOptionsRequired: false),
+    openUrl: (ref) =>
+        (url) async => false,
+    setAnalyticsConsent: (ref) => ({required granted}) async {},
     settingsStore: (ref) => const _FirstLaunchSettingsStore(),
+    showPrivacyOptions: (ref) => () async {},
   ),
   ...settings_ui.bindProviders(
     crashForTest: (ref) => () {},

@@ -122,6 +122,9 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override late final _Translations$settings$testStats$fr testStats = _Translations$settings$testStats$fr._(_root);
 	@override String get version => 'Version';
 	@override late final _Translations$settings$reset$fr reset = _Translations$settings$reset$fr._(_root);
+	@override late final _Translations$settings$privacyChoices$fr privacyChoices = _Translations$settings$privacyChoices$fr._(_root);
+	@override late final _Translations$settings$privacyPolicy$fr privacyPolicy = _Translations$settings$privacyPolicy$fr._(_root);
+	@override late final _Translations$settings$support$fr support = _Translations$settings$support$fr._(_root);
 }
 
 // Path: update
@@ -520,6 +523,39 @@ class _Translations$settings$reset$fr extends Translations$settings$reset$en {
 	@override String get confirmMessage => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.';
 	@override String get confirm => 'Réinitialiser';
 	@override String get cancel => 'Annuler';
+}
+
+// Path: settings.privacyChoices
+class _Translations$settings$privacyChoices$fr extends Translations$settings$privacyChoices$en {
+	_Translations$settings$privacyChoices$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Choix de confidentialité';
+	@override String get subtitle => 'Change ce que tu as accepté pour les pubs';
+}
+
+// Path: settings.privacyPolicy
+class _Translations$settings$privacyPolicy$fr extends Translations$settings$privacyPolicy$en {
+	_Translations$settings$privacyPolicy$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Politique de confidentialité';
+	@override String get subtitle => 'Comment Blockmancer traite tes données';
+}
+
+// Path: settings.support
+class _Translations$settings$support$fr extends Translations$settings$support$en {
+	_Translations$settings$support$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Assistance';
+	@override String get subtitle => 'De l\'aide, et comment nous joindre';
 }
 
 // Path: update.required
@@ -1114,6 +1150,12 @@ extension on TranslationsFr {
 			'settings.reset.confirmMessage' => 'Tes records et la partie en cours seront effacés. Impossible de revenir en arrière.',
 			'settings.reset.confirm' => 'Réinitialiser',
 			'settings.reset.cancel' => 'Annuler',
+			'settings.privacyChoices.title' => 'Choix de confidentialité',
+			'settings.privacyChoices.subtitle' => 'Change ce que tu as accepté pour les pubs',
+			'settings.privacyPolicy.title' => 'Politique de confidentialité',
+			'settings.privacyPolicy.subtitle' => 'Comment Blockmancer traite tes données',
+			'settings.support.title' => 'Assistance',
+			'settings.support.subtitle' => 'De l\'aide, et comment nous joindre',
 			'update.required.title' => 'Mise à jour requise',
 			'update.required.body' => 'Cette version de Blockmancer n\'est plus prise en charge. Mets à jour pour continuer à jouer ; ta progression est conservée.',
 			'update.required.button' => 'Mettre à jour',

@@ -63,38 +63,44 @@ class Application {
     );
   }
 
-  void launch() => runApp(
-    UncontrolledProviderScope(
-      container: _container,
-      child: TranslationProvider(
-        child: Builder(
-          // Splash and the game carry no AppBar, so nothing under them annotates
-          // the status bar. This covers those; a screen that does have one
-          // pushes its own annotation deeper and wins — the same value, by way
-          // of DSTheme's appBarTheme.
-          builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.light,
-            child: DSPressFeedback(
-              onPress: () => playTapSound(_container),
-              child: MaterialApp.router(
-                debugShowCheckedModeBanner: false,
-                theme: DSTheme.instance.lightTheme,
-                darkTheme: DSTheme.instance.darkTheme,
-                // Dark whatever the phone is set to. Every surface in this app is
-                // charcoal or the brand colour by design, so following the system
-                // setting would only ever produce a light scheme resolving
-                // against dark artwork. The light theme is kept, and is what a light mode
-                // would switch back on.
-                themeMode: .dark,
-                locale: TranslationProvider.of(context).flutterLocale,
-                supportedLocales: AppLocaleUtils.supportedLocales,
-                localizationsDelegates: GlobalMaterialLocalizations.delegates,
-                routerConfig: _appRouter.config(),
+  void launch() {
+    runApp(
+      UncontrolledProviderScope(
+        container: _container,
+        child: TranslationProvider(
+          child: Builder(
+            // Splash and the game carry no AppBar, so nothing under them annotates
+            // the status bar. This covers those; a screen that does have one
+            // pushes its own annotation deeper and wins — the same value, by way
+            // of DSTheme's appBarTheme.
+            builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle.light,
+              child: DSPressFeedback(
+                onPress: () => playTapSound(_container),
+                child: MaterialApp.router(
+                  debugShowCheckedModeBanner: false,
+                  theme: DSTheme.instance.lightTheme,
+                  darkTheme: DSTheme.instance.darkTheme,
+                  // Dark whatever the phone is set to. Every surface in this app is
+                  // charcoal or the brand colour by design, so following the system
+                  // setting would only ever produce a light scheme resolving
+                  // against dark artwork. The light theme is kept, and is what a light mode
+                  // would switch back on.
+                  themeMode: .dark,
+                  locale: TranslationProvider.of(context).flutterLocale,
+                  supportedLocales: AppLocaleUtils.supportedLocales,
+                  localizationsDelegates: GlobalMaterialLocalizations.delegates,
+                  routerConfig: _appRouter.config(),
+                ),
               ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
+    // Once the first frame is up: the consent form is drawn over the app.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => unawaited(gatherConsent(_container)),
+    );
+  }
 }

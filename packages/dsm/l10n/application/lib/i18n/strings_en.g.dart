@@ -165,6 +165,9 @@ class Translations$settings$en {
 	String get version => 'Version';
 
 	late final Translations$settings$reset$en reset = Translations$settings$reset$en.internal(_root);
+	late final Translations$settings$privacyChoices$en privacyChoices = Translations$settings$privacyChoices$en.internal(_root);
+	late final Translations$settings$privacyPolicy$en privacyPolicy = Translations$settings$privacyPolicy$en.internal(_root);
+	late final Translations$settings$support$en support = Translations$settings$support$en.internal(_root);
 }
 
 // Path: update
@@ -832,6 +835,51 @@ class Translations$settings$reset$en {
 
 	/// en: 'Cancel'
 	String get cancel => 'Cancel';
+}
+
+// Path: settings.privacyChoices
+class Translations$settings$privacyChoices$en {
+	Translations$settings$privacyChoices$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Privacy choices'
+	String get title => 'Privacy choices';
+
+	/// en: 'Change what you agreed to for ads'
+	String get subtitle => 'Change what you agreed to for ads';
+}
+
+// Path: settings.privacyPolicy
+class Translations$settings$privacyPolicy$en {
+	Translations$settings$privacyPolicy$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Privacy policy'
+	String get title => 'Privacy policy';
+
+	/// en: 'How Blockmancer handles your data'
+	String get subtitle => 'How Blockmancer handles your data';
+}
+
+// Path: settings.support
+class Translations$settings$support$en {
+	Translations$settings$support$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Support'
+	String get title => 'Support';
+
+	/// en: 'Help, and how to reach us'
+	String get subtitle => 'Help, and how to reach us';
 }
 
 // Path: update.required
@@ -1574,6 +1622,12 @@ extension on Translations {
 			'settings.reset.confirmMessage' => 'Your best scores and the run in progress will be deleted. This can\'t be undone.',
 			'settings.reset.confirm' => 'Reset',
 			'settings.reset.cancel' => 'Cancel',
+			'settings.privacyChoices.title' => 'Privacy choices',
+			'settings.privacyChoices.subtitle' => 'Change what you agreed to for ads',
+			'settings.privacyPolicy.title' => 'Privacy policy',
+			'settings.privacyPolicy.subtitle' => 'How Blockmancer handles your data',
+			'settings.support.title' => 'Support',
+			'settings.support.subtitle' => 'Help, and how to reach us',
 			'update.required.title' => 'Update required',
 			'update.required.body' => 'This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.',
 			'update.required.button' => 'Update',
