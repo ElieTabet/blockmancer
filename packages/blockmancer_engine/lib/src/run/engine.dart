@@ -94,12 +94,13 @@ PlacementPreview preview(
 
   final shape = shapeCatalog[shapeId];
   final landing = _landing(state, shape, anchor: anchor);
-  final cells =
-      landing ??
-      [
-        for (final offset in shape.cells)
-          if (state.board.contains(anchor + offset)) anchor + offset,
-      ];
+  final cells = [
+    for (final cell in ruleOfRound(state.config, state.round).previewPlacement(
+      board: state.board,
+      cells: [for (final offset in shape.cells) anchor + offset],
+    ))
+      if (state.board.contains(cell)) cell,
+  ];
   final placed = landing == null
       ? null
       : placeCells(state.board, landing, colorIndex: shape.colorIndex);

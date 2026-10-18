@@ -144,3 +144,20 @@ reading chosen and why. Newest task last.
 - **Provisional numbers.** Tide's boss target (5,750) and ★3 threshold (12,500) are a step above
   Fog's until Task 6. The greedy bot rarely survives the boss (it ignores the coming rise, as the
   sprint expects); Task 6 reports it.
+
+## Task 4: Mirror, Symmetry and Prism
+
+- **The preview of a mirrored drop that doesn't fit** shows the mirrored cells, red where they
+  collide, rather than the cells under the finger: "`canPlace` and `preview` work on the landing
+  cells". A third hook, `previewPlacement`, says where a piece is shown going whether it fits or
+  not; by default that is where it lands, else where it was dropped, which keeps Gravity's preview
+  as it was.
+- **Prism's count.** Every filled cell or stone whose mirror cell is one too counts, so a matched
+  pair counts twice (once per cell), as "per occupied cell" reads. With 8 columns no cell is its
+  own mirror.
+- **Symmetry and Prism read the board after the clear and Lantern**, before Quarry drops its stone
+  (Quarry acts after the move is scored).
+- **The finger's outline** shows only in Mirror's boss; Gravity's drag still shows the landing
+  alone, as before.
+- **Provisional numbers.** Mirror's boss target (6,000) and ★3 threshold (13,000) are a step above
+  Tide's until Task 6.

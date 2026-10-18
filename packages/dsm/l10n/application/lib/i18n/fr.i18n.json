@@ -214,6 +214,14 @@
       "momentum": {
         "name": "Élan",
         "description": "À chaque ligne effacée, +$mult mult par main d'affilée dont la première pièce a effacé une ligne."
+      },
+      "symmetry": {
+        "name": "Symétrie",
+        "description": "+$mult mult quand ta ligne laisse le plateau symétrique, et pas vide."
+      },
+      "prism": {
+        "name": "Prisme",
+        "description": "+$chips jetons par case pleine ou pierre dont la case miroir l'est aussi, après une ligne effacée."
       }
     }
   },
@@ -251,6 +259,7 @@
         "rubble": "Le boss commence avec des pierres sur le plateau.",
         "fog": "Le brouillard cache des cases. Pose à côté pour voir ce qu'il y a dessous.",
         "tide": "À chaque nouvelle main, la marée monte d'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.",
+        "mirror": "Tout ce que tu poses atterrit en miroir.",
         "gravity": "Pendant la manche du boss, chaque pièce tombe tout en bas."
       },
       "bossTarget": "Bats le boss : $points points",

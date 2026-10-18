@@ -20,10 +20,15 @@ Color cellColor(CellState state) => switch (state) {
 };
 
 /// The board and what is on it: its cells [rowShift] rows lower (a tide about
-/// to rise), and its top row tinted when [warnTopRow] (the next rise would
-/// flood it).
+/// to rise), its top row tinted when [warnTopRow] (the next rise would flood
+/// it), and a line down its middle when [centreLine] (Mirror's boss).
 final class BoardPainter extends CustomPainter {
-  const BoardPainter(this.board, {this.rowShift = 0, this.warnTopRow = false});
+  const BoardPainter(
+    this.board, {
+    this.centreLine = false,
+    this.rowShift = 0,
+    this.warnTopRow = false,
+  });
 
   static const _boardRadius = Radius.circular(16);
   static const _cellRadius = Radius.circular(6);
@@ -32,6 +37,7 @@ final class BoardPainter extends CustomPainter {
   static const _stoneBevel = 0.18;
 
   final Board board;
+  final bool centreLine;
   final double rowShift;
   final bool warnTopRow;
 
@@ -80,6 +86,16 @@ final class BoardPainter extends CustomPainter {
 
     canvas.restore();
 
+    if (centreLine) {
+      canvas.drawLine(
+        Offset(geometry.side / 2, BoardGeometry.padding),
+        Offset(geometry.side / 2, geometry.side - BoardGeometry.padding),
+        Paint()
+          ..color = DSColor.white.withValues(alpha: 0.5)
+          ..strokeWidth = 1.5,
+      );
+    }
+
     if (warnTopRow) {
       for (var col = 0; col < Board.size; col++) {
         canvas.drawRRect(
@@ -96,6 +112,7 @@ final class BoardPainter extends CustomPainter {
   @override
   bool shouldRepaint(BoardPainter oldDelegate) =>
       oldDelegate.board != board ||
+      oldDelegate.centreLine != centreLine ||
       oldDelegate.rowShift != rowShift ||
       oldDelegate.warnTopRow != warnTopRow;
 

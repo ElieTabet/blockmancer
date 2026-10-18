@@ -94,6 +94,18 @@ void main() {
     expect(_log(tide.boss), isNot(_log(rubble.boss)));
   });
 
+  test('the same seed plays the same rounds before the boss in Rubble and '
+      'Mirror, then a different boss', () {
+    // Given / When
+    final rubble = _placements(defaultConfig, seed);
+    final mirror = _placements(mirrorConfig, seed);
+
+    // Then
+    expect(mirror.boss, isNotEmpty);
+    expect(_log(mirror.beforeBoss), _log(rubble.beforeBoss));
+    expect(_log(mirror.boss), isNot(_log(rubble.boss)));
+  });
+
   test('in Gravity\'s boss, every piece the bot places comes to rest on the '
       'floor, a filled cell or a stone', () {
     // Given / When

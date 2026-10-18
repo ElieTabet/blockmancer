@@ -73,4 +73,18 @@ void main() {
       paintsExactlyCountTimes(#drawRRect, 1 + 64 + 1 + Board.size),
     );
   });
+
+  test('in Mirror\'s boss, a line runs down the board\'s middle', () {
+    // Given
+    final painter = BoardPainter(Board.empty(), centreLine: true);
+
+    // When / Then
+    expect(
+      (Canvas canvas) => painter.paint(canvas, size),
+      paints..line(
+        p1: Offset(size.width / 2, 6),
+        p2: Offset(size.width / 2, size.width - 6),
+      ),
+    );
+  });
 }

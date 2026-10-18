@@ -81,4 +81,33 @@ void main() {
       paintsNothing,
     );
   });
+
+  test('in Mirror\'s boss, the cells under the finger are outlined, the '
+      'shadow where the piece lands', () {
+    // Given: held in the top-left corner, landing in the top-right one
+    const landing = Cell(col: 7, row: 0);
+    final painter = PreviewPainter(
+      const DragPreview(
+        anchor: Cell(col: 0, row: 0),
+        colorIndex: 1,
+        held: [Cell(col: 0, row: 0)],
+        preview: PlacementPreview(
+          cells: [landing],
+          clearingCols: [],
+          clearingRows: [],
+          colliding: [],
+          fits: true,
+        ),
+        trayIndex: 0,
+      ),
+    );
+
+    // When / Then
+    expect(
+      (Canvas canvas) => painter.paint(canvas, size),
+      paints
+        ..rrect(color: DSColor.white.withValues(alpha: 0.7), style: .stroke)
+        ..rrect(color: DSGameColor.pieces[1].withValues(alpha: 0.6)),
+    );
+  });
 }

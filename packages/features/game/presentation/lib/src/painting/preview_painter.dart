@@ -5,11 +5,13 @@ import 'package:game_presentation/src/painting/board_geometry.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// The drag shadow over the board: the piece's colour where it fits, red where
-/// it collides, and an outline on the lines it would clear.
+/// it collides, an outline on the lines it would clear, and in Mirror's boss
+/// an outline under the finger, where the piece is held but won't land.
 final class PreviewPainter extends CustomPainter {
   const PreviewPainter(this.drag);
 
   static const _cellRadius = Radius.circular(6);
+  static const _heldAlpha = 0.7;
   static const _outlineWidth = 2.0;
   static const _shadowAlpha = 0.6;
   static const _strayAlpha = 0.45;
@@ -25,6 +27,15 @@ final class PreviewPainter extends CustomPainter {
     final geometry = BoardGeometry(size.shortestSide);
     final preview = drag.preview;
     final colour = DSGameColor.pieces[drag.colorIndex];
+
+    for (final cell in drag.held) {
+      _outline(
+        canvas,
+        geometry,
+        cell,
+        DSColor.white.withValues(alpha: _heldAlpha),
+      );
+    }
 
     for (final cell in _clearingCells(preview)) {
       _outline(canvas, geometry, cell, DSGameColor.clearingOutline);

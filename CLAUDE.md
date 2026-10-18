@@ -82,7 +82,7 @@ melos run test-engine-web
 # a row per joker played alone (docs/balance/<date>.md holds each table, docs/balance-v0.md the
 # first, docs/balance/2026-10-18-sprint5.md the Sprint 5 tuning and the ★3 thresholds). It plays
 # `configFor(world, jokerPool: JokerId.values)` — every joker on offer — in Rubble unless
-# `--world` names another playable world (gravity, fog, tide). Melos passes no arguments through, so for
+# `--world` names another world (gravity, fog, tide, mirror). Melos passes no arguments through, so for
 # `--runs` / `--build` / `--world` run it from the package:
 #   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build patience,twin --world gravity
 #   cd packages/blockmancer_engine && dart run tool/balance_bot.dart --runs 2000 --build random --solo
@@ -274,13 +274,13 @@ engine's events and never recomputes a rule.
   `const BlockmancerEngine()`. Rule data and rule decisions stay behind the contract (`defaultConfig`,
   `shape(id)`, `partnerOf(id)`, `canRevive`, `liveRunTotal`), so no feature computes a rule and
   `shared_domain`'s entities only read their own fields.
-- **Jokers and worlds.** 24 jokers in 12 pairs in `jokerCatalog` (hook and draw order; new ones
+- **Jokers and worlds.** 26 jokers in 13 pairs in `jokerCatalog` (hook and draw order; new ones
   are appended, so a pool without them draws exactly as before — Anchor and Avalanche, Gravity's,
   then the stars' Full House, On the Brink, Finisher and Hat Trick, then Fog's Lantern and Ember
-  and Tide's Sprinter and Momentum come last). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
+  Tide's Sprinter and Momentum, and Mirror's Symmetry and Prism come last). Offers draw only from `RunConfig.jokerPool` minus owned, in catalog order whatever the
   pool's list order, and the pair bias only proposes a partner in the pool; `defaultConfig`'s pool
   is every joker, as the daily run's is. The map is rule data behind the contract too:
-  `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (Rubble, Gravity, Fog, Tide),
+  `configFor(world, jokerPool:)`, `worldOrder`, `nextWorld`, `isPlayable` (every world today),
   `unlocksOf(world)` and `startingJokers` (every joker neither a world nor the stars unlock: 12).
 - **What a joker reads.** Each hook gets a `MoveContext`: the clear, the piece's size, the streak,
   Patience's bank, `occupiedAfterPlacing` (filled cells and stones once the piece has landed, before
@@ -326,8 +326,9 @@ engine's events and never recomputes a rule.
   `transformPlacement`, and `PiecePlaced` carries the landing cells; a `RunMove.place` keeps the
   drop point, so replay re-applies the rule. Two more hooks serve Fog: `onBoardSetup`, the board
   a round starts on once its stones are down (drawing from the stones stream), and
-  `afterPlacement`, the board once a move has scored and cleared. Mirror has no rule yet and
-  throws.
+  `afterPlacement`, the board once a move has scored and cleared. `previewPlacement` is where
+  the preview shows a piece going whether or not it fits (Mirror shows the mirrored cells, red
+  where they collide).
 - **Fog.** The boss starts with `RoundSpec.fog` fog cells (8) on empty cells from the stones
   stream, the first `fogStones` (3) hiding a stone (`FogPlaced`). A move is: place, score and
   clear, the jokers' removals beside the lines (Lantern, through `JokerEffect.extendClear`, which
@@ -348,6 +349,13 @@ engine's events and never recomputes a rule.
   the tide rises (its other beats play with the cells where they stood before the rise; under
   reduce motion it is simply there). Tide's boss target and ★3 are provisional, a step above
   Fog's.
+- **Mirror.** `MirrorRule.transformPlacement` lands each cell `(row, col)` of the piece on
+  `(row, 7 - col)`, place and shape mirrored; `canPlace`, `preview` and `place` work on those
+  landing cells. Symmetry (+mult) and Prism (+chips per cell whose mirror cell matches) read the
+  board after the clear, filled cells and stones alike, never fog (any fog makes the board not
+  symmetric). The game draws a line down the board's middle during the boss and, while dragging,
+  outlines the cells under the finger (`DragPreview.held`) beside the shadow on the landing
+  cells. Mirror's boss target and ★3 are provisional, a step above Tide's.
   Tests swap in a fake rule through `worldRuleLookup`.
 - **Fog cells.** `CellState.fog(hidesStone:)` blocks a piece and counts as occupied, for lines
   and for Full House and On the Brink, like a stone. A cleared line takes its fog with it, and

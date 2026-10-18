@@ -63,7 +63,7 @@ final class DragNotifierProvider
   }
 }
 
-String _$dragNotifierHash() => r'2cb188bc63aa646a4eaf9ab717013f4b011a9ea2';
+String _$dragNotifierHash() => r'd9760ef9be3ae5257cf44ea112f021229a0ab121';
 
 /// The drag shadow. Updated only when the hovered cell changes, not on every
 /// pointer move: the finger itself is tracked outside Riverpod.

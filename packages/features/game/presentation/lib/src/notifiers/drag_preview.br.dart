@@ -12,5 +12,9 @@ abstract class DragPreview with _$DragPreview {
     required int colorIndex,
     required PlacementPreview preview,
     required int trayIndex,
+
+    /// The cells under the finger, outlined when the piece lands elsewhere
+    /// (Mirror's boss); empty otherwise.
+    @Default([]) List<Cell> held,
   }) = _DragPreview;
 }

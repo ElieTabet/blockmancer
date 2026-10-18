@@ -465,6 +465,8 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$ember$en ember = Translations$game$jokers$ember$en.internal(_root);
 	late final Translations$game$jokers$sprinter$en sprinter = Translations$game$jokers$sprinter$en.internal(_root);
 	late final Translations$game$jokers$momentum$en momentum = Translations$game$jokers$momentum$en.internal(_root);
+	late final Translations$game$jokers$symmetry$en symmetry = Translations$game$jokers$symmetry$en.internal(_root);
+	late final Translations$game$jokers$prism$en prism = Translations$game$jokers$prism$en.internal(_root);
 }
 
 // Path: home.daily
@@ -1171,6 +1173,36 @@ class Translations$game$jokers$momentum$en {
 	String description({required Object mult}) => '+${mult} mult on every clear for each tray in a row whose first piece cleared a line.';
 }
 
+// Path: game.jokers.symmetry
+class Translations$game$jokers$symmetry$en {
+	Translations$game$jokers$symmetry$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Symmetry'
+	String get name => 'Symmetry';
+
+	/// en: '+$mult mult when your clear leaves the board mirror-symmetric, and not empty.'
+	String description({required Object mult}) => '+${mult} mult when your clear leaves the board mirror-symmetric, and not empty.';
+}
+
+// Path: game.jokers.prism
+class Translations$game$jokers$prism$en {
+	Translations$game$jokers$prism$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Prism'
+	String get name => 'Prism';
+
+	/// en: '+$chips chips for each filled cell or stone whose mirror cell is one too, after a clear.'
+	String description({required Object chips}) => '+${chips} chips for each filled cell or stone whose mirror cell is one too, after a clear.';
+}
+
 // Path: home.sheet.bossRule
 class Translations$home$sheet$bossRule$en {
 	Translations$home$sheet$bossRule$en.internal(this._root);
@@ -1187,6 +1219,9 @@ class Translations$home$sheet$bossRule$en {
 
 	/// en: 'Every new tray, the tide rises one row. Don't let it push your blocks off the top.'
 	String get tide => 'Every new tray, the tide rises one row. Don\'t let it push your blocks off the top.';
+
+	/// en: 'Everything you place lands mirrored.'
+	String get mirror => 'Everything you place lands mirrored.';
 
 	/// en: 'In the boss round, every piece falls to the bottom.'
 	String get gravity => 'In the boss round, every piece falls to the bottom.';
@@ -1328,6 +1363,10 @@ extension on Translations {
 			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult when the first piece of a fresh tray clears a line.',
 			'game.jokers.momentum.name' => 'Momentum',
 			'game.jokers.momentum.description' => ({required Object mult}) => '+${mult} mult on every clear for each tray in a row whose first piece cleared a line.',
+			'game.jokers.symmetry.name' => 'Symmetry',
+			'game.jokers.symmetry.description' => ({required Object mult}) => '+${mult} mult when your clear leaves the board mirror-symmetric, and not empty.',
+			'game.jokers.prism.name' => 'Prism',
+			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} chips for each filled cell or stone whose mirror cell is one too, after a clear.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
 			'home.tabLabel' => 'Play',
@@ -1349,6 +1388,7 @@ extension on Translations {
 			'home.sheet.bossRule.rubble' => 'The boss starts with stones on the board.',
 			'home.sheet.bossRule.fog' => 'Fog hides cells. Fill next to it to see what\'s underneath.',
 			'home.sheet.bossRule.tide' => 'Every new tray, the tide rises one row. Don\'t let it push your blocks off the top.',
+			'home.sheet.bossRule.mirror' => 'Everything you place lands mirrored.',
 			'home.sheet.bossRule.gravity' => 'In the boss round, every piece falls to the bottom.',
 			'home.sheet.bossTarget' => ({required Object points}) => 'Beat the boss: ${points} points',
 			'home.sheet.stars' => 'Stars',

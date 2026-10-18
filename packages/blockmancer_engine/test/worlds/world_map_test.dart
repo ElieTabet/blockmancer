@@ -30,19 +30,11 @@ void main() {
     expect(rules.configFor(.gravity, jokerPool: pool).starThreshold, 11500);
   });
 
-  test('Mirror, coming soon, is not playable and has no run', () {
-    expect(rules.isPlayable(.mirror), isFalse);
-    expect(
-      () => rules.configFor(.mirror, jokerPool: pool),
-      throwsArgumentError,
-    );
-  });
-
-  test('Rubble, Gravity, Fog and Tide are playable', () {
-    expect(rules.isPlayable(.rubble), isTrue);
-    expect(rules.isPlayable(.gravity), isTrue);
-    expect(rules.isPlayable(.fog), isTrue);
-    expect(rules.isPlayable(.tide), isTrue);
+  test('every world is playable, each with a run of its own', () {
+    for (final world in WorldId.values) {
+      expect(rules.isPlayable(world), isTrue, reason: world.name);
+      expect(rules.configFor(world, jokerPool: pool).world, world);
+    }
   });
 
   test('Tide\'s boss rises with 2 gaps and starts with no stones', () {
@@ -89,7 +81,7 @@ void main() {
 
   test('beating Rubble unlocks Stonemason and Quarry, Gravity Anchor and '
       'Avalanche, Fog Lantern and Ember, Tide Sprinter and Momentum, and Mirror '
-      'nothing yet', () {
+      'Symmetry and Prism', () {
     expect(rules.unlocksOf(.rubble), const [
       JokerId.stonemason,
       JokerId.quarry,
@@ -100,7 +92,7 @@ void main() {
     ]);
     expect(rules.unlocksOf(.fog), const [JokerId.lantern, JokerId.ember]);
     expect(rules.unlocksOf(.tide), const [JokerId.sprinter, JokerId.momentum]);
-    expect(rules.unlocksOf(.mirror), isEmpty);
+    expect(rules.unlocksOf(.mirror), const [JokerId.symmetry, JokerId.prism]);
   });
 
   test(
@@ -123,9 +115,11 @@ void main() {
           JokerId.hattrick,
           JokerId.lantern,
           JokerId.momentum,
+          JokerId.prism,
           JokerId.quarry,
           JokerId.sprinter,
           JokerId.stonemason,
+          JokerId.symmetry,
         }),
       );
     },

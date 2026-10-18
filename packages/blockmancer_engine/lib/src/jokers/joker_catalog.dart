@@ -17,10 +17,12 @@ import 'package:blockmancer_engine/src/jokers/effects/lantern.dart';
 import 'package:blockmancer_engine/src/jokers/effects/momentum.dart';
 import 'package:blockmancer_engine/src/jokers/effects/patience.dart';
 import 'package:blockmancer_engine/src/jokers/effects/precision.dart';
+import 'package:blockmancer_engine/src/jokers/effects/prism.dart';
 import 'package:blockmancer_engine/src/jokers/effects/quarry.dart';
 import 'package:blockmancer_engine/src/jokers/effects/saver.dart';
 import 'package:blockmancer_engine/src/jokers/effects/sprinter.dart';
 import 'package:blockmancer_engine/src/jokers/effects/stonemason.dart';
+import 'package:blockmancer_engine/src/jokers/effects/symmetry.dart';
 import 'package:blockmancer_engine/src/jokers/effects/tiny_tools.dart';
 import 'package:blockmancer_engine/src/jokers/effects/twin_lines.dart';
 import 'package:blockmancer_engine/src/jokers/joker_effect.dart';
@@ -57,6 +59,8 @@ const List<JokerEffect> jokerCatalog = [
   Ember(),
   Sprinter(),
   Momentum(),
+  Symmetry(),
+  Prism(),
 ];
 
 JokerEffect jokerEffect(JokerId id) =>

@@ -109,3 +109,16 @@ final tideConfig = defaultConfig.copyWith(
   starThreshold: 12500,
   world: .tide,
 );
+
+/// The default run in Mirror, whose boss starts with no stones and reflects
+/// every piece across the board's centre line. Its boss target and ★3
+/// threshold are a step above Tide's until Sprint 7's balance pass sets them
+/// from the bot.
+final mirrorConfig = defaultConfig.copyWith(
+  rounds: [
+    for (final round in defaultConfig.rounds)
+      round.isBoss ? round.copyWith(stones: 0, target: 6000) : round,
+  ],
+  starThreshold: 13000,
+  world: .mirror,
+);

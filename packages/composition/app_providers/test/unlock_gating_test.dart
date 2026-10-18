@@ -209,9 +209,45 @@ void main() {
     },
   );
 
+  test('Given Tide open, When its boss falls for the first time, Then Sprinter '
+      'and Momentum unlock, and Mirror opens', () async {
+    // Given
+    const rules = BlockmancerEngine();
+    final fresh = game.startingProgression(rules);
+    final store = FakeProgressionStore(
+      fresh.copyWith(
+        worlds: {
+          ...fresh.worlds,
+          WorldId.tide: fresh.worlds[WorldId.tide]!.copyWith(unlocked: true),
+        },
+      ),
+    );
+    final gameContainer = engineGame(progressionStore: store);
+    final won = rules
+        .startRun(
+          config: rules.configFor(
+            .tide,
+            jokerPool: fresh.unlockedJokers.toList(),
+          ),
+          seed: 1,
+        )
+        .copyWith(phase: const .won());
+
+    // When
+    final change = await gameContainer.read(game.recordProgressionProvider)(
+      const .world(world: .tide),
+      won,
+    );
+
+    // Then
+    expect(change?.unlockedJokers, [JokerId.sprinter, JokerId.momentum]);
+    expect(change?.unlockedWorld, WorldId.mirror);
+    expect(store.saved.worlds[WorldId.mirror]?.unlocked, isTrue);
+  });
+
   test(
-    'Given Tide open, When its boss falls for the first time, Then Sprinter '
-    'and Momentum unlock, and Mirror, still coming soon, stays locked',
+    'Given Mirror open, When its boss falls for the first time, Then Symmetry '
+    'and Prism unlock, the last world having none after it',
     () async {
       // Given
       const rules = BlockmancerEngine();
@@ -220,7 +256,9 @@ void main() {
         fresh.copyWith(
           worlds: {
             ...fresh.worlds,
-            WorldId.tide: fresh.worlds[WorldId.tide]!.copyWith(unlocked: true),
+            WorldId.mirror: fresh.worlds[WorldId.mirror]!.copyWith(
+              unlocked: true,
+            ),
           },
         ),
       );
@@ -228,7 +266,7 @@ void main() {
       final won = rules
           .startRun(
             config: rules.configFor(
-              .tide,
+              .mirror,
               jokerPool: fresh.unlockedJokers.toList(),
             ),
             seed: 1,
@@ -237,14 +275,13 @@ void main() {
 
       // When
       final change = await gameContainer.read(game.recordProgressionProvider)(
-        const .world(world: .tide),
+        const .world(world: .mirror),
         won,
       );
 
       // Then
-      expect(change?.unlockedJokers, [JokerId.sprinter, JokerId.momentum]);
+      expect(change?.unlockedJokers, [JokerId.symmetry, JokerId.prism]);
       expect(change?.unlockedWorld, isNull);
-      expect(store.saved.worlds[WorldId.mirror]?.unlocked, isFalse);
     },
   );
 }

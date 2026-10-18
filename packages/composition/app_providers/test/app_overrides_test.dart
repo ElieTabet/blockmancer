@@ -228,6 +228,7 @@ void main() {
       WorldId.gravity,
       WorldId.fog,
       WorldId.tide,
+      WorldId.mirror,
     ]);
     expect(shown, progression);
     expect(
@@ -268,6 +269,7 @@ void main() {
         JokerUnlock.boss(world: .gravity),
         JokerUnlock.boss(world: .fog),
         JokerUnlock.boss(world: .tide),
+        JokerUnlock.boss(world: .mirror),
         JokerUnlock.stars(count: 4),
         JokerUnlock.stars(count: 6),
       ],

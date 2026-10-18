@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 mixin _$DragPreview {
 
 /// `null` while the piece is off the board.
- Cell? get anchor; int get colorIndex; PlacementPreview get preview; int get trayIndex;
+ Cell? get anchor; int get colorIndex; PlacementPreview get preview; int get trayIndex;/// The cells under the finger, outlined when the piece lands elsewhere
+/// (Mirror's boss); empty otherwise.
+ List<Cell> get held;
 /// Create a copy of DragPreview
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +28,16 @@ $DragPreviewCopyWith<DragPreview> get copyWith => _$DragPreviewCopyWithImpl<Drag
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DragPreview&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.colorIndex, colorIndex) || other.colorIndex == colorIndex)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.trayIndex, trayIndex) || other.trayIndex == trayIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DragPreview&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.colorIndex, colorIndex) || other.colorIndex == colorIndex)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.trayIndex, trayIndex) || other.trayIndex == trayIndex)&&const DeepCollectionEquality().equals(other.held, held));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,anchor,colorIndex,preview,trayIndex);
+int get hashCode => Object.hash(runtimeType,anchor,colorIndex,preview,trayIndex,const DeepCollectionEquality().hash(held));
 
 @override
 String toString() {
-  return 'DragPreview(anchor: $anchor, colorIndex: $colorIndex, preview: $preview, trayIndex: $trayIndex)';
+  return 'DragPreview(anchor: $anchor, colorIndex: $colorIndex, preview: $preview, trayIndex: $trayIndex, held: $held)';
 }
 
 
@@ -46,7 +48,7 @@ abstract mixin class $DragPreviewCopyWith<$Res>  {
   factory $DragPreviewCopyWith(DragPreview value, $Res Function(DragPreview) _then) = _$DragPreviewCopyWithImpl;
 @useResult
 $Res call({
- Cell? anchor, int colorIndex, PlacementPreview preview, int trayIndex
+ Cell? anchor, int colorIndex, PlacementPreview preview, int trayIndex, List<Cell> held
 });
 
 
@@ -63,13 +65,14 @@ class _$DragPreviewCopyWithImpl<$Res>
 
 /// Create a copy of DragPreview
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? anchor = freezed,Object? colorIndex = null,Object? preview = null,Object? trayIndex = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? anchor = freezed,Object? colorIndex = null,Object? preview = null,Object? trayIndex = null,Object? held = null,}) {
   return _then(_self.copyWith(
 anchor: freezed == anchor ? _self.anchor : anchor // ignore: cast_nullable_to_non_nullable
 as Cell?,colorIndex: null == colorIndex ? _self.colorIndex : colorIndex // ignore: cast_nullable_to_non_nullable
 as int,preview: null == preview ? _self.preview : preview // ignore: cast_nullable_to_non_nullable
 as PlacementPreview,trayIndex: null == trayIndex ? _self.trayIndex : trayIndex // ignore: cast_nullable_to_non_nullable
-as int,
+as int,held: null == held ? _self.held : held // ignore: cast_nullable_to_non_nullable
+as List<Cell>,
   ));
 }
 /// Create a copy of DragPreview
@@ -175,10 +178,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Cell? anchor,  int colorIndex,  PlacementPreview preview,  int trayIndex)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Cell? anchor,  int colorIndex,  PlacementPreview preview,  int trayIndex,  List<Cell> held)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DragPreview() when $default != null:
-return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex);case _:
+return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex,_that.held);case _:
   return orElse();
 
 }
@@ -196,10 +199,10 @@ return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Cell? anchor,  int colorIndex,  PlacementPreview preview,  int trayIndex)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Cell? anchor,  int colorIndex,  PlacementPreview preview,  int trayIndex,  List<Cell> held)  $default,) {final _that = this;
 switch (_that) {
 case _DragPreview():
-return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex);case _:
+return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex,_that.held);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -216,10 +219,10 @@ return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Cell? anchor,  int colorIndex,  PlacementPreview preview,  int trayIndex)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Cell? anchor,  int colorIndex,  PlacementPreview preview,  int trayIndex,  List<Cell> held)?  $default,) {final _that = this;
 switch (_that) {
 case _DragPreview() when $default != null:
-return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex);case _:
+return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex,_that.held);case _:
   return null;
 
 }
@@ -231,7 +234,7 @@ return $default(_that.anchor,_that.colorIndex,_that.preview,_that.trayIndex);cas
 
 
 class _DragPreview implements DragPreview {
-  const _DragPreview({required this.anchor, required this.colorIndex, required this.preview, required this.trayIndex});
+  const _DragPreview({required this.anchor, required this.colorIndex, required this.preview, required this.trayIndex, final  List<Cell> held = const []}): _held = held;
   
 
 /// `null` while the piece is off the board.
@@ -239,6 +242,17 @@ class _DragPreview implements DragPreview {
 @override final  int colorIndex;
 @override final  PlacementPreview preview;
 @override final  int trayIndex;
+/// The cells under the finger, outlined when the piece lands elsewhere
+/// (Mirror's boss); empty otherwise.
+ final  List<Cell> _held;
+/// The cells under the finger, outlined when the piece lands elsewhere
+/// (Mirror's boss); empty otherwise.
+@override@JsonKey() List<Cell> get held {
+  if (_held is EqualUnmodifiableListView) return _held;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_held);
+}
+
 
 /// Create a copy of DragPreview
 /// with the given fields replaced by the non-null parameter values.
@@ -250,16 +264,16 @@ _$DragPreviewCopyWith<_DragPreview> get copyWith => __$DragPreviewCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DragPreview&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.colorIndex, colorIndex) || other.colorIndex == colorIndex)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.trayIndex, trayIndex) || other.trayIndex == trayIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DragPreview&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.colorIndex, colorIndex) || other.colorIndex == colorIndex)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.trayIndex, trayIndex) || other.trayIndex == trayIndex)&&const DeepCollectionEquality().equals(other._held, _held));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,anchor,colorIndex,preview,trayIndex);
+int get hashCode => Object.hash(runtimeType,anchor,colorIndex,preview,trayIndex,const DeepCollectionEquality().hash(_held));
 
 @override
 String toString() {
-  return 'DragPreview(anchor: $anchor, colorIndex: $colorIndex, preview: $preview, trayIndex: $trayIndex)';
+  return 'DragPreview(anchor: $anchor, colorIndex: $colorIndex, preview: $preview, trayIndex: $trayIndex, held: $held)';
 }
 
 
@@ -270,7 +284,7 @@ abstract mixin class _$DragPreviewCopyWith<$Res> implements $DragPreviewCopyWith
   factory _$DragPreviewCopyWith(_DragPreview value, $Res Function(_DragPreview) _then) = __$DragPreviewCopyWithImpl;
 @override @useResult
 $Res call({
- Cell? anchor, int colorIndex, PlacementPreview preview, int trayIndex
+ Cell? anchor, int colorIndex, PlacementPreview preview, int trayIndex, List<Cell> held
 });
 
 
@@ -287,13 +301,14 @@ class __$DragPreviewCopyWithImpl<$Res>
 
 /// Create a copy of DragPreview
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? anchor = freezed,Object? colorIndex = null,Object? preview = null,Object? trayIndex = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? anchor = freezed,Object? colorIndex = null,Object? preview = null,Object? trayIndex = null,Object? held = null,}) {
   return _then(_DragPreview(
 anchor: freezed == anchor ? _self.anchor : anchor // ignore: cast_nullable_to_non_nullable
 as Cell?,colorIndex: null == colorIndex ? _self.colorIndex : colorIndex // ignore: cast_nullable_to_non_nullable
 as int,preview: null == preview ? _self.preview : preview // ignore: cast_nullable_to_non_nullable
 as PlacementPreview,trayIndex: null == trayIndex ? _self.trayIndex : trayIndex // ignore: cast_nullable_to_non_nullable
-as int,
+as int,held: null == held ? _self._held : held // ignore: cast_nullable_to_non_nullable
+as List<Cell>,
   ));
 }
 

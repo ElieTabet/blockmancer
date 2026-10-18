@@ -53,6 +53,10 @@ void main() {
     expect(parseBotArgs(const ['--world', 'tide']).world, WorldId.tide);
   });
 
+  test('--world mirror plays Mirror', () {
+    expect(parseBotArgs(const ['--world', 'mirror']).world, WorldId.mirror);
+  });
+
   test('--world gravity plays Gravity', () {
     expect(parseBotArgs(const ['--world', 'gravity']).world, WorldId.gravity);
   });

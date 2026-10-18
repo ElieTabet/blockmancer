@@ -45,17 +45,22 @@ class DragNotifier extends _$DragNotifier {
 
     if (drag == null || drag.anchor == anchor) return;
 
+    final rules = ref.read(gameRulesProvider);
+    final run = ref.read(gameProvider).run;
+    final shapeId = run.tray[drag.trayIndex];
+    final mirrored = run.config.world == .mirror && run.round.isBoss;
+
     state = drag.copyWith(
       anchor: anchor,
+      held: anchor == null || shapeId == null || !mirrored
+          ? const []
+          : [
+              for (final offset in rules.shape(shapeId).cells)
+                if (run.board.contains(anchor + offset)) anchor + offset,
+            ],
       preview: anchor == null
           ? .none
-          : ref
-                .read(gameRulesProvider)
-                .preview(
-                  ref.read(gameProvider).run,
-                  anchor: anchor,
-                  trayIndex: drag.trayIndex,
-                ),
+          : rules.preview(run, anchor: anchor, trayIndex: drag.trayIndex),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:blockmancer_engine/src/pieces/shape_catalog.dart';
 import 'package:blockmancer_engine/src/run/default_config.dart';
 import 'package:blockmancer_engine/src/worlds/fog_rule.dart';
 import 'package:blockmancer_engine/src/worlds/gravity_rule.dart';
+import 'package:blockmancer_engine/src/worlds/mirror_rule.dart';
 import 'package:blockmancer_engine/src/worlds/plain_rule.dart';
 import 'package:blockmancer_engine/src/worlds/rubble_rule.dart';
 import 'package:blockmancer_engine/src/worlds/tide_rule.dart';
@@ -39,11 +40,9 @@ void main() {
     expect(ruleOfRound(tideConfig, round), isA<PlainRule>());
   });
 
-  test('a run in Mirror, coming soon, is refused', () {
-    expect(
-      () => ruleOfRound(defaultConfig.copyWith(world: .mirror), boss),
-      throwsArgumentError,
-    );
+  test('the Mirror boss plays by the mirror', () {
+    expect(ruleOfRound(mirrorConfig, boss), isA<MirrorRule>());
+    expect(ruleOfRound(mirrorConfig, round), isA<PlainRule>());
   });
 
   test('the Rubble boss starts with the stones its round asks for', () {

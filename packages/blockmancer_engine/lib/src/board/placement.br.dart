@@ -110,6 +110,13 @@ ClearResult resolveClears(Board board) {
 
 bool _isObstacle(CellState cell) => cell is StoneCell || cell is FogCell;
 
+/// [cell] reflected across the board's vertical centre line.
+Cell mirrorOf(Cell cell) => Cell(col: Board.size - 1 - cell.col, row: cell.row);
+
+/// Whether [cell] holds a filled cell or a stone: what Symmetry and Prism
+/// count, colour aside, never fog.
+bool isSolid(CellState cell) => cell is FilledCell || cell is StoneCell;
+
 /// The cells sharing a side with [cell], on the board or not.
 List<Cell> orthogonalNeighbours(Cell cell) => [
   Cell(col: cell.col, row: cell.row - 1),

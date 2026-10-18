@@ -214,6 +214,14 @@
       "momentum": {
         "name": "Momentum",
         "description": "+$mult mult on every clear for each tray in a row whose first piece cleared a line."
+      },
+      "symmetry": {
+        "name": "Symmetry",
+        "description": "+$mult mult when your clear leaves the board mirror-symmetric, and not empty."
+      },
+      "prism": {
+        "name": "Prism",
+        "description": "+$chips chips for each filled cell or stone whose mirror cell is one too, after a clear."
       }
     }
   },
@@ -251,6 +259,7 @@
         "rubble": "The boss starts with stones on the board.",
         "fog": "Fog hides cells. Fill next to it to see what's underneath.",
         "tide": "Every new tray, the tide rises one row. Don't let it push your blocks off the top.",
+        "mirror": "Everything you place lands mirrored.",
         "gravity": "In the boss round, every piece falls to the bottom."
       },
       "bossTarget": "Beat the boss: $points points",

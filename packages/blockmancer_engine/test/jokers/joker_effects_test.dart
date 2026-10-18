@@ -1230,6 +1230,114 @@ void main() {
     });
   });
 
+  group('Symmetry', () {
+    test('adds 4 mult when the clear leaves the board mirror-symmetric', () {
+      // Given / When: row 1 matches across the centre once row 0 clears
+      final score = playMove(
+        ['#######.', '##....##'],
+        at: topRight,
+        jokers: const [.symmetry],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 4);
+      expect(score.fired, const [
+        JokerFired(delta: .multAdded(amount: 4), joker: .symmetry),
+      ]);
+    });
+
+    test('reads a stone and a filled cell as alike', () {
+      // Given / When
+      final score = playMove(
+        ['#######.', 'S......#'],
+        at: topRight,
+        jokers: const [.symmetry],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.mult, 1 + 4);
+    });
+
+    test('stays quiet for a lopsided board, an empty one, or any fog', () {
+      for (final rest in const [
+        ['##......'],
+        <String>[],
+        ['F......F'],
+        ['##....##', '...F....'],
+      ]) {
+        // Given / When
+        final score = playMove(
+          ['#######.', ...rest],
+          at: topRight,
+          jokers: const [.symmetry],
+          shape: 0,
+        );
+
+        // Then
+        expect(score.fired, isEmpty, reason: '$rest');
+      }
+    });
+  });
+
+  group('Prism', () {
+    test('adds 15 chips for each filled cell or stone whose mirror cell is one '
+        'too, once the clear is done', () {
+      // Given / When: two pairs in row 1, one half-pair in row 2
+      final score = playMove(
+        ['#######.', '#S....##', '#.......'],
+        at: topRight,
+        jokers: const [.prism],
+        shape: 0,
+      );
+
+      // Then: 4 cells of row 1 have their mirror; row 2's lone one doesn't
+      expect(score.chips, 80 + 4 * 15);
+    });
+
+    test('never counts fog, nor a cell mirroring fog', () {
+      // Given / When
+      final score = playMove(
+        ['#######.', 'F......#', 'F......F'],
+        at: topRight,
+        jokers: const [.prism],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.chips, 80);
+      expect(score.fired, isEmpty);
+    });
+
+    test('with Symmetry, a symmetric board earns its chips and the mult', () {
+      // Given / When
+      final score = playMove(
+        ['#######.', '##....##'],
+        at: topRight,
+        jokers: const [.symmetry, .prism],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.chips, 80 + 4 * 15);
+      expect(score.mult, 1 + 4);
+    });
+
+    test('with Symmetry, nothing fires on a move that clears nothing', () {
+      // Given / When
+      final score = playMove(
+        ['##....##'],
+        at: const Cell(col: 3, row: 4),
+        jokers: const [.symmetry, .prism],
+        shape: 0,
+      );
+
+      // Then
+      expect(score.fired, isEmpty);
+    });
+  });
+
   group('catalog', () {
     test('holds every joker exactly once', () {
       // Given / When

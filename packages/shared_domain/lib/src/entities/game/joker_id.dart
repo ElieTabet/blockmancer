@@ -16,11 +16,13 @@ enum JokerId {
   patience,
   pockets,
   precision,
+  prism,
   quarry,
   saver,
   sprinter,
   stonemason,
   sweep,
+  symmetry,
   tiny,
   twin,
 }

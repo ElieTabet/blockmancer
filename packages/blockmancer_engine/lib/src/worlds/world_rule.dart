@@ -44,6 +44,13 @@ abstract class WorldRule {
     required List<Cell> cells,
   }) => cellsFit(board, cells) ? cells : null;
 
+  /// Where the preview shows a piece dropped on [cells] going, whether it fits
+  /// or not: where it lands, else where it was dropped.
+  List<Cell> previewPlacement({
+    required Board board,
+    required List<Cell> cells,
+  }) => transformPlacement(board: board, cells: cells) ?? cells;
+
   /// Where [shape] dropped at [anchor] lands, as the top-left of what it
   /// fills, or null when it can't be placed from there.
   Cell? transformAnchor({

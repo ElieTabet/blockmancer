@@ -430,6 +430,21 @@ void main() {
     expect(score.mult, 1 + 3 * 27);
   });
 
+  test('Symmetry adds its configured mult and Prism its configured chips', () {
+    // Given / When
+    final score = playMove(
+      ['#######.', '##....##'],
+      at: topRight,
+      config: tunedConfig,
+      jokers: const [.symmetry, .prism],
+      shape: 0,
+    );
+
+    // Then
+    expect(score.mult, 1 + 31);
+    expect(score.chips, 8 * 20 + 4 * 28);
+  });
+
   group('On the Brink', () {
     test('multiplies by its factor at its configured occupied cells', () {
       // Given / When: 8 in row 0, 7 in row 1 and 5 in row 2 make 20

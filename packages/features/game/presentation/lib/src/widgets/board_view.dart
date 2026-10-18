@@ -72,6 +72,11 @@ class _BoardLayerState extends ConsumerState<_BoardLayer>
             ].any((cell) => state.run.board.at(cell) is! EmptyCell),
       ),
     );
+    final centreLine = ref.watch(
+      gameProvider.select(
+        (state) => state.run.config.world == .mirror && state.run.round.isBoss,
+      ),
+    );
     final (riseAhead, rising) = ref.watch(
       playbackProvider.select(
         (playback) => (playback.riseAhead, playback.beat is RisingBeat),
@@ -84,6 +89,7 @@ class _BoardLayerState extends ConsumerState<_BoardLayer>
         builder: (context, _) => CustomPaint(
           painter: BoardPainter(
             board,
+            centreLine: centreLine,
             rowShift: rising
                 ? 1 - Curves.easeOut.transform(_rise.value)
                 : riseAhead

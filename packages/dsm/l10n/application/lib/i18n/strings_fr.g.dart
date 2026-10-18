@@ -294,6 +294,8 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$ember$fr ember = _Translations$game$jokers$ember$fr._(_root);
 	@override late final _Translations$game$jokers$sprinter$fr sprinter = _Translations$game$jokers$sprinter$fr._(_root);
 	@override late final _Translations$game$jokers$momentum$fr momentum = _Translations$game$jokers$momentum$fr._(_root);
+	@override late final _Translations$game$jokers$symmetry$fr symmetry = _Translations$game$jokers$symmetry$fr._(_root);
+	@override late final _Translations$game$jokers$prism$fr prism = _Translations$game$jokers$prism$fr._(_root);
 }
 
 // Path: home.daily
@@ -769,6 +771,28 @@ class _Translations$game$jokers$momentum$fr extends Translations$game$jokers$mom
 	@override String description({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par main d\'affilée dont la première pièce a effacé une ligne.';
 }
 
+// Path: game.jokers.symmetry
+class _Translations$game$jokers$symmetry$fr extends Translations$game$jokers$symmetry$en {
+	_Translations$game$jokers$symmetry$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Symétrie';
+	@override String description({required Object mult}) => '+${mult} mult quand ta ligne laisse le plateau symétrique, et pas vide.';
+}
+
+// Path: game.jokers.prism
+class _Translations$game$jokers$prism$fr extends Translations$game$jokers$prism$en {
+	_Translations$game$jokers$prism$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Prisme';
+	@override String description({required Object chips}) => '+${chips} jetons par case pleine ou pierre dont la case miroir l\'est aussi, après une ligne effacée.';
+}
+
 // Path: home.sheet.bossRule
 class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossRule$en {
 	_Translations$home$sheet$bossRule$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -779,6 +803,7 @@ class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossR
 	@override String get rubble => 'Le boss commence avec des pierres sur le plateau.';
 	@override String get fog => 'Le brouillard cache des cases. Pose à côté pour voir ce qu\'il y a dessous.';
 	@override String get tide => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.';
+	@override String get mirror => 'Tout ce que tu poses atterrit en miroir.';
 	@override String get gravity => 'Pendant la manche du boss, chaque pièce tombe tout en bas.';
 }
 
@@ -918,6 +943,10 @@ extension on TranslationsFr {
 			'game.jokers.sprinter.description' => ({required Object mult}) => '+${mult} mult quand la première pièce d\'une nouvelle main efface une ligne.',
 			'game.jokers.momentum.name' => 'Élan',
 			'game.jokers.momentum.description' => ({required Object mult}) => 'À chaque ligne effacée, +${mult} mult par main d\'affilée dont la première pièce a effacé une ligne.',
+			'game.jokers.symmetry.name' => 'Symétrie',
+			'game.jokers.symmetry.description' => ({required Object mult}) => '+${mult} mult quand ta ligne laisse le plateau symétrique, et pas vide.',
+			'game.jokers.prism.name' => 'Prisme',
+			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} jetons par case pleine ou pierre dont la case miroir l\'est aussi, après une ligne effacée.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
 			'home.tabLabel' => 'Jouer',
@@ -939,6 +968,7 @@ extension on TranslationsFr {
 			'home.sheet.bossRule.rubble' => 'Le boss commence avec des pierres sur le plateau.',
 			'home.sheet.bossRule.fog' => 'Le brouillard cache des cases. Pose à côté pour voir ce qu\'il y a dessous.',
 			'home.sheet.bossRule.tide' => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.',
+			'home.sheet.bossRule.mirror' => 'Tout ce que tu poses atterrit en miroir.',
 			'home.sheet.bossRule.gravity' => 'Pendant la manche du boss, chaque pièce tombe tout en bas.',
 			'home.sheet.bossTarget' => ({required Object points}) => 'Bats le boss : ${points} points',
 			'home.sheet.stars' => 'Étoiles',
