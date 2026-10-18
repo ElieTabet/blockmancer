@@ -55,3 +55,13 @@ reading chosen and why. Newest task last.
   checks every number in every description is one of the config's.
 - **Save:** the two new fields make the saved run version 8; older saves get 2 and 1, the values
   their builds played.
+
+### 0d. The 10,000-run confirmation
+
+- **Rule:** re-run the final Sprint 5 table at 10,000 runs; change no values unless a target moves
+  by more than 3 points, and then stop.
+- **Reading:** compared against the 2,000-run final table; "a target" is any metric the Sprint 5
+  targets name (round 3, boss win, boss win once round 4 is cleared, boss win with the pair done).
+- **Result:** the boss metrics moved by 4 to 17 points for every build, all from Collector's
+  change in 0b (the 2,000-run check with the new Collector already showed them). Values unchanged;
+  stopped to ask.
