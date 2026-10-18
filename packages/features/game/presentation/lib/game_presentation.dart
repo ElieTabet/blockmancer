@@ -5,3 +5,4 @@ export 'src/entities/game_sound.dart';
 export 'src/providers.br.dart';
 export 'src/routing/game_router.br.dart';
 export 'src/routing/game_routing.dart';
+export 'src/widgets/boss_card.dart' show showBossCard;

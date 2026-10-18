@@ -16,6 +16,10 @@ abstract class GameUiState with _$GameUiState {
     required int moveCount,
     required RunState run,
 
+    /// The world whose boss card is up: shown the first time a world run
+    /// reaches that world's boss.
+    WorldId? bossCard,
+
     /// The guided first run: never saved, and never measured against a best.
     @Default(false) bool isTutorial,
 

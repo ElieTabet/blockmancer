@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/notifiers/playback_notifier.br.dart';
+import 'package:game_presentation/src/widgets/boss_card.dart';
 import 'package:game_presentation/src/widgets/joker_offer_sheet.dart';
 import 'package:game_presentation/src/widgets/round_lost_sheet.dart';
 import 'package:game_presentation/src/widgets/run_end_sheet.dart';
 import 'package:game_presentation/src/widgets/unlock_sheet.dart';
 import 'package:shared_domain/shared_domain.dart';
 
-enum _Sheet { end, lost, offers, unlocks }
+enum _Sheet { bossCard, end, lost, offers, unlocks }
 
 /// The sheet the run is waiting on, over a dimmed board — or nothing while
 /// playing. Declarative rather than a modal route: the run's phase alone says
@@ -35,6 +36,7 @@ final class PhaseOverlay extends ConsumerWidget {
                   !state.unlocksSeen =>
             _Sheet.unlocks,
           WonPhase() || OverPhase() => _Sheet.end,
+          PlayingPhase() when state.bossCard != null => _Sheet.bossCard,
           PlayingPhase() => null,
         },
       ),
@@ -54,6 +56,7 @@ final class PhaseOverlay extends ConsumerWidget {
           alignment: .bottomCenter,
           child: _SheetFrame(
             child: switch (sheet) {
+              .bossCard => const BossCardSheet(),
               .end => const RunEndSheet(),
               .lost => const RoundLostSheet(),
               .offers => const JokerOfferSheet(),

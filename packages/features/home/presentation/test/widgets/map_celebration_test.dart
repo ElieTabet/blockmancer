@@ -148,6 +148,66 @@ void main() {
     expect(find.byType(WorldSheet), findsNothing);
   });
 
+  testWidgets("Given every world but Mirror beaten, When the map is back from "
+      "Mirror's first win, Then the moment every world is complete shows "
+      'once, with the stars held out of 15', (tester) async {
+    // Given: every boss but Mirror's beaten with its first star
+    WorldProgress beaten(WorldId world) => WorldProgress(
+      bossBeaten: world != .mirror,
+      stars: WorldStars(
+        bossBeaten: world != .mirror,
+        noRevive: world == .rubble,
+        scoreThreshold: false,
+      ),
+      unlocked: true,
+    );
+    var progression = freshProgression().copyWith(
+      worlds: {for (final world in mapWorlds) world.id: beaten(world.id)},
+    );
+    await pumpHome(tester, progression: () async => progression);
+    await tester.pump();
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(HomeWidget)),
+    );
+
+    // When
+    progression = progression.copyWith(
+      worlds: {
+        ...progression.worlds,
+        .mirror: const WorldProgress(
+          bossBeaten: true,
+          stars: WorldStars(
+            bossBeaten: true,
+            noRevive: false,
+            scoreThreshold: false,
+          ),
+          unlocked: true,
+        ),
+      },
+    );
+    container.invalidate(progressionProvider);
+    for (var frame = 0; frame < 4; frame++) {
+      await tester.pump(const Duration(milliseconds: 10));
+    }
+    await tester.pumpAndSettle();
+
+    // Then: 5 bosses and Rubble's no-revive star
+    expect(find.text('Every world complete'), findsOneWidget);
+    expect(find.text('6 of 15 stars'), findsOneWidget);
+
+    // When: put away, and the map read again
+    await tester.tap(find.text('Keep playing'));
+    await tester.pumpAndSettle();
+    container.invalidate(progressionProvider);
+    for (var frame = 0; frame < 4; frame++) {
+      await tester.pump(const Duration(milliseconds: 10));
+    }
+    await tester.pumpAndSettle();
+
+    // Then
+    expect(find.text('Every world complete'), findsNothing);
+  });
+
   for (final (name, reduceMotion) in [
     ('shakes lightly', false),
     ('keeps still under reduce motion', true),

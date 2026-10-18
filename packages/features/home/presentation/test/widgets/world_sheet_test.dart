@@ -71,6 +71,19 @@ void main() {
     expect(_inSheet(find.text('Start run')), findsOne);
   });
 
+  testWidgets("Given a world's sheet, When the player asks how its boss "
+      'plays, Then its boss card is asked for', (tester) async {
+    // Given
+    final routing = await _openSheet(tester, .rubble);
+
+    // When
+    await tester.tap(_inSheet(find.text('How the boss plays')));
+    await tester.pump();
+
+    // Then
+    expect(routing.calls, ['bossCard:rubble']);
+  });
+
   testWidgets("Given Rubble's boss beaten with two stars, "
       "When Rubble's sheet opens, "
       'Then it is done, two stars are filled, its jokers are unlocked and it '

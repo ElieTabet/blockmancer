@@ -65,6 +65,15 @@
       "pairsWith": "En paire avec : $joker",
       "take": "Prendre"
     },
+    "bossCard": {
+      "title": "Le boss de $world",
+      "rubble": "Le boss commence avec des pierres déjà posées.",
+      "gravity": "Pendant ce boss, chaque pièce tombe aussi bas que possible.",
+      "fog": "Le brouillard cache le plateau. Pose à côté pour voir ce qu'il y a dessous.",
+      "tide": "À chaque nouvelle main, la marée monte d'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.",
+      "mirror": "Tout ce que tu poses atterrit en miroir.",
+      "ok": "Compris"
+    },
     "lost": {
       "outOfPieces": "Plus de pièces",
       "noRoom": "Plus de place",
@@ -230,6 +239,12 @@
     "channelDescription": "Les nouveautés et messages de l'application."
   },
   "home": {
+    "complete": {
+      "title": "Tous les mondes terminés",
+      "body": "Tous les boss sont battus : les $count mondes sont à toi.",
+      "stars": "$stars étoiles sur $max",
+      "ok": "Continuer"
+    },
     "tabLabel": "Jouer",
     "title": "Blockmancer",
     "daily": {
@@ -255,6 +270,7 @@
     "sheet": {
       "done": "Terminé",
       "current": "En cours",
+      "bossCard": "Comment se joue le boss",
       "bossRule": {
         "rubble": "Le boss commence avec des pierres sur le plateau.",
         "fog": "Le brouillard cache des cases. Pose à côté pour voir ce qu'il y a dessous.",

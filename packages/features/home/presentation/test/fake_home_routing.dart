@@ -7,6 +7,10 @@ final class FakeHomeRouting implements HomeRouting {
   final calls = <String>[];
 
   @override
+  void onBossCardRequested(BuildContext context, WorldId world) =>
+      calls.add('bossCard:${world.name}');
+
+  @override
   void onContinueRequested(BuildContext context) => calls.add('continue');
 
   @override

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
 import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
+import 'package:game_domain/src/behaviors/mark_boss_card_seen_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_jokers_announced_behavior.dart';
 import 'package:game_domain/src/behaviors/record_pick_behavior.dart';
 import 'package:game_domain/src/behaviors/record_progression_behavior.dart';
@@ -32,6 +33,9 @@ part 'providers.br.g.dart';
 // game_domain — public providers exposed by this layer.
 
 typedef ClearProgressFun = Future<void> Function();
+
+/// See [MarkBossCardSeenBehavior].
+typedef MarkBossCardSeenFun = Future<void> Function(WorldId world);
 
 /// See [MarkJokersAnnouncedBehavior].
 typedef MarkJokersAnnouncedFun = Future<void> Function();
@@ -106,6 +110,22 @@ Future<Progression> progression(Ref ref) =>
 @riverpod
 JokerCollection jokerCollection(Ref ref) =>
     jokerCollectionOf(ref.watch(di.gameRulesProvider));
+
+/// See [MarkBossCardSeenBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+@Riverpod(keepAlive: true)
+MarkBossCardSeenFun markBossCardSeen(Ref ref) {
+  final mark = MarkBossCardSeenBehavior(
+    store: ref.watch(di.progressionStoreProvider),
+  );
+
+  return (world) async {
+    await mark(world);
+    ref.invalidate(progressionProvider);
+  };
+}
 
 /// See [MarkJokersAnnouncedBehavior].
 ///

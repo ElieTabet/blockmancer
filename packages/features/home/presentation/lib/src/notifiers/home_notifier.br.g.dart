@@ -43,7 +43,7 @@ final class HomeNotifierProvider extends $NotifierProvider<HomeNotifier, void> {
   }
 }
 
-String _$homeNotifierHash() => r'03d7394d2c4319120c3cfb6d78a372303564baf3';
+String _$homeNotifierHash() => r'b4eb8f64e61f762270ae2ae0435ba550f625d2a4';
 
 /// Home's choices. Holds nothing: it forwards each to [HomeRouting].
 

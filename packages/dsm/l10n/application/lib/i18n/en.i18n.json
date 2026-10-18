@@ -65,6 +65,15 @@
       "pairsWith": "Pairs with: $joker",
       "take": "Take"
     },
+    "bossCard": {
+      "title": "The $world boss",
+      "rubble": "The boss starts with stones already on the board.",
+      "gravity": "In this boss, every piece falls as far down as it can.",
+      "fog": "Fog hides the board. Fill next to it to see what's underneath.",
+      "tide": "Every new tray, the tide rises one row. Don't let it push your blocks off the top.",
+      "mirror": "Everything you place lands mirrored.",
+      "ok": "Got it"
+    },
     "lost": {
       "outOfPieces": "Out of pieces",
       "noRoom": "No room left",
@@ -230,6 +239,12 @@
     "channelDescription": "News and messages from the app."
   },
   "home": {
+    "complete": {
+      "title": "Every world complete",
+      "body": "Every boss is beaten: all $count worlds are yours.",
+      "stars": "$stars of $max stars",
+      "ok": "Keep playing"
+    },
     "tabLabel": "Play",
     "title": "Blockmancer",
     "daily": {
@@ -255,6 +270,7 @@
     "sheet": {
       "done": "Done",
       "current": "In progress",
+      "bossCard": "How the boss plays",
       "bossRule": {
         "rubble": "The boss starts with stones on the board.",
         "fog": "Fog hides cells. Fill next to it to see what's underneath.",

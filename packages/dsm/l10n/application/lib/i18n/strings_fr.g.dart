@@ -62,6 +62,7 @@ class _Translations$game$fr extends Translations$game$en {
 	@override late final _Translations$game$round$fr round = _Translations$game$round$fr._(_root);
 	@override late final _Translations$game$banner$fr banner = _Translations$game$banner$fr._(_root);
 	@override late final _Translations$game$offers$fr offers = _Translations$game$offers$fr._(_root);
+	@override late final _Translations$game$bossCard$fr bossCard = _Translations$game$bossCard$fr._(_root);
 	@override late final _Translations$game$lost$fr lost = _Translations$game$lost$fr._(_root);
 	@override late final _Translations$game$end$fr end = _Translations$game$end$fr._(_root);
 	@override late final _Translations$game$unlocks$fr unlocks = _Translations$game$unlocks$fr._(_root);
@@ -87,6 +88,7 @@ class _Translations$home$fr extends Translations$home$en {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
+	@override late final _Translations$home$complete$fr complete = _Translations$home$complete$fr._(_root);
 	@override String get tabLabel => 'Jouer';
 	@override String get title => 'Blockmancer';
 	@override late final _Translations$home$daily$fr daily = _Translations$home$daily$fr._(_root);
@@ -201,6 +203,22 @@ class _Translations$game$offers$fr extends Translations$game$offers$en {
 	@override String get take => 'Prendre';
 }
 
+// Path: game.bossCard
+class _Translations$game$bossCard$fr extends Translations$game$bossCard$en {
+	_Translations$game$bossCard$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String title({required Object world}) => 'Le boss de ${world}';
+	@override String get rubble => 'Le boss commence avec des pierres déjà posées.';
+	@override String get gravity => 'Pendant ce boss, chaque pièce tombe aussi bas que possible.';
+	@override String get fog => 'Le brouillard cache le plateau. Pose à côté pour voir ce qu\'il y a dessous.';
+	@override String get tide => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.';
+	@override String get mirror => 'Tout ce que tu poses atterrit en miroir.';
+	@override String get ok => 'Compris';
+}
+
 // Path: game.lost
 class _Translations$game$lost$fr extends Translations$game$lost$en {
 	_Translations$game$lost$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -298,6 +316,19 @@ class _Translations$game$jokers$fr extends Translations$game$jokers$en {
 	@override late final _Translations$game$jokers$prism$fr prism = _Translations$game$jokers$prism$fr._(_root);
 }
 
+// Path: home.complete
+class _Translations$home$complete$fr extends Translations$home$complete$en {
+	_Translations$home$complete$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Tous les mondes terminés';
+	@override String body({required Object count}) => 'Tous les boss sont battus : les ${count} mondes sont à toi.';
+	@override String stars({required Object stars, required Object max}) => '${stars} étoiles sur ${max}';
+	@override String get ok => 'Continuer';
+}
+
 // Path: home.daily
 class _Translations$home$daily$fr extends Translations$home$daily$en {
 	_Translations$home$daily$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -355,6 +386,7 @@ class _Translations$home$sheet$fr extends Translations$home$sheet$en {
 	// Translations
 	@override String get done => 'Terminé';
 	@override String get current => 'En cours';
+	@override String get bossCard => 'Comment se joue le boss';
 	@override late final _Translations$home$sheet$bossRule$fr bossRule = _Translations$home$sheet$bossRule$fr._(_root);
 	@override String bossTarget({required Object points}) => 'Bats le boss : ${points} points';
 	@override String get stars => 'Étoiles';
@@ -864,6 +896,13 @@ extension on TranslationsFr {
 			'game.offers.completesPair' => ({required Object joker}) => '★ Forme une paire avec ${joker}',
 			'game.offers.pairsWith' => ({required Object joker}) => 'En paire avec : ${joker}',
 			'game.offers.take' => 'Prendre',
+			'game.bossCard.title' => ({required Object world}) => 'Le boss de ${world}',
+			'game.bossCard.rubble' => 'Le boss commence avec des pierres déjà posées.',
+			'game.bossCard.gravity' => 'Pendant ce boss, chaque pièce tombe aussi bas que possible.',
+			'game.bossCard.fog' => 'Le brouillard cache le plateau. Pose à côté pour voir ce qu\'il y a dessous.',
+			'game.bossCard.tide' => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.',
+			'game.bossCard.mirror' => 'Tout ce que tu poses atterrit en miroir.',
+			'game.bossCard.ok' => 'Compris',
 			'game.lost.outOfPieces' => 'Plus de pièces',
 			'game.lost.noRoom' => 'Plus de place',
 			'game.lost.flooded' => 'Submergé',
@@ -949,6 +988,10 @@ extension on TranslationsFr {
 			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} jetons par case pleine ou pierre dont la case miroir l\'est aussi, après une ligne effacée.',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
+			'home.complete.title' => 'Tous les mondes terminés',
+			'home.complete.body' => ({required Object count}) => 'Tous les boss sont battus : les ${count} mondes sont à toi.',
+			'home.complete.stars' => ({required Object stars, required Object max}) => '${stars} étoiles sur ${max}',
+			'home.complete.ok' => 'Continuer',
 			'home.tabLabel' => 'Jouer',
 			'home.title' => 'Blockmancer',
 			'home.daily.title' => 'Partie du jour',
@@ -965,6 +1008,7 @@ extension on TranslationsFr {
 			'home.map.stars' => ({required Object count}) => 'Étoiles : ${count} sur 3',
 			'home.sheet.done' => 'Terminé',
 			'home.sheet.current' => 'En cours',
+			'home.sheet.bossCard' => 'Comment se joue le boss',
 			'home.sheet.bossRule.rubble' => 'Le boss commence avec des pierres sur le plateau.',
 			'home.sheet.bossRule.fog' => 'Le brouillard cache des cases. Pose à côté pour voir ce qu\'il y a dessous.',
 			'home.sheet.bossRule.tide' => 'À chaque nouvelle main, la marée monte d\'une ligne. Ne la laisse pas pousser tes blocs hors du plateau.',

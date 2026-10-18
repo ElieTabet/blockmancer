@@ -58,7 +58,7 @@ const defaultConfig = RunConfig(
   // it, so the third star takes skill and a good build: patience,twin's
   // 11,071 rounded to the nearest 250 (docs/balance/2026-10-18-sprint5.md).
   starThreshold: 11000,
-  // Six is every star of today's two worlds.
+  // Kept at 4 and 6 as the map grew to 5 worlds (15 stars).
   starUnlocks: [
     StarUnlock(jokers: [.fullhouse, .brink], stars: 4),
     StarUnlock(jokers: [.finisher, .hattrick], stars: 6),

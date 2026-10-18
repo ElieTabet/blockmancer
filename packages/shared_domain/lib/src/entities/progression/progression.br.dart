@@ -8,7 +8,8 @@ part 'progression.br.freezed.dart';
 
 /// What the player has earned across runs: the worlds open to them and what
 /// each has awarded, the jokers runs may offer, how runs went with each joker,
-/// and whether the tutorial is behind them.
+/// the bosses whose card they have seen, and whether the tutorial is behind
+/// them.
 @freezed
 abstract class Progression with _$Progression {
   const factory Progression({
@@ -21,5 +22,9 @@ abstract class Progression with _$Progression {
     required Set<JokerId> unannouncedJokers,
     required Set<JokerId> unlockedJokers,
     required Map<WorldId, WorldProgress> worlds,
+
+    /// The worlds whose boss card has been shown, so it shows only the first
+    /// time the player reaches that boss.
+    @Default(<WorldId>{}) Set<WorldId> bossCardsSeen,
   }) = _Progression;
 }

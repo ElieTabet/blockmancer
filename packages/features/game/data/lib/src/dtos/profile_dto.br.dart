@@ -5,7 +5,7 @@ part 'profile_dto.br.g.dart';
 
 /// The profile's schema version. Bump it with each change to these DTOs, and
 /// teach `migrateProfile` to bring the previous version up to it.
-const profileVersion = 6;
+const profileVersion = 7;
 
 /// Brings a profile written by an earlier version up to [profileVersion], one
 /// version at a time; a version this build doesn't know is unreadable.
@@ -31,6 +31,10 @@ Map<String, dynamic> migrateProfile(
   ),
   5 => migrateProfile(
     _fromVersion5(json),
+    startingProgression: startingProgression,
+  ),
+  6 => migrateProfile(
+    _fromVersion6(json),
     startingProgression: startingProgression,
   ),
   profileVersion => json,
@@ -122,6 +126,26 @@ Map<String, dynamic> _fromVersion5(Map<String, dynamic> json) {
   };
 }
 
+/// Version 6 kept no boss cards: a world whose boss the player has beaten was
+/// reached, so its card counts as seen; one only reached, the profile can't
+/// tell, and shows its card the next time.
+Map<String, dynamic> _fromVersion6(Map<String, dynamic> json) {
+  final progression = json['progression'] as Map<String, dynamic>;
+  final worlds = progression['worlds'] as Map<String, dynamic>;
+
+  return {
+    ...json,
+    'progression': <String, dynamic>{
+      ...progression,
+      'bossCardsSeen': [
+        for (final MapEntry(key: world, :value) in worlds.entries)
+          if ((value as Map<String, dynamic>)['bossBeaten'] == true) world,
+      ],
+    },
+    'version': 7,
+  };
+}
+
 const _version5StarUnlocks = [
   (4, ['fullhouse', 'brink']),
   (6, ['finisher', 'hattrick']),
@@ -174,6 +198,7 @@ final class BestsDto {
 @JsonSerializable(explicitToJson: true)
 final class ProgressionDto {
   const ProgressionDto({
+    required this.bossCardsSeen,
     required this.jokerStats,
     required this.tutorialDone,
     required this.unannouncedJokers,
@@ -182,6 +207,7 @@ final class ProgressionDto {
   });
 
   factory ProgressionDto.fromDomain(Progression progression) => ProgressionDto(
+    bossCardsSeen: [for (final world in progression.bossCardsSeen) world.name],
     jokerStats: {
       for (final MapEntry(key: joker, value: stats)
           in progression.jokerStats.entries)
@@ -204,6 +230,9 @@ final class ProgressionDto {
   factory ProgressionDto.fromJson(Map<String, dynamic> json) =>
       _$ProgressionDtoFromJson(json);
 
+  /// By the world's name.
+  final List<String> bossCardsSeen;
+
   /// Keyed by the joker's name.
   final Map<String, JokerStatsDto> jokerStats;
   final bool tutorialDone;
@@ -214,6 +243,9 @@ final class ProgressionDto {
   Map<String, dynamic> toJson() => _$ProgressionDtoToJson(this);
 
   Progression toDomain() => Progression(
+    bossCardsSeen: {
+      for (final world in bossCardsSeen) WorldId.values.byName(world),
+    },
     jokerStats: {
       for (final MapEntry(key: joker, value: stats) in jokerStats.entries)
         JokerId.values.byName(joker): stats.toDomain(),

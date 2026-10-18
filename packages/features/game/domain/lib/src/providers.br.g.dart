@@ -237,6 +237,67 @@ final class JokerCollectionProvider
 
 String _$jokerCollectionHash() => r'cdb3f224090b309308bfbb824751888c26cbaca2';
 
+/// See [MarkBossCardSeenBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+@ProviderFor(markBossCardSeen)
+final markBossCardSeenProvider = MarkBossCardSeenProvider._();
+
+/// See [MarkBossCardSeenBehavior].
+///
+/// Kept alive because it refreshes [progressionProvider] after an await, by
+/// when an auto-disposed provider's ref may be gone.
+
+final class MarkBossCardSeenProvider
+    extends
+        $FunctionalProvider<
+          MarkBossCardSeenFun,
+          MarkBossCardSeenFun,
+          MarkBossCardSeenFun
+        >
+    with $Provider<MarkBossCardSeenFun> {
+  /// See [MarkBossCardSeenBehavior].
+  ///
+  /// Kept alive because it refreshes [progressionProvider] after an await, by
+  /// when an auto-disposed provider's ref may be gone.
+  MarkBossCardSeenProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markBossCardSeenProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$markBossCardSeenHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkBossCardSeenFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MarkBossCardSeenFun create(Ref ref) {
+    return markBossCardSeen(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkBossCardSeenFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MarkBossCardSeenFun>(value),
+    );
+  }
+}
+
+String _$markBossCardSeenHash() => r'99e1b55b8f6597ebe01d1f96d624bb49ee54da3b';
+
 /// See [MarkJokersAnnouncedBehavior].
 ///
 /// Kept alive because it refreshes [progressionProvider] after an await, by

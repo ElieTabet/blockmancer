@@ -11,6 +11,9 @@ class HomeNotifier extends _$HomeNotifier {
   @override
   void build() {}
 
+  void openBossCard(BuildContext context, WorldId world) =>
+      ref.read(homeRoutingProvider).onBossCardRequested(context, world);
+
   void closeSpellbook(BuildContext context) =>
       ref.read(homeRoutingProvider).onSpellbookCloseRequested(context);
 

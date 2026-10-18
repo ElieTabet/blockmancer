@@ -406,15 +406,16 @@ for the map to announce them) and `tutorialDone`.
   bests and the progression; `SharedPreferencesBestScores` and `SharedPreferencesProgressionStore`
   both read and write it, each update a read and a write with no await between, so neither wipes
   the other.
-- **Version 6.** A device without a profile is version 1: the `best.*` keys and
+- **Version 7.** A device without a profile is version 1: the `best.*` keys and
   `settings.tutorialSeen`. `migrateProfile` turns that into version 2 on first read (bests kept,
   `tutorialDone` from the flag, the starting progression) and removes the `best.*` keys; version 3
   adds a best per world (`bests.worlds`), empty for older profiles; version 4 adds the joker stats,
   empty for older profiles; version 5 grants the star unlocks a profile already holds the stars
   for (thresholds as literals: 4★ and 6★), into both `unlockedJokers` and `unannouncedJokers`; version 6
   renames the fourth world's entry from `speed`, dropped for Tide before it had rules, to `tide`
-  (read as it was, the unknown name would throw the profile away). An unreadable profile starts
-  fresh and is replaced by the next write.
+  (read as it was, the unknown name would throw the profile away); version 7 adds the boss cards
+  seen (`bossCardsSeen`), counting as seen every world whose boss the profile has beaten. An
+  unreadable profile starts fresh and is replaced by the next write.
 - **Announced once.** Home's `UnlockAnnouncer` reads `unannouncedJokers` through the
   `progression` slot; when it holds jokers, it calls the `markJokersAnnounced` slot (bound to
   `game_domain`'s, which empties the set and refreshes the progression) before showing
@@ -519,6 +520,23 @@ header, beside the gear.
   `AnimatedBuilder` under `MapCelebrationScope`. A locked or coming-soon node shakes lightly when
   tapped (not under reduce motion), and its sheet still opens.
 
+### Boss cards and the end of the map
+
+- **Boss cards.** The first time a world run reaches a world's boss (any world but the map's
+  first, whose rule a new player meets with the tutorial's help), `GameNotifier` puts up that
+  world's card (`GameUiState.bossCard`, a `PhaseOverlay` sheet): the rule in a sentence and a
+  small loop of it at work (`BossRuleLoop`, still under reduce motion). "Got it" calls
+  `game_domain`'s `markBossCardSeen`, which adds the world to `Progression.bossCardsSeen`, so the
+  card never shows again (Reset progress shows them again). Every world's sheet replays its card:
+  "How the boss plays" calls `HomeRouting.onBossCardRequested`, which `app_router` answers with
+  game_presentation's exported `showBossCard`, so the card exists once.
+- **The map's end.** `celebrationBetween` sets `completedGame` when the last boss standing falls;
+  once the map's celebration has settled, and only with the map on screen, `MapCelebrationDirector`
+  shows `WorldCompleteSheet`: every world's boss beaten, the nodes all lit behind it, and the stars
+  held out of 15. Like the rest of the celebration, it shows once.
+- **A whole campaign** is tested end to end (`app_providers`' `campaign_test`): a new player
+  beats each world in order, and each world and each joker pair unlocks exactly once.
+
 ### Spellbook
 
 The joker collection, opened from the book in Home's header: `SpellbookRoute`
@@ -526,7 +544,7 @@ The joker collection, opened from the book in Home's header: `SpellbookRoute`
 button pops it (`HomeRouting.onSpellbookRequested` / `onSpellbookCloseRequested`).
 
 - **What it reads.** `game_domain`'s `jokerCollectionOf(rules)` fills home's `jokerCollection`
-  slot: a `JokerCollection` (`shared_domain`) of the 10 `JokerPair`s, each with its
+  slot: a `JokerCollection` (`shared_domain`) of the 13 `JokerPair`s, each with its
   `JokerUnlock` (`starting`, `boss(world)`, `stars(count)`) and the rules' `JokerTuning` — a new
   player's pairs first, then each world's boss's, then the stars'. Whether a joker is unlocked
   and its `JokerStats` come from the `progression` slot.

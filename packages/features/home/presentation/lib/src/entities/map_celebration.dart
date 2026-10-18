@@ -5,25 +5,34 @@ import 'package:shared_domain/shared_domain.dart';
 /// One star of one world: 0 the boss beaten, 1 no revive, 2 the run total.
 typedef WorldStar = ({int star, WorldId world});
 
-/// What the map has to celebrate since it last settled: the stars earned and
-/// the world opened, in the map's order.
+/// What the map has to celebrate since it last settled: the stars earned, the
+/// world opened, in the map's order, and whether the last boss standing fell.
 @immutable
 final class MapCelebration {
-  const MapCelebration({required this.newStars, this.unlockedWorld});
+  const MapCelebration({
+    required this.newStars,
+    this.completedGame = false,
+    this.unlockedWorld,
+  });
 
+  /// Every world's boss beaten now, and not when the map last settled.
+  final bool completedGame;
   final List<WorldStar> newStars;
   final WorldId? unlockedWorld;
 
-  bool get isEmpty => newStars.isEmpty && unlockedWorld == null;
+  bool get isEmpty =>
+      newStars.isEmpty && unlockedWorld == null && !completedGame;
 
   @override
   bool operator ==(Object other) =>
       other is MapCelebration &&
       listEquals(other.newStars, newStars) &&
+      other.completedGame == completedGame &&
       other.unlockedWorld == unlockedWorld;
 
   @override
-  int get hashCode => Object.hash(Object.hashAll(newStars), unlockedWorld);
+  int get hashCode =>
+      Object.hash(Object.hashAll(newStars), completedGame, unlockedWorld);
 }
 
 /// What [now] holds that [shown] didn't, walking [order], the map's worlds.
@@ -32,6 +41,7 @@ MapCelebration celebrationBetween(
   List<WorldId> order, {
   required Progression shown,
 }) => MapCelebration(
+  completedGame: _allBeaten(now, order) && !_allBeaten(shown, order),
   newStars: [
     for (final world in order)
       for (final (star, earned) in _starsOf(now.worlds[world]).indexed)
@@ -46,6 +56,10 @@ MapCelebration celebrationBetween(
       )
       .firstOrNull,
 );
+
+bool _allBeaten(Progression progression, List<WorldId> order) =>
+    order.isNotEmpty &&
+    order.every((world) => progression.worlds[world]?.bossBeaten ?? false);
 
 List<bool> _starsOf(WorldProgress? progress) {
   final stars = progress?.stars;

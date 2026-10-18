@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_presentation/src/entities/map_celebration.dart';
 import 'package:home_presentation/src/providers_di.br.dart';
+import 'package:home_presentation/src/widgets/world_complete_sheet.dart';
 import 'package:shared_domain/shared_domain.dart';
 
 /// Plays what the map earned since it last settled — the stars, then the
 /// opened world — once, when the map is on screen again, and holds the map's
 /// pieces at how they stood until it starts. Reduce motion settles at once,
-/// and a tap skips to the end.
+/// and a tap skips to the end. When the last boss standing fell, the moment
+/// every world is complete follows, once the map has settled.
 ///
 /// What the map last settled on is this state's, which lives as long as Home
 /// does: a cold start shows the map as it stands, with nothing to celebrate.
@@ -28,6 +30,9 @@ final class _MapCelebrationDirectorState
     with SingleTickerProviderStateMixin {
   /// What the celebration in progress ends on.
   Progression? _celebratedTo;
+
+  /// Whether every world's completion waits to be shown.
+  var _completionDue = false;
   MapCelebration? _celebration;
   late final _controller = AnimationController(vsync: this)
     ..addStatusListener((status) {
@@ -68,6 +73,13 @@ final class _MapCelebrationDirectorState
         MediaQuery.disableAnimationsOf(context) ||
         ref.watch(reduceMotionSettingProvider);
     final visible = TickerMode.valuesOf(context).enabled;
+
+    if (_completionDue && _celebration == null && visible) {
+      _completionDue = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) unawaited(showWorldCompleteSheet(context));
+      });
+    }
 
     if (_celebration != null && _still) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _skip());
@@ -114,8 +126,10 @@ final class _MapCelebrationDirectorState
       shown: _shown!,
     );
 
+    if (celebration.completedGame) _completionDue = true;
+
     if (celebration.isEmpty || _still) {
-      _shown = now;
+      setState(() => _shown = now);
       return;
     }
 

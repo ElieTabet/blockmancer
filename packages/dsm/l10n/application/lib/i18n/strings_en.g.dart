@@ -77,6 +77,7 @@ class Translations$game$en {
 	late final Translations$game$round$en round = Translations$game$round$en.internal(_root);
 	late final Translations$game$banner$en banner = Translations$game$banner$en.internal(_root);
 	late final Translations$game$offers$en offers = Translations$game$offers$en.internal(_root);
+	late final Translations$game$bossCard$en bossCard = Translations$game$bossCard$en.internal(_root);
 	late final Translations$game$lost$en lost = Translations$game$lost$en.internal(_root);
 	late final Translations$game$end$en end = Translations$game$end$en.internal(_root);
 	late final Translations$game$unlocks$en unlocks = Translations$game$unlocks$en.internal(_root);
@@ -106,6 +107,7 @@ class Translations$home$en {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+	late final Translations$home$complete$en complete = Translations$home$complete$en.internal(_root);
 
 	/// en: 'Play'
 	String get tabLabel => 'Play';
@@ -321,6 +323,36 @@ class Translations$game$offers$en {
 	String get take => 'Take';
 }
 
+// Path: game.bossCard
+class Translations$game$bossCard$en {
+	Translations$game$bossCard$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'The $world boss'
+	String title({required Object world}) => 'The ${world} boss';
+
+	/// en: 'The boss starts with stones already on the board.'
+	String get rubble => 'The boss starts with stones already on the board.';
+
+	/// en: 'In this boss, every piece falls as far down as it can.'
+	String get gravity => 'In this boss, every piece falls as far down as it can.';
+
+	/// en: 'Fog hides the board. Fill next to it to see what's underneath.'
+	String get fog => 'Fog hides the board. Fill next to it to see what\'s underneath.';
+
+	/// en: 'Every new tray, the tide rises one row. Don't let it push your blocks off the top.'
+	String get tide => 'Every new tray, the tide rises one row. Don\'t let it push your blocks off the top.';
+
+	/// en: 'Everything you place lands mirrored.'
+	String get mirror => 'Everything you place lands mirrored.';
+
+	/// en: 'Got it'
+	String get ok => 'Got it';
+}
+
 // Path: game.lost
 class Translations$game$lost$en {
 	Translations$game$lost$en.internal(this._root);
@@ -469,6 +501,27 @@ class Translations$game$jokers$en {
 	late final Translations$game$jokers$prism$en prism = Translations$game$jokers$prism$en.internal(_root);
 }
 
+// Path: home.complete
+class Translations$home$complete$en {
+	Translations$home$complete$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Every world complete'
+	String get title => 'Every world complete';
+
+	/// en: 'Every boss is beaten: all $count worlds are yours.'
+	String body({required Object count}) => 'Every boss is beaten: all ${count} worlds are yours.';
+
+	/// en: '$stars of $max stars'
+	String stars({required Object stars, required Object max}) => '${stars} of ${max} stars';
+
+	/// en: 'Keep playing'
+	String get ok => 'Keep playing';
+}
+
 // Path: home.daily
 class Translations$home$daily$en {
 	Translations$home$daily$en.internal(this._root);
@@ -554,6 +607,9 @@ class Translations$home$sheet$en {
 
 	/// en: 'In progress'
 	String get current => 'In progress';
+
+	/// en: 'How the boss plays'
+	String get bossCard => 'How the boss plays';
 
 	late final Translations$home$sheet$bossRule$en bossRule = Translations$home$sheet$bossRule$en.internal(_root);
 
@@ -1284,6 +1340,13 @@ extension on Translations {
 			'game.offers.completesPair' => ({required Object joker}) => '★ Completes a pair with your ${joker}',
 			'game.offers.pairsWith' => ({required Object joker}) => 'Pairs with: ${joker}',
 			'game.offers.take' => 'Take',
+			'game.bossCard.title' => ({required Object world}) => 'The ${world} boss',
+			'game.bossCard.rubble' => 'The boss starts with stones already on the board.',
+			'game.bossCard.gravity' => 'In this boss, every piece falls as far down as it can.',
+			'game.bossCard.fog' => 'Fog hides the board. Fill next to it to see what\'s underneath.',
+			'game.bossCard.tide' => 'Every new tray, the tide rises one row. Don\'t let it push your blocks off the top.',
+			'game.bossCard.mirror' => 'Everything you place lands mirrored.',
+			'game.bossCard.ok' => 'Got it',
 			'game.lost.outOfPieces' => 'Out of pieces',
 			'game.lost.noRoom' => 'No room left',
 			'game.lost.flooded' => 'Flooded',
@@ -1369,6 +1432,10 @@ extension on Translations {
 			'game.jokers.prism.description' => ({required Object chips}) => '+${chips} chips for each filled cell or stone whose mirror cell is one too, after a clear.',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
+			'home.complete.title' => 'Every world complete',
+			'home.complete.body' => ({required Object count}) => 'Every boss is beaten: all ${count} worlds are yours.',
+			'home.complete.stars' => ({required Object stars, required Object max}) => '${stars} of ${max} stars',
+			'home.complete.ok' => 'Keep playing',
 			'home.tabLabel' => 'Play',
 			'home.title' => 'Blockmancer',
 			'home.daily.title' => 'Daily run',
@@ -1385,6 +1452,7 @@ extension on Translations {
 			'home.map.stars' => ({required Object count}) => 'Stars: ${count} of 3',
 			'home.sheet.done' => 'Done',
 			'home.sheet.current' => 'In progress',
+			'home.sheet.bossCard' => 'How the boss plays',
 			'home.sheet.bossRule.rubble' => 'The boss starts with stones on the board.',
 			'home.sheet.bossRule.fog' => 'Fog hides cells. Fill next to it to see what\'s underneath.',
 			'home.sheet.bossRule.tide' => 'Every new tray, the tide rises one row. Don\'t let it push your blocks off the top.',

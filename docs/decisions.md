@@ -161,3 +161,30 @@ reading chosen and why. Newest task last.
   alone, as before.
 - **Provisional numbers.** Mirror's boss target (6,000) and ★3 threshold (13,000) are a step above
   Tide's until Task 6.
+
+## Task 5: map, detail sheets, boss cards, Spellbook
+
+- **Data, not screens.** The map, the world sheets and the Spellbook already read the rules'
+  `worldOrder`, `isPlayable`, `unlocksOf` and the joker collection: with every world playable no
+  node says "Coming soon" (the status stays for a world added later) and the Spellbook shows 13
+  pairs, with no screen change.
+- **Which worlds have a first-time card.** Every world but the map's first: the sprint lists
+  Gravity, Fog, Tide and Mirror, and the rule is "not the first world" rather than a list, so a
+  world added later gets its card with its strings. Rubble's card exists too, for the sheet's
+  replay, but never interrupts a new player's first boss.
+- **When it shows.** The first time a world run's boss round starts in that world, once the move
+  that started it has played back; not in daily or practice runs, which play the first world, and
+  not when a saved run is resumed already inside the boss.
+- **Where "seen" lives.** In `Progression.bossCardsSeen` (profile version 7), so Reset progress
+  shows the cards again with everything else. Older profiles count every world whose boss they
+  have beaten as seen: the player has met that rule.
+- **One card for game and home.** The card lives in `game_presentation`; the world sheet replays it
+  through `HomeRouting.onBossCardRequested`, which `app_router` answers with `showBossCard`, so
+  neither feature imports the other.
+- **"A world complete moment".** Read as the whole map complete: a sheet once the last world's
+  boss first falls ("Every world complete", the stars held out of 15), shown over the map once its
+  celebration has settled, with every node already lit (done) behind it. Reduce motion shows it
+  too, without the celebration before it.
+- **Star unlocks** stay at 4★ and 6★, out of 15 now.
+- **Device checks left to the user:** a full run from Rubble to Mirror on a phone, and the map at
+  60 fps in profile mode on a mid-range Android phone with every node open.

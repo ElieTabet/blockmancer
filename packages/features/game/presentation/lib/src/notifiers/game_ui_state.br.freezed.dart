@@ -17,7 +17,9 @@ mixin _$GameUiState {
 /// What the last action did, for the feedback that follows it.
  List<GameEvent> get lastEvents;/// Counts actions, so the same events twice still read as a new move.
 /// What the run counts for: which best it is measured against.
- GameMode get mode; int get moveCount; RunState get run;/// The guided first run: never saved, and never measured against a best.
+ GameMode get mode; int get moveCount; RunState get run;/// The world whose boss card is up: shown the first time a world run
+/// reaches that world's boss.
+ WorldId? get bossCard;/// The guided first run: never saved, and never measured against a best.
  bool get isTutorial;/// What the finished run earned on the map; null until the run has ended
 /// and it is kept, and for good in a run that earns nothing there.
  ProgressionChange? get progress;/// Whether the run has just ended and what it earned is still being kept:
@@ -37,16 +39,16 @@ $GameUiStateCopyWith<GameUiState> get copyWith => _$GameUiStateCopyWithImpl<Game
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameUiState&&const DeepCollectionEquality().equals(other.lastEvents, lastEvents)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run)&&(identical(other.isTutorial, isTutorial) || other.isTutorial == isTutorial)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.progressPending, progressPending) || other.progressPending == progressPending)&&(identical(other.record, record) || other.record == record)&&(identical(other.unlocksSeen, unlocksSeen) || other.unlocksSeen == unlocksSeen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameUiState&&const DeepCollectionEquality().equals(other.lastEvents, lastEvents)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run)&&(identical(other.bossCard, bossCard) || other.bossCard == bossCard)&&(identical(other.isTutorial, isTutorial) || other.isTutorial == isTutorial)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.progressPending, progressPending) || other.progressPending == progressPending)&&(identical(other.record, record) || other.record == record)&&(identical(other.unlocksSeen, unlocksSeen) || other.unlocksSeen == unlocksSeen));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(lastEvents),mode,moveCount,run,isTutorial,progress,progressPending,record,unlocksSeen);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(lastEvents),mode,moveCount,run,bossCard,isTutorial,progress,progressPending,record,unlocksSeen);
 
 @override
 String toString() {
-  return 'GameUiState(lastEvents: $lastEvents, mode: $mode, moveCount: $moveCount, run: $run, isTutorial: $isTutorial, progress: $progress, progressPending: $progressPending, record: $record, unlocksSeen: $unlocksSeen)';
+  return 'GameUiState(lastEvents: $lastEvents, mode: $mode, moveCount: $moveCount, run: $run, bossCard: $bossCard, isTutorial: $isTutorial, progress: $progress, progressPending: $progressPending, record: $record, unlocksSeen: $unlocksSeen)';
 }
 
 
@@ -57,7 +59,7 @@ abstract mixin class $GameUiStateCopyWith<$Res>  {
   factory $GameUiStateCopyWith(GameUiState value, $Res Function(GameUiState) _then) = _$GameUiStateCopyWithImpl;
 @useResult
 $Res call({
- List<GameEvent> lastEvents, GameMode mode, int moveCount, RunState run, bool isTutorial, ProgressionChange? progress, bool progressPending, RunEndRecord? record, bool unlocksSeen
+ List<GameEvent> lastEvents, GameMode mode, int moveCount, RunState run, WorldId? bossCard, bool isTutorial, ProgressionChange? progress, bool progressPending, RunEndRecord? record, bool unlocksSeen
 });
 
 
@@ -74,13 +76,14 @@ class _$GameUiStateCopyWithImpl<$Res>
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? lastEvents = null,Object? mode = null,Object? moveCount = null,Object? run = null,Object? isTutorial = null,Object? progress = freezed,Object? progressPending = null,Object? record = freezed,Object? unlocksSeen = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? lastEvents = null,Object? mode = null,Object? moveCount = null,Object? run = null,Object? bossCard = freezed,Object? isTutorial = null,Object? progress = freezed,Object? progressPending = null,Object? record = freezed,Object? unlocksSeen = null,}) {
   return _then(_self.copyWith(
 lastEvents: null == lastEvents ? _self.lastEvents : lastEvents // ignore: cast_nullable_to_non_nullable
 as List<GameEvent>,mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
 as GameMode,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
 as int,run: null == run ? _self.run : run // ignore: cast_nullable_to_non_nullable
-as RunState,isTutorial: null == isTutorial ? _self.isTutorial : isTutorial // ignore: cast_nullable_to_non_nullable
+as RunState,bossCard: freezed == bossCard ? _self.bossCard : bossCard // ignore: cast_nullable_to_non_nullable
+as WorldId?,isTutorial: null == isTutorial ? _self.isTutorial : isTutorial // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as ProgressionChange?,progressPending: null == progressPending ? _self.progressPending : progressPending // ignore: cast_nullable_to_non_nullable
 as bool,record: freezed == record ? _self.record : record // ignore: cast_nullable_to_non_nullable
@@ -212,10 +215,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  bool isTutorial,  ProgressionChange? progress,  bool progressPending,  RunEndRecord? record,  bool unlocksSeen)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  WorldId? bossCard,  bool isTutorial,  ProgressionChange? progress,  bool progressPending,  RunEndRecord? record,  bool unlocksSeen)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameUiState() when $default != null:
-return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.isTutorial,_that.progress,_that.progressPending,_that.record,_that.unlocksSeen);case _:
+return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.bossCard,_that.isTutorial,_that.progress,_that.progressPending,_that.record,_that.unlocksSeen);case _:
   return orElse();
 
 }
@@ -233,10 +236,10 @@ return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.isTu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  bool isTutorial,  ProgressionChange? progress,  bool progressPending,  RunEndRecord? record,  bool unlocksSeen)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  WorldId? bossCard,  bool isTutorial,  ProgressionChange? progress,  bool progressPending,  RunEndRecord? record,  bool unlocksSeen)  $default,) {final _that = this;
 switch (_that) {
 case _GameUiState():
-return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.isTutorial,_that.progress,_that.progressPending,_that.record,_that.unlocksSeen);case _:
+return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.bossCard,_that.isTutorial,_that.progress,_that.progressPending,_that.record,_that.unlocksSeen);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -253,10 +256,10 @@ return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.isTu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  bool isTutorial,  ProgressionChange? progress,  bool progressPending,  RunEndRecord? record,  bool unlocksSeen)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<GameEvent> lastEvents,  GameMode mode,  int moveCount,  RunState run,  WorldId? bossCard,  bool isTutorial,  ProgressionChange? progress,  bool progressPending,  RunEndRecord? record,  bool unlocksSeen)?  $default,) {final _that = this;
 switch (_that) {
 case _GameUiState() when $default != null:
-return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.isTutorial,_that.progress,_that.progressPending,_that.record,_that.unlocksSeen);case _:
+return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.bossCard,_that.isTutorial,_that.progress,_that.progressPending,_that.record,_that.unlocksSeen);case _:
   return null;
 
 }
@@ -268,7 +271,7 @@ return $default(_that.lastEvents,_that.mode,_that.moveCount,_that.run,_that.isTu
 
 
 class _GameUiState implements GameUiState {
-  const _GameUiState({required final  List<GameEvent> lastEvents, required this.mode, required this.moveCount, required this.run, this.isTutorial = false, this.progress, this.progressPending = false, this.record, this.unlocksSeen = false}): _lastEvents = lastEvents;
+  const _GameUiState({required final  List<GameEvent> lastEvents, required this.mode, required this.moveCount, required this.run, this.bossCard, this.isTutorial = false, this.progress, this.progressPending = false, this.record, this.unlocksSeen = false}): _lastEvents = lastEvents;
   
 
 /// What the last action did, for the feedback that follows it.
@@ -285,6 +288,9 @@ class _GameUiState implements GameUiState {
 @override final  GameMode mode;
 @override final  int moveCount;
 @override final  RunState run;
+/// The world whose boss card is up: shown the first time a world run
+/// reaches that world's boss.
+@override final  WorldId? bossCard;
 /// The guided first run: never saved, and never measured against a best.
 @override@JsonKey() final  bool isTutorial;
 /// What the finished run earned on the map; null until the run has ended
@@ -310,16 +316,16 @@ _$GameUiStateCopyWith<_GameUiState> get copyWith => __$GameUiStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameUiState&&const DeepCollectionEquality().equals(other._lastEvents, _lastEvents)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run)&&(identical(other.isTutorial, isTutorial) || other.isTutorial == isTutorial)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.progressPending, progressPending) || other.progressPending == progressPending)&&(identical(other.record, record) || other.record == record)&&(identical(other.unlocksSeen, unlocksSeen) || other.unlocksSeen == unlocksSeen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameUiState&&const DeepCollectionEquality().equals(other._lastEvents, _lastEvents)&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.run, run) || other.run == run)&&(identical(other.bossCard, bossCard) || other.bossCard == bossCard)&&(identical(other.isTutorial, isTutorial) || other.isTutorial == isTutorial)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.progressPending, progressPending) || other.progressPending == progressPending)&&(identical(other.record, record) || other.record == record)&&(identical(other.unlocksSeen, unlocksSeen) || other.unlocksSeen == unlocksSeen));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_lastEvents),mode,moveCount,run,isTutorial,progress,progressPending,record,unlocksSeen);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_lastEvents),mode,moveCount,run,bossCard,isTutorial,progress,progressPending,record,unlocksSeen);
 
 @override
 String toString() {
-  return 'GameUiState(lastEvents: $lastEvents, mode: $mode, moveCount: $moveCount, run: $run, isTutorial: $isTutorial, progress: $progress, progressPending: $progressPending, record: $record, unlocksSeen: $unlocksSeen)';
+  return 'GameUiState(lastEvents: $lastEvents, mode: $mode, moveCount: $moveCount, run: $run, bossCard: $bossCard, isTutorial: $isTutorial, progress: $progress, progressPending: $progressPending, record: $record, unlocksSeen: $unlocksSeen)';
 }
 
 
@@ -330,7 +336,7 @@ abstract mixin class _$GameUiStateCopyWith<$Res> implements $GameUiStateCopyWith
   factory _$GameUiStateCopyWith(_GameUiState value, $Res Function(_GameUiState) _then) = __$GameUiStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<GameEvent> lastEvents, GameMode mode, int moveCount, RunState run, bool isTutorial, ProgressionChange? progress, bool progressPending, RunEndRecord? record, bool unlocksSeen
+ List<GameEvent> lastEvents, GameMode mode, int moveCount, RunState run, WorldId? bossCard, bool isTutorial, ProgressionChange? progress, bool progressPending, RunEndRecord? record, bool unlocksSeen
 });
 
 
@@ -347,13 +353,14 @@ class __$GameUiStateCopyWithImpl<$Res>
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? lastEvents = null,Object? mode = null,Object? moveCount = null,Object? run = null,Object? isTutorial = null,Object? progress = freezed,Object? progressPending = null,Object? record = freezed,Object? unlocksSeen = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? lastEvents = null,Object? mode = null,Object? moveCount = null,Object? run = null,Object? bossCard = freezed,Object? isTutorial = null,Object? progress = freezed,Object? progressPending = null,Object? record = freezed,Object? unlocksSeen = null,}) {
   return _then(_GameUiState(
 lastEvents: null == lastEvents ? _self._lastEvents : lastEvents // ignore: cast_nullable_to_non_nullable
 as List<GameEvent>,mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
 as GameMode,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
 as int,run: null == run ? _self.run : run // ignore: cast_nullable_to_non_nullable
-as RunState,isTutorial: null == isTutorial ? _self.isTutorial : isTutorial // ignore: cast_nullable_to_non_nullable
+as RunState,bossCard: freezed == bossCard ? _self.bossCard : bossCard // ignore: cast_nullable_to_non_nullable
+as WorldId?,isTutorial: null == isTutorial ? _self.isTutorial : isTutorial // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as ProgressionChange?,progressPending: null == progressPending ? _self.progressPending : progressPending // ignore: cast_nullable_to_non_nullable
 as bool,record: freezed == record ? _self.record : record // ignore: cast_nullable_to_non_nullable

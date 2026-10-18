@@ -1,6 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:home_presentation/src/notifiers/home_notifier.br.dart';
 import 'package:home_presentation/src/providers_internal.br.dart';
 import 'package:home_presentation/src/widgets/joker_tile.dart';
 import 'package:home_presentation/src/widgets/points_text.dart';
@@ -77,6 +78,7 @@ final class WorldSheet extends ConsumerWidget {
                   rule,
                   style: const TextStyle(color: DSColor.white, fontSize: 15),
                 ),
+              _BossCardReplay(world: world),
               _BossTarget(world: world),
               _Heading(sheet.stars),
               for (final star in _Star.values)
@@ -126,6 +128,30 @@ final class _BossTarget extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Replays the card the world's boss opens with.
+final class _BossCardReplay extends ConsumerWidget {
+  const _BossCardReplay({required this.world});
+
+  final WorldId world;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => Align(
+    alignment: .centerLeft,
+    child: TextButton(
+      onPressed: () =>
+          ref.read(homeProvider.notifier).openBossCard(context, world),
+      child: Text(
+        context.t.home.sheet.bossCard,
+        style: const TextStyle(
+          color: DSColor.accent,
+          fontSize: 14,
+          fontWeight: .w700,
+        ),
+      ),
+    ),
+  );
 }
 
 final class _Heading extends StatelessWidget {

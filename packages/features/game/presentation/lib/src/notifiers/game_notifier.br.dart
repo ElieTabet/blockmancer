@@ -21,6 +21,10 @@ part 'game_notifier.br.g.dart';
   dependencies: [gameLaunch, launchProgression, launchedWorld, resumedRun],
 )
 class GameNotifier extends _$GameNotifier {
+  /// The boss cards shown on this screen, beyond those its progression had
+  /// seen.
+  final _bossCardsShown = <WorldId>{};
+
   /// What the next run's jokers are drawn from: the screen's progression,
   /// until a run here earns more.
   Progression? _progression;
@@ -55,6 +59,17 @@ class GameNotifier extends _$GameNotifier {
     }
 
     return _fresh(start);
+  }
+
+  /// Puts the boss card away, for good: the player has read it.
+  void closeBossCard() {
+    final world = state.bossCard;
+
+    if (world == null) return;
+
+    _bossCardsShown.add(world);
+    state = state.copyWith(bossCard: null);
+    unawaited(_markBossCardSeen(world));
   }
 
   /// Moves on from what the run unlocked to how it ended.
@@ -138,6 +153,7 @@ class GameNotifier extends _$GameNotifier {
     final ended = !hasEnded(before) && hasEnded(run);
 
     state = state.copyWith(
+      bossCard: _bossCardFor(run, events) ?? state.bossCard,
       lastEvents: events,
       moveCount: state.moveCount + 1,
       progressPending: ended && !state.isTutorial,
@@ -154,6 +170,42 @@ class GameNotifier extends _$GameNotifier {
     }
 
     unawaited(_save(SavedRun(mode: state.mode, run: run)));
+  }
+
+  /// The world whose boss card [events] call for: a world run's boss just
+  /// started, in any world but the map's first, its card never shown.
+  WorldId? _bossCardFor(RunState run, List<GameEvent> events) {
+    if (state.isTutorial || state.mode is! WorldMode) return null;
+
+    final world = run.config.world;
+    final bossStarted = events.whereType<RoundStarted>().any(
+      (started) => run.config.rounds[started.roundIndex].isBoss,
+    );
+    final seen = {
+      ...?(_progression ?? ref.read(launchProgressionProvider))?.bossCardsSeen,
+      ..._bossCardsShown,
+    };
+
+    return bossStarted &&
+            world != _rules.worldOrder.first &&
+            !seen.contains(world)
+        ? world
+        : null;
+  }
+
+  Future<void> _markBossCardSeen(WorldId world) async {
+    final markBossCardSeen = ref.read(markBossCardSeenProvider);
+
+    try {
+      await markBossCardSeen(world);
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Remembering a boss card failed; it may show again',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   Future<void> _recordEnd(RunState run) async {
