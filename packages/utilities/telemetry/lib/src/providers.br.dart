@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:telemetry/src/providers_di.br.dart' as di;
+import 'package:telemetry/src/session_errors.dart';
 import 'package:telemetry/src/telemetry.dart';
 
 part 'providers.br.g.dart';
@@ -8,6 +9,8 @@ part 'providers.br.g.dart';
 
 typedef InitializeTelemetryFun = Future<void> Function();
 
+typedef SessionHadErrorFun = bool Function();
+
 typedef RecordNonFatalFun =
     Future<void> Function(
       Object error,
@@ -15,8 +18,8 @@ typedef RecordNonFatalFun =
       required String reason,
     });
 
-/// Once per launch, as early as the container allows: the crash handlers, then
-/// the switch.
+/// Once per launch, as early as the container allows: the crash handlers, the
+/// session's error watch over them, then the switch.
 ///
 /// The handlers go in only when collecting — anywhere else they would replace
 /// Flutter's own error reporting with a reporter that never reports. The switch
@@ -25,13 +28,28 @@ typedef RecordNonFatalFun =
 @riverpod
 InitializeTelemetryFun initializeTelemetry(Ref ref) {
   final collects = ref.watch(di.collectsTelemetryProvider);
+  final errors = ref.watch(sessionErrorsProvider);
   final telemetry = ref.watch(di.telemetryProvider);
 
   return () async {
     if (collects) telemetry.installCrashHandlers();
 
+    errors.watch();
+
     await telemetry.setCollectionEnabled(collects);
   };
+}
+
+/// One for the app's life: whether this launch hit an uncaught error.
+@Riverpod(keepAlive: true)
+SessionErrors sessionErrors(Ref ref) => SessionErrors();
+
+/// Whether this launch hit an uncaught error, asked when it matters.
+@riverpod
+SessionHadErrorFun sessionHadError(Ref ref) {
+  final errors = ref.watch(sessionErrorsProvider);
+
+  return () => errors.seen;
 }
 
 /// Reports a failure the app survived, in builds that collect and nowhere else.

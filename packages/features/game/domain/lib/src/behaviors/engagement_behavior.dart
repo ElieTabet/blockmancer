@@ -56,6 +56,17 @@ class EngagementBehavior {
     ),
   );
 
+  /// The rating prompt asked for [at], in [appVersion].
+  Future<void> recordReviewAsked({
+    required String appVersion,
+    required DateTime at,
+  }) => _after(
+    (engagement) => (
+      engagement.copyWith(reviewAskedAt: at, reviewAskedVersion: appVersion),
+      null,
+    ),
+  );
+
   Future<T> _after<T>((Engagement, T) Function(Engagement) change) {
     final result = _last.then((_) async {
       final before = await _store.load();

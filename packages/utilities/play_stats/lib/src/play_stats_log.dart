@@ -62,7 +62,8 @@ final class DayStats {
     PurchaseCompletedEvent() ||
     PurchaseFailedEvent() ||
     PurchaseRestoredEvent() ||
-    PurchaseStartedEvent() => this,
+    PurchaseStartedEvent() ||
+    ReviewPromptRequestedEvent() => this,
     JokerPickEvent(:final id, :final offered) =>
       this +
           DayStats(

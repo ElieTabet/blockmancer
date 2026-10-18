@@ -8,8 +8,8 @@ part of 'providers.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Once per launch, as early as the container allows: the crash handlers, then
-/// the switch.
+/// Once per launch, as early as the container allows: the crash handlers, the
+/// session's error watch over them, then the switch.
 ///
 /// The handlers go in only when collecting — anywhere else they would replace
 /// Flutter's own error reporting with a reporter that never reports. The switch
@@ -19,8 +19,8 @@ part of 'providers.br.dart';
 @ProviderFor(initializeTelemetry)
 final initializeTelemetryProvider = InitializeTelemetryProvider._();
 
-/// Once per launch, as early as the container allows: the crash handlers, then
-/// the switch.
+/// Once per launch, as early as the container allows: the crash handlers, the
+/// session's error watch over them, then the switch.
 ///
 /// The handlers go in only when collecting — anywhere else they would replace
 /// Flutter's own error reporting with a reporter that never reports. The switch
@@ -35,8 +35,8 @@ final class InitializeTelemetryProvider
           InitializeTelemetryFun
         >
     with $Provider<InitializeTelemetryFun> {
-  /// Once per launch, as early as the container allows: the crash handlers, then
-  /// the switch.
+  /// Once per launch, as early as the container allows: the crash handlers, the
+  /// session's error watch over them, then the switch.
   ///
   /// The handlers go in only when collecting — anywhere else they would replace
   /// Flutter's own error reporting with a reporter that never reports. The switch
@@ -77,7 +77,105 @@ final class InitializeTelemetryProvider
 }
 
 String _$initializeTelemetryHash() =>
-    r'3a76c05b78acd79c46dd47e161126f733d96ec8d';
+    r'f367e43936358f387a35c5bc3c725de573f00e55';
+
+/// One for the app's life: whether this launch hit an uncaught error.
+
+@ProviderFor(sessionErrors)
+final sessionErrorsProvider = SessionErrorsProvider._();
+
+/// One for the app's life: whether this launch hit an uncaught error.
+
+final class SessionErrorsProvider
+    extends $FunctionalProvider<SessionErrors, SessionErrors, SessionErrors>
+    with $Provider<SessionErrors> {
+  /// One for the app's life: whether this launch hit an uncaught error.
+  SessionErrorsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionErrorsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sessionErrorsHash();
+
+  @$internal
+  @override
+  $ProviderElement<SessionErrors> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SessionErrors create(Ref ref) {
+    return sessionErrors(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SessionErrors value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SessionErrors>(value),
+    );
+  }
+}
+
+String _$sessionErrorsHash() => r'2c5e4a89887fc65e3f11096e619f01e73b5be294';
+
+/// Whether this launch hit an uncaught error, asked when it matters.
+
+@ProviderFor(sessionHadError)
+final sessionHadErrorProvider = SessionHadErrorProvider._();
+
+/// Whether this launch hit an uncaught error, asked when it matters.
+
+final class SessionHadErrorProvider
+    extends
+        $FunctionalProvider<
+          SessionHadErrorFun,
+          SessionHadErrorFun,
+          SessionHadErrorFun
+        >
+    with $Provider<SessionHadErrorFun> {
+  /// Whether this launch hit an uncaught error, asked when it matters.
+  SessionHadErrorProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionHadErrorProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sessionHadErrorHash();
+
+  @$internal
+  @override
+  $ProviderElement<SessionHadErrorFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SessionHadErrorFun create(Ref ref) {
+    return sessionHadError(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SessionHadErrorFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SessionHadErrorFun>(value),
+    );
+  }
+}
+
+String _$sessionHadErrorHash() => r'64e31bf02e9c85d650b1d2ad9072b98448ce58d1';
 
 /// Reports a failure the app survived, in builds that collect and nowhere else.
 ///

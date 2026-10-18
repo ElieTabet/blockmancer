@@ -24,6 +24,7 @@ void main() {
     ProgressionStore? progressionStore,
     RewardedActionFun? rewardedAction,
     SavedRun? resumed,
+    RequestReviewFun? requestReview,
     FakeRunStore? runStore,
     ShowAdFun? showInterstitial,
     WorldId? world,
@@ -40,6 +41,7 @@ void main() {
         progressionStore: progressionStore,
         rewardedAction: rewardedAction,
         resumed: resumed,
+        requestReview: requestReview,
         runStore: runStore,
         showInterstitial: showInterstitial,
         world: world,
@@ -1066,6 +1068,61 @@ void main() {
 
       // Then
       expect(shown, 0);
+    });
+  });
+
+  group('the rating prompt', () {
+    const eligible = Engagement(completedRuns: 3, daysOpened: 2);
+
+    test('a boss beaten asks for it once its end has celebrated, and only '
+        'once', () async {
+      // Given
+      var asked = 0;
+      rules = FakeGameRules(start: runIn(const .won()));
+      final game = container(
+        engagement: eligible,
+        requestReview: () async => asked++,
+      );
+
+      // When
+      await game.read(gameProvider.notifier).celebrated();
+      await game.read(gameProvider.notifier).celebrated();
+
+      // Then
+      expect(asked, 1);
+    });
+
+    test('a lost run never asks for it', () async {
+      // Given
+      var asked = 0;
+      rules = FakeGameRules(start: runIn(const .over()));
+      final game = container(
+        engagement: eligible,
+        requestReview: () async => asked++,
+      );
+
+      // When
+      await game.read(gameProvider.notifier).celebrated();
+
+      // Then
+      expect(asked, 0);
+    });
+
+    test('the tutorial never asks for it', () async {
+      // Given
+      var asked = 0;
+      rules = FakeGameRules(start: runIn(const .won()));
+      final game = container(
+        engagement: eligible,
+        launch: .tutorial,
+        requestReview: () async => asked++,
+      );
+
+      // When
+      await game.read(gameProvider.notifier).celebrated();
+
+      // Then
+      expect(asked, 0);
     });
   });
 }

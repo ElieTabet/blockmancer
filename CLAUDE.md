@@ -730,6 +730,19 @@ rewarded revive stays.
 - **Settings:** `RemoveAdsRow` (the store's price for this player; "Ads removed. Thank you!" once
   owned) and `RestorePurchasesRow` (says whether anything was found), through slots.
 
+## Rating prompt
+
+The OS's own prompt (`store_review`'s `InAppStoreReview`, over `in_app_review`), never a custom one
+first. `RunEndSheet`'s `_ReviewMoment` waits for the sheet's entrance (`sheetEntrance`) and its new
+stars' pop (`RunStars.celebration`), then calls `GameNotifier.celebrated()`: once per finished
+run, never in the tutorial, only after a boss win or a newly earned star, it asks
+`game_domain`'s `askForReview`, which asks when `reviewDue` allows it — at least 3 completed runs
+over at least 2 different days (`Engagement`), no uncaught error this session (telemetry's
+`SessionErrors`, watched at boot over whatever handlers are in place), not yet asked in this app
+version, and `review_cooldown_days` (60, Remote Config) since the last ask. It records the ask
+(`reviewAskedAt`, `reviewAskedVersion`) and logs `review_prompt_requested`; whether the OS shows
+it is the OS's call. Settings' **Rate Blockmancer** (`RateRow`) opens the store page, always.
+
 ## Consent
 
 Ads in the EEA and the UK need the player's consent first: Google's UMP form, behind `ads`'

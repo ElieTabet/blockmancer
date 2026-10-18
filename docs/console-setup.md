@@ -212,6 +212,13 @@ App Store Connect → the app → **Monetization → In-App Purchases** → **+*
 To test: App Store Connect → **Users and Access → Sandbox → Testers** → add a tester; on the
 iPhone, Settings → App Store → Sandbox Account → sign in; buy and restore from a TestFlight build.
 
+### Rating prompt
+
+Nothing to set up: the app asks StoreKit for its own prompt (`review_cooldown_days`, 60, in Remote
+Config). To see it: **TestFlight never shows it** (Apple); run a build from Xcode on a device
+(`flutter run --release` from `app/`), where it always shows, but submits nothing. Settings →
+**Rate Blockmancer** opens the App Store page (needs `APP_STORE_ID`).
+
 *(Game Center: Task 6.)*
 
 ## Play Console
@@ -248,5 +255,11 @@ product**:
 
 To test: Play Console → **Settings → License testing** → add the testers' Google accounts; install
 the build from the internal testing track (not a sideloaded APK) and buy: test cards are offered.
+
+### Rating prompt
+
+Nothing to set up. Play shows its in-app review only for an app installed from Play: install the
+internal testing build from the Play Store app, on an account that hasn't reviewed it (Play's
+quota hides it otherwise; internal app sharing shows it every time, with a placeholder submit).
 
 *(Play Games: Task 6.)*

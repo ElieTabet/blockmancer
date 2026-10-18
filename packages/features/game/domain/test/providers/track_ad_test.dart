@@ -24,6 +24,10 @@ void main() {
         remoteValue: (ref) =>
             (_) => null,
         runStore: (ref) => FakeRunStore(),
+        appVersion: (ref) async => '1.0.0',
+        requestReview: (ref) => () async {},
+        sessionHadError: (ref) =>
+            () => false,
         showInterstitial: (ref) =>
             () async => const AdResult.closed(),
       ),

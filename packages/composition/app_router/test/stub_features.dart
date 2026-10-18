@@ -46,6 +46,10 @@ List<Override> stubFeatures({
     remoteValue: (ref) =>
         (_) => null,
     runStore: (ref) => runStore ?? _NoRunStore(),
+    appVersion: (ref) async => '1.0.0',
+    requestReview: (ref) => () async {},
+    sessionHadError: (ref) =>
+        () => false,
     showInterstitial: (ref) =>
         () async => const AdResult.failed(code: 'no_ads'),
   ),
@@ -100,6 +104,7 @@ List<Override> stubFeatures({
     buyRemoveAds: (ref) =>
         () async => false,
     crashForTest: (ref) => () {},
+    rateApp: (ref) => () async {},
     removeAdsOwned: (ref) => false,
     removeAdsPrice: (ref) async => null,
     restorePurchases: (ref) =>

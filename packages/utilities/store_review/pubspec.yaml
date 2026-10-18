@@ -1,0 +1,19 @@
+name: store_review
+description: "The stores' own rating prompt and the app's store page — the only place in_app_review is known."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  in_app_review: ^2.0.12
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.4

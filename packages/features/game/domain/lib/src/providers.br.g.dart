@@ -1258,6 +1258,68 @@ final class BetweenRunsProvider
 
 String _$betweenRunsHash() => r'dfc39d26dd37bc03234baf449b391e906d4e22b4';
 
+/// Asks the OS for its rating prompt when [reviewDue] allows it, as a run's
+/// end has finished celebrating; true when it asked. Never a custom prompt
+/// first: the OS's own, or nothing.
+///
+/// Kept alive because it awaits the prompt, by when an auto-disposed
+/// provider's ref may be gone.
+
+@ProviderFor(askForReview)
+final askForReviewProvider = AskForReviewProvider._();
+
+/// Asks the OS for its rating prompt when [reviewDue] allows it, as a run's
+/// end has finished celebrating; true when it asked. Never a custom prompt
+/// first: the OS's own, or nothing.
+///
+/// Kept alive because it awaits the prompt, by when an auto-disposed
+/// provider's ref may be gone.
+
+final class AskForReviewProvider
+    extends
+        $FunctionalProvider<AskForReviewFun, AskForReviewFun, AskForReviewFun>
+    with $Provider<AskForReviewFun> {
+  /// Asks the OS for its rating prompt when [reviewDue] allows it, as a run's
+  /// end has finished celebrating; true when it asked. Never a custom prompt
+  /// first: the OS's own, or nothing.
+  ///
+  /// Kept alive because it awaits the prompt, by when an auto-disposed
+  /// provider's ref may be gone.
+  AskForReviewProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'askForReviewProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$askForReviewHash();
+
+  @$internal
+  @override
+  $ProviderElement<AskForReviewFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AskForReviewFun create(Ref ref) {
+    return askForReview(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AskForReviewFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AskForReviewFun>(value),
+    );
+  }
+}
+
+String _$askForReviewHash() => r'dd416e687db8ea7f0901d68c8a0f0d5e02074b5a';
+
 /// Counts what an ad came to: shown, its reward earned, or why it failed.
 
 @ProviderFor(trackAd)

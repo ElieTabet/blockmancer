@@ -10,6 +10,7 @@ import 'package:remote_config/remote_config.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
 import 'package:sounds/sounds.dart';
+import 'package:store_review/store_review.dart';
 import 'package:telemetry/telemetry.dart' as telemetry;
 
 part 'providers_internal.br.g.dart';
@@ -72,6 +73,10 @@ AnalyticsSink analyticsSink(Ref ref) => ref.watch(testToolsProvider)
 /// purchase is missed.
 @Riverpod(keepAlive: true)
 Purchases purchases(Ref ref) => StorePurchases();
+
+/// One for the app's life: the OS's rating prompt and the store page.
+@Riverpod(keepAlive: true)
+StoreReview storeReview(Ref ref) => InAppStoreReview(appStoreId: appStoreId);
 
 /// One for the app's life: its sounds are loaded once, at launch.
 @Riverpod(keepAlive: true)

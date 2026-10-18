@@ -73,6 +73,8 @@ Future<FakeSettingsRouting> pumpSettings(
           },
           crashForTest: (ref) =>
               () => crashes?.add('crash'),
+          rateApp: (ref) =>
+              () async => links?.add('store page'),
           removeAdsOwned: (ref) => ownsRemoveAds,
           removeAdsPrice: (ref) async => removeAdsPrice,
           restorePurchases: (ref) => () async {

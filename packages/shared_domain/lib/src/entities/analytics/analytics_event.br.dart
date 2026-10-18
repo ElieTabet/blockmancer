@@ -48,6 +48,11 @@ sealed class AnalyticsEvent with _$AnalyticsEvent {
   const factory AnalyticsEvent.purchaseStarted({required String product}) =
       PurchaseStartedEvent;
 
+  /// The app asked the OS for its rating prompt; whether it showed is the
+  /// OS's secret.
+  const factory AnalyticsEvent.reviewPromptRequested() =
+      ReviewPromptRequestedEvent;
+
   const factory AnalyticsEvent.revive() = ReviveEvent;
 
   /// Round [round], from 1, ended: won, or lost and given up.

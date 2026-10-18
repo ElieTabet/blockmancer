@@ -11,6 +11,7 @@ export 'src/entities/game_launch.dart';
 export 'src/entities/engagement.br.dart';
 export 'src/entities/game_mode.br.dart';
 export 'src/entities/interstitial_caps.dart' show interstitialKeys;
+export 'src/behaviors/review_policy.dart' show reviewKeys;
 export 'src/entities/progression_change.br.dart';
 export 'src/entities/run_end.dart';
 export 'src/entities/run_end_record.br.dart';

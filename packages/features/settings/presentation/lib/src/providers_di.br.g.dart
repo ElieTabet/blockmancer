@@ -359,3 +359,44 @@ final class RestorePurchasesProvider
 }
 
 String _$restorePurchasesHash() => r'9dbce94027508b89984c20b7e81c3c1c687cf49e';
+
+@ProviderFor(rateApp)
+final rateAppProvider = RateAppProvider._();
+
+final class RateAppProvider
+    extends $FunctionalProvider<RateAppFun, RateAppFun, RateAppFun>
+    with $Provider<RateAppFun> {
+  RateAppProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'rateAppProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$rateAppHash();
+
+  @$internal
+  @override
+  $ProviderElement<RateAppFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RateAppFun create(Ref ref) {
+    return rateApp(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RateAppFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RateAppFun>(value),
+    );
+  }
+}
+
+String _$rateAppHash() => r'c47368ccab1b3417c65add52204b42a0a14d4f96';

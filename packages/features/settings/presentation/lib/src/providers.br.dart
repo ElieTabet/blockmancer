@@ -21,6 +21,7 @@ ApplyStoredLanguageFun applyStoredLanguage(Ref ref) =>
 List<Override> bindProviders({
   required di.BuyRemoveAdsFun Function(Ref ref) buyRemoveAds,
   required VoidCallback Function(Ref ref) crashForTest,
+  required di.RateAppFun Function(Ref ref) rateApp,
   required bool Function(Ref ref) removeAdsOwned,
   required Future<String?> Function(Ref ref) removeAdsPrice,
   required di.RestorePurchasesFun Function(Ref ref) restorePurchases,
@@ -29,6 +30,7 @@ List<Override> bindProviders({
 }) => [
   di.buyRemoveAdsProvider.overrideWith(buyRemoveAds),
   di.crashForTestProvider.overrideWith(crashForTest),
+  di.rateAppProvider.overrideWith(rateApp),
   di.removeAdsOwnedProvider.overrideWith(removeAdsOwned),
   di.removeAdsPriceProvider.overrideWith(removeAdsPrice),
   di.restorePurchasesProvider.overrideWith(restorePurchases),

@@ -18,7 +18,9 @@ mixin _$Engagement {
  int get completedRuns;/// Local days the app was opened on, the first included.
  int get daysOpened;/// The local day (`yyyymmdd`) of the first launch; null until then.
  int? get firstOpenedOn; DateTime? get lastInterstitialAt;/// The local day (`yyyymmdd`) of the latest launch.
- int? get lastOpenedOn;/// Run ends since the last interstitial showed.
+ int? get lastOpenedOn;/// When the app last asked the OS for its rating prompt, and in which of
+/// its versions.
+ DateTime? get reviewAskedAt; String? get reviewAskedVersion;/// Run ends since the last interstitial showed.
  int get runEndsSinceInterstitial;
 /// Create a copy of Engagement
 /// with the given fields replaced by the non-null parameter values.
@@ -30,16 +32,16 @@ $EngagementCopyWith<Engagement> get copyWith => _$EngagementCopyWithImpl<Engagem
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Engagement&&(identical(other.completedRuns, completedRuns) || other.completedRuns == completedRuns)&&(identical(other.daysOpened, daysOpened) || other.daysOpened == daysOpened)&&(identical(other.firstOpenedOn, firstOpenedOn) || other.firstOpenedOn == firstOpenedOn)&&(identical(other.lastInterstitialAt, lastInterstitialAt) || other.lastInterstitialAt == lastInterstitialAt)&&(identical(other.lastOpenedOn, lastOpenedOn) || other.lastOpenedOn == lastOpenedOn)&&(identical(other.runEndsSinceInterstitial, runEndsSinceInterstitial) || other.runEndsSinceInterstitial == runEndsSinceInterstitial));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Engagement&&(identical(other.completedRuns, completedRuns) || other.completedRuns == completedRuns)&&(identical(other.daysOpened, daysOpened) || other.daysOpened == daysOpened)&&(identical(other.firstOpenedOn, firstOpenedOn) || other.firstOpenedOn == firstOpenedOn)&&(identical(other.lastInterstitialAt, lastInterstitialAt) || other.lastInterstitialAt == lastInterstitialAt)&&(identical(other.lastOpenedOn, lastOpenedOn) || other.lastOpenedOn == lastOpenedOn)&&(identical(other.reviewAskedAt, reviewAskedAt) || other.reviewAskedAt == reviewAskedAt)&&(identical(other.reviewAskedVersion, reviewAskedVersion) || other.reviewAskedVersion == reviewAskedVersion)&&(identical(other.runEndsSinceInterstitial, runEndsSinceInterstitial) || other.runEndsSinceInterstitial == runEndsSinceInterstitial));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,completedRuns,daysOpened,firstOpenedOn,lastInterstitialAt,lastOpenedOn,runEndsSinceInterstitial);
+int get hashCode => Object.hash(runtimeType,completedRuns,daysOpened,firstOpenedOn,lastInterstitialAt,lastOpenedOn,reviewAskedAt,reviewAskedVersion,runEndsSinceInterstitial);
 
 @override
 String toString() {
-  return 'Engagement(completedRuns: $completedRuns, daysOpened: $daysOpened, firstOpenedOn: $firstOpenedOn, lastInterstitialAt: $lastInterstitialAt, lastOpenedOn: $lastOpenedOn, runEndsSinceInterstitial: $runEndsSinceInterstitial)';
+  return 'Engagement(completedRuns: $completedRuns, daysOpened: $daysOpened, firstOpenedOn: $firstOpenedOn, lastInterstitialAt: $lastInterstitialAt, lastOpenedOn: $lastOpenedOn, reviewAskedAt: $reviewAskedAt, reviewAskedVersion: $reviewAskedVersion, runEndsSinceInterstitial: $runEndsSinceInterstitial)';
 }
 
 
@@ -50,7 +52,7 @@ abstract mixin class $EngagementCopyWith<$Res>  {
   factory $EngagementCopyWith(Engagement value, $Res Function(Engagement) _then) = _$EngagementCopyWithImpl;
 @useResult
 $Res call({
- int completedRuns, int daysOpened, int? firstOpenedOn, DateTime? lastInterstitialAt, int? lastOpenedOn, int runEndsSinceInterstitial
+ int completedRuns, int daysOpened, int? firstOpenedOn, DateTime? lastInterstitialAt, int? lastOpenedOn, DateTime? reviewAskedAt, String? reviewAskedVersion, int runEndsSinceInterstitial
 });
 
 
@@ -67,14 +69,16 @@ class _$EngagementCopyWithImpl<$Res>
 
 /// Create a copy of Engagement
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? completedRuns = null,Object? daysOpened = null,Object? firstOpenedOn = freezed,Object? lastInterstitialAt = freezed,Object? lastOpenedOn = freezed,Object? runEndsSinceInterstitial = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? completedRuns = null,Object? daysOpened = null,Object? firstOpenedOn = freezed,Object? lastInterstitialAt = freezed,Object? lastOpenedOn = freezed,Object? reviewAskedAt = freezed,Object? reviewAskedVersion = freezed,Object? runEndsSinceInterstitial = null,}) {
   return _then(_self.copyWith(
 completedRuns: null == completedRuns ? _self.completedRuns : completedRuns // ignore: cast_nullable_to_non_nullable
 as int,daysOpened: null == daysOpened ? _self.daysOpened : daysOpened // ignore: cast_nullable_to_non_nullable
 as int,firstOpenedOn: freezed == firstOpenedOn ? _self.firstOpenedOn : firstOpenedOn // ignore: cast_nullable_to_non_nullable
 as int?,lastInterstitialAt: freezed == lastInterstitialAt ? _self.lastInterstitialAt : lastInterstitialAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,lastOpenedOn: freezed == lastOpenedOn ? _self.lastOpenedOn : lastOpenedOn // ignore: cast_nullable_to_non_nullable
-as int?,runEndsSinceInterstitial: null == runEndsSinceInterstitial ? _self.runEndsSinceInterstitial : runEndsSinceInterstitial // ignore: cast_nullable_to_non_nullable
+as int?,reviewAskedAt: freezed == reviewAskedAt ? _self.reviewAskedAt : reviewAskedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,reviewAskedVersion: freezed == reviewAskedVersion ? _self.reviewAskedVersion : reviewAskedVersion // ignore: cast_nullable_to_non_nullable
+as String?,runEndsSinceInterstitial: null == runEndsSinceInterstitial ? _self.runEndsSinceInterstitial : runEndsSinceInterstitial // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -160,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int completedRuns,  int daysOpened,  int? firstOpenedOn,  DateTime? lastInterstitialAt,  int? lastOpenedOn,  int runEndsSinceInterstitial)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int completedRuns,  int daysOpened,  int? firstOpenedOn,  DateTime? lastInterstitialAt,  int? lastOpenedOn,  DateTime? reviewAskedAt,  String? reviewAskedVersion,  int runEndsSinceInterstitial)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Engagement() when $default != null:
-return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.lastInterstitialAt,_that.lastOpenedOn,_that.runEndsSinceInterstitial);case _:
+return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.lastInterstitialAt,_that.lastOpenedOn,_that.reviewAskedAt,_that.reviewAskedVersion,_that.runEndsSinceInterstitial);case _:
   return orElse();
 
 }
@@ -181,10 +185,10 @@ return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.l
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int completedRuns,  int daysOpened,  int? firstOpenedOn,  DateTime? lastInterstitialAt,  int? lastOpenedOn,  int runEndsSinceInterstitial)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int completedRuns,  int daysOpened,  int? firstOpenedOn,  DateTime? lastInterstitialAt,  int? lastOpenedOn,  DateTime? reviewAskedAt,  String? reviewAskedVersion,  int runEndsSinceInterstitial)  $default,) {final _that = this;
 switch (_that) {
 case _Engagement():
-return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.lastInterstitialAt,_that.lastOpenedOn,_that.runEndsSinceInterstitial);case _:
+return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.lastInterstitialAt,_that.lastOpenedOn,_that.reviewAskedAt,_that.reviewAskedVersion,_that.runEndsSinceInterstitial);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +205,10 @@ return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.l
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int completedRuns,  int daysOpened,  int? firstOpenedOn,  DateTime? lastInterstitialAt,  int? lastOpenedOn,  int runEndsSinceInterstitial)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int completedRuns,  int daysOpened,  int? firstOpenedOn,  DateTime? lastInterstitialAt,  int? lastOpenedOn,  DateTime? reviewAskedAt,  String? reviewAskedVersion,  int runEndsSinceInterstitial)?  $default,) {final _that = this;
 switch (_that) {
 case _Engagement() when $default != null:
-return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.lastInterstitialAt,_that.lastOpenedOn,_that.runEndsSinceInterstitial);case _:
+return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.lastInterstitialAt,_that.lastOpenedOn,_that.reviewAskedAt,_that.reviewAskedVersion,_that.runEndsSinceInterstitial);case _:
   return null;
 
 }
@@ -216,7 +220,7 @@ return $default(_that.completedRuns,_that.daysOpened,_that.firstOpenedOn,_that.l
 
 
 class _Engagement implements Engagement {
-  const _Engagement({this.completedRuns = 0, this.daysOpened = 0, this.firstOpenedOn, this.lastInterstitialAt, this.lastOpenedOn, this.runEndsSinceInterstitial = 0});
+  const _Engagement({this.completedRuns = 0, this.daysOpened = 0, this.firstOpenedOn, this.lastInterstitialAt, this.lastOpenedOn, this.reviewAskedAt, this.reviewAskedVersion, this.runEndsSinceInterstitial = 0});
   
 
 /// Runs played to their end, won or not; the tutorial never counts.
@@ -228,6 +232,10 @@ class _Engagement implements Engagement {
 @override final  DateTime? lastInterstitialAt;
 /// The local day (`yyyymmdd`) of the latest launch.
 @override final  int? lastOpenedOn;
+/// When the app last asked the OS for its rating prompt, and in which of
+/// its versions.
+@override final  DateTime? reviewAskedAt;
+@override final  String? reviewAskedVersion;
 /// Run ends since the last interstitial showed.
 @override@JsonKey() final  int runEndsSinceInterstitial;
 
@@ -241,16 +249,16 @@ _$EngagementCopyWith<_Engagement> get copyWith => __$EngagementCopyWithImpl<_Eng
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Engagement&&(identical(other.completedRuns, completedRuns) || other.completedRuns == completedRuns)&&(identical(other.daysOpened, daysOpened) || other.daysOpened == daysOpened)&&(identical(other.firstOpenedOn, firstOpenedOn) || other.firstOpenedOn == firstOpenedOn)&&(identical(other.lastInterstitialAt, lastInterstitialAt) || other.lastInterstitialAt == lastInterstitialAt)&&(identical(other.lastOpenedOn, lastOpenedOn) || other.lastOpenedOn == lastOpenedOn)&&(identical(other.runEndsSinceInterstitial, runEndsSinceInterstitial) || other.runEndsSinceInterstitial == runEndsSinceInterstitial));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Engagement&&(identical(other.completedRuns, completedRuns) || other.completedRuns == completedRuns)&&(identical(other.daysOpened, daysOpened) || other.daysOpened == daysOpened)&&(identical(other.firstOpenedOn, firstOpenedOn) || other.firstOpenedOn == firstOpenedOn)&&(identical(other.lastInterstitialAt, lastInterstitialAt) || other.lastInterstitialAt == lastInterstitialAt)&&(identical(other.lastOpenedOn, lastOpenedOn) || other.lastOpenedOn == lastOpenedOn)&&(identical(other.reviewAskedAt, reviewAskedAt) || other.reviewAskedAt == reviewAskedAt)&&(identical(other.reviewAskedVersion, reviewAskedVersion) || other.reviewAskedVersion == reviewAskedVersion)&&(identical(other.runEndsSinceInterstitial, runEndsSinceInterstitial) || other.runEndsSinceInterstitial == runEndsSinceInterstitial));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,completedRuns,daysOpened,firstOpenedOn,lastInterstitialAt,lastOpenedOn,runEndsSinceInterstitial);
+int get hashCode => Object.hash(runtimeType,completedRuns,daysOpened,firstOpenedOn,lastInterstitialAt,lastOpenedOn,reviewAskedAt,reviewAskedVersion,runEndsSinceInterstitial);
 
 @override
 String toString() {
-  return 'Engagement(completedRuns: $completedRuns, daysOpened: $daysOpened, firstOpenedOn: $firstOpenedOn, lastInterstitialAt: $lastInterstitialAt, lastOpenedOn: $lastOpenedOn, runEndsSinceInterstitial: $runEndsSinceInterstitial)';
+  return 'Engagement(completedRuns: $completedRuns, daysOpened: $daysOpened, firstOpenedOn: $firstOpenedOn, lastInterstitialAt: $lastInterstitialAt, lastOpenedOn: $lastOpenedOn, reviewAskedAt: $reviewAskedAt, reviewAskedVersion: $reviewAskedVersion, runEndsSinceInterstitial: $runEndsSinceInterstitial)';
 }
 
 
@@ -261,7 +269,7 @@ abstract mixin class _$EngagementCopyWith<$Res> implements $EngagementCopyWith<$
   factory _$EngagementCopyWith(_Engagement value, $Res Function(_Engagement) _then) = __$EngagementCopyWithImpl;
 @override @useResult
 $Res call({
- int completedRuns, int daysOpened, int? firstOpenedOn, DateTime? lastInterstitialAt, int? lastOpenedOn, int runEndsSinceInterstitial
+ int completedRuns, int daysOpened, int? firstOpenedOn, DateTime? lastInterstitialAt, int? lastOpenedOn, DateTime? reviewAskedAt, String? reviewAskedVersion, int runEndsSinceInterstitial
 });
 
 
@@ -278,14 +286,16 @@ class __$EngagementCopyWithImpl<$Res>
 
 /// Create a copy of Engagement
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? completedRuns = null,Object? daysOpened = null,Object? firstOpenedOn = freezed,Object? lastInterstitialAt = freezed,Object? lastOpenedOn = freezed,Object? runEndsSinceInterstitial = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? completedRuns = null,Object? daysOpened = null,Object? firstOpenedOn = freezed,Object? lastInterstitialAt = freezed,Object? lastOpenedOn = freezed,Object? reviewAskedAt = freezed,Object? reviewAskedVersion = freezed,Object? runEndsSinceInterstitial = null,}) {
   return _then(_Engagement(
 completedRuns: null == completedRuns ? _self.completedRuns : completedRuns // ignore: cast_nullable_to_non_nullable
 as int,daysOpened: null == daysOpened ? _self.daysOpened : daysOpened // ignore: cast_nullable_to_non_nullable
 as int,firstOpenedOn: freezed == firstOpenedOn ? _self.firstOpenedOn : firstOpenedOn // ignore: cast_nullable_to_non_nullable
 as int?,lastInterstitialAt: freezed == lastInterstitialAt ? _self.lastInterstitialAt : lastInterstitialAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,lastOpenedOn: freezed == lastOpenedOn ? _self.lastOpenedOn : lastOpenedOn // ignore: cast_nullable_to_non_nullable
-as int?,runEndsSinceInterstitial: null == runEndsSinceInterstitial ? _self.runEndsSinceInterstitial : runEndsSinceInterstitial // ignore: cast_nullable_to_non_nullable
+as int?,reviewAskedAt: freezed == reviewAskedAt ? _self.reviewAskedAt : reviewAskedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,reviewAskedVersion: freezed == reviewAskedVersion ? _self.reviewAskedVersion : reviewAskedVersion // ignore: cast_nullable_to_non_nullable
+as String?,runEndsSinceInterstitial: null == runEndsSinceInterstitial ? _self.runEndsSinceInterstitial : runEndsSinceInterstitial // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

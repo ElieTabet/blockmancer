@@ -65,3 +65,12 @@ typedef RestorePurchasesFun = Future<bool> Function();
 RestorePurchasesFun restorePurchases(Ref ref) => throw UnimplementedError(
   'restorePurchasesProvider must be overridden by the composition layer',
 );
+
+/// Opens the app's page in its store, for a rating: always allowed, unlike
+/// the OS's prompt.
+typedef RateAppFun = Future<void> Function();
+
+@riverpod
+RateAppFun rateApp(Ref ref) => throw UnimplementedError(
+  'rateAppProvider must be overridden by the composition layer',
+);

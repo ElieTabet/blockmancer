@@ -4,6 +4,7 @@ import 'package:game_domain/src/behaviors/clear_progress_behavior.dart';
 import 'package:game_domain/src/behaviors/earned_worlds_store.dart';
 import 'package:game_domain/src/behaviors/engagement_behavior.dart';
 import 'package:game_domain/src/behaviors/interstitial_policy.dart';
+import 'package:game_domain/src/behaviors/review_policy.dart';
 import 'package:game_domain/src/behaviors/daily_run_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_boss_card_seen_behavior.dart';
 import 'package:game_domain/src/behaviors/mark_jokers_announced_behavior.dart';
@@ -358,6 +359,45 @@ BetweenRunsFun betweenRuns(Ref ref) => () async {
   if (result is! AdFailed) await engagement.recordInterstitial(now);
 };
 
+typedef AskForReviewFun =
+    Future<bool> Function({required bool bossBeaten, required bool newStar});
+
+/// Asks the OS for its rating prompt when [reviewDue] allows it, as a run's
+/// end has finished celebrating; true when it asked. Never a custom prompt
+/// first: the OS's own, or nothing.
+///
+/// Kept alive because it awaits the prompt, by when an auto-disposed
+/// provider's ref may be gone.
+@Riverpod(keepAlive: true)
+AskForReviewFun askForReview(Ref ref) =>
+    ({required bossBeaten, required newStar}) async {
+      final engagement = ref.read(engagementProvider);
+      final now = ref.read(di.clockProvider).now();
+      final cooldown = reviewCooldownOf(ref.read(di.remoteValueProvider));
+      final hadError = ref.read(di.sessionHadErrorProvider)();
+      final requestReview = ref.read(di.requestReviewProvider);
+      final sink = ref.read(di.analyticsSinkProvider);
+      final appVersion = await ref.read(di.appVersionProvider.future);
+
+      if (!reviewDue(
+        appVersion: appVersion,
+        bossBeaten: bossBeaten,
+        cooldown: cooldown,
+        engagement: await engagement.read(),
+        hadError: hadError,
+        newStar: newStar,
+        now: now,
+      )) {
+        return false;
+      }
+
+      await engagement.recordReviewAsked(appVersion: appVersion, at: now);
+      sink.log(const .reviewPromptRequested());
+      await requestReview();
+
+      return true;
+    };
+
 /// Counts what an ad came to: shown, its reward earned, or why it failed.
 @riverpod
 TrackAdFun trackAd(Ref ref) {
@@ -380,24 +420,30 @@ TrackAdFun trackAd(Ref ref) {
 List<Override> bindProviders({
   required Future<bool> Function(Ref ref) adsRemoved,
   required AnalyticsSink Function(Ref ref) analyticsSink,
+  required Future<String> Function(Ref ref) appVersion,
   required BestScores Function(Ref ref) bestScores,
   required Clock Function(Ref ref) clock,
   required EngagementStore Function(Ref ref) engagementStore,
   required GameRules Function(Ref ref) gameRules,
   required ProgressionStore Function(Ref ref) progressionStore,
   required RemoteValueFun Function(Ref ref) remoteValue,
+  required di.RequestReviewFun Function(Ref ref) requestReview,
   required RunStore Function(Ref ref) runStore,
+  required di.SessionHadErrorFun Function(Ref ref) sessionHadError,
   required di.ShowAdFun Function(Ref ref) showInterstitial,
 }) => [
   di.adsRemovedProvider.overrideWith(adsRemoved),
   di.analyticsSinkProvider.overrideWith(analyticsSink),
+  di.appVersionProvider.overrideWith(appVersion),
   di.bestScoresProvider.overrideWith(bestScores),
   di.clockProvider.overrideWith(clock),
   di.engagementStoreProvider.overrideWith(engagementStore),
   di.gameRulesProvider.overrideWith(gameRules),
   di.progressionStoreProvider.overrideWith(progressionStore),
   di.remoteValueProvider.overrideWith(remoteValue),
+  di.requestReviewProvider.overrideWith(requestReview),
   di.runStoreProvider.overrideWith(runStore),
+  di.sessionHadErrorProvider.overrideWith(sessionHadError),
   di.showInterstitialProvider.overrideWith(showInterstitial),
 ];
 

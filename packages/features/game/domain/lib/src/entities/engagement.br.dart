@@ -20,6 +20,11 @@ abstract class Engagement with _$Engagement {
     /// The local day (`yyyymmdd`) of the latest launch.
     int? lastOpenedOn,
 
+    /// When the app last asked the OS for its rating prompt, and in which of
+    /// its versions.
+    DateTime? reviewAskedAt,
+    String? reviewAskedVersion,
+
     /// Run ends since the last interstitial showed.
     @Default(0) int runEndsSinceInterstitial,
   }) = _Engagement;

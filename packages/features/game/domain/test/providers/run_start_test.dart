@@ -24,6 +24,10 @@ ProviderContainer _containerAt(
       remoteValue: (ref) =>
           (key) => published[key],
       runStore: (ref) => FakeRunStore(),
+      appVersion: (ref) async => '1.0.0',
+      requestReview: (ref) => () async {},
+      sessionHadError: (ref) =>
+          () => false,
       showInterstitial: (ref) =>
           () async => const AdResult.failed(code: 'no_ads'),
     ),

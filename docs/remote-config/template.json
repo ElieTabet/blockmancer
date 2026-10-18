@@ -469,6 +469,13 @@
       "description": "Seconds at least between two interstitials",
       "valueType": "NUMBER"
     },
+    "review_cooldown_days": {
+      "defaultValue": {
+        "value": "60"
+      },
+      "description": "Days at least between two rating prompts",
+      "valueType": "NUMBER"
+    },
     "min_version_android": {
       "defaultValue": {
         "value": "0.0.0"

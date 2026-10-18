@@ -127,6 +127,7 @@ class _Translations$settings$fr extends Translations$settings$en {
 	@override late final _Translations$settings$support$fr support = _Translations$settings$support$fr._(_root);
 	@override late final _Translations$settings$removeAds$fr removeAds = _Translations$settings$removeAds$fr._(_root);
 	@override late final _Translations$settings$restore$fr restore = _Translations$settings$restore$fr._(_root);
+	@override late final _Translations$settings$rate$fr rate = _Translations$settings$rate$fr._(_root);
 }
 
 // Path: update
@@ -592,6 +593,17 @@ class _Translations$settings$restore$fr extends Translations$settings$restore$en
 	@override String get noneTitle => 'Rien à restaurer';
 	@override String get noneMessage => 'Aucun achat trouvé pour ce compte de la boutique.';
 	@override String get ok => 'OK';
+}
+
+// Path: settings.rate
+class _Translations$settings$rate$fr extends Translations$settings$rate$en {
+	_Translations$settings$rate$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Noter Blockmancer';
+	@override String get subtitle => 'Dis ce que tu en penses, sur la boutique';
 }
 
 // Path: update.required
@@ -1208,6 +1220,8 @@ extension on TranslationsFr {
 			'settings.restore.noneTitle' => 'Rien à restaurer',
 			'settings.restore.noneMessage' => 'Aucun achat trouvé pour ce compte de la boutique.',
 			'settings.restore.ok' => 'OK',
+			'settings.rate.title' => 'Noter Blockmancer',
+			'settings.rate.subtitle' => 'Dis ce que tu en penses, sur la boutique',
 			'update.required.title' => 'Mise à jour requise',
 			'update.required.body' => 'Cette version de Blockmancer n\'est plus prise en charge. Mets à jour pour continuer à jouer ; ta progression est conservée.',
 			'update.required.button' => 'Mettre à jour',

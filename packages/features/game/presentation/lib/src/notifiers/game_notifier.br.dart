@@ -34,6 +34,9 @@ class GameNotifier extends _$GameNotifier {
   /// on Play again or leave doesn't ask twice.
   var _movingOn = false;
 
+  /// The finished run whose end has already had its say about a rating.
+  RunState? _reviewedRun;
+
   @override
   GameUiState build() {
     ref.watch(gameRulesProvider);
@@ -67,6 +70,38 @@ class GameNotifier extends _$GameNotifier {
     ref.read(preloadAdsProvider)();
 
     return _fresh(start);
+  }
+
+  /// The run's end has finished celebrating on screen: after a boss win or a
+  /// newly earned star, the rating prompt may be asked for, once per run,
+  /// never in the tutorial (the domain decides the rest).
+  Future<void> celebrated() async {
+    final run = state.run;
+    final newStars = state.progress?.newStars;
+    final bossBeaten = run.phase is WonPhase;
+    final newStar =
+        newStars != null &&
+        (newStars.bossBeaten || newStars.noRevive || newStars.scoreThreshold);
+
+    if (state.isTutorial || identical(_reviewedRun, run)) return;
+
+    _reviewedRun = run;
+
+    if (!bossBeaten && !newStar) return;
+
+    try {
+      await ref.read(askForReviewProvider)(
+        bossBeaten: bossBeaten,
+        newStar: newStar,
+      );
+    } on Object catch (error, stackTrace) {
+      Timber.e(
+        tag: packageName,
+        logMessage: 'Asking for a rating failed',
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   /// Puts the boss card away, for good: the player has read it.

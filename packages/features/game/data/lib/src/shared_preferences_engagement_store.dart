@@ -22,6 +22,7 @@ final class SharedPreferencesEngagementStore implements EngagementStore {
     try {
       final json = jsonDecode(raw) as Map<String, dynamic>;
       final lastInterstitialAt = json['lastInterstitialAt'] as String?;
+      final reviewAskedAt = json['reviewAskedAt'] as String?;
 
       return Engagement(
         completedRuns: json['completedRuns'] as int? ?? 0,
@@ -31,6 +32,10 @@ final class SharedPreferencesEngagementStore implements EngagementStore {
             ? null
             : DateTime.parse(lastInterstitialAt),
         lastOpenedOn: json['lastOpenedOn'] as int?,
+        reviewAskedAt: reviewAskedAt == null
+            ? null
+            : DateTime.parse(reviewAskedAt),
+        reviewAskedVersion: json['reviewAskedVersion'] as String?,
         runEndsSinceInterstitial: json['runEndsSinceInterstitial'] as int? ?? 0,
       );
     } on Object catch (error, stackTrace) {
@@ -58,6 +63,8 @@ final class SharedPreferencesEngagementStore implements EngagementStore {
               ?.toUtc()
               .toIso8601String(),
           'lastOpenedOn': engagement.lastOpenedOn,
+          'reviewAskedAt': engagement.reviewAskedAt?.toUtc().toIso8601String(),
+          'reviewAskedVersion': engagement.reviewAskedVersion,
           'runEndsSinceInterstitial': engagement.runEndsSinceInterstitial,
         }),
       );

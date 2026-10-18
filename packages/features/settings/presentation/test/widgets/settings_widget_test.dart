@@ -308,6 +308,25 @@ void main() {
     );
   });
 
+  testWidgets(
+    'Given Settings, When Rate Blockmancer is tapped, Then the store page '
+    'opens',
+    (tester) async {
+      // Given
+      final links = <String>[];
+      await pumpSettings(tester, links: links);
+      await tester.ensureVisible(find.text('Rate Blockmancer'));
+      await tester.pumpAndSettle();
+
+      // When
+      await tester.tap(find.text('Rate Blockmancer'));
+      await tester.pumpAndSettle();
+
+      // Then
+      expect(links, ['store page']);
+    },
+  );
+
   group('purchases', () {
     testWidgets(
       'Given the store, When Remove ads is tapped, Then its sheet opens, the '

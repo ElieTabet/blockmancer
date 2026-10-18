@@ -251,6 +251,52 @@ final class PurchasesProvider
 
 String _$purchasesHash() => r'582bc6336c51c6cddfda440516e6be020389cf27';
 
+/// One for the app's life: the OS's rating prompt and the store page.
+
+@ProviderFor(storeReview)
+final storeReviewProvider = StoreReviewProvider._();
+
+/// One for the app's life: the OS's rating prompt and the store page.
+
+final class StoreReviewProvider
+    extends $FunctionalProvider<StoreReview, StoreReview, StoreReview>
+    with $Provider<StoreReview> {
+  /// One for the app's life: the OS's rating prompt and the store page.
+  StoreReviewProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'storeReviewProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$storeReviewHash();
+
+  @$internal
+  @override
+  $ProviderElement<StoreReview> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  StoreReview create(Ref ref) {
+    return storeReview(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(StoreReview value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<StoreReview>(value),
+    );
+  }
+}
+
+String _$storeReviewHash() => r'982c4fc268f8fca7bb0e2e904bf72349f3b2d03f';
+
 /// One for the app's life: its sounds are loaded once, at launch.
 
 @ProviderFor(gameSounds)

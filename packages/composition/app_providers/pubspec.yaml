@@ -37,6 +37,7 @@ dependencies:
   shop_data: any
   shop_domain: any
   sounds: any
+  store_review: any
   splash_presentation: any
 
 dev_dependencies:

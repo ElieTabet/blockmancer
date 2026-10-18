@@ -52,6 +52,44 @@ final class AdsRemovedProvider
 
 String _$adsRemovedHash() => r'2d95911321547276c5ca592eca3b0ae66b9bcd5a';
 
+/// This build's version (`1.0.0`): the rating prompt asks once per version.
+
+@ProviderFor(appVersion)
+final appVersionProvider = AppVersionProvider._();
+
+/// This build's version (`1.0.0`): the rating prompt asks once per version.
+
+final class AppVersionProvider
+    extends $FunctionalProvider<AsyncValue<String>, String, FutureOr<String>>
+    with $FutureModifier<String>, $FutureProvider<String> {
+  /// This build's version (`1.0.0`): the rating prompt asks once per version.
+  AppVersionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appVersionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appVersionHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<String> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<String> create(Ref ref) {
+    return appVersion(ref);
+  }
+}
+
+String _$appVersionHash() => r'2033e49eec6555757226a5c67f3c984b8dc77554';
+
 @ProviderFor(analyticsSink)
 final analyticsSinkProvider = AnalyticsSinkProvider._();
 
@@ -444,3 +482,96 @@ final class ShowInterstitialProvider
 }
 
 String _$showInterstitialHash() => r'e8ce7656a04ce27dc2a8c548656b1ce3a90b9ef5';
+
+@ProviderFor(requestReview)
+final requestReviewProvider = RequestReviewProvider._();
+
+final class RequestReviewProvider
+    extends
+        $FunctionalProvider<
+          RequestReviewFun,
+          RequestReviewFun,
+          RequestReviewFun
+        >
+    with $Provider<RequestReviewFun> {
+  RequestReviewProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'requestReviewProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$requestReviewHash();
+
+  @$internal
+  @override
+  $ProviderElement<RequestReviewFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RequestReviewFun create(Ref ref) {
+    return requestReview(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RequestReviewFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RequestReviewFun>(value),
+    );
+  }
+}
+
+String _$requestReviewHash() => r'e3dcae0d9f2d931b14df939289b25237e456885b';
+
+@ProviderFor(sessionHadError)
+final sessionHadErrorProvider = SessionHadErrorProvider._();
+
+final class SessionHadErrorProvider
+    extends
+        $FunctionalProvider<
+          SessionHadErrorFun,
+          SessionHadErrorFun,
+          SessionHadErrorFun
+        >
+    with $Provider<SessionHadErrorFun> {
+  SessionHadErrorProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionHadErrorProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sessionHadErrorHash();
+
+  @$internal
+  @override
+  $ProviderElement<SessionHadErrorFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SessionHadErrorFun create(Ref ref) {
+    return sessionHadError(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SessionHadErrorFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SessionHadErrorFun>(value),
+    );
+  }
+}
+
+String _$sessionHadErrorHash() => r'683e412e2b0b515f76d10ab8dc885bc684849949';

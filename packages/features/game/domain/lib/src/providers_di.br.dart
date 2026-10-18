@@ -20,6 +20,12 @@ Future<bool> adsRemoved(Ref ref) => throw UnimplementedError(
   'adsRemovedProvider must be overridden by the composition layer',
 );
 
+/// This build's version (`1.0.0`): the rating prompt asks once per version.
+@riverpod
+Future<String> appVersion(Ref ref) => throw UnimplementedError(
+  'appVersionProvider must be overridden by the composition layer',
+);
+
 @riverpod
 AnalyticsSink analyticsSink(Ref ref) => throw UnimplementedError(
   'analyticsSinkProvider must be overridden by the composition layer',
@@ -71,4 +77,20 @@ typedef ShowAdFun = Future<AdResult> Function();
 @riverpod
 ShowAdFun showInterstitial(Ref ref) => throw UnimplementedError(
   'showInterstitialProvider must be overridden by the composition layer',
+);
+
+/// Asks the OS for its rating prompt, which it may or may not show.
+typedef RequestReviewFun = Future<void> Function();
+
+@riverpod
+RequestReviewFun requestReview(Ref ref) => throw UnimplementedError(
+  'requestReviewProvider must be overridden by the composition layer',
+);
+
+/// Whether this launch hit an uncaught error.
+typedef SessionHadErrorFun = bool Function();
+
+@riverpod
+SessionHadErrorFun sessionHadError(Ref ref) => throw UnimplementedError(
+  'sessionHadErrorProvider must be overridden by the composition layer',
 );

@@ -170,6 +170,7 @@ class Translations$settings$en {
 	late final Translations$settings$support$en support = Translations$settings$support$en.internal(_root);
 	late final Translations$settings$removeAds$en removeAds = Translations$settings$removeAds$en.internal(_root);
 	late final Translations$settings$restore$en restore = Translations$settings$restore$en.internal(_root);
+	late final Translations$settings$rate$en rate = Translations$settings$rate$en.internal(_root);
 }
 
 // Path: update
@@ -950,6 +951,21 @@ class Translations$settings$restore$en {
 	String get ok => 'OK';
 }
 
+// Path: settings.rate
+class Translations$settings$rate$en {
+	Translations$settings$rate$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Rate Blockmancer'
+	String get title => 'Rate Blockmancer';
+
+	/// en: 'Tell others what you think, on the store'
+	String get subtitle => 'Tell others what you think, on the store';
+}
+
 // Path: update.required
 class Translations$update$required$en {
 	Translations$update$required$en.internal(this._root);
@@ -1712,6 +1728,8 @@ extension on Translations {
 			'settings.restore.noneTitle' => 'Nothing to restore',
 			'settings.restore.noneMessage' => 'No purchase was found for this store account.',
 			'settings.restore.ok' => 'OK',
+			'settings.rate.title' => 'Rate Blockmancer',
+			'settings.rate.subtitle' => 'Tell others what you think, on the store',
 			'update.required.title' => 'Update required',
 			'update.required.body' => 'This version of Blockmancer is no longer supported. Update to keep playing; your progress is kept.',
 			'update.required.button' => 'Update',

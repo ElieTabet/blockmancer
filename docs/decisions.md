@@ -408,3 +408,18 @@ Three changes from the review of this file, each its own commit.
 - **A pending purchase** (parental approval) changes nothing until the store completes it.
 - **The info popup:** the design system had only error and confirm popups; `DSPopup.showInfo`
   (a check) says a restore worked.
+
+## Sprint 8, Task 5: rating prompt
+
+- **"After the celebration finishes":** the run-end sheet's entrance (300 ms) plus its new stars'
+  pop (900 ms, none under reduce motion). An unlock sheet comes first and isn't the moment: the
+  run end, where Play again is, is. Leaving before then asks nothing.
+- **"2 different days since install":** the app opened on at least 2 different local days, the
+  install day included (`Engagement.daysOpened`).
+- **"No crash in this session":** no uncaught error reached Flutter's or the platform's handlers
+  since launch (a crash ends the session anyway; an error survived is the signal).
+- **A daily or practice run's boss win** counts as a boss win; their runs earn no stars.
+- **Once per version, then the cooldown:** both hold; a new version may ask again only once the
+  cooldown since the last ask has passed.
+- **Recorded before asking:** the ask is kept before the OS is called, so a crash inside the OS's
+  sheet can't make the app ask twice.

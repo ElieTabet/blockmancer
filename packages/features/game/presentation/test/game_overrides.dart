@@ -94,7 +94,9 @@ List<Override> gameOverrides(
   bool rewardedAdReady = true,
   game.SavedRun? resumed,
   GameRouting? routing,
+  game.RequestReviewFun? requestReview,
   game.RunStore? runStore,
+  bool sessionHadError = false,
   game.ShowAdFun? showInterstitial,
   bool soundOn = true,
   WorldId? world,
@@ -112,6 +114,10 @@ List<Override> gameOverrides(
     remoteValue: (ref) =>
         (_) => null,
     runStore: (ref) => runStore ?? FakeRunStore(),
+    appVersion: (ref) async => '1.0.0',
+    requestReview: (ref) => requestReview ?? () async {},
+    sessionHadError: (ref) =>
+        () => sessionHadError,
     showInterstitial: (ref) =>
         showInterstitial ?? () async => const AdResult.failed(code: 'no_ads'),
   ),

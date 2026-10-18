@@ -68,6 +68,7 @@ final class FirebaseAnalyticsSink implements AnalyticsSink {
         'purchase_started',
         {'product': product},
       ),
+      ReviewPromptRequestedEvent() => ('review_prompt_requested', const {}),
       ReviveEvent() => ('revive', const {}),
       RoundEndEvent(:final round, :final score, :final won) => (
         'round_end',

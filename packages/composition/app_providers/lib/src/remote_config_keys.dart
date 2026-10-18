@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:app_update_domain/app_update_domain.dart' show updateKeys;
 import 'package:blockmancer_engine/blockmancer_engine.dart';
 import 'package:game_domain/game_domain.dart'
-    show interstitialKeys, runTuningKeys;
+    show interstitialKeys, reviewKeys, runTuningKeys;
 import 'package:shared_domain/shared_domain.dart';
 
 /// Every key the app reads from Remote Config, with the default it plays
@@ -14,6 +14,7 @@ import 'package:shared_domain/shared_domain.dart';
 List<RemoteKey> remoteConfigKeys() => [
   ...runTuningKeys(const BlockmancerEngine()),
   ...interstitialKeys,
+  ...reviewKeys,
   ...updateKeys,
 ];
 

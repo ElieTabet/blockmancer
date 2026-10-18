@@ -413,4 +413,22 @@ void main() {
     // Then
     expect(find.text('Gravity · earn its three stars'), findsOneWidget);
   });
+
+  testWidgets('a won run asks for a rating once its end sheet has come in, '
+      'when the player qualifies', (tester) async {
+    // Given
+    var asked = 0;
+    await pumpGame(
+      tester,
+      runIn(const .won()),
+      engagement: const Engagement(completedRuns: 3, daysOpened: 2),
+      requestReview: () async => asked++,
+    );
+
+    // When
+    await tester.pump(const Duration(seconds: 2));
+
+    // Then
+    expect(asked, 1);
+  });
 }

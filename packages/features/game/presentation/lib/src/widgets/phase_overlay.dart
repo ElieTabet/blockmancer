@@ -91,6 +91,9 @@ _Sheet? _sheetShown(WidgetRef ref) {
 
 /// Fades a sheet in, deaf to touches until it is in: a tap meant for the board
 /// an instant earlier would otherwise pick a joker or end the run.
+/// How long a sheet takes to fade in.
+const sheetEntrance = Duration(milliseconds: 300);
+
 final class _SheetEntrance extends StatefulWidget {
   const _SheetEntrance({required this.child, super.key});
 
@@ -103,12 +106,12 @@ final class _SheetEntrance extends StatefulWidget {
 class _SheetEntranceState extends State<_SheetEntrance>
     with SingleTickerProviderStateMixin {
   var _arrived = false;
-  late final _controller = AnimationController(vsync: this, duration: _fadeIn)
-    ..addStatusListener((status) {
-      if (status.isCompleted) setState(() => _arrived = true);
-    })
-    ..forward();
-  static const _fadeIn = Duration(milliseconds: 300);
+  late final _controller =
+      AnimationController(vsync: this, duration: sheetEntrance)
+        ..addStatusListener((status) {
+          if (status.isCompleted) setState(() => _arrived = true);
+        })
+        ..forward();
 
   @override
   void dispose() {

@@ -383,6 +383,10 @@
       "noneTitle": "Nothing to restore",
       "noneMessage": "No purchase was found for this store account.",
       "ok": "OK"
+    },
+    "rate": {
+      "title": "Rate Blockmancer",
+      "subtitle": "Tell others what you think, on the store"
     }
   },
   "update": {

@@ -92,6 +92,7 @@ List<Override> featureBindingOverrides({
   ...game.bindProviders(
     adsRemoved: (ref) => ref.watch(shop.removeAdsProvider.future),
     analyticsSink: (ref) => ref.watch(analyticsSinkProvider),
+    appVersion: (ref) async => (await readAppInfo()).version,
     bestScores: (ref) => SharedPreferencesBestScores(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
@@ -102,7 +103,9 @@ List<Override> featureBindingOverrides({
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
     remoteValue: (ref) => ref.watch(remoteValuesProvider).valueOf,
+    requestReview: (ref) => ref.watch(storeReviewProvider).requestReview,
     runStore: (ref) => const SharedPreferencesRunStore(),
+    sessionHadError: (ref) => ref.watch(telemetry.sessionHadErrorProvider),
     showInterstitial: (ref) => ref.watch(interstitialAdsProvider).show,
   ),
   ...game_ui.bindProviders(
@@ -216,6 +219,7 @@ List<Override> featureBindingOverrides({
   ...settings_ui.bindProviders(
     buyRemoveAds: (ref) => ref.watch(shop.removeAdsProvider.notifier).buy,
     crashForTest: (ref) => ref.watch(telemetry.telemetryProvider).crash,
+    rateApp: (ref) => ref.watch(storeReviewProvider).openStoreListing,
     removeAdsOwned: (ref) => ref.watch(shop.removeAdsProvider).value ?? false,
     removeAdsPrice: (ref) => ref.watch(shop.removeAdsPriceProvider.future),
     restorePurchases: (ref) =>

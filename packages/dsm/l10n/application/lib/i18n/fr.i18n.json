@@ -383,6 +383,10 @@
       "noneTitle": "Rien à restaurer",
       "noneMessage": "Aucun achat trouvé pour ce compte de la boutique.",
       "ok": "OK"
+    },
+    "rate": {
+      "title": "Noter Blockmancer",
+      "subtitle": "Dis ce que tu en penses, sur la boutique"
     }
   },
   "update": {

@@ -14,6 +14,9 @@ enum _Star { bossBeaten, noRevive, scoreThreshold }
 final class RunStars extends ConsumerWidget {
   const RunStars({super.key});
 
+  /// How long the new stars take to pop in, one after the other.
+  static const celebration = Duration(milliseconds: 900);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shown = ref.watch(
@@ -47,10 +50,9 @@ class _StarLineState extends ConsumerState<_StarLine>
     with SingleTickerProviderStateMixin {
   late final _controller = AnimationController(
     vsync: this,
-    duration: _pops,
+    duration: RunStars.celebration,
     value: 1,
   );
-  static const _pops = Duration(milliseconds: 900);
   // One pop after the other, in the stars' order.
   late final _scale =
       TweenSequence([
