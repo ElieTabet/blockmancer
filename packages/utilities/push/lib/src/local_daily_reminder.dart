@@ -18,10 +18,6 @@ final class LocalDailyReminder implements DailyReminder {
 
   static const _channelId = 'daily_reminder';
   static const _firstId = 100;
-
-  /// The repeating reminder earlier test builds set: cancelled with the rest,
-  /// so an update doesn't leave it repeating.
-  static const _legacyId = 1;
   final FlutterLocalNotificationsPlugin _localNotifications;
 
   /// The time zone database, loaded on first use: it takes a moment.
@@ -30,8 +26,6 @@ final class LocalDailyReminder implements DailyReminder {
   @override
   Future<void> cancel() async {
     try {
-      await _localNotifications.cancel(id: _legacyId);
-
       for (var index = 0; index < DailyReminder.maxReminders; index++) {
         await _localNotifications.cancel(id: _firstId + index);
       }
@@ -49,12 +43,19 @@ final class LocalDailyReminder implements DailyReminder {
     await cancel();
 
     try {
+      await _createChannel(
+        channelDescription: channelDescription,
+        channelName: channelName,
+      );
+
       final zone = tz.getLocation(await timeZone());
       final details = NotificationDetails(
         android: AndroidNotificationDetails(
           _channelId,
           channelName,
           channelDescription: channelDescription,
+          importance: .high,
+          priority: .high,
         ),
       );
 
@@ -119,6 +120,28 @@ final class LocalDailyReminder implements DailyReminder {
           minute,
         ).toUtc(),
     ];
+  }
+
+  /// Created before the plugin would make it at the default importance, which
+  /// draws no banner and which Android never lets an app raise afterwards.
+  /// Re-created with every plan, so its name follows the app's language.
+  Future<void> _createChannel({
+    required String channelDescription,
+    required String channelName,
+  }) async {
+    final android = _localNotifications
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+
+    await android?.createNotificationChannel(
+      AndroidNotificationChannel(
+        _channelId,
+        channelName,
+        description: channelDescription,
+        importance: .high,
+      ),
+    );
   }
 
   static void _log(String message, Object error, StackTrace stackTrace) =>

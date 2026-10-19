@@ -951,8 +951,10 @@ no-op). Three packages share the client side, and only one knows Firebase:
 - **The reminders:** a week of one-shot local notifications at 18:00 local time
   (`reminderTime`), each with its own message: `push`'s `DailyReminder` (`LocalDailyReminder`:
   `upcoming` gives each local day's 18:00 as an instant, `replace` cancels every reminder and
-  `zonedSchedule`s the new ones, ids 100–107 plus the old repeating one's 1, inexact on Android,
-  its own `daily_reminder` channel, the tap's data as the payload), never a push.
+  `zonedSchedule`s the new ones, ids 100–107, inexact on Android,
+  its own `daily_reminder` channel, created at high importance so Android drops a banner and
+  re-created with every plan so its name follows the language, the tap's data as the payload),
+  never a push.
 - **Who decides:** push_notifications_domain's `DailyReminderNotifier` (keepAlive; its state is
   the plan). It plans only with Settings' **Daily reminder** on (`dailyReminderEnabled`) and a
   daily run played to its end (`hasPlayedDaily`); otherwise it cancels. It plans again on every

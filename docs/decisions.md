@@ -585,6 +585,6 @@ Three changes from the review of this file, each its own commit.
 - **French in "tu"**, as the rest of the game (asked and chosen); the English is as given.
 - **A tap** opens Home scrolled back to its top, the daily card in view; it doesn't start the run.
   `notification_opened(message_id)` is logged with the message's id, the same in both languages.
-- **Notification ids:** reminders take 1 (the old repeating one, cancelled on update) and 100–107;
+- **Notification ids:** reminders take 100–107;
   the foreground pushes Android draws moved to 1000 up so cancelling a reminder never takes one
   down.
