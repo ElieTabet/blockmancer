@@ -1,13 +1,18 @@
 import 'package:push_notifications_domain/src/entities/push_destination.br.dart';
+import 'package:push_notifications_domain/src/entities/reminder_message.dart';
 
 /// Where a push leads, read from its `data`.
 ///
-/// Every push opens Home until the app teaches this its own keys. When it does,
-/// say what a push is about by which key it carries, and send anything this
-/// build does not recognise to Home too: a push from a newer server should
-/// still open the app.
+/// A daily reminder leads to the daily run. Anything this build does not
+/// recognise opens Home: a push from a newer server should still open the app.
 class ResolvePushDestinationBehavior {
   const ResolvePushDestinationBehavior();
 
-  PushDestination call(Map<String, String> data) => const .home();
+  PushDestination call(Map<String, String> data) =>
+      switch ((data[ReminderData.type], data[ReminderData.message])) {
+        (ReminderData.dailyReminder, final String messageId) => .dailyRun(
+          messageId: messageId,
+        ),
+        _ => const .home(),
+      };
 }

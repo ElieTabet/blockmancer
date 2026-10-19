@@ -32,7 +32,9 @@ final class FirebasePushMessaging implements PushMessaging {
   /// stream: a tap nobody is listening for has nowhere to go anyway.
   final _localTaps = StreamController<Map<String, String>>.broadcast();
 
-  int _nextNotificationId = 0;
+  /// Clear of the daily reminders' ids (1, and 100 on), which cancelling them
+  /// would otherwise take down.
+  int _nextNotificationId = 1000;
 
   /// Every argument is optional so the composition layer can write
   /// `FirebasePushMessaging()` and stay free of the two plugins; they are here

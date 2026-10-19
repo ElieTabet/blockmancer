@@ -24,6 +24,9 @@ class PushOpeningsNotifier extends _$PushOpeningsNotifier {
     final routing = ref.read(di.pushNotificationsRoutingProvider);
 
     switch (destination) {
+      case DailyRunPushDestination(:final messageId):
+        ref.read(trackNotificationOpenedProvider)(messageId);
+        routing.onDailyRunOpened();
       case HomePushDestination():
         routing.onHomeOpened();
     }

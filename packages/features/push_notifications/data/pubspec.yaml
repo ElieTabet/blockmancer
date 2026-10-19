@@ -1,0 +1,19 @@
+name: push_notifications_data
+description: "push_notifications data layer — the daily reminders' log, on the device through shared_preferences."
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.44.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  push_notifications_domain: any
+  shared_preferences: ^2.5.3
+  timber: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

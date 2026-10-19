@@ -9,6 +9,47 @@ part of 'providers_di.br.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(analyticsSink)
+final analyticsSinkProvider = AnalyticsSinkProvider._();
+
+final class AnalyticsSinkProvider
+    extends $FunctionalProvider<AnalyticsSink, AnalyticsSink, AnalyticsSink>
+    with $Provider<AnalyticsSink> {
+  AnalyticsSinkProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'analyticsSinkProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$analyticsSinkHash();
+
+  @$internal
+  @override
+  $ProviderElement<AnalyticsSink> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AnalyticsSink create(Ref ref) {
+    return analyticsSink(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AnalyticsSink value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AnalyticsSink>(value),
+    );
+  }
+}
+
+String _$analyticsSinkHash() => r'0c3ecec390e77acb21ab1c90e5a089e918fd2c63';
+
 @ProviderFor(cancelDailyReminder)
 final cancelDailyReminderProvider = CancelDailyReminderProvider._();
 
@@ -57,53 +98,6 @@ final class CancelDailyReminderProvider
 String _$cancelDailyReminderHash() =>
     r'65cb43c43fe116df90b3c763096738624d61ecbf';
 
-@ProviderFor(currentTimeZone)
-final currentTimeZoneProvider = CurrentTimeZoneProvider._();
-
-final class CurrentTimeZoneProvider
-    extends
-        $FunctionalProvider<
-          CurrentTimeZoneFun,
-          CurrentTimeZoneFun,
-          CurrentTimeZoneFun
-        >
-    with $Provider<CurrentTimeZoneFun> {
-  CurrentTimeZoneProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'currentTimeZoneProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$currentTimeZoneHash();
-
-  @$internal
-  @override
-  $ProviderElement<CurrentTimeZoneFun> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  CurrentTimeZoneFun create(Ref ref) {
-    return currentTimeZone(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(CurrentTimeZoneFun value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<CurrentTimeZoneFun>(value),
-    );
-  }
-}
-
-String _$currentTimeZoneHash() => r'c009d56ac97451ae75b0ea56fb2ab59251d8ecd8';
-
 /// Whether the player wants the daily reminder (Settings).
 
 @ProviderFor(dailyReminderEnabled)
@@ -142,6 +136,90 @@ final class DailyReminderEnabledProvider
 
 String _$dailyReminderEnabledHash() =>
     r'86cddef77da9a317984a57f9805f0e0f49f324d6';
+
+@ProviderFor(dailyStanding)
+final dailyStandingProvider = DailyStandingProvider._();
+
+final class DailyStandingProvider
+    extends
+        $FunctionalProvider<
+          DailyStandingFun,
+          DailyStandingFun,
+          DailyStandingFun
+        >
+    with $Provider<DailyStandingFun> {
+  DailyStandingProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyStandingProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyStandingHash();
+
+  @$internal
+  @override
+  $ProviderElement<DailyStandingFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DailyStandingFun create(Ref ref) {
+    return dailyStanding(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DailyStandingFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DailyStandingFun>(value),
+    );
+  }
+}
+
+String _$dailyStandingHash() => r'4991def7b697eda2e2a664096c901cd44df13509';
+
+/// The language the app shows (`en`, `fr`), now and on every change.
+
+@ProviderFor(displayLanguage)
+final displayLanguageProvider = DisplayLanguageProvider._();
+
+/// The language the app shows (`en`, `fr`), now and on every change.
+
+final class DisplayLanguageProvider
+    extends $FunctionalProvider<AsyncValue<String>, String, Stream<String>>
+    with $FutureModifier<String>, $StreamProvider<String> {
+  /// The language the app shows (`en`, `fr`), now and on every change.
+  DisplayLanguageProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'displayLanguageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$displayLanguageHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<String> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<String> create(Ref ref) {
+    return displayLanguage(ref);
+  }
+}
+
+String _$displayLanguageHash() => r'8cf3e5616e6fbba9e6577833ae699c9560cf973f';
 
 @ProviderFor(hasPlayedDaily)
 final hasPlayedDailyProvider = HasPlayedDailyProvider._();
@@ -235,6 +313,46 @@ final class LaunchMessageProvider
 }
 
 String _$launchMessageHash() => r'97249ce3894c6c4c4710647b435502992bfc91ae';
+
+@ProviderFor(now)
+final nowProvider = NowProvider._();
+
+final class NowProvider extends $FunctionalProvider<NowFun, NowFun, NowFun>
+    with $Provider<NowFun> {
+  NowProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'nowProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$nowHash();
+
+  @$internal
+  @override
+  $ProviderElement<NowFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  NowFun create(Ref ref) {
+    return now(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NowFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<NowFun>(value),
+    );
+  }
+}
+
+String _$nowHash() => r'3f98f48522fb3cdf4fc7a045b74ba2ce21052b6c';
 
 @ProviderFor(openedMessages)
 final openedMessagesProvider = OpenedMessagesProvider._();
@@ -376,6 +494,191 @@ final class ReadPushTokenProvider
 
 String _$readPushTokenHash() => r'cb92c7f70ac3ce680d18cd572eaed9cadb35b50b';
 
+@ProviderFor(reminderLogStore)
+final reminderLogStoreProvider = ReminderLogStoreProvider._();
+
+final class ReminderLogStoreProvider
+    extends
+        $FunctionalProvider<
+          ReminderLogStore,
+          ReminderLogStore,
+          ReminderLogStore
+        >
+    with $Provider<ReminderLogStore> {
+  ReminderLogStoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reminderLogStoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reminderLogStoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReminderLogStore> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReminderLogStore create(Ref ref) {
+    return reminderLogStore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReminderLogStore value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReminderLogStore>(value),
+    );
+  }
+}
+
+String _$reminderLogStoreHash() => r'33eaddd8ea83664bb4858ab489f76eaa72ade099';
+
+@ProviderFor(reminderTexts)
+final reminderTextsProvider = ReminderTextsProvider._();
+
+final class ReminderTextsProvider
+    extends
+        $FunctionalProvider<
+          ReminderTextsFun,
+          ReminderTextsFun,
+          ReminderTextsFun
+        >
+    with $Provider<ReminderTextsFun> {
+  ReminderTextsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reminderTextsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reminderTextsHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReminderTextsFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReminderTextsFun create(Ref ref) {
+    return reminderTexts(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReminderTextsFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReminderTextsFun>(value),
+    );
+  }
+}
+
+String _$reminderTextsHash() => r'c77c0f30ee5d376e781ae4cfc04243b866b422bf';
+
+@ProviderFor(reminderTimes)
+final reminderTimesProvider = ReminderTimesProvider._();
+
+final class ReminderTimesProvider
+    extends
+        $FunctionalProvider<
+          ReminderTimesFun,
+          ReminderTimesFun,
+          ReminderTimesFun
+        >
+    with $Provider<ReminderTimesFun> {
+  ReminderTimesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reminderTimesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reminderTimesHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReminderTimesFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReminderTimesFun create(Ref ref) {
+    return reminderTimes(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReminderTimesFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReminderTimesFun>(value),
+    );
+  }
+}
+
+String _$reminderTimesHash() => r'9385554bc8b8228883db46ce4bef015535b7c365';
+
+@ProviderFor(replaceReminders)
+final replaceRemindersProvider = ReplaceRemindersProvider._();
+
+final class ReplaceRemindersProvider
+    extends
+        $FunctionalProvider<
+          ReplaceRemindersFun,
+          ReplaceRemindersFun,
+          ReplaceRemindersFun
+        >
+    with $Provider<ReplaceRemindersFun> {
+  ReplaceRemindersProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'replaceRemindersProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$replaceRemindersHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReplaceRemindersFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ReplaceRemindersFun create(Ref ref) {
+    return replaceReminders(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReplaceRemindersFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReplaceRemindersFun>(value),
+    );
+  }
+}
+
+String _$replaceRemindersHash() => r'f6becc560a0db4541dc1cc27551bd9ef4f688744';
+
 @ProviderFor(reportPushToken)
 final reportPushTokenProvider = ReportPushTokenProvider._();
 
@@ -470,51 +773,3 @@ final class RequestPushPermissionProvider
 
 String _$requestPushPermissionHash() =>
     r'45fb9ca1691ba5084944215ffb70367b3a1a62c8';
-
-@ProviderFor(scheduleDailyReminder)
-final scheduleDailyReminderProvider = ScheduleDailyReminderProvider._();
-
-final class ScheduleDailyReminderProvider
-    extends
-        $FunctionalProvider<
-          ScheduleDailyReminderFun,
-          ScheduleDailyReminderFun,
-          ScheduleDailyReminderFun
-        >
-    with $Provider<ScheduleDailyReminderFun> {
-  ScheduleDailyReminderProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'scheduleDailyReminderProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$scheduleDailyReminderHash();
-
-  @$internal
-  @override
-  $ProviderElement<ScheduleDailyReminderFun> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  ScheduleDailyReminderFun create(Ref ref) {
-    return scheduleDailyReminder(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ScheduleDailyReminderFun value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<ScheduleDailyReminderFun>(value),
-    );
-  }
-}
-
-String _$scheduleDailyReminderHash() =>
-    r'54b18f1dfbefb23f434cdaaba148110d02ba5448';

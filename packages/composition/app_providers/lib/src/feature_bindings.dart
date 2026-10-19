@@ -14,6 +14,7 @@ import 'package:game_domain/game_domain.dart' as game;
 import 'package:game_presentation/game_presentation.dart' as game_ui;
 import 'package:home_presentation/home_presentation.dart' as home_ui;
 import 'package:push/push.dart' as push;
+import 'package:push_notifications_data/push_notifications_data.dart';
 import 'package:push_notifications_domain/push_notifications_domain.dart'
     as push_notifications_domain;
 import 'package:push_notifications_presentation/push_notifications_presentation.dart'
@@ -58,12 +59,15 @@ List<Override> featureBindingOverrides({
     telemetry: (ref) => telemetry.FirebaseTelemetry(),
   ),
   ...push_notifications_domain.bindProviders(
+    analyticsSink: (ref) => ref.watch(analyticsSinkProvider),
     cancelDailyReminder: (ref) => ref.watch(dailyReminderProvider).cancel,
-    currentTimeZone: (ref) => ref.watch(dailyReminderProvider).timeZone,
     dailyReminderEnabled: (ref) =>
         ref.watch(settings.dailyReminderEnabledProvider.future),
+    dailyStanding: (ref) => ref.watch(game.dailyStandingProvider),
+    displayLanguage: (ref) => push_notifications_ui.displayLanguages(),
     hasPlayedDaily: (ref) => ref.watch(game.hasPlayedDailyProvider),
     launchMessage: (ref) => ref.watch(push.pushMessagingProvider).launchMessage,
+    now: (ref) => const SystemClock().now,
     // The instance is captured, not the ref: these are called after an
     // await, by when an auto-disposed slot's ref may be gone.
     openedMessages: (ref) {
@@ -77,26 +81,26 @@ List<Override> featureBindingOverrides({
       return () => messaging.tokenChanges;
     },
     readPushToken: (ref) => ref.watch(push.pushMessagingProvider).currentToken,
+    reminderLogStore: (ref) => const SharedPreferencesReminderLogStore(),
+    reminderTexts: (ref) => push_notifications_ui.reminderMessageTexts,
+    reminderTimes: (ref) => ref.watch(dailyReminderProvider).upcoming,
+    replaceReminders: (ref) {
+      final reminder = ref.watch(dailyReminderProvider);
+
+      return (reminders) {
+        final channel = push_notifications_ui.dailyReminderChannelTexts();
+
+        return reminder.replace(
+          reminders,
+          channelDescription: channel.channelDescription,
+          channelName: channel.channelName,
+        );
+      };
+    },
     // No backend to tell: the token is FCM's to use, and nobody else's.
     reportPushToken: (ref) => (token) async {},
     requestPushPermission: (ref) =>
         ref.watch(push.pushMessagingProvider).requestPermission,
-    scheduleDailyReminder: (ref) {
-      final reminder = ref.watch(dailyReminderProvider);
-
-      return ({required hour, required minute}) {
-        final texts = push_notifications_ui.dailyReminderTexts();
-
-        return reminder.schedule(
-          body: texts.body,
-          channelDescription: texts.channelDescription,
-          channelName: texts.channelName,
-          hour: hour,
-          minute: minute,
-          title: texts.title,
-        );
-      };
-    },
   ),
   ...push_notifications_ui.bindProviders(
     initializeMessaging: (ref) =>
@@ -106,7 +110,10 @@ List<Override> featureBindingOverrides({
   // Bound here rather than with the other routing, like the app status's: a
   // tap arrives from the OS, so it navigates through the router instance.
   ...push_notifications_ui.bindRoutingProviders(
-    pushNotificationsRouting: (ref) => PushNotificationsRoutingImpl(router),
+    pushNotificationsRouting: (ref) => PushNotificationsRoutingImpl(
+      router,
+      revealDailyCard: ref.watch(home_ui.revealDailyCardProvider),
+    ),
   ),
   // The game reaches the rules, its storage and the ad network only through
   // these slots.

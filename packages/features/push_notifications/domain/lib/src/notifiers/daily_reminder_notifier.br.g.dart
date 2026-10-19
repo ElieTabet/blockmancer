@@ -8,33 +8,37 @@ part of 'daily_reminder_notifier.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The daily reminder: scheduled only for a player who has played a daily run
-/// to its end, with the switch on; cancelled otherwise. Its state is the time
-/// zone it was scheduled in, null when there is none, so a change of zone
-/// reschedules it at the new local time.
+/// The daily reminders: a week of them, planned afresh on every app start and
+/// return, on a change of the Settings switch or of the app's language, and
+/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
+/// who has played a daily run to its end, with the switch on; cancelled
+/// otherwise. Its state is the plan.
 ///
-/// Kept alive so that zone outlives the screens: it is read again on every
-/// return to the app.
+/// Kept alive so the plan follows the switch and the language for the app's
+/// life.
 
 @ProviderFor(DailyReminderNotifier)
 final dailyReminderProvider = DailyReminderNotifierProvider._();
 
-/// The daily reminder: scheduled only for a player who has played a daily run
-/// to its end, with the switch on; cancelled otherwise. Its state is the time
-/// zone it was scheduled in, null when there is none, so a change of zone
-/// reschedules it at the new local time.
+/// The daily reminders: a week of them, planned afresh on every app start and
+/// return, on a change of the Settings switch or of the app's language, and
+/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
+/// who has played a daily run to its end, with the switch on; cancelled
+/// otherwise. Its state is the plan.
 ///
-/// Kept alive so that zone outlives the screens: it is read again on every
-/// return to the app.
+/// Kept alive so the plan follows the switch and the language for the app's
+/// life.
 final class DailyReminderNotifierProvider
-    extends $AsyncNotifierProvider<DailyReminderNotifier, String?> {
-  /// The daily reminder: scheduled only for a player who has played a daily run
-  /// to its end, with the switch on; cancelled otherwise. Its state is the time
-  /// zone it was scheduled in, null when there is none, so a change of zone
-  /// reschedules it at the new local time.
+    extends
+        $AsyncNotifierProvider<DailyReminderNotifier, List<PlannedReminder>> {
+  /// The daily reminders: a week of them, planned afresh on every app start and
+  /// return, on a change of the Settings switch or of the app's language, and
+  /// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
+  /// who has played a daily run to its end, with the switch on; cancelled
+  /// otherwise. Its state is the plan.
   ///
-  /// Kept alive so that zone outlives the screens: it is read again on every
-  /// return to the app.
+  /// Kept alive so the plan follows the switch and the language for the app's
+  /// life.
   DailyReminderNotifierProvider._()
     : super(
         from: null,
@@ -55,27 +59,34 @@ final class DailyReminderNotifierProvider
 }
 
 String _$dailyReminderNotifierHash() =>
-    r'd4d5afd3468f01d6c6a72fbf2de574b889974010';
+    r'6561a68a6bfc677e3adc7df2370fc50f5e21f289';
 
-/// The daily reminder: scheduled only for a player who has played a daily run
-/// to its end, with the switch on; cancelled otherwise. Its state is the time
-/// zone it was scheduled in, null when there is none, so a change of zone
-/// reschedules it at the new local time.
+/// The daily reminders: a week of them, planned afresh on every app start and
+/// return, on a change of the Settings switch or of the app's language, and
+/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
+/// who has played a daily run to its end, with the switch on; cancelled
+/// otherwise. Its state is the plan.
 ///
-/// Kept alive so that zone outlives the screens: it is read again on every
-/// return to the app.
+/// Kept alive so the plan follows the switch and the language for the app's
+/// life.
 
-abstract class _$DailyReminderNotifier extends $AsyncNotifier<String?> {
-  FutureOr<String?> build();
+abstract class _$DailyReminderNotifier
+    extends $AsyncNotifier<List<PlannedReminder>> {
+  FutureOr<List<PlannedReminder>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<String?>, String?>;
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<List<PlannedReminder>>, List<PlannedReminder>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<String?>, String?>,
-              AsyncValue<String?>,
+              AnyNotifier<
+                AsyncValue<List<PlannedReminder>>,
+                List<PlannedReminder>
+              >,
+              AsyncValue<List<PlannedReminder>>,
               Object?,
               Object?
             >;

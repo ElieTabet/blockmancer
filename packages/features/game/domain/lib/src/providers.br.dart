@@ -240,6 +240,19 @@ Future<int> dailyStreak(Ref ref) async => dailyStreakOf(
   today: ref.watch(todaysDailyDateProvider),
 );
 
+typedef DailyStandingFun =
+    Future<({bool played, int streak})> Function(DateTime day);
+
+/// See [dailyStandingOf], read fresh each time: the daily reminders ask it
+/// about the days ahead.
+@riverpod
+DailyStandingFun dailyStanding(Ref ref) {
+  final scores = ref.watch(di.bestScoresProvider);
+
+  return (day) async =>
+      dailyStandingOf(day: day, days: await scores.dailyDays());
+}
+
 typedef HasPlayedDailyFun = Future<bool> Function();
 
 /// Whether a daily run was ever played to its end on this device, read fresh

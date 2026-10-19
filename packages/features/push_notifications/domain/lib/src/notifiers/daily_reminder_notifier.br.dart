@@ -1,3 +1,5 @@
+import 'package:push_notifications_domain/src/behaviors/plan_daily_reminders_behavior.dart';
+import 'package:push_notifications_domain/src/entities/reminder_log.br.dart';
 import 'package:push_notifications_domain/src/package_name.dart';
 import 'package:push_notifications_domain/src/providers.br.dart';
 import 'package:push_notifications_domain/src/providers_di.br.dart' as di;
@@ -10,42 +12,80 @@ part 'daily_reminder_notifier.br.g.dart';
 /// when the day's run is likely still to play.
 const reminderTime = (hour: 18, minute: 0);
 
-/// The daily reminder: scheduled only for a player who has played a daily run
-/// to its end, with the switch on; cancelled otherwise. Its state is the time
-/// zone it was scheduled in, null when there is none, so a change of zone
-/// reschedules it at the new local time.
+/// The daily reminders: a week of them, planned afresh on every app start and
+/// return, on a change of the Settings switch or of the app's language, and
+/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
+/// who has played a daily run to its end, with the switch on; cancelled
+/// otherwise. Its state is the plan.
 ///
-/// Kept alive so that zone outlives the screens: it is read again on every
-/// return to the app.
+/// Kept alive so the plan follows the switch and the language for the app's
+/// life.
 @Riverpod(keepAlive: true)
 class DailyReminderNotifier extends _$DailyReminderNotifier {
+  /// Each plan's reading of the log through to its scheduling, one after the
+  /// other: two plans interleaved would cancel each other's reminders, or
+  /// both count the same reminders shown.
+  var _writes = Future<void>.value();
+
   @override
-  Future<String?> build() async {
-    final enabled = await ref.watch(di.dailyReminderEnabledProvider.future);
+  Future<List<PlannedReminder>> build() async {
+    final enabled = ref.watch(di.dailyReminderEnabledProvider.future);
+    final language = ref.watch(di.displayLanguageProvider.future);
+    final dailyStanding = ref.read(di.dailyStandingProvider);
     final hasPlayedDaily = ref.read(di.hasPlayedDailyProvider);
-    final scheduleReminder = ref.read(di.scheduleDailyReminderProvider);
-    final timeZone = ref.read(di.currentTimeZoneProvider);
+    final now = ref.read(di.nowProvider);
+    final reminderTimes = ref.read(di.reminderTimesProvider);
 
-    // Cancelled whenever it isn't due, so a reminder scheduled before the
-    // switch went off, or before a progress reset, doesn't linger.
-    if (!enabled || !await hasPlayedDaily()) {
-      await ref.read(di.cancelDailyReminderProvider)();
+    // Cancelled whenever they aren't due, so reminders planned before the
+    // switch went off, or before a progress reset, don't linger.
+    if (!await enabled || !await hasPlayedDaily()) {
+      await _inOrder(ref.read(di.cancelDailyReminderProvider));
 
-      return null;
+      return const [];
     }
 
-    final zone = await timeZone();
-    await scheduleReminder(
+    final times = await reminderTimes(
+      days: reminderDays,
       hour: reminderTime.hour,
       minute: reminderTime.minute,
     );
+    final slots = <ReminderSlot>[];
 
-    return zone;
+    for (final (day, at) in times.indexed) {
+      final (:played, :streak) = await dailyStanding(at.toUtc());
+
+      slots.add((at: at, day: day, played: played, streak: streak));
+    }
+
+    if (!ref.mounted) return const [];
+
+    final replace = ref.read(di.replaceRemindersProvider);
+    final store = ref.read(di.reminderLogStoreProvider);
+    final texts = ref.read(di.reminderTextsProvider);
+    final languageCode = await language;
+    var planned = const <PlannedReminder>[];
+
+    await _inOrder(() async {
+      final log = const PlanDailyRemindersBehavior()(
+        log: await store.load(),
+        now: now(),
+        slots: slots,
+      );
+
+      planned = log.planned;
+      await store.save(log);
+      await replace([
+        for (final reminder in log.planned)
+          _notificationOf(reminder, language: languageCode, texts: texts),
+      ]);
+    });
+
+    return planned;
   }
 
   /// A daily run was just played to its end: asks for notifications (the OS
-  /// prompts once, then answers from its record) and schedules the reminder,
-  /// unless the player turned it off.
+  /// prompts once, then answers from its record) and plans the reminders,
+  /// unless the player turned them off.
   Future<void> dailyRunFinished() async {
     final askForNotifications = ref.read(askForNotificationsProvider);
 
@@ -54,34 +94,58 @@ class DailyReminderNotifier extends _$DailyReminderNotifier {
     try {
       await askForNotifications();
     } on Object catch (error, stackTrace) {
-      // Scheduled all the same: a phone that refused shows nothing, and one
-      // that allows it later gets it from then on.
+      // Planned all the same: a phone that refused shows nothing, and one
+      // that allows it later gets them from then on.
+      _log('Asking for notifications failed', error, stackTrace);
+    }
+
+    await _replan();
+  }
+
+  /// Back in the app: the days are counted from this open, and the phone may
+  /// have changed time zone or language since.
+  Future<void> resumed() => _replan();
+
+  /// Never throws: a reminder that couldn't be planned is logged, and the
+  /// next plan starts from whatever the log then holds.
+  Future<void> _inOrder(Future<void> Function() write) => _writes = _writes
+      .then((_) => write())
+      .onError<Object>(
+        (error, stackTrace) =>
+            _log('Planning the daily reminders failed', error, stackTrace),
+      );
+
+  Future<void> _replan() async {
+    if (!ref.mounted) return;
+
+    ref.invalidateSelf();
+    await future;
+  }
+
+  static di.ReminderNotification _notificationOf(
+    PlannedReminder reminder, {
+    required String language,
+    required di.ReminderTextsFun texts,
+  }) {
+    final (:body, :title) = texts(
+      reminder.message,
+      language: language,
+      streak: reminder.streak,
+    );
+
+    return (
+      at: reminder.at,
+      body: body,
+      data: reminder.message.data,
+      title: title,
+    );
+  }
+
+  static void _log(String message, Object error, StackTrace stackTrace) =>
       Timber.e(
         tag: packageName,
-        logMessage: 'Asking for notifications failed',
+        logMessage: message,
         exception: error,
         stackTrace: stackTrace,
       );
-    }
-
-    if (!ref.mounted) return;
-
-    ref.invalidateSelf();
-    await future;
-  }
-
-  /// Back in the app: reschedules when the phone has changed time zone since,
-  /// so the reminder keeps to the local time.
-  Future<void> resumed() async {
-    final scheduledIn = await future;
-
-    if (scheduledIn == null || !ref.mounted) return;
-
-    if (await ref.read(di.currentTimeZoneProvider)() == scheduledIn) return;
-
-    if (!ref.mounted) return;
-
-    ref.invalidateSelf();
-    await future;
-  }
 }

@@ -4,5 +4,8 @@
 /// No `BuildContext`: what triggers it is the OS handing over a tap, not a
 /// widget — and at a cold start there is no screen yet to borrow one from.
 abstract interface class PushNotificationsRouting {
+  /// Home, with the daily run's card in view.
+  void onDailyRunOpened();
+
   void onHomeOpened();
 }

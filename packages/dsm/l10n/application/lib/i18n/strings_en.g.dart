@@ -567,17 +567,13 @@ class Translations$push$reminder$en {
 
 	// Translations
 
-	/// en: 'Today's daily run is ready'
-	String get title => 'Today\'s daily run is ready';
-
-	/// en: 'Same pieces for everyone. Keep your streak going!'
-	String get body => 'Same pieces for everyone. Keep your streak going!';
-
 	/// en: 'Daily run reminder'
 	String get channelName => 'Daily run reminder';
 
 	/// en: 'A reminder when today's daily run is ready.'
 	String get channelDescription => 'A reminder when today\'s daily run is ready.';
+
+	late final Translations$push$reminder$messages$en messages = Translations$push$reminder$messages$en.internal(_root);
 }
 
 // Path: home.complete
@@ -1539,6 +1535,26 @@ class Translations$game$jokers$prism$en {
 	String get short => 'Prism';
 }
 
+// Path: push.reminder.messages
+class Translations$push$reminder$messages$en {
+	Translations$push$reminder$messages$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final Translations$push$reminder$messages$streakCount$en streakCount = Translations$push$reminder$messages$streakCount$en.internal(_root);
+	late final Translations$push$reminder$messages$streakFire$en streakFire = Translations$push$reminder$messages$streakFire$en.internal(_root);
+	late final Translations$push$reminder$messages$boardReady$en boardReady = Translations$push$reminder$messages$boardReady$en.internal(_root);
+	late final Translations$push$reminder$messages$newDaily$en newDaily = Translations$push$reminder$messages$newDaily$en.internal(_root);
+	late final Translations$push$reminder$messages$jokersRestless$en jokersRestless = Translations$push$reminder$messages$jokersRestless$en.internal(_root);
+	late final Translations$push$reminder$messages$comboTime$en comboTime = Translations$push$reminder$messages$comboTime$en.internal(_root);
+	late final Translations$push$reminder$messages$fiveMinutes$en fiveMinutes = Translations$push$reminder$messages$fiveMinutes$en.internal(_root);
+	late final Translations$push$reminder$messages$beatYesterday$en beatYesterday = Translations$push$reminder$messages$beatYesterday$en.internal(_root);
+	late final Translations$push$reminder$messages$boardReset$en boardReset = Translations$push$reminder$messages$boardReset$en.internal(_root);
+	late final Translations$push$reminder$messages$blocksFalling$en blocksFalling = Translations$push$reminder$messages$blocksFalling$en.internal(_root);
+	late final Translations$push$reminder$messages$comeback$en comeback = Translations$push$reminder$messages$comeback$en.internal(_root);
+}
+
 // Path: home.sheet.bossRule
 class Translations$home$sheet$bossRule$en {
 	Translations$home$sheet$bossRule$en.internal(this._root);
@@ -1609,6 +1625,171 @@ class Translations$home$spellbook$tiers$en {
 
 	/// en: 'Gold'
 	String get gold => 'Gold';
+}
+
+// Path: push.reminder.messages.streakCount
+class Translations$push$reminder$messages$streakCount$en {
+	Translations$push$reminder$messages$streakCount$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '🔥 ${n}-day streak!'
+	String title({required Object n}) => '🔥 ${n}-day streak!';
+
+	/// en: 'Don't break it now — today's run is waiting.'
+	String get body => 'Don\'t break it now — today\'s run is waiting.';
+}
+
+// Path: push.reminder.messages.streakFire
+class Translations$push$reminder$messages$streakFire$en {
+	Translations$push$reminder$messages$streakFire$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '🔥 Keep the fire going'
+	String get title => '🔥 Keep the fire going';
+
+	/// en: 'Day $n of your streak. One run keeps it alive.'
+	String body({required Object n}) => 'Day ${n} of your streak. One run keeps it alive.';
+}
+
+// Path: push.reminder.messages.boardReady
+class Translations$push$reminder$messages$boardReady$en {
+	Translations$push$reminder$messages$boardReady$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '🧩 Today's board is ready'
+	String get title => '🧩 Today\'s board is ready';
+
+	/// en: 'Same seed for everyone. How far can you go?'
+	String get body => 'Same seed for everyone. How far can you go?';
+}
+
+// Path: push.reminder.messages.newDaily
+class Translations$push$reminder$messages$newDaily$en {
+	Translations$push$reminder$messages$newDaily$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '🏆 New daily run'
+	String get title => '🏆 New daily run';
+
+	/// en: 'Fresh pieces, fresh leaderboard. Claim the top spot.'
+	String get body => 'Fresh pieces, fresh leaderboard. Claim the top spot.';
+}
+
+// Path: push.reminder.messages.jokersRestless
+class Translations$push$reminder$messages$jokersRestless$en {
+	Translations$push$reminder$messages$jokersRestless$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '🃏 Your jokers are restless'
+	String get title => '🃏 Your jokers are restless';
+
+	/// en: 'Find a pair, chain the combos, beat today's score.'
+	String get body => 'Find a pair, chain the combos, beat today\'s score.';
+}
+
+// Path: push.reminder.messages.comboTime
+class Translations$push$reminder$messages$comboTime$en {
+	Translations$push$reminder$messages$comboTime$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '💥 Combo time'
+	String get title => '💥 Combo time';
+
+	/// en: 'Clear two lines at once and watch that mult climb.'
+	String get body => 'Clear two lines at once and watch that mult climb.';
+}
+
+// Path: push.reminder.messages.fiveMinutes
+class Translations$push$reminder$messages$fiveMinutes$en {
+	Translations$push$reminder$messages$fiveMinutes$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '⚡ 5 minutes, one run'
+	String get title => '⚡ 5 minutes, one run';
+
+	/// en: 'Today's daily run fits in a coffee break.'
+	String get body => 'Today\'s daily run fits in a coffee break.';
+}
+
+// Path: push.reminder.messages.beatYesterday
+class Translations$push$reminder$messages$beatYesterday$en {
+	Translations$push$reminder$messages$beatYesterday$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '🎯 Beat yesterday's you'
+	String get title => '🎯 Beat yesterday\'s you';
+
+	/// en: 'A new seed, a new chance at your best score.'
+	String get body => 'A new seed, a new chance at your best score.';
+}
+
+// Path: push.reminder.messages.boardReset
+class Translations$push$reminder$messages$boardReset$en {
+	Translations$push$reminder$messages$boardReset$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '✨ The daily board just reset'
+	String get title => '✨ The daily board just reset';
+
+	/// en: 'Everyone starts from zero. Get there first.'
+	String get body => 'Everyone starts from zero. Get there first.';
+}
+
+// Path: push.reminder.messages.blocksFalling
+class Translations$push$reminder$messages$blocksFalling$en {
+	Translations$push$reminder$messages$blocksFalling$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '🧱 Blocks are falling into place'
+	String get title => '🧱 Blocks are falling into place';
+
+	/// en: 'Today's run is live. Show them how it's done.'
+	String get body => 'Today\'s run is live. Show them how it\'s done.';
+}
+
+// Path: push.reminder.messages.comeback
+class Translations$push$reminder$messages$comeback$en {
+	Translations$push$reminder$messages$comeback$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '👋 We saved your spot'
+	String get title => '👋 We saved your spot';
+
+	/// en: 'A new daily run is waiting — your jokers missed you.'
+	String get body => 'A new daily run is waiting — your jokers missed you.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1789,10 +1970,30 @@ extension on Translations {
 			'game.jokers.prism.short' => 'Prism',
 			'push.channelName' => 'Announcements',
 			'push.channelDescription' => 'News and messages from the app.',
-			'push.reminder.title' => 'Today\'s daily run is ready',
-			'push.reminder.body' => 'Same pieces for everyone. Keep your streak going!',
 			'push.reminder.channelName' => 'Daily run reminder',
 			'push.reminder.channelDescription' => 'A reminder when today\'s daily run is ready.',
+			'push.reminder.messages.streakCount.title' => ({required Object n}) => '🔥 ${n}-day streak!',
+			'push.reminder.messages.streakCount.body' => 'Don\'t break it now — today\'s run is waiting.',
+			'push.reminder.messages.streakFire.title' => '🔥 Keep the fire going',
+			'push.reminder.messages.streakFire.body' => ({required Object n}) => 'Day ${n} of your streak. One run keeps it alive.',
+			'push.reminder.messages.boardReady.title' => '🧩 Today\'s board is ready',
+			'push.reminder.messages.boardReady.body' => 'Same seed for everyone. How far can you go?',
+			'push.reminder.messages.newDaily.title' => '🏆 New daily run',
+			'push.reminder.messages.newDaily.body' => 'Fresh pieces, fresh leaderboard. Claim the top spot.',
+			'push.reminder.messages.jokersRestless.title' => '🃏 Your jokers are restless',
+			'push.reminder.messages.jokersRestless.body' => 'Find a pair, chain the combos, beat today\'s score.',
+			'push.reminder.messages.comboTime.title' => '💥 Combo time',
+			'push.reminder.messages.comboTime.body' => 'Clear two lines at once and watch that mult climb.',
+			'push.reminder.messages.fiveMinutes.title' => '⚡ 5 minutes, one run',
+			'push.reminder.messages.fiveMinutes.body' => 'Today\'s daily run fits in a coffee break.',
+			'push.reminder.messages.beatYesterday.title' => '🎯 Beat yesterday\'s you',
+			'push.reminder.messages.beatYesterday.body' => 'A new seed, a new chance at your best score.',
+			'push.reminder.messages.boardReset.title' => '✨ The daily board just reset',
+			'push.reminder.messages.boardReset.body' => 'Everyone starts from zero. Get there first.',
+			'push.reminder.messages.blocksFalling.title' => '🧱 Blocks are falling into place',
+			'push.reminder.messages.blocksFalling.body' => 'Today\'s run is live. Show them how it\'s done.',
+			'push.reminder.messages.comeback.title' => '👋 We saved your spot',
+			'push.reminder.messages.comeback.body' => 'A new daily run is waiting — your jokers missed you.',
 			'home.complete.title' => 'Every world complete',
 			'home.complete.body' => ({required Object count}) => 'Every boss is beaten: all ${count} worlds are yours.',
 			'home.complete.stars' => ({required Object stars, required Object max}) => '${stars} of ${max} stars',

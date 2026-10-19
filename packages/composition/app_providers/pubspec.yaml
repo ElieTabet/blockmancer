@@ -20,6 +20,7 @@ dependencies:
   external_links: any
   play_stats: any
   push: any
+  push_notifications_data: any
   push_notifications_domain: any
   purchases: any
   push_notifications_presentation: any

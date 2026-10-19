@@ -561,8 +561,8 @@ void main() {
     );
   });
 
-  test("a first daily run's end sets the reminder in the app's language and "
-      'starts the streak', () async {
+  test("a first daily run's end sets the week's reminders in the app's "
+      'language and starts the streak', () async {
     // Given
     SharedPreferences.setMockInitialValues({});
     final reminder = _FakeDailyReminder();
@@ -590,11 +590,15 @@ void main() {
     await container.read(push_notifications.dailyReminderProvider.future);
 
     // Then: Firebase isn't started here, so the permission ask fails, and
-    // the reminder is set all the same
-    expect(reminder.calls, [
-      'cancel',
-      "schedule 18:0 Today's daily run is ready",
-    ]);
+    // the week's reminders are set all the same, in English: none today,
+    // already played, and days 1, 2, 3, 5 (calling the player back) and 7
+    expect(reminder.calls, ['cancel', 'replace in Daily run reminder']);
+    expect(reminder.replaced.single, hasLength(5));
+    expect(reminder.replaced.single[3].title, '👋 We saved your spot');
+    expect(
+      reminder.replaced.single.map((reminder) => reminder.data['type']),
+      everyElement('daily_reminder'),
+    );
     expect(await container.read(home_di.dailyStreakProvider.future), 1);
   });
 
@@ -631,23 +635,38 @@ final class _FakeLeaderboards implements Leaderboards {
       calls.add('submit ${_name(board)} $score');
 }
 
-/// Records what was asked of the daily reminder.
+/// Records what was asked of the daily reminders. Its days start a second
+/// from now, so today's is still ahead.
 final class _FakeDailyReminder implements DailyReminder {
   final calls = <String>[];
+  final replaced = <List<ReminderNotification>>[];
 
   @override
   Future<void> cancel() async => calls.add('cancel');
 
   @override
-  Future<void> schedule({
-    required String body,
+  Future<void> replace(
+    List<ReminderNotification> reminders, {
     required String channelDescription,
     required String channelName,
-    required int hour,
-    required int minute,
-    required String title,
-  }) async => calls.add('schedule $hour:$minute $title');
+  }) async {
+    calls.add('replace in $channelName');
+    replaced.add(reminders);
+  }
 
   @override
   Future<String> timeZone() async => 'Europe/Paris';
+
+  @override
+  Future<List<DateTime>> upcoming({
+    required int days,
+    required int hour,
+    required int minute,
+  }) async {
+    final start = DateTime.now().toUtc().add(const Duration(seconds: 1));
+
+    return [
+      for (var day = 0; day <= days; day++) start.add(Duration(days: day)),
+    ];
+  }
 }

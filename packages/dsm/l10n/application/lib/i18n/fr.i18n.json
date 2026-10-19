@@ -267,10 +267,54 @@
     "channelName": "Annonces",
     "channelDescription": "Les nouveautés et messages de l'application.",
     "reminder": {
-      "title": "La partie du jour est prête",
-      "body": "Les mêmes pièces pour tout le monde. Garde ta série !",
       "channelName": "Rappel de la partie du jour",
-      "channelDescription": "Un rappel quand la partie du jour est prête."
+      "channelDescription": "Un rappel quand la partie du jour est prête.",
+      "messages": {
+        "streakCount": {
+          "title": "🔥 Série de $n jours !",
+          "body": "Ne la brise pas maintenant : la partie du jour t'attend."
+        },
+        "streakFire": {
+          "title": "🔥 Garde la flamme",
+          "body": "Jour $n de ta série. Une partie suffit pour la garder."
+        },
+        "boardReady": {
+          "title": "🧩 Le plateau du jour est prêt",
+          "body": "Le même pour tout le monde. Jusqu'où iras-tu ?"
+        },
+        "newDaily": {
+          "title": "🏆 Nouvelle partie du jour",
+          "body": "Nouvelles pièces, nouveau classement. Vise la première place."
+        },
+        "jokersRestless": {
+          "title": "🃏 Tes jokers s'impatientent",
+          "body": "Trouve une paire, enchaîne les combos, bats le score du jour."
+        },
+        "comboTime": {
+          "title": "💥 C'est l'heure des combos",
+          "body": "Vide deux lignes d'un coup et regarde le mult grimper."
+        },
+        "fiveMinutes": {
+          "title": "⚡ 5 minutes, une partie",
+          "body": "La partie du jour tient dans une pause café."
+        },
+        "beatYesterday": {
+          "title": "🎯 Fais mieux qu'hier",
+          "body": "Nouvelle graine, nouvelle chance de battre ton record."
+        },
+        "boardReset": {
+          "title": "✨ Le plateau du jour vient de changer",
+          "body": "Tout le monde repart de zéro. Prends de l'avance."
+        },
+        "blocksFalling": {
+          "title": "🧱 Les blocs se mettent en place",
+          "body": "La partie du jour est lancée. Montre l'exemple."
+        },
+        "comeback": {
+          "title": "👋 On t'a gardé une place",
+          "body": "Une nouvelle partie du jour t'attend, tes jokers s'ennuient."
+        }
+      }
     }
   },
   "home": {

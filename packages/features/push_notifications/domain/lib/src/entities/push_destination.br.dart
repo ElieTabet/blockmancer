@@ -4,9 +4,13 @@ part 'push_destination.br.freezed.dart';
 
 /// Where a tapped push leads.
 ///
-/// One case until the app has screens a push can be about: add a case per key
-/// the server sends, and resolve it in `ResolvePushDestinationBehavior`.
+/// Add a case per key a push carries, and resolve it in
+/// `ResolvePushDestinationBehavior`.
 @freezed
 sealed class PushDestination with _$PushDestination {
+  /// A daily reminder, by its message's id: the daily run's card.
+  const factory PushDestination.dailyRun({required String messageId}) =
+      DailyRunPushDestination;
+
   const factory PushDestination.home() = HomePushDestination;
 }

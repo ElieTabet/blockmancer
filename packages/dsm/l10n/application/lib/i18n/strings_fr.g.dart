@@ -350,10 +350,9 @@ class _Translations$push$reminder$fr extends Translations$push$reminder$en {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'La partie du jour est prête';
-	@override String get body => 'Les mêmes pièces pour tout le monde. Garde ta série !';
 	@override String get channelName => 'Rappel de la partie du jour';
 	@override String get channelDescription => 'Un rappel quand la partie du jour est prête.';
+	@override late final _Translations$push$reminder$messages$fr messages = _Translations$push$reminder$messages$fr._(_root);
 }
 
 // Path: home.complete
@@ -953,6 +952,26 @@ class _Translations$game$jokers$prism$fr extends Translations$game$jokers$prism$
 	@override String get short => 'Prisme';
 }
 
+// Path: push.reminder.messages
+class _Translations$push$reminder$messages$fr extends Translations$push$reminder$messages$en {
+	_Translations$push$reminder$messages$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override late final _Translations$push$reminder$messages$streakCount$fr streakCount = _Translations$push$reminder$messages$streakCount$fr._(_root);
+	@override late final _Translations$push$reminder$messages$streakFire$fr streakFire = _Translations$push$reminder$messages$streakFire$fr._(_root);
+	@override late final _Translations$push$reminder$messages$boardReady$fr boardReady = _Translations$push$reminder$messages$boardReady$fr._(_root);
+	@override late final _Translations$push$reminder$messages$newDaily$fr newDaily = _Translations$push$reminder$messages$newDaily$fr._(_root);
+	@override late final _Translations$push$reminder$messages$jokersRestless$fr jokersRestless = _Translations$push$reminder$messages$jokersRestless$fr._(_root);
+	@override late final _Translations$push$reminder$messages$comboTime$fr comboTime = _Translations$push$reminder$messages$comboTime$fr._(_root);
+	@override late final _Translations$push$reminder$messages$fiveMinutes$fr fiveMinutes = _Translations$push$reminder$messages$fiveMinutes$fr._(_root);
+	@override late final _Translations$push$reminder$messages$beatYesterday$fr beatYesterday = _Translations$push$reminder$messages$beatYesterday$fr._(_root);
+	@override late final _Translations$push$reminder$messages$boardReset$fr boardReset = _Translations$push$reminder$messages$boardReset$fr._(_root);
+	@override late final _Translations$push$reminder$messages$blocksFalling$fr blocksFalling = _Translations$push$reminder$messages$blocksFalling$fr._(_root);
+	@override late final _Translations$push$reminder$messages$comeback$fr comeback = _Translations$push$reminder$messages$comeback$fr._(_root);
+}
+
 // Path: home.sheet.bossRule
 class _Translations$home$sheet$bossRule$fr extends Translations$home$sheet$bossRule$en {
 	_Translations$home$sheet$bossRule$fr._(TranslationsFr root) : this._root = root, super.internal(root);
@@ -993,6 +1012,127 @@ class _Translations$home$spellbook$tiers$fr extends Translations$home$spellbook$
 	@override String get bronze => 'Bronze';
 	@override String get silver => 'Argent';
 	@override String get gold => 'Or';
+}
+
+// Path: push.reminder.messages.streakCount
+class _Translations$push$reminder$messages$streakCount$fr extends Translations$push$reminder$messages$streakCount$en {
+	_Translations$push$reminder$messages$streakCount$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String title({required Object n}) => '🔥 Série de ${n} jours !';
+	@override String get body => 'Ne la brise pas maintenant : la partie du jour t\'attend.';
+}
+
+// Path: push.reminder.messages.streakFire
+class _Translations$push$reminder$messages$streakFire$fr extends Translations$push$reminder$messages$streakFire$en {
+	_Translations$push$reminder$messages$streakFire$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '🔥 Garde la flamme';
+	@override String body({required Object n}) => 'Jour ${n} de ta série. Une partie suffit pour la garder.';
+}
+
+// Path: push.reminder.messages.boardReady
+class _Translations$push$reminder$messages$boardReady$fr extends Translations$push$reminder$messages$boardReady$en {
+	_Translations$push$reminder$messages$boardReady$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '🧩 Le plateau du jour est prêt';
+	@override String get body => 'Le même pour tout le monde. Jusqu\'où iras-tu ?';
+}
+
+// Path: push.reminder.messages.newDaily
+class _Translations$push$reminder$messages$newDaily$fr extends Translations$push$reminder$messages$newDaily$en {
+	_Translations$push$reminder$messages$newDaily$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '🏆 Nouvelle partie du jour';
+	@override String get body => 'Nouvelles pièces, nouveau classement. Vise la première place.';
+}
+
+// Path: push.reminder.messages.jokersRestless
+class _Translations$push$reminder$messages$jokersRestless$fr extends Translations$push$reminder$messages$jokersRestless$en {
+	_Translations$push$reminder$messages$jokersRestless$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '🃏 Tes jokers s\'impatientent';
+	@override String get body => 'Trouve une paire, enchaîne les combos, bats le score du jour.';
+}
+
+// Path: push.reminder.messages.comboTime
+class _Translations$push$reminder$messages$comboTime$fr extends Translations$push$reminder$messages$comboTime$en {
+	_Translations$push$reminder$messages$comboTime$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '💥 C\'est l\'heure des combos';
+	@override String get body => 'Vide deux lignes d\'un coup et regarde le mult grimper.';
+}
+
+// Path: push.reminder.messages.fiveMinutes
+class _Translations$push$reminder$messages$fiveMinutes$fr extends Translations$push$reminder$messages$fiveMinutes$en {
+	_Translations$push$reminder$messages$fiveMinutes$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '⚡ 5 minutes, une partie';
+	@override String get body => 'La partie du jour tient dans une pause café.';
+}
+
+// Path: push.reminder.messages.beatYesterday
+class _Translations$push$reminder$messages$beatYesterday$fr extends Translations$push$reminder$messages$beatYesterday$en {
+	_Translations$push$reminder$messages$beatYesterday$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '🎯 Fais mieux qu\'hier';
+	@override String get body => 'Nouvelle graine, nouvelle chance de battre ton record.';
+}
+
+// Path: push.reminder.messages.boardReset
+class _Translations$push$reminder$messages$boardReset$fr extends Translations$push$reminder$messages$boardReset$en {
+	_Translations$push$reminder$messages$boardReset$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '✨ Le plateau du jour vient de changer';
+	@override String get body => 'Tout le monde repart de zéro. Prends de l\'avance.';
+}
+
+// Path: push.reminder.messages.blocksFalling
+class _Translations$push$reminder$messages$blocksFalling$fr extends Translations$push$reminder$messages$blocksFalling$en {
+	_Translations$push$reminder$messages$blocksFalling$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '🧱 Les blocs se mettent en place';
+	@override String get body => 'La partie du jour est lancée. Montre l\'exemple.';
+}
+
+// Path: push.reminder.messages.comeback
+class _Translations$push$reminder$messages$comeback$fr extends Translations$push$reminder$messages$comeback$en {
+	_Translations$push$reminder$messages$comeback$fr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '👋 On t\'a gardé une place';
+	@override String get body => 'Une nouvelle partie du jour t\'attend, tes jokers s\'ennuient.';
 }
 
 /// The flat map containing all translations for locale <fr>.
@@ -1173,10 +1313,30 @@ extension on TranslationsFr {
 			'game.jokers.prism.short' => 'Prisme',
 			'push.channelName' => 'Annonces',
 			'push.channelDescription' => 'Les nouveautés et messages de l\'application.',
-			'push.reminder.title' => 'La partie du jour est prête',
-			'push.reminder.body' => 'Les mêmes pièces pour tout le monde. Garde ta série !',
 			'push.reminder.channelName' => 'Rappel de la partie du jour',
 			'push.reminder.channelDescription' => 'Un rappel quand la partie du jour est prête.',
+			'push.reminder.messages.streakCount.title' => ({required Object n}) => '🔥 Série de ${n} jours !',
+			'push.reminder.messages.streakCount.body' => 'Ne la brise pas maintenant : la partie du jour t\'attend.',
+			'push.reminder.messages.streakFire.title' => '🔥 Garde la flamme',
+			'push.reminder.messages.streakFire.body' => ({required Object n}) => 'Jour ${n} de ta série. Une partie suffit pour la garder.',
+			'push.reminder.messages.boardReady.title' => '🧩 Le plateau du jour est prêt',
+			'push.reminder.messages.boardReady.body' => 'Le même pour tout le monde. Jusqu\'où iras-tu ?',
+			'push.reminder.messages.newDaily.title' => '🏆 Nouvelle partie du jour',
+			'push.reminder.messages.newDaily.body' => 'Nouvelles pièces, nouveau classement. Vise la première place.',
+			'push.reminder.messages.jokersRestless.title' => '🃏 Tes jokers s\'impatientent',
+			'push.reminder.messages.jokersRestless.body' => 'Trouve une paire, enchaîne les combos, bats le score du jour.',
+			'push.reminder.messages.comboTime.title' => '💥 C\'est l\'heure des combos',
+			'push.reminder.messages.comboTime.body' => 'Vide deux lignes d\'un coup et regarde le mult grimper.',
+			'push.reminder.messages.fiveMinutes.title' => '⚡ 5 minutes, une partie',
+			'push.reminder.messages.fiveMinutes.body' => 'La partie du jour tient dans une pause café.',
+			'push.reminder.messages.beatYesterday.title' => '🎯 Fais mieux qu\'hier',
+			'push.reminder.messages.beatYesterday.body' => 'Nouvelle graine, nouvelle chance de battre ton record.',
+			'push.reminder.messages.boardReset.title' => '✨ Le plateau du jour vient de changer',
+			'push.reminder.messages.boardReset.body' => 'Tout le monde repart de zéro. Prends de l\'avance.',
+			'push.reminder.messages.blocksFalling.title' => '🧱 Les blocs se mettent en place',
+			'push.reminder.messages.blocksFalling.body' => 'La partie du jour est lancée. Montre l\'exemple.',
+			'push.reminder.messages.comeback.title' => '👋 On t\'a gardé une place',
+			'push.reminder.messages.comeback.body' => 'Une nouvelle partie du jour t\'attend, tes jokers s\'ennuient.',
 			'home.complete.title' => 'Tous les mondes terminés',
 			'home.complete.body' => ({required Object count}) => 'Tous les boss sont battus : les ${count} mondes sont à toi.',
 			'home.complete.stars' => ({required Object stars, required Object max}) => '${stars} étoiles sur ${max}',

@@ -39,6 +39,11 @@ void main() {
     });
     expectMapped(const .adRewardEarned(), 'ad_reward_earned', {});
     expectMapped(
+      const .notificationOpened(messageId: 'combo_time'),
+      'notification_opened',
+      {'message_id': 'combo_time'},
+    );
+    expectMapped(
       const .purchaseStarted(product: 'remove_ads'),
       'purchase_started',
       {'product': 'remove_ads'},

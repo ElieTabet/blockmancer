@@ -43,4 +43,26 @@ void main() {
       3,
     );
   });
+
+  test("Given today's daily run played, When tomorrow's standing is read, "
+      'Then tomorrow is unplayed and the streak still stands', () {
+    expect(
+      dailyStandingOf(
+        day: DateTime.utc(2026, 10, 19, 17),
+        days: {20261017, 20261018},
+      ),
+      (played: false, streak: 2),
+    );
+  });
+
+  test('Given a reminder at 18:00 in Los Angeles, When its standing is read, '
+      'Then it counts on the UTC day it fires on, the next one', () {
+    expect(
+      dailyStandingOf(
+        day: DateTime.utc(2026, 10, 19, 1),
+        days: {20261018, 20261019},
+      ),
+      (played: true, streak: 2),
+    );
+  });
 }

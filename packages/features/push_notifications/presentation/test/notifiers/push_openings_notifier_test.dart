@@ -7,11 +7,22 @@ import 'package:push_notifications_domain/push_notifications_domain.dart'
 import 'package:push_notifications_domain/push_notifications_domain.dart'
     show PushDestination, pushDestinationsProvider;
 import 'package:push_notifications_presentation/push_notifications_presentation.dart';
+import 'package:shared_domain/shared_domain.dart';
+
+final class _NoAnalytics implements AnalyticsSink {
+  const _NoAnalytics();
+
+  @override
+  void log(AnalyticsEvent event) {}
+}
 
 final class _RecordingRouting implements PushNotificationsRouting {
   final List<String> calls;
 
   _RecordingRouting(this.calls);
+
+  @override
+  void onDailyRunOpened() => calls.add('daily run');
 
   @override
   void onHomeOpened() => calls.add('home');
@@ -35,6 +46,10 @@ void main() {
   }) async {
     final container = ProviderContainer(
       overrides: [
+        push_notifications_domain.trackNotificationOpenedProvider.overrideWith(
+          (ref) =>
+              (messageId) => calls.add('opened $messageId'),
+        ),
         pushDestinationsProvider.overrideWith(
           (ref) => () {
             listens++;
@@ -103,6 +118,14 @@ void main() {
     expect(calls.last, 'home');
   });
 
+  test('a tapped daily reminder is counted by its message, then opens the '
+      'daily run', () async {
+    await initialize();
+    await tap(const PushDestination.dailyRun(messageId: 'combo_time'));
+
+    expect(calls.sublist(calls.length - 2), ['opened combo_time', 'daily run']);
+  });
+
   // The launch push is read once per launch, so a second listener would be
   // a second read — and every later tap opened twice.
   test('initializing twice still listens once', () async {
@@ -128,26 +151,32 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         ...push_notifications_domain.bindProviders(
+          analyticsSink: (ref) => const _NoAnalytics(),
           cancelDailyReminder: (ref) => () async {},
-          currentTimeZone: (ref) =>
-              () async => 'UTC',
           dailyReminderEnabled: (ref) async => false,
+          dailyStanding: (ref) =>
+              (day) async => (played: false, streak: 0),
+          displayLanguage: (ref) => Stream.value('en'),
           hasPlayedDaily: (ref) =>
               () async => false,
           launchMessage: (ref) =>
               () =>
                   Future.delayed(const Duration(milliseconds: 50), () => null),
+          now: (ref) => DateTime.now,
           openedMessages: (ref) =>
               () => ref.watch(messages),
           pushTokenChanges: (ref) =>
               () => const Stream.empty(),
           readPushToken: (ref) =>
               () async => null,
+          reminderLogStore: (ref) => throw UnimplementedError(),
+          reminderTexts: (ref) => reminderMessageTexts,
+          reminderTimes: (ref) =>
+              ({required days, required hour, required minute}) async => [],
+          replaceReminders: (ref) => (reminders) async {},
           reportPushToken: (ref) => (token) async {},
           requestPushPermission: (ref) =>
               () async => true,
-          scheduleDailyReminder: (ref) =>
-              ({required hour, required minute}) async {},
         ),
         ...bindProviders(
           initializeMessaging: (ref) =>

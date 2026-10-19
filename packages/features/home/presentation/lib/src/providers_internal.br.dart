@@ -25,6 +25,15 @@ const _noStars = WorldStars(
   scoreThreshold: false,
 );
 
+/// Each request to bring the daily run's card into view, counted.
+@Riverpod(keepAlive: true)
+class DailyCardReveals extends _$DailyCardReveals {
+  @override
+  int build() => 0;
+
+  void request() => state++;
+}
+
 /// The furthest playable world open to the player, where the map says "you
 /// are here"; null until the progression is read.
 @riverpod

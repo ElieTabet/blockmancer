@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:home_presentation/home_presentation.dart';
+import 'package:home_presentation/src/widgets/home_widget.dart';
 
 import '../pump_home.dart';
 
@@ -117,5 +121,34 @@ void main() {
 
     // Then
     expect(routing.calls, ['settings']);
+  });
+
+  testWidgets('Given Home scrolled down the map, When a daily reminder is '
+      'tapped, Then Home scrolls back to the daily run', (tester) async {
+    // Given
+    // A phone's height, so the map runs below the fold
+    await pumpHome(tester, viewSize: const Size(390, 700));
+    ScrollPosition position() => tester
+        .state<ScrollableState>(
+          find
+              .descendant(
+                of: find.byType(SingleChildScrollView),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+        )
+        .position;
+    position().jumpTo(position().maxScrollExtent);
+    await tester.pump();
+    expect(position().pixels, greaterThan(0));
+
+    // When
+    ProviderScope.containerOf(
+      tester.element(find.byType(HomeWidget)),
+    ).read(revealDailyCardProvider)();
+    await tester.pumpAndSettle();
+
+    // Then
+    expect(position().pixels, 0);
   });
 }

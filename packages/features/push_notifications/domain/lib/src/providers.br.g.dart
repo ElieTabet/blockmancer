@@ -238,3 +238,51 @@ final class StartPushTokenSyncProvider
 
 String _$startPushTokenSyncHash() =>
     r'fc6edc52a175c19789bd0babae8a886e5704ecad';
+
+@ProviderFor(trackNotificationOpened)
+final trackNotificationOpenedProvider = TrackNotificationOpenedProvider._();
+
+final class TrackNotificationOpenedProvider
+    extends
+        $FunctionalProvider<
+          TrackNotificationOpenedFun,
+          TrackNotificationOpenedFun,
+          TrackNotificationOpenedFun
+        >
+    with $Provider<TrackNotificationOpenedFun> {
+  TrackNotificationOpenedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trackNotificationOpenedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$trackNotificationOpenedHash();
+
+  @$internal
+  @override
+  $ProviderElement<TrackNotificationOpenedFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  TrackNotificationOpenedFun create(Ref ref) {
+    return trackNotificationOpened(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TrackNotificationOpenedFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TrackNotificationOpenedFun>(value),
+    );
+  }
+}
+
+String _$trackNotificationOpenedHash() =>
+    r'865afa35a6fd2076c38844848e3c29dba7ab047c';

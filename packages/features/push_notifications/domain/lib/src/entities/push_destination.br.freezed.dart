@@ -55,10 +55,11 @@ extension PushDestinationPatterns on PushDestination {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( HomePushDestination value)?  home,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DailyRunPushDestination value)?  dailyRun,TResult Function( HomePushDestination value)?  home,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case HomePushDestination() when home != null:
+case DailyRunPushDestination() when dailyRun != null:
+return dailyRun(_that);case HomePushDestination() when home != null:
 return home(_that);case _:
   return orElse();
 
@@ -77,10 +78,11 @@ return home(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( HomePushDestination value)  home,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DailyRunPushDestination value)  dailyRun,required TResult Function( HomePushDestination value)  home,}){
 final _that = this;
 switch (_that) {
-case HomePushDestination():
+case DailyRunPushDestination():
+return dailyRun(_that);case HomePushDestination():
 return home(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -95,10 +97,11 @@ return home(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( HomePushDestination value)?  home,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DailyRunPushDestination value)?  dailyRun,TResult? Function( HomePushDestination value)?  home,}){
 final _that = this;
 switch (_that) {
-case HomePushDestination() when home != null:
+case DailyRunPushDestination() when dailyRun != null:
+return dailyRun(_that);case HomePushDestination() when home != null:
 return home(_that);case _:
   return null;
 
@@ -116,9 +119,10 @@ return home(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  home,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String messageId)?  dailyRun,TResult Function()?  home,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case HomePushDestination() when home != null:
+case DailyRunPushDestination() when dailyRun != null:
+return dailyRun(_that.messageId);case HomePushDestination() when home != null:
 return home();case _:
   return orElse();
 
@@ -137,9 +141,10 @@ return home();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  home,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String messageId)  dailyRun,required TResult Function()  home,}) {final _that = this;
 switch (_that) {
-case HomePushDestination():
+case DailyRunPushDestination():
+return dailyRun(_that.messageId);case HomePushDestination():
 return home();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -154,14 +159,81 @@ return home();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  home,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String messageId)?  dailyRun,TResult? Function()?  home,}) {final _that = this;
 switch (_that) {
-case HomePushDestination() when home != null:
+case DailyRunPushDestination() when dailyRun != null:
+return dailyRun(_that.messageId);case HomePushDestination() when home != null:
 return home();case _:
   return null;
 
 }
 }
+
+}
+
+/// @nodoc
+
+
+class DailyRunPushDestination implements PushDestination {
+  const DailyRunPushDestination({required this.messageId});
+  
+
+ final  String messageId;
+
+/// Create a copy of PushDestination
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DailyRunPushDestinationCopyWith<DailyRunPushDestination> get copyWith => _$DailyRunPushDestinationCopyWithImpl<DailyRunPushDestination>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DailyRunPushDestination&&(identical(other.messageId, messageId) || other.messageId == messageId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,messageId);
+
+@override
+String toString() {
+  return 'PushDestination.dailyRun(messageId: $messageId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DailyRunPushDestinationCopyWith<$Res> implements $PushDestinationCopyWith<$Res> {
+  factory $DailyRunPushDestinationCopyWith(DailyRunPushDestination value, $Res Function(DailyRunPushDestination) _then) = _$DailyRunPushDestinationCopyWithImpl;
+@useResult
+$Res call({
+ String messageId
+});
+
+
+
+
+}
+/// @nodoc
+class _$DailyRunPushDestinationCopyWithImpl<$Res>
+    implements $DailyRunPushDestinationCopyWith<$Res> {
+  _$DailyRunPushDestinationCopyWithImpl(this._self, this._then);
+
+  final DailyRunPushDestination _self;
+  final $Res Function(DailyRunPushDestination) _then;
+
+/// Create a copy of PushDestination
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? messageId = null,}) {
+  return _then(DailyRunPushDestination(
+messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
 
 }
 

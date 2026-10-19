@@ -267,10 +267,54 @@
     "channelName": "Announcements",
     "channelDescription": "News and messages from the app.",
     "reminder": {
-      "title": "Today's daily run is ready",
-      "body": "Same pieces for everyone. Keep your streak going!",
       "channelName": "Daily run reminder",
-      "channelDescription": "A reminder when today's daily run is ready."
+      "channelDescription": "A reminder when today's daily run is ready.",
+      "messages": {
+        "streakCount": {
+          "title": "🔥 ${n}-day streak!",
+          "body": "Don't break it now — today's run is waiting."
+        },
+        "streakFire": {
+          "title": "🔥 Keep the fire going",
+          "body": "Day $n of your streak. One run keeps it alive."
+        },
+        "boardReady": {
+          "title": "🧩 Today's board is ready",
+          "body": "Same seed for everyone. How far can you go?"
+        },
+        "newDaily": {
+          "title": "🏆 New daily run",
+          "body": "Fresh pieces, fresh leaderboard. Claim the top spot."
+        },
+        "jokersRestless": {
+          "title": "🃏 Your jokers are restless",
+          "body": "Find a pair, chain the combos, beat today's score."
+        },
+        "comboTime": {
+          "title": "💥 Combo time",
+          "body": "Clear two lines at once and watch that mult climb."
+        },
+        "fiveMinutes": {
+          "title": "⚡ 5 minutes, one run",
+          "body": "Today's daily run fits in a coffee break."
+        },
+        "beatYesterday": {
+          "title": "🎯 Beat yesterday's you",
+          "body": "A new seed, a new chance at your best score."
+        },
+        "boardReset": {
+          "title": "✨ The daily board just reset",
+          "body": "Everyone starts from zero. Get there first."
+        },
+        "blocksFalling": {
+          "title": "🧱 Blocks are falling into place",
+          "body": "Today's run is live. Show them how it's done."
+        },
+        "comeback": {
+          "title": "👋 We saved your spot",
+          "body": "A new daily run is waiting — your jokers missed you."
+        }
+      }
     }
   },
   "home": {

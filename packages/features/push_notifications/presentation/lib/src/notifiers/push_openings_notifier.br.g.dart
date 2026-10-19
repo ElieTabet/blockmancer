@@ -63,7 +63,7 @@ final class PushOpeningsNotifierProvider
 }
 
 String _$pushOpeningsNotifierHash() =>
-    r'50e8f76090f6407a81db45121a9c2362222881d0';
+    r'b57df879bd15c656e2ba5ef118e9e6a81d16bef3';
 
 /// Opens what each tapped push is about, for as long as the app runs.
 ///

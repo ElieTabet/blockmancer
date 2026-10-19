@@ -23,10 +23,30 @@ void main() {
       deepLink: [const TabShellRoute(), const DeepRoute()],
     );
 
-    PushNotificationsRoutingImpl(router).onHomeOpened();
+    PushNotificationsRoutingImpl(router, revealDailyCard: () {}).onHomeOpened();
     await tester.pumpAndSettle();
 
     expect(rootStackNames(router), [TabShellRoute.name]);
+    expect(activeTab(router), HomeRoute.name);
+  });
+
+  testWidgets('a daily reminder lands on Home, then brings its daily card '
+      'into view', (tester) async {
+    final router = await pumpAppRouter(
+      tester,
+      deepLink: [const TabShellRoute(), const DeepRoute()],
+    );
+    final revealed = <List<String>>[];
+
+    PushNotificationsRoutingImpl(
+      router,
+      revealDailyCard: () => revealed.add(rootStackNames(router)),
+    ).onDailyRunOpened();
+    await tester.pumpAndSettle();
+
+    expect(revealed, [
+      [TabShellRoute.name],
+    ]);
     expect(activeTab(router), HomeRoute.name);
   });
 
@@ -35,7 +55,7 @@ void main() {
   testWidgets('waits for the splash to hand off', (tester) async {
     final router = await pumpAppRouter(tester, deepLink: [const SplashRoute()]);
 
-    PushNotificationsRoutingImpl(router).onHomeOpened();
+    PushNotificationsRoutingImpl(router, revealDailyCard: () {}).onHomeOpened();
     await tester.pump();
 
     expect(rootStackNames(router), [SplashRoute.name]);

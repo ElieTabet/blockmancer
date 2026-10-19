@@ -670,6 +670,60 @@ final class DailyStreakProvider
 
 String _$dailyStreakHash() => r'6d51bb362b918ad06353d51e42b35ac773010dac';
 
+/// See [dailyStandingOf], read fresh each time: the daily reminders ask it
+/// about the days ahead.
+
+@ProviderFor(dailyStanding)
+final dailyStandingProvider = DailyStandingProvider._();
+
+/// See [dailyStandingOf], read fresh each time: the daily reminders ask it
+/// about the days ahead.
+
+final class DailyStandingProvider
+    extends
+        $FunctionalProvider<
+          DailyStandingFun,
+          DailyStandingFun,
+          DailyStandingFun
+        >
+    with $Provider<DailyStandingFun> {
+  /// See [dailyStandingOf], read fresh each time: the daily reminders ask it
+  /// about the days ahead.
+  DailyStandingProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyStandingProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyStandingHash();
+
+  @$internal
+  @override
+  $ProviderElement<DailyStandingFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DailyStandingFun create(Ref ref) {
+    return dailyStanding(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DailyStandingFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DailyStandingFun>(value),
+    );
+  }
+}
+
+String _$dailyStandingHash() => r'48055eb740acc59f59965e3dfbcf81f97741b3a0';
+
 /// Whether a daily run was ever played to its end on this device, read fresh
 /// each time.
 

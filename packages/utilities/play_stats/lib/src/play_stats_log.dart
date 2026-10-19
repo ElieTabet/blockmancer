@@ -55,10 +55,12 @@ final class DayStats {
   );
 
   DayStats withEvent(AnalyticsEvent event) => switch (event) {
-    // The testers' log counts play; ads and purchases are Firebase's to count.
+    // The testers' log counts play; ads, purchases and reminders are
+    // Firebase's to count.
     AdFailedEvent() ||
     AdRewardEarnedEvent() ||
     AdShownEvent() ||
+    NotificationOpenedEvent() ||
     PurchaseCompletedEvent() ||
     PurchaseFailedEvent() ||
     PurchaseRestoredEvent() ||

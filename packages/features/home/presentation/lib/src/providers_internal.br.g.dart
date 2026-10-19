@@ -8,6 +8,64 @@ part of 'providers_internal.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Each request to bring the daily run's card into view, counted.
+
+@ProviderFor(DailyCardReveals)
+final dailyCardRevealsProvider = DailyCardRevealsProvider._();
+
+/// Each request to bring the daily run's card into view, counted.
+final class DailyCardRevealsProvider
+    extends $NotifierProvider<DailyCardReveals, int> {
+  /// Each request to bring the daily run's card into view, counted.
+  DailyCardRevealsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dailyCardRevealsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dailyCardRevealsHash();
+
+  @$internal
+  @override
+  DailyCardReveals create() => DailyCardReveals();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$dailyCardRevealsHash() => r'cbe45305d86807fe344a1cbd523700deebfbd928';
+
+/// Each request to bring the daily run's card into view, counted.
+
+abstract class _$DailyCardReveals extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<int, int>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
 /// The furthest playable world open to the player, where the map says "you
 /// are here"; null until the progression is read.
 

@@ -32,6 +32,11 @@ sealed class AnalyticsEvent with _$AnalyticsEvent {
     required List<JokerId> offered,
   }) = JokerPickEvent;
 
+  /// A daily reminder tapped; [messageId] names its message, the same in
+  /// every language.
+  const factory AnalyticsEvent.notificationOpened({required String messageId}) =
+      NotificationOpenedEvent;
+
   /// Buying [product] reached the player's purchase: owned from now on.
   const factory AnalyticsEvent.purchaseCompleted({required String product}) =
       PurchaseCompletedEvent;

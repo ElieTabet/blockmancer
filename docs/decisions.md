@@ -558,3 +558,33 @@ Three changes from the review of this file, each its own commit.
   assets package, folder already declared) replaces a joker's glyph with no code change.
 - **The gold shine** sweeps a soft band across the card every few seconds; under the phone's or
   the app's reduce motion it is a still highlight.
+
+## Varied daily reminders
+
+- **A week, planned on every open:** one-shot notifications for today (if 18:00 is still ahead)
+  and the next 7 days, cancelled and planned again at every start and return to the app, on the
+  Settings switch, on a change of language, and at a daily run's end. The days are counted from
+  that open, so "days without opening the app" needs no stored date.
+- **The back-off:** days 0–3 every day, then days 5 and 7, then nothing until the next open: at
+  most 6 pending (iOS allows 64).
+- **The comeback message** goes on day 5, the first reminder of the back-off (asked and chosen).
+- **"Today already played"** is the UTC day the reminder fires on, the one the daily run is keyed
+  by. In Paris that is today; in Los Angeles 18:00 is already the next UTC day, whose run is a new
+  one, so that reminder still goes out.
+- **Streak messages** go to a reminder whose UTC day would still hold a streak of 2 or more were
+  nothing more played: today's before playing, tomorrow's after. `{n}` is that streak.
+- **No repeat of the last 3:** with only two streak messages (and one comeback), a pool with
+  nothing left draws a general message instead, so streak days run S1, S2, general, S1, … rather
+  than ever repeat one within three.
+- **What counts as shown:** the previous plan's reminders whose time has passed when the next is
+  made; those still ahead were cancelled unseen. The plan and the last 3 shown are kept on the
+  device (`push_notifications_data`, `reminder.log`). A phone that refused notifications still
+  "shows" them, which only varies what it never sees.
+- **The seed** is the reminder's UTC day (`yyyymmdd`), so replanning the same week with the same
+  history gives the same messages.
+- **French in "tu"**, as the rest of the game (asked and chosen); the English is as given.
+- **A tap** opens Home scrolled back to its top, the daily card in view; it doesn't start the run.
+  `notification_opened(message_id)` is logged with the message's id, the same in both languages.
+- **Notification ids:** reminders take 1 (the old repeating one, cancelled on update) and 100–107;
+  the foreground pushes Android draws moved to 1000 up so cancelling a reminder never takes one
+  down.

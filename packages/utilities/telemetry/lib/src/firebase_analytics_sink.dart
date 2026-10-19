@@ -52,6 +52,10 @@ final class FirebaseAnalyticsSink implements AnalyticsSink {
           'offered': offered.map((joker) => joker.name).join(','),
         },
       ),
+      NotificationOpenedEvent(:final messageId) => (
+        'notification_opened',
+        {'message_id': messageId},
+      ),
       PurchaseCompletedEvent(:final product) => (
         'purchase_completed',
         {'product': product},

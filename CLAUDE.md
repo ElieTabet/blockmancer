@@ -47,7 +47,7 @@ blockmancer/
 │       ├── app_update/{domain,data,presentation}/ # app_update_* — whether this version must or may be updated (Remote Config's minimum and latest versions, pub_semver), the banner closed per version on the device, and the blocking update screen
 │       ├── game/{domain,data,presentation}/      # game_* — the run's mode, seed, best scores and saved run (domain), kept on the device with its clock (data), and the board, tray and joker picks, pushed over the shell (presentation); rules injected via GameRules
 │       ├── home/presentation/                    # home_presentation — the first tab: the world map under today's Daily run, Practice and the Spellbook in the header (worlds, jokers, progression and bests read through slots)
-│       ├── push_notifications/{domain,presentation}/ # push_notifications_* — the permission ask, token sync, where a tapped push leads, and when the daily reminder is set (no screens)
+│       ├── push_notifications/{domain,data,presentation}/ # push_notifications_* — the permission ask, token sync, where a tapped push leads, and the week of daily reminders: planned (domain), their log on the device (data), their words (presentation); no screens
 │       ├── shop/{domain,data}/                  # shop_* — the Remove ads purchase: bought, restored, kept on the device and re-checked with the store at launch (no screens: Settings shows its rows through slots)
 │       ├── settings/{domain,data,presentation}/  # settings_* — sound, haptics, reduce motion, language and the tutorial flag (domain), on the device (data), and the Settings screen, pushed over the shell from Home's gear (presentation); resetting progress goes through a slot
 │       └── splash/presentation/                  # splash_presentation — app entry: the branded wait, then the hand-off
@@ -163,7 +163,7 @@ Examples:
 
 - **Monorepo:** Dart Pub Workspace — each package has `resolution: workspace`; root `pubspec.yaml` discovers members via globs under `workspace:` (`app`, `packages/*`, `packages/dsm/*`, `packages/dsm/l10n/*`, `packages/composition/*`, `packages/plugins/*`, `packages/utilities/*`, `packages/utilities/**/*`, `packages/features/**/*`). New packages are picked up automatically — no manual registration. The two utilities globs coexist because most utilities are flat (`push`, `telemetry`) while a layer-split one (`webviews/{domain,presentation}`) sits a level deeper; `**/*` needs two segments, so it matches only the deeper ones and the flat glob's hit on the bare `webviews/` directory is ignored, exactly as `packages/dsm/*` already ignores `l10n/`.
 - **Dependency overrides:** the root `pubspec.yaml` pins `analyzer: 10.2.0` (plus `dart_style: 3.1.7`, `riverpod_analyzer_utils: 1.0.0-dev.10`) via `dependency_overrides` so the `custom_lints` analyzer-plugin can coexist with `riverpod_generator`'s conservative `analyzer ^9.0.0` cap. Mirrors flutter-front.
-- **Feature layering:** each feature is split into layer packages `<feature>_domain`, `<feature>_data`, `<feature>_presentation` under `packages/features/<feature>/`. Layer boundaries are enforced at compile time by each package's declared deps. Layers a feature doesn't need are simply absent — `push_notifications` has no `_data`.
+- **Feature layering:** each feature is split into layer packages `<feature>_domain`, `<feature>_data`, `<feature>_presentation` under `packages/features/<feature>/`. Layer boundaries are enforced at compile time by each package's declared deps. Layers a feature doesn't need are simply absent — `home` has only `_presentation`.
 - **Composition layer:** `packages/composition/` holds the composition root — `app_router` (app root router `AppRouter` aggregating feature routes, plus the concrete `<Feature>RoutingImpl` classes and `routingOverrides()`) and `app_providers` (`appOverrides()` aggregating the routing binds for the app's root container). The composition packages import the feature packages; the `app` depends only on composition, so it imports no feature package. Dependency direction: `app → composition → features`.
 - **Package internals:** the public API of every package is its barrel `lib/<pkg>.dart`; all implementation lives under `lib/src/`. Each package carries `lib/src/package_name.dart` (`const packageName = '<pkg>';`). Providers follow [providers](.claude/rules/providers.md): `providers.br.dart` holds this package's own `@riverpod` providers **and** its `bindProviders(...)` helper, `providers_di.br.dart` holds inbound slots that throw until overridden, and `providers_internal.br.dart` holds layer-internal ones. Never both `providers.br.dart` and `providers.dart` in one package.
 - **Melos v7+:** Scripts defined in `pubspec.yaml` under `melos:` key — no separate `melos.yaml` file
@@ -893,6 +893,8 @@ whatever a test build counted on the phone at launch (`discardTestStatsOutsideTe
   `trackRevive`, since only it knows whether an ad or Remove ads paid for it — and
   `runEndEventsOf` a run's end, once
   `recordProgression` answers: `run_end(total, won, stars_earned)` and `world_unlock(world)`.
+  push_notifications logs `notification_opened(message_id)` when a daily reminder is tapped
+  (Firebase only, like the ads' and purchases' events).
   `GameNotifier` calls `trackMove` from `_apply` and `trackRunEnd` from `_recordProgress`; the
   tutorial counts nothing.
 - **Where:** `play_stats`' `LocalPlayStats` (one for the app's life, `app_providers`'
@@ -922,9 +924,9 @@ no-op). Three packages share the client side, and only one knows Firebase:
   permission and then reports the token whatever the answer (on a fresh iOS install answering the
   prompt is the first moment a token is readable). `pushTokenSync` (keepAlive) reports each
   refreshed token. `ResolvePushDestinationBehavior` reads where a tap leads. `PushDestination` has
-  one case, `.home()`, until the app has screens a push can be about: add a case per `data` key the
-  server sends, resolve it there, and route it in `PushOpeningsNotifier` — anything unrecognised
-  still opens the app. `push`'s `receivedMessages` (pushes arriving while the app is open) is
+  two cases, `.dailyRun(messageId)` (a daily reminder) and `.home()`: add a case per `data` key
+  the server sends, resolve it there, and route it in `PushOpeningsNotifier` — anything
+  unrecognised still opens the app. `push`'s `receivedMessages` (pushes arriving while the app is open) is
   available for a screen that should catch up on one; nothing listens to it yet.
 - **Who calls what.** The permission is asked when a daily run ends (see Daily reminder), never
   at launch. `PushNotificationsRoutingImpl` (context-free: a tap arrives from the OS, not a widget)
@@ -946,22 +948,39 @@ no-op). Three packages share the client side, and only one knows Firebase:
 
 ## Daily reminder and streak
 
-- **The reminder:** "Today's daily run is ready", every day at 18:00 local time (`reminderTime`),
-  a local notification: `push`'s `DailyReminder` (`LocalDailyReminder`, `zonedSchedule` repeating
-  on the time of day, inexact on Android, its own `daily_reminder` channel), never a push.
-- **Who decides:** push_notifications_domain's `DailyReminderNotifier` (keepAlive; its state is the
-  time zone it scheduled in). It schedules only with Settings' **Daily reminder** on
-  (`dailyReminderEnabled`) and a daily run played to its end (`hasPlayedDaily`, game_domain's,
-  from the daily bests); otherwise it cancels. When a daily run ends, game_domain's
-  `recordRunEnd` calls its `onDailyRunFinished` slot, bound to `dailyRunFinished`: it asks for
-  notifications (the OS prompts once) and schedules, the ask failing or not. `resumed` reschedules
-  when the time zone changed.
-- **Started** by `startDailyReminder` (app_providers) after push's start: it listens to the notifier
-  for the app's life (so the switch takes effect at once) and calls `resumed` on every return to
-  the app. The texts come from push_notifications_presentation's `dailyReminderTexts`, read in
-  the app's language when it schedules.
+- **The reminders:** a week of one-shot local notifications at 18:00 local time
+  (`reminderTime`), each with its own message: `push`'s `DailyReminder` (`LocalDailyReminder`:
+  `upcoming` gives each local day's 18:00 as an instant, `replace` cancels every reminder and
+  `zonedSchedule`s the new ones, ids 100–107 plus the old repeating one's 1, inexact on Android,
+  its own `daily_reminder` channel, the tap's data as the payload), never a push.
+- **Who decides:** push_notifications_domain's `DailyReminderNotifier` (keepAlive; its state is
+  the plan). It plans only with Settings' **Daily reminder** on (`dailyReminderEnabled`) and a
+  daily run played to its end (`hasPlayedDaily`); otherwise it cancels. It plans again on every
+  start and return to the app (`resumed`), on the switch, on a change of the app's language
+  (`displayLanguage`, push_notifications_presentation's `displayLanguages`), and when a daily run
+  ends: game_domain's `recordRunEnd` calls its `onDailyRunFinished` slot, bound to
+  `dailyRunFinished`, which asks for notifications (the OS prompts once) and plans, the ask
+  failing or not. Plans run one after another, never interleaved.
+- **The plan** (`PlanDailyRemindersBehavior`, pure): days 0–3 from this open every day, then days
+  5 and 7, then nothing until the next open; none whose UTC day's daily run is played
+  (`dailyStanding`, game_domain's `dailyStandingOf`); the first past day 3 is the comeback
+  message, a projected streak of 2 or more draws a streak message (naming it), anything else a
+  general one. Each is drawn with a `Random` seeded by its UTC day, never one of the last 3
+  shown or planned before it (a pool with nothing left draws a general one). The previous plan's
+  reminders whose time has passed count as shown; the plan and the last 3 are kept in
+  push_notifications_data's `SharedPreferencesReminderLogStore` (`reminder.log`).
+- **Messages:** `ReminderMessage` (11, in pools `streak`, `general`, `comeback`), each with a
+  stable snake_case `id`; the words are `push.reminder.messages.<message>` (EN/FR, an emoji
+  first), read by push_notifications_presentation's `reminderMessageTexts` in the language the
+  plan is made in. A test keeps every title within 40 characters and every body within 110.
+- **A tap** carries `{type: daily_reminder, message: <id>}`: `ResolvePushDestinationBehavior`
+  makes it `PushDestination.dailyRun`, `PushOpeningsNotifier` logs `notification_opened(message_id)`
+  (`trackNotificationOpened`) and calls `onDailyRunOpened`, which opens Home and calls home's
+  `revealDailyCard`, scrolling it back to the daily card.
+- **Started** by `startDailyReminder` (app_providers) after push's start: it listens to the
+  notifier for the app's life and calls `resumed` on every return to the app.
 - **Android:** `RECEIVE_BOOT_COMPLETED` and flutter_local_notifications' two receivers in the
-  manifest, so it fires and survives a restart; no exact-alarm permission.
+  manifest, so they fire and survive a restart; no exact-alarm permission.
 - **The streak:** game_domain's `dailyStreak` (`dailyStreakOf`): the UTC days in a row, today
   back, with a daily run played to its end (`BestScores.dailyDays`, the profile's daily bests, so
   no migration); today not played yet doesn't break it. The daily card's `DailyStreak` shows it

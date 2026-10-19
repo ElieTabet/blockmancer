@@ -1,9 +1,20 @@
 import 'package:home_presentation/src/providers_di.br.dart' as di;
+import 'package:home_presentation/src/providers_internal.br.dart';
 import 'package:home_presentation/src/routing/home_routing.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_domain/shared_domain.dart';
 
+part 'providers.br.g.dart';
+
 // home_presentation — public providers exposed by this layer.
+
+typedef RevealDailyCardFun = void Function();
+
+/// Scrolls Home back to the daily run's card, if Home is up: where a tapped
+/// daily reminder lands.
+@Riverpod(keepAlive: true)
+RevealDailyCardFun revealDailyCard(Ref ref) =>
+    ref.read(dailyCardRevealsProvider.notifier).request;
 
 List<Override> bindProviders({
   required Future<int?> Function(Ref ref) dailyBest,

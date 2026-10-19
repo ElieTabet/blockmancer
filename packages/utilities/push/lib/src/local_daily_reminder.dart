@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:push/src/daily_reminder.dart';
@@ -6,8 +8,8 @@ import 'package:timber/timber.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
-/// [DailyReminder] over flutter_local_notifications' `zonedSchedule`, repeating
-/// on the time of day. The plugin itself is initialised by
+/// [DailyReminder] over flutter_local_notifications' `zonedSchedule`, each
+/// reminder once. The plugin itself is initialised by
 /// `FirebasePushMessaging.initialize`, at launch, before anything schedules.
 final class LocalDailyReminder implements DailyReminder {
   LocalDailyReminder({FlutterLocalNotificationsPlugin? localNotifications})
@@ -15,7 +17,11 @@ final class LocalDailyReminder implements DailyReminder {
           localNotifications ?? FlutterLocalNotificationsPlugin();
 
   static const _channelId = 'daily_reminder';
-  static const _id = 1;
+  static const _firstId = 100;
+
+  /// The repeating reminder earlier test builds set: cancelled with the rest,
+  /// so an update doesn't leave it repeating.
+  static const _legacyId = 1;
   final FlutterLocalNotificationsPlugin _localNotifications;
 
   /// The time zone database, loaded on first use: it takes a moment.
@@ -24,54 +30,51 @@ final class LocalDailyReminder implements DailyReminder {
   @override
   Future<void> cancel() async {
     try {
-      await _localNotifications.cancel(id: _id);
+      await _localNotifications.cancel(id: _legacyId);
+
+      for (var index = 0; index < DailyReminder.maxReminders; index++) {
+        await _localNotifications.cancel(id: _firstId + index);
+      }
     } catch (error, stackTrace) {
-      _log('Cancelling the daily reminder failed', error, stackTrace);
+      _log('Cancelling the daily reminders failed', error, stackTrace);
     }
   }
 
   @override
-  Future<void> schedule({
-    required String body,
+  Future<void> replace(
+    List<ReminderNotification> reminders, {
     required String channelDescription,
     required String channelName,
-    required int hour,
-    required int minute,
-    required String title,
   }) async {
+    await cancel();
+
     try {
       final zone = tz.getLocation(await timeZone());
-      final now = tz.TZDateTime.now(zone);
-      final today = tz.TZDateTime(
-        zone,
-        now.year,
-        now.month,
-        now.day,
-        hour,
-        minute,
+      final details = NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channelId,
+          channelName,
+          channelDescription: channelDescription,
+        ),
       );
 
-      await _localNotifications.zonedSchedule(
-        id: _id,
-        title: title,
-        body: body,
-        scheduledDate: today.isAfter(now)
-            ? today
-            : today.add(const Duration(days: 1)),
-        notificationDetails: NotificationDetails(
-          android: AndroidNotificationDetails(
-            _channelId,
-            channelName,
-            channelDescription: channelDescription,
-          ),
-        ),
-        // Inexact: a reminder minutes late is fine, and exact alarms need a
-        // permission Play audits.
-        androidScheduleMode: .inexactAllowWhileIdle,
-        matchDateTimeComponents: .time,
-      );
+      for (final (index, reminder)
+          in reminders.take(DailyReminder.maxReminders).indexed) {
+        await _localNotifications.zonedSchedule(
+          id: _firstId + index,
+          title: reminder.title,
+          body: reminder.body,
+          scheduledDate: tz.TZDateTime.from(reminder.at, zone),
+          notificationDetails: details,
+          // Inexact: a reminder minutes late is fine, and exact alarms need a
+          // permission Play audits.
+          androidScheduleMode: .inexactAllowWhileIdle,
+          // The JSON FirebasePushMessaging reads back from a tap.
+          payload: jsonEncode(reminder.data),
+        );
+      }
     } catch (error, stackTrace) {
-      _log('Scheduling the daily reminder failed', error, stackTrace);
+      _log('Scheduling the daily reminders failed', error, stackTrace);
     }
   }
 
@@ -94,6 +97,28 @@ final class LocalDailyReminder implements DailyReminder {
 
       return 'UTC';
     }
+  }
+
+  @override
+  Future<List<DateTime>> upcoming({
+    required int days,
+    required int hour,
+    required int minute,
+  }) async {
+    final zone = tz.getLocation(await timeZone());
+    final now = tz.TZDateTime.now(zone);
+
+    return [
+      for (var day = 0; day <= days; day++)
+        tz.TZDateTime(
+          zone,
+          now.year,
+          now.month,
+          now.day + day,
+          hour,
+          minute,
+        ).toUtc(),
+    ];
   }
 
   static void _log(String message, Object error, StackTrace stackTrace) =>

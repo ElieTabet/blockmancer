@@ -1,5 +1,5 @@
 name: push_notifications_domain
-description: "push_notifications domain layer — asking for notifications, keeping the server's token current, and where a tapped push leads."
+description: "push_notifications domain layer — asking for notifications, keeping the server's token current, where a tapped push leads, and the daily reminders."
 publish_to: none
 resolution: workspace
 
@@ -13,6 +13,7 @@ dependencies:
   timber: any
   riverpod_annotation: ^4.0.2
   freezed_annotation: ^3.1.0
+  shared_domain: any
 
 dev_dependencies:
   flutter_test:

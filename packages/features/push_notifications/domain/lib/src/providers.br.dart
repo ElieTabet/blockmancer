@@ -1,10 +1,12 @@
 import 'package:push_notifications_domain/src/behaviors/ask_for_notifications_behavior.dart';
 import 'package:push_notifications_domain/src/behaviors/sync_push_token_behavior.dart';
 import 'package:push_notifications_domain/src/behaviors/watch_push_destinations_behavior.dart';
+import 'package:push_notifications_domain/src/contracts/reminder_log_store.dart';
 import 'package:push_notifications_domain/src/entities/push_destination.br.dart';
 import 'package:push_notifications_domain/src/package_name.dart';
 import 'package:push_notifications_domain/src/providers_di.br.dart' as di;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_domain/shared_domain.dart';
 import 'package:timber/timber.dart';
 
 part 'providers.br.g.dart';
@@ -18,6 +20,9 @@ typedef AskForNotificationsFun = Future<void> Function();
 typedef PushDestinationsFun = Stream<PushDestination> Function();
 
 typedef StartPushTokenSyncFun = void Function();
+
+/// A daily reminder tapped, by its message's id.
+typedef TrackNotificationOpenedFun = void Function(String messageId);
 
 /// The permission prompt and the token report behind it. See
 /// [AskForNotificationsBehavior] for why they go together, in that order.
@@ -69,30 +74,50 @@ void pushTokenSync(Ref ref) {
 StartPushTokenSyncFun startPushTokenSync(Ref ref) =>
     () => ref.read(pushTokenSyncProvider);
 
-/// Binds this layer's inbound slots: the messaging (composition, pointing at
-/// `push`) and the report (composition, pointing at `device`).
+@riverpod
+TrackNotificationOpenedFun trackNotificationOpened(Ref ref) {
+  final sink = ref.watch(di.analyticsSinkProvider);
+
+  return (messageId) => sink.log(.notificationOpened(messageId: messageId));
+}
+
+/// Binds this layer's inbound slots: the messaging and the reminders
+/// (composition, pointing at `push`), the daily run's record (the game) and
+/// the report.
 List<Override> bindProviders({
+  required AnalyticsSink Function(Ref ref) analyticsSink,
   required di.CancelDailyReminderFun Function(Ref ref) cancelDailyReminder,
-  required di.CurrentTimeZoneFun Function(Ref ref) currentTimeZone,
   required Future<bool> Function(Ref ref) dailyReminderEnabled,
+  required di.DailyStandingFun Function(Ref ref) dailyStanding,
+  required Stream<String> Function(Ref ref) displayLanguage,
   required di.HasPlayedDailyFun Function(Ref ref) hasPlayedDaily,
   required di.LaunchMessageFun Function(Ref ref) launchMessage,
+  required di.NowFun Function(Ref ref) now,
   required di.OpenedMessagesFun Function(Ref ref) openedMessages,
   required di.PushTokenChangesFun Function(Ref ref) pushTokenChanges,
   required di.ReadPushTokenFun Function(Ref ref) readPushToken,
+  required ReminderLogStore Function(Ref ref) reminderLogStore,
+  required di.ReminderTextsFun Function(Ref ref) reminderTexts,
+  required di.ReminderTimesFun Function(Ref ref) reminderTimes,
+  required di.ReplaceRemindersFun Function(Ref ref) replaceReminders,
   required di.ReportPushTokenFun Function(Ref ref) reportPushToken,
   required di.RequestPushPermissionFun Function(Ref ref) requestPushPermission,
-  required di.ScheduleDailyReminderFun Function(Ref ref) scheduleDailyReminder,
 }) => [
+  di.analyticsSinkProvider.overrideWith(analyticsSink),
   di.cancelDailyReminderProvider.overrideWith(cancelDailyReminder),
-  di.currentTimeZoneProvider.overrideWith(currentTimeZone),
   di.dailyReminderEnabledProvider.overrideWith(dailyReminderEnabled),
+  di.dailyStandingProvider.overrideWith(dailyStanding),
+  di.displayLanguageProvider.overrideWith(displayLanguage),
   di.hasPlayedDailyProvider.overrideWith(hasPlayedDaily),
   di.launchMessageProvider.overrideWith(launchMessage),
+  di.nowProvider.overrideWith(now),
   di.openedMessagesProvider.overrideWith(openedMessages),
   di.pushTokenChangesProvider.overrideWith(pushTokenChanges),
   di.readPushTokenProvider.overrideWith(readPushToken),
+  di.reminderLogStoreProvider.overrideWith(reminderLogStore),
+  di.reminderTextsProvider.overrideWith(reminderTexts),
+  di.reminderTimesProvider.overrideWith(reminderTimes),
+  di.replaceRemindersProvider.overrideWith(replaceReminders),
   di.reportPushTokenProvider.overrideWith(reportPushToken),
   di.requestPushPermissionProvider.overrideWith(requestPushPermission),
-  di.scheduleDailyReminderProvider.overrideWith(scheduleDailyReminder),
 ];

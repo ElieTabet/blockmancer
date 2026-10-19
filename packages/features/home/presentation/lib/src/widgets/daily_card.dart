@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_presentation/src/notifiers/home_notifier.br.dart';
 import 'package:home_presentation/src/providers_di.br.dart';
+import 'package:home_presentation/src/providers_internal.br.dart';
 import 'package:home_presentation/src/widgets/best_line.dart';
 import 'package:home_presentation/src/widgets/home_card.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +19,8 @@ final class DailyCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final daily = context.t.home.daily;
+
+    ref.listen(dailyCardRevealsProvider, (_, _) => _reveal(context, ref));
 
     return HomeCard(
       accent: DSColor.accent,
@@ -61,6 +66,26 @@ final class DailyCard extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Home starts at its top, the card just under the header.
+  static void _reveal(BuildContext context, WidgetRef ref) {
+    final position = Scrollable.maybeOf(context)?.position;
+
+    if (position == null || !position.hasPixels) return;
+
+    if (MediaQuery.disableAnimationsOf(context) ||
+        ref.read(reduceMotionSettingProvider)) {
+      position.jumpTo(0);
+    } else {
+      unawaited(
+        position.animateTo(
+          0,
+          curve: Curves.easeOutCubic,
+          duration: const Duration(milliseconds: 400),
+        ),
+      );
+    }
   }
 }
 
