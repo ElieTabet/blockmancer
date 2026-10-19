@@ -221,6 +221,12 @@ List<Override> featureBindingOverrides({
   ),
   ...app_update_ui.bindProviders(
     openUrl: (ref) => external_links.openExternalUrl,
+    whenGameSettled: (ref) => ref.watch(game_ui.whenGameSettledProvider),
+  ),
+  // With the router instance, like push's: a published minimum blocks the app
+  // wherever the player is, not from a screen.
+  ...app_update_ui.bindRoutingProviders(
+    appUpdateRouting: (ref) => AppUpdateRoutingImpl(router),
   ),
   // Settings resets the game's progress without knowing the game, and shows
   // the build and opens the mail app without knowing either plugin.

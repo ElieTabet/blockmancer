@@ -1,5 +1,6 @@
 import 'package:app_update_domain/app_update_domain.dart';
 import 'package:app_update_presentation/src/providers_di.br.dart' as di;
+import 'package:app_update_presentation/src/routing/app_update_routing.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'providers.br.g.dart';
@@ -20,4 +21,12 @@ OpenStoreListingFun openStoreListing(Ref ref) {
 
 List<Override> bindProviders({
   required di.OpenUrlFun Function(Ref ref) openUrl,
-}) => [di.openUrlProvider.overrideWith(openUrl)];
+  required di.WhenSettledFun Function(Ref ref) whenGameSettled,
+}) => [
+  di.openUrlProvider.overrideWith(openUrl),
+  di.whenGameSettledProvider.overrideWith(whenGameSettled),
+];
+
+List<Override> bindRoutingProviders({
+  required AppUpdateRouting Function(Ref ref) appUpdateRouting,
+}) => [di.appUpdateRoutingProvider.overrideWith(appUpdateRouting)];

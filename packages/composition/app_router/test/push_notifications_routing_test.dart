@@ -1,4 +1,6 @@
 import 'package:app_router/app_router.dart';
+import 'package:app_update_presentation/app_update_presentation.dart'
+    show UpdateRequiredRoute;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_presentation/home_presentation.dart' show HomeRoute;
@@ -67,5 +69,18 @@ void main() {
 
     // The splash's own minimum, left running when it was replaced.
     await tester.pump(const Duration(seconds: 2));
+  });
+
+  // The update screen has no way out, so a push can't open one.
+  testWidgets('a tap while the update screen is up is dropped', (tester) async {
+    final router = await pumpAppRouter(
+      tester,
+      deepLink: [const UpdateRequiredRoute()],
+    );
+
+    PushNotificationsRoutingImpl(router, revealDailyCard: () {}).onHomeOpened();
+    await tester.pumpAndSettle();
+
+    expect(rootStackNames(router), [UpdateRequiredRoute.name]);
   });
 }

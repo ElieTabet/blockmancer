@@ -149,7 +149,9 @@ class GameNotifier extends _$GameNotifier {
   void persist() {
     if (state.isTutorial) return;
 
-    unawaited(_save(SavedRun(mode: state.mode, run: state.run)));
+    ref
+        .read(gameActivityProvider)
+        .track(_save(SavedRun(mode: state.mode, run: state.run)));
   }
 
   /// Leaves the tutorial for a practice run, from its starting pick.
@@ -277,14 +279,17 @@ class GameNotifier extends _$GameNotifier {
 
     ref.read(trackMoveProvider)(state.mode, before, transition);
 
+    final activity = ref.read(gameActivityProvider);
+
     if (ended) {
       unawaited(_recordEnd(run));
-      unawaited(_countRunEnd());
-      unawaited(_recordProgress(run));
+      activity
+        ..track(_countRunEnd())
+        ..track(_recordProgress(run));
       unawaited(_submitScore(run));
     }
 
-    unawaited(_save(SavedRun(mode: state.mode, run: run)));
+    activity.track(_save(SavedRun(mode: state.mode, run: run)));
   }
 
   /// The world whose boss card [events] call for: a world run's boss just

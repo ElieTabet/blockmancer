@@ -1,4 +1,11 @@
+import 'dart:async';
+
+import 'package:app_router/app_router.dart';
+import 'package:app_update_domain/app_update_domain.dart' as app_update;
+import 'package:app_update_presentation/app_update_presentation.dart'
+    as app_update_ui;
 import 'package:blockmancer_engine/blockmancer_engine.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' show Ref;
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:shared_domain/shared_domain.dart'
@@ -30,10 +37,34 @@ const tutorialFirstLine = 'Drag a piece onto the board';
 /// composition test mounts the real screens with the real rules, a first
 /// launch's settings, no sound or haptics and, unless [runStore] keeps one, no
 /// saved run. The splash goes Home unless [tutorialSeen] says otherwise.
+///
+/// Nothing is published to Remote Config and no update is asked for, unless
+/// [remoteValue] publishes: then the real update check reads it, for the
+/// splash, the map's banner and the update screen [router] puts up.
 List<Override> stubFeatures({
+  required AppRouter router,
+  app_update.RemoteValueFun Function(Ref ref)? remoteValue,
   game.RunStore? runStore,
   bool tutorialSeen = true,
 }) => [
+  if (remoteValue != null) ...[
+    ...app_update.bindProviders(
+      appVersion: (ref) async => '1.0.0',
+      remoteValue: remoteValue,
+      remoteValuesFetched: (ref) => Future.value(),
+      storePlatform: (ref) => .ios,
+      storeUrls: (ref) => (android: 'play', ios: 'appstore'),
+      updateDismissals: (ref) => _MemoryDismissals(),
+    ),
+    ...app_update_ui.bindProviders(
+      openUrl: (ref) =>
+          (url) async => true,
+      whenGameSettled: (ref) => ref.watch(game_ui.whenGameSettledProvider),
+    ),
+    ...app_update_ui.bindRoutingProviders(
+      appUpdateRouting: (ref) => AppUpdateRoutingImpl(router),
+    ),
+  ],
   ...game.bindProviders(
     adsRemoved: (ref) async => false,
     analyticsSink: (ref) => const _NoAnalytics(),
@@ -44,8 +75,10 @@ List<Override> stubFeatures({
     onRunFinished: (ref) => () async {},
     progressionStore: (ref) =>
         _MemoryProgressionStore(ref.watch(game.initialProgressionProvider)),
-    remoteValue: (ref) =>
-        (_) => null,
+    remoteValue:
+        remoteValue ??
+        (ref) =>
+            (_) => null,
     runStore: (ref) => runStore ?? _NoRunStore(),
     appVersion: (ref) async => '1.0.0',
     requestReview: (ref) => () async {},
@@ -71,7 +104,9 @@ List<Override> stubFeatures({
     dailyBest: (ref) async => null,
     dailyDate: (ref) => DateTime.utc(2026, 10, 17),
     dailyStreak: (ref) async => 0,
-    dismissUpdateOffer: (ref) => () async {},
+    dismissUpdateOffer: (ref) => remoteValue == null
+        ? () async {}
+        : ref.watch(app_update.dismissUpdateOfferProvider),
     hasSavedRun: (ref) => ref.watch(game.hasSavedRunProvider.future),
     jokerCollection: (ref) => ref.watch(game.jokerCollectionProvider),
     markJokersAnnounced: (ref) => ref.watch(game.markJokersAnnouncedProvider),
@@ -83,7 +118,9 @@ List<Override> stubFeatures({
     // Still, so the map's "you are here" pin lets pumpAndSettle settle.
     reduceMotionSetting: (ref) => true,
     showDailyLeaderboard: (ref) => () async {},
-    updateOffer: (ref) async => null,
+    updateOffer: (ref) => remoteValue == null
+        ? Future.value()
+        : ref.watch(app_update.updateOfferProvider.future),
     worlds: (ref) => ref.watch(game.worldSummariesProvider),
   ),
   ...settings.bindProviders(
@@ -121,9 +158,22 @@ List<Override> stubFeatures({
   ),
   ...splash_ui.bindProviders(
     tutorialSeen: (ref) async => tutorialSeen,
-    updateRequired: (ref) async => false,
+    updateRequired: (ref) => remoteValue == null
+        ? Future.value(false)
+        : ref.watch(app_update.updateRequiredProvider.future),
   ),
 ];
+
+/// The banner closed per version, kept in memory.
+final class _MemoryDismissals implements app_update.UpdateDismissals {
+  String? dismissed;
+
+  @override
+  Future<void> dismiss(String version) async => dismissed = version;
+
+  @override
+  Future<String?> dismissedVersion() async => dismissed;
+}
 
 /// A first launch's settings, and nothing kept.
 final class _FirstLaunchSettingsStore implements settings.SettingsStore {
@@ -165,17 +215,25 @@ final class _NoRunStore implements game.RunStore {
 }
 
 /// A run store that outlives the app it is given to, as the device's does.
+/// Writes wait for [gate] when one is set.
 final class MemoryRunStore implements game.RunStore {
+  Completer<void>? gate;
   game.SavedRun? saved;
 
   @override
-  Future<void> clear() async => saved = null;
+  Future<void> clear() async {
+    await gate?.future;
+    saved = null;
+  }
 
   @override
   Future<game.SavedRun?> load() async => saved;
 
   @override
-  Future<void> save(game.SavedRun run) async => saved = run;
+  Future<void> save(game.SavedRun run) async {
+    await gate?.future;
+    saved = run;
+  }
 }
 
 final class _NoonClock implements game.Clock {

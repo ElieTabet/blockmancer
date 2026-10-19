@@ -632,3 +632,32 @@ Three changes from the review of this file, each its own commit.
   still waits up to 2 seconds for the launch's.
 - **A closed banner stays closed** across every recompute: closing is kept per version on the
   device, so only a newer `latest_version_*` brings the banner back.
+- **"The move's event queue has finished playing"** is the game screen's playback back at rest
+  (`PlaybackState.isPlaying` false): every beat of the move shown, or skipped by a tap. A move
+  with no beats has nothing to wait for. In the tutorial, a playback held on its product beat
+  waits for the player's tap like the rest of it.
+- **"Its save has completed"** is every write the move starts on the device: the run (or its
+  clear, at the end), and at a run's end the progression and the run-end count. Not the score
+  submitted to the leaderboards, which waits on the network and is the platform's to retry, nor
+  analytics, which never waits.
+- **How the outside learns it.** The game keeps one `GameActivity` for the app's life (outside
+  the screen's scope, which nothing else can read), fed by the playback and the game notifier,
+  and exports `whenGameSettled`; the update check's own slot is bound to it. With no game on
+  screen it is settled at once.
+- **Blocked once per session.** The guard puts the screen up the first time the check says
+  required and then stops: the screen has no way out, so a later recompute (a minimum raised
+  again) has nothing to change.
+- **The splash is waited out**, not skipped: if the splash put the screen up itself, the guard's
+  request finds it there and leaves it; if the splash went Home before the value arrived, the
+  guard puts it up as soon as the splash has handed off.
+- **A move started in the frame between "settled" and the screen going up** is not cut short:
+  its save is queued behind the others and lands whatever the screen, since the writes belong
+  to the app, not to the game screen.
+- **Notification taps** (the "same check") never open anything over the update screen: a tap
+  that finds it is dropped, like the back button. A cold-start tap still waits out the splash,
+  and is dropped if the splash put the screen up.
+- **Purchases needed no code change.** The store's listener and the Remove ads notifier live for
+  the app's life, outside any screen, and every transaction the store hands over is acknowledged
+  whether or not anything listens, those it hands over again at launch included. Tests pin both:
+  a purchase completing after the screen went up is kept, and a transaction delivered at launch
+  is acknowledged.

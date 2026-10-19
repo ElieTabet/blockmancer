@@ -63,6 +63,21 @@ void main() {
     verify(() => store.completePurchase(any())).called(1);
   });
 
+  test('Given a purchase the last launch left unfinished, When the store hands '
+      'it over at launch with nothing listening yet, Then it is still '
+      'acknowledged', () async {
+    // Given: the stream opened at launch, no screen listening
+    final purchases = StorePurchases(store: store);
+    purchases.updates;
+
+    // When
+    stream.add([_purchase(.purchased, pendingComplete: true)]);
+    await Future<void>.delayed(Duration.zero);
+
+    // Then
+    verify(() => store.completePurchase(any())).called(1);
+  });
+
   test('Given each status, Then it maps onto its outcome', () async {
     // Given
     final purchases = StorePurchases(store: store);

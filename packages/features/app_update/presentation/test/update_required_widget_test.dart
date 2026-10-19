@@ -37,6 +37,7 @@ void main() {
 
               return true;
             },
+            whenGameSettled: (ref) => () async {},
           ),
         ],
         child: TranslationProvider(

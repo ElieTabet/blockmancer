@@ -1,8 +1,8 @@
-import 'dart:async';
-
 import 'package:app_router/src/app_router.dart' show AppRouter, TabShellRoute;
+import 'package:app_router/src/routing/once_settled.dart';
+import 'package:app_update_presentation/app_update_presentation.dart'
+    show UpdateRequiredRoute;
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/widgets.dart';
 import 'package:home_presentation/home_presentation.dart' show HomeRoute;
 import 'package:push_notifications_presentation/push_notifications_presentation.dart'
     show PushNotificationsRouting;
@@ -11,7 +11,7 @@ import 'package:splash_presentation/splash_presentation.dart' show SplashRoute;
 /// Where a tapped push takes the app.
 ///
 /// Navigates through the [AppRouter] instance rather than a `BuildContext`,
-/// like [AppStatusRoutingImpl]: the trigger is the OS handing over a tap, and
+/// like `AppUpdateRoutingImpl`: the trigger is the OS handing over a tap, and
 /// at a cold start there is no screen yet to borrow a context from.
 ///
 /// Each push lands on a clean stack: whatever was open is dismissed and the
@@ -22,7 +22,8 @@ import 'package:splash_presentation/splash_presentation.dart' show SplashRoute;
 /// What the push is about is opened over the shell, never under the splash —
 /// whose hand-off replaces the whole stack and would sweep it away — nor over a
 /// blocking screen or login, which have a question to settle first. It waits
-/// those out and opens once they are gone.
+/// those out and opens once they are gone. The update screen is never gone,
+/// so a tap that finds it is dropped.
 final class PushNotificationsRoutingImpl implements PushNotificationsRouting {
   final void Function() _revealDailyCard;
   final AppRouter _router;
@@ -47,25 +48,14 @@ final class PushNotificationsRoutingImpl implements PushNotificationsRouting {
   Future<void> _home(StackRouter root) =>
       root.navigate(const TabShellRoute(children: [HomeRoute()]));
 
-  /// Opens on the frame after the stack settles — it changes mid-frame, and a
-  /// route pushed from there lands under the one still arriving. A frame is
-  /// asked for too: a settled screen may have none coming.
   void _openOnceSettled(Future<void> Function(StackRouter root) open) {
     final root = _router.root;
 
-    void openOnceSettled() {
-      final top = root.stackData.lastOrNull?.name;
-
-      if (top == null || _waitsOut.contains(top)) return;
-
-      root.removeListener(openOnceSettled);
-
-      WidgetsBinding.instance
-        ..addPostFrameCallback((_) => unawaited(open(root)))
-        ..ensureVisualUpdate();
-    }
-
-    root.addListener(openOnceSettled);
-    openOnceSettled();
+    onceSettled(
+      root,
+      // A tap while the update screen is up is dropped: it has no way out.
+      open: (top) => top == UpdateRequiredRoute.name ? null : open(root),
+      waitsOut: _waitsOut,
+    );
   }
 }

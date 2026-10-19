@@ -8,6 +8,55 @@ part of 'providers_internal.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// One for the app's life, outside the screen's scope: what waits for the game
+/// to settle needs no game on screen to ask.
+
+@ProviderFor(gameActivity)
+final gameActivityProvider = GameActivityProvider._();
+
+/// One for the app's life, outside the screen's scope: what waits for the game
+/// to settle needs no game on screen to ask.
+
+final class GameActivityProvider
+    extends $FunctionalProvider<GameActivity, GameActivity, GameActivity>
+    with $Provider<GameActivity> {
+  /// One for the app's life, outside the screen's scope: what waits for the game
+  /// to settle needs no game on screen to ask.
+  GameActivityProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'gameActivityProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$gameActivityHash();
+
+  @$internal
+  @override
+  $ProviderElement<GameActivity> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GameActivity create(Ref ref) {
+    return gameActivity(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GameActivity value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GameActivity>(value),
+    );
+  }
+}
+
+String _$gameActivityHash() => r'5a231ceb6893b132a6de6c5a76beb487b890b150';
+
 /// The platform's reduce-motion setting. Scoped by `GameWidget` from its
 /// `MediaQuery`, which only a widget can read.
 

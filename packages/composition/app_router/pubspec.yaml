@@ -24,7 +24,9 @@ dependencies:
   auto_route: ^11.1.0
 
 dev_dependencies:
-  # Test-only: the composition tests mount the real game tab, rules included.
+  # Test-only: the composition tests mount the real game tab, rules included,
+  # and the real update check.
+  app_update_domain: any
   blockmancer_engine: any
   game_domain: any
   settings_domain: any

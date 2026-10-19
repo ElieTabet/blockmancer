@@ -1,10 +1,22 @@
 import 'dart:ui';
 
 import 'package:game_presentation/src/providers_di.br.dart' as di;
+import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/routing/game_routing.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'providers.br.g.dart';
+
 // game_presentation — public providers exposed by this layer.
+
+typedef WhenGameSettledFun = Future<void> Function();
+
+/// Completes once the game has finished with its last move: played back, and
+/// its run, progression and run-end count written. At once with no game on
+/// screen.
+@Riverpod(keepAlive: true)
+WhenGameSettledFun whenGameSettled(Ref ref) =>
+    ref.watch(gameActivityProvider).settled;
 
 List<Override> bindProviders({
   required bool Function(Ref ref) hapticsOnSetting,

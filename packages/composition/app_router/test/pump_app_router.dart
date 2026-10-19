@@ -4,6 +4,9 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:app_update_domain/app_update_domain.dart' show RemoteValueFun;
+import 'package:app_update_presentation/app_update_presentation.dart'
+    show updateGuardProvider;
 import 'package:game_domain/game_domain.dart' show RunStore;
 import 'package:l10n_application/l10n_application.dart';
 
@@ -13,9 +16,13 @@ import 'stub_features.dart';
 /// Mounts the real route tree at [deepLink], which is what these tests are
 /// about: every one of them turns on where a route actually lands in the stack,
 /// so a recording double would assert nothing.
+///
+/// With [remoteValue], what Remote Config publishes reaches the real update
+/// check, and the update screen goes up whenever it asks, as from boot.
 Future<AppRouter> pumpAppRouter(
   WidgetTester tester, {
   required List<PageRouteInfo<dynamic>> deepLink,
+  RemoteValueFun Function(Ref ref)? remoteValue,
   RunStore? runStore,
   bool tutorialSeen = true,
 }) async {
@@ -29,7 +36,12 @@ Future<AppRouter> pumpAppRouter(
     ProviderScope(
       overrides: [
         ...routingOverrides(),
-        ...stubFeatures(runStore: runStore, tutorialSeen: tutorialSeen),
+        ...stubFeatures(
+          remoteValue: remoteValue,
+          router: router,
+          runStore: runStore,
+          tutorialSeen: tutorialSeen,
+        ),
       ],
       child: TranslationProvider(
         child: MaterialApp.router(
@@ -41,6 +53,13 @@ Future<AppRouter> pumpAppRouter(
       ),
     ),
   );
+
+  if (remoteValue != null) {
+    ProviderScope.containerOf(
+      tester.element(find.byType(MaterialApp)),
+    ).listen(updateGuardProvider, (_, _) {});
+  }
+
   await tester.pumpAndSettle();
 
   return router;

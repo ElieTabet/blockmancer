@@ -33,6 +33,7 @@ class PlaybackNotifier extends _$PlaybackNotifier {
     // Listened to rather than watched: a rebuild would cut a move short.
     ref
       ..onDispose(_stop)
+      ..onDispose(ref.read(gameActivityProvider).stopPlaying)
       ..listen(gameProvider, _onGame)
       ..listen(
         reduceMotionProvider,
@@ -66,6 +67,7 @@ class PlaybackNotifier extends _$PlaybackNotifier {
     _stop();
     _holdsOnProduct = false;
     state = PlaybackState(step: state.step);
+    ref.read(gameActivityProvider).stopPlaying();
   }
 
   void _onGame(GameUiState? previous, GameUiState next) {
@@ -82,6 +84,7 @@ class PlaybackNotifier extends _$PlaybackNotifier {
 
     if (_beats.isEmpty) return _finish();
 
+    ref.read(gameActivityProvider).startPlaying();
     final lands = _beats.any((beat) => beat is LandingBeat);
     final risesAt = _beats.indexWhere((beat) => beat is RisingBeat);
     final tideClear = risesAt < 0

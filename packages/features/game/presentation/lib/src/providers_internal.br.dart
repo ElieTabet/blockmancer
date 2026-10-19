@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:game_presentation/src/notifiers/game_activity.dart';
 import 'package:game_presentation/src/notifiers/beat.br.dart';
 import 'package:game_presentation/src/notifiers/game_notifier.br.dart';
 import 'package:game_presentation/src/notifiers/playback_notifier.br.dart';
@@ -14,6 +15,11 @@ part 'providers_internal.br.g.dart';
 /// The round score as the card shows it, against the round's target, and how
 /// long it counts up to it.
 typedef RoundScoreShown = ({Duration countUp, int score, int target});
+
+/// One for the app's life, outside the screen's scope: what waits for the game
+/// to settle needs no game on screen to ask.
+@Riverpod(keepAlive: true)
+GameActivity gameActivity(Ref ref) => GameActivity();
 
 /// The platform's reduce-motion setting. Scoped by `GameWidget` from its
 /// `MediaQuery`, which only a widget can read.

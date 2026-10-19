@@ -12,3 +12,4 @@ export 'src/remote_config_startup.dart';
 export 'src/sound_startup.dart';
 export 'src/telemetry_startup.dart';
 export 'src/test_tools_startup.dart';
+export 'src/update_guard_startup.dart';

@@ -44,18 +44,25 @@ final class FakeBestScores implements game.BestScores {
   Future<void> save(game.GameMode mode, int total) async => saved[mode] = total;
 }
 
-/// The saved run kept in memory.
+/// The saved run kept in memory. Writes wait for [gate] when one is set.
 final class FakeRunStore implements game.RunStore {
+  Completer<void>? gate;
   game.SavedRun? saved;
 
   @override
-  Future<void> clear() async => saved = null;
+  Future<void> clear() async {
+    await gate?.future;
+    saved = null;
+  }
 
   @override
   Future<game.SavedRun?> load() async => saved;
 
   @override
-  Future<void> save(game.SavedRun run) async => saved = run;
+  Future<void> save(game.SavedRun run) async {
+    await gate?.future;
+    saved = run;
+  }
 }
 
 /// A clock stopped at noon on [testDay], UTC.
