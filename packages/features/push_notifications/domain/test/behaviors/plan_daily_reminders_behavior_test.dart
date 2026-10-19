@@ -90,6 +90,38 @@ void main() {
     expect(_days(log, evening), [1, 2, 3, 5, 7]);
   });
 
+  test('Given the app opened less than 2 hours before the reminder, When the '
+      'week is planned, Then that day gets none', () {
+    // Given: 1 hour 59 before today's reminder
+    final lateAfternoon = DateTime.utc(2026, 10, 19, 15, 1);
+
+    // When
+    final log = _plan(
+      log: const ReminderLog(),
+      now: lateAfternoon,
+      slots: _week(lateAfternoon),
+    );
+
+    // Then
+    expect(_days(log, lateAfternoon), [1, 2, 3, 5, 7]);
+  });
+
+  test('Given the app opened 2 hours before the reminder, When the week is '
+      'planned, Then that day still gets its reminder', () {
+    // Given
+    final afternoon = DateTime.utc(2026, 10, 19, 15);
+
+    // When
+    final log = _plan(
+      log: const ReminderLog(),
+      now: afternoon,
+      slots: _week(afternoon),
+    );
+
+    // Then
+    expect(_days(log, afternoon), [0, 1, 2, 3, 5, 7]);
+  });
+
   test('Given a streak standing on some days only, When the week is planned, '
       'Then streak messages go out on those days alone, naming the streak', () {
     // Given: a 4-day streak today, broken from tomorrow on

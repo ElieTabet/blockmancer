@@ -571,6 +571,10 @@ Three changes from the review of this file, each its own commit.
   reminders read it. A player without a daily run has no streak, so draws the general messages.
 - **The back-off:** days 0–3 every day, then days 5 and 7, then nothing until the next open: at
   most 6 pending (iOS allows 64).
+- **Not right after an open:** a reminder going off less than 2 hours after the app was last in
+  front is skipped (exactly 2 hours still goes out). "Last opened" is the moment the plan is made:
+  every plan is made with the app in front (an open, a return, a run's end, a setting changed),
+  so it needs no stored time. Opening at 16:30 skips today's 18:00; opening at 15:00 keeps it.
 - **The comeback message** goes on day 5, the first reminder of the back-off (asked and chosen).
 - **"Today already played"** is the UTC day the reminder fires on, the one the daily run is keyed
   by. In Paris that is today; in Los Angeles 18:00 is already the next UTC day, whose run is a new

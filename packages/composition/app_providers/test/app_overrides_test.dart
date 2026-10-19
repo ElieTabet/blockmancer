@@ -633,9 +633,10 @@ void main() {
     await pumpEventQueue();
     await container.read(push_notifications.dailyReminderProvider.future);
 
-    // Then: days 0, 1, 2, 3, 5 (calling the player back) and 7
+    // Then: none today, the app open a second before it, then days 1, 2, 3,
+    // 5 (calling the player back) and 7
     expect(reminder.calls, ['cancel', 'replace in Daily run reminder']);
-    expect(reminder.replaced.single, hasLength(6));
+    expect(reminder.replaced.single, hasLength(5));
     expect(
       [
         for (final notification in reminder.replaced.single)
@@ -644,8 +645,8 @@ void main() {
           )?.pool,
       ],
       [
-        for (var index = 0; index < 6; index++)
-          index == 4
+        for (var index = 0; index < 5; index++)
+          index == 3
               ? push_notifications.ReminderPool.comeback
               : push_notifications.ReminderPool.general,
       ],

@@ -967,7 +967,8 @@ no-op). Three packages share the client side, and only one knows Firebase:
   daily run has no streak, so gets the general messages.
 - **The plan** (`PlanDailyRemindersBehavior`, pure): days 0–3 from this open every day, then days
   5 and 7, then nothing until the next open; none whose UTC day's daily run is played
-  (`dailyStanding`, game_domain's `dailyStandingOf`); the first past day 3 is the comeback
+  (`dailyStanding`, game_domain's `dailyStandingOf`); none going off less than 2 hours after
+  the plan is made, which is always while the app is in front; the first past day 3 is the comeback
   message, a projected streak of 2 or more draws a streak message (naming it), anything else a
   general one. Each is drawn with a `Random` seeded by its UTC day, never one of the last 3
   shown or planned before it (a pool with nothing left draws a general one). The previous plan's

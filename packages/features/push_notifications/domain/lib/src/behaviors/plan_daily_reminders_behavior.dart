@@ -17,6 +17,9 @@ const reminderDays = 7;
 /// - every day until the third, then every other day until the seventh, then
 ///   none until the app is opened again;
 /// - none on a UTC day whose daily run is already played;
+/// - none going off less than 2 hours after `now`: a plan is made while the
+///   app is in front (an open, a return, a run's end, a setting), so `now` is
+///   the last time the player was seen, too recent to nudge;
 /// - the first reminder past the third day calls the player back; a streak of
 ///   2 or more draws a streak message, any other day a general one;
 /// - each message drawn at random, seeded with its UTC day, never one of the
@@ -30,6 +33,7 @@ class PlanDailyRemindersBehavior {
 
   static const _everyDayUntil = 3;
   static const _minStreak = 2;
+  static const _quietAfterOpen = Duration(hours: 2);
   static const _remembered = 3;
 
   ReminderLog call({
@@ -43,11 +47,12 @@ class PlanDailyRemindersBehavior {
         if (!reminder.at.isAfter(now)) reminder.message,
     ]);
     final drawn = [...recent];
+    final earliest = now.add(_quietAfterOpen);
     final planned = <PlannedReminder>[];
     var comebackDue = true;
 
     for (final slot in slots) {
-      if (!slot.at.isAfter(now) || !_remindsOn(slot.day) || slot.played) {
+      if (slot.at.isBefore(earliest) || !_remindsOn(slot.day) || slot.played) {
         continue;
       }
 
