@@ -20,12 +20,15 @@ void main() {
   ProviderContainer container({
     Map<String, String> published = const {},
     Future<void>? fetched,
+    RemoteValueFun Function(Ref ref)? remoteValue,
   }) {
     final container = ProviderContainer(
       overrides: bindProviders(
         appVersion: (ref) async => '1.0.0',
-        remoteValue: (ref) =>
-            (key) => published[key],
+        remoteValue:
+            remoteValue ??
+            (ref) =>
+                (key) => published[key],
         remoteValuesFetched: (ref) => fetched ?? Future.value(),
         storePlatform: (ref) => .android,
         storeUrls: (ref) => (android: 'play', ios: 'appstore'),
@@ -79,4 +82,72 @@ void main() {
     // When / Then
     expect(await pending.read(updateRequiredProvider.future), isTrue);
   });
+
+  group('values published while the app is open', () {
+    late ProviderContainer live;
+
+    setUp(() {
+      live = container(
+        remoteValue: (ref) {
+          final published = ref.watch(_publishedProvider);
+
+          return (key) => published[key];
+        },
+      );
+      live
+        ..listen(updateOfferProvider, (_, _) {})
+        ..listen(updateRequiredProvider, (_, _) {});
+    });
+
+    void publish(String key, String version) =>
+        live.read(_publishedProvider.notifier).publish(key, version);
+
+    test('Given nothing published, When a newer version is, Then it is '
+        'offered, and once the minimum is raised, required', () async {
+      // Given
+      expect(await live.read(updateOfferProvider.future), isNull);
+
+      // When
+      publish('latest_version_android', '1.1.0');
+
+      // Then
+      expect(await live.read(updateOfferProvider.future), '1.1.0');
+      expect(await live.read(updateRequiredProvider.future), isFalse);
+
+      publish('min_version_android', '1.0.1');
+      expect(await live.read(updateRequiredProvider.future), isTrue);
+    });
+
+    test(
+      'Given a version whose banner was closed, When something else is '
+      'published, Then it stays closed, and a newer one is offered',
+      () async {
+        // Given
+        publish('latest_version_android', '1.1.0');
+        expect(await live.read(updateOfferProvider.future), '1.1.0');
+        await live.read(dismissUpdateOfferProvider)();
+
+        // When
+        publish('round_1_target', '300');
+
+        // Then
+        expect(await live.read(updateOfferProvider.future), isNull);
+
+        publish('latest_version_android', '1.2.0');
+        expect(await live.read(updateOfferProvider.future), '1.2.0');
+      },
+    );
+  });
 }
+
+/// What Remote Config publishes, changed as the console would.
+final class _Published extends Notifier<Map<String, String>> {
+  @override
+  Map<String, String> build() => const {};
+
+  void publish(String key, String value) => state = {...state, key: value};
+}
+
+final _publishedProvider = NotifierProvider<_Published, Map<String, String>>(
+  _Published.new,
+);

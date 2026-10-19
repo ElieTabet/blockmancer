@@ -213,7 +213,7 @@ List<Override> featureBindingOverrides({
   // knowing neither the plugin behind the version nor Remote Config.
   ...app_update.bindProviders(
     appVersion: (ref) async => (await readAppInfo()).version,
-    remoteValue: (ref) => ref.watch(remoteValuesProvider).valueOf,
+    remoteValue: (ref) => ref.watch(liveRemoteValueProvider),
     remoteValuesFetched: (ref) => ref.watch(remoteValuesFetchedProvider.future),
     storePlatform: (ref) => defaultTargetPlatform == .iOS ? .ios : .android,
     storeUrls: (ref) => storeUrls,

@@ -626,3 +626,9 @@ Three changes from the review of this file, each its own commit.
   started with: the game screen never watches the slot, only reads it as a run starts (a test
   publishes mid-run and checks the run on screen is the same object). Interstitial and rating
   caps were already read at each decision.
+- **The update check recomputes from its slot**, which composition binds to the live values:
+  nothing in `app_update` learns about Remote Config's changes, it only reads a slot that changes.
+  After launch the fetch it waits for has long settled, so a recompute is immediate; the splash
+  still waits up to 2 seconds for the launch's.
+- **A closed banner stays closed** across every recompute: closing is kept per version on the
+  device, so only a newer `latest_version_*` brings the banner back.
