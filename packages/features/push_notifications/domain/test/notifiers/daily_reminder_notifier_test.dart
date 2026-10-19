@@ -17,8 +17,8 @@ final class _MemoryLogStore implements ReminderLogStore {
   Future<void> save(ReminderLog log) async => this.log = log;
 }
 
-/// The phone as the reminders see it: its settings switch, the daily runs
-/// played, the app's language, and what was asked of the OS.
+/// The phone as the reminders see it: its settings switch, the runs played,
+/// the app's language, and what was asked of the OS.
 final class _Phone {
   var askFails = false;
   final calls = <String>[];
@@ -28,6 +28,9 @@ final class _Phone {
 
   /// Days from today whose daily run is played; null when none ever was.
   Set<int>? played;
+
+  /// A world or practice run played to its end.
+  var playedOtherRun = false;
   final replaced = <List<ReminderNotification>>[];
 
   ProviderContainer container() {
@@ -46,9 +49,9 @@ final class _Phone {
           },
         ),
         displayLanguageProvider.overrideWith((ref) => languages.stream),
-        hasPlayedDailyProvider.overrideWith(
+        hasCompletedRunProvider.overrideWith(
           (ref) =>
-              () async => played != null,
+              () async => played != null || playedOtherRun,
         ),
         nowProvider.overrideWith(
           (ref) =>
@@ -98,8 +101,8 @@ final class _Phone {
 }
 
 void main() {
-  test('Given a player who never finished a daily run, When the app starts, '
-      'Then no reminder is planned', () async {
+  test('Given a player who never finished a run, When the app starts, Then no '
+      'reminder is planned', () async {
     // Given
     final phone = _Phone();
 
@@ -109,6 +112,45 @@ void main() {
 
     // Then
     expect(phone.calls, ['cancel']);
+  });
+
+  test('Given a player who only ever finished world runs, When the app '
+      'starts, Then the week is planned with general messages and the comeback '
+      'one', () async {
+    // Given
+    final phone = _Phone()..playedOtherRun = true;
+
+    // When
+    final container = phone.container();
+    final planned = await container.read(dailyReminderProvider.future);
+
+    // Then
+    expect(phone.calls, ['replace 6']);
+    expect(planned.map((reminder) => reminder.message.pool), <ReminderPool>[
+      .general,
+      .general,
+      .general,
+      .general,
+      .comeback,
+      .general,
+    ]);
+  });
+
+  test('Given a first world run just finished, When the game says so, Then '
+      'notifications are asked for and the week is planned', () async {
+    // Given
+    final phone = _Phone();
+    final container = phone.container();
+    await container.read(dailyReminderProvider.future);
+    phone
+      ..calls.clear()
+      ..playedOtherRun = true;
+
+    // When
+    await container.read(dailyReminderProvider.notifier).runFinished();
+
+    // Then
+    expect(phone.calls, ['ask', 'replace 6']);
   });
 
   test("Given today's daily run just finished, a first, When the game says "
@@ -123,7 +165,7 @@ void main() {
       ..played = {0};
 
     // When
-    await container.read(dailyReminderProvider.notifier).dailyRunFinished();
+    await container.read(dailyReminderProvider.notifier).runFinished();
 
     // Then
     expect(phone.calls, ['ask', 'replace 5']);
@@ -141,7 +183,7 @@ void main() {
       ..played = {0};
 
     // When
-    await container.read(dailyReminderProvider.notifier).dailyRunFinished();
+    await container.read(dailyReminderProvider.notifier).runFinished();
 
     // Then
     expect(phone.calls, ['ask', 'replace 5']);
@@ -195,7 +237,7 @@ void main() {
     phone.calls.clear();
 
     // When
-    await container.read(dailyReminderProvider.notifier).dailyRunFinished();
+    await container.read(dailyReminderProvider.notifier).runFinished();
 
     // Then
     expect(phone.calls, isEmpty);

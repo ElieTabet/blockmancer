@@ -65,7 +65,7 @@ List<Override> featureBindingOverrides({
         ref.watch(settings.dailyReminderEnabledProvider.future),
     dailyStanding: (ref) => ref.watch(game.dailyStandingProvider),
     displayLanguage: (ref) => push_notifications_ui.displayLanguages(),
-    hasPlayedDaily: (ref) => ref.watch(game.hasPlayedDailyProvider),
+    hasCompletedRun: (ref) => ref.watch(game.hasCompletedRunProvider),
     launchMessage: (ref) => ref.watch(push.pushMessagingProvider).launchMessage,
     now: (ref) => const SystemClock().now,
     // The instance is captured, not the ref: these are called after an
@@ -127,9 +127,9 @@ List<Override> featureBindingOverrides({
     clock: (ref) => const SystemClock(),
     engagementStore: (ref) => const SharedPreferencesEngagementStore(),
     gameRules: (ref) => const BlockmancerEngine(),
-    onDailyRunFinished: (ref) => ref
+    onRunFinished: (ref) => ref
         .watch(push_notifications_domain.dailyReminderProvider.notifier)
-        .dailyRunFinished,
+        .runFinished,
     progressionStore: (ref) => SharedPreferencesProgressionStore(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),

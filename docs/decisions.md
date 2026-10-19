@@ -563,8 +563,12 @@ Three changes from the review of this file, each its own commit.
 
 - **A week, planned on every open:** one-shot notifications for today (if 18:00 is still ahead)
   and the next 7 days, cancelled and planned again at every start and return to the app, on the
-  Settings switch, on a change of language, and at a daily run's end. The days are counted from
+  Settings switch, on a change of language, and at any run's end. The days are counted from
   that open, so "days without opening the app" needs no stored date.
+- **From the first completed run of any kind:** world, practice or daily, the tutorial aside; the
+  permission is asked at that run's end too. "Completed" is `Engagement.completedRuns`, the count
+  the interstitial and rating caps already read; it is counted as the run ends, before the
+  reminders read it. A player without a daily run has no streak, so draws the general messages.
 - **The back-off:** days 0–3 every day, then days 5 and 7, then nothing until the next open: at
   most 6 pending (iOS allows 64).
 - **The comeback message** goes on day 5, the first reminder of the back-off (asked and chosen).

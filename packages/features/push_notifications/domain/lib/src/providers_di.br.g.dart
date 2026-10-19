@@ -221,52 +221,52 @@ final class DisplayLanguageProvider
 
 String _$displayLanguageHash() => r'8cf3e5616e6fbba9e6577833ae699c9560cf973f';
 
-@ProviderFor(hasPlayedDaily)
-final hasPlayedDailyProvider = HasPlayedDailyProvider._();
+@ProviderFor(hasCompletedRun)
+final hasCompletedRunProvider = HasCompletedRunProvider._();
 
-final class HasPlayedDailyProvider
+final class HasCompletedRunProvider
     extends
         $FunctionalProvider<
-          HasPlayedDailyFun,
-          HasPlayedDailyFun,
-          HasPlayedDailyFun
+          HasCompletedRunFun,
+          HasCompletedRunFun,
+          HasCompletedRunFun
         >
-    with $Provider<HasPlayedDailyFun> {
-  HasPlayedDailyProvider._()
+    with $Provider<HasCompletedRunFun> {
+  HasCompletedRunProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'hasPlayedDailyProvider',
+        name: r'hasCompletedRunProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$hasPlayedDailyHash();
+  String debugGetCreateSourceHash() => _$hasCompletedRunHash();
 
   @$internal
   @override
-  $ProviderElement<HasPlayedDailyFun> $createElement(
+  $ProviderElement<HasCompletedRunFun> $createElement(
     $ProviderPointer pointer,
   ) => $ProviderElement(pointer);
 
   @override
-  HasPlayedDailyFun create(Ref ref) {
-    return hasPlayedDaily(ref);
+  HasCompletedRunFun create(Ref ref) {
+    return hasCompletedRun(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(HasPlayedDailyFun value) {
+  Override overrideWithValue(HasCompletedRunFun value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<HasPlayedDailyFun>(value),
+      providerOverride: $SyncValueProvider<HasCompletedRunFun>(value),
     );
   }
 }
 
-String _$hasPlayedDailyHash() => r'ef79a453739c43eee37d88a13fd4107d665d6a9e';
+String _$hasCompletedRunHash() => r'346d399c25460b59048b472ba108383f05231577';
 
 @ProviderFor(launchMessage)
 final launchMessageProvider = LaunchMessageProvider._();

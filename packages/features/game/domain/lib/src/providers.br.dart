@@ -210,19 +210,19 @@ RecordProgressionFun recordProgression(Ref ref) {
 RecordRunEndFun recordRunEnd(Ref ref) {
   final record = RecordRunEndBehavior(scores: ref.watch(di.bestScoresProvider));
 
-  final dailyRunFinished = ref.watch(di.onDailyRunFinishedProvider);
+  final runFinished = ref.watch(di.onRunFinishedProvider);
 
   return (mode, total) async {
     final result = await record(mode, total);
 
     if (result.isNewBest) ref.invalidate(bestScoreProvider(mode));
 
-    if (mode is DailyMode) {
-      // A day's first best is a new day played.
-      if (result.isNewBest) ref.invalidate(dailyDaysProvider);
-
-      unawaited(dailyRunFinished());
+    // A day's first best is a new day played.
+    if (mode is DailyMode && result.isNewBest) {
+      ref.invalidate(dailyDaysProvider);
     }
+
+    unawaited(runFinished());
 
     return result;
   };
@@ -253,15 +253,16 @@ DailyStandingFun dailyStanding(Ref ref) {
       dailyStandingOf(day: day, days: await scores.dailyDays());
 }
 
-typedef HasPlayedDailyFun = Future<bool> Function();
+typedef HasCompletedRunFun = Future<bool> Function();
 
-/// Whether a daily run was ever played to its end on this device, read fresh
-/// each time.
+/// Whether a run of any kind, the tutorial aside, was ever played to its end
+/// on this device, read fresh each time. It waits for the counts already
+/// asked for, so a run that has just ended and said so counts.
 @riverpod
-HasPlayedDailyFun hasPlayedDaily(Ref ref) {
-  final scores = ref.watch(di.bestScoresProvider);
+HasCompletedRunFun hasCompletedRun(Ref ref) {
+  final engagement = ref.watch(engagementProvider);
 
-  return () async => (await scores.dailyDays()).isNotEmpty;
+  return () async => (await engagement.read()).completedRuns > 0;
 }
 
 @riverpod
@@ -526,7 +527,7 @@ List<Override> bindProviders({
   required Clock Function(Ref ref) clock,
   required EngagementStore Function(Ref ref) engagementStore,
   required GameRules Function(Ref ref) gameRules,
-  required di.DailyRunFinishedFun Function(Ref ref) onDailyRunFinished,
+  required di.RunFinishedFun Function(Ref ref) onRunFinished,
   required ProgressionStore Function(Ref ref) progressionStore,
   required RemoteValueFun Function(Ref ref) remoteValue,
   required di.RequestReviewFun Function(Ref ref) requestReview,
@@ -543,7 +544,7 @@ List<Override> bindProviders({
   di.clockProvider.overrideWith(clock),
   di.engagementStoreProvider.overrideWith(engagementStore),
   di.gameRulesProvider.overrideWith(gameRules),
-  di.onDailyRunFinishedProvider.overrideWith(onDailyRunFinished),
+  di.onRunFinishedProvider.overrideWith(onRunFinished),
   di.progressionStoreProvider.overrideWith(progressionStore),
   di.remoteValueProvider.overrideWith(remoteValue),
   di.requestReviewProvider.overrideWith(requestReview),

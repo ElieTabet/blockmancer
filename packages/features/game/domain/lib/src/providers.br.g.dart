@@ -591,7 +591,7 @@ final class RecordRunEndProvider
   }
 }
 
-String _$recordRunEndHash() => r'9f216a8df1f079481d44f2a6ae24c18a893b572f';
+String _$recordRunEndHash() => r'c7326b35b6450b693e65778633c4c0d9bf43f5f7';
 
 /// The UTC days on which a daily run was played to its end.
 
@@ -724,60 +724,63 @@ final class DailyStandingProvider
 
 String _$dailyStandingHash() => r'48055eb740acc59f59965e3dfbcf81f97741b3a0';
 
-/// Whether a daily run was ever played to its end on this device, read fresh
-/// each time.
+/// Whether a run of any kind, the tutorial aside, was ever played to its end
+/// on this device, read fresh each time. It waits for the counts already
+/// asked for, so a run that has just ended and said so counts.
 
-@ProviderFor(hasPlayedDaily)
-final hasPlayedDailyProvider = HasPlayedDailyProvider._();
+@ProviderFor(hasCompletedRun)
+final hasCompletedRunProvider = HasCompletedRunProvider._();
 
-/// Whether a daily run was ever played to its end on this device, read fresh
-/// each time.
+/// Whether a run of any kind, the tutorial aside, was ever played to its end
+/// on this device, read fresh each time. It waits for the counts already
+/// asked for, so a run that has just ended and said so counts.
 
-final class HasPlayedDailyProvider
+final class HasCompletedRunProvider
     extends
         $FunctionalProvider<
-          HasPlayedDailyFun,
-          HasPlayedDailyFun,
-          HasPlayedDailyFun
+          HasCompletedRunFun,
+          HasCompletedRunFun,
+          HasCompletedRunFun
         >
-    with $Provider<HasPlayedDailyFun> {
-  /// Whether a daily run was ever played to its end on this device, read fresh
-  /// each time.
-  HasPlayedDailyProvider._()
+    with $Provider<HasCompletedRunFun> {
+  /// Whether a run of any kind, the tutorial aside, was ever played to its end
+  /// on this device, read fresh each time. It waits for the counts already
+  /// asked for, so a run that has just ended and said so counts.
+  HasCompletedRunProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'hasPlayedDailyProvider',
+        name: r'hasCompletedRunProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$hasPlayedDailyHash();
+  String debugGetCreateSourceHash() => _$hasCompletedRunHash();
 
   @$internal
   @override
-  $ProviderElement<HasPlayedDailyFun> $createElement(
+  $ProviderElement<HasCompletedRunFun> $createElement(
     $ProviderPointer pointer,
   ) => $ProviderElement(pointer);
 
   @override
-  HasPlayedDailyFun create(Ref ref) {
-    return hasPlayedDaily(ref);
+  HasCompletedRunFun create(Ref ref) {
+    return hasCompletedRun(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(HasPlayedDailyFun value) {
+  Override overrideWithValue(HasCompletedRunFun value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<HasPlayedDailyFun>(value),
+      providerOverride: $SyncValueProvider<HasCompletedRunFun>(value),
     );
   }
 }
 
-String _$hasPlayedDailyHash() => r'158108821e825ce18b61aa7542ae0b6c69ff1325';
+String _$hasCompletedRunHash() => r'b3ac2bcb7eaf5f323be2517536f190afed1ebf2f';
 
 @ProviderFor(runStartFor)
 final runStartForProvider = RunStartForProvider._();

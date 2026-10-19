@@ -10,8 +10,8 @@ part of 'daily_reminder_notifier.br.dart';
 // ignore_for_file: type=lint, type=warning
 /// The daily reminders: a week of them, planned afresh on every app start and
 /// return, on a change of the Settings switch or of the app's language, and
-/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
-/// who has played a daily run to its end, with the switch on; cancelled
+/// at any run's end (see [PlanDailyRemindersBehavior]). Only for a player who
+/// has played a run of any kind to its end, with the switch on; cancelled
 /// otherwise. Its state is the plan.
 ///
 /// Kept alive so the plan follows the switch and the language for the app's
@@ -22,8 +22,8 @@ final dailyReminderProvider = DailyReminderNotifierProvider._();
 
 /// The daily reminders: a week of them, planned afresh on every app start and
 /// return, on a change of the Settings switch or of the app's language, and
-/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
-/// who has played a daily run to its end, with the switch on; cancelled
+/// at any run's end (see [PlanDailyRemindersBehavior]). Only for a player who
+/// has played a run of any kind to its end, with the switch on; cancelled
 /// otherwise. Its state is the plan.
 ///
 /// Kept alive so the plan follows the switch and the language for the app's
@@ -33,8 +33,8 @@ final class DailyReminderNotifierProvider
         $AsyncNotifierProvider<DailyReminderNotifier, List<PlannedReminder>> {
   /// The daily reminders: a week of them, planned afresh on every app start and
   /// return, on a change of the Settings switch or of the app's language, and
-  /// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
-  /// who has played a daily run to its end, with the switch on; cancelled
+  /// at any run's end (see [PlanDailyRemindersBehavior]). Only for a player who
+  /// has played a run of any kind to its end, with the switch on; cancelled
   /// otherwise. Its state is the plan.
   ///
   /// Kept alive so the plan follows the switch and the language for the app's
@@ -59,12 +59,12 @@ final class DailyReminderNotifierProvider
 }
 
 String _$dailyReminderNotifierHash() =>
-    r'6561a68a6bfc677e3adc7df2370fc50f5e21f289';
+    r'612766963ba063c078dfe0ad60a842a251efd762';
 
 /// The daily reminders: a week of them, planned afresh on every app start and
 /// return, on a change of the Settings switch or of the app's language, and
-/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
-/// who has played a daily run to its end, with the switch on; cancelled
+/// at any run's end (see [PlanDailyRemindersBehavior]). Only for a player who
+/// has played a run of any kind to its end, with the switch on; cancelled
 /// otherwise. Its state is the plan.
 ///
 /// Kept alive so the plan follows the switch and the language for the app's

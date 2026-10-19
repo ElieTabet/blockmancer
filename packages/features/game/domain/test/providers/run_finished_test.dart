@@ -7,7 +7,7 @@ import '../fake_engagement_store.dart';
 import '../fake_progression_store.dart';
 import '../fakes.dart';
 
-/// The game on 18 October 2026, counting each daily run it is told of.
+/// The game on 18 October 2026, counting each run end it is told of.
 (ProviderContainer, List<String>) _game(FakeBestScores scores) {
   final told = <String>[];
   final container = ProviderContainer(
@@ -19,8 +19,8 @@ import '../fakes.dart';
       clock: (ref) => FakeClock(DateTime.utc(2026, 10, 18, 9)),
       engagementStore: (ref) => FakeEngagementStore(),
       gameRules: (ref) => const TwoWorldRules(),
-      onDailyRunFinished: (ref) =>
-          () async => told.add('daily run finished'),
+      onRunFinished: (ref) =>
+          () async => told.add('run finished'),
       progressionStore: (ref) => FakeProgressionStore(),
       remoteValue: (ref) =>
           (_) => null,
@@ -40,8 +40,8 @@ import '../fakes.dart';
 }
 
 void main() {
-  test("Given yesterday's daily played, When today's ends, Then the reminder "
-      'is told and the streak reads 2', () async {
+  test("Given yesterday's daily played, When today's ends, Then the reminders "
+      'are told and the streak reads 2', () async {
     // Given
     final scores = FakeBestScores()..saved[const .daily(day: 20261017)] = 4000;
     final (container, told) = _game(scores);
@@ -55,23 +55,41 @@ void main() {
     );
 
     // Then
-    expect(told, ['daily run finished']);
+    expect(told, ['run finished']);
     expect(await container.read(dailyStreakProvider.future), 2);
-    expect(await container.read(hasPlayedDailyProvider)(), isTrue);
   });
 
-  test('Given a practice run and a world run, When they end, Then the '
-      'reminder hears nothing', () async {
+  test('Given a player who only ever plays world runs, When one ends, Then '
+      'the reminders are told and the player counts as having finished a '
+      'run', () async {
     // Given
     final (container, told) = _game(FakeBestScores());
-    final recordRunEnd = container.read(recordRunEndProvider);
+    expect(await container.read(hasCompletedRunProvider)(), isFalse);
 
-    // When
-    await recordRunEnd(const .practice(), 2000);
-    await recordRunEnd(const .world(world: WorldId.gravity), 2500);
+    // When: the game counts the end beside keeping its best
+    final recorded = container.read(recordRunEndProvider)(
+      const .world(world: WorldId.gravity),
+      2500,
+    );
+    await container.read(countRunEndProvider)();
+    await recorded;
 
     // Then
-    expect(told, isEmpty);
-    expect(await container.read(hasPlayedDailyProvider)(), isFalse);
+    expect(told, ['run finished']);
+    expect(await container.read(hasCompletedRunProvider)(), isTrue);
   });
+
+  test(
+    'Given a practice run, When it ends, Then the reminders are told',
+    () async {
+      // Given
+      final (container, told) = _game(FakeBestScores());
+
+      // When
+      await container.read(recordRunEndProvider)(const .practice(), 2000);
+
+      // Then
+      expect(told, ['run finished']);
+    },
+  );
 }

@@ -20,7 +20,7 @@ ProviderContainer _containerAt(
       clock: (ref) => clock,
       engagementStore: (ref) => FakeEngagementStore(),
       gameRules: (ref) => const TwoWorldRules(),
-      onDailyRunFinished: (ref) => () async {},
+      onRunFinished: (ref) => () async {},
       progressionStore: (ref) => FakeProgressionStore(),
       remoteValue: (ref) =>
           (key) => published[key],

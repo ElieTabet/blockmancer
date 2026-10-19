@@ -928,7 +928,7 @@ no-op). Three packages share the client side, and only one knows Firebase:
   the server sends, resolve it there, and route it in `PushOpeningsNotifier` — anything
   unrecognised still opens the app. `push`'s `receivedMessages` (pushes arriving while the app is open) is
   available for a screen that should catch up on one; nothing listens to it yet.
-- **Who calls what.** The permission is asked when a daily run ends (see Daily reminder), never
+- **Who calls what.** The permission is asked when a run ends (see Daily reminder), never
   at launch. `PushNotificationsRoutingImpl` (context-free: a tap arrives from the OS, not a widget)
   waits out the splash, then dismisses
   whatever is open and selects the push's tab — so back always lands on that tab. A push about one
@@ -957,12 +957,14 @@ no-op). Three packages share the client side, and only one knows Firebase:
   never a push.
 - **Who decides:** push_notifications_domain's `DailyReminderNotifier` (keepAlive; its state is
   the plan). It plans only with Settings' **Daily reminder** on (`dailyReminderEnabled`) and a
-  daily run played to its end (`hasPlayedDaily`); otherwise it cancels. It plans again on every
-  start and return to the app (`resumed`), on the switch, on a change of the app's language
-  (`displayLanguage`, push_notifications_presentation's `displayLanguages`), and when a daily run
-  ends: game_domain's `recordRunEnd` calls its `onDailyRunFinished` slot, bound to
-  `dailyRunFinished`, which asks for notifications (the OS prompts once) and plans, the ask
-  failing or not. Plans run one after another, never interleaved.
+  run of any kind (world, practice or daily; never the tutorial) played to its end
+  (`hasCompletedRun`, game_domain's `Engagement.completedRuns`); otherwise it cancels. It plans
+  again on every start and return to the app (`resumed`), on the switch, on a change of the app's
+  language (`displayLanguage`, push_notifications_presentation's `displayLanguages`), and when
+  any run ends: game_domain's `recordRunEnd` calls its `onRunFinished` slot, bound to
+  `runFinished`, which asks for notifications (the OS prompts once) and plans, the ask
+  failing or not. Plans run one after another, never interleaved. A player who never played a
+  daily run has no streak, so gets the general messages.
 - **The plan** (`PlanDailyRemindersBehavior`, pure): days 0–3 from this open every day, then days
   5 and 7, then nothing until the next open; none whose UTC day's daily run is played
   (`dailyStanding`, game_domain's `dailyStandingOf`); the first past day 3 is the comeback

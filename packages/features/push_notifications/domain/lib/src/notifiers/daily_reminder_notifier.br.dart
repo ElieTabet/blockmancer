@@ -14,8 +14,8 @@ const reminderTime = (hour: 18, minute: 0);
 
 /// The daily reminders: a week of them, planned afresh on every app start and
 /// return, on a change of the Settings switch or of the app's language, and
-/// at a daily run's end (see [PlanDailyRemindersBehavior]). Only for a player
-/// who has played a daily run to its end, with the switch on; cancelled
+/// at any run's end (see [PlanDailyRemindersBehavior]). Only for a player who
+/// has played a run of any kind to its end, with the switch on; cancelled
 /// otherwise. Its state is the plan.
 ///
 /// Kept alive so the plan follows the switch and the language for the app's
@@ -32,13 +32,13 @@ class DailyReminderNotifier extends _$DailyReminderNotifier {
     final enabled = ref.watch(di.dailyReminderEnabledProvider.future);
     final language = ref.watch(di.displayLanguageProvider.future);
     final dailyStanding = ref.read(di.dailyStandingProvider);
-    final hasPlayedDaily = ref.read(di.hasPlayedDailyProvider);
+    final hasCompletedRun = ref.read(di.hasCompletedRunProvider);
     final now = ref.read(di.nowProvider);
     final reminderTimes = ref.read(di.reminderTimesProvider);
 
     // Cancelled whenever they aren't due, so reminders planned before the
     // switch went off, or before a progress reset, don't linger.
-    if (!await enabled || !await hasPlayedDaily()) {
+    if (!await enabled || !await hasCompletedRun()) {
       await _inOrder(ref.read(di.cancelDailyReminderProvider));
 
       return const [];
@@ -83,10 +83,10 @@ class DailyReminderNotifier extends _$DailyReminderNotifier {
     return planned;
   }
 
-  /// A daily run was just played to its end: asks for notifications (the OS
+  /// A run of any kind was just played to its end: asks for notifications (the OS
   /// prompts once, then answers from its record) and plans the reminders,
   /// unless the player turned them off.
-  Future<void> dailyRunFinished() async {
+  Future<void> runFinished() async {
     final askForNotifications = ref.read(askForNotificationsProvider);
 
     if (!await ref.read(di.dailyReminderEnabledProvider.future)) return;

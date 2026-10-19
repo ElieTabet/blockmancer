@@ -41,7 +41,7 @@ List<Override> stubFeatures({
     clock: (ref) => const _NoonClock(),
     engagementStore: (ref) => _MemoryEngagementStore(),
     gameRules: (ref) => const BlockmancerEngine(),
-    onDailyRunFinished: (ref) => () async {},
+    onRunFinished: (ref) => () async {},
     progressionStore: (ref) =>
         _MemoryProgressionStore(ref.watch(game.initialProgressionProvider)),
     remoteValue: (ref) =>

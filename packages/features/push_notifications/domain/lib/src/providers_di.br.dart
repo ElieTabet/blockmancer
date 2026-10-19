@@ -17,8 +17,8 @@ typedef CancelDailyReminderFun = Future<void> Function();
 typedef DailyStandingFun =
     Future<({bool played, int streak})> Function(DateTime day);
 
-/// Whether a daily run was ever played to its end on this device.
-typedef HasPlayedDailyFun = Future<bool> Function();
+/// Whether a run of any kind was ever played to its end on this device.
+typedef HasCompletedRunFun = Future<bool> Function();
 
 typedef NowFun = DateTime Function();
 
@@ -99,8 +99,8 @@ Stream<String> displayLanguage(Ref ref) => throw UnimplementedError(
 );
 
 @riverpod
-HasPlayedDailyFun hasPlayedDaily(Ref ref) => throw UnimplementedError(
-  'hasPlayedDailyProvider must be overridden by the composition layer',
+HasCompletedRunFun hasCompletedRun(Ref ref) => throw UnimplementedError(
+  'hasCompletedRunProvider must be overridden by the composition layer',
 );
 
 @riverpod

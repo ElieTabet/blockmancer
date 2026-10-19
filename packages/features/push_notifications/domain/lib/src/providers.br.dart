@@ -82,7 +82,7 @@ TrackNotificationOpenedFun trackNotificationOpened(Ref ref) {
 }
 
 /// Binds this layer's inbound slots: the messaging and the reminders
-/// (composition, pointing at `push`), the daily run's record (the game) and
+/// (composition, pointing at `push`), the runs' record (the game) and
 /// the report.
 List<Override> bindProviders({
   required AnalyticsSink Function(Ref ref) analyticsSink,
@@ -90,7 +90,7 @@ List<Override> bindProviders({
   required Future<bool> Function(Ref ref) dailyReminderEnabled,
   required di.DailyStandingFun Function(Ref ref) dailyStanding,
   required Stream<String> Function(Ref ref) displayLanguage,
-  required di.HasPlayedDailyFun Function(Ref ref) hasPlayedDaily,
+  required di.HasCompletedRunFun Function(Ref ref) hasCompletedRun,
   required di.LaunchMessageFun Function(Ref ref) launchMessage,
   required di.NowFun Function(Ref ref) now,
   required di.OpenedMessagesFun Function(Ref ref) openedMessages,
@@ -108,7 +108,7 @@ List<Override> bindProviders({
   di.dailyReminderEnabledProvider.overrideWith(dailyReminderEnabled),
   di.dailyStandingProvider.overrideWith(dailyStanding),
   di.displayLanguageProvider.overrideWith(displayLanguage),
-  di.hasPlayedDailyProvider.overrideWith(hasPlayedDaily),
+  di.hasCompletedRunProvider.overrideWith(hasCompletedRun),
   di.launchMessageProvider.overrideWith(launchMessage),
   di.nowProvider.overrideWith(now),
   di.openedMessagesProvider.overrideWith(openedMessages),

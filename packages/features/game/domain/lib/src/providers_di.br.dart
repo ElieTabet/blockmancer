@@ -111,11 +111,11 @@ SubmitScoreFun submitDailyScore(Ref ref) => throw UnimplementedError(
   'submitDailyScoreProvider must be overridden by the composition layer',
 );
 
-/// Told that a daily run was just played to its end and its best kept: the
-/// daily reminder's moment. Never throws.
-typedef DailyRunFinishedFun = Future<void> Function();
+/// Told that a run of any kind was just played to its end and its best kept:
+/// the daily reminders' moment. Never throws.
+typedef RunFinishedFun = Future<void> Function();
 
 @riverpod
-DailyRunFinishedFun onDailyRunFinished(Ref ref) => throw UnimplementedError(
-  'onDailyRunFinishedProvider must be overridden by the composition layer',
+RunFinishedFun onRunFinished(Ref ref) => throw UnimplementedError(
+  'onRunFinishedProvider must be overridden by the composition layer',
 );

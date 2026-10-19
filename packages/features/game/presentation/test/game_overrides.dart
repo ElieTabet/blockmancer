@@ -117,7 +117,7 @@ List<Override> gameOverrides(
     clock: (ref) => const FakeClock(),
     engagementStore: (ref) => FakeEngagementStore(engagement),
     gameRules: (ref) => rules,
-    onDailyRunFinished: (ref) => () async {},
+    onRunFinished: (ref) => () async {},
     progressionStore: (ref) =>
         progressionStore ??
         FakeProgressionStore(game.startingProgression(rules)),

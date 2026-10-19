@@ -157,7 +157,7 @@ void main() {
           dailyStanding: (ref) =>
               (day) async => (played: false, streak: 0),
           displayLanguage: (ref) => Stream.value('en'),
-          hasPlayedDaily: (ref) =>
+          hasCompletedRun: (ref) =>
               () async => false,
           launchMessage: (ref) =>
               () =>

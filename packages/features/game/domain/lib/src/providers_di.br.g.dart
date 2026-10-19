@@ -668,50 +668,43 @@ final class SubmitDailyScoreProvider
 
 String _$submitDailyScoreHash() => r'2da033c7846a194441d0230df0858a6e9a0b21e9';
 
-@ProviderFor(onDailyRunFinished)
-final onDailyRunFinishedProvider = OnDailyRunFinishedProvider._();
+@ProviderFor(onRunFinished)
+final onRunFinishedProvider = OnRunFinishedProvider._();
 
-final class OnDailyRunFinishedProvider
-    extends
-        $FunctionalProvider<
-          DailyRunFinishedFun,
-          DailyRunFinishedFun,
-          DailyRunFinishedFun
-        >
-    with $Provider<DailyRunFinishedFun> {
-  OnDailyRunFinishedProvider._()
+final class OnRunFinishedProvider
+    extends $FunctionalProvider<RunFinishedFun, RunFinishedFun, RunFinishedFun>
+    with $Provider<RunFinishedFun> {
+  OnRunFinishedProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'onDailyRunFinishedProvider',
+        name: r'onRunFinishedProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$onDailyRunFinishedHash();
+  String debugGetCreateSourceHash() => _$onRunFinishedHash();
 
   @$internal
   @override
-  $ProviderElement<DailyRunFinishedFun> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  $ProviderElement<RunFinishedFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  DailyRunFinishedFun create(Ref ref) {
-    return onDailyRunFinished(ref);
+  RunFinishedFun create(Ref ref) {
+    return onRunFinished(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(DailyRunFinishedFun value) {
+  Override overrideWithValue(RunFinishedFun value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<DailyRunFinishedFun>(value),
+      providerOverride: $SyncValueProvider<RunFinishedFun>(value),
     );
   }
 }
 
-String _$onDailyRunFinishedHash() =>
-    r'832292294114755f6ea9755446574ebdba42869d';
+String _$onRunFinishedHash() => r'6430cedf1019ff816ccbf0b7b6e11a2f5a5cfc37';

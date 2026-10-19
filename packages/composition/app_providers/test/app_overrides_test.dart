@@ -581,11 +581,13 @@ void main() {
     await container.read(push_notifications.dailyReminderProvider.future);
     final today = container.read(game.todaysDailyDateProvider);
 
-    // When
-    await container.read(game.recordRunEndProvider)(
+    // When: the game keeps its best and counts its end
+    final recorded = container.read(game.recordRunEndProvider)(
       .daily(day: today.year * 10000 + today.month * 100 + today.day),
       3000,
     );
+    await container.read(game.countRunEndProvider)();
+    await recorded;
     await pumpEventQueue();
     await container.read(push_notifications.dailyReminderProvider.future);
 
@@ -600,6 +602,54 @@ void main() {
       everyElement('daily_reminder'),
     );
     expect(await container.read(home_di.dailyStreakProvider.future), 1);
+  });
+
+  test("a player who only plays world runs gets the week's reminders from "
+      'their first run end, general ones as there is no streak', () async {
+    // Given
+    SharedPreferences.setMockInitialValues({});
+    final reminder = _FakeDailyReminder();
+    final container = ProviderContainer(
+      overrides: [
+        ...appOverrides(
+          collectsTelemetry: false,
+          router: AppRouter(),
+          testTools: false,
+        ),
+        dailyReminderProvider.overrideWithValue(reminder),
+      ],
+    );
+    addTearDown(container.dispose);
+    startDailyReminder(container);
+    await container.read(push_notifications.dailyReminderProvider.future);
+
+    // When: the game keeps its best and counts its end
+    final recorded = container.read(game.recordRunEndProvider)(
+      const .world(world: WorldId.rubble),
+      2000,
+    );
+    await container.read(game.countRunEndProvider)();
+    await recorded;
+    await pumpEventQueue();
+    await container.read(push_notifications.dailyReminderProvider.future);
+
+    // Then: days 0, 1, 2, 3, 5 (calling the player back) and 7
+    expect(reminder.calls, ['cancel', 'replace in Daily run reminder']);
+    expect(reminder.replaced.single, hasLength(6));
+    expect(
+      [
+        for (final notification in reminder.replaced.single)
+          push_notifications.ReminderMessage.fromId(
+            notification.data['message']!,
+          )?.pool,
+      ],
+      [
+        for (var index = 0; index < 6; index++)
+          index == 4
+              ? push_notifications.ReminderPool.comeback
+              : push_notifications.ReminderPool.general,
+      ],
+    );
   });
 
   // Only `telemetry` names the analytics and crash plugins, and the app alone
