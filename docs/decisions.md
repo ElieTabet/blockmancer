@@ -601,3 +601,14 @@ Three changes from the review of this file, each its own commit.
 - **Notification ids:** reminders take 100–107;
   the foreground pushes Android draws moved to 1000 up so cancelling a reminder never takes one
   down.
+
+## Live Remote Config and the kill switch
+
+- **"Values changed"** fires after every fetch that didn't fail, whether or not a value differs,
+  and after every live update once it is activated: the SDK doesn't say whether a fetch brought
+  anything new, and recomputing the same answer costs nothing. A fetch or an activation that
+  fails fires nothing, the values being those already read.
+- **A live update is activated at once.** The SDK fetches it itself and leaves activating to the
+  app; nothing in the app needs to hold one back, since a run reads its values as it starts.
+- **An error on the live stream** (Android reports a dropped connection there; iOS only prints
+  it) is logged and the app keeps listening: the SDK reconnects by itself.
