@@ -78,6 +78,7 @@ melos:
         url_launcher: ^6.3.2 # opens a link outside the app; known only to the external_links package
       dev_dependencies:
         auto_route_generator: ^10.4.0
+        fake_async: ^1.3.3 # already flutter_test's: time a test controls, never the machine's
         build_runner: 2.16.0 # pinned: 2.16.2 calls AnalysisOptionsBuilder, absent in the pinned analyzer 10.2.0
         flutter_launcher_icons: ^0.14.4 # Generates the launcher icons into app/android and app/ios
         flutter_gen_runner: ^5.15.0 # FlutterGen — generates the type-safe Assets accessor (assets package)
