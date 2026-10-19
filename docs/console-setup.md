@@ -132,9 +132,15 @@ Or with the Firebase CLI (check `firebase --help deploy` for your version):
 add `"remoteconfig": {"template": "docs/remote-config/template.json"}` to a `firebase.json` at the
 repo root, then `firebase deploy --only remoteconfig --project blockmancer-a153f`.
 
-How the app reads them: fetched at launch, at most every 12 hours (every 5 minutes in a test
-build); a run reads them as it starts, so a change reaches the next run, never one in progress.
-The update check waits up to 2 seconds for the launch's fetch.
+How the app reads them:
+- **While the app is open, live:** a published change arrives within seconds, through Remote
+  Config's real-time listener, and is applied at once. The map's and the Spellbook's numbers
+  update on screen.
+- **Fetched** at launch and on every return to the app, at most every 12 hours (every 5 minutes
+  in a test build); within that limit the fetch answers with the values already held.
+- **A run reads them as it starts**, so a change reaches the next run, never one in progress.
+- **The update check** waits up to 2 seconds for the launch's fetch, then decides again at every
+  change.
 
 #### How to add a world's config
 
@@ -158,9 +164,18 @@ Older app versions never ask for the new keys, so they ignore them. Never rename
 old one or change what it means: versions already shipped keep reading it as they did.
 
 **Kill switch:** set `min_version_ios` / `min_version_android` above a broken version (e.g.
-`1.0.1` to stop 1.0.0) and publish: that version shows "Update required" with a store button from
-its next launch. `latest_version_*` shows a dismissible banner on the map instead, once per
-version. All four default to `0.0.0`, which asks nothing.
+`1.0.1` to stop 1.0.0) and publish: that version shows "Update required" with a store button, in
+place of everything and with no way back. `latest_version_*` shows a dismissible banner on the
+map instead, once per version. All four default to `0.0.0`, which asks nothing.
+
+When a player sees it:
+- **App open:** within seconds (the live listener). Mid-run, once the move being played has
+  played out and been saved; the run resumes after the update.
+- **App closed:** at the next launch, on the splash, if the launch's fetch lands within 2
+  seconds; otherwise as soon as it does.
+- **App in the background:** on return. The return's fetch obeys the 12-hour limit, so within
+  it the app keeps the values it held, and the change comes from the live listener as it
+  reconnects, or at the latest from the first fetch past the limit.
 
 ## AdMob
 
