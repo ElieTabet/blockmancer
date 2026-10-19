@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' show Ref;
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:shared_domain/shared_domain.dart'
@@ -84,6 +85,7 @@ final class FakeGameRouting implements GameRouting {
 /// nowhere unless [analytics] keeps it, and run totals reach no leaderboard
 /// unless [submitBestScore] or [submitDailyScore] takes them. The screen is opened with
 /// [progression], a new player's unless given, which [progressionStore] keeps.
+/// Nothing is published to Remote Config unless [remoteValue] publishes it.
 List<Override> gameOverrides(
   FakeGameRules rules, {
   bool adsRemoved = false,
@@ -97,6 +99,7 @@ List<Override> gameOverrides(
   Progression? progression,
   game.ProgressionStore? progressionStore,
   bool reduceMotion = false,
+  game.RemoteValueFun Function(Ref ref)? remoteValue,
   RewardedActionFun? rewardedAction,
   bool rewardedAdReady = true,
   game.SavedRun? resumed,
@@ -121,8 +124,10 @@ List<Override> gameOverrides(
     progressionStore: (ref) =>
         progressionStore ??
         FakeProgressionStore(game.startingProgression(rules)),
-    remoteValue: (ref) =>
-        (_) => null,
+    remoteValue:
+        remoteValue ??
+        (ref) =>
+            (_) => null,
     runStore: (ref) => runStore ?? FakeRunStore(),
     appVersion: (ref) async => '1.0.0',
     requestReview: (ref) => requestReview ?? () async {},

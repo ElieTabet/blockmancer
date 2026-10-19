@@ -107,6 +107,9 @@ final class FakeGameRules implements GameRules {
   Transition? next;
   final RunState start;
 
+  /// The config of every run started, in order.
+  final started = <RunConfig>[];
+
   @override
   RunConfig get defaultConfig => testConfig;
 
@@ -211,6 +214,7 @@ final class FakeGameRules implements GameRules {
   @override
   RunState startRun({required RunConfig config, required int seed}) {
     calls.add('startRun $seed');
+    started.add(config);
 
     return start;
   }

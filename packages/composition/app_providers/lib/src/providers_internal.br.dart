@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ads/ads.dart';
 import 'package:app_providers/src/release_ids.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:game_domain/game_domain.dart' as game;
 import 'package:leaderboards/leaderboards.dart';
 import 'package:play_stats/play_stats.dart';
@@ -132,6 +133,51 @@ RemoteValues remoteValues(Ref ref) => FirebaseRemoteValues(
 @Riverpod(keepAlive: true)
 Future<void> remoteValuesFetched(Ref ref) =>
     ref.watch(remoteValuesProvider).fetchAndActivate();
+
+/// Keeps the values current for the app's life: listening live once the
+/// launch's fetch has settled (the web needs a fetch first), and fetching
+/// again on every return to the app, which the minimum interval may answer
+/// from what was already fetched.
+@Riverpod(keepAlive: true)
+void remoteValuesKeptCurrent(Ref ref) {
+  final values = ref.watch(remoteValuesProvider);
+  final resumed = AppLifecycleListener(
+    onResume: () => unawaited(values.fetchAndActivate()),
+  );
+  ref.onDispose(resumed.dispose);
+
+  unawaited(
+    ref
+        .watch(remoteValuesFetchedProvider.future)
+        .then((_) => values.listenForUpdates()),
+  );
+}
+
+/// Counts every change of the values, so what reads them can recompute.
+@Riverpod(keepAlive: true)
+class RemoteValuesRevision extends _$RemoteValuesRevision {
+  @override
+  int build() {
+    final changes = ref
+        .watch(remoteValuesProvider)
+        .changes
+        .listen((_) => state++);
+    ref.onDispose(changes.cancel);
+
+    return 0;
+  }
+}
+
+/// The values as they stand: a new function at every change, so whatever
+/// watches it recomputes. A run on screen never watches it, so it keeps the
+/// values it started with.
+@Riverpod(keepAlive: true)
+String? Function(String key) liveRemoteValue(Ref ref) {
+  ref.watch(remoteValuesRevisionProvider);
+  final values = ref.watch(remoteValuesProvider);
+
+  return (key) => values.valueOf(key);
+}
 
 /// Whether this is a test build: `TEST_TOOLS`, the app's to say.
 @Riverpod(keepAlive: true)

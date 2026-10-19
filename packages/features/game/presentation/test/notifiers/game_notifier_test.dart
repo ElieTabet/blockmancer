@@ -22,6 +22,7 @@ void main() {
     GameLaunch launch = .daily,
     Progression? progression,
     ProgressionStore? progressionStore,
+    RemoteValueFun Function(Ref ref)? remoteValue,
     RewardedActionFun? rewardedAction,
     SavedRun? resumed,
     RequestReviewFun? requestReview,
@@ -41,6 +42,7 @@ void main() {
         launch: launch,
         progression: progression,
         progressionStore: progressionStore,
+        remoteValue: remoteValue,
         rewardedAction: rewardedAction,
         resumed: resumed,
         requestReview: requestReview,
@@ -92,6 +94,33 @@ void main() {
       rules.calls.where((call) => call.startsWith('startRun')),
       hasLength(2),
     );
+  });
+
+  test('a value published mid-run leaves the run as it started, and the next '
+      'run plays it', () async {
+    // Given
+    final game = container(
+      launch: .practice,
+      remoteValue: (ref) {
+        final published = ref.watch(_publishedProvider);
+
+        return (key) => published[key];
+      },
+    );
+    final run = game.read(gameProvider).run;
+
+    // When
+    game.read(_publishedProvider.notifier).publish('round_1_target', '300');
+    await pumpEventQueue();
+
+    // Then
+    expect(identical(game.read(gameProvider).run, run), isTrue);
+    expect(rules.started.single.rounds.first.target, 250);
+
+    rules.next = (runIn(const .over()), const [GameEvent.runOver(total: 1)]);
+    game.read(gameProvider.notifier).endRun();
+    await game.read(gameProvider.notifier).retry();
+    expect(rules.started.last.rounds.first.target, 300);
   });
 
   group('the jokers a run may offer', () {
@@ -1239,3 +1268,15 @@ void main() {
     });
   });
 }
+
+/// What Remote Config publishes, changed as the console would.
+final class _Published extends Notifier<Map<String, String>> {
+  @override
+  Map<String, String> build() => const {};
+
+  void publish(String key, String value) => state = {...state, key: value};
+}
+
+final _publishedProvider = NotifierProvider<_Published, Map<String, String>>(
+  _Published.new,
+);

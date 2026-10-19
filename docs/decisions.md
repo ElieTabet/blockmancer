@@ -612,3 +612,17 @@ Three changes from the review of this file, each its own commit.
   app; nothing in the app needs to hold one back, since a run reads its values as it starts.
 - **An error on the live stream** (Android reports a dropped connection there; iOS only prints
   it) is logged and the app keeps listening: the SDK reconnects by itself.
+- **"The same lifecycle hook the daily reminder uses"** is read as the same mechanism, an
+  `AppLifecycleListener` whose `onResume` acts, not one listener shared by both: each startup
+  keeps its own, so neither knows the other. Remote Config's lives in a keepAlive provider that
+  disposes it, so a test's container takes it down.
+- **The re-fetch on return** obeys the minimum interval (12 hours in a release): within it, the
+  SDK answers with what it already holds, and the live listener is what brings anything newer.
+- **The live listener starts once the launch's fetch has settled**, as the SDK asks on the web;
+  on a phone it changes nothing.
+- **Live values reach more than the update check.** The game's remote-value slot follows every
+  change too, so the map's boss targets and ★3 thresholds and the Spellbook's numbers update on
+  screen, and the next run started plays the new values. A run in progress keeps the config it
+  started with: the game screen never watches the slot, only reads it as a run starts (a test
+  publishes mid-run and checks the run on screen is the same object). Interstitial and rating
+  caps were already read at each decision.

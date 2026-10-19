@@ -584,6 +584,179 @@ final class RemoteValuesFetchedProvider
 String _$remoteValuesFetchedHash() =>
     r'ff6b71abd56498cac0306923798f52de5737b122';
 
+/// Keeps the values current for the app's life: listening live once the
+/// launch's fetch has settled (the web needs a fetch first), and fetching
+/// again on every return to the app, which the minimum interval may answer
+/// from what was already fetched.
+
+@ProviderFor(remoteValuesKeptCurrent)
+final remoteValuesKeptCurrentProvider = RemoteValuesKeptCurrentProvider._();
+
+/// Keeps the values current for the app's life: listening live once the
+/// launch's fetch has settled (the web needs a fetch first), and fetching
+/// again on every return to the app, which the minimum interval may answer
+/// from what was already fetched.
+
+final class RemoteValuesKeptCurrentProvider
+    extends $FunctionalProvider<void, void, void>
+    with $Provider<void> {
+  /// Keeps the values current for the app's life: listening live once the
+  /// launch's fetch has settled (the web needs a fetch first), and fetching
+  /// again on every return to the app, which the minimum interval may answer
+  /// from what was already fetched.
+  RemoteValuesKeptCurrentProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'remoteValuesKeptCurrentProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$remoteValuesKeptCurrentHash();
+
+  @$internal
+  @override
+  $ProviderElement<void> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  void create(Ref ref) {
+    return remoteValuesKeptCurrent(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
+}
+
+String _$remoteValuesKeptCurrentHash() =>
+    r'da4d20212d01885d0f9a7611c7454308387e45cf';
+
+/// Counts every change of the values, so what reads them can recompute.
+
+@ProviderFor(RemoteValuesRevision)
+final remoteValuesRevisionProvider = RemoteValuesRevisionProvider._();
+
+/// Counts every change of the values, so what reads them can recompute.
+final class RemoteValuesRevisionProvider
+    extends $NotifierProvider<RemoteValuesRevision, int> {
+  /// Counts every change of the values, so what reads them can recompute.
+  RemoteValuesRevisionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'remoteValuesRevisionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$remoteValuesRevisionHash();
+
+  @$internal
+  @override
+  RemoteValuesRevision create() => RemoteValuesRevision();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$remoteValuesRevisionHash() =>
+    r'dd4eafb9462b30da0a5fac0aa12471fbf09bd9dc';
+
+/// Counts every change of the values, so what reads them can recompute.
+
+abstract class _$RemoteValuesRevision extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<int, int>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
+/// The values as they stand: a new function at every change, so whatever
+/// watches it recomputes. A run on screen never watches it, so it keeps the
+/// values it started with.
+
+@ProviderFor(liveRemoteValue)
+final liveRemoteValueProvider = LiveRemoteValueProvider._();
+
+/// The values as they stand: a new function at every change, so whatever
+/// watches it recomputes. A run on screen never watches it, so it keeps the
+/// values it started with.
+
+final class LiveRemoteValueProvider
+    extends
+        $FunctionalProvider<
+          String? Function(String key),
+          String? Function(String key),
+          String? Function(String key)
+        >
+    with $Provider<String? Function(String key)> {
+  /// The values as they stand: a new function at every change, so whatever
+  /// watches it recomputes. A run on screen never watches it, so it keeps the
+  /// values it started with.
+  LiveRemoteValueProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'liveRemoteValueProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$liveRemoteValueHash();
+
+  @$internal
+  @override
+  $ProviderElement<String? Function(String key)> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  String? Function(String key) create(Ref ref) {
+    return liveRemoteValue(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String? Function(String key) value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String? Function(String key)>(value),
+    );
+  }
+}
+
+String _$liveRemoteValueHash() => r'a1fb93cbdb7f4ddf073b34a0d0a2965bde3eddf6';
+
 /// Whether this is a test build: `TEST_TOOLS`, the app's to say.
 
 @ProviderFor(testTools)

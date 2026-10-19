@@ -133,7 +133,7 @@ List<Override> featureBindingOverrides({
     progressionStore: (ref) => SharedPreferencesProgressionStore(
       startingProgression: ref.watch(game.initialProgressionProvider),
     ),
-    remoteValue: (ref) => ref.watch(remoteValuesProvider).valueOf,
+    remoteValue: (ref) => ref.watch(liveRemoteValueProvider),
     requestReview: (ref) => ref.watch(storeReviewProvider).requestReview,
     runStore: (ref) => const SharedPreferencesRunStore(),
     sessionHadError: (ref) => ref.watch(telemetry.sessionHadErrorProvider),
