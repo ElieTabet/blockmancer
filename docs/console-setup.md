@@ -112,6 +112,11 @@ release.
 - **The keys:** [`docs/remote-config/keys.md`](remote-config/keys.md) — name, type, default,
   allowed range, what it changes (68 keys). A value outside its range, or not a number, is
   ignored and the default plays.
+- **One parameter per number, never one JSON value.** The run's config is not published as a
+  whole: each number is its own parameter, read and checked on its own (`game_domain`'s
+  `run_tuning.dart`). A malformed, out-of-range or missing value plays the in-app default for
+  that number alone, and every other published number still plays. An app version only asks for
+  the keys it knows, so parameters added for a later version are never read by an older one.
 - **The template:** [`docs/remote-config/template.json`](remote-config/template.json), generated
   from the code's own defaults (`packages/composition/app_providers/tool/remote_config_template.dart`;
   a test fails if it drifts). Publishing it changes nothing until a value is edited.
@@ -130,6 +135,27 @@ repo root, then `firebase deploy --only remoteconfig --project blockmancer-a153f
 How the app reads them: fetched at launch, at most every 12 hours (every 5 minutes in a test
 build); a run reads them as it starts, so a change reaches the next run, never one in progress.
 The update check waits up to 2 seconds for the launch's fetch.
+
+#### How to add a world's config
+
+A new world (a `WorldId` value with its config in the engine, `isPlayable` true):
+
+1. **Nothing to write for its boss and third star.** `boss_target_<world>` and `star3_<world>`
+   come with the world, defaulting to what its run plays in the app (`configFor`).
+2. **Its rule's own numbers** (as `tide_boss_gaps` or `fog_boss_cells`): one entry each in
+   `_keys` in `packages/features/game/domain/lib/src/entities/run_tuning.dart`, with
+   `world: .<world>` so it tunes that world's run alone, an allowed range, and a description.
+   The default is always read from the run, never written in the entry.
+3. **Regenerate the template and the table:**
+   `cd packages/composition/app_providers && dart run tool/remote_config_template.dart` (a test
+   fails until it is run). Commit `docs/remote-config/`.
+4. **In the console**, only to change a value: **Add parameter** with the key's name, type
+   Number and the default from `keys.md`. Nothing has to be published for the world to play:
+   with no value, the app plays its own default. Don't re-publish `template.json` over a live
+   template to add keys; it puts back every edited value.
+
+Older app versions never ask for the new keys, so they ignore them. Never rename a key, reuse an
+old one or change what it means: versions already shipped keep reading it as they did.
 
 **Kill switch:** set `min_version_ios` / `min_version_android` above a broken version (e.g.
 `1.0.1` to stop 1.0.0) and publish: that version shows "Update required" with a store button from

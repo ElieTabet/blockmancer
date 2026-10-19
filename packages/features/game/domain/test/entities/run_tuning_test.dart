@@ -77,6 +77,95 @@ void main() {
     expect(tuned(_rubble(), values), _rubble());
   });
 
+  test('Given keys a later version reads published beside one this version '
+      'knows, When a run is tuned, Then the unknown ones are never read, '
+      'nothing throws, and the known one plays', () {
+    // Given: a later world's boss, a later joker's number, a fifth round
+    final asked = <String>[];
+    final values = {
+      'boss_target_volcano': '5000',
+      'joker_phoenix_mult': '4',
+      'round_5_target': '3000',
+      'chips_per_cell': '12',
+    };
+
+    // When
+    final run = tuned(_rubble(), (key) {
+      asked.add(key);
+
+      return values[key];
+    });
+
+    // Then
+    expect(run, _rubble().copyWith(chipsPerCell: 12));
+    expect(
+      asked,
+      isNot(
+        anyOf(
+          contains('boss_target_volcano'),
+          contains('joker_phoenix_mult'),
+          contains('round_5_target'),
+        ),
+      ),
+    );
+  });
+
+  test('Given one malformed value, one missing and the rest valid, When a run '
+      'is tuned, Then only the malformed and missing ones keep their '
+      'defaults', () {
+    // Given: round 2's target malformed, round 4's pieces not published
+    final values = _published({
+      'boss_target_rubble': '4100',
+      'joker_ember_mult': '2',
+      'round_1_target': '300',
+      'round_2_target': '12k',
+      'round_3_pieces': '19',
+    });
+
+    // When
+    final run = tuned(_rubble(), values);
+
+    // Then
+    expect(run.rounds[0].target, 300);
+    expect(run.rounds[1].target, _rubble().rounds[1].target);
+    expect(run.rounds[2].pieces, 19);
+    expect(run.rounds[3].pieces, _rubble().rounds[3].pieces);
+    expect(run.rounds.last.target, 4100);
+    expect(run.jokers.emberMult, 2);
+    expect(run.offerCount, _rubble().offerCount);
+  });
+
+  test('Given a release that gives Fog its rules, When the keys are listed and '
+      "a Fog run is tuned, Then Fog's keys appear with Fog's own defaults and "
+      'tune its run alone', () {
+    // Given: Fog coming soon, then playable
+    const before = TwoWorldRules();
+    const after = TwoWorldRules(fogPlayable: true);
+    Set<String> names(GameRules rules) => {
+      for (final key in runTuningKeys(rules)) key.name,
+    };
+
+    // When
+    final added = names(after).difference(names(before));
+    final fogKeys = {
+      for (final key in runTuningKeys(after))
+        if (added.contains(key.name)) key.name: key.defaultValue,
+    };
+    final fog = after.configFor(.fog, jokerPool: const []);
+    final published = _published({'boss_target_fog': '3900'});
+
+    // Then: its keys, nothing else, defaulting to what its run plays: the
+    // boss target and third star every world gets, and its rule's numbers
+    expect(fogKeys, {
+      'boss_target_fog': '${fog.rounds.last.target}',
+      'fog_boss_cells': '${fog.rounds.last.fog}',
+      'fog_boss_hidden_stones': '${fog.rounds.last.fogStones}',
+      'star3_fog': '${fog.starThreshold}',
+    });
+    expect(tuned(fog, published).rounds.last.target, 3900);
+    expect(tuned(_rubble(), published), _rubble());
+  });
+
   test('Given a decimal published for the partner bias, When a run is tuned, '
       'Then it plays it', () {
     expect(
