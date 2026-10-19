@@ -589,6 +589,11 @@ Three changes from the review of this file, each its own commit.
 - **French in "tu"**, as the rest of the game (asked and chosen); the English is as given.
 - **A tap** opens Home scrolled back to its top, the daily card in view; it doesn't start the run.
   `notification_opened(message_id)` is logged with the message's id, the same in both languages.
+- **Inexact on Android:** every reminder is scheduled with `AndroidScheduleMode.inexactAllowWhileIdle`
+  (`LocalDailyReminder`, checked by its test), so it may come some minutes after 18:00, Doze
+  included. The app declares neither `SCHEDULE_EXACT_ALARM` nor `USE_EXACT_ALARM` (checked in the
+  merged manifest), and its manifest removes both (`tools:node="remove"`) should a library merge
+  one in: Play allows them only to alarm and calendar apps, and a nudge minutes late is fine.
 - **Notification ids:** reminders take 100–107;
   the foreground pushes Android draws moved to 1000 up so cancelling a reminder never takes one
   down.
