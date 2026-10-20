@@ -328,7 +328,7 @@ player is signed in once the consent form has gone; a refusal only leaves the bo
 → sign in, then play a daily run to its end; the Leaderboard button shows the score (scores can
 take a minute to appear). Leaderboards don't need review to show in the sandbox.
 
-### Daily reminder
+### Daily reminder ✅
 
 Nothing to set up: it is a local notification, scheduled on the phone, with no server and no
 capability (the push entitlement already covers asking for notifications). To see it: play a
