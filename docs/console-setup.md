@@ -229,7 +229,7 @@ ConsentDebugSettings.Builder().addTestDeviceHashedId(…)"), and run again with
 `--dart-define=UMP_TEST_DEVICE_ID=<that id>` added: the form shows as in the EEA. Decline: the
 game plays as usual.
 
-### 3. app-ads.txt
+### 3. app-ads.txt ✅
 
 Host a file at **`https://studio.elietabet.com/app-ads.txt`** containing exactly:
 
