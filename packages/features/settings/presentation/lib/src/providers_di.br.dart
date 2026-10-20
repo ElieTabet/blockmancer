@@ -58,8 +58,9 @@ Future<String?> removeAdsPrice(Ref ref) => throw UnimplementedError(
 );
 
 /// Asks the store for what the player owns: whether Remove ads is owned once
-/// it has answered.
-typedef RestorePurchasesFun = Future<bool> Function();
+/// it has answered, or null when a restore is already under way, whose own
+/// answer is the one to show.
+typedef RestorePurchasesFun = Future<bool?> Function();
 
 @riverpod
 RestorePurchasesFun restorePurchases(Ref ref) => throw UnimplementedError(

@@ -460,6 +460,25 @@ void main() {
         expect(find.text('Nothing to restore'), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'Given a restore already under way, When Restore purchases is tapped '
+      'again, Then no second popup is shown',
+      (tester) async {
+        // Given
+        await pumpSettings(tester, restoreFinds: null);
+        await tester.ensureVisible(find.text('Restore purchases'));
+        await tester.pumpAndSettle();
+
+        // When
+        await tester.tap(find.text('Restore purchases'));
+        await tester.pumpAndSettle();
+
+        // Then
+        expect(find.text('Nothing to restore'), findsNothing);
+        expect(find.text('Purchases restored'), findsNothing);
+      },
+    );
   });
 
   group('privacy', () {

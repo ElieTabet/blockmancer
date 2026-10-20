@@ -762,7 +762,9 @@ everyone (the rules' `canRevive`), just no ad.
   `startPurchases` (boot) re-checks with the store (a restore that counts as none), so a reinstall
   gets it back. From a buy until the store reports on it (bought, cancelled, failed, pending),
   another tap asks for nothing, so a double tap never stacks a second payment sheet; a buy the
-  store never reports on stops holding the next one back after 5 minutes. Nothing takes it back. Events: `purchase_started`, `purchase_completed`,
+  store never reports on stops holding the next one back after 5 minutes. A restore does the
+  same: a tap while one is under way asks the store nothing and answers null, so only the first
+  tap's popup shows. Nothing takes it back. Events: `purchase_started`, `purchase_completed`,
   `purchase_restored` (only a restore the player asked for), `purchase_failed(code)` (`canceled`,
   `unavailable`, or the store's code).
 - **`purchases`** (`StorePurchases`) wraps `in_app_purchase` (StoreKit 2 on iOS) and acknowledges

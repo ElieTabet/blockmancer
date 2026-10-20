@@ -125,6 +125,39 @@ void main() {
     expect(calls, ['buy blockmancer.remove_ads', 'buy blockmancer.remove_ads']);
   });
 
+  test('Given a restore under way, When Restore purchases is tapped again, '
+      'Then the store is asked once, and only the first tap answers', () async {
+    // Given
+    final shop = launch(onRestore: () => store.add(_update(.restored)));
+    await shop.read(removeAdsProvider.future);
+    final notifier = shop.read(removeAdsProvider.notifier);
+
+    // When
+    final taps = await Future.wait([notifier.restore(), notifier.restore()]);
+
+    // Then
+    expect(calls, ['restore']);
+    expect(taps, [isTrue, isNull]);
+
+    expect(await notifier.restore(), isTrue);
+    expect(calls, ['restore', 'restore']);
+  });
+
+  test('Given the store reporting several restored purchases, When the '
+      'player restores, Then it is answered once, without error', () async {
+    // Given
+    final shop = launch(
+      onRestore: () => store
+        ..add(_update(.restored))
+        ..add(_update(.restored)),
+    );
+    await shop.read(removeAdsProvider.future);
+
+    // When / Then
+    expect(await shop.read(removeAdsProvider.notifier).restore(), isTrue);
+    await settle();
+  });
+
   test('Given a player who backs out of the store, Then ads stay on and the '
       'purchase counts as failed, canceled', () async {
     // Given

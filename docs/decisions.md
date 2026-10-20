@@ -670,3 +670,7 @@ Three changes from the review of this file, each its own commit.
   not the row's. A tap held back answers as if the sheet opened, so no "unavailable" popup.
 - **A store that never reports** (which neither store does in practice) stops holding back after
   5 minutes: the sheet covers the app meanwhile, so nothing can be tapped behind it.
+- **Restore purchases holds back the same way.** A tap while a restore is under way asks the
+  store nothing and answers "already restoring" (null), which Settings shows nothing for: the
+  first tap's popup is the answer to both. The store may report several restored purchases for
+  one restore; the first answers it, and the rest no longer throw.

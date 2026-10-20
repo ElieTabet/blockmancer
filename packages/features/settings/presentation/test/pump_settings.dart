@@ -29,7 +29,7 @@ Future<FakeSettingsRouting> pumpSettings(
   bool ownsRemoveAds = false,
   List<String>? purchases,
   String? removeAdsPrice = '3,99 €',
-  bool restoreFinds = false,
+  bool? restoreFinds = false,
   bool storeOpens = true,
   FakeMailApp? mailApp,
   FakeShareSheet? shareSheet,

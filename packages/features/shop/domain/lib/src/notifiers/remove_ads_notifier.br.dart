@@ -71,8 +71,12 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
   Future<void> recheck() => ref.read(di.restorePurchasesProvider)();
 
   /// The player's restore (Settings): whether Remove ads is owned once the
-  /// store has reported, or [_restoreWait] has passed.
-  Future<bool> restore() async {
+  /// store has reported, or [_restoreWait] has passed. Null for a tap while
+  /// one is under way: the store isn't asked twice, and the first tap's
+  /// answer is the one to show.
+  Future<bool?> restore() async {
+    if (_restoring != null) return null;
+
     final restoring = _restoring = Completer<void>();
 
     try {
@@ -102,7 +106,11 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
           sink.log(.purchaseRestored(product: product));
         }
         await _keep();
-        _restoring?.complete();
+
+        // The store may report several restored purchases for one restore.
+        if (_restoring case final restoring? when !restoring.isCompleted) {
+          restoring.complete();
+        }
       case .canceled:
         sink.log(.purchaseFailed(code: 'canceled', product: product));
       case .failed:
