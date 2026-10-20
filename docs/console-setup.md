@@ -104,7 +104,7 @@ such row.
 The build scripts upload the Dart symbols themselves; iOS dSYMs go up from the Runner target's
 "Upload Crashlytics symbols" build phase.
 
-### 4. Remote Config
+### 4. Remote Config ✅
 
 Every number a run plays with, and the update versions, can change from the console without a
 release.
@@ -141,6 +141,11 @@ How the app reads them:
 - **A run reads them as it starts**, so a change reaches the next run, never one in progress.
 - **The update check** waits up to 2 seconds for the launch's fetch, then decides again at every
   change.
+- **Cost:** fetch requests are free up to 100,000 a day, then $0.06 per 10,000. A player makes
+  at most 2 a day (the 12-hour limit), plus 1 per change published while their app is open; the
+  live connection itself is no request. So free up to about 50,000 players a day, about $0.60 a
+  day at 100,000. Keep the 12-hour limit in release builds; a test build's 5 minutes is up to
+  about 300 a day per tester.
 
 #### How to add a world's config
 
