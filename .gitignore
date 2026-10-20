@@ -129,3 +129,6 @@ app.*.symbols
 
 # Stray logs at the repo root (a test loop once wrote one per package)
 /*.txt
+
+# The Crashlytics CLI's symbol tool, downloaded by the release builds
+.crashlytics/
