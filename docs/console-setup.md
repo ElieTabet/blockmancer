@@ -355,10 +355,11 @@ Play Console → the app → **Policy and programs → App content → Data safe
 App content → **Ads** → "Does your app contain ads?" **Yes**. Advertising ID: declare its use for
 **Advertising or marketing** and **Analytics** (the manifest declares `AD_ID`).
 
-### In-app product: Remove ads
+### In-app product: Remove ads ✅
 
-Play Console → the app → **Monetize with Play → Products → In-app products** → **Create
-product**:
+Play Console → the app → **Monetize with Play → Products → One-time products** → **Create
+one-time product**. The page asks for the `BILLING` permission until a build that has it is
+uploaded to a track: 1.0.0+4 is the first.
 
 - Product ID: **`blockmancer.remove_ads`** ✅ (exactly); purchase option ID: **`buy`**
 - Name / description: as in App Store Connect, in English and French
@@ -367,8 +368,9 @@ product**:
   uploaded to a track: upload a test build to internal testing first; `in_app_purchase` adds the
   permission.)
 
-To test: Play Console → **Settings → License testing** → add the testers' Google accounts; install
-the build from the internal testing track (not a sideloaded APK) and buy: test cards are offered.
+To test (not done yet): Play Console → **Settings → License testing** → add the testers' Google
+accounts; install the build from the internal testing track (not a sideloaded APK) and buy: test
+cards are offered.
 
 ### Rating prompt ✅
 
