@@ -295,7 +295,7 @@ Config). To see it: **TestFlight never shows it** (Apple); run a build from Xcod
 (`flutter run --release` from `app/`), where it always shows, but submits nothing. Settings →
 **Rate Blockmancer** opens the App Store page (needs `APP_STORE_ID`).
 
-### Game Center: the two leaderboards
+### Game Center: the two leaderboards ✅
 
 The code submits every run's total to **`blockmancer.best_run`** and each daily run's to
 **`blockmancer.daily_run`** too, and the daily card's **Leaderboard** opens the daily one. The
