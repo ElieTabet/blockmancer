@@ -45,7 +45,7 @@ final class RemoveAdsNotifierProvider
   RemoveAdsNotifier create() => RemoveAdsNotifier();
 }
 
-String _$removeAdsNotifierHash() => r'ff616dcc77277b21fa2a3d27a33024e4ad64b5da';
+String _$removeAdsNotifierHash() => r'92397cccb08d7af5f6a933f106cc48fcf18d82bb';
 
 /// Whether the player owns Remove ads (the one product: interstitials gone
 /// for good; the rewarded revive stays): kept on the device, and confirmed by

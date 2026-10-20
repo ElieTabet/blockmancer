@@ -14,6 +14,12 @@ part 'remove_ads_notifier.br.g.dart';
 /// takes it back (a refund is the store's to handle).
 @Riverpod(keepAlive: true)
 class RemoveAdsNotifier extends _$RemoveAdsNotifier {
+  /// Set from a buy until the store reports how it went.
+  Timer? _buying;
+
+  /// How long a buy the store never reports on holds back the next one.
+  static const _buyingAtMost = Duration(minutes: 5);
+
   /// How long a restore waits for the store to report what it found.
   static const _restoreWait = Duration(seconds: 3);
 
@@ -22,7 +28,9 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
   @override
   Future<bool> build() async {
     final updates = ref.watch(di.purchaseUpdatesProvider)().listen(_onUpdate);
-    ref.onDispose(updates.cancel);
+    ref
+      ..onDispose(updates.cancel)
+      ..onDispose(_doneBuying);
 
     try {
       return await ref.watch(di.entitlementStoreProvider).adsRemoved();
@@ -39,14 +47,19 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
   }
 
   /// Opens the store's sheet; false when it couldn't open. What comes of it
-  /// arrives as an update.
+  /// arrives as an update. Until it has, another tap asks nothing: the store
+  /// would put up a second sheet.
   Future<bool> buy() async {
+    if (_buying != null) return true;
+
+    _buying = Timer(_buyingAtMost, _doneBuying);
     final product = ref.read(di.removeAdsProductIdProvider);
     final sink = ref.read(di.analyticsSinkProvider)
       ..log(.purchaseStarted(product: product));
     final opened = await ref.read(di.buyProductProvider)(product);
 
     if (!opened) {
+      _doneBuying();
       sink.log(.purchaseFailed(code: 'unavailable', product: product));
     }
 
@@ -77,6 +90,7 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
 
     if (update.productId != product) return;
 
+    _doneBuying();
     final sink = ref.read(di.analyticsSinkProvider);
 
     switch (update.outcome) {
@@ -98,6 +112,11 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
       case .pending:
         break;
     }
+  }
+
+  void _doneBuying() {
+    _buying?.cancel();
+    _buying = null;
   }
 
   Future<void> _keep() async {

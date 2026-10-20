@@ -760,7 +760,9 @@ everyone (the rules' `canRevive`), just no ad.
   (`shop_data`'s `SharedPreferencesEntitlementStore`, `purchases.removeAds`), so it holds offline,
   and confirmed by every purchase or restore the store reports, listened to from launch.
   `startPurchases` (boot) re-checks with the store (a restore that counts as none), so a reinstall
-  gets it back. Nothing takes it back. Events: `purchase_started`, `purchase_completed`,
+  gets it back. From a buy until the store reports on it (bought, cancelled, failed, pending),
+  another tap asks for nothing, so a double tap never stacks a second payment sheet; a buy the
+  store never reports on stops holding the next one back after 5 minutes. Nothing takes it back. Events: `purchase_started`, `purchase_completed`,
   `purchase_restored` (only a restore the player asked for), `purchase_failed(code)` (`canceled`,
   `unavailable`, or the store's code).
 - **`purchases`** (`StorePurchases`) wraps `in_app_purchase` (StoreKit 2 on iOS) and acknowledges

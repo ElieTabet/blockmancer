@@ -661,3 +661,12 @@ Three changes from the review of this file, each its own commit.
   whether or not anything listens, those it hands over again at launch included. Tests pin both:
   a purchase completing after the screen went up is kept, and a transaction delivered at launch
   is acknowledged.
+
+## One payment sheet at a time
+
+- **A buy holds the next one back until the store reports on it**: bought, restored, cancelled,
+  failed or pending (a parent's approval closes the sheet too). The sheet can't be opened twice
+  by any tap in between, whichever row or screen it comes from, since the guard is the shop's,
+  not the row's. A tap held back answers as if the sheet opened, so no "unavailable" popup.
+- **A store that never reports** (which neither store does in practice) stops holding back after
+  5 minutes: the sheet covers the app meanwhile, so nothing can be tapped behind it.

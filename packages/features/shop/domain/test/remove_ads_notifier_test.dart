@@ -92,6 +92,39 @@ void main() {
     ]);
   });
 
+  test('Given the store\'s sheet opening, When Remove ads is tapped again, '
+      'Then no second sheet is asked for', () async {
+    // Given
+    final shop = launch();
+    await shop.read(removeAdsProvider.future);
+    final notifier = shop.read(removeAdsProvider.notifier);
+
+    // When
+    final taps = await Future.wait([notifier.buy(), notifier.buy()]);
+    await notifier.buy();
+
+    // Then
+    expect(calls, ['buy blockmancer.remove_ads']);
+    expect(taps, [isTrue, isTrue]);
+  });
+
+  test('Given a buy the store has reported on, When Remove ads is tapped '
+      'again, Then the sheet opens again', () async {
+    // Given
+    final shop = launch();
+    await shop.read(removeAdsProvider.future);
+    final notifier = shop.read(removeAdsProvider.notifier);
+    await notifier.buy();
+    store.add(_update(.canceled));
+    await settle();
+
+    // When
+    await notifier.buy();
+
+    // Then
+    expect(calls, ['buy blockmancer.remove_ads', 'buy blockmancer.remove_ads']);
+  });
+
   test('Given a player who backs out of the store, Then ads stay on and the '
       'purchase counts as failed, canceled', () async {
     // Given
