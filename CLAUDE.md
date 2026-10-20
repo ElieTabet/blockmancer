@@ -135,6 +135,15 @@ melos run build-android
 melos run build-ios-test
 melos run build-android-test
 
+# Either platform or both, against production (scripts/build.sh): asks whether
+# it's a release (exactly build-android / build-ios), a test build (exactly
+# build-android-test / build-ios-test, named -test) or an installable build (a
+# release APK, an ad-hoc .ipa; placeholder ids only warn) and for the version,
+# which it writes to app/pubspec.yaml (commit the bump), and copies the
+# artefacts to build/outputs/. Pass --platform android|ios|both,
+# --release / --test / --no-release and --version x.y.z+build to skip asking.
+melos run build
+
 # Regenerate the Remote Config template and its key table from the code's
 # defaults (docs/remote-config/; a test fails until this is re-run)
 cd packages/composition/app_providers && dart run tool/remote_config_template.dart

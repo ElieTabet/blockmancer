@@ -191,3 +191,13 @@ melos:
         The Android release build as a test build for Play internal testing:
         TEST_TOOLS on, like build-ios-test.
       run: bash scripts/build_android_release.sh --test-tools
+
+    build:
+      description: |
+        Interactive build against production: asks for the platform (Android,
+        iOS or both), whether it is a release (the store build, exactly
+        build-android / build-ios), a test build (build-android-test /
+        build-ios-test) or an installable one (an APK / ad-hoc .ipa to share)
+        and for the version, written to app/pubspec.yaml, and copies
+        the artefacts to build/outputs/ (delegates to scripts/build.sh).
+      run: bash scripts/build.sh
