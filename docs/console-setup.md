@@ -268,7 +268,7 @@ App Store Connect → the app → **App Privacy** → Get Started, answering wha
 No contact info, no location, no user content: the app has no account. "Used to track" answers
 must match the IDFA: the app asks the tracking question (ATT) through the IDFA explainer.
 
-### In-app purchase: Remove ads
+### In-app purchase: Remove ads ✅
 
 App Store Connect → the app → **Monetization → In-App Purchases** → **+**:
 
