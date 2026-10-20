@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_domain/settings_domain.dart';
+import 'package:shared_domain/shared_domain.dart' show RestoreOutcome;
 
 import '../fake_feedback.dart';
 import '../fake_settings_store.dart';
@@ -425,41 +426,72 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Given a purchase made before, When Restore purchases is tapped, Then '
-      'it is restored and the player told',
-      (tester) async {
+    // What each restore comes to, as the player is told it, in each language.
+    final restoreCases = <(RestoreOutcome, AppLocale, String, String, String)>[
+      (
+        .restored,
+        .en,
+        'Restore purchases',
+        'Purchases restored',
+        'Ads are removed on this device, and revives need no video.',
+      ),
+      (
+        .nothingFound,
+        .en,
+        'Restore purchases',
+        'Nothing to restore',
+        'No purchase was found for this store account.',
+      ),
+      (
+        .storeUnreachable,
+        .en,
+        'Restore purchases',
+        'Store unavailable',
+        "The store couldn't be reached. Try again in a moment.",
+      ),
+      (
+        .restored,
+        .fr,
+        'Restaurer les achats',
+        'Achats restaurés',
+        'Les pubs sont supprimées sur cet appareil, et revivre se fait sans '
+            'vidéo.',
+      ),
+      (
+        .nothingFound,
+        .fr,
+        'Restaurer les achats',
+        'Rien à restaurer',
+        'Aucun achat trouvé pour ce compte de la boutique.',
+      ),
+      (
+        .storeUnreachable,
+        .fr,
+        'Restaurer les achats',
+        'Boutique indisponible',
+        'Impossible de joindre la boutique. Réessaie dans un instant.',
+      ),
+    ];
+
+    for (final (outcome, locale, row, title, message) in restoreCases) {
+      testWidgets('Given a restore that comes to ${outcome.name}, When Restore '
+          'purchases is tapped in ${locale.languageCode}, Then the player is '
+          'told so', (tester) async {
         // Given
-        await pumpSettings(tester, restoreFinds: true);
-        await tester.ensureVisible(find.text('Restore purchases'));
+        LocaleSettings.setLocaleSync(locale);
+        await pumpSettings(tester, restoreFinds: outcome);
+        await tester.ensureVisible(find.text(row));
         await tester.pumpAndSettle();
 
         // When
-        await tester.tap(find.text('Restore purchases'));
+        await tester.tap(find.text(row));
         await tester.pumpAndSettle();
 
         // Then
-        expect(find.text('Purchases restored'), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'Given nothing bought, When Restore purchases is tapped, Then the player '
-      'is told there was nothing to restore',
-      (tester) async {
-        // Given
-        await pumpSettings(tester);
-        await tester.ensureVisible(find.text('Restore purchases'));
-        await tester.pumpAndSettle();
-
-        // When
-        await tester.tap(find.text('Restore purchases'));
-        await tester.pumpAndSettle();
-
-        // Then
-        expect(find.text('Nothing to restore'), findsOneWidget);
-      },
-    );
+        expect(find.text(title), findsOneWidget);
+        expect(find.text(message), findsOneWidget);
+      });
+    }
 
     testWidgets(
       'Given a restore already under way, When Restore purchases is tapped '

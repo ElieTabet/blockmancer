@@ -29,7 +29,10 @@ final class _FakeStore implements Purchases {
   Future<String?> priceOf(String productId) async => null;
 
   @override
-  Future<void> restore() async {}
+  Future<void> recheckQuietly() async {}
+
+  @override
+  Future<bool> restore() async => true;
 }
 
 // The whole composition but the screens: what is under test is that the

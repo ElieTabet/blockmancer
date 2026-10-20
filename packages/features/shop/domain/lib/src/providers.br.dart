@@ -18,6 +18,7 @@ List<Override> bindProviders({
   required EntitlementStore Function(Ref ref) entitlementStore,
   required di.PriceOfFun Function(Ref ref) priceOf,
   required di.PurchaseUpdatesFun Function(Ref ref) purchaseUpdates,
+  required di.RecheckPurchasesFun Function(Ref ref) recheckPurchases,
   required String Function(Ref ref) removeAdsProductId,
   required di.RestorePurchasesFun Function(Ref ref) restorePurchases,
 }) => [
@@ -26,6 +27,7 @@ List<Override> bindProviders({
   di.entitlementStoreProvider.overrideWith(entitlementStore),
   di.priceOfProvider.overrideWith(priceOf),
   di.purchaseUpdatesProvider.overrideWith(purchaseUpdates),
+  di.recheckPurchasesProvider.overrideWith(recheckPurchases),
   di.removeAdsProductIdProvider.overrideWith(removeAdsProductId),
   di.restorePurchasesProvider.overrideWith(restorePurchases),
 ];

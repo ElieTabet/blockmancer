@@ -66,27 +66,31 @@ class RemoveAdsNotifier extends _$RemoveAdsNotifier {
     return opened;
   }
 
-  /// The launch's re-check: the store reports what the player owns, quietly
-  /// (it isn't the player's restore, so it counts as none).
-  Future<void> recheck() => ref.read(di.restorePurchasesProvider)();
+  /// The launch's re-check: the store reports what the player owns, where it
+  /// can without asking them anything (it isn't the player's restore, so it
+  /// counts as none).
+  Future<void> recheck() => ref.read(di.recheckPurchasesProvider)();
 
   /// The player's restore (Settings): whether Remove ads is owned once the
-  /// store has reported, or [_restoreWait] has passed. Null for a tap while
-  /// one is under way: the store isn't asked twice, and the first tap's
-  /// answer is the one to show.
-  Future<bool?> restore() async {
+  /// store has reported, or [_restoreWait] has passed, or that the store
+  /// couldn't be reached. Null for a tap while one is under way: the store
+  /// isn't asked twice, and the first tap's answer is the one to show.
+  Future<RestoreOutcome?> restore() async {
     if (_restoring != null) return null;
 
     final restoring = _restoring = Completer<void>();
 
     try {
-      await ref.read(di.restorePurchasesProvider)();
+      if (!await ref.read(di.restorePurchasesProvider)()) {
+        return .storeUnreachable;
+      }
+
       await restoring.future.timeout(_restoreWait, onTimeout: () {});
     } finally {
       _restoring = null;
     }
 
-    return await future;
+    return await future ? .restored : .nothingFound;
   }
 
   Future<void> _onUpdate(PurchaseUpdate update) async {

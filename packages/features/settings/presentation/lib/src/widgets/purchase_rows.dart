@@ -68,10 +68,21 @@ final class RestorePurchasesRow extends ConsumerWidget {
 
     return SettingsRow(
       onTap: () async {
-        final restored = await ref.read(restorePurchasesProvider)();
+        final outcome = await ref.read(restorePurchasesProvider)();
 
         // A tap while the first restore runs: that one's popup answers it.
-        if (restored == null || !context.mounted) return;
+        if (outcome == null || !context.mounted) return;
+
+        if (outcome == .storeUnreachable) {
+          return DSPopup.showError(
+            context,
+            title: restore.unreachableTitle,
+            message: restore.unreachableMessage,
+            buttonLabel: restore.ok,
+          );
+        }
+
+        final restored = outcome == .restored;
 
         await DSPopup.showInfo(
           context,

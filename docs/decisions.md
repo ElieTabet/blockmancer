@@ -674,3 +674,11 @@ Three changes from the review of this file, each its own commit.
   store nothing and answers "already restoring" (null), which Settings shows nothing for: the
   first tap's popup is the answer to both. The store may report several restored purchases for
   one restore; the first answers it, and the rest no longer throw.
+- **No restore at launch on iOS.** The App Store may ask for the Apple Account's password on a
+  restore, so on iOS only the player's tap restores; a reinstall gets Remove ads back from
+  Restore purchases. Google Play answers silently, so Android still checks at every launch. The
+  platform is `purchases`' to know (`recheckQuietly`), not the shop's.
+- **Three answers to a restore:** restored (Remove ads found, or already owned), nothing found,
+  or the store unreachable (no store on the phone, offline, or the store failing), which no
+  longer passes for "nothing found". A restore that reached the store but heard nothing within
+  3 seconds counts as nothing found.

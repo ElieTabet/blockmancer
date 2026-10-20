@@ -759,12 +759,14 @@ everyone (the rules' `canRevive`), just no ad.
 - **`shop_domain`'s `RemoveAdsNotifier`** (keepAlive) owns it: kept on the device
   (`shop_data`'s `SharedPreferencesEntitlementStore`, `purchases.removeAds`), so it holds offline,
   and confirmed by every purchase or restore the store reports, listened to from launch.
-  `startPurchases` (boot) re-checks with the store (a restore that counts as none), so a reinstall
-  gets it back. From a buy until the store reports on it (bought, cancelled, failed, pending),
+  `startPurchases` (boot) re-checks with the store where it can without asking the player
+  anything (`Purchases.recheckQuietly`: Google Play only; on iOS a restore would ask for the Apple
+  Account's password, so it is the player's to ask for), so an Android reinstall gets it back. From a buy until the store reports on it (bought, cancelled, failed, pending),
   another tap asks for nothing, so a double tap never stacks a second payment sheet; a buy the
   store never reports on stops holding the next one back after 5 minutes. A restore does the
   same: a tap while one is under way asks the store nothing and answers null, so only the first
-  tap's popup shows. Nothing takes it back. Events: `purchase_started`, `purchase_completed`,
+  tap's popup shows. A restore answers `RestoreOutcome` (`shared_domain`): restored, nothing found,
+  or the store unreachable (`Purchases.restore` false), each with its own popup (EN/FR). Nothing takes it back. Events: `purchase_started`, `purchase_completed`,
   `purchase_restored` (only a restore the player asked for), `purchase_failed(code)` (`canceled`,
   `unavailable`, or the store's code).
 - **`purchases`** (`StorePurchases`) wraps `in_app_purchase` (StoreKit 2 on iOS) and acknowledges

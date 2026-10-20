@@ -14,9 +14,16 @@ abstract interface class Purchases {
   /// `3,99 €`), or null while the store can't be reached. Never throws.
   Future<String?> priceOf(String productId);
 
+  /// Checks at launch what this player owns, where the store can without
+  /// asking them anything: Google Play does; the App Store would ask for the
+  /// Apple Account's password, so on iOS a restore is the player's to ask
+  /// for. What is found arrives on [updates] as restored. Never throws.
+  Future<void> recheckQuietly();
+
   /// Asks the store for every non-consumable this player owns; each arrives
-  /// on [updates] as restored. Never throws.
-  Future<void> restore();
+  /// on [updates] as restored. False when the store couldn't be reached.
+  /// Never throws.
+  Future<bool> restore();
 }
 
 /// No store: tests, and builds without one.
@@ -33,5 +40,8 @@ final class NoPurchases implements Purchases {
   Future<String?> priceOf(String productId) async => null;
 
   @override
-  Future<void> restore() async {}
+  Future<void> recheckQuietly() async {}
+
+  @override
+  Future<bool> restore() async => false;
 }

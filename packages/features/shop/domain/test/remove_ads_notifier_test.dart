@@ -33,7 +33,10 @@ void main() {
   late StreamController<PurchaseUpdate> store;
   late List<String> calls;
 
-  ProviderContainer launch({void Function()? onRestore}) {
+  ProviderContainer launch({
+    void Function()? onRestore,
+    bool storeReachable = true,
+  }) {
     final container = ProviderContainer(
       overrides: bindProviders(
         analyticsSink: (ref) => analytics,
@@ -47,10 +50,19 @@ void main() {
             (productId) async => r'$3.99',
         purchaseUpdates: (ref) =>
             () => store.stream,
+        recheckPurchases: (ref) => () async {
+          calls.add('recheck');
+          onRestore?.call();
+        },
         removeAdsProductId: (ref) => _product,
         restorePurchases: (ref) => () async {
           calls.add('restore');
+
+          if (!storeReachable) return false;
+
           onRestore?.call();
+
+          return true;
         },
       ),
     );
@@ -137,9 +149,9 @@ void main() {
 
     // Then
     expect(calls, ['restore']);
-    expect(taps, [isTrue, isNull]);
+    expect(taps, [RestoreOutcome.restored, isNull]);
 
-    expect(await notifier.restore(), isTrue);
+    expect(await notifier.restore(), RestoreOutcome.restored);
     expect(calls, ['restore', 'restore']);
   });
 
@@ -154,7 +166,10 @@ void main() {
     await shop.read(removeAdsProvider.future);
 
     // When / Then
-    expect(await shop.read(removeAdsProvider.notifier).restore(), isTrue);
+    expect(
+      await shop.read(removeAdsProvider.notifier).restore(),
+      RestoreOutcome.restored,
+    );
     await settle();
   });
 
@@ -188,7 +203,9 @@ void main() {
     await settle();
 
     // Then
+    expect(calls, ['recheck']);
     expect(shop.read(removeAdsProvider).value, isTrue);
+    expect(entitlement.removed, isTrue);
     expect(analytics.logged, isEmpty);
   });
 
@@ -202,10 +219,41 @@ void main() {
     final restored = await shop.read(removeAdsProvider.notifier).restore();
 
     // Then
-    expect(restored, isTrue);
+    expect(restored, RestoreOutcome.restored);
+    expect(shop.read(removeAdsProvider).value, isTrue);
+    expect(entitlement.removed, isTrue);
     expect(analytics.logged, const [
       AnalyticsEvent.purchaseRestored(product: _product),
     ]);
+  });
+
+  test('Given nothing bought on this store account, When the player '
+      'restores, Then nothing is found and ads stay on', () async {
+    // Given
+    final shop = launch();
+    await shop.read(removeAdsProvider.future);
+
+    // When
+    final outcome = await shop.read(removeAdsProvider.notifier).restore();
+
+    // Then
+    expect(outcome, RestoreOutcome.nothingFound);
+    expect(shop.read(removeAdsProvider).value, isFalse);
+    expect(entitlement.removed, isFalse);
+  });
+
+  test('Given the store out of reach, When the player restores, Then they '
+      'are told so, and ads stay on', () async {
+    // Given
+    final shop = launch(storeReachable: false);
+    await shop.read(removeAdsProvider.future);
+
+    // When
+    final outcome = await shop.read(removeAdsProvider.notifier).restore();
+
+    // Then
+    expect(outcome, RestoreOutcome.storeUnreachable);
+    expect(shop.read(removeAdsProvider).value, isFalse);
   });
 
   test('Given Remove ads kept on the device, When the app launches offline, '

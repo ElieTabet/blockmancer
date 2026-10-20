@@ -262,6 +262,7 @@ List<Override> featureBindingOverrides({
 
       return () => purchases.updates;
     },
+    recheckPurchases: (ref) => ref.watch(purchasesProvider).recheckQuietly,
     removeAdsProductId: (ref) => iapRemoveAds,
     restorePurchases: (ref) => ref.watch(purchasesProvider).restore,
   ),

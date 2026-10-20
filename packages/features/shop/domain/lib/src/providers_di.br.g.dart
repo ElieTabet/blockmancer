@@ -225,6 +225,53 @@ final class PurchaseUpdatesProvider
 
 String _$purchaseUpdatesHash() => r'c8ed7a149e83cc116da010edad38a1118b88fce1';
 
+@ProviderFor(recheckPurchases)
+final recheckPurchasesProvider = RecheckPurchasesProvider._();
+
+final class RecheckPurchasesProvider
+    extends
+        $FunctionalProvider<
+          RecheckPurchasesFun,
+          RecheckPurchasesFun,
+          RecheckPurchasesFun
+        >
+    with $Provider<RecheckPurchasesFun> {
+  RecheckPurchasesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recheckPurchasesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$recheckPurchasesHash();
+
+  @$internal
+  @override
+  $ProviderElement<RecheckPurchasesFun> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  RecheckPurchasesFun create(Ref ref) {
+    return recheckPurchases(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RecheckPurchasesFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RecheckPurchasesFun>(value),
+    );
+  }
+}
+
+String _$recheckPurchasesHash() => r'ec2d421c0dacccaa06e6f39c91fd8c1a625b83c1';
+
 /// The Remove ads product's id in the stores.
 
 @ProviderFor(removeAdsProductId)

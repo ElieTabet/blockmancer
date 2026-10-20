@@ -477,6 +477,8 @@
       "restoredMessage": "Ads are removed on this device, and revives need no video.",
       "noneTitle": "Nothing to restore",
       "noneMessage": "No purchase was found for this store account.",
+      "unreachableTitle": "Store unavailable",
+      "unreachableMessage": "The store couldn't be reached. Try again in a moment.",
       "ok": "OK"
     },
     "rate": "Rate Blockmancer"

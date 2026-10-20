@@ -477,6 +477,8 @@
       "restoredMessage": "Les pubs sont supprimées sur cet appareil, et revivre se fait sans vidéo.",
       "noneTitle": "Rien à restaurer",
       "noneMessage": "Aucun achat trouvé pour ce compte de la boutique.",
+      "unreachableTitle": "Boutique indisponible",
+      "unreachableMessage": "Impossible de joindre la boutique. Réessaie dans un instant.",
       "ok": "OK"
     },
     "rate": "Noter Blockmancer"

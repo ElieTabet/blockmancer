@@ -572,6 +572,8 @@ class _Translations$settings$restore$fr extends Translations$settings$restore$en
 	@override String get restoredMessage => 'Les pubs sont supprimées sur cet appareil, et revivre se fait sans vidéo.';
 	@override String get noneTitle => 'Rien à restaurer';
 	@override String get noneMessage => 'Aucun achat trouvé pour ce compte de la boutique.';
+	@override String get unreachableTitle => 'Boutique indisponible';
+	@override String get unreachableMessage => 'Impossible de joindre la boutique. Réessaie dans un instant.';
 	@override String get ok => 'OK';
 }
 
@@ -1455,6 +1457,8 @@ extension on TranslationsFr {
 			'settings.restore.restoredMessage' => 'Les pubs sont supprimées sur cet appareil, et revivre se fait sans vidéo.',
 			'settings.restore.noneTitle' => 'Rien à restaurer',
 			'settings.restore.noneMessage' => 'Aucun achat trouvé pour ce compte de la boutique.',
+			'settings.restore.unreachableTitle' => 'Boutique indisponible',
+			'settings.restore.unreachableMessage' => 'Impossible de joindre la boutique. Réessaie dans un instant.',
 			'settings.restore.ok' => 'OK',
 			'settings.rate' => 'Noter Blockmancer',
 			'update.required.title' => 'Mise à jour requise',

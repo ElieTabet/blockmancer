@@ -6,6 +6,7 @@ import 'package:l10n_application/l10n_application.dart';
 import 'package:settings_domain/settings_domain.dart' as settings;
 import 'package:settings_presentation/settings_presentation.dart';
 import 'package:settings_presentation/src/widgets/settings_widget.dart';
+import 'package:shared_domain/shared_domain.dart' show RestoreOutcome;
 
 import 'fake_feedback.dart';
 import 'fake_settings_routing.dart';
@@ -29,7 +30,7 @@ Future<FakeSettingsRouting> pumpSettings(
   bool ownsRemoveAds = false,
   List<String>? purchases,
   String? removeAdsPrice = '3,99 €',
-  bool? restoreFinds = false,
+  RestoreOutcome? restoreFinds = .nothingFound,
   bool storeOpens = true,
   FakeMailApp? mailApp,
   FakeShareSheet? shareSheet,

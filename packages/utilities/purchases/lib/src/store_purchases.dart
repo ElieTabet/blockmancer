@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:purchases/src/package_name.dart';
 import 'package:purchases/src/purchases.dart';
@@ -43,13 +45,24 @@ final class StorePurchases implements Purchases {
       (await _product(productId))?.price;
 
   @override
-  Future<void> restore() async {
+  Future<void> recheckQuietly() async {
+    if (defaultTargetPlatform != .android) return;
+
+    await restore();
+  }
+
+  @override
+  Future<bool> restore() async {
     try {
-      if (!await _store.isAvailable()) return;
+      if (!await _store.isAvailable()) return false;
 
       await _store.restorePurchases();
+
+      return true;
     } catch (error, stackTrace) {
       _log('Restoring the purchases failed', error, stackTrace);
+
+      return false;
     }
   }
 

@@ -151,7 +151,7 @@ List<Override> stubFeatures({
     removeAdsOwned: (ref) => false,
     removeAdsPrice: (ref) async => null,
     restorePurchases: (ref) =>
-        () async => false,
+        () async => .nothingFound,
     shareText: (ref) =>
         (text, {origin, subject}) async => false,
     showsTestTools: (ref) => false,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mocktail/mocktail.dart';
@@ -41,6 +42,7 @@ void main() {
     when(() => store.purchaseStream).thenAnswer((_) => stream.stream);
     when(() => store.completePurchase(any())).thenAnswer((_) async {});
     when(() => store.isAvailable()).thenAnswer((_) async => true);
+    when(() => store.restorePurchases()).thenAnswer((_) async {});
   });
 
   tearDown(() => stream.close());
@@ -119,5 +121,81 @@ void main() {
     verifyNever(
       () => store.buyNonConsumable(purchaseParam: any(named: 'purchaseParam')),
     );
+  });
+
+  test('Given a purchase found again by a restore, When the store hands it '
+      'over, Then it is reported as restored and acknowledged', () async {
+    // Given
+    final purchases = StorePurchases(store: store);
+    final outcomes = <PurchaseOutcome>[];
+    purchases.updates.listen((update) => outcomes.add(update.outcome));
+
+    // When
+    stream.add([_purchase(.restored, pendingComplete: true)]);
+    await Future<void>.delayed(Duration.zero);
+
+    // Then
+    expect(outcomes, [PurchaseOutcome.restored]);
+    verify(() => store.completePurchase(any())).called(1);
+  });
+
+  test('Given the store within reach, When the player restores, Then the '
+      'store is asked', () async {
+    // When
+    final reached = await StorePurchases(store: store).restore();
+
+    // Then
+    expect(reached, isTrue);
+    verify(() => store.restorePurchases()).called(1);
+  });
+
+  test('Given no store on the phone, When the player restores, Then it says '
+      'the store is out of reach, asking nothing', () async {
+    // Given
+    when(() => store.isAvailable()).thenAnswer((_) async => false);
+
+    // When
+    final reached = await StorePurchases(store: store).restore();
+
+    // Then
+    expect(reached, isFalse);
+    verifyNever(() => store.restorePurchases());
+  });
+
+  test('Given the store failing, When the player restores, Then it says the '
+      'store is out of reach', () async {
+    // Given
+    when(() => store.restorePurchases()).thenThrow(Exception('offline'));
+
+    // When / Then
+    expect(await StorePurchases(store: store).restore(), isFalse);
+  });
+
+  group('the launch\'s quiet re-check', () {
+    tearDown(() => debugDefaultTargetPlatformOverride = null);
+
+    test('Given Android, When the app launches, Then Google Play is asked what '
+        'the player owns', () async {
+      // Given
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
+      // When
+      await StorePurchases(store: store).recheckQuietly();
+
+      // Then
+      verify(() => store.restorePurchases()).called(1);
+    });
+
+    test('Given iOS, When the app launches, Then the App Store is asked '
+        'nothing: a restore is the player\'s to ask for', () async {
+      // Given
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+
+      // When
+      await StorePurchases(store: store).recheckQuietly();
+
+      // Then
+      verifyNever(() => store.restorePurchases());
+    });
   });
 }

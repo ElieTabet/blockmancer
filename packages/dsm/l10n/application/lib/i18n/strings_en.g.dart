@@ -964,6 +964,12 @@ class Translations$settings$restore$en {
 	/// en: 'No purchase was found for this store account.'
 	String get noneMessage => 'No purchase was found for this store account.';
 
+	/// en: 'Store unavailable'
+	String get unreachableTitle => 'Store unavailable';
+
+	/// en: 'The store couldn't be reached. Try again in a moment.'
+	String get unreachableMessage => 'The store couldn\'t be reached. Try again in a moment.';
+
 	/// en: 'OK'
 	String get ok => 'OK';
 }
@@ -2112,6 +2118,8 @@ extension on Translations {
 			'settings.restore.restoredMessage' => 'Ads are removed on this device, and revives need no video.',
 			'settings.restore.noneTitle' => 'Nothing to restore',
 			'settings.restore.noneMessage' => 'No purchase was found for this store account.',
+			'settings.restore.unreachableTitle' => 'Store unavailable',
+			'settings.restore.unreachableMessage' => 'The store couldn\'t be reached. Try again in a moment.',
 			'settings.restore.ok' => 'OK',
 			'settings.rate' => 'Rate Blockmancer',
 			'update.required.title' => 'Update required',

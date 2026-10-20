@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_domain/shared_domain.dart' show RestoreOutcome;
 import 'package:settings_presentation/src/routing/settings_routing.dart';
 
 part 'providers_di.br.g.dart';
@@ -57,10 +58,9 @@ Future<String?> removeAdsPrice(Ref ref) => throw UnimplementedError(
   'removeAdsPriceProvider must be overridden by the composition layer',
 );
 
-/// Asks the store for what the player owns: whether Remove ads is owned once
-/// it has answered, or null when a restore is already under way, whose own
-/// answer is the one to show.
-typedef RestorePurchasesFun = Future<bool?> Function();
+/// Asks the store for what the player owns, and what came of it; null when a
+/// restore is already under way, whose own answer is the one to show.
+typedef RestorePurchasesFun = Future<RestoreOutcome?> Function();
 
 @riverpod
 RestorePurchasesFun restorePurchases(Ref ref) => throw UnimplementedError(

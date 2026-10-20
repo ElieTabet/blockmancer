@@ -41,8 +41,18 @@ PurchaseUpdatesFun purchaseUpdates(Ref ref) => throw UnimplementedError(
   'purchaseUpdatesProvider must be overridden by the composition layer',
 );
 
-/// Asks the store for what the player owns; each arrives as restored.
-typedef RestorePurchasesFun = Future<void> Function();
+/// The launch's check of what the player owns, where the store can make it
+/// without asking them anything; each find arrives as restored.
+typedef RecheckPurchasesFun = Future<void> Function();
+
+/// Asks the store for what the player owns; each arrives as restored. False
+/// when the store couldn't be reached.
+typedef RestorePurchasesFun = Future<bool> Function();
+
+@riverpod
+RecheckPurchasesFun recheckPurchases(Ref ref) => throw UnimplementedError(
+  'recheckPurchasesProvider must be overridden by the composition layer',
+);
 
 /// The Remove ads product's id in the stores.
 @riverpod
