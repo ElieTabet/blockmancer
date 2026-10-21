@@ -111,7 +111,7 @@ Every number a run plays with, and the update versions, can change from the cons
 release.
 
 - **The keys:** [`docs/remote-config/keys.md`](remote-config/keys.md) — name, type, default,
-  allowed range, what it changes (68 keys). A value outside its range, or not a number, is
+  allowed range, what it changes (75 keys). A value outside its range, or not a number, is
   ignored and the default plays.
 - **One parameter per number, never one JSON value.** The run's config is not published as a
   whole: each number is its own parameter, read and checked on its own (`game_domain`'s
