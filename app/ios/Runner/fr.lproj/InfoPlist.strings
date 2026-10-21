@@ -1,0 +1,2 @@
+/* The text of iOS's tracking alert (App Tracking Transparency), in French. */
+"NSUserTrackingUsageDescription" = "Cela permet à Blockmancer de te montrer des publicités qui te ressemblent davantage. Les publicités s'affichent dans tous les cas, et ton choix ne change jamais le jeu.";

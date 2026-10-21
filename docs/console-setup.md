@@ -215,7 +215,11 @@ AdMob → **Privacy & messaging**:
 2. **IDFA explainer** (iOS only) → **Create message** → app: Blockmancer (iOS); languages: English
    and French → **Publish**. When the player taps Continue, iOS shows its tracking alert with the
    app's own text (`NSUserTrackingUsageDescription` in `Info.plist`: "This lets Blockmancer show
-   ads that suit you better. Ads appear either way, and your choice never changes the game.").
+   ads that suit you better. Ads appear either way, and your choice never changes the game."; in
+   French from `fr.lproj/InfoPlist.strings`: "Cela permet à Blockmancer de te montrer des
+   publicités qui te ressemblent davantage. Les publicités s'affichent dans tous les cas, et ton
+   choix ne change jamais le jeu."). `CFBundleLocalizations` declares English and French, so iOS's
+   own alerts and sheets follow a French phone too.
 3. Optional: **US state regulations** message, if you want it (the app doesn't need it to run).
 
 How the app uses it: at every launch, once the first frame is up, it asks Google's UMP whether a
