@@ -804,9 +804,13 @@ Game Center on iOS, Play Games on Android, behind `leaderboards`' `Leaderboards`
   `submitRunScore`, which decides the boards: every run's total to the all-time board, a daily
   run's to the day's too, nothing for a total of 0. Its slots (`submitBestScore`,
   `submitDailyScore`) are bound to the one `Leaderboards` instance, each with its board.
-- **Signing in:** `signInToLeaderboards` (app_providers) once the consent form is done, at
-  launch's post-frame step; a submit or the board signs in again if needed. A refusal leaves the
-  boards empty and never blocks play.
+- **Signing in:** only the board asks. `restoreLeaderboardsSignIn` (app_providers), once the
+  consent form is done at launch's post-frame step, signs in to Game Center on iOS, which only
+  works once the app asks at launch and shows its sheet at most once; on Android it does nothing,
+  as Play Games signs a player in by itself where it can and asking opens Google's account
+  screens. A score goes in only when the player is signed in, and is dropped otherwise; tapping
+  **Leaderboard** asks to sign in first. A refusal leaves the boards empty and never blocks play.
+  The games_services calls sit behind `GamesServicesCalls`, so tests fake them.
 - **The button:** the daily card's **Leaderboard** (`LeaderboardButton`, its own pressable) calls
   home's `showDailyLeaderboard` slot.
 - **Placeholders:** a platform whose ids are still `PLACEHOLDER_…` gets `NoLeaderboards`. Android

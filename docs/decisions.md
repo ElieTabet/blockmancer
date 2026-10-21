@@ -449,7 +449,14 @@ Three changes from the review of this file, each its own commit.
 - **"Silent sign-in after splash":** once the consent form has had the screen (launch's
   post-frame step), so Game Center's sheet never covers it. Game Center signs a returning player
   in with a banner; a first-timer sees its sign-in sheet once. A refusal or failure is logged and
-  leaves the boards empty; a later submit or Leaderboard tap tries again.
+  leaves the boards empty.
+- **Only the board asks to sign in (fixed after Task 6):** on Android, asking Play Games to sign
+  in opens Google's account screens full screen, even on a phone with no Google account, and the
+  first build asked at every launch and before every score, so a player who refused got it after
+  every run. Now launch asks only Game Center (iOS needs it); Android only reads whether Play Games
+  signed the player in by itself. A score from a player not signed in is dropped, not kept for
+  later: the platform keeps the best, and the next run's total goes in once they sign in from the
+  Leaderboard button, the only place that asks.
 - **The daily board on each platform:** Game Center's is a recurring board restarting every day
   at 00:00 UTC, the daily run's own day. Play has no such board: every leaderboard keeps daily,
   weekly and all-time views, its day ending at midnight Pacific time. So Play gets a dedicated

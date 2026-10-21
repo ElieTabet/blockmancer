@@ -671,11 +671,7 @@ final class _FakeLeaderboards implements Leaderboards {
       board == dailyLeaderboard ? 'daily' : 'best';
 
   @override
-  Future<bool> signIn() async {
-    calls.add('sign in');
-
-    return true;
-  }
+  Future<void> restoreSignIn() async => calls.add('restore sign-in');
 
   @override
   Future<void> show(LeaderboardIds board, {bool today = false}) async =>
