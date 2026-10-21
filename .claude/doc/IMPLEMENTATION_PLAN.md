@@ -263,13 +263,13 @@ Details and acceptance criteria are in `SPRINTS_6_7.md` in the repo.
 
 Goal: ship 1.0 on iOS and Android the same week, with every task below in 1.0. The agent keeps docs/console-setup.md: every step to do by hand in Firebase (Remote Config keys and template), AdMob, App Store Connect and Play Console.
 
-- [ ] Firebase: Analytics sink, Crashlytics, Remote Config feeding `RunConfig`, force and optional updates, `TEST_TOOLS` flag
-- [ ] Consent and privacy: UMP form, iOS tracking prompt, "Privacy choices" in Settings
-- [ ] Ads: rewarded revive, interstitial between runs only (capped through Remote Config)
-- [ ] Remove ads purchase at $3.99 with restore; the rewarded revive stays
-- [ ] Rating prompt: native review API after a boss win or a new star, never after a loss, at most once per version, no pre-prompt; "Rate Blockmancer" in Settings
-- [ ] Daily run leaderboard (Game Center, Play Games)
-- [ ] Daily reminder notification and streak
+- [x] Firebase: Analytics sink, Crashlytics, Remote Config feeding `RunConfig`, force and optional updates, `TEST_TOOLS` flag
+- [x] Consent and privacy: UMP form, iOS tracking prompt, "Privacy choices" in Settings
+- [x] Ads: rewarded revive, interstitial between runs only (capped through Remote Config)
+- [x] Remove ads purchase at $3.99 with restore; the rewarded revive stays
+- [x] Rating prompt: native review API after a boss win or a new star, never after a loss, at most once per version, no pre-prompt; "Rate Blockmancer" in Settings
+- [x] Daily run leaderboard (Game Center, Play Games)
+- [x] Daily reminder notification and streak
 - [ ] Store listing, privacy labels and Data safety, DSA trader status, tax and bank, staged rollouts on both stores, 10 runs played on real phones
 
 Details and acceptance criteria are in `SPRINT_8.md` in the repo.
