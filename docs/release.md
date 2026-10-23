@@ -61,9 +61,8 @@ are in [`store-listing.md`](store-listing.md). Tick a box once it is done.
   **Strategy**), privacy policy URL, the name "Blockmancer: Puzzle Roguelite".
 - [ ] **Version 1.0:** subtitle, promotional text, description, keywords (store-listing.md) in
   English (U.S.) and French; support URL `https://studio.elietabet.com/support`; screenshots in
-  the sizes App Store Connect asks for: iPhone 6.9" (or 6.7") and 6.5", and **iPad 13"**, since
-  the app runs on iPad too (Xcode's device family is iPhone and iPad; making it iPhone-only would
-  drop the iPad screenshots).
+  the sizes App Store Connect asks for: iPhone 6.9" (or 6.7") and 6.5", and **iPad 13"**: the
+  app ships on iPad too, in portrait and full screen (no split view), as decided.
 - [ ] Remove ads ready to submit **with the version** (its review screenshot and notes), Game
   Center enabled on the version with both leaderboards.
 - [ ] **Small Business Program** joined (15% commission instead of 30%).
