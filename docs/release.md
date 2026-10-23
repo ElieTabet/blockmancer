@@ -6,8 +6,11 @@ are in [`store-listing.md`](store-listing.md). Tick a box once it is done.
 
 ## 1. Blockers
 
-- [ ] **Legal notice:** Settings' **Legal notice** opens `studio.elietabet.com/legal`, which the
-  site no longer has (404). Put the page back on the site, or have the row removed from the app.
+- [ ] **Legal notice:** Settings' **Legal notice** opens `studio.elietabet.com/legal`. The page
+  is back in the site's repo (`elietabet-studio-site`, `legal/` and `fr/legal/`), not yet online:
+  fill its placeholders (legal status, SIRET, VAT, address, phone, the host; the list is in the
+  site's README), then push the site's `main`, which publishes it, and check `/legal` and
+  `/fr/legal` open.
 
 ## 2. Before building
 
