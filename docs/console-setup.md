@@ -187,7 +187,10 @@ When a player sees it:
 
 ### 1. Apps and ad units ✅
 
-Both apps exist (iOS and Android, publisher `pub-9236909266129177`), each with two ad units:
+Both apps exist (iOS and Android, publisher `pub-2010935804678660`), each with two ad units.
+They were recreated on a new AdMob account on 2026-10-23, so its Privacy & messaging (section 2),
+payments (section 4), test devices and Firebase link start empty and need setting up again, and
+each app needs linking to its store listing once it is live:
 
 | Ad unit name | Format | Used for |
 |---|---|---|
@@ -239,7 +242,7 @@ game plays as usual.
 Host a file at **`https://studio.elietabet.com/app-ads.txt`** containing exactly:
 
 ```
-google.com, pub-9236909266129177, DIRECT, f08c47fec0942fa0
+google.com, pub-2010935804678660, DIRECT, f08c47fec0942fa0
 ```
 
 and set the developer website of both store listings to `https://studio.elietabet.com` (AdMob
