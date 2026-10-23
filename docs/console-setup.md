@@ -63,8 +63,8 @@ Live at **studio.elietabet.com**: `/privacy` (leads to `/blockmancer/privacy`, t
 also given to both stores and the consent form), `/support` and `/app-ads.txt`.
 
 ⚠️ Settings' **Legal notice** opens `/legal`. The page is back in the site's repo
-(`elietabet-studio-site`), not yet online: fill its placeholders (your phone and the host's
-name, address and phone), then push the site's `main` to publish it.
+(`elietabet-studio-site`), not yet online: fill its placeholders (the host's name, address
+and phone), then push the site's `main` to publish it.
 
 ## Firebase
 
