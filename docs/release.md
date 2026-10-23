@@ -6,22 +6,21 @@ are in [`store-listing.md`](store-listing.md). Tick a box once it is done.
 
 ## 1. Blockers
 
-- [ ] **Legal notice:** Settings' **Legal notice** opens `studio.elietabet.com/legal`. The page
-  is ready in the site's repo (`elietabet-studio-site`, `legal/` and `fr/legal/`), not yet
-  online: push the site's `main`, which publishes it, and check `/legal` and `/fr/legal` open.
+- [x] **Legal notice:** Settings' **Legal notice** opens `studio.elietabet.com/legal`. The page
+  is live (`elietabet-studio-site`, `legal/` and `fr/legal/`).
 
 ## 2. Before building
 
-- [ ] `main` green: `melos run analyze` and `melos run test`.
-- [ ] No placeholder left in `app/env/prod.json` (the release builds refuse to build otherwise:
+- [x] `main` green: `melos run analyze` and `melos run test`.
+- [x] No placeholder left in `app/env/prod.json` (the release builds refuse to build otherwise:
   `scripts/check_release_ids.sh`). Optional: your phones in `ADMOB_TEST_DEVICE_IDS`, so a release
   build serves you test ads instead of real ones.
-- [ ] **Remote Config** published with every key in `docs/remote-config/keys.md` (75 today).
+- [x] **Remote Config** published with every key in `docs/remote-config/keys.md` (75 today).
   Publishing `template.json` over a live template puts back every value edited in the console:
   add new keys by hand instead (console-setup.md, Remote Config).
-- [ ] `min_version_ios` / `min_version_android` at `0.0.0` (they block every version below them).
-- [ ] The studio site's pages live: `/privacy`, `/support` and `/app-ads.txt`.
-- [ ] Testers who had a build from before the varied daily reminders (1.0.0+3 and earlier):
+- [x] `min_version_ios` / `min_version_android` at `0.0.0` (they block every version below them).
+- [x] The studio site's pages live: `/privacy`, `/support` and `/app-ads.txt`.
+- [x] Testers who had a build from before the varied daily reminders (1.0.0+3 and earlier):
   uninstall and reinstall once, or they get two reminders every evening.
 
 ## 3. Build 1.0.0
