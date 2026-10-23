@@ -7,10 +7,8 @@ are in [`store-listing.md`](store-listing.md). Tick a box once it is done.
 ## 1. Blockers
 
 - [ ] **Legal notice:** Settings' **Legal notice** opens `studio.elietabet.com/legal`. The page
-  is back in the site's repo (`elietabet-studio-site`, `legal/` and `fr/legal/`), not yet online:
-  fill its placeholders (the host's name, address and phone; published as an individual, so no
-  SIRET, VAT or address), then push the site's `main`, which publishes it, and check `/legal` and
-  `/fr/legal` open.
+  is ready in the site's repo (`elietabet-studio-site`, `legal/` and `fr/legal/`), not yet
+  online: push the site's `main`, which publishes it, and check `/legal` and `/fr/legal` open.
 
 ## 2. Before building
 

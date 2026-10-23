@@ -62,9 +62,8 @@ So a release build on your own phone never serves you live ads (AdMob forbids cl
 Live at **studio.elietabet.com**: `/privacy` (leads to `/blockmancer/privacy`, the privacy policy,
 also given to both stores and the consent form), `/support` and `/app-ads.txt`.
 
-⚠️ Settings' **Legal notice** opens `/legal`. The page is back in the site's repo
-(`elietabet-studio-site`), not yet online: fill its placeholders (the host's name, address
-and phone), then push the site's `main` to publish it.
+⚠️ Settings' **Legal notice** opens `/legal`. The page is ready in the site's repo
+(`elietabet-studio-site`), not yet online: push the site's `main` to publish it.
 
 ## Firebase
 
