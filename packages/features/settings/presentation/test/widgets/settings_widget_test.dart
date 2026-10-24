@@ -238,7 +238,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Then
-        expect(mailApp.drafts.single.path, 'support@elietabet.com');
+        expect(mailApp.drafts.single.path, 'eliebtabet@gmail.com');
         expect(find.text('No mail app'), findsNothing);
       },
     );
@@ -258,7 +258,7 @@ void main() {
         expect(find.text('No mail app'), findsOneWidget);
         expect(
           find.text(
-            "We couldn't open a mail app. Write to us at support@elietabet.com.",
+            "We couldn't open a mail app. Write to us at eliebtabet@gmail.com.",
           ),
           findsOneWidget,
         );

@@ -43,7 +43,7 @@ are in [`store-listing.md`](store-listing.md). Tick a box once it is done.
   child-directed).
 - [ ] **Store listing**, English (United States) and French (France): app name, short and full
   description (store-listing.md), the icon (512×512), the feature graphic (1024×500), at least 2
-  phone screenshots, category **Games → Puzzle**, contact email `support@elietabet.com`, website
+  phone screenshots, category **Games → Puzzle**, contact email `eliebtabet@gmail.com`, website
   `https://studio.elietabet.com`.
 - [ ] Remove ads (`blockmancer.remove_ads`) **active**, its name and description in both
   languages.

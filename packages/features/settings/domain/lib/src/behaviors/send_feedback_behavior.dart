@@ -2,7 +2,7 @@ import 'package:settings_domain/src/entities/app_details.br.dart';
 import 'package:settings_domain/src/providers_di.br.dart';
 
 /// Where feedback goes, and the address shown when no mail app can open.
-const feedbackAddress = 'support@elietabet.com';
+const feedbackAddress = 'eliebtabet@gmail.com';
 
 /// Opens a mail draft to [feedbackAddress] with the build and the phone
 /// prefilled, and answers whether one opened.

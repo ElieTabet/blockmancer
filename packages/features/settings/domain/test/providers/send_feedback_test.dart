@@ -20,7 +20,7 @@ void main() {
       expect(opened, isTrue);
       final draft = mailApp.drafts.single;
       expect(draft.scheme, 'mailto');
-      expect(draft.path, 'support@elietabet.com');
+      expect(draft.path, 'eliebtabet@gmail.com');
       expect(draft.queryParameters['subject'], 'Blockmancer feedback');
       expect(
         draft.queryParameters['body'],

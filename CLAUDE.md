@@ -881,7 +881,7 @@ The player's settings, kept on the device; there is no account to sync them to. 
   Titles wrap rather than clip at large text sizes, in both languages (a test at 2× in each).
   Reset's confirmation spells out what is erased; its red button comes after Cancel, which leads.
 - **Version and feedback:** the footer shows `settings_domain`'s `AppDetails` version as
-  "Blockmancer 1.0.0", without the build (the feedback email carries it), and Send feedback runs `SendFeedbackBehavior`: a `mailto:support@elietabet.com` draft whose
+  "Blockmancer 1.0.0", without the build (the feedback email carries it), and Send feedback runs `SendFeedbackBehavior`: a `mailto:eliebtabet@gmail.com` draft whose
   subject and labels stay in English (support reads them) with the version, build, device and OS
   prefilled. When no mail app opens, a popup shows the address. Both come through slots —
   `appDetails` (keepAlive, `app_info`'s `readAppInfo` mapped field by field) and `composeEmail`
