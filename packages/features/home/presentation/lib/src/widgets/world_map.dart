@@ -15,8 +15,8 @@ final class WorldMap extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // The rules' worlds, which never change while the app runs: the map
-    // builds once, and each node watches its own world.
+    // The map's worlds change only when Remote Config activates new values,
+    // and each node watches its own world.
     final worlds = ref.watch(worldsProvider);
 
     return LayoutBuilder(

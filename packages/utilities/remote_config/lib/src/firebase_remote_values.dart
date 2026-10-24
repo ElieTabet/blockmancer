@@ -38,8 +38,9 @@ final class FirebaseRemoteValues implements RemoteValues {
           minimumFetchInterval: _minimumFetchInterval,
         ),
       );
-      await _remoteConfig.fetchAndActivate();
-      _changes.add(null);
+      // False when the fetch activated nothing new, the minimum interval
+      // answering from cache: what reads the values has nothing to redo.
+      if (await _remoteConfig.fetchAndActivate()) _changes.add(null);
     } catch (error, stackTrace) {
       Timber.e(
         tag: packageName,
@@ -97,8 +98,7 @@ final class FirebaseRemoteValues implements RemoteValues {
 
   Future<void> _activateUpdate() async {
     try {
-      await _remoteConfig.activate();
-      _changes.add(null);
+      if (await _remoteConfig.activate()) _changes.add(null);
     } catch (error, stackTrace) {
       Timber.e(
         tag: packageName,

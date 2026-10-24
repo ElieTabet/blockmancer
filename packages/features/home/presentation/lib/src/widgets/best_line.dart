@@ -7,7 +7,9 @@ import 'package:l10n_application/l10n_application.dart';
 
 enum HomeMode { daily, practice }
 
-/// The mode's best, or that it hasn't been played. Empty while it is read.
+/// The mode's best, or that it hasn't been played. Empty only while first
+/// read: read again, it keeps what it showed, so the card never changes
+/// height.
 final class BestLine extends ConsumerWidget {
   const BestLine({required this.mode, super.key});
 
@@ -22,7 +24,7 @@ final class BestLine extends ConsumerWidget {
     final home = context.t.home;
 
     return switch (best) {
-      AsyncData(value: final points?) => Text(
+      AsyncValue(value: final points?) => Text(
         home.best(points: pointsText(context, points)),
         style: const TextStyle(
           color: DSColor.accent,
@@ -30,11 +32,11 @@ final class BestLine extends ConsumerWidget {
           fontWeight: .w700,
         ),
       ),
-      AsyncData() || AsyncError() => Text(
+      AsyncValue(hasValue: true) || AsyncError() => Text(
         home.noBest,
         style: const TextStyle(color: DSColor.textMuted, fontSize: 13),
       ),
-      AsyncLoading() => const SizedBox.shrink(),
+      _ => const SizedBox.shrink(),
     };
   }
 }

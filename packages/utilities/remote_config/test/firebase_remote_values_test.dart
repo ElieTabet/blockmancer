@@ -143,6 +143,21 @@ void main() {
       });
     });
 
+    test('Given a return to the app within the fetch interval, When the fetch '
+        'brings nothing new, Then the values have not changed', () {
+      inFakeTime((async) {
+        // Given
+        unawaited(values.fetchAndActivate());
+
+        // When
+        fetch.complete(false);
+        async.flushMicrotasks();
+
+        // Then
+        expect(changes, 0);
+      });
+    });
+
     test('Given no network, When the values are fetched, Then nothing has '
         'changed', () {
       inFakeTime((async) {
@@ -194,6 +209,22 @@ void main() {
 
         // Then
         expect(changes, 1);
+      });
+    });
+
+    test('Given the app listening for updates, When one is published that '
+        'changes no value, Then the values have not changed', () {
+      inFakeTime((async) {
+        // Given
+        values.listenForUpdates();
+
+        // When
+        updates.add(RemoteConfigUpdate({'min_version_ios'}));
+        activation.complete(false);
+        async.flushMicrotasks();
+
+        // Then
+        expect(changes, 0);
       });
     });
 

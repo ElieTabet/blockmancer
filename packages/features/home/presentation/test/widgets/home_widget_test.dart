@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,6 +7,17 @@ import 'package:home_presentation/home_presentation.dart';
 import 'package:home_presentation/src/widgets/home_widget.dart';
 
 import '../pump_home.dart';
+
+/// What today's best is read from: Remote Config's values, which a return to
+/// the app may renew.
+final _readFrom = NotifierProvider<_Revision, int>(_Revision.new);
+
+final class _Revision extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void renew() => state++;
+}
 
 void main() {
   testWidgets('Given both bests, When Home opens, '
@@ -20,6 +33,32 @@ void main() {
     expect(find.text('Best: 2,400'), findsOneWidget);
     expect(find.text('Practice'), findsOneWidget);
     expect(find.text('Best: 12,345'), findsOneWidget);
+  });
+
+  testWidgets("Given today's best on the daily card, When the app comes back "
+      'to the front and the best is read again, Then it stays on screen, so '
+      'nothing below it moves', (tester) async {
+    // Given: the first read answers at once, the next one takes its time
+    var reads = 0;
+    await pumpHome(
+      tester,
+      loadDailyBest: (ref) {
+        ref.watch(_readFrom);
+
+        return reads++ == 0 ? Future.value(2400) : Completer<int?>().future;
+      },
+    );
+    expect(find.text('Best: 2,400'), findsOneWidget);
+
+    // When
+    ProviderScope.containerOf(
+      tester.element(find.byType(HomeWidget)),
+    ).read(_readFrom.notifier).renew();
+    await tester.pump();
+
+    // Then
+    expect(reads, 2);
+    expect(find.text('Best: 2,400'), findsOneWidget);
   });
 
   testWidgets('Given no daily run today, When Home opens, '

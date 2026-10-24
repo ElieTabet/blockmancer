@@ -202,7 +202,8 @@ final rubbleBeaten = freshProgression().copyWith(
 /// [screen] is Home unless another of its screens is given, on a [viewSize]
 /// view, with the game's [collection] of jokers unless [jokerCollection] says
 /// otherwise. The daily leaderboard shows nothing unless
-/// [showDailyLeaderboard] says otherwise.
+/// [showDailyLeaderboard] says otherwise. Each read of today's best answers
+/// [dailyBest] at once, unless [loadDailyBest] answers it instead.
 /// A newer version on offer, recording the store opened and the banner
 /// closed.
 final class UpdateOffer {
@@ -229,6 +230,7 @@ Future<FakeHomeRouting> pumpHome(
   int dailyStreak = 0,
   bool hasSavedRun = false,
   JokerCollection jokerCollection = collection,
+  Future<int?> Function(Ref ref)? loadDailyBest,
   MarkJokersAnnouncedFun? markJokersAnnounced,
   MarkSpellbookSeenFun? markSpellbookSeen,
   int? practiceBest,
@@ -249,7 +251,8 @@ Future<FakeHomeRouting> pumpHome(
     ProviderScope(
       overrides: [
         ...bindProviders(
-          dailyBest: (ref) async => dailyBest,
+          dailyBest: (ref) =>
+              loadDailyBest?.call(ref) ?? Future.value(dailyBest),
           dailyDate: (ref) => DateTime.utc(2026, 10, 17),
           dailyStreak: (ref) async => dailyStreak,
           dismissUpdateOffer: (ref) => updateOffer?.dismiss ?? () async {},

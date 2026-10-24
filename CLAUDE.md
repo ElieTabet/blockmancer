@@ -1020,10 +1020,12 @@ no-op). Three packages share the client side, and only one knows Firebase:
   12 hours. A debug run is not a test build unless run with `--dart-define=TEST_TOOLS=true`.
 - **Remote Config** (`packages/utilities/remote_config`): `RemoteValues.valueOf(key)` is the text
   published for a key, or null; the package that reads a key parses it and ignores a bad value.
-  `changes` fires after every fetch that didn't fail and after every live update, which
-  `listenForUpdates` takes from the SDK's real-time listener (`onConfigUpdated`) and activates at
-  once. `fetchRemoteConfig` starts the launch's fetch (kept as `remoteValuesFetched`) right after
-  the container, not waited for, and `remoteValuesKeptCurrent`: the live listener once that fetch
+  `changes` fires after every fetch and every live update that activates new values (the SDK
+  says so); a fetch the minimum interval answers from cache changes nothing, so a return to the
+  app recomputes nothing. Live updates come from the SDK's real-time listener
+  (`onConfigUpdated`), which `listenForUpdates` takes and activates at once.
+  `fetchRemoteConfig` starts the launch's fetch (kept as `remoteValuesFetched`) right after the
+  container, not waited for, and `remoteValuesKeptCurrent`: the live listener once that fetch
   has settled, and a fetch on every return to the app (an `AppLifecycleListener`, as the daily
   reminder's), under the same minimum interval. `remoteValuesRevision` counts the changes, and
   `liveRemoteValue` is a new function at each one: the game's and `app_update`'s `remoteValue`
