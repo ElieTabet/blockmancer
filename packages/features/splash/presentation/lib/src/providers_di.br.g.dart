@@ -8,6 +8,47 @@ part of 'providers_di.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Whether the player turned motion down in the app's settings. A future: the
+/// logo's entrance waits for the stored answer rather than play on a guess.
+
+@ProviderFor(reduceMotionSetting)
+final reduceMotionSettingProvider = ReduceMotionSettingProvider._();
+
+/// Whether the player turned motion down in the app's settings. A future: the
+/// logo's entrance waits for the stored answer rather than play on a guess.
+
+final class ReduceMotionSettingProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether the player turned motion down in the app's settings. A future: the
+  /// logo's entrance waits for the stored answer rather than play on a guess.
+  ReduceMotionSettingProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reduceMotionSettingProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reduceMotionSettingHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return reduceMotionSetting(ref);
+  }
+}
+
+String _$reduceMotionSettingHash() =>
+    r'5c62f367b99991bfa3313ff4ffe17b706dd27d0c';
 
 @ProviderFor(splashRouting)
 final splashRoutingProvider = SplashRoutingProvider._();

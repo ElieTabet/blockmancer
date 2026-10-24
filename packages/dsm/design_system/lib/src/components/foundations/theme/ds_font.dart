@@ -19,6 +19,12 @@ final class DSFont {
   static TextStyle display(TextStyle? style) =>
       GoogleFonts.getFont(displayFamily, textStyle: style);
 
+  /// Loads [display]'s bold from its bundled file, which happens on first use
+  /// otherwise: text drawn before it lands shows in a fallback font for a frame.
+  static Future<void> preloadDisplayBold() => GoogleFonts.pendingFonts([
+    GoogleFonts.getFont(displayFamily, fontWeight: FontWeight.w700),
+  ]);
+
   /// Draws every typeface from the files bundled in `assets/fonts/` and never
   /// downloads one: a download fails offline and behind TLS-inspecting
   /// networks. Call once at boot, before the first frame. A weight the theme

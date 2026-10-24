@@ -61,6 +61,7 @@ void main() {
     expect(container.read(reduceMotionOnProvider), isTrue);
     expect(container.read(dailyReminderOnProvider), isFalse);
     expect(await container.read(dailyReminderEnabledProvider.future), isFalse);
+    expect(await container.read(reduceMotionEnabledProvider.future), isTrue);
   });
 
   test('the tutorial and the language wait for what is stored', () async {

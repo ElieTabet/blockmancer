@@ -14,6 +14,7 @@ export 'src/components/foundations/theme/ds_color.dart';
 export 'src/components/foundations/theme/ds_font.dart';
 export 'src/components/foundations/theme/ds_game_color.dart';
 export 'src/components/foundations/theme/ds_joker_color.dart';
+export 'src/components/foundations/theme/ds_logo_color.dart';
 export 'src/components/foundations/theme/ds_corner_radius.dart';
 export 'src/components/foundations/theme/ds_horizontal_space.dart';
 export 'src/components/foundations/theme/ds_space.dart';

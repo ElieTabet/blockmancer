@@ -6,19 +6,32 @@ import 'package:timber/timber.dart';
 
 part 'splash_state_notifier.br.g.dart';
 
-// The branded splash lingers at least this long, so the hand-off is never a
-// flash. Launch work (the update check's Remote Config fetch) runs inside
-// this wait.
-const _splashDuration = Duration(milliseconds: 1800);
+/// Where the launch's animation stands, for the screen to play its exit.
+enum SplashStage {
+  /// The logo's entrance, then its hold while launch work runs.
+  intro,
+
+  /// Everything the launch waits for is in: the exit plays, and the next
+  /// screen fades in over it.
+  leaving,
+}
+
+/// The soonest the exit starts: when the logo's entrance has settled. Launch
+/// work (the update check's Remote Config fetch) runs inside this wait.
+const splashExitStart = Duration(milliseconds: 1300);
+
+/// The soonest the next screen fades in, a little into the exit. Later only
+/// when the launch's answers come later, and then at once.
+const splashHandOff = Duration(milliseconds: 1480);
 
 @riverpod
 class SplashStateNotifier extends _$SplashStateNotifier {
   @override
-  void build() {}
+  SplashStage build() => .intro;
 
-  /// Holds the splash for its minimum, then hands off: to the update screen
-  /// when this version no longer plays, to the tutorial on a first launch, to
-  /// Home otherwise.
+  /// Holds the splash until its answers are in and its entrance has played,
+  /// signals the exit, then hands off: to the update screen when this version
+  /// no longer plays, to the tutorial on a first launch, to Home otherwise.
   Future<void> onReady(BuildContext context) async {
     // Held through the wait: the widget only reads this notifier, so it would
     // be disposed during the delay, and the answer it waits for dropped with
@@ -30,12 +43,20 @@ class SplashStateNotifier extends _$SplashStateNotifier {
       (_, _) {},
     );
 
+    // Started together, so the hand-off is never later than the answers.
+    final handOff = Future<void>.delayed(splashHandOff);
+
     try {
       final (_, seen, blocked) = await (
-        Future<void>.delayed(_splashDuration),
+        Future<void>.delayed(splashExitStart),
         _seenOrHome(tutorialSeen.read()),
         _requiredOrPlay(updateRequired.read()),
       ).wait;
+
+      if (!context.mounted) return;
+
+      state = .leaving;
+      await handOff;
 
       if (!context.mounted) return;
 

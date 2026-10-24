@@ -6,6 +6,13 @@ part 'providers_di.br.g.dart';
 // splash_presentation — inbound dependency-injection slots. Each throws until
 // the composition layer overrides it.
 
+/// Whether the player turned motion down in the app's settings. A future: the
+/// logo's entrance waits for the stored answer rather than play on a guess.
+@riverpod
+Future<bool> reduceMotionSetting(Ref ref) => throw UnimplementedError(
+  'reduceMotionSettingProvider must be overridden by the composition layer',
+);
+
 @riverpod
 SplashRouting splashRouting(Ref ref) => throw UnimplementedError(
   'splashRoutingProvider must be overridden by the composition layer (app_router)',

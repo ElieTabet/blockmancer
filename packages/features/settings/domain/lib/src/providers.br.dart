@@ -50,6 +50,13 @@ bool hapticsOn(Ref ref) =>
 bool reduceMotionOn(Ref ref) =>
     ref.watch(settingsProvider).value?.reduceMotion ?? _defaults.reduceMotion;
 
+/// Whether the player turned motion down. A future, so the launch's animation
+/// never plays on the default before the stored answer.
+@riverpod
+Future<bool> reduceMotionEnabled(Ref ref) => ref.watch(
+  settingsProvider.selectAsync((settings) => settings.reduceMotion),
+);
+
 /// See [ResetProgressBehavior].
 @riverpod
 ResetProgressFun resetProgress(Ref ref) => ResetProgressBehavior(

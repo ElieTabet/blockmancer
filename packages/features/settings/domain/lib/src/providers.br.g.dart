@@ -218,6 +218,48 @@ final class ReduceMotionOnProvider extends $FunctionalProvider<bool, bool, bool>
 
 String _$reduceMotionOnHash() => r'52d21460dc6e618504e934b0ddd7d0cfe9a0c421';
 
+/// Whether the player turned motion down. A future, so the launch's animation
+/// never plays on the default before the stored answer.
+
+@ProviderFor(reduceMotionEnabled)
+final reduceMotionEnabledProvider = ReduceMotionEnabledProvider._();
+
+/// Whether the player turned motion down. A future, so the launch's animation
+/// never plays on the default before the stored answer.
+
+final class ReduceMotionEnabledProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Whether the player turned motion down. A future, so the launch's animation
+  /// never plays on the default before the stored answer.
+  ReduceMotionEnabledProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reduceMotionEnabledProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reduceMotionEnabledHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return reduceMotionEnabled(ref);
+  }
+}
+
+String _$reduceMotionEnabledHash() =>
+    r'07a9bb409704c15e665a5abe802287bb984f4d1c';
+
 /// See [ResetProgressBehavior].
 
 @ProviderFor(resetProgress)

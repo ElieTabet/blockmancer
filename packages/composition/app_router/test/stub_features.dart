@@ -157,6 +157,7 @@ List<Override> stubFeatures({
     showsTestTools: (ref) => false,
   ),
   ...splash_ui.bindProviders(
+    reduceMotionSetting: (ref) async => true,
     tutorialSeen: (ref) async => tutorialSeen,
     updateRequired: (ref) => remoteValue == null
         ? Future.value(false)

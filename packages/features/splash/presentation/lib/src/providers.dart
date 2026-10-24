@@ -5,9 +5,11 @@ import 'package:splash_presentation/src/routing/splash_routing.dart';
 // splash_presentation — public providers exposed by this layer.
 
 List<Override> bindProviders({
+  required Future<bool> Function(Ref ref) reduceMotionSetting,
   required Future<bool> Function(Ref ref) tutorialSeen,
   required Future<bool> Function(Ref ref) updateRequired,
 }) => [
+  di.reduceMotionSettingProvider.overrideWith(reduceMotionSetting),
   di.tutorialSeenProvider.overrideWith(tutorialSeen),
   di.updateRequiredProvider.overrideWith(updateRequired),
 ];

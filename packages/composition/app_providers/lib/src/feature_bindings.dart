@@ -277,8 +277,11 @@ List<Override> featureBindingOverrides({
     shareText: (ref) => external_links.shareText,
     showsTestTools: (ref) => testTools,
   ),
-  // The splash opens the tutorial on a first launch without knowing Settings.
+  // The splash opens the tutorial on a first launch, and obeys reduce motion,
+  // without knowing Settings.
   ...splash_ui.bindProviders(
+    reduceMotionSetting: (ref) =>
+        ref.watch(settings.reduceMotionEnabledProvider.future),
     tutorialSeen: (ref) => ref.watch(settings.tutorialSeenProvider.future),
     updateRequired: (ref) =>
         ref.watch(app_update.updateRequiredProvider.future),

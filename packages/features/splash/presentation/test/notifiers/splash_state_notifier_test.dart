@@ -46,6 +46,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         ...bindProviders(
+          reduceMotionSetting: (ref) async => true,
           tutorialSeen: (ref) => tutorialSeen?.call() ?? Future.value(true),
           updateRequired: (ref) =>
               updateRequired?.call() ?? Future.value(false),
@@ -72,7 +73,31 @@ void main() {
     // Then
     expect(routing.handOffs, isEmpty);
 
-    await tester.pump(const Duration(milliseconds: 800));
+    await tester.pump(const Duration(milliseconds: 480));
+    await ready;
+    expect(routing.handOffs, ['home']);
+  });
+
+  testWidgets('the exit is signalled once the entrance has played, a little '
+      'before the hand-off', (tester) async {
+    // Given
+    final context = await pumpContext(tester);
+    final splash = container();
+    final stages = <SplashStage>[];
+    splash.listen(splashStateProvider, (_, stage) => stages.add(stage));
+
+    // When
+    final ready = splash.read(splashStateProvider.notifier).onReady(context);
+    await tester.pump(const Duration(milliseconds: 1299));
+
+    // Then
+    expect(stages, isEmpty);
+
+    await tester.pump(const Duration(milliseconds: 1));
+    expect(stages, [SplashStage.leaving]);
+    expect(routing.handOffs, isEmpty);
+
+    await tester.pump(const Duration(milliseconds: 180));
     await ready;
     expect(routing.handOffs, ['home']);
   });
